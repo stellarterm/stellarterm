@@ -1,9 +1,9 @@
-
 var React = window.React = require('react'),
     ReactDOM = require("react-dom"),
     Timer = require("./ui/Timer"),
     mountNode = document.getElementById("app");
 
+console.log(StellarSdk);
 var TodoList = React.createClass({
   render: function() {
     var createItem = function(itemText) {
