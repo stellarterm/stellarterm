@@ -1,0 +1,11 @@
+/node_modules/
+/dist/
+.sass-cache/
+/bower_components/
+
+
+# OSX
+*.DS_Store
+.AppleDouble
+.LSOverride
+._*
