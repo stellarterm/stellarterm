@@ -34,6 +34,7 @@
     "react-tools": "latest",
     "reactify": "latest",
     "run-sequence": "^1.2.2",
+    "standard": "^8.6.0",
     "strip-debug": "^1.0.1",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "~2.1"
