@@ -19,7 +19,6 @@ gulp.task('default', ['clean', 'watch'])
 
 // Clean
 gulp.task('clean', function (cb) {
-  $.cache.clearAll()
   cb(del.sync(['dist']))
 })
 
@@ -65,8 +64,10 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], function (
     .pipe(gulp.dest('dist'))
 })
 
+var baseTasks = ['html', 'styles', 'scripts', 'copyBower'];
+
 // Watch
-gulp.task('watch', ['html', 'scripts'], function () {
+gulp.task('watch', baseTasks, function () {
   browserSync({
     notify: false,
     logPrefix: 'BS',
@@ -82,6 +83,11 @@ let bsReload = done => {
 }
 gulp.task('html-reload', ['html'], bsReload)
 gulp.task('css-reload', ['styles', 'scripts'], bsReload)
+
+gulp.task('copyBower', function() {
+  return gulp.src('bower_components/**/*')
+    .pipe(gulp.dest('dist/bower_components/'))
+})
 
 // Build production site.
 gulp.task('uglify-js', function () {
@@ -100,7 +106,7 @@ gulp.task('production', function (cb) {
   process.env.NODE_ENV = 'production'
   runSequence(
     'clean',
-    ['html', 'styles', 'scripts'],
+    baseTasks,
     'uglify-js',
     'inlinesource'
     , function () {

@@ -3,7 +3,7 @@ var ReactDOM = require('react-dom')
 var Timer = require('./ui/Timer')
 var mountNode = document.getElementById('app')
 
-console.log(StellarSdk)
+console.log(StellarSdk);
 var TodoList = React.createClass({
   render: function () {
     var createItem = function (itemText) {
