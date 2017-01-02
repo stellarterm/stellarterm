@@ -26,7 +26,7 @@ gulp.task('styles', () => {
 
 // browserify
 const bundler = watchify(browserify({
-  entries: ['./app/scripts/app.jsx'],
+  entries: ['./app.jsx'],
   debug: true,
   insertGlobals: true,
   cache: {},
@@ -45,7 +45,7 @@ bundler.on('update', rebundle);
 bundler.on('log', $.util.log);
 gulp.task('scripts', rebundle);
 
-gulp.task('html', () => gulp.src('app/*.html')
+gulp.task('html', () => gulp.src('index.html')
     .pipe(gulp.dest('dist')));
 
 gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp.src('./app/*.html')
