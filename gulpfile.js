@@ -63,8 +63,8 @@ gulp.task('watch', baseTasks, () => {
     logPrefix: 'BS',
     server: ['dist'],
   });
-  gulp.watch('app/*.html', ['html-reload']);
-  gulp.watch(['app/styles/**/*.scss', 'app/styles/**/*.css'], ['css-reload']);
+  gulp.watch('index.html', ['html-reload']);
+  gulp.watch(['styles/**/*.scss', 'styles/**/*.css'], ['css-reload']);
 });
 
 const bsReload = (done) => {
