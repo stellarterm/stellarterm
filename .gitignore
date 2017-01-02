@@ -4,6 +4,8 @@ dist/
 bower_components/
 
 
+npm-debug.log
+
 # OSX
 *.DS_Store
 .AppleDouble
