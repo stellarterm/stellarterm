@@ -1,22 +1,23 @@
 const React = window.React = require('react');
 const _ = require('lodash');
 
+// Dumb component that mainly renders the UI
+
 function OfferTable(props) {
-  console.log(props.offers)
   return <table>
     <tbody>
       <tr>
         <th>Price</th>
-        <th>XLM</th>
-        <th>USD</th>
-        <th>Sum(XLM)</th>
+        <th>{props.counterCurrency}</th>
+        <th>{props.baseCurrency}</th>
+        <th>Depth ({props.baseCurrency})</th>
       </tr>
       {
         _.map(props.offers, offer =>
-          <tr key={offer.offerId}>
+          <tr key={offer.key}>
             <td>{offer.price}</td>
-            <td>{offer.a}</td>
-            <td>{offer.b}</td>
+            <td>{offer.counter}</td>
+            <td>{offer.base}</td>
             <td>{offer.depth}</td>
           </tr>
         )
