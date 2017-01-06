@@ -1,11 +1,13 @@
 const React = window.React = require('react');
-const OfferTable = require('./OfferTable.jsx')
+const OfferTable = require('./OfferTable.jsx');
+const Stellarify = require('../lib/Stellarify');
 
 class Offers extends React.Component {
   render() {
+    let orderbookDetails = Stellarify.orderbookDetails(this.props.orderbookDetails);
 
     let buyDepth = 0;
-    let buys = _.map(this.props.bids, (bid) => {
+    let buys = _.map(orderbookDetails.bids, (bid) => {
       buyDepth += Number(bid.amount);
       return {
         key: bid.price,
@@ -17,7 +19,7 @@ class Offers extends React.Component {
     });
 
     let sellDepth = 0;
-    let sells = _.map(this.props.asks, (ask) => {
+    let sells = _.map(orderbookDetails.asks, (ask) => {
       sellDepth += Number(ask.amount) * Number(ask.price);
       return {
         key: ask.price,
@@ -34,15 +36,15 @@ class Offers extends React.Component {
           Buy offers
           {OfferTable({
             offers: buys,
-            counterCurrency: this.props.buying.getCode(),
-            baseCurrency: this.props.selling.getCode(),
+            counterCurrency: orderbookDetails.counter.getCode(),
+            baseCurrency: orderbookDetails.base.getCode(),
           })}
 
           Sell offers
           {OfferTable({
             offers: sells,
-            counterCurrency: this.props.buying.getCode(),
-            baseCurrency: this.props.selling.getCode(),
+            counterCurrency: orderbookDetails.counter.getCode(),
+            baseCurrency: orderbookDetails.base.getCode(),
           })}
         </div>
       </div>
