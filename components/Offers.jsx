@@ -7,7 +7,6 @@ class Offers extends React.Component {
   render() {
     let orderbookDetails = Stellarify.orderbookDetails(this.props.orderbookDetails);
 
-    // We use a space so that users can't be phished as easily
     let baseLabel = Printify.assetName(orderbookDetails.base);
     let counterLabel = Printify.assetName(orderbookDetails.counter);
 
@@ -39,6 +38,7 @@ class Offers extends React.Component {
       <div>
         <div>
           Buy offers
+          {OfferTable({
             offers: buys,
             counterCurrency: counterLabel,
             baseCurrency: baseLabel,
