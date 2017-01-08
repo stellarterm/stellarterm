@@ -2,14 +2,13 @@ const React = window.React = require('react');
 const ReactDOM = require('react-dom');
 const mountNode = document.getElementById('app');
 const Offers = require('./components/Offers.jsx');
+const Session = require('./components/Session.jsx');
 
 const Driver = require('./lib/Driver');
 
 let driver = new Driver({
   horizonUrl: 'https://horizon.stellar.org',
 });
-
-
 
 class TermApp extends React.Component {
   constructor(props) {
@@ -29,6 +28,7 @@ class TermApp extends React.Component {
   render() {
     return (
       <div>
+        <Session></Session>
         <div>
           <p>Base currency: {driver.baseBuyingAssetName()} {driver.baseBuyingGetIssuer()}</p>
           <p>Counter currency: {driver.counterSellingAssetName()} {driver.counterSellingGetIssuer()}</p>
