@@ -8,16 +8,16 @@ function OfferTable(props) {
     <tbody>
       <tr>
         <th>Price</th>
-        <th>{props.counterCurrency}</th>
         <th>{props.baseCurrency}</th>
-        <th>Depth ({props.baseCurrency})</th>
+        <th>{props.counterCurrency}</th>
+        <th>Depth ({props.counterCurrency})</th>
       </tr>
       {
         _.map(props.offers, offer =>
           <tr key={offer.key}>
             <td>{offer.price}</td>
-            <td>{offer.counter}</td>
             <td>{offer.base}</td>
+            <td>{offer.counter}</td>
             <td>{offer.depth}</td>
           </tr>
         )

@@ -6,14 +6,18 @@ class Offers extends React.Component {
   render() {
     let orderbookDetails = Stellarify.orderbookDetails(this.props.orderbookDetails);
 
+    // We use a space so that users can't be phished as easily
+    let baseLabel = orderbookDetails.base.isNative() ? 'native lumens' : orderbookDetails.base.getCode();
+    let counterLabel = orderbookDetails.counter.isNative() ? 'native lumens' : orderbookDetails.counter.getCode();
+
     let buyDepth = 0;
     let buys = _.map(orderbookDetails.bids, (bid) => {
       buyDepth += Number(bid.amount);
       return {
         key: bid.price,
         price: bid.price,
-        counter: (Number(bid.amount) * Number(bid.price)).toFixed(7),
-        base: bid.amount,
+        base: (Number(bid.amount) * Number(bid.price)).toFixed(7),
+        counter: bid.amount,
         depth: buyDepth.toFixed(7),
       }
     });
@@ -24,8 +28,8 @@ class Offers extends React.Component {
       return {
         key: ask.price,
         price: ask.price,
-        counter: ask.amount,
-        base: (Number(ask.amount) * Number(ask.price)).toFixed(7),
+        base: ask.amount,
+        counter: (Number(ask.amount) * Number(ask.price)).toFixed(7),
         depth: sellDepth.toFixed(7),
       }
     });
@@ -34,17 +38,16 @@ class Offers extends React.Component {
       <div>
         <div>
           Buy offers
-          {OfferTable({
             offers: buys,
-            counterCurrency: orderbookDetails.counter.getCode(),
-            baseCurrency: orderbookDetails.base.getCode(),
+            counterCurrency: counterLabel,
+            baseCurrency: baseLabel,
           })}
 
           Sell offers
           {OfferTable({
             offers: sells,
-            counterCurrency: orderbookDetails.counter.getCode(),
-            baseCurrency: orderbookDetails.base.getCode(),
+            counterCurrency: counterLabel,
+            baseCurrency: baseLabel,
           })}
         </div>
       </div>
