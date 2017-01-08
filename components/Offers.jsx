@@ -5,6 +5,10 @@ const Printify = require('../lib/Printify');
 
 class Offers extends React.Component {
   render() {
+    if (this.props.orderbookDetails === undefined) {
+      return <div>Loading</div>;
+    }
+
     let orderbookDetails = Stellarify.orderbookDetails(this.props.orderbookDetails);
 
     let baseLabel = Printify.assetName(orderbookDetails.base);
