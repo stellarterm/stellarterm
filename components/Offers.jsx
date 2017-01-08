@@ -1,14 +1,15 @@
 const React = window.React = require('react');
 const OfferTable = require('./OfferTable.jsx');
 const Stellarify = require('../lib/Stellarify');
+const Printify = require('../lib/Printify');
 
 class Offers extends React.Component {
   render() {
     let orderbookDetails = Stellarify.orderbookDetails(this.props.orderbookDetails);
 
     // We use a space so that users can't be phished as easily
-    let baseLabel = orderbookDetails.base.isNative() ? 'native lumens' : orderbookDetails.base.getCode();
-    let counterLabel = orderbookDetails.counter.isNative() ? 'native lumens' : orderbookDetails.counter.getCode();
+    let baseLabel = Printify.assetName(orderbookDetails.base);
+    let counterLabel = Printify.assetName(orderbookDetails.counter);
 
     let buyDepth = 0;
     let buys = _.map(orderbookDetails.bids, (bid) => {
