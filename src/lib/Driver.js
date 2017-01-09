@@ -24,7 +24,7 @@ function Driver(opts) {
   this.syncSession = () => {
     this.session = {
       state: session.state,
-      accountId: session.account === null ? '' : session.account.accoundId(),
+      accountId: session.state === 'in' ? session.keypair.accountId() : '',
     }
   }
   this.syncSession();
@@ -38,7 +38,21 @@ function Driver(opts) {
 
   this.handlers = {
     logIn: async (secretKey) => {
-      await Spoon.foo(this.Server);
+      let seedValidity = true;
+      let keypair;
+      try {
+        keypair = StellarSdk.Keypair.fromSeed(secretKey);
+      } catch (e) {
+        seedValidity = false;
+        console.log('Invalid secret key');
+        return;
+      }
+      session.keypair = keypair;
+      session.state = 'loading';
+      this.syncSession();
+      session.account = await this.Server.loadAccount(keypair.accountId());
+      session.state = 'in';
+      this.syncSession();
     }
   }
 
@@ -47,9 +61,6 @@ function Driver(opts) {
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // It's in the same file as the driver because the driver is the only one that should ever use the spoon
 class Spoon {
-  static async foo(Server) {
-    return await Server.loadAccount('GCI7ILB37OFVHLLSA74UCXZFCTPEBJOZK7YCNBI7DKH7D76U4CRJBL2A');
-  }
 }
 
 
