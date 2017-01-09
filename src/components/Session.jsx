@@ -1,28 +1,33 @@
 const React = window.React = require('react');
+import LoginForm from './Session/LoginForm.jsx';
 
 class Session extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      secretInput: 'SCTTKASS24XPXL6V4AS6VSVCL6VOM3OXEO4JGUQASGXVIG5CRGTMDKH6',
-    }
+    this.d = this.props.driver;
 
-    this.handleInput = (event) => {
-      this.setState({secretInput: event.target.value});
-    }
-    this.handleSubmit = (event) => {
-      this.props.handlers.logIn(this.state.secretInput);
-      event.preventDefault();
-    }
+    this.listenId = this.d.listenSession(() => {
+      console.log('helloooo')
+      this.forceUpdate();
+    });
+
+    // Static functions
+    this.handlers = this.props.driver.handlers;
+    this.logIn = this.props.driver.handlers.logIn;
   }
-
+  componentWillUnmount() {
+    this.d.unlistenSession(this.listenId);
+  }
   render() {
-    return <div>
-      <form onSubmit={this.handleSubmit}>
-        <input type="text" value={this.state.secretInput} onChange={this.handleInput} placeholder="Secret key" />
-        <input type="submit" value="Log in"></input>
-      </form>
-    </div>
+    let state = this.d.session.state;
+    console.log(state)
+    if (state === 'out') {
+      return <LoginForm handler={this.logIn}></LoginForm>
+    } else if (state === 'loading') {
+      return <div><p>Loading</p></div>
+    } else if (state === 'in') {
+      return <div>Logged in as: {this.d.session.accountId}</div>
+    }
   }
 }
 

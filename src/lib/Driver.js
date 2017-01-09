@@ -20,12 +20,58 @@ function Driver(opts) {
     keypair: null,
   };
 
+
+  let _byol = {}; // Build your own listener
+  // returns a event id reference that can be used to unlisten
+  let _listen = (eventName, cb) => {
+    if (!_byol[eventName]) {
+      _byol[eventName] = {
+        nextIndex: 0,
+        listeners: [], // stores callbacks
+      }
+    }
+    let listenerIndex = _byol[eventName].nextIndex;
+    _byol[eventName].nextIndex += 1;
+    _byol[eventName].listeners[listenerIndex] = cb;
+    return listenerIndex;
+  }
+  let _unlisten = (eventName, id) => {
+    if (!isFinite(id)) {
+      throw new Error('Invalid unlisten id');
+    }
+    _byol[eventName] = null;
+  }
+  // Organized way to trigger things (single source of truth)
+  // Using trigger directly is not allowed
+  let _trigger = (eventName) => {
+    console.log('_byol',_byol)
+    if (!_byol[eventName]) {
+      return;
+    }
+    for (let i = 0; i < _byol[eventName].nextIndex; i++) {
+      let listener = _byol[eventName].listeners[i];
+      if (listener) {
+        listener();
+      }
+    }
+  };
+  let availableEvents = [
+    'session',
+  ];
+  let trigger = {};
+  availableEvents.forEach((event) => {
+    this['listen' + event.charAt(0).toUpperCase() + event.slice(1)] = (cb) => _listen('session', cb);
+    this['unlisten' + event.charAt(0).toUpperCase() + event.slice(1)] = (id) => _unlisten('session', id);
+    trigger[event] = () => _trigger('session');
+  })
+
   // Only the driver should change the session. This data is derived from the internal session
   this.syncSession = () => {
     this.session = {
       state: session.state,
       accountId: session.state === 'in' ? session.keypair.accountId() : '',
     }
+    trigger.session();
   }
   this.syncSession();
 
