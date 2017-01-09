@@ -1,6 +1,6 @@
 const React = window.React = require('react');
 
-class Session extends React.component {
+class Session extends React.Component {
   render() {
     return <div>
       <input type="text" placeholder="Secret key" />
