@@ -12,34 +12,33 @@ function Driver(opts) {
   this._baseBuying = new StellarSdk.Asset('XLM', null);
   this._counterSelling = new StellarSdk.Asset('USD', 'GBAUUA74H4XOQYRSOW2RZUA4QL5PB37U3JS5NE3RTB2ELJVMIF5RLMAG');
 
-  // Internal session is a privately scoped variable so that only functions defined here can access it
-  let session = {
+  const session = {
     // 3 states for session state: 'out', 'loading', 'in'
     state: 'out',
     account: null,
     keypair: null,
   };
 
-  let byol = new Byol();
+  const byol = new Byol();
 
-  let availableEvents = [
+  const availableEvents = [
     'session',
   ];
-  let trigger = {};
+  const trigger = {};
   availableEvents.forEach((event) => {
-    this['listen' + event.charAt(0).toUpperCase() + event.slice(1)] = (cb) => byol.listen('session', cb);
-    this['unlisten' + event.charAt(0).toUpperCase() + event.slice(1)] = (id) => byol.unlisten('session', id);
+    this[`listen${event.charAt(0).toUpperCase()}${event.slice(1)}`] = cb => byol.listen('session', cb);
+    this[`unlisten${event.charAt(0).toUpperCase()}${event.slice(1)}`] = id => byol.unlisten('session', id);
     trigger[event] = () => byol.trigger('session');
-  })
+  });
 
   // Only the driver should change the session. This data is derived from the internal session
   this.syncSession = () => {
     this.session = {
       state: session.state,
       accountId: session.state === 'in' ? session.keypair.accountId() : '',
-    }
+    };
     trigger.session();
-  }
+  };
   this.syncSession();
 
   this.getOrderbook = () => this.Server.orderbook(this._baseBuying, this._counterSelling).call();
@@ -51,12 +50,10 @@ function Driver(opts) {
 
   this.handlers = {
     logIn: async (secretKey) => {
-      let seedValidity = true;
       let keypair;
       try {
         keypair = StellarSdk.Keypair.fromSeed(secretKey);
       } catch (e) {
-        seedValidity = false;
         console.log('Invalid secret key');
         return;
       }
@@ -66,15 +63,15 @@ function Driver(opts) {
       session.account = await this.Server.loadAccount(keypair.accountId());
       session.state = 'in';
       this.syncSession();
-    }
-  }
-
+    },
+  };
 }
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
-// It's in the same file as the driver because the driver is the only one that should ever use the spoon
-class Spoon {
-}
+// It's in the same file as the driver because the driver is the only one that
+// should ever use the spoon
+// class Spoon {
+// }
 
 
 export default Driver;

@@ -76,5 +76,15 @@
       ]
     ]
   },
-  "browser": {}
+  "browser": {},
+  "eslintConfig": {
+    "extends": "airbnb",
+    "globals": {
+      "StellarSdk": true
+    },
+    "rules": {
+      "new-cap": "warn",
+      "no-underscore-dangle": "off"
+    }
+  }
 }
