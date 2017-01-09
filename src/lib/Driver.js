@@ -10,7 +10,7 @@ import Printify from '../lib/Printify';
 function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl);
   this._baseBuying = new StellarSdk.Asset('XLM', null);
-  this._counterSelling = new StellarSdk.Asset('USD', 'GBAMBOOZDWZPVV52RCLJQYMQNXOBLOXWNQAY2IF2FREV2WL46DBCH3BE');
+  this._counterSelling = new StellarSdk.Asset('USD', 'GBAUUA74H4XOQYRSOW2RZUA4QL5PB37U3JS5NE3RTB2ELJVMIF5RLMAG');
 
   // Internal session is a privately scoped variable so that only functions defined here can access it
   let session = {

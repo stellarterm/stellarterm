@@ -6,8 +6,20 @@ import Session from './components/Session.jsx';
 
 import Driver from './lib/Driver';
 
+let network = {};
+
+let useLiveNetwork = () => {
+  network.horizonUrl = 'https://horizon.stellar.org';
+  StellarSdk.Network.usePublicNetwork();
+}
+let useTestNetwork = () => {
+  network.horizonUrl = 'https://horizon-testnet.stellar.org';
+  StellarSdk.Network.useTestNetwork();
+}
+useTestNetwork();
+
 let driver = new Driver({
-  horizonUrl: 'https://horizon.stellar.org',
+  horizonUrl: network.horizonUrl,
 });
 
 class TermApp extends React.Component {
