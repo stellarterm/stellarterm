@@ -13,7 +13,7 @@
     "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
   },
   "dependencies": {
-    "babelify": "^7.4.0",
+    "babelify": "^7.3.0",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
@@ -24,26 +24,24 @@
     "browserify": "latest",
     "del": "~0.1.3",
     "eslint": "^3.12.2",
-    "eslint-config-airbnb": "^13.0.0",
+    "eslint-config-airbnb": "^14.0.0",
     "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.8.0",
     "gulp": ">=3.8.8",
-    "gulp-autoprefixer": "~1.0.1",
+    "gulp-autoprefixer": "^3.1.1",
     "gulp-bower": "0.0.6",
     "gulp-exit": "0.0.2",
     "gulp-inline-source": "^3.0.0",
     "gulp-load-plugins": "~0.7.0",
-    "gulp-strip-debug": "^1.0.2",
-    "gulp-uglify": "^1.0.2",
+    "gulp-uglify": "^2.0.0",
     "gulp-util": "~3.0.1",
     "jest-cli": "^18.1.0",
     "react": "latest",
     "react-dom": "latest",
     "run-sequence": "^1.2.2",
-    "strip-debug": "^1.0.1",
     "vinyl-source-stream": "^1.0.0",
-    "watchify": "~2.1"
+    "watchify": "^3.8.0"
   },
   "engines": {
     "node": ">=7.4.0"
@@ -67,7 +65,9 @@
           "ignore": [
             "bower_components"
           ],
-          "plugins": ["transform-runtime"],
+          "plugins": [
+            "transform-runtime"
+          ],
           "presets": [
             "env",
             "react"
