@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import LoginForm from './Session/LoginForm.jsx';
+import AccountView from './Session/AccountView.jsx';
 
 class Session extends React.Component {
   constructor(props) {
@@ -26,7 +27,7 @@ class Session extends React.Component {
     } else if (state === 'loading') {
       return <div><p>Loading</p></div>
     } else if (state === 'in') {
-      return <div>Logged in as: {this.d.session.accountId}</div>
+      return <AccountView session={this.d.session}></AccountView>
     }
   }
 }
