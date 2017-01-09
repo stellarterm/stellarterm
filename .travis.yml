@@ -4,4 +4,6 @@ node_js:
 install:
   - npm run setup
 before_script:
-  - npm run lint
+  - npm run lint || true
+script:
+  - npm run production
