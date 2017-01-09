@@ -4,7 +4,7 @@ class Session extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      secretInput: ''
+      secretInput: 'SCTTKASS24XPXL6V4AS6VSVCL6VOM3OXEO4JGUQASGXVIG5CRGTMDKH6',
     }
 
     this.handleInput = (event) => {
