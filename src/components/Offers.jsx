@@ -2,6 +2,7 @@ const React = window.React = require('react');
 import OfferTable from './OfferTable.jsx';
 import Stellarify from '../lib/Stellarify';
 import Printify from '../lib/Printify';
+import _ from 'lodash';
 
 class Offers extends React.Component {
   render() {

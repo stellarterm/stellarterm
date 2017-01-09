@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "babelify": "^7.3.0",
+    "gulp": "^3.9.1",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
