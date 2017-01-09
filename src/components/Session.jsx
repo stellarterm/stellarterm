@@ -8,7 +8,6 @@ class Session extends React.Component {
     this.d = this.props.driver;
 
     this.listenId = this.d.listenSession(() => {
-      console.log('helloooo')
       this.forceUpdate();
     });
 
@@ -21,7 +20,6 @@ class Session extends React.Component {
   }
   render() {
     let state = this.d.session.state;
-    console.log(state)
     if (state === 'out') {
       return <LoginForm handler={this.logIn}></LoginForm>
     } else if (state === 'loading') {
