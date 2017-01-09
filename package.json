@@ -13,10 +13,12 @@
     "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
   },
   "dependencies": {
+    "babel-preset-latest": "^6.16.0",
+    "babelify": "^7.4.0",
     "lodash": "^4.17.4"
   },
   "devDependencies": {
-    "babelify": "^6.1.3",
+    "babel-preset-react": "^6.16.0",
     "browser-sync": "latest",
     "browserify": "latest",
     "del": "~0.1.3",
@@ -43,7 +45,7 @@
     "watchify": "~2.1"
   },
   "engines": {
-    "node": ">=6.9.2"
+    "node": ">=7"
   },
   "jest": {
     "transform": {
@@ -54,13 +56,19 @@
     ]
   },
   "browserify": {
-    "extension": [ "jsx" ],
+    "extension": [
+      "jsx"
+    ],
     "transform": [
       [
         "babelify",
         {
           "ignore": [
             "bower_components"
+          ],
+          "presets": [
+            "latest",
+            "react"
           ]
         }
       ]

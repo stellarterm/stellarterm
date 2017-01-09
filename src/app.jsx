@@ -1,10 +1,10 @@
 const React = window.React = require('react');
 const ReactDOM = require('react-dom');
 const mountNode = document.getElementById('app');
-const Offers = require('./components/Offers.jsx');
-const Session = require('./components/Session.jsx');
+import Offers from './components/Offers.jsx';
+import Session from './components/Session.jsx';
 
-const Driver = require('./lib/Driver');
+import Driver from './lib/Driver';
 
 let driver = new Driver({
   horizonUrl: 'https://horizon.stellar.org',

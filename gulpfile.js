@@ -26,7 +26,7 @@ gulp.task('styles', () => {
 
 // browserify
 const bundler = watchify(browserify({
-  entries: ['./app.jsx'],
+  entries: ['./src/app.jsx'],
   debug: true,
   insertGlobals: true,
   cache: {},

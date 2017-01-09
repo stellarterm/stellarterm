@@ -1,7 +1,7 @@
 // The driver maintains the state of the application and drives everything.
 // Most everything else is just stateless
 // This is similar to Redux except more flexible for faster development
-const Printify = require('../lib/Printify');
+import Printify from '../lib/Printify';
 
 // Using old school "classes" because I'm old scohol and it's simpler for
 // someone experienced in JavaScript to understand. I may use the ES6 forma

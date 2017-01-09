@@ -1,7 +1,7 @@
 const React = window.React = require('react');
-const OfferTable = require('./OfferTable.jsx');
-const Stellarify = require('../lib/Stellarify');
-const Printify = require('../lib/Printify');
+import OfferTable from './OfferTable.jsx';
+import Stellarify from '../lib/Stellarify';
+import Printify from '../lib/Printify';
 
 class Offers extends React.Component {
   render() {
