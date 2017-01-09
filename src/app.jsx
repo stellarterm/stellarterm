@@ -28,7 +28,7 @@ class TermApp extends React.Component {
   render() {
     return (
       <div>
-        <Session></Session>
+        <Session handlers={driver.handlers} session={driver.session}></Session>
         <div>
           <p>Base currency: {driver.baseBuyingAssetName()} {driver.baseBuyingGetIssuer()}</p>
           <p>Counter currency: {driver.counterSellingAssetName()} {driver.counterSellingGetIssuer()}</p>
