@@ -25,27 +25,18 @@ let driver = new Driver({
 class TermApp extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      orderbook: undefined,
-    };
 
-    this.driver = props.driver;
-    this.driver.getOrderbook()
-    .then(res => {
-      this.setState({
-        orderbook: res,
-      })
-    })
+    this.d = driver;
   }
   render() {
     return (
       <div>
-        <Session driver={driver}></Session>
+        <Session driver={this.d}></Session>
         <div>
-          <p>Base currency: {driver.baseBuyingAssetName()} {driver.baseBuyingGetIssuer()}</p>
-          <p>Counter currency: {driver.counterSellingAssetName()} {driver.counterSellingGetIssuer()}</p>
+          <p>Base currency: {this.d.baseBuyingAssetName()} {this.d.baseBuyingGetIssuer()}</p>
+          <p>Counter currency: {this.d.counterSellingAssetName()} {this.d.counterSellingGetIssuer()}</p>
         </div>
-        <Offers orderbookDetails={this.state.orderbook}></Offers>
+        <Offers d={this.d} orderbookDetails={this.d.orderbook}></Offers>
       </div>
     );
   }

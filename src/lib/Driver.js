@@ -4,11 +4,35 @@
 import Printify from '../lib/Printify';
 import Byol from './Byol';
 
+
+// Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
+// It's in the same file as the driver because the driver is the only one that
+// should ever use the spoon
+let MagicSpoon = {
+  Orderbook(Server, baseBuying, counterSelling, onUpdate) {
+    // Orderbook is an object that keeps track of the orderbook for you.
+    // All the driver needs to do is remember to call the close function
+
+    this.ready = false;
+    let initialOrderbook = Server.orderbook(baseBuying, counterSelling).call()
+      .then(res => {
+        this.asks = res.asks;
+        this.bids = res.bids;
+        this.baseBuying = baseBuying;
+        this.counterSelling = counterSelling;
+        this.ready = true;
+        onUpdate();
+      });
+    // TODO: Stream updates
+  }
+}
+
+
 // Using old school "classes" because I'm old scohol and it's simpler for
-// someone experienced in JavaScript to understand. I may use the ES6 forma
+// someone experienced in JavaScript to understand. I may use the ES6 form
 // later though.
 function Driver(opts) {
-  this.Server = new StellarSdk.Server(opts.horizonUrl);
+  this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
   this._baseBuying = new StellarSdk.Asset('XLM', null);
   this._counterSelling = new StellarSdk.Asset('USD', 'GBAUUA74H4XOQYRSOW2RZUA4QL5PB37U3JS5NE3RTB2ELJVMIF5RLMAG');
 
@@ -23,12 +47,13 @@ function Driver(opts) {
 
   const availableEvents = [
     'session',
+    'orderbook',
   ];
   const trigger = {};
-  availableEvents.forEach((event) => {
-    this[`listen${event.charAt(0).toUpperCase()}${event.slice(1)}`] = cb => byol.listen('session', cb);
-    this[`unlisten${event.charAt(0).toUpperCase()}${event.slice(1)}`] = id => byol.unlisten('session', id);
-    trigger[event] = () => byol.trigger('session');
+  availableEvents.forEach((eventName) => {
+    this[`listen${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`] = cb => byol.listen(eventName, cb);
+    this[`unlisten${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`] = id => byol.unlisten(eventName, id);
+    trigger[eventName] = () => byol.trigger(eventName);
   });
 
   // Only the driver should change the session. This data is derived from the internal session
@@ -41,7 +66,11 @@ function Driver(opts) {
   };
   this.syncSession();
 
-  this.getOrderbook = () => this.Server.orderbook(this._baseBuying, this._counterSelling).call();
+  this.orderbook = new MagicSpoon.Orderbook(this.Server, this._baseBuying, this._counterSelling, () => {
+    trigger.orderbook();
+  });
+  // this.getOrderbook = () => this.Server.orderbook(this._baseBuying, this._counterSelling).call();
+
 
   this.baseBuyingAssetName = () => Printify.assetName(this._baseBuying);
   this.counterSellingAssetName = () => Printify.assetName(this._counterSelling);
@@ -67,11 +96,6 @@ function Driver(opts) {
   };
 }
 
-// Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
-// It's in the same file as the driver because the driver is the only one that
-// should ever use the spoon
-// class Spoon {
-// }
 
 
 export default Driver;

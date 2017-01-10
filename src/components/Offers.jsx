@@ -5,18 +5,25 @@ import Printify from '../lib/Printify';
 import _ from 'lodash';
 
 class Offers extends React.Component {
+  constructor(props) {
+    super(props);
+    props.d.listenOrderbook(() => {
+      this.forceUpdate();
+    });
+  }
   render() {
-    if (this.props.orderbookDetails === undefined) {
+    console.log(this.props.d.orderbook)
+    if (!this.props.d.orderbook.ready) {
       return <div>Loading</div>;
     }
 
-    let orderbookDetails = Stellarify.orderbookDetails(this.props.orderbookDetails);
+    let orderbook = this.props.d.orderbook;
 
-    let baseLabel = Printify.assetName(orderbookDetails.base);
-    let counterLabel = Printify.assetName(orderbookDetails.counter);
+    let baseLabel = Printify.assetName(orderbook.baseBuying);
+    let counterLabel = Printify.assetName(orderbook.counterSelling);
 
     let buyDepth = 0;
-    let buys = _.map(orderbookDetails.bids, (bid) => {
+    let buys = _.map(orderbook.bids, (bid) => {
       buyDepth += Number(bid.amount);
       return {
         key: bid.price,
@@ -28,7 +35,7 @@ class Offers extends React.Component {
     });
 
     let sellDepth = 0;
-    let sells = _.map(orderbookDetails.asks, (ask) => {
+    let sells = _.map(orderbook.asks, (ask) => {
       sellDepth += Number(ask.amount) * Number(ask.price);
       return {
         key: ask.price,
