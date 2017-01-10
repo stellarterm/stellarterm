@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm)
 
-# StellarTerm: An advanced trading terminal for the [Stellar](https://www.stellar.org/) network
+# [StellarTerm](https://stellarterm.com/): An advanced trading terminal for the [Stellar](https://www.stellar.org/) network
 
 StellarTerm is a web based trading client for use on the Stellar network. The target audience of this client is advanced users who need a powerful tool for interacting with the Stellar distributed exchange.
 
