@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm)
+[![Travis CI status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm) [ ![Codeship Status](https://img.shields.io/codeship/af24fda0-b980-0134-5c05-4ec9827c52a2/master.svg)](https://app.codeship.com/projects/195032)
 
 # StellarTerm - Try it out at [stellarterm.com](https://stellarterm.com/)
 
