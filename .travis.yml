@@ -3,7 +3,6 @@ node_js:
   - node
 install:
   - npm run setup
-  - rhash --help
 before_script:
   - npm run lint || true
 script:
