@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm)
 
-# [StellarTerm](https://stellarterm.com/): An advanced trading terminal for the [Stellar](https://www.stellar.org/) network
+# StellarTerm - Try it out at [stellarterm.com](https://stellarterm.com/)
 
 StellarTerm is a web based trading client for use on the Stellar network. The target audience of this client is advanced users who need a powerful tool for interacting with the Stellar distributed exchange.
 
@@ -11,6 +11,9 @@ StellarTerm is a web based trading client for use on the Stellar network. The ta
 ## Under the cover features
 - No external dependencies or trackers
 - All GitHub commits [securely signed with GPG](https://github.com/blog/2144-gpg-signature-verification)
+
+## Deployment
+The project is hosted on GitHub pages in the [stellarterm/stellarterm.github.io](https://github.com/stellarterm/stellarterm.github.io/) repository. The client is wrapped into a single html file and it's sha 256 sum is recorded on each git commit.
 
 ## License
 StellarTerm is open source software licensed under the Apache-2.0 license.
