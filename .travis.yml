@@ -1,12 +1,12 @@
 language: node_js
 node_js:
-- node
+  - node
 install:
-- npm run setup
+  - npm run setup
 before_script:
-- npm run lint || true
+  - npm run lint || true
 script:
-- npm run production
+  - npm run production
 addons:
   artifacts:
     debug: true
