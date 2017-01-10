@@ -5,27 +5,26 @@ import AccountView from './Session/AccountView.jsx';
 class Session extends React.Component {
   constructor(props) {
     super(props);
-    this.d = this.props.driver;
-
-    this.listenId = this.d.listenSession(() => {
+    this.listenId = this.props.d.listenSession(() => {
       this.forceUpdate();
     });
 
-    // Static functions
-    this.handlers = this.props.driver.handlers;
-    this.logIn = this.props.driver.handlers.logIn;
+    // Static functions from driver
+    this.handlers = this.props.d.handlers;
+    this.logIn = this.props.d.handlers.logIn;
   }
   componentWillUnmount() {
     this.d.unlistenSession(this.listenId);
   }
   render() {
-    let state = this.d.session.state;
+    let d = this.props.d;
+    let state = d.session.state;
     if (state === 'out') {
       return <LoginForm handler={this.logIn}></LoginForm>
     } else if (state === 'loading') {
       return <div><p>Loading</p></div>
     } else if (state === 'in') {
-      return <AccountView session={this.d.session}></AccountView>
+      return <AccountView session={d.session}></AccountView>
     }
   }
 }

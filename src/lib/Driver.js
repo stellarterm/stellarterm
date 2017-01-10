@@ -6,9 +6,21 @@ import Byol from './Byol';
 
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
+// Simplifies the objects to what is necessary. Listens to updates automagically.
 // It's in the same file as the driver because the driver is the only one that
-// should ever use the spoon
+// should ever use the spoon.
 let MagicSpoon = {
+  Account(Server, keypair, onLoad, onUpdate) {
+    this.ready = false;
+    this.accountId = keypair.accountId();
+    let initialAccount = Server.loadAccount(this.accountId)
+    .then(res => {
+      this.sequence = res.sequence;
+      this.balances = res.balances;
+      this.ready = true;
+      onLoad();
+    })
+  },
   Orderbook(Server, baseBuying, counterSelling, onUpdate) {
     // Orderbook is an object that keeps track of the orderbook for you.
     // All the driver needs to do is remember to call the close function
@@ -24,6 +36,7 @@ let MagicSpoon = {
         onUpdate();
       });
     // TODO: Stream updates
+    // TODO: Close
   }
 }
 
@@ -35,13 +48,6 @@ function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
   this._baseBuying = new StellarSdk.Asset('XLM', null);
   this._counterSelling = new StellarSdk.Asset('USD', 'GBAUUA74H4XOQYRSOW2RZUA4QL5PB37U3JS5NE3RTB2ELJVMIF5RLMAG');
-
-  const session = {
-    // 3 states for session state: 'out', 'loading', 'in'
-    state: 'out',
-    account: null,
-    keypair: null,
-  };
 
   const byol = new Byol();
 
@@ -56,15 +62,24 @@ function Driver(opts) {
     trigger[eventName] = () => byol.trigger(eventName);
   });
 
+  // ----- Initializations above this line -----
+
+  const session = {
+    // 3 states for session state: 'out', 'loading', 'in'
+    state: 'out',
+    account: null,
+    keypair: null,
+  };
+
   // Only the driver should change the session. This data is derived from the internal session
-  this.syncSession = () => {
+  let syncSession = () => {
     this.session = {
       state: session.state,
-      accountId: session.state === 'in' ? session.keypair.accountId() : '',
+      account: session.account
     };
     trigger.session();
   };
-  this.syncSession();
+  syncSession();
 
   this.orderbook = new MagicSpoon.Orderbook(this.Server, this._baseBuying, this._counterSelling, () => {
     trigger.orderbook();
@@ -88,10 +103,13 @@ function Driver(opts) {
       }
       session.keypair = keypair;
       session.state = 'loading';
-      this.syncSession();
-      session.account = await this.Server.loadAccount(keypair.accountId());
-      session.state = 'in';
-      this.syncSession();
+      syncSession();
+      session.account = new MagicSpoon.Account(this.Server, keypair, () => {
+        session.state = 'in';
+        syncSession();
+      }, () => {
+        syncSession();
+      });
     },
   };
 }
