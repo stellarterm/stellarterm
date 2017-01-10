@@ -11,8 +11,8 @@ export default class LoginForm extends React.Component {
       this.setState({secretInput: event.target.value});
     }
     this.handleSubmit = (event) => {
-      this.props.handler(this.state.secretInput);
       event.preventDefault();
+      this.props.handler(this.state.secretInput);
     }
   }
 
