@@ -47,7 +47,7 @@ let MagicSpoon = {
 function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
   this._baseBuying = new StellarSdk.Asset('XLM', null);
-  this._counterSelling = new StellarSdk.Asset('USD', 'GBAUUA74H4XOQYRSOW2RZUA4QL5PB37U3JS5NE3RTB2ELJVMIF5RLMAG');
+  this._counterSelling = new StellarSdk.Asset('USD', 'GDZI4YC2ZYPVWIU54FGOZ62QF563XBSJSPBABW64XKP2DGVIR3YI3M23');
 
   const byol = new Byol();
 

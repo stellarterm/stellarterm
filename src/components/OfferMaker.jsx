@@ -11,11 +11,11 @@ export default class OfferMaker extends React.Component {
 
     this.state = {
       valid: false,
-      price: '523', // Most sticky item (since the price is pretty static)
-      amount: '10',
+      price: '0.0024', // Most sticky item (since the price is pretty static)
+      amount: '5400',
 
       // Total = price * amount
-      total: '5230',
+      total: '12.96',
     };
 
     let normalizeInput = (input) => {
@@ -43,7 +43,7 @@ export default class OfferMaker extends React.Component {
         } else if (item == 'amount') {
           state.total = new BigNumber(new BigNumber(value).times(new BigNumber(state.price)).toFixed(7)).toString();
         } else if (item == 'total') {
-          state.price = new BigNumber(new BigNumber(value).times(new BigNumber(state.amount)).toFixed(7)).toString();
+          state.price = new BigNumber(new BigNumber(value).dividedBy(new BigNumber(state.amount)).toFixed(7)).toString();
         } else {
           throw new Error('Invalid item type');
         }
