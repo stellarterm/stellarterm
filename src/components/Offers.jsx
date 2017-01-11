@@ -28,7 +28,7 @@ class Offers extends React.Component {
       return {
         key: bid.price,
         price: bid.price,
-        base: (Number(bid.amount) * Number(bid.price)).toFixed(7),
+        base: (Number(bid.amount) / Number(bid.price)).toFixed(7),
         counter: bid.amount,
         depth: buyDepth.toFixed(7),
       }
