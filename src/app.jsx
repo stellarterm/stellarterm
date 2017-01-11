@@ -38,6 +38,7 @@ class TermApp extends React.Component {
           <p>Counter currency: {this.d.counterSellingAssetName()} {this.d.counterSellingGetIssuer()}</p>
         </div>
         <OfferMaker d={this.d} side="buy"></OfferMaker>
+        <OfferMaker d={this.d} side="sell"></OfferMaker>
         <Offers d={this.d}></Offers>
       </div>
     );

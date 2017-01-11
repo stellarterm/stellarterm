@@ -8,19 +8,33 @@ BigNumber.config({ EXPONENTIAL_AT: 100 });
 export default class OfferMaker extends React.Component {
   constructor(props) {
     super(props);
+    let initialized = false;
+
+    props.d.listenOrderbook(() => {
+      if (!initialized) {
+        initialized = true;
+        let state = {};
+
+        // Initialize price
+        if (props.side === 'buy' && props.d.orderbook.bids.length > 0) {
+          state.price = new BigNumber(props.d.orderbook.bids[0].price).toString() // Get rid of extra 0s
+        } else if (props.d.orderbook.asks.length > 0) { // Proptypes validation make sure this is sell
+          state.price = new BigNumber(props.d.orderbook.asks[0].price).toString() // Get rid of extra 0s
+        }
+
+        this.setState(state);
+      }
+      this.forceUpdate();
+    });
 
     this.state = {
       valid: false,
-      price: '0.0024', // Most sticky item (since the price is pretty static)
-      amount: '5400',
+      price: '', // Most sticky item (since the price is pretty static)
+      amount: '',
 
       // Total = price * amount
-      total: '12.96',
+      total: '',
     };
-
-    let normalizeInput = (input) => {
-      // return input.replace()
-    }
     // TODO: Limit the number of digits after the decimal that can be input
     this.updateState = (item, e) => {
       let state = Object.assign(this.state);
@@ -48,6 +62,7 @@ export default class OfferMaker extends React.Component {
           throw new Error('Invalid item type');
         }
 
+        // TODO: truer valid
         state.valid = true;
       } catch(e) {
         // Invalid input somewhere
@@ -71,10 +86,11 @@ export default class OfferMaker extends React.Component {
 
 
     return <div>
+      <h3>{this.props.side}</h3>
       <form onSubmit={this.handleSubmit}>
-        <div>Price: <input type="text" value={this.state.price} onChange={(e) => this.updateState('price', e)} placeholder="Price" /></div>
-        <div>Amount: <input type="text" value={this.state.amount} onChange={(e) => this.updateState('amount', e)} placeholder="Price" /></div>
-        <div>Total: <input type="text" value={this.state.total} onChange={(e) => this.updateState('total', e)} placeholder="Price" /></div>
+        <div>Price: <input type="text" value={this.state.price} onChange={(e) => this.updateState('price', e)} placeholder="" /></div>
+        <div>Amount: <input type="text" value={this.state.amount} onChange={(e) => this.updateState('amount', e)} placeholder="" /></div>
+        <div>Total: <input type="text" value={this.state.total} onChange={(e) => this.updateState('total', e)} placeholder="" /></div>
         <input type="submit" value="Submit offer"></input>
       </form>
     </div>
