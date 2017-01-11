@@ -9,25 +9,25 @@ import Byol from './Byol';
 // Simplifies the objects to what is necessary. Listens to updates automagically.
 // It's in the same file as the driver because the driver is the only one that
 // should ever use the spoon.
-let MagicSpoon = {
+const MagicSpoon = {
   Account(Server, keypair, onLoad, onUpdate) {
     this.ready = false;
     this.accountId = keypair.accountId();
-    let initialAccount = Server.loadAccount(this.accountId)
-    .then(res => {
+    const initialAccount = Server.loadAccount(this.accountId)
+    .then((res) => {
       this.sequence = res.sequence;
       this.balances = res.balances;
       this.ready = true;
       onLoad();
-    })
+    });
   },
   Orderbook(Server, baseBuying, counterSelling, onUpdate) {
     // Orderbook is an object that keeps track of the orderbook for you.
     // All the driver needs to do is remember to call the close function
 
     this.ready = false;
-    let initialOrderbook = Server.orderbook(baseBuying, counterSelling).call()
-      .then(res => {
+    const initialOrderbook = Server.orderbook(baseBuying, counterSelling).call()
+      .then((res) => {
         this.asks = res.asks;
         this.bids = res.bids;
         this.baseBuying = baseBuying;
@@ -37,8 +37,8 @@ let MagicSpoon = {
       });
     // TODO: Stream updates
     // TODO: Close
-  }
-}
+  },
+};
 
 
 // Using old school "classes" because I'm old scohol and it's simpler for
@@ -72,10 +72,10 @@ function Driver(opts) {
   };
 
   // Only the driver should change the session. This data is derived from the internal session
-  let syncSession = () => {
+  const syncSession = () => {
     this.session = {
       state: session.state,
-      account: session.account
+      account: session.account,
     };
     trigger.session();
   };
@@ -113,7 +113,6 @@ function Driver(opts) {
     },
   };
 }
-
 
 
 export default Driver;

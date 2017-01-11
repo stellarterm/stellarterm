@@ -18,7 +18,7 @@ export default class OfferMaker extends React.Component {
         // Initialize price
         if (props.side === 'buy' && props.d.orderbook.bids.length > 0) {
           state.price = new BigNumber(props.d.orderbook.bids[0].price).toString() // Get rid of extra 0s
-        } else if (props.d.orderbook.asks.length > 0) { // Proptypes validation make sure this is sell
+        } else if (props.d.orderbook.asks.length > 0) { // Proptypes validation makes sure this is sell
           state.price = new BigNumber(props.d.orderbook.asks[0].price).toString() // Get rid of extra 0s
         }
 
