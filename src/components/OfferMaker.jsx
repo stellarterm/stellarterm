@@ -3,8 +3,8 @@ import Stellarify from '../lib/Stellarify';
 import Printify from '../lib/Printify';
 import BigNumber from 'bignumber.js';
 import _ from 'lodash';
-BigNumber.config({ EXPONENTIAL_AT: 100 });
 
+// OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
   constructor(props) {
     super(props);
@@ -77,6 +77,11 @@ export default class OfferMaker extends React.Component {
     this.handleSubmit = (e) => {
       // TODO: Hook up with driver
       e.preventDefault();
+      props.d.handlers.createOffer(props.side, {
+        price: this.state.price,
+        amount: this.state.amount,
+        total: this.state.total,
+      })
     }
   }
   render() {
@@ -84,14 +89,13 @@ export default class OfferMaker extends React.Component {
       return <div>Loading</div>;
     }
 
-
     return <div>
       <h3>{this.props.side}</h3>
-      <form onSubmit={this.handleSubmit}>
+      <form onSubmit={this.handleSubmit}  disabled={!this.state.valid}>
         <div>Price: <input type="text" value={this.state.price} onChange={(e) => this.updateState('price', e)} placeholder="" /></div>
         <div>Amount: <input type="text" value={this.state.amount} onChange={(e) => this.updateState('amount', e)} placeholder="" /></div>
         <div>Total: <input type="text" value={this.state.total} onChange={(e) => this.updateState('total', e)} placeholder="" /></div>
-        <input type="submit" value="Submit offer"></input>
+        <input type="submit" value="Submit offer" disabled={!this.state.valid}></input>
       </form>
     </div>
   }

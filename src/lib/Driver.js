@@ -3,23 +3,22 @@
 // This is similar to Redux except more flexible for faster development
 import Printify from '../lib/Printify';
 import Byol from './Byol';
-
+import _ from 'lodash';
+import BigNumber from 'bignumber.js';
+BigNumber.config({ EXPONENTIAL_AT: 100 });
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
 // It's in the same file as the driver because the driver is the only one that
 // should ever use the spoon.
 const MagicSpoon = {
-  Account(Server, keypair, onLoad, onUpdate) {
-    this.ready = false;
-    this.accountId = keypair.accountId();
-    const initialAccount = Server.loadAccount(this.accountId)
-    .then((res) => {
-      this.sequence = res.sequence;
-      this.balances = res.balances;
-      this.ready = true;
-      onLoad();
-    });
+  async Account(Server, keypair, onUpdate) {
+    let sdkAccount = await Server.loadAccount(keypair.accountId())
+    console.log(sdkAccount);
+    sdkAccount.signTx = transaction => {
+      transaction.sign(keypair);
+    };
+    return sdkAccount;
   },
   Orderbook(Server, baseBuying, counterSelling, onUpdate) {
     // Orderbook is an object that keeps track of the orderbook for you.
@@ -38,6 +37,56 @@ const MagicSpoon = {
     // TODO: Stream updates
     // TODO: Close
   },
+
+  // opts.baseBuying -- StellarSdk.Asset (example: XLM)
+  // opts.counterSelling -- StellarSdk.Asset (example: USD)
+  // opts.price -- Exchange ratio selling/buying
+  // opts.amount -- Here, it's relative to the base (JS-sdk does: Total amount selling)
+  // opts.type -- String of either 'buy' or 'sell' (relative to base currency)
+  createOffer(Server, spoonAccount, side, opts) {
+    let sdkBuying;
+    let sdkSelling;
+    let sdkPrice;
+    let sdkAmount;
+
+    const bigOptsPrice = new BigNumber(opts.price).toPrecision(15);
+    const bigOptsAmount = new BigNumber(opts.amount).toPrecision(15);
+
+    console.log(`Creating *${side}* offer at price ${opts.price}`);
+    if (side === 'buy') {
+      sdkBuying = opts.baseBuying; // ex: lumens
+      sdkSelling = opts.counterSelling; // ex: USD
+      sdkPrice = new BigNumber(1).dividedBy(bigOptsPrice);
+      sdkAmount = new BigNumber(bigOptsAmount).times(bigOptsPrice).toFixed(7);
+    } else if (side === 'sell') {
+      sdkBuying = opts.counterSelling; // ex: USD
+      sdkSelling = opts.baseBuying; // ex: lumens
+      sdkPrice = new BigNumber(bigOptsPrice);
+      sdkAmount = new BigNumber(bigOptsAmount).toFixed(7);
+    } else {
+      throw new Error(`Invalid side ${side}`);
+    }
+
+    const operationOpts = {
+      buying: sdkBuying,
+      selling: sdkSelling,
+      amount: String(sdkAmount),
+      price: String(sdkPrice),
+      offerId: 0, // 0 for new offer
+    };
+    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+      .addOperation(StellarSdk.Operation.manageOffer(operationOpts))
+      .build();
+    spoonAccount.signTx(transaction);
+    return Server.submitTransaction(transaction)
+      .then(res => {
+        console.log('Offer create success');
+        console.log(res)
+      })
+      .catch(err => {
+        console.error(err)
+      })
+  },
 };
 
 
@@ -47,7 +96,7 @@ const MagicSpoon = {
 function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
   this._baseBuying = new StellarSdk.Asset('XLM', null);
-  this._counterSelling = new StellarSdk.Asset('USD', 'GDZI4YC2ZYPVWIU54FGOZ62QF563XBSJSPBABW64XKP2DGVIR3YI3M23');
+  this._counterSelling = new StellarSdk.Asset('USD', 'GDGIZOLWKOSRXMRI2YJIPESVB4CGSABK4HTRQSRPEKIUZYICEXGOMST2');
 
   const byol = new Byol();
 
@@ -67,7 +116,7 @@ function Driver(opts) {
   const session = {
     // 3 states for session state: 'out', 'loading', 'in'
     state: 'out',
-    account: null,
+    account: null, // will hold a MagicSpoon.Account instance
     keypair: null,
   };
 
@@ -75,7 +124,7 @@ function Driver(opts) {
   const syncSession = () => {
     this.session = {
       state: session.state,
-      account: session.account,
+      account: session.account, // MagicSpoon.Account instance
     };
     trigger.session();
   };
@@ -104,13 +153,18 @@ function Driver(opts) {
       session.keypair = keypair;
       session.state = 'loading';
       syncSession();
-      session.account = new MagicSpoon.Account(this.Server, keypair, () => {
-        session.state = 'in';
-        syncSession();
-      }, () => {
+      session.account = await MagicSpoon.Account(this.Server, keypair, () => {
         syncSession();
       });
+      session.state = 'in';
+      syncSession();
     },
+    createOffer: async (side, opts) => {
+      MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
+        baseBuying: this.orderbook.baseBuying,
+        counterSelling: this.orderbook.counterSelling,
+      }));
+    }
   };
 }
 
