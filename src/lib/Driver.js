@@ -17,6 +17,23 @@ const MagicSpoon = {
     sdkAccount.signTx = transaction => {
       transaction.sign(keypair);
     };
+
+    let accountEvents = new EventSource(`${Server.serverUrl}/accounts/${keypair.accountId()}`);
+    accountEvents.onmessage = function(message) {
+      let response = JSON.parse(message.data);
+      let updated = false;
+      if (!_.isEqual(sdkAccount.balances, response.balances)) {
+        sdkAccount.balances = response.balances;
+        updated = true;
+      }
+      if (updated) {
+        onUpdate();
+      }
+    }
+    sdkAccount.close = () => {
+      accountEvents.close();
+    }
+
     return sdkAccount;
   },
   Orderbook(Server, baseBuying, counterSelling, onUpdate) {
@@ -94,8 +111,9 @@ const MagicSpoon = {
 // later though.
 function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
+  this.Server.serverUrl = opts.horizonUrl;
   this._baseBuying = new StellarSdk.Asset('XLM', null);
-  this._counterSelling = new StellarSdk.Asset('USD', 'GDGIZOLWKOSRXMRI2YJIPESVB4CGSABK4HTRQSRPEKIUZYICEXGOMST2');
+  this._counterSelling = new StellarSdk.Asset('USD', 'GBO4EDXUKN57H2Z4NRQ4XCXI3WZPB2CPTJ6CWYDXIU4WW747NYLMWI4W');
 
   const byol = new Byol();
 
