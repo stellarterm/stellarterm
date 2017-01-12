@@ -26,8 +26,7 @@ let driver = new Driver({
 class TermApp extends React.Component {
   constructor(props) {
     super(props);
-
-    this.d = driver;
+    this.d = props.d;
   }
   render() {
     return (
@@ -45,4 +44,4 @@ class TermApp extends React.Component {
   }
 };
 
-ReactDOM.render(<TermApp driver={driver} />, mountNode);
+ReactDOM.render(<TermApp d={driver} />, mountNode);

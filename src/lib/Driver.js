@@ -14,7 +14,6 @@ BigNumber.config({ EXPONENTIAL_AT: 100 });
 const MagicSpoon = {
   async Account(Server, keypair, onUpdate) {
     let sdkAccount = await Server.loadAccount(keypair.accountId())
-    console.log(sdkAccount);
     sdkAccount.signTx = transaction => {
       transaction.sign(keypair);
     };
@@ -112,23 +111,11 @@ function Driver(opts) {
   });
 
   // ----- Initializations above this line -----
-
-  const session = {
-    // 3 states for session state: 'out', 'loading', 'in'
+  // Only the driver should change the session.
+  this.session = {
     state: 'out',
-    account: null, // will hold a MagicSpoon.Account instance
-    keypair: null,
+    account: null, // MagicSpoon.Account instance
   };
-
-  // Only the driver should change the session. This data is derived from the internal session
-  const syncSession = () => {
-    this.session = {
-      state: session.state,
-      account: session.account, // MagicSpoon.Account instance
-    };
-    trigger.session();
-  };
-  syncSession();
 
   this.orderbook = new MagicSpoon.Orderbook(this.Server, this._baseBuying, this._counterSelling, () => {
     trigger.orderbook();
@@ -150,14 +137,14 @@ function Driver(opts) {
         console.log('Invalid secret key');
         return;
       }
-      session.keypair = keypair;
-      session.state = 'loading';
-      syncSession();
-      session.account = await MagicSpoon.Account(this.Server, keypair, () => {
-        syncSession();
+      this.session.state = 'loading';
+      trigger.session();
+
+      this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
+        trigger.session();
       });
-      session.state = 'in';
-      syncSession();
+      this.session.state = 'in';
+      trigger.session();
     },
     createOffer: async (side, opts) => {
       MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
