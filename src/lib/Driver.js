@@ -18,18 +18,19 @@ const MagicSpoon = {
       transaction.sign(keypair);
     };
 
-    let accountEvents = new EventSource(`${Server.serverUrl}/accounts/${keypair.accountId()}`);
-    accountEvents.onmessage = function(message) {
-      let response = JSON.parse(message.data);
-      let updated = false;
-      if (!_.isEqual(sdkAccount.balances, response.balances)) {
-        sdkAccount.balances = response.balances;
-        updated = true;
+    Server.accounts().accountId(keypair.accountId()).stream({
+      onmessage: res => {
+        let updated = false;
+        if (!_.isEqual(sdkAccount.balances, res.balances)) {
+          sdkAccount.balances = res.balances;
+          updated = true;
+        }
+        if (updated) {
+          onUpdate();
+        }
       }
-      if (updated) {
-        onUpdate();
-      }
-    }
+    });
+
     sdkAccount.close = () => {
       accountEvents.close();
     }
@@ -49,8 +50,26 @@ const MagicSpoon = {
         this.counterSelling = counterSelling;
         this.ready = true;
         onUpdate();
+
       });
-    // TODO: Stream updates
+    let streamingOrderbookClose = Server.orderbook(baseBuying, counterSelling)
+      .stream({
+        onmessage: res => {
+          let updated = false;
+          if (!_.isEqual(this.bids, res.bids)) {
+            this.bids = res.bids;
+            updated = true;
+          }
+          if (!_.isEqual(this.asks, res.asks)) {
+            this.asks = res.asks;
+            updated = true;
+          }
+          if (updated) {
+            onUpdate();
+          }
+        }
+      })
+    this.close = streamingOrderbookClose;
     // TODO: Close
   },
 
