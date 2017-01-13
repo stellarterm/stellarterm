@@ -23,14 +23,14 @@ export default function Byol() {
 
   // Organized way to trigger things (single source of truth)
   // Using trigger directly is not allowed
-  this.trigger = (eventName) => {
+  this.trigger = (eventName, opts) => {
     if (!events[eventName]) {
       return;
     }
     for (let i = 0; i < events[eventName].nextIndex; i += 1) {
       const listener = events[eventName].listeners[i];
       if (listener) {
-        listener();
+        listener(opts);
       }
     }
   };

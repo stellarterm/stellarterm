@@ -19,8 +19,6 @@ const MagicSpoon = {
       transaction.sign(keypair);
     };
 
-
-
     let accountEventsClose = Server.accounts().accountId(keypair.accountId()).stream({
       onmessage: res => {
         let updated = false;
@@ -199,12 +197,13 @@ function Driver(opts) {
   const availableEvents = [
     'session',
     'orderbook',
+    'orderbookPricePick',
   ];
   const trigger = {};
   availableEvents.forEach((eventName) => {
     this[`listen${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`] = cb => byol.listen(eventName, cb);
     this[`unlisten${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`] = id => byol.unlisten(eventName, id);
-    trigger[eventName] = () => byol.trigger(eventName);
+    trigger[eventName] = (opts) => byol.trigger(eventName, opts);
   });
 
   // ----- Initializations above this line -----
@@ -271,6 +270,11 @@ function Driver(opts) {
     removeOffer: async (offerId) => {
       MagicSpoon.removeOffer(this.Server, this.session.account, offerId);
     },
+    orderbookPricePick: (price) => {
+      trigger.orderbookPricePick({
+        price,
+      })
+    }
   };
 }
 

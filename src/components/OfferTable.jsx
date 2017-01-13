@@ -26,7 +26,11 @@ export default function OfferTable(props) {
         } else {
           rowStyle.background = `linear-gradient(to right, ${sellBackground} ${depthPercentage}%, ${altColor} ${depthPercentage}%)`;
         }
-        return <div className="OfferTable__row" key={offer.key} style={rowStyle}>
+        return <div
+          className="OfferTable__row"
+          key={offer.key}
+          style={rowStyle}
+          onClick={() => props.d.handlers.orderbookPricePick(offer.price)}>
           <div className="OfferTable__row__item">{offer.price}</div>
           <div className="OfferTable__row__item">{offer.base}</div>
           <div className="OfferTable__row__item">{offer.counter}</div>

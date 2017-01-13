@@ -27,6 +27,10 @@ export default class OfferMaker extends React.Component {
       this.forceUpdate();
     });
 
+    this.props.d.listenOrderbookPricePick(opts => {
+      this.updateState('price', opts.price);
+    });
+
     this.state = {
       valid: false,
       price: '', // Most sticky item (since the price is pretty static)
@@ -36,10 +40,9 @@ export default class OfferMaker extends React.Component {
       total: '',
     };
     // TODO: Limit the number of digits after the decimal that can be input
-    this.updateState = (item, e) => {
+    this.updateState = (item, value) => {
       let state = Object.assign(this.state);
       state.valid = false;
-      let value = e.target.value;
       if (item == 'price') {
         state.price = value;
       } else if (item == 'amount') {
@@ -92,9 +95,9 @@ export default class OfferMaker extends React.Component {
     return <div>
       <h3>{this.props.side}</h3>
       <form onSubmit={this.handleSubmit}  disabled={!this.state.valid}>
-        <div>Price: <input type="text" value={this.state.price} onChange={(e) => this.updateState('price', e)} placeholder="" /></div>
-        <div>Amount: <input type="text" value={this.state.amount} onChange={(e) => this.updateState('amount', e)} placeholder="" /></div>
-        <div>Total: <input type="text" value={this.state.total} onChange={(e) => this.updateState('total', e)} placeholder="" /></div>
+        <div>Price: <input type="text" value={this.state.price} onChange={(e) => this.updateState('price', e.target.value)} placeholder="" /></div>
+        <div>Amount: <input type="text" value={this.state.amount} onChange={(e) => this.updateState('amount', e.target.value)} placeholder="" /></div>
+        <div>Total: <input type="text" value={this.state.total} onChange={(e) => this.updateState('total', e.target.value)} placeholder="" /></div>
         <input type="submit" value="Submit offer" disabled={!this.state.valid}></input>
       </form>
     </div>

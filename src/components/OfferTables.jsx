@@ -59,6 +59,7 @@ export default class OfferTables extends React.Component {
             counterCurrency: counterLabel,
             baseCurrency: baseLabel,
             maxDepth,
+            d: this.props.d,
           })}
         </div>
         <div className="OfferTables_table">
@@ -69,6 +70,7 @@ export default class OfferTables extends React.Component {
             counterCurrency: counterLabel,
             baseCurrency: baseLabel,
             maxDepth,
+            d: this.props.d,
           })}
         </div>
       </div>
