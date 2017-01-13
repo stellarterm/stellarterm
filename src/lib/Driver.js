@@ -41,19 +41,17 @@ const MagicSpoon = {
     // We won't miss any offers assuming that the user only updates their offers through the client
     // with just one window open at a time
     sdkAccount.updateOffers = () => {
-      Server.offers('accounts', keypair.accountId())
+      return Server.offers('accounts', keypair.accountId())
         .limit(100) // TODO: Keep iterating through next() to show more than 100 offers
         .call()
         .then(res => {
           let newOffers = {};
           _.each(res.records, offer => {
-            console.log(offer.id)
             newOffers[offer.id] = offer;
-            console.log(newOffers)
           });
           sdkAccount.offers = newOffers;
-      console.log('updateing ofers')
           onUpdate();
+          return null;
         });
     }
     sdkAccount.updateOffers();
@@ -140,11 +138,12 @@ const MagicSpoon = {
       .addOperation(StellarSdk.Operation.manageOffer(operationOpts))
       .build();
     spoonAccount.sign(transaction);
-    return Server.submitTransaction(transaction)
+    Server.submitTransaction(transaction)
       .then(res => {
         console.log('Offer create success');
         console.log(res)
         spoonAccount.updateOffers(); // Just to be doubly sure
+        return;
       })
       .catch(err => {
         console.error(err)
