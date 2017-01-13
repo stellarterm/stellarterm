@@ -16,7 +16,7 @@ export default function AccountView({session}) {
   let offers = [];
   _.forIn(session.account.offers, offer => {
     console.log(offer)
-    offers.push(<li key={offer.id}>{offer.id} - {offer.price}</li>);
+    offers.push(<li key={offer.id}>{offer.id} - {1/offer.price}</li>);
     // TODO: only show this
   })
   let offersList = <ul>{offers}</ul>
