@@ -20,8 +20,9 @@ gulp.task('clean', (cb) => {
 
 // Styles
 gulp.task('styles', () => {
-  gulp.src(['./app/styles/**/*.css'], { base: './app/styles/' })
-  .pipe(gulp.dest('dist/styles'));
+  gulp.src('./src/**/*.scss')
+  .pipe($.sass().on('error', $.sass.logError))
+  .pipe(gulp.dest('./dist/css'));
 });
 
 // browserify
@@ -64,7 +65,7 @@ gulp.task('watch', baseTasks, () => {
     server: ['dist'],
   });
   gulp.watch('index.html', ['html-reload']);
-  gulp.watch(['styles/**/*.scss', 'styles/**/*.css'], ['css-reload']);
+  gulp.watch(['src/**/*.scss'], ['css-reload']);
 });
 
 const bsReload = (done) => {
@@ -72,7 +73,7 @@ const bsReload = (done) => {
   done();
 };
 gulp.task('html-reload', ['html'], bsReload);
-gulp.task('css-reload', ['styles', 'scripts'], bsReload);
+gulp.task('css-reload', ['styles'], bsReload);
 
 gulp.task('copyBower', () => gulp.src('bower_components/**/*')
     .pipe(gulp.dest('dist/bower_components/')));
