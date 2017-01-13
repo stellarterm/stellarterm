@@ -4,6 +4,7 @@
 import Printify from '../lib/Printify';
 import Byol from './Byol';
 import _ from 'lodash';
+import Stellarify from '../lib/Stellarify';
 import BigNumber from 'bignumber.js';
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -14,9 +15,17 @@ BigNumber.config({ EXPONENTIAL_AT: 100 });
 const MagicSpoon = {
   async Account(Server, keypair, onUpdate) {
     let sdkAccount = await Server.loadAccount(keypair.accountId())
-    sdkAccount.signTx = transaction => {
+    sdkAccount.sign = transaction => {
       transaction.sign(keypair);
     };
+
+    let postProcessAccount = account => {
+      _.each(account.balances, balance => {
+        balance.asset = Stellarify.asset(balance);
+      })
+    }
+
+    postProcessAccount(sdkAccount);
 
     let accountEventsClose = Server.accounts().accountId(keypair.accountId()).stream({
       onmessage: res => {
@@ -25,7 +34,9 @@ const MagicSpoon = {
           sdkAccount.balances = res.balances;
           updated = true;
         }
+
         if (updated) {
+          postProcessAccount(sdkAccount);
           onUpdate();
         }
       }
@@ -122,7 +133,7 @@ const MagicSpoon = {
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.manageOffer(operationOpts))
       .build();
-    spoonAccount.signTx(transaction);
+    spoonAccount.sign(transaction);
     return Server.submitTransaction(transaction)
       .then(res => {
         console.log('Offer create success');
@@ -131,6 +142,25 @@ const MagicSpoon = {
       .catch(err => {
         console.error(err)
       })
+  },
+  changeTrust(Server, spoonAccount, opts) {
+    let sdkLimit;
+    if (typeof opts.limit === 'string' || opts.limit instanceof String) {
+      sdkLimit = opts.limit;
+    } else if (opts.limit !== undefined) {
+      throw new Error('changeTrust opts.limit must be a string');
+    }
+
+    const operationOpts = {
+      asset: opts.asset,
+      limit: sdkLimit,
+    };
+
+    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+      .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
+      .build();
+    spoonAccount.sign(transaction);
+    const transactionResult = Server.submitTransaction(transaction);
   },
 };
 
@@ -198,6 +228,12 @@ function Driver(opts) {
         baseBuying: this.orderbook.baseBuying,
         counterSelling: this.orderbook.counterSelling,
       }));
+    },
+    removeTrustLine: async (asset, limit) => {
+      MagicSpoon.changeTrust(this.Server, this.session.account, {
+        asset: asset,
+        limit
+      })
     }
   };
 }
