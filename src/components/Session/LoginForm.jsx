@@ -4,7 +4,7 @@ export default class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      secretInput: 'SBF33P2MQEWAIZE3VZRUBRYREQHTECUWQ24L2HH4XDVVXIPH57JB2G3H',
+      secretInput: 'SB5ZMJBQ2CIKJQ6QV3OTLGNEUZLKL5DC3JQ6N45GPS6WRC52MN65WUA2',
     }
 
     this.handleInput = (event) => {

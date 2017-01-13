@@ -200,7 +200,7 @@ function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
   this.Server.serverUrl = opts.horizonUrl;
   this._baseBuying = new StellarSdk.Asset('XLM', null);
-  this._counterSelling = new StellarSdk.Asset('USD', 'GBO4EDXUKN57H2Z4NRQ4XCXI3WZPB2CPTJ6CWYDXIU4WW747NYLMWI4W');
+  this._counterSelling = new StellarSdk.Asset('USD', 'GBZ3P4Z53Z7ZHATW6KCA2OXEBWKQGN2433WMSMKF7OJXWFJL4JT6NG4V');
 
   const byol = new Byol();
 
@@ -264,10 +264,16 @@ function Driver(opts) {
         counterSelling: this.orderbook.counterSelling,
       }));
     },
-    removeTrustLine: async (asset, limit) => {
+    addTrust: async (code, issuer) => {
+      // For simplicity, currently only adds max trust line
       MagicSpoon.changeTrust(this.Server, this.session.account, {
-        asset: asset,
-        limit
+        asset: new StellarSdk.Asset(code, issuer),
+      })
+    },
+    removeTrust: async (code, issuer) => {
+      MagicSpoon.changeTrust(this.Server, this.session.account, {
+        asset: new StellarSdk.Asset(code, issuer),
+        limit: '0',
       })
     },
     removeOffer: async (offerId) => {
