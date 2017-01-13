@@ -24,7 +24,7 @@ class Session extends React.Component {
     } else if (state === 'loading') {
       return <div><p>Loading</p></div>
     } else if (state === 'in') {
-      return <AccountView session={d.session}></AccountView>
+      return <AccountView d={d}></AccountView>
     }
 
   }
