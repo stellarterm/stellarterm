@@ -1,0 +1,18 @@
+.OfferTable {
+  width: 100%;
+  text-align: right;
+  border-collapse: collapse;
+}
+  .OfferTable td {
+    font-size: 13px;
+    margin: 0;
+    padding: 4px 1px;
+  }
+  .OfferTable tr {
+    margin: 0;
+    padding: 0;
+  }
+  .OfferTable tr:nth-child(odd) {
+    background-color: #f7f7f7;
+  }
+

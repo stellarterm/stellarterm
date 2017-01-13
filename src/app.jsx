@@ -1,8 +1,8 @@
 const React = window.React = require('react');
 const ReactDOM = require('react-dom');
 const mountNode = document.getElementById('app');
-import Offers from './components/Offers.jsx';
-import OfferMaker from './components/OfferMaker.jsx';
+import OfferTables from './components/OfferTables.jsx';
+import OfferMakers from './components/OfferMakers.jsx';
 import Session from './components/Session.jsx';
 
 import Driver from './lib/Driver';
@@ -36,9 +36,8 @@ class TermApp extends React.Component {
           <p>Base currency: {this.d.baseBuyingAssetName()} {this.d.baseBuyingGetIssuer()}</p>
           <p>Counter currency: {this.d.counterSellingAssetName()} {this.d.counterSellingGetIssuer()}</p>
         </div>
-        <OfferMaker d={this.d} side="buy"></OfferMaker>
-        <OfferMaker d={this.d} side="sell"></OfferMaker>
-        <Offers d={this.d}></Offers>
+        <OfferMakers d={this.d}></OfferMakers>
+        <OfferTables d={this.d}></OfferTables>
       </div>
     );
   }

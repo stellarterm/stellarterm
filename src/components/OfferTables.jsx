@@ -4,7 +4,7 @@ import Stellarify from '../lib/Stellarify';
 import Printify from '../lib/Printify';
 import _ from 'lodash';
 
-class Offers extends React.Component {
+export default class OfferTables extends React.Component {
   constructor(props) {
     super(props);
     props.d.listenOrderbook(() => {
@@ -47,15 +47,16 @@ class Offers extends React.Component {
     });
 
     return (
-      <div>
-        <div>
+      <div className="OfferTables">
+        <div className="OfferTables_table">
           Buy offers
           {OfferTable({
             offers: buys,
             counterCurrency: counterLabel,
             baseCurrency: baseLabel,
           })}
-
+        </div>
+        <div className="OfferTables_table">
           Sell offers
           {OfferTable({
             offers: sells,
@@ -68,4 +69,3 @@ class Offers extends React.Component {
   }
 };
 
-export default Offers;

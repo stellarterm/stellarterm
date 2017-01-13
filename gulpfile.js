@@ -20,7 +20,7 @@ gulp.task('clean', (cb) => {
 
 // Styles
 gulp.task('styles', () => {
-  gulp.src('./src/**/*.scss')
+  gulp.src('./src/styles/**/*.scss')
   .pipe($.sass().on('error', $.sass.logError))
   .pipe(gulp.dest('./dist/css'));
 });

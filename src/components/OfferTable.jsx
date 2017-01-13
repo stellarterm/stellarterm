@@ -4,7 +4,7 @@ const _ = require('lodash');
 // Dumb component that mainly renders the UI
 
 function OfferTable(props) {
-  return <table>
+  return <table className="OfferTable">
     <tbody>
       <tr>
         <th>Price</th>

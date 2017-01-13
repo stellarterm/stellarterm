@@ -1,0 +1,25 @@
+const React = window.React = require('react');
+import OfferMaker from './OfferMaker.jsx';
+
+export default class OfferMakers extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props.d.listenOrderbook(() => {
+      this.forceUpdate();
+    });
+  }
+  render() {
+    if (!this.props.d.orderbook.ready) {
+      return <div>Loading</div>;
+    }
+
+    return <div className="OfferMakers">
+      <div className="OfferMakers_maker">
+        <OfferMaker d={this.props.d} side="buy"></OfferMaker>
+      </div>
+      <div className="OfferMakers_maker">
+        <OfferMaker d={this.props.d} side="sell"></OfferMaker>
+      </div>
+    </div>
+  }
+};
