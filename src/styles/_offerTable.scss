@@ -1,18 +1,29 @@
 .OfferTable {
   width: 100%;
   text-align: right;
-  border-collapse: collapse;
+  font-size: 14px;
 }
-  .OfferTable td {
-    font-size: 13px;
-    margin: 0;
-    padding: 4px 1px;
-  }
-  .OfferTable tr {
-    margin: 0;
-    padding: 0;
-  }
-  .OfferTable tr:nth-child(odd) {
-    background-color: #f7f7f7;
-  }
 
+.OfferTable__header {
+  display: flex;
+}
+  .OfferTable__header__item {
+    width: 25%;
+  }
+.OfferTable__row {
+  border-top: 1px;
+  border-left: 0;
+  border-right: 0;
+  border-bottom: 1px;
+  border-style: solid;
+  border-color: transparent;
+  display: flex;
+}
+.OfferTable__row:hover {
+  border-color: #555;
+  cursor: pointer;
+}
+  .OfferTable__row__item {
+    width: 25%;
+    padding: 5px 3px;
+  }

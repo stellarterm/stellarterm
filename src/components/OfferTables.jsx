@@ -2,6 +2,7 @@ const React = window.React = require('react');
 import OfferTable from './OfferTable.jsx';
 import Stellarify from '../lib/Stellarify';
 import Printify from '../lib/Printify';
+import BigNumber from 'bignumber.js';
 import _ from 'lodash';
 
 export default class OfferTables extends React.Component {
@@ -46,22 +47,28 @@ export default class OfferTables extends React.Component {
       }
     });
 
+    let maxDepth = BigNumber.max(buyDepth.toFixed(7), sellDepth.toFixed(7));
+
     return (
       <div className="OfferTables">
         <div className="OfferTables_table">
           Buy offers
           {OfferTable({
+            side: 'buy',
             offers: buys,
             counterCurrency: counterLabel,
             baseCurrency: baseLabel,
+            maxDepth,
           })}
         </div>
         <div className="OfferTables_table">
           Sell offers
           {OfferTable({
+            side: 'sell',
             offers: sells,
             counterCurrency: counterLabel,
             baseCurrency: baseLabel,
+            maxDepth,
           })}
         </div>
       </div>
