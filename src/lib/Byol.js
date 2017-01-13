@@ -24,7 +24,6 @@ export default function Byol() {
   // Organized way to trigger things (single source of truth)
   // Using trigger directly is not allowed
   this.trigger = (eventName) => {
-    console.log(`Triggered: ${eventName}`);
     if (!events[eventName]) {
       return;
     }

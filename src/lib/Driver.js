@@ -234,8 +234,6 @@ function Driver(opts) {
     trigger.orderbook();
     forceUpdateAccountOffers();
   });
-  // this.getOrderbook = () => this.Server.orderbook(this._baseBuying, this._counterSelling).call();
-
 
   this.baseBuyingAssetName = () => Printify.assetName(this._baseBuying);
   this.counterSellingAssetName = () => Printify.assetName(this._counterSelling);
