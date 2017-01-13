@@ -44,16 +44,29 @@ const MagicSpoon = {
 
     sdkAccount.offers = {};
 
-    let offerStreamClose = Server.offers('accounts', keypair.accountId()).stream({
-      onmessage: message => {
-        sdkAccount.offers[message.id] = message;
-        onUpdate();
-      }
-    })
+    // Horizon offers for account doesn't return us updates. So we will have to manually update it.
+    // We won't miss any offers assuming that the user only updates their offers through the client
+    // with just one window open at a time
+    sdkAccount.updateOffers = () => {
+      Server.offers('accounts', keypair.accountId())
+        .limit(100) // TODO: Keep iterating through next() to show more than 100 offers
+        .call()
+        .then(res => {
+          let newOffers = {};
+          _.each(res.records, offer => {
+            console.log(offer.id)
+            newOffers[offer.id] = offer;
+            console.log(newOffers)
+          });
+          sdkAccount.offers = newOffers;
+      console.log('updateing ofers')
+          onUpdate();
+        });
+    }
+    sdkAccount.updateOffers();
 
     sdkAccount.close = () => {
       accountEventsClose();
-      offerStreamClose();
     };
 
     return sdkAccount;
@@ -138,6 +151,7 @@ const MagicSpoon = {
       .then(res => {
         console.log('Offer create success');
         console.log(res)
+        spoonAccount.updateOffers(); // Just to be doubly sure
       })
       .catch(err => {
         console.error(err)
@@ -161,6 +175,20 @@ const MagicSpoon = {
       .build();
     spoonAccount.sign(transaction);
     const transactionResult = Server.submitTransaction(transaction);
+  },
+  async removeOffer(Server, spoonAccount, offerId) {
+    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+      .addOperation(StellarSdk.Operation.manageOffer({
+        buying: StellarSdk.Asset.native(),
+        selling: new StellarSdk.Asset('REMOVE', spoonAccount.accountId()),
+        amount: '0',
+        price: '1',
+        offerId,
+      }))
+      .build();
+    spoonAccount.sign(transaction);
+    const transactionResult = await Server.submitTransaction(transaction);
+    spoonAccount.updateOffers();
   },
 };
 
@@ -193,9 +221,18 @@ function Driver(opts) {
     state: 'out',
     account: null, // MagicSpoon.Account instance
   };
+  // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
+  // It shouldn't cause too much of an overhead
+  let forceUpdateAccountOffers = () => {
+    let updateFn = _.get(this.session, 'account.updateOffers');
+    if (updateFn) {
+      updateFn();
+    }
+  }
 
   this.orderbook = new MagicSpoon.Orderbook(this.Server, this._baseBuying, this._counterSelling, () => {
     trigger.orderbook();
+    forceUpdateAccountOffers();
   });
   // this.getOrderbook = () => this.Server.orderbook(this._baseBuying, this._counterSelling).call();
 
@@ -234,7 +271,10 @@ function Driver(opts) {
         asset: asset,
         limit
       })
-    }
+    },
+    removeOffer: async (offerId) => {
+      MagicSpoon.removeOffer(this.Server, this.session.account, offerId);
+    },
   };
 }
 

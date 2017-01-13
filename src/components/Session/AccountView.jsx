@@ -15,7 +15,6 @@ export default function AccountView({d}) {
   let balancesList = <ul>{balances}</ul>
 
   let trustLines = [];
-      console.log(account.balances)
   account.balances.forEach(balance => {
     if (balance.asset_type !== 'native') {
       let limit = balance.limit == '922337203685.4775807' ? 'unlimited': balance.limit;
@@ -29,7 +28,7 @@ export default function AccountView({d}) {
 
   let offers = [];
   _.forIn(account.offers, offer => {
-    offers.push(<li key={offer.id}>{offer.id} - {1/offer.price}</li>);
+    offers.push(<li key={offer.id}>{offer.id} - {1/offer.price}<button onClick={() => d.handlers.removeOffer(offer.id)}>Remove</button></li>);
     // TODO: only show this
   })
   let offersList = <ul>{offers}</ul>
