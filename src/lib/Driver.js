@@ -19,13 +19,7 @@ const MagicSpoon = {
       transaction.sign(keypair);
     };
 
-    let postProcessAccount = account => {
-      _.each(account.balances, balance => {
-        balance.asset = Stellarify.asset(balance);
-      })
-    }
 
-    postProcessAccount(sdkAccount);
 
     let accountEventsClose = Server.accounts().accountId(keypair.accountId()).stream({
       onmessage: res => {
@@ -36,7 +30,6 @@ const MagicSpoon = {
         }
 
         if (updated) {
-          postProcessAccount(sdkAccount);
           onUpdate();
         }
       }

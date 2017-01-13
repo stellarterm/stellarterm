@@ -4,7 +4,7 @@ import Printify from '../../lib/Printify';
 import _ from 'lodash';
 
 export default class AccountView extends React.Component {
-    constructor(props) {
+  constructor(props) {
     super(props);
     this.state = {
       trustCode: 'USD',
@@ -36,11 +36,17 @@ export default class AccountView extends React.Component {
 
     let trustLines = [];
     account.balances.forEach(balance => {
+      let removeButton;
+      if (balance.balance === '0.0000000') {
+        removeButton = <button onClick={() => this.props.d.handlers.removeTrust(balance.asset_code, balance.asset_issuer)}>Remove</button>
+      } else {
+        removeButton = <button disabled="true">Unable to remove trust line until balance is 0</button>
+      }
       if (balance.asset_type !== 'native') {
         let limit = balance.limit == '922337203685.4775807' ? 'unlimited': balance.limit;
         trustLines.push(<li key={balance.asset_issuer + balance.asset_code}>
           <span>{balance.asset_code}: Issuer: {balance.asset_issuer} Limit: {limit}</span>
-          <button onClick={() => this.props.d.handlers.removeTrust(balance.asset_code, balance.asset_issuer)}>Remove</button>
+          {removeButton}
         </li>)
       }
     })
