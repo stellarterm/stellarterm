@@ -18,7 +18,7 @@ const MagicSpoon = {
       transaction.sign(keypair);
     };
 
-    Server.accounts().accountId(keypair.accountId()).stream({
+    let accountEventsClose = Server.accounts().accountId(keypair.accountId()).stream({
       onmessage: res => {
         let updated = false;
         if (!_.isEqual(sdkAccount.balances, res.balances)) {
@@ -31,9 +31,19 @@ const MagicSpoon = {
       }
     });
 
+    sdkAccount.offers = {};
+
+    let offerStreamClose = Server.offers('accounts', keypair.accountId()).stream({
+      onmessage: message => {
+        sdkAccount.offers[message.id] = message;
+        onUpdate();
+      }
+    })
+
     sdkAccount.close = () => {
-      accountEvents.close();
-    }
+      accountEventsClose();
+      offerStreamClose();
+    };
 
     return sdkAccount;
   },
