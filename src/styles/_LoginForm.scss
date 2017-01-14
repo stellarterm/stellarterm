@@ -1,0 +1,24 @@
+.LoginForm {
+  width: 600px;
+  margin: 0 auto;
+  border: 1px solid $s-color-primary7;
+  background: $s-color-primary9;
+  border-radius: $s-var-radius;
+  margin-top: 1em;
+}
+.LoginForm__form {
+  padding: 20px;
+}
+
+.LoginForm__password {
+  width: 100%;
+  margin-bottom: 0.5em;
+}
+.LoginForm__notes {
+  border-top: 1px solid $s-color-primary7;
+  padding: 20px;
+}
+
+.LoginForm__notes ul {
+  margin-left: 2em;
+}
