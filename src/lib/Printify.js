@@ -6,8 +6,8 @@ const Printify = {
     return asset.isNative() ? 'lumens' : asset.getCode();
   },
   lightenZeros(number) {
-    let emph = number.replace(/0+$/, '');
-    let unemphMatch = number.match(/0+$/);
+    let emph = number.replace(/\.?0+$/, '');
+    let unemphMatch = number.match(/\.?0+$/);
     let unemph;
     if (unemphMatch !== null) {
       unemph = <span className="lightenZeros__unemph">{unemphMatch[0]}</span>
