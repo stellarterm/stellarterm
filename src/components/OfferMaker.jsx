@@ -96,27 +96,68 @@ export default class OfferMaker extends React.Component {
       return <div>Loading</div>;
     }
 
+    let capitalizedSide = 'Buy';
+    if (this.props.side === 'sell') {
+      capitalizedSide = 'Sell';
+    }
+
+    let baseAssetName = Printify.assetName(this.props.d.orderbook.baseBuying);
+    let counterAssetName = Printify.assetName(this.props.d.orderbook.counterSelling);
+
     let title;
     if (this.props.side === 'buy') {
-      title = `Buy ${Printify.assetName(this.props.d.orderbook.baseBuying)}`;
+      title = `Buy ${baseAssetName}`;
     } else {
-      title = `Sell ${Printify.assetName(this.props.d.orderbook.baseBuying)}`;
+      title = `Sell ${baseAssetName}`;
     }
 
     let submit;
     if (this.props.d.session.state === 'in') {
-      submit = <input type="submit" className="s-button" value={'Submit ' + this.props.side + ' offer'} disabled={!this.state.valid}></input>
+      submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid}></input>
     } else {
       submit = <span>Log in to create an offer</span>
     }
 
+    let summary;
+    if (this.state.valid) {
+      if (this.props.side === 'buy') {
+        summary = <div className="s-alert s-alert--info">Buy {this.state.amount} {baseAssetName} for {this.state.total} {counterAssetName}</div>;
+      } else {
+        summary = <div className="s-alert s-alert--info">Sell {this.state.amount} {baseAssetName} for {this.state.total} {counterAssetName}</div>;
+      }
+    }
+
+
+
     return <div>
       <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
       <form onSubmit={this.handleSubmit}  disabled={!this.state.valid}>
-        <div>Price: <input type="text" value={this.state.price} onChange={(e) => this.updateState('price', e.target.value)} placeholder="" /></div>
-        <div>Amount: <input type="text" value={this.state.amount} onChange={(e) => this.updateState('amount', e.target.value)} placeholder="" /></div>
-        <div>Total: <input type="text" value={this.state.total} onChange={(e) => this.updateState('total', e.target.value)} placeholder="" /></div>
-        {submit}
+        <table className="OfferMaker__table">
+          <tbody>
+            <tr className="OfferMaker__table__row">
+              <td className="OfferMaker__table__label">Price per {baseAssetName}</td>
+              <td className="OfferMaker__table__input">
+                <input type="text" className="OfferMaker__table__input__input" value={this.state.price} onChange={(e) => this.updateState('price', e.target.value)} placeholder="" />
+              </td>
+            </tr>
+            <tr className="OfferMaker__table__row">
+              <td className="OfferMaker__table__label">Amount {baseAssetName}</td>
+              <td className="OfferMaker__table__input">
+                <input type="text" className="OfferMaker__table__input__input" value={this.state.amount} onChange={(e) => this.updateState('amount', e.target.value)} placeholder="" />
+              </td>
+            </tr>
+            <tr className="OfferMaker__table__row">
+              <td className="OfferMaker__table__label">Total {counterAssetName}</td>
+              <td className="OfferMaker__table__input">
+                <input type="text" className="OfferMaker__table__input__input" value={this.state.total} onChange={(e) => this.updateState('total', e.target.value)} placeholder="" />
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div className="OfferMaker__overview">
+          {summary}
+          {submit}
+        </div>
       </form>
     </div>
   }
