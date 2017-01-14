@@ -19,13 +19,20 @@
     font-size: $s-scale-3;
   }
 
+  .island__separator {
+    border-top: 1px solid $s-color-neutral7;
+    width: 100%;
+    margin-top: 40px;
+    margin-bottom: 30px;
+  }
+
   .island__sub {
     display: flex;
-    padding: 0 10px;
+    padding: 0 14px;
     justify-content: space-between;
   }
     .island__sub__division {
-      margin: 0 10px;
+      margin: 0 14px;
       flex: 1;
     }
       .island__sub__division__title {

@@ -4,6 +4,7 @@ const mountNode = document.getElementById('app');
 import OfferTables from './components/OfferTables.jsx';
 import OfferMakers from './components/OfferMakers.jsx';
 import Session from './components/Session.jsx';
+import PairPicker from './components/PairPicker.jsx';
 
 import Driver from './lib/Driver';
 
@@ -38,22 +39,14 @@ class TermApp extends React.Component {
           <Session d={this.d}></Session>
         </div>
         <div className="island">
-          <div className="island__header">
-            Currency pair picker
-          </div>
-          <p>Base currency: {this.d.baseBuyingAssetName()} {this.d.baseBuyingGetIssuer()}</p>
-          <p>Counter currency: {this.d.counterSellingAssetName()} {this.d.counterSellingGetIssuer()}</p>
-        </div>
-        <div className="island">
-          <div className="island__header">
-            Create offer
-          </div>
-          <OfferMakers d={this.d}></OfferMakers>
+          <PairPicker d={this.d}></PairPicker>
         </div>
         <div className="island">
           <div className="island__header">
             Orderbook
           </div>
+          <OfferMakers d={this.d}></OfferMakers>
+          <div className="island__separator"></div>
           <OfferTables d={this.d}></OfferTables>
         </div>
       </div>
