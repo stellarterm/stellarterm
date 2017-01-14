@@ -1,0 +1,14 @@
+.HeaderBack {
+  background: #fff;
+  border-bottom: 1px solid $s-color-neutral6;
+  margin-bottom: 2em;
+}
+.Header__nav {
+  height: 70px;
+  display: flex;
+  align-items: center;
+}
+.Header__nav__item {
+  margin-right: 2em;
+  text-decoration: none;
+}
