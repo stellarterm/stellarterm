@@ -33,7 +33,8 @@
   }
     .island__sub__division {
       margin: 0 14px;
-      flex: 1;
+      flex: 1 0;
+      width: 0; // no-flex
     }
       .island__sub__division__title {
         font-size: 22px;

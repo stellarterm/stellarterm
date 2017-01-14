@@ -1,5 +1,54 @@
 .AssetCard {
   background: #c0e8da;
   border-radius: $s-var-radius;
-  padding: 10px;
+  display: flex;
+  padding: 8px 16px 8px 8px;
+  height: 64px;
+  align-items: center;
 }
+  .AssetCard__logo {
+    width: 50px;
+    height: 50px;
+    background: #fff;
+    flex: 0 0 auto;
+    margin-right: 16px;
+  }
+  .AssetCard__content {
+    overflow: hidden;
+  }
+  .AssetCard__header {
+    display: flex;
+    align-items: baseline;
+    height: 28px;
+    border-bottom: 1px solid rgba(0,0,0,0.15);
+  }
+
+  .AssetCard__code {
+    font-weight: 700;
+    font-size: $s-scale-1;
+    line-height: 24px;
+    margin-right: 8px;
+  }
+
+  .AssetCard__federation {
+    text-decoration: none;
+    font-size: $s-scale-3;
+    line-height: 24px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .AssetCard__federation:hover {
+    border-bottom: 1px solid #000;
+  }
+
+  .AssetCard__issuerAccountId {
+    margin: 0;
+    font-size: 10px;
+    padding-left: 2px; // Fine tuning for alignment;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 1px;
+    opacity: 0.8;
+  }
