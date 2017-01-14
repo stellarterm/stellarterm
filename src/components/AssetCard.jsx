@@ -9,7 +9,17 @@ export default class AssetCard extends React.Component {
     let asset = this.props.asset;
 
     if (asset.isNative()) {
-      return <div className="AssetCard">lumens</div>
+      return <div className="AssetCard">
+        <div className="AssetCard__logo">
+        </div>
+        <div className="AssetCard__content">
+          <div className="AssetCard__header">
+            <span className="AssetCard__code">{this.props.asset.getCode()}</span>
+            <span className="AssetCard__federation">Stellar Network</span>
+          </div>
+          <p className="AssetCard__issuerAccountId">native lumens</p>
+        </div>
+      </div>
     }
 
     return <div className="AssetCard">

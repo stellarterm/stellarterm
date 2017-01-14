@@ -1,5 +1,5 @@
 .AssetCard {
-  background: #c0e8da;
+  background: #eee;
   border-radius: $s-var-radius;
   display: flex;
   padding: 8px 16px 8px 8px;
@@ -38,14 +38,14 @@
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .AssetCard__federation:hover {
+  a.AssetCard__federation:hover {
     border-bottom: 1px solid #000;
   }
 
   .AssetCard__issuerAccountId {
     margin: 0;
     font-size: 10px;
-    padding-left: 2px; // Fine tuning for alignment;
+    padding-left: 1px; // Fine tuning for alignment due to keming stuff
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
