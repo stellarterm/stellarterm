@@ -31,13 +31,31 @@ class TermApp extends React.Component {
   render() {
     return (
       <div>
-        <Session d={this.d}></Session>
-        <div>
+        <div className="island">
+          <div className="island__header">
+            Account
+          </div>
+          <Session d={this.d}></Session>
+        </div>
+        <div className="island">
+          <div className="island__header">
+            Currency pair picker
+          </div>
           <p>Base currency: {this.d.baseBuyingAssetName()} {this.d.baseBuyingGetIssuer()}</p>
           <p>Counter currency: {this.d.counterSellingAssetName()} {this.d.counterSellingGetIssuer()}</p>
         </div>
-        <OfferMakers d={this.d}></OfferMakers>
-        <OfferTables d={this.d}></OfferTables>
+        <div className="island">
+          <div className="island__header">
+            Create offer
+          </div>
+          <OfferMakers d={this.d}></OfferMakers>
+        </div>
+        <div className="island">
+          <div className="island__header">
+            Orderbook
+          </div>
+          <OfferTables d={this.d}></OfferTables>
+        </div>
       </div>
     );
   }

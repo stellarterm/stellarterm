@@ -13,11 +13,11 @@ export default class OfferMakers extends React.Component {
       return <div>Loading</div>;
     }
 
-    return <div className="OfferMakers">
-      <div className="OfferMakers_maker">
+    return <div className="OfferMakers island__sub">
+      <div className="OfferMakers_maker island__sub__division">
         <OfferMaker d={this.props.d} side="buy"></OfferMaker>
       </div>
-      <div className="OfferMakers_maker">
+      <div className="OfferMakers_maker island__sub__division">
         <OfferMaker d={this.props.d} side="sell"></OfferMaker>
       </div>
     </div>

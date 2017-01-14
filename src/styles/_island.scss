@@ -1,0 +1,35 @@
+.island {
+  min-width: 800px;
+  max-width: 1000px;
+  margin: 0 auto;
+  box-shadow: 0 0 2px #fff;
+  background: #fff;
+  margin-bottom: 18px;
+  border: 1px solid $s-color-neutral7;
+  border-radius: 2px;
+  padding-bottom: 20px;
+}
+
+  .island__header {
+    background-color: $s-color-neutral8;
+    border-bottom: 1px solid $s-color-neutral7;
+    padding: 8px 20px;
+    font-size: $s-scale-3;
+  }
+
+  .island__sub {
+    display: flex;
+    padding: 0 10px;
+    justify-content: space-between;
+  }
+    .island__sub__division {
+      margin: 0 10px;
+      flex: 1;
+    }
+      .island__sub__division__title {
+        font-size: 22px;
+        margin-bottom: 8px;
+        margin-top: 12px;
+        font-weight: 400;
+        text-align: center;
+      }

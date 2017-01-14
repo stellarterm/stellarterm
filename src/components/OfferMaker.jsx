@@ -92,13 +92,20 @@ export default class OfferMaker extends React.Component {
       return <div>Loading</div>;
     }
 
+    let title;
+    if (this.props.side === 'buy') {
+      title = `Buy ${Printify.assetName(this.props.d.orderbook.baseBuying)}`;
+    } else {
+      title = `Sell ${Printify.assetName(this.props.d.orderbook.baseBuying)}`;
+    }
+
     return <div>
-      <h3>{this.props.side}</h3>
+      <h3 className="island__sub__division__title">{title}</h3>
       <form onSubmit={this.handleSubmit}  disabled={!this.state.valid}>
         <div>Price: <input type="text" value={this.state.price} onChange={(e) => this.updateState('price', e.target.value)} placeholder="" /></div>
         <div>Amount: <input type="text" value={this.state.amount} onChange={(e) => this.updateState('amount', e.target.value)} placeholder="" /></div>
         <div>Total: <input type="text" value={this.state.total} onChange={(e) => this.updateState('total', e.target.value)} placeholder="" /></div>
-        <input type="submit" value="Submit offer" disabled={!this.state.valid}></input>
+        <input type="submit" className="s-button" value="Submit offer" disabled={!this.state.valid}></input>
       </form>
     </div>
   }

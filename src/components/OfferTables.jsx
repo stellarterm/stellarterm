@@ -50,9 +50,9 @@ export default class OfferTables extends React.Component {
     let maxDepth = BigNumber.max(buyDepth.toFixed(7), sellDepth.toFixed(7));
 
     return (
-      <div className="OfferTables">
-        <div className="OfferTables_table">
-          Buy offers
+      <div className="OfferTables island__sub">
+        <div className="OfferTables__tables island__sub__division">
+          <h3 className="island__sub__division__title">Buy offers</h3>
           {OfferTable({
             side: 'buy',
             offers: buys,
@@ -62,8 +62,8 @@ export default class OfferTables extends React.Component {
             d: this.props.d,
           })}
         </div>
-        <div className="OfferTables_table">
-          Sell offers
+        <div className="OfferTables__table island__sub__division">
+          <h3 className="island__sub__division__title">Sell offers</h3>
           {OfferTable({
             side: 'sell',
             offers: sells,

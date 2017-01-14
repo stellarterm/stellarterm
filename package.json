@@ -18,7 +18,9 @@
     "bignumber.js": "^4.0.0",
     "gulp": "^3.9.1",
     "gulp-sass": "^3.1.0",
-    "lodash": "^4.17.4"
+    "lodash": "^4.17.4",
+    "solar-css": "git+https://github.com/stellar/solar.git",
+    "solar-stellarorg": "git+https://github.com/irisli/solar-stellarterm.git"
   },
   "devDependencies": {
     "babel-plugin-transform-runtime": "^6.15.0",

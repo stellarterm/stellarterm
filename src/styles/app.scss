@@ -1,3 +1,15 @@
+@import 'node_modules/solar-css/lib/index';
+@import 'node_modules/solar-stellarterm/lib/index';
+
+@import 'node_modules/solar-css/styles/index';
+@import 'node_modules/solar-stellarterm/styles/index';
+
+html, body {
+  background: #F3F5FC;
+}
+
+@import 'island';
+
 @import 'offerTables';
   @import 'offerTable';
 
