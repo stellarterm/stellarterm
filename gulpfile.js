@@ -46,7 +46,7 @@ bundler.on('update', rebundle);
 bundler.on('log', $.util.log);
 gulp.task('scripts', rebundle);
 
-gulp.task('html', () => gulp.src('index.html')
+gulp.task('html', () => gulp.src('./src/index.html')
     .pipe(gulp.dest('dist')));
 
 gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp.src('./app/*.html')
@@ -64,7 +64,7 @@ gulp.task('watch', baseTasks, () => {
     logPrefix: 'BS',
     server: ['dist'],
   });
-  gulp.watch('index.html', ['html-reload']);
+  gulp.watch('./src/index.html', ['html-reload']);
   gulp.watch(['src/**/*.scss'], ['css-reload']);
 });
 
