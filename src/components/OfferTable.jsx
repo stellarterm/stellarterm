@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 const _ = require('lodash');
+import Printify from '../lib/Printify';
 
 
 
@@ -31,10 +32,10 @@ export default function OfferTable(props) {
           key={offer.key}
           style={rowStyle}
           onClick={() => props.d.handlers.orderbookPricePick(offer.price)}>
-          <div className="OfferTable__row__item">{offer.price}</div>
-          <div className="OfferTable__row__item">{offer.base}</div>
-          <div className="OfferTable__row__item">{offer.counter}</div>
-          <div className="OfferTable__row__item">{offer.depth}</div>
+          <div className="OfferTable__row__item">{Printify.lightenZeros(offer.price)}</div>
+          <div className="OfferTable__row__item">{Printify.lightenZeros(offer.base)}</div>
+          <div className="OfferTable__row__item">{Printify.lightenZeros(offer.counter)}</div>
+          <div className="OfferTable__row__item">{Printify.lightenZeros(offer.depth)}</div>
         </div>
       })
     }
