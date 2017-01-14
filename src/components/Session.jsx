@@ -14,7 +14,7 @@ class Session extends React.Component {
     this.logIn = this.props.d.handlers.logIn;
   }
   componentWillUnmount() {
-    this.d.unlistenSession(this.listenId);
+    this.props.d.unlistenSession(this.listenId);
   }
   render() {
     let d = this.props.d;
