@@ -4,7 +4,10 @@
 @import 'node_modules/solar-css/styles/index';
 @import 'node_modules/solar-stellarterm/styles/index';
 
-html, body {
+html {
+  background: $s-color-primary9;
+}
+body {
   background: $s-color-primary9;
 }
 
