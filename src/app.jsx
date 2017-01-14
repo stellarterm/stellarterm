@@ -6,7 +6,7 @@ import OfferMakers from './components/OfferMakers.jsx';
 import Session from './components/Session.jsx';
 import PairPicker from './components/PairPicker.jsx';
 import url from 'url';
-
+import Header from './components/Header.jsx';
 import Driver from './lib/Driver';
 
 let network = {};
@@ -50,20 +50,22 @@ class TermApp extends React.Component {
   }
   render() {
     let url = this.state.url;
+
+    let body;
     if (url === '') {
       // Home page
-      return <div>
+      body = <div>
         Welcome to stellarterm.com
       </div>
     } else if (url === 'account') {
-      return <div className="island">
+      body = <div className="island">
         <div className="island__header">
           Account
         </div>
         <Session d={this.d}></Session>
       </div>
     } else if (url === 'trading') {
-      return <div>
+      body = <div>
         <div className="island">
           <PairPicker d={this.d}></PairPicker>
         </div>
@@ -76,9 +78,16 @@ class TermApp extends React.Component {
           <OfferTables d={this.d}></OfferTables>
         </div>
       </div>;
+    } else {
+
+      body = <div>Page not found</div>
     }
 
-    return <div>Page not found</div>
+    return <div>
+      <Header></Header>
+      {body}
+    </div>;
+
   }
 };
 
