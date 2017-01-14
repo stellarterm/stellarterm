@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import Printify from '../lib/Printify';
+import directory from '../directory';
 
 export default class AssetCard extends React.Component {
   constructor(props) {
@@ -11,6 +12,7 @@ export default class AssetCard extends React.Component {
     if (asset.isNative()) {
       return <div className="AssetCard">
         <div className="AssetCard__logo">
+        <img className="AssetCard__logo__image" src={directory.data['Stellar Network'].logo}></img>
         </div>
         <div className="AssetCard__content">
           <div className="AssetCard__header">
@@ -24,6 +26,7 @@ export default class AssetCard extends React.Component {
 
     return <div className="AssetCard">
       <div className="AssetCard__logo">
+        <img className="AssetCard__logo__image" src={directory.data['stellarterm.com'].logo}></img>
       </div>
       <div className="AssetCard__content">
         <div className="AssetCard__header">

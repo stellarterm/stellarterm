@@ -13,6 +13,12 @@
     flex: 0 0 auto;
     margin-right: 16px;
   }
+  .AssetCard__logo__image {
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    display: block;
+  }
   .AssetCard__content {
     overflow: hidden;
   }
