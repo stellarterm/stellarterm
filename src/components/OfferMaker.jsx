@@ -10,6 +10,10 @@ export default class OfferMaker extends React.Component {
     super(props);
     let initialized = false;
 
+    this.props.d.listenSession(() => {
+      this.forceUpdate();
+    });
+
     props.d.listenOrderbook(() => {
       if (!initialized) {
         initialized = true;
@@ -99,13 +103,20 @@ export default class OfferMaker extends React.Component {
       title = `Sell ${Printify.assetName(this.props.d.orderbook.baseBuying)}`;
     }
 
+    let submit;
+    if (this.props.d.session.state === 'in') {
+      submit = <input type="submit" className="s-button" value={'Submit ' + this.props.side + ' offer'} disabled={!this.state.valid}></input>
+    } else {
+      submit = <span>Log in to create an offer</span>
+    }
+
     return <div>
-      <h3 className="island__sub__division__title">{title}</h3>
+      <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
       <form onSubmit={this.handleSubmit}  disabled={!this.state.valid}>
         <div>Price: <input type="text" value={this.state.price} onChange={(e) => this.updateState('price', e.target.value)} placeholder="" /></div>
         <div>Amount: <input type="text" value={this.state.amount} onChange={(e) => this.updateState('amount', e.target.value)} placeholder="" /></div>
         <div>Total: <input type="text" value={this.state.total} onChange={(e) => this.updateState('total', e.target.value)} placeholder="" /></div>
-        <input type="submit" className="s-button" value="Submit offer" disabled={!this.state.valid}></input>
+        {submit}
       </form>
     </div>
   }
