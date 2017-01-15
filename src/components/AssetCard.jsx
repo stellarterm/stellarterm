@@ -19,9 +19,9 @@ export default class AssetCard extends React.Component {
 
     let federationlink;
     if (!source.website) {
-      federationlink = <a className="AssetCard__federation" href={source.website} target="_blank">{source.name}</a>
-    } else {
       federationlink = <span className="AssetCard__federation">{source.name}</span>
+    } else {
+      federationlink = <a className="AssetCard__federation" href={source.website} target="_blank">{source.name}</a>
     }
 
     let issuerAccountId;
