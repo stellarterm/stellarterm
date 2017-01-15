@@ -47,7 +47,6 @@ export default class AccountView extends React.Component {
     let offersList = <ul>{offers}</ul>
     return <div>
       <BalancesTable d={this.props.d}></BalancesTable>
-      <AddTrust d={this.props.d}></AddTrust>
     </div>
   }
 }

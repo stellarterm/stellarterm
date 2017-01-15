@@ -53,7 +53,7 @@ export default class BalancesTable extends React.Component {
     return <div className="so-back">
       <div className="island">
         <div className="island__header">
-          Balances and Trust
+          Balances
         </div>
         <table className="BalancesTable">
           <thead>

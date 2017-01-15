@@ -50,6 +50,7 @@ class TermApp extends React.Component {
   }
   render() {
     let url = this.state.url;
+    let urlParts = url.split('/');
 
     let body;
     if (url === '') {
@@ -59,8 +60,8 @@ class TermApp extends React.Component {
           Welcome to stellarterm.com
         </div>
       </div>
-    } else if (url === 'account') {
-      body = <Session d={this.d}></Session>
+    } else if (urlParts[0] === 'account') {
+      body = <Session d={this.d} urlParts={urlParts}></Session>
     } else if (url === 'trading') {
       body = <div>
         <div className="so-back islandBack">
