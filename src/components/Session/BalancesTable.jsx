@@ -12,7 +12,6 @@ export default class BalancesTable extends React.Component {
   render() {
     let account = this.props.d.session.account;
 
-
     let nativeBalances = [];
     let knownBalances = [];
     let unknownBalances = [];
