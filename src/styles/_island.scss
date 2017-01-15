@@ -6,7 +6,7 @@
 .island {
   width: 980px;
   margin: 0 auto;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   background: #fff;
   // margin-bottom: 18px;
   // border: 1px solid $s-color-neutral5;
@@ -30,7 +30,7 @@
     border-bottom: 1px solid $s-color-neutral7;
     border-radius: 3px 3px 0 0;
 
-    padding: 8px 20px;
+    padding: 12px 20px;
     font-size: $s-scale-3;
   }
 
