@@ -60,12 +60,7 @@ export default class AccountView extends React.Component {
     })
     let offersList = <ul>{offers}</ul>
     return <div>
-      <p>Logged in as: {account.accountId()}</p>
       <BalancesTable d={this.props.d}></BalancesTable>
-      <p>Offers</p>
-      {offersList}
-      <p>Trust Lines</p>
-      {trustLinesList}
       <form onSubmit={this.handleSubmitTrust}>
         <input type="text" value={this.state.trustCode} onChange={this.handleInputTrustCode} placeholder="Asset code" />
         <input type="text" value={this.state.trustIssuer} onChange={this.handleInputTrustIssuer} placeholder="Asset Issuer" />

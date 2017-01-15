@@ -32,19 +32,39 @@ export default class BalancesTable extends React.Component {
 
       let removeLink;
       if (balance.balance === '0.0000000') {
-        removeLink = <button onClick={() => this.props.d.handlers.removeTrust(balance.asset_code, balance.asset_issuer)}>Remove</button>
+        removeLink = <a className="BalancesTable__row__removeLink" onClick={() => this.props.d.handlers.removeTrust(balance.asset_code, balance.asset_issuer)}>Remove trust</a>
       } else {
-        removeLink = <button disabled="true">Unable to remove trust line until balance is 0</button>
+        removeLink = <span className="BalancesTable__row__removeLink">Trust can be removed when balance is 0</span>
       }
-      balanceCards.push(<AssetCard key={balance.asset_issuer + balance.asset_code} asset={balanceAsset} fixed={true}>
-        Balance: {balance.balance} {balanceAsset.getCode()}
-        Trust limit: {limit}
-        {removeLink}
-      </AssetCard>);
+
+      let limitCell = <td>N/A</td>;
+      if (balance.asset_type !== 'native') {
+        limitCell = <td>Trust limit: {limit}<br />{removeLink}</td>
+      }
+
+      balanceCards.push(<tr className="BalancesTable__row" key={balance.asset_issuer + balance.asset_code}>
+        <td>
+          <AssetCard asset={balanceAsset} fixed={true}></AssetCard>
+        </td>
+        <td className="BalancesTable__row__amount">{Printify.lightenZeros(balance.balance)}</td>
+        {limitCell}
+      </tr>);
     })
 
     return <div>
-      {balanceCards}
+    <table className="BalancesTable">
+      <thead>
+        <tr  className="BalancesTable__headerRow">
+          <td>Asset</td>
+          <td>Balance</td>
+          <td>Trust</td>
+        </tr>
+      </thead>
+      <tbody>
+        {balanceCards}
+
+      </tbody>
+    </table>
     </div>
   }
 }

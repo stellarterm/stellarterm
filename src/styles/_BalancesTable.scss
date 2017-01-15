@@ -1,0 +1,27 @@
+.BalancesTable {
+
+}
+.BalancesTable__headerRow {
+  font-size: $s-scale-2;
+  text-align: center;
+  border-bottom: 1px solid $s-color-neutral7;
+}
+.BalancesTable__headerRow td {
+  padding-top: 0.5em;
+  padding-bottom: 0.5em;
+}
+.BalancesTable__row {
+  border-bottom: 1px solid $s-color-neutral7;
+}
+.BalancesTable__row td {
+  padding: 0.75em 1em;
+}
+
+.BalancesTable__row__amount {
+  font-family: 'Ubuntu Mono';
+  text-align: right;
+  font-size: $s-scale-2;
+}
+.BalancesTable__row__removeLink {
+  font-size: $s-scale-6;
+}
