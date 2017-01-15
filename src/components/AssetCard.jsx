@@ -42,7 +42,6 @@ export default class AssetCard extends React.Component {
       </div>
     }
 
-
     if (this.props.children) {
       containerClassName += ' AssetCard--container';
       return <div className={containerClassName}>

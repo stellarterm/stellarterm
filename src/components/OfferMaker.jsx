@@ -6,28 +6,32 @@ import _ from 'lodash';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
+  initialize() {
+    if (!this.initialized) {
+      this.initialized = true;
+      let state = {};
+
+      // Initialize price
+      if (this.props.side === 'buy' && this.props.d.orderbook.bids.length > 0) {
+        state.price = new BigNumber(this.props.d.orderbook.bids[0].price).toString() // Get rid of extra 0s
+      } else if (this.props.d.orderbook.asks.length > 0) { // Proptypes validation makes sure this is sell
+        state.price = new BigNumber(this.props.d.orderbook.asks[0].price).toString() // Get rid of extra 0s
+      }
+
+      return state;
+    }
+    return {};
+  }
   constructor(props) {
     super(props);
-    let initialized = false;
+    this.initialized = false;
 
     this.props.d.listenSession(() => {
       this.forceUpdate();
     });
 
     props.d.listenOrderbook(() => {
-      if (!initialized) {
-        initialized = true;
-        let state = {};
-
-        // Initialize price
-        if (props.side === 'buy' && props.d.orderbook.bids.length > 0) {
-          state.price = new BigNumber(props.d.orderbook.bids[0].price).toString() // Get rid of extra 0s
-        } else if (props.d.orderbook.asks.length > 0) { // Proptypes validation makes sure this is sell
-          state.price = new BigNumber(props.d.orderbook.asks[0].price).toString() // Get rid of extra 0s
-        }
-
-        this.setState(state);
-      }
+      this.setState(this.initialize());
       this.forceUpdate();
     });
 
@@ -43,6 +47,11 @@ export default class OfferMaker extends React.Component {
       // Total = price * amount
       total: '',
     };
+
+    if (this.props.d.orderbook.ready) {
+      this.state = Object.assign(this.state, this.initialize());
+    }
+
     // TODO: Limit the number of digits after the decimal that can be input
     this.updateState = (item, value) => {
       let state = Object.assign(this.state);
@@ -115,7 +124,7 @@ export default class OfferMaker extends React.Component {
     if (this.props.d.session.state === 'in') {
       submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid}></input>
     } else {
-      submit = <span>Log in to create an offer</span>
+      submit = <span><a href="#account">Log in</a> to create an offer</span>
     }
 
     let summary;
