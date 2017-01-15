@@ -1,11 +1,25 @@
-// Recommended minimum width: 440px;
-.AssetCard {
-  background: #eee;
+// Recommended width: 440px;
+.AssetCard__main {
+  background: $s-color-neutral8;
   border-radius: $s-var-radius;
   display: flex;
   padding: 8px 16px 8px 8px;
   height: 64px;
   align-items: center;
+  border: 1px solid $s-color-neutral7;
+}
+.AssetCard--fixed {
+  width: 440px;
+}
+.AssetCard--container .AssetCard__main {
+  border-radius: $s-var-radius $s-var-radius 0 0;
+}
+.AssetCard__addon {
+  padding: 8px;
+  border-left: 1px solid $s-color-neutral7;
+  border-right: 1px solid $s-color-neutral7;
+  border-bottom: 1px solid $s-color-neutral7;
+  border-radius: 0 0 $s-var-radius $s-var-radius;
 }
   .AssetCard__logo {
     width: 50px;

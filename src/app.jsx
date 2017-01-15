@@ -83,7 +83,6 @@ class TermApp extends React.Component {
         </div>
       </div>;
     } else {
-
       body = <div>Page not found</div>
     }
 
