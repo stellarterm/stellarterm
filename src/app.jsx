@@ -1,6 +1,7 @@
 const React = window.React = require('react');
 const ReactDOM = require('react-dom');
 const mountNode = document.getElementById('app');
+import NotFound from './components/NotFound.jsx';
 import OfferTables from './components/OfferTables.jsx';
 import OfferMakers from './components/OfferMakers.jsx';
 import Session from './components/Session.jsx';
@@ -62,7 +63,7 @@ class TermApp extends React.Component {
       </div>
     } else if (urlParts[0] === 'account') {
       body = <Session d={this.d} urlParts={urlParts}></Session>
-    } else if (url === 'trading') {
+    } else if (urlParts[0] === 'trading') {
       body = <div>
         <div className="so-back islandBack">
           <div className="island island--simplePadTB">
@@ -81,20 +82,7 @@ class TermApp extends React.Component {
         </div>
       </div>
     } else {
-      body = <div className="so-back islandBack">
-        <div className="island">
-          <div className="island__header">
-            Page not found
-          </div>
-          <div className="OfferTables island__sub">
-            <div className="OfferTables__tables island__sub__division island--simplePadTB">
-              The requested page was not found. Try going to the <a href="#">home page</a> to navigate to where you want to go.
-            </div>
-            <div className="OfferTables__table island__sub__division">
-            </div>
-          </div>
-        </div>
-      </div>
+      body = <NotFound></NotFound>
     }
 
     return <div>
