@@ -26,7 +26,6 @@ class Session extends React.Component {
     } else if (state === 'in') {
       return <AccountView d={d}></AccountView>
     }
-
   }
 }
 

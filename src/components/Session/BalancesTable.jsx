@@ -51,20 +51,25 @@ export default class BalancesTable extends React.Component {
       </tr>);
     })
 
-    return <div>
-    <table className="BalancesTable">
-      <thead>
-        <tr  className="BalancesTable__headerRow">
-          <td>Asset</td>
-          <td>Balance</td>
-          <td>Trust</td>
-        </tr>
-      </thead>
-      <tbody>
-        {balanceCards}
+    return <div className="so-back">
+      <div className="island">
+        <div className="island__header">
+          Balances and Trust
+        </div>
+        <table className="BalancesTable">
+          <thead>
+            <tr  className="BalancesTable__headerRow">
+              <td>Asset</td>
+              <td>Balance</td>
+              <td>Trust</td>
+            </tr>
+          </thead>
+          <tbody>
+            {balanceCards}
 
-      </tbody>
-    </table>
+          </tbody>
+        </table>
+      </div>
     </div>
   }
 }

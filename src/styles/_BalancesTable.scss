@@ -1,17 +1,16 @@
 .BalancesTable {
-
+  width: 100%;
 }
 .BalancesTable__headerRow {
   font-size: $s-scale-2;
   text-align: center;
-  border-bottom: 1px solid $s-color-neutral7;
 }
 .BalancesTable__headerRow td {
   padding-top: 0.5em;
   padding-bottom: 0.5em;
 }
 .BalancesTable__row {
-  border-bottom: 1px solid $s-color-neutral7;
+  border-top: 1px solid $s-color-neutral7;
 }
 .BalancesTable__row td {
   padding: 0.75em 1em;

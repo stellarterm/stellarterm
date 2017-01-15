@@ -60,14 +60,7 @@ class TermApp extends React.Component {
         </div>
       </div>
     } else if (url === 'account') {
-      body = <div className="so-back">
-        <div className="island">
-          <div className="island__header">
-            Account
-          </div>
-          <Session d={this.d}></Session>
-        </div>
-      </div>
+      body = <Session d={this.d}></Session>
     } else if (url === 'trading') {
       body = <div className="so-back">
         <div className="island">

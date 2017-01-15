@@ -2,26 +2,12 @@ const React = window.React = require('react');
 import Stellarify from '../../lib/Stellarify';
 import Printify from '../../lib/Printify';
 import BalancesTable from './BalancesTable.jsx';
+import AddTrust from './AddTrust.jsx';
 import _ from 'lodash';
 
 export default class AccountView extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      trustCode: 'USD',
-      trustIssuer: 'GBZ3P4Z53Z7ZHATW6KCA2OXEBWKQGN2433WMSMKF7OJXWFJL4JT6NG4V',
-    }
-
-    this.handleInputTrustCode = (event) => {
-      this.setState({trustCode: event.target.value});
-    }
-    this.handleInputTrustIssuer = (event) => {
-      this.setState({trustIssuer: event.target.value});
-    }
-    this.handleSubmitTrust = (event) => {
-      event.preventDefault();
-      this.props.d.handlers.addTrust(this.state.trustCode, this.state.trustIssuer);
-    }
   }
 
   render() {
@@ -61,11 +47,7 @@ export default class AccountView extends React.Component {
     let offersList = <ul>{offers}</ul>
     return <div>
       <BalancesTable d={this.props.d}></BalancesTable>
-      <form onSubmit={this.handleSubmitTrust}>
-        <input type="text" value={this.state.trustCode} onChange={this.handleInputTrustCode} placeholder="Asset code" />
-        <input type="text" value={this.state.trustIssuer} onChange={this.handleInputTrustIssuer} placeholder="Asset Issuer" />
-        <input type="submit" value="Create trust line"></input>
-      </form>
+      <AddTrust d={this.props.d}></AddTrust>
     </div>
   }
 }
