@@ -5,13 +5,13 @@
 @import 'node_modules/solar-stellarterm/styles/index';
 
 html {
-  background: $s-color-primary9;
+  background: #fff;
 }
 body {
-  background: $s-color-primary9;
+  background: linear-gradient(240deg, rgba(100,200,255,0.1), rgba(255,255,0,0.2)),
+              linear-gradient(180deg, rgba(255,255,255,0.2), transparent),
+              linear-gradient(120deg, #9796db, #96dadb);
 }
-
-
 
 @import 'island';
 @import 'lightenZeros';

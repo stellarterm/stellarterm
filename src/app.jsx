@@ -62,19 +62,23 @@ class TermApp extends React.Component {
     } else if (url === 'account') {
       body = <Session d={this.d}></Session>
     } else if (url === 'trading') {
-      body = <div className="so-back">
-        <div className="island">
-          <PairPicker d={this.d}></PairPicker>
-        </div>
-        <div className="island">
-          <div className="island__header">
-            Orderbook
+      body = <div>
+        <div className="so-back islandBack">
+          <div className="island island--simplePadTB">
+            <PairPicker d={this.d}></PairPicker>
           </div>
-          <OfferMakers d={this.d}></OfferMakers>
-          <div className="island__separator"></div>
-          <OfferTables d={this.d}></OfferTables>
         </div>
-      </div>;
+        <div className="so-back islandBack">
+          <div className="island">
+            <div className="island__header">
+              Orderbook
+            </div>
+            <OfferMakers d={this.d}></OfferMakers>
+            <div className="island__separator"></div>
+            <OfferTables d={this.d}></OfferTables>
+          </div>
+        </div>
+      </div>
     } else {
       body = <div>Page not found</div>
     }

@@ -19,7 +19,7 @@ export default function OfferTable(props) {
     </div>
     {
       _.map(props.offers, (offer, index) => {
-        let altColor = index % 2 === 0 ? '#fff' : '#f7f7f7';
+        let altColor = index % 2 === 0 ? '#fff' : '#f4f4f5'; // #f4f4f5 is $s-color-neutral8
         let depthPercentage = Number(offer.depth / props.maxDepth * 100).toFixed(1);
         let rowStyle = {};
         if (props.side === 'buy') {
