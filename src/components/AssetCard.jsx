@@ -17,7 +17,7 @@ export default class AssetCard extends React.Component {
     if (asset.isNative()) {
       assetCardMain = <div className="AssetCard__main">
         <div className="AssetCard__logo">
-        <img className="AssetCard__logo__image" src={directory.data['Stellar Network'].logo}></img>
+          <img className="AssetCard__logo__image" src={directory.data['Stellar Network'].logo}></img>
         </div>
         <div className="AssetCard__content">
           <div className="AssetCard__header">
