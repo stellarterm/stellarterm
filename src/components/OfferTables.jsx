@@ -13,7 +13,6 @@ export default class OfferTables extends React.Component {
     });
   }
   render() {
-    console.log(this.props.d.orderbook)
     if (!this.props.d.orderbook.ready) {
       return <div>Loading</div>;
     }

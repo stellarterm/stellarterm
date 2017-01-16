@@ -9,8 +9,12 @@ export default class PairPicker extends React.Component {
     });
   }
   render() {
-    let baseBuying = this.props.d._baseBuying;
-    let counterSelling = this.props.d._counterSelling;
+    if (!this.props.d.orderbook.ready) {
+      return <div>loading</div>
+    }
+
+    let baseBuying = this.props.d.orderbook.baseBuying;
+    let counterSelling = this.props.d.orderbook.counterSelling;
 
 
     return (

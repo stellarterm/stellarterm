@@ -6,6 +6,7 @@ import OfferTables from './components/OfferTables.jsx';
 import OfferMakers from './components/OfferMakers.jsx';
 import Session from './components/Session.jsx';
 import PairPicker from './components/PairPicker.jsx';
+import Stellarify from './lib/Stellarify';
 import url from 'url';
 import Header from './components/Header.jsx';
 import Driver from './lib/Driver';
@@ -63,24 +64,37 @@ class TermApp extends React.Component {
       </div>
     } else if (urlParts[0] === 'account') {
       body = <Session d={this.d} urlParts={urlParts}></Session>
-    } else if (urlParts[0] === 'trading') {
-      body = <div>
-        <div className="so-back islandBack">
-          <div className="island island--simplePadTB">
-            <PairPicker d={this.d}></PairPicker>
-          </div>
-        </div>
-        <div className="so-back islandBack">
-          <div className="island">
-            <div className="island__header">
-              Orderbook
+    } else if (urlParts[0] === 'exchange') {
+
+      if (urlParts.length === 3) {
+        // console.log(urlParts);
+        let baseBuying = Stellarify.parseAssetSlug(urlParts[1]);
+        let counterSelling = Stellarify.parseAssetSlug(urlParts[2]);
+
+        this.d.handlers.setOrderbook(baseBuying, counterSelling);
+        // body = <div>blah</div>
+        body = <div>
+          <div className="so-back islandBack">
+            <div className="island island--simplePadTB">
+              <PairPicker d={this.d}></PairPicker>
             </div>
-            <OfferMakers d={this.d}></OfferMakers>
-            <div className="island__separator"></div>
-            <OfferTables d={this.d}></OfferTables>
+          </div>
+          <div className="so-back islandBack">
+            <div className="island">
+              <div className="island__header">
+                Orderbook
+              </div>
+              <OfferMakers d={this.d}></OfferMakers>
+              <div className="island__separator"></div>
+              <OfferTables d={this.d}></OfferTables>
+            </div>
           </div>
         </div>
-      </div>
+      } else {
+        body = <div>
+          Use the markets page to pick a pair
+        </div>
+      }
     } else {
       body = <NotFound></NotFound>
     }

@@ -47,6 +47,12 @@ _.each(data, source => {
 
 module.exports = {
   data,
+  getSourceByFederation(federation) {
+    if (data.hasOwnProperty(federation)) {
+      return data[federation];
+    }
+    return data.unknown;
+  },
   getSourceById(accountId) {
     if (accountId === undefined) {
       return data['Stellar Network'];

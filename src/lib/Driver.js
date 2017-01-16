@@ -1,4 +1,5 @@
 // The driver maintains the state of the application and drives everything.
+// (Well, it knows about everything except for routing)
 // Most everything else is just stateless
 // This is similar to Redux except more flexible for faster development
 import Printify from '../lib/Printify';
@@ -189,8 +190,6 @@ const MagicSpoon = {
 function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
   this.Server.serverUrl = opts.horizonUrl;
-  this._baseBuying = new StellarSdk.Asset('XLM', null);
-  this._counterSelling = new StellarSdk.Asset('USD', 'GBZ3P4Z53Z7ZHATW6KCA2OXEBWKQGN2433WMSMKF7OJXWFJL4JT6NG4V');
 
   const byol = new Byol();
 
@@ -221,15 +220,11 @@ function Driver(opts) {
     }
   }
 
-  this.orderbook = new MagicSpoon.Orderbook(this.Server, this._baseBuying, this._counterSelling, () => {
-    trigger.orderbook();
-    forceUpdateAccountOffers();
-  });
 
-  this.baseBuyingAssetName = () => Printify.assetName(this._baseBuying);
-  this.counterSellingAssetName = () => Printify.assetName(this._counterSelling);
-  this.baseBuyingGetIssuer = () => this._baseBuying.getIssuer();
-  this.counterSellingGetIssuer = () => this._counterSelling.getIssuer();
+  // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon
+  this.orderbook = {
+    ready: false,
+  };
 
   this.handlers = {
     logIn: async (secretKey) => {
@@ -274,6 +269,17 @@ function Driver(opts) {
       trigger.orderbookPricePick({
         price,
       })
+    },
+    setOrderbook: (baseBuying, counterSelling) => {
+      // If orderbook is already set, then this is a no-op
+      // Expects baseBuying and counterSelling to StellarSdk.Asset objects
+      if (this.orderbook.close) {
+        this.orderbook.close();
+      }
+      this.orderbook = new MagicSpoon.Orderbook(this.Server, baseBuying, counterSelling, () => {
+        trigger.orderbook();
+        forceUpdateAccountOffers();
+      });
     }
   };
 }
