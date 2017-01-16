@@ -137,15 +137,12 @@ const MagicSpoon = {
       .addOperation(StellarSdk.Operation.manageOffer(operationOpts))
       .build();
     spoonAccount.sign(transaction);
-    Server.submitTransaction(transaction)
+    return Server.submitTransaction(transaction)
       .then(res => {
         console.log('Offer create success');
         console.log(res)
         spoonAccount.updateOffers(); // Just to be doubly sure
         return;
-      })
-      .catch(err => {
-        console.error(err)
       })
   },
   changeTrust(Server, spoonAccount, opts) {
@@ -246,7 +243,7 @@ function Driver(opts) {
       trigger.session();
     },
     createOffer: async (side, opts) => {
-      MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
+      return MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
         baseBuying: this.orderbook.baseBuying,
         counterSelling: this.orderbook.counterSelling,
       }));

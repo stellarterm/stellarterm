@@ -51,6 +51,9 @@ export default class OfferMaker extends React.Component {
 
       // Total = price * amount
       total: '',
+      buttonState: 'ready', // ready or pending
+      errorMessage: '',
+      successMessage: '',
     };
 
     if (this.props.d.orderbook.ready) {
@@ -59,7 +62,11 @@ export default class OfferMaker extends React.Component {
 
     // TODO: Limit the number of digits after the decimal that can be input
     this.updateState = (item, value) => {
-      let state = Object.assign(this.state);
+      let state = Object.assign(this.state, {
+        // Reset messages
+        successMessage: '',
+        errorMessage: '',
+      });
       state.valid = false;
       if (item == 'price') {
         state.price = value;
@@ -99,6 +106,27 @@ export default class OfferMaker extends React.Component {
         amount: this.state.amount,
         total: this.state.total,
       })
+      .then(result => {
+        this.setState({
+          buttonState: 'ready',
+          successMessage: 'Offer successfully created',
+        })
+      })
+      .catch(result => {
+        this.setState({
+          buttonState: 'ready',
+          errorMessage: 'The previous offer transaction failed',
+        })
+      })
+
+      this.setState({
+        valid: false,
+        buttonState: 'pending',
+        amount: '',
+        total: '',
+        successMessage: '',
+        errorMessage: '',
+      });
     }
   }
   render() {
@@ -123,7 +151,11 @@ export default class OfferMaker extends React.Component {
 
     let submit;
     if (this.props.d.session.state === 'in') {
-      submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid}></input>
+      if (this.state.buttonState === 'ready') {
+        submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid}></input>
+      } else {
+        submit = <input type="submit" className="s-button" disabled={true} value="Offer pending..." disabled={true}></input>
+      }
     } else {
       submit = <span><a href="#account">Log in</a> to create an offer</span>
     }
@@ -137,11 +169,20 @@ export default class OfferMaker extends React.Component {
       }
     }
 
+    let error;
+    if (this.state.errorMessage !== '') {
+      error = <div className="s-alert s-alert--alert">{this.state.errorMessage}</div>;
+    }
+
+    let success;
+    if (this.state.successMessage !== '') {
+      success = <div className="s-alert s-alert--success">{this.state.successMessage}</div>;
+    }
 
 
     return <div>
       <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
-      <form onSubmit={this.handleSubmit}  disabled={!this.state.valid}>
+      <form onSubmit={this.handleSubmit}  disabled={!this.state.valid || this.state.buttonState === 'pending'}>
         <table className="OfferMaker__table">
           <tbody>
             <tr className="OfferMaker__table__row">
@@ -166,6 +207,8 @@ export default class OfferMaker extends React.Component {
         </table>
         <div className="OfferMaker__overview">
           {summary}
+          {error}
+          {success}
           {submit}
         </div>
       </form>
