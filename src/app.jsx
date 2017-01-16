@@ -70,23 +70,28 @@ class TermApp extends React.Component {
       body = <Markets d={this.d}></Markets>
     } else if (urlParts[0] === 'exchange') {
       if (urlParts.length === 3) {
-        let baseBuying = Stellarify.parseAssetSlug(urlParts[1]);
-        let counterSelling = Stellarify.parseAssetSlug(urlParts[2]);
+        try {
+          let baseBuying = Stellarify.parseAssetSlug(urlParts[1]);
+          let counterSelling = Stellarify.parseAssetSlug(urlParts[2]);
 
-        this.d.handlers.setOrderbook(baseBuying, counterSelling);
-        body = <div>
-          <PairPicker d={this.d}></PairPicker>
-          <div className="so-back islandBack">
-            <div className="island">
-              <div className="island__header">
-                Orderbook
+          this.d.handlers.setOrderbook(baseBuying, counterSelling);
+          body = <div>
+            <PairPicker d={this.d}></PairPicker>
+            <div className="so-back islandBack">
+              <div className="island">
+                <div className="island__header">
+                  Orderbook
+                </div>
+                <OfferMakers d={this.d}></OfferMakers>
+                <div className="island__separator"></div>
+                <OfferTables d={this.d}></OfferTables>
               </div>
-              <OfferMakers d={this.d}></OfferMakers>
-              <div className="island__separator"></div>
-              <OfferTables d={this.d}></OfferTables>
             </div>
           </div>
-        </div>
+        } catch (e) {
+          console.log(e.message);
+          body = <Generic title="Pick a market">Exchange url was invalid. To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
+        }
       } else {
         body = <Generic title="Pick a market">To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
       }
