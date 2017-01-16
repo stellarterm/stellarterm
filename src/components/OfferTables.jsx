@@ -29,7 +29,7 @@ export default class OfferTables extends React.Component {
     let buys = _.map(orderbook.bids, (bid) => {
       buyDepth += Number(bid.amount);
       return {
-        key: bid.price,
+        key: `${bid.price}-${bid.amount}`,
         price: bid.price,
         base: (Number(bid.amount) / Number(bid.price)).toFixed(7),
         counter: bid.amount,
@@ -41,7 +41,7 @@ export default class OfferTables extends React.Component {
     let sells = _.map(orderbook.asks, (ask) => {
       sellDepth += Number(ask.amount) * Number(ask.price);
       return {
-        key: ask.price,
+        key: `${ask.price}-${ask.amount}`,
         price: ask.price,
         base: ask.amount,
         counter: (Number(ask.amount) * Number(ask.price)).toFixed(7),
