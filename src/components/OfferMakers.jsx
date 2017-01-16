@@ -4,9 +4,12 @@ import OfferMaker from './OfferMaker.jsx';
 export default class OfferMakers extends React.Component {
   constructor(props) {
     super(props);
-    this.props.d.listenOrderbook(() => {
+    this.listenOrderbookId = this.props.d.listenOrderbook(() => {
       this.forceUpdate();
     });
+  }
+  componentWillUnmount() {
+    this.props.d.unlistenSession(this.listenOrderbookId);
   }
   render() {
     if (!this.props.d.orderbook.ready) {
