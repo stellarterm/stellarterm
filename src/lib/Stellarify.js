@@ -75,9 +75,6 @@ const Stellarify = {
     return `${asset.getCode()}-${issuer}`
   },
   pairToExchangeUrl(baseBuying, counterSelling) {
-    console.log(this.assetToSlug(baseBuying))
-    console.log(this.assetToSlug(counterSelling))
-    // console.log(this.asset)
     return `exchange/${this.assetToSlug(baseBuying)}/${this.assetToSlug(counterSelling)}`;
   },
 };
