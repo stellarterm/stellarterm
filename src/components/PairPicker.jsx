@@ -26,15 +26,20 @@ export default class PairPicker extends React.Component {
             <h3 className="island__sub__division__title">Counter asset</h3>
           </div>
         </div>
-        <a href="#exchange/XLM-native/USD-stellarterm.com" className="assetPair">
-          <div className="assetPair__card">
-            <AssetCard asset={baseBuying}></AssetCard>
+        <div className="PairPicker__pair">
+          <div className="assetPair">
+            <div className="assetPair__card">
+              <AssetCard asset={baseBuying}></AssetCard>
+            </div>
+            <div className="assetPair__separator"></div>
+            <div className="assetPair__card">
+              <AssetCard asset={counterSelling}></AssetCard>
+            </div>
           </div>
-          <div className="assetPair__separator"></div>
-          <div className="assetPair__card">
-            <AssetCard asset={counterSelling}></AssetCard>
-          </div>
-        </a>
+        </div>
+        <div className="PairPicker__auxInfo">
+          To see other orderbooks, go to the <a href="#markets">market list page</a>.
+        </div>
       </div>
     );
   }

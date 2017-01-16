@@ -25,11 +25,11 @@ export default class Markets extends React.Component {
         <a href="#exchange/XLM-native/USD-stellarterm.com" className="Markets__table__row">
           <div className="assetPair">
             <div className="assetPair__card">
-              <AssetCard asset={markets[0].baseBuying}></AssetCard>
+              <AssetCard asset={markets[0].baseBuying} noLink={true}></AssetCard>
             </div>
             <div className="assetPair__separator"></div>
             <div className="assetPair__card">
-              <AssetCard asset={markets[0].counterSelling}></AssetCard>
+              <AssetCard asset={markets[0].counterSelling} noLink={true}></AssetCard>
             </div>
           </div>
         </a>

@@ -6,6 +6,7 @@ import OfferTables from './components/OfferTables.jsx';
 import OfferMakers from './components/OfferMakers.jsx';
 import Markets from './components/Markets.jsx';
 import Session from './components/Session.jsx';
+import Generic from './components/Generic.jsx';
 import PairPicker from './components/PairPicker.jsx';
 import Stellarify from './lib/Stellarify';
 import url from 'url';
@@ -87,9 +88,7 @@ class TermApp extends React.Component {
           </div>
         </div>
       } else {
-        body = <div>
-          Use the markets page to pick a pair
-        </div>
+        body = <Generic title="Pick a market">To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
       }
     } else {
       body = <NotFound></NotFound>
