@@ -157,10 +157,33 @@ export default class OfferMaker extends React.Component {
       title = `Sell ${baseAssetName}`;
     }
 
+    let youHave;
+    let hasAllTrust = false;
+    if (this.props.d.session.state === 'in') {
+      let baseBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.baseBuying);
+      let counterBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.counterSelling);
+
+      if (baseBalance !== null && counterBalance !== null) {
+        hasAllTrust = true;
+      }
+      let targetBalance = this.props.side === 'buy' ? counterBalance : baseBalance;
+      let targetAsset = this.props.side === 'buy' ? this.props.d.orderbook.counterSelling : this.props.d.orderbook.baseBuying;
+
+      if (targetBalance) {
+        youHave = <div className="OfferMaker__youHave">You have {targetBalance} {targetAsset.getCode()}</div>;
+      } else {
+        youHave = <div className="OfferMaker__youHave">Must <a href="#account/addTrust">create trust line</a> for {targetAsset.getCode()} to trade</div>;
+      }
+    }
+
     let submit;
     if (this.props.d.session.state === 'in') {
       if (this.state.buttonState === 'ready') {
-        submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid}></input>
+        if (hasAllTrust) {
+          submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid}></input>
+        } else {
+          submit = <input type="submit" className="s-button" value="Trust required" disabled={true}></input>
+        }
       } else {
         submit = <input type="submit" className="s-button" disabled={true} value="Offer pending..." disabled={true}></input>
       }
@@ -217,6 +240,7 @@ export default class OfferMaker extends React.Component {
           </tbody>
         </table>
         <div className="OfferMaker__overview">
+          {youHave}
           {summary}
           {error}
           {success}

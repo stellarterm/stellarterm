@@ -20,6 +20,27 @@ const MagicSpoon = {
       transaction.sign(keypair);
     };
 
+    // Expects StellarSdk.Asset
+    // Returns null if there is no trust
+    // Returns string of balance if exists
+    sdkAccount.getBalance = (targetAsset) => {
+      let targetBalance = null;
+      if (targetAsset.isNative()) {
+        _.each(sdkAccount.balances, balance => {
+          if (balance.asset_type === 'native') {
+            targetBalance = balance.balance;
+          }
+        });
+      } else {
+        _.each(sdkAccount.balances, balance => {
+          if (balance.asset_code === targetAsset.getCode() && balance.asset_issuer === targetAsset.getIssuer()) {
+            targetBalance = balance.balance;
+          }
+        });
+      }
+      return targetBalance;
+    }
+
     let accountEventsClose = Server.accounts().accountId(keypair.accountId()).stream({
       onmessage: res => {
         let updated = false;
