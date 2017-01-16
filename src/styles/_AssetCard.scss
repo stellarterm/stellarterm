@@ -75,3 +75,10 @@
     margin-top: 1px;
     opacity: 0.8;
   }
+
+
+.BalancesTable__row:hover .AssetCard__main,
+.Markets__table__row:hover .AssetCard__main {
+  border: 1px solid $s-color-primary4;
+  box-shadow: 0 0 1px rgba($s-color-primary4, 0.3);
+}

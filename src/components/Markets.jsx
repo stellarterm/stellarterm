@@ -22,13 +22,15 @@ export default class Markets extends React.Component {
             <h3 className="island__sub__division__title">Counter asset</h3>
           </div>
         </div>
-        <a href="#exchange/XLM-native/USD-stellarterm.com" className="assetPair">
-          <div className="assetPair__card">
-            <AssetCard asset={markets[0].baseBuying}></AssetCard>
-          </div>
-          <div className="assetPair__separator"></div>
-          <div className="assetPair__card">
-            <AssetCard asset={markets[0].counterSelling}></AssetCard>
+        <a href="#exchange/XLM-native/USD-stellarterm.com" className="Markets__table__row">
+          <div className="assetPair">
+            <div className="assetPair__card">
+              <AssetCard asset={markets[0].baseBuying}></AssetCard>
+            </div>
+            <div className="assetPair__separator"></div>
+            <div className="assetPair__card">
+              <AssetCard asset={markets[0].counterSelling}></AssetCard>
+            </div>
           </div>
         </a>
       </div>

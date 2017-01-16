@@ -13,3 +13,9 @@
 .assetPair__card {
   flex: 1 0;
 }
+
+
+.Markets__table__row:hover .assetPair__separator {
+  border-top: 1px solid $s-color-primary4;
+  border-bottom: 1px solid $s-color-primary4;
+}
