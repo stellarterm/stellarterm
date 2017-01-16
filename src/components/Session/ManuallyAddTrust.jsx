@@ -52,6 +52,20 @@ export default class ManuallyAddTrust extends React.Component {
           </div>
         </div>
       } else {
+        let found = false;
+        _.each(this.props.d.session.account.balances, balance => {
+          if (balance.asset_code === this.state.trustCode && balance.asset_issuer === this.state.trustIssuer) {
+            found = true;
+          }
+        });
+
+        let createButton;
+        if (found) {
+          createButton = <button disabled={true} className="s-button">Trust line for {this.state.trustCode} exists</button>
+        } else {
+          createButton = <button className="s-button">Create trust line for {this.state.trustCode}</button>
+        }
+
         let asset = new StellarSdk.Asset(this.state.trustCode, this.state.trustIssuer);
         confirmation = <div>
           <div className="island__separator"></div>
@@ -59,7 +73,7 @@ export default class ManuallyAddTrust extends React.Component {
             <div className="AddTrust__confirmation__assetCard">
               <AssetCard asset={asset} fixed={true}></AssetCard>
             </div>
-            <button className="s-button">Create trust line for {this.state.trustCode}</button>
+            {createButton}
           </div>
         </div>
       }
