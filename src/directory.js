@@ -52,7 +52,7 @@ let data = {
     website: 'https://bitcoinfundi.com/',
     assets: [
       {
-        code: 'CNY',
+        code: 'USD',
         issuer: 'GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R',
       },
       {
