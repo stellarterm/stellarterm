@@ -13,6 +13,12 @@
   width: auto;
   min-width: 100px;
 }
+.OfferMaker__message {
+  font-size: $s-scale-5;
+}
+.OfferMaker__errorList {
+  margin-left: 2em;
+}
 
 
 .OfferMaker__table__input__input {

@@ -22,6 +22,13 @@ export default class OfferMaker extends React.Component {
     }
     return {};
   }
+  capDigits(input) {
+    try {
+      return new BigNumber(input).toFixed(7).toString();
+    } catch (e) {
+      return input;
+    }
+  }
   componentWillUnmount() {
     this.props.d.unlistenSession(this.listenSessionId);
     this.props.d.unlistenSession(this.listenOrderbookId);
@@ -52,7 +59,7 @@ export default class OfferMaker extends React.Component {
       // Total = price * amount
       total: '',
       buttonState: 'ready', // ready or pending
-      errorMessage: '',
+      errorMessage: false,
       successMessage: '',
     };
 
@@ -65,7 +72,7 @@ export default class OfferMaker extends React.Component {
       let state = Object.assign(this.state, {
         // Reset messages
         successMessage: '',
-        errorMessage: '',
+        errorMessage: false,
       });
       state.valid = false;
       if (item == 'price') {
@@ -115,7 +122,7 @@ export default class OfferMaker extends React.Component {
       .catch(result => {
         this.setState({
           buttonState: 'ready',
-          errorMessage: 'The previous offer transaction failed',
+          errorMessage: true,
         })
       })
 
@@ -125,7 +132,7 @@ export default class OfferMaker extends React.Component {
         amount: '',
         total: '',
         successMessage: '',
-        errorMessage: '',
+        errorMessage: false,
       });
     }
   }
@@ -157,28 +164,31 @@ export default class OfferMaker extends React.Component {
         submit = <input type="submit" className="s-button" disabled={true} value="Offer pending..." disabled={true}></input>
       }
     } else {
-      submit = <span><a href="#account">Log in</a> to create an offer</span>
+      submit = <span className="OfferMaker__message"><a href="#account">Log in</a> to create an offer</span>
     }
 
     let summary;
     if (this.state.valid) {
       if (this.props.side === 'buy') {
-        summary = <div className="s-alert s-alert--info">Buy {this.state.amount} {baseAssetName} for {this.state.total} {counterAssetName}</div>;
+        summary = <div className="s-alert s-alert--info">Buy {this.state.amount} {this.capDigits(baseAssetName)} for {this.capDigits(this.state.total)} {counterAssetName}</div>;
       } else {
-        summary = <div className="s-alert s-alert--info">Sell {this.state.amount} {baseAssetName} for {this.state.total} {counterAssetName}</div>;
+        summary = <div className="s-alert s-alert--info">Sell {this.state.amount} {this.capDigits(baseAssetName)} for {this.capDigits(this.state.total)} {counterAssetName}</div>;
       }
     }
 
     let error;
-    if (this.state.errorMessage !== '') {
-      error = <div className="s-alert s-alert--alert">{this.state.errorMessage}</div>;
+    if (this.state.errorMessage) {
+      error = <div className="s-alert s-alert--alert OfferMaker__message">Failed to create offer. Possible reasons why:
+        <ul className="OfferMaker__errorList">
+          <li>Not enough funds to complete order</li>
+        </ul>
+      </div>;
     }
 
     let success;
     if (this.state.successMessage !== '') {
-      success = <div className="s-alert s-alert--success">{this.state.successMessage}</div>;
+      success = <div className="s-alert s-alert--success OfferMaker__message">{this.state.successMessage}</div>;
     }
-
 
     return <div>
       <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
