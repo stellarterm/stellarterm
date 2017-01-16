@@ -166,6 +166,7 @@ const MagicSpoon = {
       .build();
     spoonAccount.sign(transaction);
     const transactionResult = Server.submitTransaction(transaction);
+    return transactionResult;
   },
   async removeOffer(Server, spoonAccount, offerId) {
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
@@ -252,7 +253,7 @@ function Driver(opts) {
     },
     addTrust: async (code, issuer) => {
       // For simplicity, currently only adds max trust line
-      MagicSpoon.changeTrust(this.Server, this.session.account, {
+      return MagicSpoon.changeTrust(this.Server, this.session.account, {
         asset: new StellarSdk.Asset(code, issuer),
       })
     },
