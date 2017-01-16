@@ -9,24 +9,30 @@ export default class AssetPair extends React.Component {
     super(props);
   }
   render() {
-    let content = <div className="assetPair">
-      <div className="assetPair__card">
+    let content = <div className="AssetPair">
+      <div className="AssetPair__card">
         <AssetCard asset={this.props.baseBuying} noLink={true}></AssetCard>
       </div>
-      <div className="assetPair__separator"></div>
-      <div className="assetPair__card">
+      <div className="AssetPair__separator"></div>
+      <div className="AssetPair__card">
         <AssetCard asset={this.props.counterSelling} noLink={true}></AssetCard>
       </div>
-    </div>
-    if (this.props.baseBuying && this.props.counterSelling) {
-      let url = '#' + Stellarify.pairToExchangeUrl(this.props.baseBuying, this.props.counterSelling);
-      return <a href={url} key={url} className="Markets__table__row">
-        {content}
-      </a>
-    } else {
-      return <div className="Markets__table__row">
-        {content}
-      </div>
+    </div>;
+
+    if (this.props.row) {
+      if (this.props.baseBuying && this.props.counterSelling) {
+        let url = '#' + Stellarify.pairToExchangeUrl(this.props.baseBuying, this.props.counterSelling);
+        // In the future, this can be split into AssetPairRow and AssetPair if the row is not needed
+        return <a href={url} key={url} className="AssetPairRow">
+          {content}
+        </a>
+      } else {
+        return <div className="AssetPairRow">
+          {content}
+        </div>
+      }
     }
+
+    return content;
   }
 };

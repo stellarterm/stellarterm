@@ -24,9 +24,11 @@ export default class CustomMarketPicker extends React.Component {
     }
   }
   render() {
-    let pair;
+    let results;
     if (this.state.baseBuying || this.state.counterSelling) {
-      pair = <AssetPair baseBuying={this.state.baseBuying} counterSelling={this.state.counterSelling}></AssetPair>
+      results = <div className="CustomMarketPicker__results">
+        <AssetPair row={true} baseBuying={this.state.baseBuying} counterSelling={this.state.counterSelling}></AssetPair>
+      </div>
     }
 
     return (
@@ -34,7 +36,7 @@ export default class CustomMarketPicker extends React.Component {
         <div className="island__header">
           Custom exchange pair
         </div>
-        <div className="island__sub">
+        <div className="island__sub CustomMarketPicker__title">
           <div className="island__sub__division">
             <h3 className="island__sub__division__title">Base asset</h3>
           </div>
@@ -42,7 +44,7 @@ export default class CustomMarketPicker extends React.Component {
             <h3 className="island__sub__division__title">Counter asset</h3>
           </div>
         </div>
-        <div className="island__sub">
+        <div className="island__sub CustomMarketPicker__picker">
           <div className="island__sub__division">
             <AssetPickerNarrow onUpdate={this.baseBuyingUpdate}></AssetPickerNarrow>
           </div>
@@ -50,9 +52,7 @@ export default class CustomMarketPicker extends React.Component {
             <AssetPickerNarrow onUpdate={this.counterSellingUpdate}></AssetPickerNarrow>
           </div>
         </div>
-        <div className="CustomMarketPicker__results">
-          {pair}
-        </div>
+        {results}
       </div>
     );
   }

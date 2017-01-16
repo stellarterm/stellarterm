@@ -1,5 +1,5 @@
 .AssetPickerNarrow__inputGroup {
-  margin-bottom: 9px;
+  // margin-bottom: 9px;
 }
 .AssetPickerNarrow__tag {
   padding: 0.35em 1em 0.3166em 1em;
@@ -9,4 +9,11 @@
 }
 .AssetPickerNarrow__tag + .AssetPickerNarrow__input {
   border-radius: 0 0 $s-var-radius $s-var-radius;
+}
+
+.AssetPickerNarrow__code {
+  margin-bottom: 0.75em;
+}
+.AssetPickerNarrow__issuer {
+  margin-bottom: 0;
 }

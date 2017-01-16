@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import AssetCard from './AssetCard.jsx';
+import AssetPair from './AssetPair.jsx';
 import CustomMarketPicker from './CustomMarketPicker.jsx';
 import Stellarify from '../lib/Stellarify';
 import _ from 'lodash';
@@ -37,26 +38,13 @@ export default class Markets extends React.Component {
   }
   render() {
     let rows = [];
-    _.each(markets, market => {
-      let url = '#' + Stellarify.pairToExchangeUrl(market.baseBuying, market.counterSelling);
-      rows.push(
-        <a href={url} key={url} className="Markets__table__row">
-          <div className="assetPair">
-            <div className="assetPair__card">
-              <AssetCard asset={market.baseBuying} noLink={true}></AssetCard>
-            </div>
-            <div className="assetPair__separator"></div>
-            <div className="assetPair__card">
-              <AssetCard asset={market.counterSelling} noLink={true}></AssetCard>
-            </div>
-          </div>
-        </a>
-      )
+    _.each(markets, (market, index) => {
+      rows.push(<AssetPair key={index} row={true} baseBuying={market.baseBuying} counterSelling={market.counterSelling}></AssetPair>)
     })
     return (
       <div>
         <div className="so-back islandBack islandBack--t">
-          <CustomMarketPicker></CustomMarketPicker>
+          <CustomMarketPicker row={true}></CustomMarketPicker>
         </div>
         <div className="so-back islandBack">
           <div className="island">

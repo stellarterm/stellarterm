@@ -33,7 +33,7 @@ export default class BalancesTable extends React.Component {
       if (balance.balance === '0.0000000') {
         removeLink = <a className="BalancesTable__row__removeLink" onClick={() => this.props.d.handlers.removeTrust(balance.asset_code, balance.asset_issuer)}>Remove trust</a>
       } else {
-        removeLink = <span className="BalancesTable__row__removeLink">Trust can be removed when balance is 0</span>
+        removeLink = <span className="BalancesTable__row__removeLink">Trust is removable when balance is 0</span>
       }
 
       let limitCell = <td>N/A</td>;

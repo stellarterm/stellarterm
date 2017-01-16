@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import AssetCard from './AssetCard.jsx';
+import AssetPair from './AssetPair.jsx';
 
 export default class PairPicker extends React.Component {
   constructor(props) {
@@ -30,15 +31,7 @@ export default class PairPicker extends React.Component {
           </div>
         </div>
         <div className="PairPicker__pair">
-          <div className="assetPair">
-            <div className="assetPair__card">
-              <AssetCard asset={baseBuying}></AssetCard>
-            </div>
-            <div className="assetPair__separator"></div>
-            <div className="assetPair__card">
-              <AssetCard asset={counterSelling}></AssetCard>
-            </div>
-          </div>
+          <AssetPair baseBuying={baseBuying} counterSelling={counterSelling}></AssetPair>
         </div>
         <div className="PairPicker__auxInfo">
           To see other orderbooks, go to the <a href="#markets">market list page</a>.

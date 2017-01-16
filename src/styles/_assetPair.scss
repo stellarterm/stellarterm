@@ -1,21 +1,29 @@
-.assetPair {
+.AssetPairRow {
+  border-top: 1px solid $s-color-neutral7;
+  padding: 0.75em 18px;
+  text-decoration: none;
+  display: block;
+}
+
+
+.AssetPair {
   display: flex;
   align-items: center;
   text-decoration: none;
 }
-.assetPair__separator {
-  width: 28px;
-  height: 28px;
+.AssetPair__separator {
+  width: 18px;
+  height: 18px;
   border-top: 1px solid $s-color-neutral7;
   border-bottom: 1px solid $s-color-neutral7;
-  flex: 0 0 20px;
+  flex: 0 0 18px;
 }
-.assetPair__card {
+.AssetPair__card {
   flex: 1 0;
 }
 
-
-.Markets__table__row:hover .assetPair__separator {
+a.AssetPairRow:hover .AssetPair__separator {
   border-top: 1px solid $s-color-primary4;
   border-bottom: 1px solid $s-color-primary4;
 }
+

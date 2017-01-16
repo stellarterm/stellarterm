@@ -53,13 +53,13 @@ export default class AssetPickerNarrow extends React.Component {
   }
   render() {
     return <div>
-      <label className="s-inputGroup AssetPickerNarrow__inputGroup">
+      <label className="s-inputGroup AssetPickerNarrow__inputGroup AssetPickerNarrow__code">
         <span className="s-inputGroup__item AssetPickerNarrow__tag s-inputGroup__item--tag S-flexItem-full">
           <span>Asset Code</span>
         </span>
         <input className="s-inputGroup__item AssetPickerNarrow__input S-flexItem-full" type="text" value={this.state.code} onChange={e => this.handleInput('code', e)} placeholder="example: XLM" />
       </label>
-      <label className="s-inputGroup AssetPickerNarrow__inputGroup">
+      <label className="s-inputGroup AssetPickerNarrow__inputGroup AssetPickerNarrow__issuer">
         <span className="s-inputGroup__item AssetPickerNarrow__tag s-inputGroup__item--tag S-flexItem-full">
           <span>Issuer Account ID or federation</span>
         </span>
