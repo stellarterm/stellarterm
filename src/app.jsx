@@ -59,9 +59,19 @@ class TermApp extends React.Component {
     let body;
     if (url === '') {
       // Home page
-      body = <div className="so-back">
-        <div className="so-chunk">
-          Welcome to stellarterm.com
+      body = <div className="so-back islandBack islandBack--ttt">
+        <div className="island">
+          <div className="island__header">
+            Stellar Terminal
+          </div>
+          <div className="island__sub">
+            <div className="island__sub__division HomePage__introBlurb island--simplePadTB">
+              Welcome to the StellarTerm app. This is a <a href="https://github.com/irisli/stellarterm">open source</a> web based trading client for the Stellar network.
+            </div>
+            <div className="island__sub__division HomePage__buttonContainer">
+              <a className="s-button" href="#exchange/XLM-native/USD-stellarterm.com">View exchange demo</a>
+            </div>
+          </div>
         </div>
       </div>
     } else if (urlParts[0] === 'account') {
