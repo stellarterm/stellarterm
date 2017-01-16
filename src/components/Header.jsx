@@ -10,6 +10,7 @@ export default class Header extends React.Component {
         <nav className="Header__nav">
           <a className="Header__nav__item" href="#">Stellarterm</a>
           <a className="Header__nav__item" href="#exchange">Exchange</a>
+          <a className="Header__nav__item" href="#markets">Markets</a>
           <a className="Header__nav__item" href="#account">Account</a>
         </nav>
       </div>

@@ -1,21 +1,17 @@
 const React = window.React = require('react');
 import AssetCard from './AssetCard.jsx';
 
-export default class PairPicker extends React.Component {
+
+let markets = [{
+  baseBuying: StellarSdk.Asset.native(),
+  counterSelling: new StellarSdk.Asset('USD', 'GBZ3P4Z53Z7ZHATW6KCA2OXEBWKQGN2433WMSMKF7OJXWFJL4JT6NG4V'),
+}];
+
+export default class Markets extends React.Component {
   constructor(props) {
     super(props);
-    this.props.d.listenOrderbook(() => {
-      this.forceUpdate();
-    });
   }
   render() {
-    if (!this.props.d.orderbook.ready) {
-      return <div>loading</div>
-    }
-
-    let baseBuying = this.props.d.orderbook.baseBuying;
-    let counterSelling = this.props.d.orderbook.counterSelling;
-
     return (
       <div className="island">
         <div className="OfferTables island__sub">
@@ -28,11 +24,11 @@ export default class PairPicker extends React.Component {
         </div>
         <a href="#exchange/XLM-native/USD-stellarterm.com" className="assetPair">
           <div className="assetPair__card">
-            <AssetCard asset={baseBuying}></AssetCard>
+            <AssetCard asset={markets[0].baseBuying}></AssetCard>
           </div>
           <div className="assetPair__separator"></div>
           <div className="assetPair__card">
-            <AssetCard asset={counterSelling}></AssetCard>
+            <AssetCard asset={markets[0].counterSelling}></AssetCard>
           </div>
         </a>
       </div>
