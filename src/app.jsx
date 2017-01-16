@@ -23,7 +23,8 @@ let useTestNetwork = () => {
   network.horizonUrl = 'https://horizon-testnet.stellar.org';
   StellarSdk.Network.useTestNetwork();
 }
-useTestNetwork();
+useLiveNetwork();
+// useTestNetwork();
 
 let driver = new Driver({
   horizonUrl: network.horizonUrl,
