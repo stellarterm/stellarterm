@@ -9,7 +9,14 @@ export default class AddTrustFromDirectory extends React.Component {
     super(props);
   }
   render() {
-    let asset = new StellarSdk.Asset('USD', 'GBZ3P4Z53Z7ZHATW6KCA2OXEBWKQGN2433WMSMKF7OJXWFJL4JT6NG4V');
+    let rows = [];
+    _.each(directory.getAllSources(), source => {
+      _.each(source.assets, assetObj => {
+        let asset = new StellarSdk.Asset(assetObj.code, assetObj.issuer);
+        const key = assetObj.code + assetObj.issuer;
+        rows.push(<AddTrustFromDirectoryRow key={key} d={this.props.d} asset={asset}></AddTrustFromDirectoryRow>);
+      })
+    })
     return <div className="so-back">
       <div className="island">
         <div className="island__header">
@@ -19,7 +26,7 @@ export default class AddTrustFromDirectory extends React.Component {
           <p>This is a list of anchors from the Stellar community. Note: StellarTerm does not endorse any of these anchors.</p>
         </div>
         <div className="AddTrustFromDirectory">
-          <AddTrustFromDirectoryRow d={this.props.d} asset={asset}></AddTrustFromDirectoryRow>
+          {rows}
         </div>
       </div>
     </div>
