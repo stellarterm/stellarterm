@@ -6,7 +6,7 @@ import _ from 'lodash';
 let markets = [
   {
     baseBuying: StellarSdk.Asset.native(),
-    counterSelling: new StellarSdk.Asset('USD', 'GBZ3P4Z53Z7ZHATW6KCA2OXEBWKQGN2433WMSMKF7OJXWFJL4JT6NG4V'),
+    counterSelling: new StellarSdk.Asset('DEMO', 'GBAMBOOZDWZPVV52RCLJQYMQNXOBLOXWNQAY2IF2FREV2WL46DBCH3BE'),
   },
   {
     baseBuying: StellarSdk.Asset.native(),
