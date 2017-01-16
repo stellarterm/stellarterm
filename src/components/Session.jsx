@@ -29,9 +29,11 @@ class Session extends React.Component {
       let content;
       let part1 = this.props.urlParts[1];
       if (part1 === undefined) {
-        content = <AccountView d={d}></AccountView>
+        content = <div className="so-back islandBack islandBack--t">
+          <AccountView d={d}></AccountView>
+        </div>
       } else if (part1 === 'addTrust') {
-        content = <div>
+        content = <div className="so-back islandBack islandBack--t">
           <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
           <ManuallyAddTrust d={d}></ManuallyAddTrust>
         </div>

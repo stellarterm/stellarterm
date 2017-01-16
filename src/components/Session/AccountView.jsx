@@ -2,7 +2,6 @@ const React = window.React = require('react');
 import Stellarify from '../../lib/Stellarify';
 import Printify from '../../lib/Printify';
 import BalancesTable from './BalancesTable.jsx';
-import AddTrust from './AddTrust.jsx';
 import _ from 'lodash';
 
 export default class AccountView extends React.Component {
@@ -45,8 +44,6 @@ export default class AccountView extends React.Component {
       // TODO: only show this
     })
     let offersList = <ul>{offers}</ul>
-    return <div>
-      <BalancesTable d={this.props.d}></BalancesTable>
-    </div>
+    return <BalancesTable d={this.props.d}></BalancesTable>
   }
 }

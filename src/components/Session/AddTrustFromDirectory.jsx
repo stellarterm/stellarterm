@@ -17,7 +17,7 @@ export default class AddTrustFromDirectory extends React.Component {
         rows.push(<AddTrustFromDirectoryRow key={key} d={this.props.d} asset={asset}></AddTrustFromDirectoryRow>);
       })
     })
-    return <div className="so-back">
+    return <div className="so-back islandBack">
       <div className="island">
         <div className="island__header">
           Add trust from known anchors

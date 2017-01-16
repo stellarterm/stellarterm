@@ -7,7 +7,7 @@ export default function Generic(props) {
       {props.title}
     </div>
   }
-  return <div className="so-back islandBack">
+  return <div className="so-back islandBack islandBack--t">
     <div className="island">
       {header}
       <div className="Generic__content">

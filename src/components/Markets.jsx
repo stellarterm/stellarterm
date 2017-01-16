@@ -53,16 +53,18 @@ export default class Markets extends React.Component {
       )
     })
     return (
-      <div className="island">
-        <div className="OfferTables island__sub">
-          <div className="OfferTables__tables island__sub__division">
-            <h3 className="island__sub__division__title">Base asset</h3>
+      <div className="so-back islandBack islandBack--t">
+        <div className="island">
+          <div className="OfferTables island__sub">
+            <div className="OfferTables__tables island__sub__division">
+              <h3 className="island__sub__division__title">Base asset</h3>
+            </div>
+            <div className="OfferTables__table island__sub__division">
+              <h3 className="island__sub__division__title">Counter asset</h3>
+            </div>
           </div>
-          <div className="OfferTables__table island__sub__division">
-            <h3 className="island__sub__division__title">Counter asset</h3>
-          </div>
+          {rows}
         </div>
-        {rows}
       </div>
     );
   }

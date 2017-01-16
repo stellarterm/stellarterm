@@ -76,9 +76,11 @@ class TermApp extends React.Component {
 
           this.d.handlers.setOrderbook(baseBuying, counterSelling);
           body = <div>
-            <PairPicker d={this.d}></PairPicker>
+            <div className="so-back islandBack islandBack--t">
+              <PairPicker d={this.d}></PairPicker>
+            </div>
             <div className="so-back islandBack">
-              <div className="island">
+              <div className="island island--pb">
                 <div className="island__header">
                   Orderbook
                 </div>
