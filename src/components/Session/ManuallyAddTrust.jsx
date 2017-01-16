@@ -2,7 +2,7 @@ const React = window.React = require('react');
 import AssetCard from '../AssetCard.jsx';
 import _ from 'lodash';
 
-export default class AddTrust extends React.Component {
+export default class ManuallyAddTrust extends React.Component {
   constructor(props) {
     super(props);
     this.state = {

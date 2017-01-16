@@ -1,7 +1,8 @@
 const React = window.React = require('react');
 import LoginForm from './Session/LoginForm.jsx';
 import AccountView from './Session/AccountView.jsx';
-import AddTrust from './Session/AddTrust.jsx';
+import ManuallyAddTrust from './Session/ManuallyAddTrust.jsx';
+import AddTrustFromDirectory from './Session/AddTrustFromDirectory.jsx';
 
 class Session extends React.Component {
   constructor(props) {
@@ -30,7 +31,10 @@ class Session extends React.Component {
       if (part1 === undefined) {
         content = <AccountView d={d}></AccountView>
       } else if (part1 === 'addTrust') {
-        content = <AddTrust d={d}></AddTrust>
+        content = <div>
+          <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
+          <ManuallyAddTrust d={d}></ManuallyAddTrust>
+        </div>
       }
 
       return <div>

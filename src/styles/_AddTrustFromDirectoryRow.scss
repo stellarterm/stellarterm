@@ -1,0 +1,16 @@
+.AddTrustFromDirectoryRow {
+  display: flex;
+  padding: 0.75em 1em;
+  border-top: 1px solid $s-color-neutral7;
+}
+.AddTrustFromDirectoryRow__asset {
+  width: 450px;
+  flex: 0 0;
+}
+.AddTrustFromDirectoryRow__options {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
