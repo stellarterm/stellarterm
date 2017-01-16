@@ -2,12 +2,10 @@ const React = window.React = require('react');
 const ReactDOM = require('react-dom');
 const mountNode = document.getElementById('app');
 import NotFound from './components/NotFound.jsx';
-import OfferTables from './components/OfferTables.jsx';
-import OfferMakers from './components/OfferMakers.jsx';
 import Markets from './components/Markets.jsx';
 import Session from './components/Session.jsx';
+import Exchange from './components/Exchange.jsx';
 import Generic from './components/Generic.jsx';
-import PairPicker from './components/PairPicker.jsx';
 import Stellarify from './lib/Stellarify';
 import url from 'url';
 import Header from './components/Header.jsx';
@@ -86,21 +84,7 @@ class TermApp extends React.Component {
           let counterSelling = Stellarify.parseAssetSlug(urlParts[2]);
 
           this.d.handlers.setOrderbook(baseBuying, counterSelling);
-          body = <div>
-            <div className="so-back islandBack islandBack--t">
-              <PairPicker d={this.d}></PairPicker>
-            </div>
-            <div className="so-back islandBack">
-              <div className="island island--pb">
-                <div className="island__header">
-                  Orderbook
-                </div>
-                <OfferMakers d={this.d}></OfferMakers>
-                <div className="island__separator"></div>
-                <OfferTables d={this.d}></OfferTables>
-              </div>
-            </div>
-          </div>
+          body = <Exchange d={this.d}></Exchange>
         } catch (e) {
           console.log(e.message);
           body = <Generic title="Pick a market">Exchange url was invalid. To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
