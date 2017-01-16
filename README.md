@@ -2,11 +2,27 @@
 
 # StellarTerm - Try it out at [stellarterm.com](https://stellarterm.com/)
 
-StellarTerm is a web based trading client for use on the Stellar network. The target audience of this client is advanced users who need a powerful tool for interacting with the Stellar distributed exchange.
+StellarTerm is a web based trading client for use on the Stellar network. This client aims to make it easy and safe for users of any skill level to trade on the Stellar network by making a clear and secure user interface.
 
-## Features
-- No login required, simply use a secret key to authenticate
-- Embeddable components
+## Screenshots
+
+### Compatible with accounts from any other client
+![Universal login](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/universal-login.png)
+
+### Shows listing of balances with secure asset cards
+![Detailed balances](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/detailed-balances.png)
+
+### Ability to add trust either manually or from a curated list
+![Adding trust from directories](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/adding-trust-from-directory.png)
+
+### A directory of the asset pairs traded on the Stellar network
+![Market directory](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/marketdirectory.png)
+
+### Ability to make offers in an intuitive manner
+![Offer maker](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/offermaker.png)
+
+### A detailed user friendly orderbook
+![Orderbook](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/orderbook.png)
 
 ## Under the cover features
 - No external dependencies or trackers
