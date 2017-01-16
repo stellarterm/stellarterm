@@ -6,9 +6,16 @@
 .Header__nav {
   height: 72px;
   display: flex;
-  align-items: center;
+  align-items: baseline;
+  padding-top: 18px;
 }
 .Header__nav__item {
-  margin-right: 2em;
+  margin-right: 36px;
   text-decoration: none;
+}
+.Header__nav__item--logo {
+  margin-right: 36px;
+  font-weight: bold;
+  color: $s-color-primary4;
+  font-size: $s-scale-2;
 }
