@@ -11,7 +11,7 @@ export default class ManuallyAddTrust extends React.Component {
     }
 
     this.handleInputTrustCode = (event) => {
-      this.setState({trustCode: event.target.value});
+      this.setState({trustCode: event.target.value.toUpperCase()});
     }
     this.handleInputTrustIssuer = (event) => {
       this.setState({trustIssuer: event.target.value});
