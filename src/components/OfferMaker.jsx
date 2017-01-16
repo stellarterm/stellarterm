@@ -22,20 +22,25 @@ export default class OfferMaker extends React.Component {
     }
     return {};
   }
+  componentWillUnmount() {
+    this.props.d.unlistenSession(this.listenSessionId);
+    this.props.d.unlistenSession(this.listenOrderbookId);
+    this.props.d.unlistenSession(this.listenOrderbookPricePickId);
+  }
   constructor(props) {
     super(props);
     this.initialized = false;
 
-    this.props.d.listenSession(() => {
+    this.listenSessionId = props.d.listenSession(() => {
       this.forceUpdate();
     });
 
-    props.d.listenOrderbook(() => {
+    this.listenOrderbookId = props.d.listenOrderbook(() => {
       this.setState(this.initialize());
       this.forceUpdate();
     });
 
-    this.props.d.listenOrderbookPricePick(opts => {
+    this.listenOrderbookPricePickId = this.props.d.listenOrderbookPricePick(opts => {
       this.updateState('price', opts.price);
     });
 
@@ -85,10 +90,6 @@ export default class OfferMaker extends React.Component {
       }
       this.setState(state);
     }
-
-    props.d.listenOrderbook(() => {
-      this.forceUpdate();
-    });
 
     this.handleSubmit = (e) => {
       // TODO: Hook up with driver
