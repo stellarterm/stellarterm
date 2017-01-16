@@ -70,7 +70,7 @@ class TermApp extends React.Component {
               Welcome to the StellarTerm app. This is a <a href="https://github.com/irisli/stellarterm">open source</a> web based trading client for the Stellar network.
             </div>
             <div className="island__sub__division HomePage__buttonContainer">
-              <a className="s-button" href="#exchange/XLM-native/USD-stellarterm.com">View exchange demo</a>
+              <a className="s-button" href="#exchange/XLM-native/DEMO-stellarterm.com">View exchange demo</a>
             </div>
           </div>
         </div>
