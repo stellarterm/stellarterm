@@ -273,6 +273,10 @@ function Driver(opts) {
     setOrderbook: (baseBuying, counterSelling) => {
       // If orderbook is already set, then this is a no-op
       // Expects baseBuying and counterSelling to StellarSdk.Asset objects
+      if (this.orderbook.ready && this.orderbook.baseBuying.equals(baseBuying) && this.orderbook.counterSelling.equals(counterSelling)) {
+        return;
+      }
+
       if (this.orderbook.close) {
         this.orderbook.close();
       }
