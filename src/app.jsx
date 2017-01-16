@@ -93,7 +93,18 @@ class TermApp extends React.Component {
           body = <Generic title="Pick a market">Exchange url was invalid. To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
         }
       } else {
-        body = <Generic title="Pick a market">To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
+        if (this.d.orderbook.ready) {
+          setTimeout(() => {
+            let newUrl = Stellarify.pairToExchangeUrl(this.d.orderbook.baseBuying, this.d.orderbook.counterSelling);
+            history.replaceState(null, null, '#' + newUrl);
+            this.setState({
+              url: newUrl,
+            })
+          }, 0);
+          body = <Generic title="Loading orderbook">Loading</Generic>
+        } else {
+          body = <Generic title="Pick a market">To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
+        }
       }
     } else {
       body = <NotFound></NotFound>

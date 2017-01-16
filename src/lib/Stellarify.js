@@ -63,6 +63,23 @@ const Stellarify = {
 
     return new StellarSdk.Asset(code, issuer);
   },
+  assetToSlug(asset) {
+    if (asset.isNative()) {
+      return 'XLM-native';
+    }
+    let issuer = asset.getIssuer();
+    let source = directory.getSourceById(issuer)
+    if (source.name !== 'unknown') {
+      issuer = source.name;
+    }
+    return `${asset.getCode()}-${issuer}`
+  },
+  pairToExchangeUrl(baseBuying, counterSelling) {
+    console.log(this.assetToSlug(baseBuying))
+    console.log(this.assetToSlug(counterSelling))
+    // console.log(this.asset)
+    return `exchange/${this.assetToSlug(baseBuying)}/${this.assetToSlug(counterSelling)}`;
+  },
 };
 
 export default Stellarify;
