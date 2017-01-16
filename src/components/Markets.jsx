@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import AssetCard from './AssetCard.jsx';
+import CustomMarketPicker from './CustomMarketPicker.jsx';
 import Stellarify from '../lib/Stellarify';
 import _ from 'lodash';
 
@@ -53,17 +54,25 @@ export default class Markets extends React.Component {
       )
     })
     return (
-      <div className="so-back islandBack islandBack--t">
-        <div className="island">
-          <div className="OfferTables island__sub">
-            <div className="OfferTables__tables island__sub__division">
-              <h3 className="island__sub__division__title">Base asset</h3>
+      <div>
+        <div className="so-back islandBack islandBack--t">
+          <CustomMarketPicker></CustomMarketPicker>
+        </div>
+        <div className="so-back islandBack">
+          <div className="island">
+            <div className="island__header">
+              Popular exchange markets
             </div>
-            <div className="OfferTables__table island__sub__division">
-              <h3 className="island__sub__division__title">Counter asset</h3>
+            <div className="island__sub">
+              <div className="island__sub__division">
+                <h3 className="island__sub__division__title">Base asset</h3>
+              </div>
+              <div className="island__sub__division">
+                <h3 className="island__sub__division__title">Counter asset</h3>
+              </div>
             </div>
+            {rows}
           </div>
-          {rows}
         </div>
       </div>
     );

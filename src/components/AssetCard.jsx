@@ -13,6 +13,12 @@ export default class AssetCard extends React.Component {
       containerClassName += ' AssetCard--fixed';
     }
 
+    if (!asset) {
+      // Blank card
+      return <div className="AssetCard__main">
+      </div>
+    }
+
     let assetCardMain;
     let issuerId = this.props.asset.getIssuer();
     let source = directory.getSourceById(issuerId);
