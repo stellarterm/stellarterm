@@ -43,7 +43,8 @@ export default class ManuallyAddTrust extends React.Component {
           <div className="island__separator"></div>
           <div className="AddTrust__confirmation">
             <div className="s-alert s-alert--alert">
-              <ul className="AddTrust__errorList">
+              <ul className="AddT
+              rust__errorList">
                 {_.map(errors, (errorMessage, index) => {
                   return <li key={index}>{errorMessage}</li>;
                 })}
@@ -79,28 +80,26 @@ export default class ManuallyAddTrust extends React.Component {
       }
     }
 
-    return <div className="so-back islandBack--t">
-      <div className="island">
-        <div className="island__header">
-          Manually add trust
-        </div>
-        <div className="island__paddedContent">
-          <p>You can add trust manually if you know the account ID and asset code</p>
-          <label className="s-inputGroup AddTrust__inputGroup">
-            <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
-              <span>Asset Code</span>
-            </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={this.state.trustCode} onChange={this.handleInputTrustCode} placeholder="Asset code (example: BTC)" />
-          </label>
-          <label className="s-inputGroup AddTrust__inputGroup">
-            <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
-              <span>Issuer Account ID</span>
-            </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={this.state.trustIssuer} onChange={this.handleInputTrustIssuer} placeholder="Asset Issuer (example: GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R)" />
-          </label>
-        </div>
-        {confirmation}
+    return <div className="island">
+      <div className="island__header">
+        Manually add trust
       </div>
+      <div className="island__paddedContent">
+        <p>You can add trust manually if you know the account ID and asset code</p>
+        <label className="s-inputGroup AddTrust__inputGroup">
+          <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
+            <span>Asset Code</span>
+          </span>
+          <input className="s-inputGroup__item S-flexItem-share" type="text" value={this.state.trustCode} onChange={this.handleInputTrustCode} placeholder="Asset code (example: BTC)" />
+        </label>
+        <label className="s-inputGroup AddTrust__inputGroup">
+          <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
+            <span>Issuer Account ID</span>
+          </span>
+          <input className="s-inputGroup__item S-flexItem-share" type="text" value={this.state.trustIssuer} onChange={this.handleInputTrustIssuer} placeholder="Asset Issuer (example: GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R)" />
+        </label>
+      </div>
+      {confirmation}
     </div>
   }
 }

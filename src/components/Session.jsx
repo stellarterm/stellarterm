@@ -35,9 +35,13 @@ class Session extends React.Component {
           <AccountView d={d}></AccountView>
         </div>
       } else if (part1 === 'addTrust') {
-        content = <div className="so-back islandBack islandBack--t">
-          <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
-          <ManuallyAddTrust d={d}></ManuallyAddTrust>
+        content = <div>
+          <div className="so-back islandBack islandBack--t">
+            <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
+          </div>
+          <div className="so-back islandBack">
+            <ManuallyAddTrust d={d}></ManuallyAddTrust>
+          </div>
         </div>
       }
 
