@@ -40,7 +40,7 @@ export default class BalancesTable extends React.Component {
       button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Error creating trust line for {this.props.asset.getCode()}</button>
     } else {
       if (found) {
-        button = <button className="s-button" disabled={true} onClick={(e) => this.handleSubmitTrust(e)}>Trust line for {this.props.asset.getCode()} exists</button>
+        button = <span className="BalancesTable__row__exists">Trust line for {this.props.asset.getCode()} exists</span>
       } else {
         button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Create trust line for {this.props.asset.getCode()}</button>
       }
