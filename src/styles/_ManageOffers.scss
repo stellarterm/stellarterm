@@ -1,0 +1,30 @@
+.ManageOffers__table {
+  width: 100%;
+  text-align: right;
+  font-size: 16px;
+}
+
+.ManageOffers__table__header {
+  background: $s-color-neutral8;
+  font-weight: bold;
+  text-align: center;
+}
+  .ManageOffers__table__header__item {
+    padding: 4px 8px 4px 2px;
+  }
+.ManageOffers__table__row {
+}
+.ManageOffers__table__row:hover {
+  background: #fdfdc8;
+}
+  .ManageOffers__table__row__item {
+    padding: 4px 8px 4px 2px;
+    text-align: right;
+    font-family: 'Ubuntu Mono';
+  }
+
+  .ManageOffers__table__row__none {
+    padding: 4px 8px;
+    text-align: center;
+    font-family: 'Ubuntu Mono';
+  }

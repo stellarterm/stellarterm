@@ -185,7 +185,7 @@ export default class OfferMaker extends React.Component {
           submit = <input type="submit" className="s-button" value="Trust required" disabled={true}></input>
         }
       } else {
-        submit = <input type="submit" className="s-button" disabled={true} value="Offer pending..." disabled={true}></input>
+        submit = <input type="submit" className="s-button" disabled={true} value="Creating offer..." disabled={true}></input>
       }
     } else {
       submit = <span className="OfferMaker__message"><a href="#account">Log in</a> to create an offer</span>

@@ -199,6 +199,7 @@ const MagicSpoon = {
     spoonAccount.sign(transaction);
     const transactionResult = await Server.submitTransaction(transaction);
     spoonAccount.updateOffers();
+    return transactionResult;
   },
 };
 
@@ -282,7 +283,7 @@ function Driver(opts) {
       })
     },
     removeOffer: async (offerId) => {
-      MagicSpoon.removeOffer(this.Server, this.session.account, offerId);
+      return MagicSpoon.removeOffer(this.Server, this.session.account, offerId);
     },
     orderbookPricePick: (price) => {
       trigger.orderbookPricePick({

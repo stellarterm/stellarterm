@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import directory from '../directory';
-
+import BigNumber from 'bignumber.js';
 const Stellarify = {
   // orderbookDetails(input) {
     // Obsolete
@@ -42,7 +42,6 @@ const Stellarify = {
       issuer = null;
     } else if (!StellarSdk.Keypair.isValidPublicKey(issuer)) {
       // Neither native nor a public key, so we will try to resolve it
-      console.log();
       let source = directory.getSourceByFederation(issuer);
       if (source.name === 'unknown') {
         throw new Error(`Unknown issuer ${issuer}`);
@@ -76,6 +75,41 @@ const Stellarify = {
   },
   pairToExchangeUrl(baseBuying, counterSelling) {
     return `exchange/${this.assetToSlug(baseBuying)}/${this.assetToSlug(counterSelling)}`;
+  },
+  isOfferRelevant(baseBuying, counterSelling, offer) {
+    let offerBuying = this.asset(offer.buying);
+    let offerSelling = this.asset(offer.selling);
+    return (baseBuying.equals(offerBuying) && counterSelling.equals(offerSelling))
+        || (baseBuying.equals(offerSelling) && counterSelling.equals(offerBuying));
+  },
+  rectifyOffer(baseBuying, counterSelling, offer) {
+    let newOffer = _.assign({}, offer);
+    // Make sure that the offer is relative to the base/counter pair
+    let offerBuying = this.asset(offer.buying);
+    let offerSelling = this.asset(offer.selling);
+    // / (baseBuying.equals(offerBuying) && counterSelling.equals(offerSelling))
+        // || (baseBuying.equals(offerSelling) && counterSelling.equals(offerBuying));
+    if (baseBuying.equals(offerBuying) && counterSelling.equals(offerSelling)) {
+      // Flip price
+      newOffer.side = 'buy';
+      newOffer.price_r = {
+        d: offer.price_r.n,
+        n: offer.price_r.d,
+      }
+      newOffer.baseAmount = new BigNumber(offer.amount).dividedBy(new BigNumber(newOffer.price_r.n).dividedBy(newOffer.price_r.d)).toFixed(7);
+      newOffer.counterAmount = offer.amount;
+    } else if (baseBuying.equals(offerSelling) && counterSelling.equals(offerBuying)) {
+      // Don't flip
+      newOffer.side = 'sell';
+      newOffer.baseAmount = offer.amount;
+      newOffer.counterAmount = new BigNumber(newOffer.price_r.n).dividedBy(newOffer.price_r.d).times(offer.amount).toFixed(7);
+    } else {
+      throw new Error('Irrelevant offer passed into rectifyOffer');
+      return;
+    }
+    newOffer.amount = undefined;
+    newOffer.price = new BigNumber(newOffer.price_r.n).dividedBy(newOffer.price_r.d).toFixed(7);
+    return newOffer;
   },
 };
 

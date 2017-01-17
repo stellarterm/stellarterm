@@ -2,6 +2,7 @@ const React = window.React = require('react');
 import OfferTables from './OfferTables.jsx';
 import PairPicker from './PairPicker.jsx';
 import OfferMakers from './OfferMakers.jsx';
+import ManageOffers from './ManageOffers.jsx';
 import Generic from './Generic.jsx';
 
 export default class Exchange extends React.Component {
@@ -31,6 +32,14 @@ export default class Exchange extends React.Component {
           <OfferMakers d={this.props.d}></OfferMakers>
           <div className="island__separator"></div>
           <OfferTables d={this.props.d}></OfferTables>
+        </div>
+      </div>
+      <div className="so-back islandBack">
+        <div className="island">
+          <div className="island__header">
+            Manage offers
+          </div>
+          <ManageOffers d={this.props.d}></ManageOffers>
         </div>
       </div>
     </div>

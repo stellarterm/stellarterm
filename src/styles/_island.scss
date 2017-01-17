@@ -28,7 +28,7 @@
 
 // For if the content is too simple to warrant a complicated pad
 .island__paddedContent {
-  padding: 16px 20px;
+  padding: 16px 18px;
 }
 
   .island__header {
@@ -36,7 +36,7 @@
     border-bottom: 1px solid $s-color-neutral7;
     border-radius: 3px 3px 0 0;
 
-    padding: 10px 18px;
+    padding: 11px 18px 9px 18px;
     font-size: $s-scale-3;
   }
 
