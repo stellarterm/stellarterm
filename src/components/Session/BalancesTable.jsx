@@ -48,7 +48,7 @@ export default class BalancesTable extends React.Component {
 
     return <div className="island">
       <div className="island__header">
-        Balances
+        Balances for {this.props.d.session.account.accountId()}
       </div>
       <table className="BalancesTable">
         <thead>
