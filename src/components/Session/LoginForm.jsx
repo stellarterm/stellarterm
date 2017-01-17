@@ -34,6 +34,8 @@ export default class LoginForm extends React.Component {
     let errorMessage;
     if (this.state.invalidKey) {
       errorMessage = <div className="s-alert s-alert--alert">Invalid secret key. Hint: it starts with the letter S and is all uppercase</div>
+    } else if (this.props.setupError) {
+      errorMessage = <div className="s-alert s-alert--alert">Unable to find account. Make sure that your account is on the public network and funded with 20 lumens.</div>
     }
     return <div className="so-back islandBack islandBack--t">
       <div className="island island--pb">

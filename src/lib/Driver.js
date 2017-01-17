@@ -229,6 +229,7 @@ function Driver(opts) {
   // Only the driver should change the session.
   this.session = {
     state: 'out',
+    setupError: false, // Couldn't find account
     account: null, // MagicSpoon.Account instance
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
@@ -255,14 +256,21 @@ function Driver(opts) {
         console.log('Invalid secret key');
         return;
       }
+      this.session.setupError = false;
       this.session.state = 'loading';
       trigger.session();
 
-      this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
+      try {
+        this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
+          trigger.session();
+        });
+        this.session.state = 'in';
         trigger.session();
-      });
-      this.session.state = 'in';
-      trigger.session();
+      } catch (e) {
+        this.session.state = 'out';
+        this.session.setupError = true;
+        trigger.session();
+      }
     },
     createOffer: async (side, opts) => {
       return MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {

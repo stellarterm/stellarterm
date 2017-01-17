@@ -22,8 +22,9 @@ class Session extends React.Component {
   render() {
     let d = this.props.d;
     let state = d.session.state;
+    let setupError = d.session.setupError;
     if (state === 'out') {
-      return <LoginForm handler={this.logIn}></LoginForm>
+      return <LoginForm setupError={setupError} handler={this.logIn}></LoginForm>
     } else if (state === 'loading') {
       return <Generic title="Loading account">Loading account</Generic>
     } else if (state === 'in') {
