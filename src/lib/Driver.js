@@ -277,7 +277,7 @@ function Driver(opts) {
       })
     },
     removeTrust: async (code, issuer) => {
-      MagicSpoon.changeTrust(this.Server, this.session.account, {
+      return await MagicSpoon.changeTrust(this.Server, this.session.account, {
         asset: new StellarSdk.Asset(code, issuer),
         limit: '0',
       })

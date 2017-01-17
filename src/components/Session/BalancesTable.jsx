@@ -2,6 +2,7 @@ const React = window.React = require('react');
 import Stellarify from '../../lib/Stellarify';
 import Printify from '../../lib/Printify';
 import AssetCard from '../AssetCard.jsx';
+import RemoveTrustLink from './RemoveTrustLink.jsx';
 import _ from 'lodash';
 
 export default class BalancesTable extends React.Component {
@@ -29,12 +30,7 @@ export default class BalancesTable extends React.Component {
       let balanceAsset = Stellarify.asset(balance);
       let limit = balance.limit == '922337203685.4775807' ? 'maximum': balance.limit;
 
-      let removeLink;
-      if (balance.balance === '0.0000000') {
-        removeLink = <a className="BalancesTable__row__removeLink" onClick={() => this.props.d.handlers.removeTrust(balance.asset_code, balance.asset_issuer)}>Remove trust</a>
-      } else {
-        removeLink = <span className="BalancesTable__row__removeLink">Trust is removable when balance is 0</span>
-      }
+      let removeLink = <RemoveTrustLink balance={balance} d={this.props.d}></RemoveTrustLink>
 
       let limitCell = <td>N/A</td>;
       if (balance.asset_type !== 'native') {
