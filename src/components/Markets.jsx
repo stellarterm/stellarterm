@@ -20,6 +20,10 @@ let markets = [
   },
   {
     baseBuying: StellarSdk.Asset.native(),
+    counterSelling: new StellarSdk.Asset('PHP', 'GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP'),
+  },
+  {
+    baseBuying: StellarSdk.Asset.native(),
     counterSelling: new StellarSdk.Asset('CNY', 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'),
   },
   {
