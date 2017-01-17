@@ -18,6 +18,9 @@ StellarTerm is a web based trading client for use on the Stellar network. This c
 ### A directory of the asset pairs traded on the Stellar network
 ![Market directory](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/marketdirectory.png)
 
+### Manage offers for an account
+![Manage offers](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/manage-offers.png)
+
 ### Shows listing of balances with secure asset cards
 ![Detailed balances](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/detailed-balances.png)
 
