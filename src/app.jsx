@@ -108,7 +108,7 @@ class TermApp extends React.Component {
     }
 
     return <div>
-      <Header></Header>
+      <Header d={this.props.d} urlParts={urlParts}></Header>
       {body}
     </div>;
 

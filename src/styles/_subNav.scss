@@ -1,14 +1,13 @@
 .subNavBack {
   background: $s-color-primary8;
-  // border-bottom: 1px solid $s-color-neutral6;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   position: relative;
-  z-index: 5;
 }
 .subNav__nav {
   height: 54px;
   display: flex;
   align-items: center;
+  padding-left: 18px;
+  padding-right: 18px;
 }
 .subNav__nav__item {
   margin-right: 2em;

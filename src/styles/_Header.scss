@@ -1,13 +1,17 @@
+.HeaderBackBack {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
 .HeaderBack {
   background: #fff;
   position: relative;
-  z-index: 8;
 }
 .Header__nav {
   height: 72px;
   display: flex;
   align-items: baseline;
   padding-top: 18px;
+  padding-left: 18px;
+  padding-right: 18px;
 }
 .Header__nav__item {
   margin-right: 36px;

@@ -79,7 +79,6 @@ export default class ManuallyAddTrust extends React.Component {
       }
     }
 
-
     return <div className="so-back islandBack--t">
       <div className="island">
         <div className="island__header">
