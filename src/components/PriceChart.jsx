@@ -80,11 +80,19 @@ export default class PriceChart extends React.Component {
   }
   renderChart(orderbook) {
     this.rendered = true;
+    let elem = document.getElementById('PriceChart');
     // We detect the height and width from the PriceChart element
     // This is so that it can be embedded into other sites easily
-    let elem = document.getElementById('PriceChart');
     const height = elem.clientHeight;
     const width = elem.clientWidth;
+
+    const pairName = `${orderbook.baseBuying.code}/${orderbook.counterSelling.code}`;
+    window.elem = elem;
+
+    if (orderbook.trades.length === 0) {
+      elem.getElementsByClassName('PriceChart__message')[0].textContent = `No trade history for ${pairName}`;
+      return;
+    }
 
     const highstockOptions = {
       colors: ['#9291e0'], // Purple from background gradient
@@ -139,7 +147,7 @@ export default class PriceChart extends React.Component {
         selected: 2,
       },
       series: [{
-        name: `${orderbook.baseBuying.code}/${orderbook.counterSelling.code}`,
+        name: pairName,
         data: orderbook.trades,
         dataGrouping: {
           dateTimeLabelFormats: dataGroupingDateTimeLabelFormats,
@@ -203,13 +211,12 @@ export default class PriceChart extends React.Component {
   shouldComponentUpdate() {
     return false;
   }
-  componentWillReceiveProps(newProps) {
-    console.log(newProps);
-  }
   render() {
     return <div className="so-back islandBack">
       <div className="island PriceChartChunk">
-        <div id="PriceChart"></div>
+        <div id="PriceChart">
+          <p className="PriceChart__message">Loading historical price data...</p>
+        </div>
       </div>
     </div>;
   }
