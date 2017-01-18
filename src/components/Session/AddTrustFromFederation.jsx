@@ -1,6 +1,7 @@
 const React = window.React = require('react');
 import AddTrustFromDirectoryRow from './AddTrustFromDirectoryRow.jsx';
 import Stellarify from '../../lib/Stellarify';
+import MessageRow from '../MessageRow.jsx';
 import _ from 'lodash';
 
 export default class AddTrustFromFederation extends React.Component {
@@ -25,7 +26,6 @@ export default class AddTrustFromFederation extends React.Component {
         if (fedValue !== this.state.federation) {
           return;
         }
-        console.log('found',res);
         this.setState({
           federation: fedValue,
           state: 'found',
@@ -41,76 +41,26 @@ export default class AddTrustFromFederation extends React.Component {
           state: 'notfound',
           currencies: [],
         });
-        console.log('err', err);
       })
     }
-    // this.handleSubmitTrust = (event) => {
-    //   event.preventDefault();
-    //   this.props.d.handlers.addTrust(this.state.trustCode, this.state.trustIssuer);
-    // }
   }
 
   render() {
-    // let confirmation;
-    // if (this.state.trustCode !== '' && this.state.trustIssuer !== '') {
-    //   let errors = [];
-    //   let trustCode = this.state.trustCode;
-    //   if (trustCode.length > 12) {
-    //     errors.push('Asset code must be 12 or fewer characters');
-    //   }
-    //   if (!trustCode.match(/^[a-zA-Z0-9]+$/g)) {
-    //     errors.push('Asset code must contain only letters and/or numbers');
-    //   }
-    //   if (!StellarSdk.Keypair.isValidPublicKey(this.state.trustIssuer)) {
-    //     errors.push('Asset issuer account ID must be a valid account ID');
-    //   }
-
-    //   if (errors.length) {
-    //     confirmation = <div>
-    //       <div className="island__separator"></div>
-    //       <div className="AddTrust__confirmation">
-    //         <div className="s-alert s-alert--alert">
-    //           <ul className="AddTrust__errorList">
-    //             {_.map(errors, (errorMessage, index) => {
-    //               return <li key={index}>{errorMessage}</li>;
-    //             })}
-    //           </ul>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   } else {
-    //     let found = false;
-    //     _.each(this.props.d.session.account.balances, balance => {
-    //       if (balance.asset_code === this.state.trustCode && balance.asset_issuer === this.state.trustIssuer) {
-    //         found = true;
-    //       }
-    //     });
-
-    //     let createButton;
-    //     if (found) {
-    //       createButton = <button disabled={true} className="s-button">Trust line for {this.state.trustCode} exists</button>
-    //     } else {
-    //       createButton = <button className="s-button">Create trust line for {this.state.trustCode}</button>
-    //     }
-
-    //     let asset = new StellarSdk.Asset(this.state.trustCode, this.state.trustIssuer);
-    //     confirmation = <div>
-    //       <div className="island__separator"></div>
-    //       <div className="AddTrust__confirmation">
-    //         <div className="AddTrust__confirmation__assetCard">
-    //           <AssetCard asset={asset} fixed={true}></AssetCard>
-    //         </div>
-    //         {createButton}
-    //       </div>
-    //     </div>
-    //   }
-    // }
-    let rows = _.map(this.state.currencies, currency => {
-      let asset = Stellarify.assetToml(currency);
-      const key = currency.code + currency.issuer;
-      return <AddTrustFromDirectoryRow key={key} d={this.props.d} asset={asset}></AddTrustFromDirectoryRow>;
-    })
-
+    let results;
+    if (this.state.state === 'pending') {
+      results = <MessageRow>Loading currencies for {this.state.federation}...</MessageRow>
+    } else if (this.state.state === 'notfound') {
+      results = <MessageRow>Unable to find currencies for {this.state.federation}</MessageRow>
+    } else if (this.state.state === 'found') {
+      results = <div className="AddTrustFromDirectory">
+        {_.map(this.state.currencies, currency => {
+          let asset = Stellarify.assetToml(currency);
+          const key = currency.code + currency.issuer;
+          return <AddTrustFromDirectoryRow key={key} d={this.props.d} asset={asset}></AddTrustFromDirectoryRow>;
+        })}
+      </div>
+    }
+    console.log(this.state.state, results);
 
     return <div className="island">
       <div className="island__header">
@@ -125,9 +75,7 @@ export default class AddTrustFromFederation extends React.Component {
           <input className="s-inputGroup__item S-flexItem-share" type="text" value={this.state.federation} onChange={this.handleInputFederation} placeholder="example: coins.asia" />
         </label>
       </div>
-      <div className="AddTrustFromDirectory">
-        {rows}
-      </div>
+      {results}
     </div>
   }
 }

@@ -45,6 +45,7 @@ export default class BalancesTable extends React.Component {
         button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Create trust line for {this.props.asset.getCode()}</button>
       }
     }
+
     return <div className="AddTrustFromDirectoryRow">
       <div className="AddTrustFromDirectoryRow__asset">
         <AssetCard asset={this.props.asset} fixed={true}></AssetCard>

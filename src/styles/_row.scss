@@ -1,0 +1,11 @@
+.row {
+  display: flex;
+  padding: 14px 18px;
+  border-top: 1px solid $s-color-neutral7;
+}
+.row__message {
+  width: 100%;
+  text-align: center;
+  font-size: $s-scale-3;
+  color: $s-color-neutral5;
+}
