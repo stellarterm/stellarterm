@@ -15,7 +15,7 @@ export default class AccountView extends React.Component {
     account.balances.forEach(balance => {
       let balanceAsset = Stellarify.asset(balance);
       balances.push(<li key={balance.asset_issuer + balance.asset_code}>
-        {Printify.assetName(balanceAsset)}: {balance.balance}
+        {balanceAsset.getCode()}: {balance.balance}
       </li>)
     })
     let balancesList = <ul>{balances}</ul>

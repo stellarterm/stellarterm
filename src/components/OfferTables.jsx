@@ -22,8 +22,8 @@ export default class OfferTables extends React.Component {
 
     let orderbook = this.props.d.orderbook;
 
-    let baseLabel = Printify.assetName(orderbook.baseBuying);
-    let counterLabel = Printify.assetName(orderbook.counterSelling);
+    let baseLabel = orderbook.baseBuying.getCode();
+    let counterLabel = orderbook.counterSelling.getCode();
 
     let buyDepth = 0;
     let buys = _.map(orderbook.bids, (bid) => {

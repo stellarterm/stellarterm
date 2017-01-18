@@ -147,8 +147,8 @@ export default class OfferMaker extends React.Component {
       capitalizedSide = 'Sell';
     }
 
-    let baseAssetName = Printify.assetName(this.props.d.orderbook.baseBuying);
-    let counterAssetName = Printify.assetName(this.props.d.orderbook.counterSelling);
+    let baseAssetName = this.props.d.orderbook.baseBuying.getCode();
+    let counterAssetName = this.props.d.orderbook.counterSelling.getCode();
 
     let title;
     if (this.props.side === 'buy') {
