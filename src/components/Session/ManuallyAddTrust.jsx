@@ -43,8 +43,7 @@ export default class ManuallyAddTrust extends React.Component {
           <div className="island__separator"></div>
           <div className="AddTrust__confirmation">
             <div className="s-alert s-alert--alert">
-              <ul className="AddT
-              rust__errorList">
+              <ul className="AddTrust__errorList">
                 {_.map(errors, (errorMessage, index) => {
                   return <li key={index}>{errorMessage}</li>;
                 })}

@@ -10,10 +10,14 @@ const Stellarify = {
   //   return stellarified;
   // },
   asset(input) {
+    // Horizon json asset
     if (input.asset_type === 'native') {
       return new StellarSdk.Asset.native();
     }
     return new StellarSdk.Asset(input.asset_code, input.asset_issuer);
+  },
+  assetToml(input) {
+    return new StellarSdk.Asset(input.code, input.issuer);
   },
   parseAssetSlug(slug) {
     // Takes in a URL part 'XLM-native' or 'USD-stellarterm.com'

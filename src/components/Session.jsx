@@ -2,8 +2,9 @@ const React = window.React = require('react');
 import LoginForm from './Session/LoginForm.jsx';
 import AccountView from './Session/AccountView.jsx';
 import ManuallyAddTrust from './Session/ManuallyAddTrust.jsx';
-import Generic from './Generic.jsx';
+import AddTrustFromFederation from './Session/AddTrustFromFederation.jsx';
 import AddTrustFromDirectory from './Session/AddTrustFromDirectory.jsx';
+import Generic from './Generic.jsx';
 
 class Session extends React.Component {
   constructor(props) {
@@ -38,6 +39,9 @@ class Session extends React.Component {
         content = <div>
           <div className="so-back islandBack islandBack--t">
             <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
+          </div>
+          <div className="so-back islandBack">
+            <AddTrustFromFederation d={d}></AddTrustFromFederation>
           </div>
           <div className="so-back islandBack">
             <ManuallyAddTrust d={d}></ManuallyAddTrust>
