@@ -6,14 +6,20 @@ StellarTerm is a web based trading client for use on the Stellar network. This c
 
 ## Screenshots
 
-### Ability to make offers in an intuitive manner
-![Offer maker](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/offermaker.png)
-
-### Ability to add trust either manually or from a curated list
-![Adding trust from directories](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/adding-trust-from-directory.png)
 
 ### A detailed user friendly orderbook
 ![Orderbook](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/orderbook.png)
+
+### Ability to add trust either from a curated list, manually, or via federation
+![Adding trust from directories](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/adding-trust-from-directory.png)
+
+![Adding trust via federation](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/adding-trust-via-federation.png)
+
+### Price history charts (coming soon)
+![Price history charts](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/history-chart.png)
+
+### Ability to make offers in an intuitive manner
+![Offer maker](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/offermaker.png)
 
 ### A directory of the asset pairs traded on the Stellar network
 ![Market directory](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/marketdirectory.png)
