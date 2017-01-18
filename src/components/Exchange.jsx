@@ -3,6 +3,7 @@ import OfferTables from './OfferTables.jsx';
 import PairPicker from './PairPicker.jsx';
 import OfferMakers from './OfferMakers.jsx';
 import ManageOffers from './ManageOffers.jsx';
+import PriceChart from './PriceChart.jsx';
 import Generic from './Generic.jsx';
 
 export default class Exchange extends React.Component {
@@ -24,6 +25,7 @@ export default class Exchange extends React.Component {
       <div className="so-back islandBack islandBack--t">
         <PairPicker d={this.props.d}></PairPicker>
       </div>
+      <PriceChart d={this.props.d}></PriceChart>
       <div className="so-back islandBack">
         <div className="island island--pb">
           <div className="island__header">
