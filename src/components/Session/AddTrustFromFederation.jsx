@@ -2,6 +2,7 @@ const React = window.React = require('react');
 import AddTrustRow from './AddTrustRow.jsx';
 import Stellarify from '../../lib/Stellarify';
 import MessageRow from '../MessageRow.jsx';
+import ErrorRow from '../ErrorRow.jsx';
 import _ from 'lodash';
 
 export default class AddTrustFromFederation extends React.Component {
@@ -50,7 +51,7 @@ export default class AddTrustFromFederation extends React.Component {
     if (this.state.state === 'pending') {
       results = <MessageRow>Loading currencies for {this.state.federation}...</MessageRow>
     } else if (this.state.state === 'notfound') {
-      results = <MessageRow>Unable to find currencies for {this.state.federation}</MessageRow>
+      results = <ErrorRow>Unable to find currencies for {this.state.federation}</ErrorRow>
     } else if (this.state.state === 'found') {
       results = _.map(this.state.currencies, currency => {
         let asset = Stellarify.assetToml(currency);
