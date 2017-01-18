@@ -1,6 +1,6 @@
 const React = window.React = require('react');
 import AssetCard from '../AssetCard.jsx';
-import AddTrustFromDirectoryRow from './AddTrustFromDirectoryRow.jsx';
+import AddTrustRow from './AddTrustRow.jsx';
 import directory from '../../directory';
 import _ from 'lodash';
 
@@ -14,7 +14,7 @@ export default class AddTrustFromDirectory extends React.Component {
       _.each(source.assets, assetObj => {
         let asset = new StellarSdk.Asset(assetObj.code, assetObj.issuer);
         const key = assetObj.code + assetObj.issuer;
-        rows.push(<AddTrustFromDirectoryRow key={key} d={this.props.d} asset={asset}></AddTrustFromDirectoryRow>);
+        rows.push(<AddTrustRow key={key} d={this.props.d} asset={asset}></AddTrustRow>);
       })
     })
     return <div className="island">

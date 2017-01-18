@@ -4,7 +4,7 @@ import Printify from '../../lib/Printify';
 import AssetCard from '../AssetCard.jsx';
 import _ from 'lodash';
 
-export default class BalancesTable extends React.Component {
+export default class AddTrustRow extends React.Component {
   constructor(props) {
     super(props);
 
@@ -40,17 +40,17 @@ export default class BalancesTable extends React.Component {
       button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Error creating trust line for {this.props.asset.getCode()}</button>
     } else {
       if (found) {
-        button = <span className="BalancesTable__row__exists">Trust line for {this.props.asset.getCode()} exists</span>
+        button = <span className="AddTrustRow__exists">Trust line for {this.props.asset.getCode()} exists</span>
       } else {
         button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Create trust line for {this.props.asset.getCode()}</button>
       }
     }
 
-    return <div className="AddTrustFromDirectoryRow">
-      <div className="AddTrustFromDirectoryRow__asset">
+    return <div className="row">
+      <div className="row__fixedAsset">
         <AssetCard asset={this.props.asset} fixed={true}></AssetCard>
       </div>
-      <div className="AddTrustFromDirectoryRow__options">
+      <div className="row__shareOption">
         {button}
       </div>
     </div>

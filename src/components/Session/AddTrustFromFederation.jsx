@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-import AddTrustFromDirectoryRow from './AddTrustFromDirectoryRow.jsx';
+import AddTrustRow from './AddTrustRow.jsx';
 import Stellarify from '../../lib/Stellarify';
 import MessageRow from '../MessageRow.jsx';
 import _ from 'lodash';
@@ -41,7 +41,7 @@ export default class AddTrustFromFederation extends React.Component {
           state: 'notfound',
           currencies: [],
         });
-      })
+      });
     }
   }
 
@@ -52,15 +52,12 @@ export default class AddTrustFromFederation extends React.Component {
     } else if (this.state.state === 'notfound') {
       results = <MessageRow>Unable to find currencies for {this.state.federation}</MessageRow>
     } else if (this.state.state === 'found') {
-      results = <div className="AddTrustFromDirectory">
-        {_.map(this.state.currencies, currency => {
-          let asset = Stellarify.assetToml(currency);
-          const key = currency.code + currency.issuer;
-          return <AddTrustFromDirectoryRow key={key} d={this.props.d} asset={asset}></AddTrustFromDirectoryRow>;
-        })}
-      </div>
+      results = _.map(this.state.currencies, currency => {
+        let asset = Stellarify.assetToml(currency);
+        const key = currency.code + currency.issuer;
+        return <AddTrustRow key={key} d={this.props.d} asset={asset}></AddTrustRow>;
+      });
     }
-    console.log(this.state.state, results);
 
     return <div className="island">
       <div className="island__header">
