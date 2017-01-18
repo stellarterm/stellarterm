@@ -65,7 +65,10 @@ class TermApp extends React.Component {
           </div>
           <div className="island__sub">
             <div className="island__sub__division HomePage__introBlurb island--simplePadTB">
-              Welcome to the StellarTerm app. This is a <a href="https://github.com/irisli/stellarterm">open source</a> web based trading client for the Stellar network.
+              Welcome to the StellarTerm app. This is an open source web based trading client for the Stellar network
+              <br />
+              <br />
+              For more information, check out the project's <a href="https://github.com/irisli/stellarterm">GitHub repo</a>.
             </div>
             <div className="island__sub__division HomePage__buttonContainer">
               <a className="s-button" href="#exchange/XLM-native/DEMO-stellarterm.com">View exchange demo</a>
