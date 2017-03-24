@@ -40,6 +40,38 @@ StellarTerm is a web based trading client for use on the Stellar network. This c
 ## Deployment
 The project is hosted on GitHub pages in the [stellarterm/stellarterm.github.io](https://github.com/stellarterm/stellarterm.github.io/) repository. The client is wrapped into a single html file and it's sha 256 sum is recorded on each git commit.
 
+## Development instructions
+### Prerequisites
+Make sure you have Node.js 7.4.0 or higher install. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
+
+```sh
+# Check your node version using this command
+node --version
+```
+
+### Environment Setup
+```sh
+# Clone the project
+git clone https://github.com/irisli/stellarterm.git
+cd stellarterm
+
+# Install the npm and bower dependencies
+npm run setup
+```
+
+### Development mode
+The build process has tools watches the code and rebuilds if something has changed. It will also serve the app locally (usually http://localhost:3000) and automatically refresh the page when changes are built.
+
+```sh
+npm start
+```
+
+### Production build
+This builds a single index.html file with assets inlined. The single file contains the whole app and can be hosted online. Output file is in `./dist/index.html`.
+```sh
+npm run production
+```
+
 ## License
 StellarTerm is open source software licensed under the Apache-2.0 license.
 
