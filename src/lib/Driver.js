@@ -117,10 +117,8 @@ const MagicSpoon = {
 
     const orderbookTrades = Server.orderbook(baseBuying, counterSelling).trades().call()
       .then((res) => {
-        let fakeInterval = 3*3600*1000;
         this.trades = _.map(res.records, (trade, index) => {
-          // Fake data with dates
-          return [Date.now() + (-res.records.length + index) * fakeInterval, new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
+          return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
         });
         onUpdate();
       });
