@@ -144,7 +144,7 @@ export default class PriceChart extends React.Component {
             type: 'all',
             text: 'All',
           }],
-        selected: 2,
+        selected: 5,
       },
       series: [{
         name: pairName,
