@@ -4,6 +4,7 @@ import AccountView from './Session/AccountView.jsx';
 import ManuallyAddTrust from './Session/ManuallyAddTrust.jsx';
 import AddTrustFromFederation from './Session/AddTrustFromFederation.jsx';
 import AddTrustFromDirectory from './Session/AddTrustFromDirectory.jsx';
+import Send from './Session/Send.jsx';
 import Generic from './Generic.jsx';
 
 class Session extends React.Component {
@@ -45,6 +46,12 @@ class Session extends React.Component {
           </div>
           <div className="so-back islandBack">
             <ManuallyAddTrust d={d}></ManuallyAddTrust>
+          </div>
+        </div>
+      } else if (part1 === 'send') {
+        content = <div>
+          <div className="so-back islandBack islandBack--t">
+            <Send d={d}></Send>
           </div>
         </div>
       }

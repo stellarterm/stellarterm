@@ -1,0 +1,17 @@
+.Send__title {
+  font-size: $s-scale-b;
+  display: flex;
+  color: $s-color-neutral3;
+}
+.Send__panel {
+  padding: 16px 18px;
+}
+.Send__panel.is-inactive {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.Send__separator {
+  width: 100%;
+  border-top: 1px solid $s-color-neutral7;
+}
