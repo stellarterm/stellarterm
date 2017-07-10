@@ -13,7 +13,7 @@ export default class Send extends React.Component {
       </div>
       <div className="Send__panel">
         <h3 className="Send__title">
-          1. Select destination
+          1. Select destination<a className="Send__title__edit">Edit</a>
         </h3>
           - Input field validate accountid
           - Input field validate
