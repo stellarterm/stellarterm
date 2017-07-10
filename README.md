@@ -42,7 +42,7 @@ The project is hosted on GitHub pages in the [stellarterm/stellarterm.github.io]
 
 ## Development instructions
 ### Prerequisites
-Make sure you have Node.js 7.4.0 or higher install. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
+Make sure you have Node.js 7.4.0 or higher installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
 
 ```sh
 # Check your node version using this command
