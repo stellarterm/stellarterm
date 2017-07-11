@@ -1,4 +1,5 @@
 const React = window.React = require('react');
+import AssetCard from '../AssetCard.jsx';
 import _ from 'lodash';
 
 export default class Send extends React.Component {
@@ -53,6 +54,20 @@ export default class Send extends React.Component {
     </div>
 
     // Step 2
+
+    let Step2Content;
+    if (step === 2) {
+      Step2Content = <div className="Send__content">
+        <AssetCard asset={new StellarSdk.Asset.native()} fixed={true}></AssetCard>
+        <div className="Send__panel__next">
+          <button className="s-button" onClick={d.send.handlers.step2Next}>Save and continue</button>
+        </div>
+      </div>
+    } else if (step > 2) {
+      Step2Content = <div className="Send__content">
+        <AssetCard asset={new StellarSdk.Asset.native()} fixed={true}></AssetCard>
+      </div>
+    }
     let Step2Edit;
     if (step > 2) {
       Step2Edit = <a className="Send__title__edit" onClick={d.send.handlers.step2Edit}>Edit</a>;
@@ -61,7 +76,7 @@ export default class Send extends React.Component {
       <h3 className="Send__title">
         2. Select asset {Step2Edit}
       </h3>
-      Lumens
+      {Step2Content}
     </div>
 
     // Step 3

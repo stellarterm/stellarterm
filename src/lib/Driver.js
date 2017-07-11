@@ -261,6 +261,8 @@ function Driver(opts) {
   this.send = {
     step: 1, // Starts at 1. Natural indexing corresponds to the step numbers
 
+    // Constraint: Each step is allowed to safely assume that the previous steps are finished
+
     // Step state is initialized by the reset functions
     step1: {},
     resetStep1: () => {
@@ -287,21 +289,27 @@ function Driver(opts) {
         this.send.accountId = e.target.value;
         trigger.send();
       },
-      step1Next: () => {
-        this.send.step = 4;
-        trigger.send();
-      },
       step1Edit: () => {
         this.send.step = 1;
         this.send.resetStep2();
         this.send.resetStep3();
         trigger.send();
       },
+      step1Next: () => {
+        this.send.step = 2;
+        trigger.send();
+      },
+
       step2Edit: () => {
         this.send.step = 2;
         this.send.resetStep3();
         trigger.send();
       },
+      step2Next: () => {
+        this.send.step = 3;
+        trigger.send();
+      },
+
       step3Edit: () => {
         this.send.step = 3;
         trigger.send();
