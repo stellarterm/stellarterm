@@ -213,6 +213,7 @@ const MagicSpoon = {
 };
 
 
+
 // Using old school "classes" because I'm old scohol and it's simpler for
 // someone experienced in JavaScript to understand. I may use the ES6 form
 // later though.
@@ -226,6 +227,7 @@ function Driver(opts) {
     'session',
     'orderbook',
     'orderbookPricePick',
+    'send',
   ];
   const trigger = {};
   availableEvents.forEach((eventName) => {
@@ -255,6 +257,21 @@ function Driver(opts) {
       updateFn();
     }
   }
+
+  this.send = {
+    step: 1, // Starts at 1. Natural indexing corresponds to the step numbers
+    accountId: '',
+    handlers: {
+      updateAccountId: (e) => {
+        this.send.accountId = e.target.value;
+        trigger.send();
+      },
+      step1Next: () => {
+        this.send.step = 4;
+        trigger.send();
+      },
+    },
+  };
 
 
   // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon

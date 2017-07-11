@@ -1,3 +1,11 @@
+
+.Send__panel {
+  padding: 16px 18px;
+}
+.Send__panel.is-inactive {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
 .Send__title {
   font-size: $s-scale-2;
   display: flex;
@@ -5,8 +13,10 @@
   align-items: flex-end;
   background: $s-color-neutral7;
   border-radius: $s-var-radius;
-  padding: 0.5em;
-  margin-bottom: 0.5em;
+  padding: 0.5em 1em;
+}
+.Send__content {
+  padding-top: 12px;
 }
 .Send__title--inactive {
   background: $s-color-neutral8;
@@ -19,13 +29,10 @@
 .Send__title__edit:hover {
   color: $s-color-neutral2;
 }
-.Send__panel {
-  padding: 16px 18px;
+.Send__panel__next {
+
 }
-.Send__panel.is-inactive {
-  opacity: 0.4;
-  cursor: not-allowed;
-}
+
 
 .Send__separator {
   width: 100%;
