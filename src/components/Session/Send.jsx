@@ -35,31 +35,43 @@ export default class Send extends React.Component {
           <button className="s-button" onClick={d.send.handlers.step1Next}>Save and continue</button>
         </div>
       </div>
-    } else {
+    } else if (step > 1) {
       Step1Content = <div className="Send__content">
-        <span>Account ID {d.send.accountId}</span>
+        <span>Account ID: <strong>{d.send.accountId}</strong></span>
       </div>
     }
 
+    let Step1Edit;
+    if (step > 1) {
+      Step1Edit = <a className="Send__title__edit" onClick={d.send.handlers.step1Edit}>Edit</a>;
+    }
     let Step1 = <div className={step1ClassName}>
       <h3 className="Send__title">
-        1. Select destination {step === 1 ? null : <a className="Send__title__edit">Edit</a>}
+        1. Select destination {Step1Edit}
       </h3>
       {Step1Content}
     </div>
 
     // Step 2
+    let Step2Edit;
+    if (step > 2) {
+      Step2Edit = <a className="Send__title__edit" onClick={d.send.handlers.step2Edit}>Edit</a>;
+    }
     let Step2 = <div className={step2ClassName}>
       <h3 className="Send__title">
-        2. Select asset
+        2. Select asset {Step2Edit}
       </h3>
       Lumens
     </div>
 
     // Step 3
+    let Step3Edit;
+    if (step > 3) {
+      Step3Edit = <a className="Send__title__edit" onClick={d.send.handlers.step3Edit}>Edit</a>;
+    }
     let Step3 = <div className={step3ClassName}>
       <h3 className="Send__title">
-        3. Select amount
+        3. Select amount {Step3Edit}
       </h3>
       <div className="Send__content">
         <label className="s-inputGroup">

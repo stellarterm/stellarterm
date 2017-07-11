@@ -260,6 +260,27 @@ function Driver(opts) {
 
   this.send = {
     step: 1, // Starts at 1. Natural indexing corresponds to the step numbers
+
+    // Step state is initialized by the reset functions
+    step1: {},
+    resetStep1: () => {
+      this.send.step1 = {
+        accountId: '',
+      };
+    },
+
+    step2: {},
+    resetStep2: () => {
+      this.send.step2 = {
+      };
+    },
+
+    step3: {},
+    resetStep3: () => {
+      this.send.step3 = {
+      };
+    },
+
     accountId: '',
     handlers: {
       updateAccountId: (e) => {
@@ -270,8 +291,26 @@ function Driver(opts) {
         this.send.step = 4;
         trigger.send();
       },
+      step1Edit: () => {
+        this.send.step = 1;
+        this.send.resetStep2();
+        this.send.resetStep3();
+        trigger.send();
+      },
+      step2Edit: () => {
+        this.send.step = 2;
+        this.send.resetStep3();
+        trigger.send();
+      },
+      step3Edit: () => {
+        this.send.step = 3;
+        trigger.send();
+      }
     },
   };
+  this.send.resetStep1();
+  this.send.resetStep2();
+  this.send.resetStep3();
 
 
   // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon
