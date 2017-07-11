@@ -11,9 +11,12 @@
   display: flex;
   color: $s-color-neutral3;
   align-items: flex-end;
-  background: $s-color-neutral7;
+  background: $s-color-neutral8;
   border-radius: $s-var-radius;
   padding: 0.5em 1em;
+}
+.Send__title.is-active {
+  background: $s-color-neutral7;
 }
 .Send__content {
   padding-top: 12px;
@@ -37,4 +40,10 @@
 .Send__separator {
   width: 100%;
   border-top: 1px solid $s-color-neutral7;
+}
+
+
+
+.Send__assetChoice {
+  text-decoration: none;
 }

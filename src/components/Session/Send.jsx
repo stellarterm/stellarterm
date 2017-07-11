@@ -20,6 +20,11 @@ export default class Send extends React.Component {
     let step3ClassName = 'Send__panel' + (step < 3 ? ' is-future' : '');
     let step4ClassName = 'Send__panel' + (step < 4 ? ' is-future' : '');
 
+    let step1TitleClassName = 'Send__title' + (step === 1 ? ' is-active' : '');
+    let step2TitleClassName = 'Send__title' + (step === 2 ? ' is-active' : '');
+    let step3TitleClassName = 'Send__title' + (step === 3 ? ' is-active' : '');
+    let step4TitleClassName = 'Send__title' + (step === 4 ? ' is-active' : '');
+
     // All the steps are in this page to reduce fragmentation
 
     // Step 1
@@ -47,7 +52,7 @@ export default class Send extends React.Component {
       Step1Edit = <a className="Send__title__edit" onClick={d.send.handlers.step1Edit}>Edit</a>;
     }
     let Step1 = <div className={step1ClassName}>
-      <h3 className="Send__title">
+      <h3 className={step1TitleClassName}>
         1. Select destination {Step1Edit}
       </h3>
       {Step1Content}
@@ -55,17 +60,25 @@ export default class Send extends React.Component {
 
     // Step 2
 
+
     let Step2Content;
     if (step === 2) {
+      let assetCards = _.map(d.send.step2.availableAssets, (asset, index) => {
+        return <a className="Send__assetChoice" onClick={() => {d.send.handlers.step2PickAsset(index)}} key={index}><AssetCard asset={asset} fixed={true} lit={asset == d.send.step2.asset}></AssetCard></a>
+      })
+
       Step2Content = <div className="Send__content">
-        <AssetCard asset={new StellarSdk.Asset.native()} fixed={true}></AssetCard>
+        Select an asset to send.
+        <div className="Send__assetPicker">
+          {assetCards}
+        </div>
         <div className="Send__panel__next">
           <button className="s-button" onClick={d.send.handlers.step2Next}>Save and continue</button>
         </div>
       </div>
     } else if (step > 2) {
       Step2Content = <div className="Send__content">
-        <AssetCard asset={new StellarSdk.Asset.native()} fixed={true}></AssetCard>
+        <AssetCard asset={d.send.step2.asset} fixed={true}></AssetCard>
       </div>
     }
     let Step2Edit;
@@ -73,7 +86,7 @@ export default class Send extends React.Component {
       Step2Edit = <a className="Send__title__edit" onClick={d.send.handlers.step2Edit}>Edit</a>;
     }
     let Step2 = <div className={step2ClassName}>
-      <h3 className="Send__title">
+      <h3 className={step2TitleClassName}>
         2. Select asset {Step2Edit}
       </h3>
       {Step2Content}
@@ -85,7 +98,7 @@ export default class Send extends React.Component {
       Step3Edit = <a className="Send__title__edit" onClick={d.send.handlers.step3Edit}>Edit</a>;
     }
     let Step3 = <div className={step3ClassName}>
-      <h3 className="Send__title">
+      <h3 className={step3TitleClassName}>
         3. Select amount {Step3Edit}
       </h3>
       <div className="Send__content">
@@ -95,6 +108,9 @@ export default class Send extends React.Component {
           </span>
           <input className="s-inputGroup__item S-flexItem-share" type="text" value={""} onChange={() => {}} placeholder="" />
         </label>
+        <div className="Send__panel__next">
+          <button className="s-button" onClick={d.send.handlers.step3Next}>Save and continue</button>
+        </div>
       </div>
     </div>
 
@@ -105,7 +121,7 @@ export default class Send extends React.Component {
     </div>
 
     let Step4 = <div className={step4ClassName}>
-      <h3 className="Send__title">
+      <h3 className={step4TitleClassName}>
         4. Review
       </h3>
       <div className="Send__content">

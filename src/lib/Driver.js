@@ -274,6 +274,11 @@ function Driver(opts) {
     step2: {},
     resetStep2: () => {
       this.send.step2 = {
+        availableAssets: [
+          new StellarSdk.Asset.native(),
+        ],
+        asset: null,
+        selectedIndex: null,
       };
     },
 
@@ -305,6 +310,11 @@ function Driver(opts) {
         this.send.resetStep3();
         trigger.send();
       },
+      step2PickAsset: (index) => {
+        this.send.step2.asset = this.send.step2.availableAssets[index];
+        this.send.step2.selectedIndex = index;
+        trigger.send();
+      },
       step2Next: () => {
         this.send.step = 3;
         trigger.send();
@@ -313,7 +323,11 @@ function Driver(opts) {
       step3Edit: () => {
         this.send.step = 3;
         trigger.send();
-      }
+      },
+      step3Next: () => {
+        this.send.step = 4;
+        trigger.send();
+      },
     },
   };
   this.send.resetStep1();
