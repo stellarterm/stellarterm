@@ -14,64 +14,89 @@ export default class Send extends React.Component {
   render() {
     let d = this.props.d;
     let step = this.props.d.send.step;
-    let step1ClassName = 'Send__panel' + (step === 1 ? '' : ' is-inactive');
-    let step2ClassName = 'Send__panel' + (step === 2 ? '' : ' is-inactive');
-    let step3ClassName = 'Send__panel' + (step === 3 ? '' : ' is-inactive');
-    let step4ClassName = 'Send__panel' + (step === 4 ? '' : ' is-inactive');
+    let step1ClassName = 'Send__panel' + (step < 1 ? ' is-future' : '');
+    let step2ClassName = 'Send__panel' + (step < 2 ? ' is-future' : '');
+    let step3ClassName = 'Send__panel' + (step < 3 ? ' is-future' : '');
+    let step4ClassName = 'Send__panel' + (step < 4 ? ' is-future' : '');
+
+    // All the steps are in this page to reduce fragmentation
+
+    // Step 1
+    let Step1Content;
+    if (step === 1) {
+      Step1Content = <div className="Send__content">
+        <label className="s-inputGroup">
+          <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
+            <span>Account ID</span>
+          </span>
+          <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="" />
+        </label>
+        <div className="Send__panel__next">
+          <button className="s-button" onClick={d.send.handlers.step1Next}>Save and continue</button>
+        </div>
+      </div>
+    } else {
+      Step1Content = <div className="Send__content">
+        <span>Account ID {d.send.accountId}</span>
+      </div>
+    }
+
+    let Step1 = <div className={step1ClassName}>
+      <h3 className="Send__title">
+        1. Select destination {step === 1 ? null : <a className="Send__title__edit">Edit</a>}
+      </h3>
+      {Step1Content}
+    </div>
+
+    // Step 2
+    let Step2 = <div className={step2ClassName}>
+      <h3 className="Send__title">
+        2. Select asset
+      </h3>
+      Lumens
+    </div>
+
+    // Step 3
+    let Step3 = <div className={step3ClassName}>
+      <h3 className="Send__title">
+        3. Select amount
+      </h3>
+      <div className="Send__content">
+        <label className="s-inputGroup">
+          <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
+            <span>Amount</span>
+          </span>
+          <input className="s-inputGroup__item S-flexItem-share" type="text" value={""} onChange={() => {}} placeholder="" />
+        </label>
+      </div>
+    </div>
+
+    // Step 4
+    let Step4Next = step !== 4 ? null : <div className="Send__panel__next">
+      Note: Transactions on the Stellar network are irreversible. Please make sure all the transaction details are correct.
+      <button className="s-button">Submit transaction</button>
+    </div>
+
+    let Step4 = <div className={step4ClassName}>
+      <h3 className="Send__title">
+        4. Review
+      </h3>
+      <div className="Send__content">
+        {Step4Next}
+      </div>
+    </div>
 
     return <div className="island">
       <div className="island__header">
         Send payment
       </div>
-      <div className={step1ClassName}>
-        <h3 className="Send__title">
-          1. Select destination<a className="Send__title__edit">Edit</a>
-        </h3>
-        <div className="Send__content">
-          <label className="s-inputGroup">
-            <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
-              <span>Account ID</span>
-            </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="" />
-          </label>
-          <div className="Send__panel__next">
-            <button className="s-button" onClick={d.send.handlers.step1Next}>Save and continue</button>
-          </div>
-        </div>
-      </div>
+      {Step1}
       <div className="Send__separator"></div>
-      <div className={step2ClassName}>
-        <h3 className="Send__title">
-          2. Select asset
-        </h3>
-        Lumens
-      </div>
+      {Step2}
       <div className="Send__separator"></div>
-      <div className={step3ClassName}>
-        <h3 className="Send__title">
-          3. Select amount
-        </h3>
-        <div className="Send__content">
-          <label className="s-inputGroup">
-            <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
-              <span>Amount</span>
-            </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={""} onChange={() => {}} placeholder="" />
-          </label>
-        </div>
-      </div>
+      {Step3}
       <div className="Send__separator"></div>
-      <div className={step4ClassName}>
-        <h3 className="Send__title">
-          4. Review
-        </h3>
-        <div className="Send__content">
-          Please finish the previous steps first.
-          <div className="Send__panel__next">
-            <button className="s-button">Submit transaction</button>
-          </div>
-        </div>
-      </div>
+      {Step4}
     </div>
   }
 }
