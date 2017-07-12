@@ -285,6 +285,7 @@ function Driver(opts) {
     step3: {},
     resetStep3: () => {
       this.send.step3 = {
+        amount: '',
       };
     },
 
@@ -322,6 +323,10 @@ function Driver(opts) {
 
       step3Edit: () => {
         this.send.step = 3;
+        trigger.send();
+      },
+      updateAmount: (e) => {
+        this.send.step3.amount = e.target.value;
         trigger.send();
       },
       step3Next: () => {

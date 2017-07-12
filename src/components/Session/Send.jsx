@@ -53,7 +53,7 @@ export default class Send extends React.Component {
     }
     let Step1 = <div className={step1ClassName}>
       <h3 className={step1TitleClassName}>
-        1. Select destination {Step1Edit}
+        1. Destination {Step1Edit}
       </h3>
       {Step1Content}
     </div>
@@ -87,7 +87,7 @@ export default class Send extends React.Component {
     }
     let Step2 = <div className={step2ClassName}>
       <h3 className={step2TitleClassName}>
-        2. Select asset {Step2Edit}
+        2. Asset {Step2Edit}
       </h3>
       {Step2Content}
     </div>
@@ -97,22 +97,32 @@ export default class Send extends React.Component {
     if (step > 3) {
       Step3Edit = <a className="Send__title__edit" onClick={d.send.handlers.step3Edit}>Edit</a>;
     }
-    let Step3 = <div className={step3ClassName}>
-      <h3 className={step3TitleClassName}>
-        3. Select amount {Step3Edit}
-      </h3>
-      <div className="Send__content">
+    let Step3Content;
+    if (step === 3) {
+      Step3Content = <div className="Send__content">
         <label className="s-inputGroup">
           <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
             <span>Amount</span>
           </span>
-          <input className="s-inputGroup__item S-flexItem-share" type="text" value={""} onChange={() => {}} placeholder="" />
+          <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.step3.amount} onChange={d.send.handlers.updateAmount} placeholder="" />
         </label>
         <div className="Send__panel__next">
           <button className="s-button" onClick={d.send.handlers.step3Next}>Save and continue</button>
         </div>
       </div>
+    } else if (step > 3) {
+      Step3Content = <div className="Send__content">
+        {d.send.step3.amount} {d.send.step2.asset.getCode()}
+      </div>
+    }
+    let Step3 = <div className={step3ClassName}>
+      <h3 className={step3TitleClassName}>
+        3. Amount {Step3Edit}
+      </h3>
+      {Step3Content}
     </div>
+
+
 
     // Step 4
     let Step4Next = step !== 4 ? null : <div className="Send__panel__next">
