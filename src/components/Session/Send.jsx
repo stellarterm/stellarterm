@@ -64,16 +64,22 @@ export default class Send extends React.Component {
     let Step2Content;
     if (step === 2) {
       let assetCards = _.map(d.send.step2.availableAssets, (asset, index) => {
-        return <a className="Send__assetChoice" onClick={() => {d.send.handlers.step2PickAsset(index)}} key={index}><AssetCard asset={asset} fixed={true} lit={asset == d.send.step2.asset}></AssetCard></a>
+        return <div className="row--lite">
+          <div className="row__fixedAsset">
+            <AssetCard asset={asset} fixed={true}></AssetCard>
+          </div>
+          <div className="row__shareOption">
+            <a className="s-button" onClick={() => {d.send.handlers.step2PickAsset(index)}}>Send {asset.getCode()}</a>
+          </div>
+        </div>
       })
 
       Step2Content = <div className="Send__content">
-        Select an asset to send.
+        Select an asset to send. These are assets that both you and the recipient trusts.
         <div className="Send__assetPicker">
           {assetCards}
         </div>
         <div className="Send__panel__next">
-          <button className="s-button" onClick={d.send.handlers.step2Next}>Save and continue</button>
         </div>
       </div>
     } else if (step > 2) {

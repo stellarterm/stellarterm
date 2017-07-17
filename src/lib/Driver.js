@@ -312,11 +312,9 @@ function Driver(opts) {
         trigger.send();
       },
       step2PickAsset: (index) => {
+        // Step 2 doesn't have a next button because this acts as the next button
         this.send.step2.asset = this.send.step2.availableAssets[index];
         this.send.step2.selectedIndex = index;
-        trigger.send();
-      },
-      step2Next: () => {
         this.send.step = 3;
         trigger.send();
       },
