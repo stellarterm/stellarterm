@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import AssetCard from '../AssetCard.jsx';
+import Stellarify from '../../lib/Stellarify';
 import _ from 'lodash';
 
 export default class Send extends React.Component {
@@ -68,7 +69,7 @@ export default class Send extends React.Component {
       let Step2Content;
       if (step === 2) {
         let assetCards = _.map(d.send.step2.availableAssets, (asset, index) => {
-          return <div className="row--lite">
+          return <div className="row--lite" key={Stellarify.assetToSlug(asset)}>
             <div className="row__fixedAsset">
               <AssetCard asset={asset} fixed={true}></AssetCard>
             </div>
