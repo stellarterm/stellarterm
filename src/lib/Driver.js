@@ -259,6 +259,12 @@ function Driver(opts) {
   }
 
   this.send = {
+    state: 'setup', // 'setup' | 'pending' | 'error' | 'success'
+
+    resetState: () => {
+      this.state = 'setup';
+    },
+
     step: 1, // Starts at 1. Natural indexing corresponds to the step numbers
 
     // Constraint: Each step is allowed to safely assume that the previous steps are finished
@@ -329,6 +335,11 @@ function Driver(opts) {
       },
       step3Next: () => {
         this.send.step = 4;
+        trigger.send();
+      },
+
+      submit: () => {
+        this.send.state = 'pending';
         trigger.send();
       },
     },
