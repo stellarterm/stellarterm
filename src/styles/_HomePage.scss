@@ -1,5 +1,23 @@
+.HomePage__lead {
+  font-size: $s-scale-c;
+  margin: 0 auto;
+  width: 560px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  padding-top: 120px;
+  padding-bottom: 120px;
+}
 .HomePage__buttonContainer {
   text-align: center;
-  padding-top: 3em;
-  padding-bottom: 3em;
+}
+
+.HomePage__screenshot {
+  width: 450px;
+  height: 250px;
+  margin-bottom: 0;
+  display: block;
+}
+.HomePage__introImage {
+    padding-top: 20px;
 }
