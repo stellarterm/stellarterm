@@ -190,7 +190,7 @@ export default class Send extends React.Component {
         </div>
         <h3 className="Send__title">Success!</h3>
 
-        Transaction ID: <a href={'https://horizon.stellar.org/transactions/' + d.send.txId}>{d.send.txId}</a>
+        Transaction ID: <a target="_blank" href={'https://horizon.stellar.org/transactions/' + d.send.txId}>{d.send.txId}</a>
         <br /><br />
         <button className="s-button" onClick={d.send.handlers.reset}>Start over</button>
       </div>
