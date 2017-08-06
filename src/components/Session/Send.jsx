@@ -169,6 +169,29 @@ export default class Send extends React.Component {
         </div>
         Submitting transaction...
       </div>
+    } else if (state === 'success') {
+      return <div className="island">
+        <div className="island__header">
+          Send Payment
+        </div>
+        <h3 className="Send__title">Success!</h3>
+
+        Transaction ID: <a href={'https://horizon.stellar.org/transactions/' + d.send.txId}>{d.send.txId}</a>
+        <br /><br />
+        <button className="s-button" onClick={d.send.handlers.reset}>Start over</button>
+      </div>
+    } else { // state is error
+      return <div className="island">
+        <div className="island__header">
+          Send Payment
+        </div>
+        <h3 className="Send__title">Error</h3>
+        <pre>
+          {d.send.errorDetails}
+        </pre>
+        <br /><br />
+        <button className="s-button" onClick={d.send.handlers.reset}>Start over</button>
+      </div>
     }
   }
 }

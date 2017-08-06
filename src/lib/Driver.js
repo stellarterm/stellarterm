@@ -175,6 +175,22 @@ const MagicSpoon = {
         return;
       })
   },
+  async sendPayment(Server, spoonAccount,  opts) {
+    const operationOpts = {
+      destination: opts.destination,
+      asset: opts.asset,
+      amount: opts.amount,
+    };
+
+    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+      .addOperation(StellarSdk.Operation.payment(operationOpts))
+      // .addMemo(StellarSdk.Memo.text('hello'))
+      .build();
+    spoonAccount.sign(transaction);
+
+    const transactionResult = await Server.submitTransaction(transaction);
+    return transactionResult;
+  },
   changeTrust(Server, spoonAccount, opts) {
     let sdkLimit;
     if (typeof opts.limit === 'string' || opts.limit instanceof String) {
@@ -214,9 +230,8 @@ const MagicSpoon = {
 
 
 
-// Using old school "classes" because I'm old scohol and it's simpler for
-// someone experienced in JavaScript to understand. I may use the ES6 form
-// later though.
+// Using old school "classes" because I'm old school and it's simpler to
+// understand. I may use the ES6 form later though.
 function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
   this.Server.serverUrl = opts.horizonUrl;
@@ -259,13 +274,10 @@ function Driver(opts) {
   }
 
   this.send = {
-    state: 'setup', // 'setup' | 'pending' | 'error' | 'success'
-
-    resetState: () => {
-      this.state = 'setup';
+    init: () => {
+      this.send.state = 'setup'; // 'setup' | 'pending' | 'error' | 'success'
+      this.send.step = 1; // Starts at 1. Natural indexing corresponds to the step numbers
     },
-
-    step: 1, // Starts at 1. Natural indexing corresponds to the step numbers
 
     // Constraint: Each step is allowed to safely assume that the previous steps are finished
 
@@ -337,16 +349,43 @@ function Driver(opts) {
         this.send.step = 4;
         trigger.send();
       },
-
-      submit: () => {
+      submit: async () => {
         this.send.state = 'pending';
         trigger.send();
+        let result;
+        try {
+          result = await MagicSpoon.sendPayment(this.Server, this.session.account, {
+            destination: this.send.accountId,
+            asset: this.send.step2.asset,
+            amount: this.send.step3.amount,
+          });
+          this.send.txId = result.hash;
+          this.send.state = 'success';
+        } catch(err) {
+          this.send.state = 'error';
+          if (err instanceof Error) {
+            this.send.errorDetails = err.message;
+          } else {
+            this.send.errorDetails = JSON.stringify(err, null, 2);
+          }
+        }
+        trigger.send();
       },
+      reset: () => {
+        this.send.resetAll();
+        trigger.send();
+      }
+    },
+
+    resetAll: () => {
+      this.send.init();
+      this.send.resetStep1();
+      this.send.resetStep2();
+      this.send.resetStep3();
     },
   };
-  this.send.resetStep1();
-  this.send.resetStep2();
-  this.send.resetStep3();
+
+  this.send.resetAll();
 
 
   // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon
