@@ -1,6 +1,7 @@
 const React = window.React = require('react');
 import AssetCard from '../AssetCard.jsx';
 import Stellarify from '../../lib/Stellarify';
+import Validate from '../../lib/Validate';
 import _ from 'lodash';
 
 export default class Send extends React.Component {
@@ -35,15 +36,21 @@ export default class Send extends React.Component {
       // Step 1
       let Step1Content;
       if (step === 1) {
+        let accountIdValid = Validate.publicKey(d.send.accountId);
+        let destinationValidationMessage;
+        if (accountIdValid === false) {
+          destinationValidationMessage = <p>Account ID is invalid</p>
+        }
         Step1Content = <div className="Send__content">
           <label className="s-inputGroup">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Account ID</span>
             </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="" />
+            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="example: GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
           </label>
+          {destinationValidationMessage}
           <div className="Send__panel__next">
-            <button className="s-button" onClick={d.send.handlers.step1Next}>Save and continue</button>
+            <button className="s-button" disabled={!accountIdValid} onClick={d.send.handlers.step1Next}>Save and continue</button>
           </div>
         </div>
       } else if (step > 1) {
@@ -109,6 +116,12 @@ export default class Send extends React.Component {
         Step3Edit = <a className="Send__title__edit" onClick={d.send.handlers.step3Edit}>Edit</a>;
       }
       let Step3Content;
+      let amountValid = Validate.amount(d.send.step3.amount);
+      let amountValidationMessage;
+      if (amountValid === false) {
+        amountValidationMessage = <p>Amount is invalid</p>
+      }
+      console.log('amountValid',amountValid)
       if (step === 3) {
         Step3Content = <div className="Send__content">
           <label className="s-inputGroup">
@@ -117,8 +130,9 @@ export default class Send extends React.Component {
             </span>
             <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.step3.amount} onChange={d.send.handlers.updateAmount} placeholder="" />
           </label>
+          {amountValidationMessage}
           <div className="Send__panel__next">
-            <button className="s-button" onClick={d.send.handlers.step3Next}>Save and continue</button>
+            <button className="s-button" disabled={!amountValid} onClick={d.send.handlers.step3Next}>Save and continue</button>
           </div>
         </div>
       } else if (step > 3) {
