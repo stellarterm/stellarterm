@@ -177,14 +177,26 @@ const MagicSpoon = {
       })
   },
   async sendPayment(Server, spoonAccount,  opts) {
-    const operationOpts = {
-      destination: opts.destination,
-      asset: opts.asset,
-      amount: opts.amount,
-    };
-
+    // sendPayment will detect if the account is a new account. If so, then it will
+    // be a createAccount operation
     let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
-      .addOperation(StellarSdk.Operation.payment(operationOpts));
+    try {
+      let destAccount = await Server.loadAccount(operationOpts.destination);
+      transaction = transaction.addOperation(StellarSdk.Operation.payment({
+        destination: opts.destination,
+        asset: opts.asset,
+        amount: opts.amount,
+      }));
+    } catch(e) {
+      if (!opts.asset.isNative()) {
+        throw new Error('Destination account does not exist. To create it, you must send a minimum of 20 lumens to create it');
+      }
+      transaction = transaction.addOperation(StellarSdk.Operation.createAccount({
+        destination: opts.destination,
+        startingBalance: opts.amount,
+      }));
+    }
+
     if (opts.memo) {
       transaction = transaction.addMemo(Stellarify.memo(opts.memo.type, opts.memo.content));
     }
