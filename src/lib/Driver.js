@@ -182,10 +182,13 @@ const MagicSpoon = {
       amount: opts.amount,
     };
 
-    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
-      .addOperation(StellarSdk.Operation.payment(operationOpts))
-      // .addMemo(StellarSdk.Memo.text('hello'))
-      .build();
+    let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+      .addOperation(StellarSdk.Operation.payment(operationOpts));
+    if (opts.memo) {
+      transaction = transaction.addMemo(Stellarify.memo(opts.memo.type, opts.memo.content));
+    }
+
+    transaction = transaction.build();
     spoonAccount.sign(transaction);
 
     const transactionResult = await Server.submitTransaction(transaction);
@@ -361,10 +364,15 @@ function Driver(opts) {
         trigger.send();
         let result;
         try {
+          let sendMemo = (this.send.memoType === 'none') ? undefined : {
+            type: this.send.memoType,
+            content: this.send.memoContent,
+          };
           result = await MagicSpoon.sendPayment(this.Server, this.session.account, {
             destination: this.send.accountId,
             asset: this.send.step2.asset,
             amount: this.send.step3.amount,
+            memo: sendMemo,
           });
           this.send.txId = result.hash;
           this.send.state = 'success';
