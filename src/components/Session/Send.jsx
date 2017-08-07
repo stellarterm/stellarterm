@@ -103,8 +103,10 @@ export default class Send extends React.Component {
           </div>
         </div>
       } else if (step > 1) {
+        let memoSummary = (d.send.memoType === 'none') ? null : <p><span>{d.send.memoType}: <strong>{d.send.memoContent}</strong></span></p>;
         Step1Content = <div className="Send__content">
-          <span>Account ID: <strong>{d.send.accountId}</strong></span>
+          <p><span>Account ID: <strong>{d.send.accountId}</strong></span></p>
+          {memoSummary}
         </div>
       }
 
