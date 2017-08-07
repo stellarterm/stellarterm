@@ -45,6 +45,7 @@ export default class Send extends React.Component {
         let memoContentInput;
         let memoReady = true;
         let memoValidationMessage;
+        let memoNote;
         if (d.send.memoType !== 'none') {
           let memoPlaceholder;
           switch (d.send.memoType) {
@@ -76,6 +77,7 @@ export default class Send extends React.Component {
         let dropdownClassName = "so-dropdown s-inputGroup__item S-flexItem-noFlex";
         if (d.send.memoRequired) {
           dropdownClassName += ' is-disabled';
+          memoNote = 'Recipient requires a memo. Make sure it is correct.';
         }
         Step1Content = <div className="Send__content">
           <label className="s-inputGroup">
@@ -97,6 +99,9 @@ export default class Send extends React.Component {
                 <option>MEMO_HASH</option>
                 <option>MEMO_RETURN</option>
               </select>
+            </span>
+            <span className="s-inputGroup__item s-inputGroup__item--tagMin S-flexItem-share">
+              <span>{memoNote}</span>
             </span>
           </label>
           {memoContentInput}
