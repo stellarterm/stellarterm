@@ -282,11 +282,8 @@ function Driver(opts) {
     // Constraint: Each step is allowed to safely assume that the previous steps are finished
 
     // Step state is initialized by the reset functions
-    step1: {},
     resetStep1: () => {
-      this.send.step1 = {
-        accountId: '',
-      };
+      this.send.accountId = '';
     },
 
     step2: {},
