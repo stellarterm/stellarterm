@@ -45,11 +45,24 @@ export default class Send extends React.Component {
         let memoContentInput;
 
         if (d.send.memoType !== 'none') {
+          let memoPlaceholder;
+          switch (d.send.memoType) {
+            case 'MEMO_ID':
+              memoPlaceholder = 'Memo ID number';
+              break;
+            case 'MEMO_TEXT':
+              memoPlaceholder = 'Up to 28 bytes of text';
+              break;
+            case 'MEMO_HASH':
+            case 'MEMO_RETURN':
+              memoPlaceholder = '64 character hexadecimal encoded string';
+              break;
+          }
           memoContentInput = <label className="s-inputGroup">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Memo content</span>
             </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.memoContent} onChange={d.send.handlers.updateMemoContent} placeholder="" />
+            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.memoContent} onChange={d.send.handlers.updateMemoContent} placeholder={memoPlaceholder}/>
           </label>
         }
 
