@@ -147,10 +147,51 @@ _.each(data, source => {
     }
     dataByIssuer[accountId] = source;
   })
-})
+});
+
+let destinations = {};
+function addDestination(accountId, opts) {
+  if (!opts.name) {
+    throw new Error('Name required for destinations');
+  }
+  destinations[accountId] = {
+    name
+  };
+  if (opts.requiredMemoType) {
+    if (!(opts.requiredMemoType == 'MEMO_TEXT'
+       || opts.requiredMemoType == 'MEMO_ID'
+       || opts.requiredMemoType == 'MEMO_HASH'
+       || opts.requiredMemoType == 'MEMO_RETURN')) {
+      throw new Error('Invalid memo type when adding destination');
+    }
+    destinations[accountId].requiredMemoType = opts.requiredMemoType;
+  }
+}
+
+addDestination('GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM', {
+  name: 'Kraken',
+  requiredMemoType: 'MEMO_ID',
+});
+addDestination('GCGNWKCJ3KHRLPM3TM6N7D3W5YKDJFL6A2YCXFXNMRTZ4Q66MEMZ6FI2', {
+  name: 'Poloniex',
+  requiredMemoType: 'MEMO_ID',
+});
+addDestination('GB6YPGW5JFMMP2QB2USQ33EUWTXVL4ZT5ITUNCY3YKVWOJPP57CANOF3', {
+  name: 'Bittrex',
+  requiredMemoType: 'MEMO_ID',
+});
+addDestination('GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM', {
+  name: 'BTC38',
+  requiredMemoType: 'MEMO_ID',
+});
+addDestination('GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7', {
+  name: 'Changelly',
+  requiredMemoType: 'MEMO_ID',
+});
 
 module.exports = {
   data,
+  destinations,
   getSourceByFederation(federation) {
     if (data.hasOwnProperty(federation)) {
       return data[federation];

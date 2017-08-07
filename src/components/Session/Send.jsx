@@ -73,7 +73,10 @@ export default class Send extends React.Component {
           }
         }
 
-
+        let dropdownClassName = "so-dropdown s-inputGroup__item S-flexItem-noFlex";
+        if (d.send.memoRequired) {
+          dropdownClassName += ' is-disabled';
+        }
         Step1Content = <div className="Send__content">
           <label className="s-inputGroup">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
@@ -84,10 +87,10 @@ export default class Send extends React.Component {
           {destinationValidationMessage}
           <label className="s-inputGroup">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
-              <span>Memo type (optional)</span>
+              <span>Memo type</span>
             </span>
-            <span className="so-dropdown s-inputGroup__item S-flexItem-noFlex">
-              <select value={d.send.memoType} onChange={d.send.handlers.updateMemoType} className="so-dropdown__select">
+            <span className={dropdownClassName}>
+              <select value={d.send.memoType} onChange={d.send.handlers.updateMemoType} disabled={d.send.memoRequired} className="so-dropdown__select">
                 <option>none</option>
                 <option>MEMO_ID</option>
                 <option>MEMO_TEXT</option>

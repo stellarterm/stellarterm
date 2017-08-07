@@ -7,6 +7,7 @@ import Byol from './Byol';
 import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import BigNumber from 'bignumber.js';
+import directory from '../directory';
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
@@ -279,6 +280,7 @@ function Driver(opts) {
   this.send = {
     init: () => {
       this.send.state = 'setup'; // 'setup' | 'pending' | 'error' | 'success'
+      this.send.memoRequired = false;
       this.send.memoType = 'none'; // 'none' | 'MEMO_ID' |'MEMO_TEXT' | 'MEMO_HASH' | 'MEMO_RETURN'
       this.send.memoContent = '';
       this.send.step = 1; // Starts at 1. Natural indexing corresponds to the step numbers
@@ -313,6 +315,14 @@ function Driver(opts) {
     handlers: {
       updateAccountId: (e) => {
         this.send.accountId = e.target.value;
+        this.send.memoRequired = false;
+        if (directory.destinations.hasOwnProperty(this.send.accountId)) {
+          let destination = directory.destinations[this.send.accountId];
+          if (destination.requiredMemoType) {
+            this.send.memoRequired = true;
+            this.send.memoType = destination.requiredMemoType;
+          }
+        }
         trigger.send();
       },
       updateMemoType: (e) => {
