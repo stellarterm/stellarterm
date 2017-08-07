@@ -276,6 +276,8 @@ function Driver(opts) {
   this.send = {
     init: () => {
       this.send.state = 'setup'; // 'setup' | 'pending' | 'error' | 'success'
+      this.send.memoType = 'none'; // 'none' | 'MEMO_ID' |'MEMO_TEXT' | 'MEMO_HASH' | 'MEMO_RETURN'
+      this.send.memoContent = '';
       this.send.step = 1; // Starts at 1. Natural indexing corresponds to the step numbers
     },
 
@@ -308,6 +310,14 @@ function Driver(opts) {
     handlers: {
       updateAccountId: (e) => {
         this.send.accountId = e.target.value;
+        trigger.send();
+      },
+      updateMemoType: (e) => {
+        this.send.memoType = e.target.value;
+        trigger.send();
+      },
+      updateMemoContent: (e) => {
+        this.send.memoContent = e.target.value;
         trigger.send();
       },
       step1Edit: () => {

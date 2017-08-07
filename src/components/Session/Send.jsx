@@ -41,6 +41,18 @@ export default class Send extends React.Component {
         if (accountIdValid === false) {
           destinationValidationMessage = <p>Account ID is invalid</p>
         }
+
+        let memoContentInput;
+
+        if (d.send.memoType !== 'none') {
+          memoContentInput = <label className="s-inputGroup">
+            <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
+              <span>Memo content</span>
+            </span>
+            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.memoContent} onChange={d.send.handlers.updateMemoContent} placeholder="" />
+          </label>
+        }
+
         Step1Content = <div className="Send__content">
           <label className="s-inputGroup">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
@@ -49,6 +61,21 @@ export default class Send extends React.Component {
             <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="example: GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
           </label>
           {destinationValidationMessage}
+          <label className="s-inputGroup">
+            <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
+              <span>Memo type (optional)</span>
+            </span>
+            <span className="so-dropdown s-inputGroup__item S-flexItem-noFlex">
+              <select value={d.send.memoType} onChange={d.send.handlers.updateMemoType} className="so-dropdown__select">
+                <option>none</option>
+                <option>MEMO_ID</option>
+                <option>MEMO_TEXT</option>
+                <option>MEMO_HASH</option>
+                <option>MEMO_RETURN</option>
+              </select>
+            </span>
+          </label>
+          {memoContentInput}
           <div className="Send__panel__next">
             <button className="s-button" disabled={!accountIdValid} onClick={d.send.handlers.step1Next}>Save and continue</button>
           </div>
