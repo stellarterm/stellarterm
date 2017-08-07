@@ -43,7 +43,8 @@ export default class Send extends React.Component {
         }
 
         let memoContentInput;
-
+        let memoReady = true;
+        let memoValidationMessage;
         if (d.send.memoType !== 'none') {
           let memoPlaceholder;
           switch (d.send.memoType) {
@@ -64,7 +65,14 @@ export default class Send extends React.Component {
             </span>
             <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.memoContent} onChange={d.send.handlers.updateMemoContent} placeholder={memoPlaceholder}/>
           </label>
+
+          let memoV = Validate.memo(d.send.memoContent, d.send.memoType);
+          memoReady = memoV.ready;
+          if (memoV.message) {
+            memoValidationMessage = <p>{memoV.message}</p>
+          }
         }
+
 
         Step1Content = <div className="Send__content">
           <label className="s-inputGroup">
@@ -89,8 +97,9 @@ export default class Send extends React.Component {
             </span>
           </label>
           {memoContentInput}
+          {memoValidationMessage}
           <div className="Send__panel__next">
-            <button className="s-button" disabled={!accountIdValid} onClick={d.send.handlers.step1Next}>Save and continue</button>
+            <button className="s-button" disabled={!accountIdValid || !memoReady} onClick={d.send.handlers.step1Next}>Save and continue</button>
           </div>
         </div>
       } else if (step > 1) {
