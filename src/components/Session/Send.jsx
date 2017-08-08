@@ -134,13 +134,13 @@ export default class Send extends React.Component {
 
       let Step2Content;
       if (step === 2) {
-        let assetCards = _.map(d.send.step2.availableAssets, (asset, index) => {
-          return <div className="row--lite" key={Stellarify.assetToSlug(asset)}>
+        let assetCards = _.map(d.send.availableAssets, (asset,slug) => {
+          return <div className="row--lite" key={slug}>
             <div className="row__fixedAsset">
               <AssetCard asset={asset} fixed={true}></AssetCard>
             </div>
             <div className="row__shareOption">
-              <a className="s-button" onClick={() => {d.send.handlers.step2PickAsset(index)}}>Send {asset.getCode()}</a>
+              <a className="s-button" onClick={() => {d.send.handlers.step2PickAsset(slug)}}>Send {asset.getCode()}</a>
             </div>
           </div>
         })

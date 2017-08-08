@@ -6,6 +6,7 @@ import Printify from '../lib/Printify';
 import Byol from './Byol';
 import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
+import Validate from '../lib/Validate';
 import BigNumber from 'bignumber.js';
 import directory from '../directory';
 BigNumber.config({ EXPONENTIAL_AT: 100 });
@@ -305,6 +306,7 @@ function Driver(opts) {
       this.send.memoRequired = false;
       this.send.memoType = 'none'; // 'none' | 'MEMO_ID' |'MEMO_TEXT' | 'MEMO_HASH' | 'MEMO_RETURN'
       this.send.memoContent = '';
+      this.send.targetAccount = null;
       this.send.step = 1; // Starts at 1. Natural indexing corresponds to the step numbers
     },
 
@@ -317,13 +319,32 @@ function Driver(opts) {
 
     step2: {},
     resetStep2: () => {
+      this.send.availableAssets = {};
+      this.send.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = new StellarSdk.Asset.native();
       this.send.step2 = {
-        availableAssets: [
-          new StellarSdk.Asset.native(),
-        ],
         asset: null,
-        selectedIndex: null,
       };
+    },
+    calculateAvailableAssets: () => {
+      // Calculate the assets that you can send to the destination
+      this.send.availableAssets = {};
+      this.send.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = new StellarSdk.Asset.native();
+
+      let senderTrusts = {};
+      _.each(this.session.account.balances, balance => {
+        senderTrusts[Stellarify.assetToSlug(Stellarify.asset(balance))] = true;
+      })
+
+      _.each(this.send.targetAccount.balances, balance => {
+        let asset = Stellarify.asset(balance);
+        if (asset.isNative()) {
+          return;
+        }
+        let slug = Stellarify.assetToSlug(asset);
+        if (senderTrusts.hasOwnProperty(slug)) {
+          this.send.availableAssets[slug] = asset;
+        }
+      })
     },
 
     step3: {},
@@ -345,6 +366,20 @@ function Driver(opts) {
             this.send.memoType = destination.requiredMemoType;
           }
         }
+        this.send.targetAccount = null;
+        if (Validate.publicKey(this.send.accountId)) {
+          this.Server.loadAccount(this.send.accountId)
+          .then((account) => {
+            if (account.id === this.send.accountId) {
+              // Prevent race conditions using this check
+              this.send.targetAccount = account;
+              this.send.calculateAvailableAssets();
+              trigger.send();
+            }
+          })
+          .catch(() => {})
+        }
+
         trigger.send();
       },
       updateMemoType: (e) => {
@@ -371,10 +406,9 @@ function Driver(opts) {
         this.send.resetStep3();
         trigger.send();
       },
-      step2PickAsset: (index) => {
+      step2PickAsset: (slug) => {
         // Step 2 doesn't have a next button because this acts as the next button
-        this.send.step2.asset = this.send.step2.availableAssets[index];
-        this.send.step2.selectedIndex = index;
+        this.send.step2.asset = this.send.availableAssets[slug];
         this.send.step = 3;
         trigger.send();
       },
