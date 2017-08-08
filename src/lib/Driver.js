@@ -121,6 +121,10 @@ const MagicSpoon = {
         this.trades = _.map(res.records, (trade, index) => {
           return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
         });
+
+        this.trades.sort((a,b) => {
+          return a[0]-b[0];
+        });
         onUpdate();
       });
 
