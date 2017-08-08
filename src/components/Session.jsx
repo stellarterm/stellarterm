@@ -57,6 +57,17 @@ class Session extends React.Component {
       }
 
       return <div>
+        <div className="subNavBackClipper">
+          <div className="so-back subNavBack">
+            <div className="so-chunk subNav">
+              <nav className="subNav__nav">
+                <a className="subNav__nav__item" href="#account">Balances</a>
+                <a className="subNav__nav__item" href="#account/send">Send</a>
+                <a className="subNav__nav__item" href="#account/addTrust">Add trust</a>
+              </nav>
+            </div>
+          </div>
+        </div>
         {content}
       </div>
     }
