@@ -118,10 +118,16 @@ const MagicSpoon = {
 
     const orderbookTrades = Server.orderbook(baseBuying, counterSelling).trades().limit(200).order('desc').call()
       .then((res) => {
-        this.trades = _.map(res.records, (trade, index) => {
-          return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
-        });
-
+        this.trades = _.filter(
+          _.map(res.records, (trade, index) => {
+            return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
+          }),
+          (entry) => {
+            // Remote NaN elements that cause gaps in the chart.
+            // NaN values happens when the trade bought and sold 0.0000000 of each asset
+            return !isNaN(entry[1]);
+          }
+        );
         this.trades.sort((a,b) => {
           return a[0]-b[0];
         });
