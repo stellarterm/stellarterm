@@ -189,6 +189,7 @@ export default class PriceChart extends React.Component {
       },
       xAxis: {
         dateTimeLabelFormats: axisDTLF,
+        ordinal: false,
       },
       navigator: {
         maskFill: 'rgba(255, 255, 255, 0.45)',
