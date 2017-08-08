@@ -181,7 +181,7 @@ const MagicSpoon = {
     // be a createAccount operation
     let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
     try {
-      let destAccount = await Server.loadAccount(operationOpts.destination);
+      let destAccount = await Server.loadAccount(opts.destination);
       transaction = transaction.addOperation(StellarSdk.Operation.payment({
         destination: opts.destination,
         asset: opts.asset,
