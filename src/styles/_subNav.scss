@@ -1,6 +1,15 @@
+.subNavBackClipper {
+  // Clips the top of the box shadow to not clash with the header
+  // A bit kludgey with the negative margin but it's a simple solution compared to using absolute positioning
+  overflow: hidden;
+  height: 74px;
+  margin-bottom: -20px;
+}
 .subNavBack {
   background: $s-color-primary8;
   position: relative;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  overflow:hidden;
 }
 .subNav__nav {
   height: 54px;
