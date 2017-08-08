@@ -7,6 +7,7 @@ const browserify = require('browserify');
 const watchify = require('watchify');
 const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
+const fs = require('fs');
 
 const reload = browserSync.reload;
 
@@ -23,6 +24,34 @@ gulp.task('styles', () => {
   return gulp.src('./src/styles/**/*.scss')
     .pipe($.sass().on('error', $.sass.logError))
     .pipe(gulp.dest('./dist/css'));
+});
+
+// Images (For big images that get turned into base64)
+gulp.task('images', (cb) => {
+  let file = 'let images = {\n';
+  let addImage = (name, extension) => {
+    // Known to support jpg, png, gif. Supports others if mime type matches extension
+    let mimeType = extension;
+    if (extension === 'jpg') {
+      mimeType = 'jpeg';
+    }
+
+    let image = fs.readFileSync(`./images/${name}.${mimeType}`);
+    let b64 = new Buffer(image).toString('base64');
+    file += `  '${name}': 'data:image/${mimeType};base64, ${b64}',\n`
+  };
+
+
+
+  addImage('charts','png');
+  addImage('order','png');
+  addImage('send','png');
+  addImage('github','png');
+
+
+
+  file += '};\nmodule.exports = images;';
+  fs.writeFile('./src/images.js', file, cb);
 });
 
 // browserify
@@ -55,7 +84,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe($.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'scripts', 'copyBower'];
+const baseTasks = ['html', 'styles', 'images', 'scripts', 'copyBower'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {

@@ -1,5 +1,33 @@
+.HomePage__lead {
+  font-size: $s-scale-c;
+  margin: 0 auto;
+  width: 560px;
+  text-align: center;
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  padding-top: 90px;
+  padding-bottom: 90px;
+}
 .HomePage__buttonContainer {
   text-align: center;
-  padding-top: 3em;
-  padding-bottom: 3em;
+}
+
+.HomePage__screenshot {
+  width: 450px;
+  margin-bottom: 0;
+  display: block;
+}
+.HomePage__introImage {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.HomePage__sideBlurb {
+  padding-top: 20px;
+}
+.HomePage__sectionTitle {
+  text-align: center;
+  font-weight: normal;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  font-size: $s-scale-2;
 }
