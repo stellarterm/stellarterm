@@ -18,7 +18,12 @@ export default class ManuallyAddTrust extends React.Component {
     }
     this.handleSubmitTrust = (event) => {
       event.preventDefault();
-      this.props.d.handlers.addTrust(this.state.trustCode, this.state.trustIssuer);
+      this.props.d.handlers.addTrust(this.state.trustCode, this.state.trustIssuer)
+      .then((result) => {
+        this.forceUpdate();
+      })
+      .catch(error => {
+      })
     }
   }
 
@@ -63,7 +68,7 @@ export default class ManuallyAddTrust extends React.Component {
         if (found) {
           createButton = <button disabled={true} className="s-button">Trust line for {this.state.trustCode} exists</button>
         } else {
-          createButton = <button className="s-button">Create trust line for {this.state.trustCode}</button>
+          createButton = <button className="s-button" onClick={(e) => {this.handleSubmitTrust(e)}}>Create trust line for {this.state.trustCode}</button>
         }
 
         let asset = new StellarSdk.Asset(this.state.trustCode, this.state.trustIssuer);
