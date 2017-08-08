@@ -5,8 +5,8 @@
   text-align: center;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  padding-top: 120px;
-  padding-bottom: 120px;
+  padding-top: 90px;
+  padding-bottom: 90px;
 }
 .HomePage__buttonContainer {
   text-align: center;
@@ -14,10 +14,20 @@
 
 .HomePage__screenshot {
   width: 450px;
-  height: 250px;
   margin-bottom: 0;
   display: block;
 }
 .HomePage__introImage {
-    padding-top: 20px;
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.HomePage__sideBlurb {
+  padding-top: 20px;
+}
+.HomePage__sectionTitle {
+  text-align: center;
+  font-weight: normal;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  font-size: $s-scale-2;
 }

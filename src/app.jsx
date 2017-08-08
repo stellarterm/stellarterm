@@ -10,6 +10,7 @@ import Stellarify from './lib/Stellarify';
 import url from 'url';
 import Header from './components/Header.jsx';
 import Driver from './lib/Driver';
+import images from './images';
 
 let network = {};
 
@@ -58,39 +59,55 @@ class TermApp extends React.Component {
     let body;
     if (url === '') {
       // Home page
-      body = <div className="so-back islandBack">
-        <h2 className="HomePage__lead">Explore the power of the Stellar distributed exchange</h2>
-        <div className="island">
-          <div className="island__sub">
-            <div className="island__sub__division HomePage__introImage">
-            <img className="HomePage__screenshot" src="./900500.png" />
-            </div>
-            <div className="island__sub__division">
-              Interactive graphs of the markets on the Stellar distributed exchange.
-              <br />
-              <br />
-              <div className="HomePage__buttonContainer">
-              <a className="s-button" href="#exchange/XLM-native/DEMO-stellarterm.com">View exchange demo</a>
+      body = <div>
+        <div className="so-back">
+          <h2 className="HomePage__lead">Explore the power of the Stellar distributed exchange</h2>
+        </div>
+        <div className="so-back islandBack">
+          <div className="island">
+            <div className="island__sub">
+              <div className="island__sub__division HomePage__introImage">
+                <a href="#exchange/XLM-native/DEMO-stellarterm.com"><img className="HomePage__screenshot" src={images.charts} /></a>
+              </div>
+              <div className="island__sub__division">
+                <div className="HomePage__sideBlurb">
+                  Explore markets on the Stellar distributed exchange through interactive graphs and user friendly charts.
+                  <br />
+                  <br />
+                  <div className="HomePage__buttonContainer">
+                    <a className="s-button" href="#exchange/XLM-native/DEMO-stellarterm.com">View exchange demo</a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
-          <div className="island__separator"></div>
-          <div className="island__sub">
-            <div className="island__sub__division HomePage__introImage">
-              Picture
-            </div>
-            <div className="island__sub__division">
-              Make trades and manage your account. You can also edit trustlines and send payments.
+        </div>
+        <div className="so-back islandBack">
+          <div className="island">
+            <h3 className="HomePage__sectionTitle">Make trades and send payments</h3>
+            <div className="island__sub">
+              <div className="island__sub__division HomePage__introImage">
+                <img className="HomePage__screenshot" src={images.order} />
+              </div>
+              <div className="island__sub__division HomePage__introImage">
+                <img className="HomePage__screenshot" src={images.send} />
+              </div>
             </div>
           </div>
-          <div className="island__separator"></div>
-          <div className="island__sub">
-            <div className="island__sub__division HomePage__introImage">
-              Picture
-            </div>
-            <div className="island__sub__division">
-              StellarTerm is open source and released under the Apache 2.0 license. To support the project, please <a href="https://github.com/irisli/stellarterm">star the project on GitHub</a>.
-              It is developed by <a href="https://iris.li/">Iris Li</a>, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.
+        </div>
+        <div className="so-back islandBack">
+          <div className="island">
+            <div className="island__sub">
+              <div className="island__sub__division HomePage__introImage">
+                <a href="https://github.com/irisli/stellarterm"><img className="HomePage__screenshot" src={images.github} /></a>
+              </div>
+              <div className="island__sub__division">
+                <div className="HomePage__sideBlurb">
+                  <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm">star the project on GitHub</a>.</p>
+                  <p>StellarTerm is developed by <a href="https://iris.li/">Iris Li</a>, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
+                  <p>The project is released under the Apache-2.0 license and is released as is without warranty.</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
