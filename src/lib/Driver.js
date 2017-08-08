@@ -7,6 +7,7 @@ import Byol from './Byol';
 import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import BigNumber from 'bignumber.js';
+import directory from '../directory';
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
@@ -175,6 +176,37 @@ const MagicSpoon = {
         return;
       })
   },
+  async sendPayment(Server, spoonAccount,  opts) {
+    // sendPayment will detect if the account is a new account. If so, then it will
+    // be a createAccount operation
+    let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+    try {
+      let destAccount = await Server.loadAccount(opts.destination);
+      transaction = transaction.addOperation(StellarSdk.Operation.payment({
+        destination: opts.destination,
+        asset: opts.asset,
+        amount: opts.amount,
+      }));
+    } catch(e) {
+      if (!opts.asset.isNative()) {
+        throw new Error('Destination account does not exist. To create it, you must send a minimum of 20 lumens to create it');
+      }
+      transaction = transaction.addOperation(StellarSdk.Operation.createAccount({
+        destination: opts.destination,
+        startingBalance: opts.amount,
+      }));
+    }
+
+    if (opts.memo) {
+      transaction = transaction.addMemo(Stellarify.memo(opts.memo.type, opts.memo.content));
+    }
+
+    transaction = transaction.build();
+    spoonAccount.sign(transaction);
+
+    const transactionResult = await Server.submitTransaction(transaction);
+    return transactionResult;
+  },
   changeTrust(Server, spoonAccount, opts) {
     let sdkLimit;
     if (typeof opts.limit === 'string' || opts.limit instanceof String) {
@@ -213,9 +245,9 @@ const MagicSpoon = {
 };
 
 
-// Using old school "classes" because I'm old scohol and it's simpler for
-// someone experienced in JavaScript to understand. I may use the ES6 form
-// later though.
+
+// Using old school "classes" because I'm old school and it's simpler to
+// understand. I may use the ES6 form later though.
 function Driver(opts) {
   this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
   this.Server.serverUrl = opts.horizonUrl;
@@ -226,6 +258,7 @@ function Driver(opts) {
     'session',
     'orderbook',
     'orderbookPricePick',
+    'send',
   ];
   const trigger = {};
   availableEvents.forEach((eventName) => {
@@ -241,6 +274,12 @@ function Driver(opts) {
     setupError: false, // Couldn't find account
     account: null, // MagicSpoon.Account instance
   };
+  // this.session = {
+  //   state: 'in',
+  //   setupError: false, // Couldn't find account
+  //   account: {
+  //   }, // MagicSpoon.Account instance
+  // };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
   let forceUpdateAccountOffers = () => {
@@ -249,6 +288,141 @@ function Driver(opts) {
       updateFn();
     }
   }
+
+  this.send = {
+    init: () => {
+      this.send.state = 'setup'; // 'setup' | 'pending' | 'error' | 'success'
+      this.send.memoRequired = false;
+      this.send.memoType = 'none'; // 'none' | 'MEMO_ID' |'MEMO_TEXT' | 'MEMO_HASH' | 'MEMO_RETURN'
+      this.send.memoContent = '';
+      this.send.step = 1; // Starts at 1. Natural indexing corresponds to the step numbers
+    },
+
+    // Constraint: Each step is allowed to safely assume that the previous steps are finished
+
+    // Step state is initialized by the reset functions
+    resetStep1: () => {
+      this.send.accountId = '';
+    },
+
+    step2: {},
+    resetStep2: () => {
+      this.send.step2 = {
+        availableAssets: [
+          new StellarSdk.Asset.native(),
+        ],
+        asset: null,
+        selectedIndex: null,
+      };
+    },
+
+    step3: {},
+    resetStep3: () => {
+      this.send.step3 = {
+        amount: '',
+      };
+    },
+
+    accountId: '',
+    handlers: {
+      updateAccountId: (e) => {
+        this.send.accountId = e.target.value;
+        this.send.memoRequired = false;
+        if (directory.destinations.hasOwnProperty(this.send.accountId)) {
+          let destination = directory.destinations[this.send.accountId];
+          if (destination.requiredMemoType) {
+            this.send.memoRequired = true;
+            this.send.memoType = destination.requiredMemoType;
+          }
+        }
+        trigger.send();
+      },
+      updateMemoType: (e) => {
+        this.send.memoType = e.target.value;
+        trigger.send();
+      },
+      updateMemoContent: (e) => {
+        this.send.memoContent = e.target.value;
+        trigger.send();
+      },
+      step1Edit: () => {
+        this.send.step = 1;
+        this.send.resetStep2();
+        this.send.resetStep3();
+        trigger.send();
+      },
+      step1Next: () => {
+        this.send.step = 2;
+        trigger.send();
+      },
+
+      step2Edit: () => {
+        this.send.step = 2;
+        this.send.resetStep3();
+        trigger.send();
+      },
+      step2PickAsset: (index) => {
+        // Step 2 doesn't have a next button because this acts as the next button
+        this.send.step2.asset = this.send.step2.availableAssets[index];
+        this.send.step2.selectedIndex = index;
+        this.send.step = 3;
+        trigger.send();
+      },
+
+      step3Edit: () => {
+        this.send.step = 3;
+        trigger.send();
+      },
+      updateAmount: (e) => {
+        this.send.step3.amount = e.target.value;
+        trigger.send();
+      },
+      step3Next: () => {
+        this.send.step = 4;
+        trigger.send();
+      },
+      submit: async () => {
+        this.send.state = 'pending';
+        trigger.send();
+        let result;
+        try {
+          let sendMemo = (this.send.memoType === 'none') ? undefined : {
+            type: this.send.memoType,
+            content: this.send.memoContent,
+          };
+          result = await MagicSpoon.sendPayment(this.Server, this.session.account, {
+            destination: this.send.accountId,
+            asset: this.send.step2.asset,
+            amount: this.send.step3.amount,
+            memo: sendMemo,
+          });
+          this.send.txId = result.hash;
+          this.send.state = 'success';
+        } catch(err) {
+          this.send.state = 'error';
+          if (err instanceof Error) {
+            this.send.errorDetails = err.message;
+          } else {
+            this.send.errorDetails = JSON.stringify(err, null, 2);
+          }
+        }
+        trigger.send();
+      },
+      reset: () => {
+        this.send.resetAll();
+        trigger.send();
+      }
+    },
+
+    resetAll: () => {
+      this.send.init();
+      this.send.resetStep1();
+      this.send.resetStep2();
+      this.send.resetStep3();
+    },
+  };
+
+  this.send.resetAll();
 
 
   // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon

@@ -12,6 +12,13 @@ export default class AssetCard extends React.Component {
     if (this.props.fixed) {
       containerClassName += ' AssetCard--fixed';
     }
+    if (this.props.button) {
+      containerClassName += ' AssetCard--button';
+    }
+    if (this.props.lit) {
+      containerClassName += ' AssetCard--lit';
+    }
+
 
     if (!asset) {
       // Blank card

@@ -19,6 +19,21 @@ const Stellarify = {
   assetToml(input) {
     return new StellarSdk.Asset(input.code, input.issuer);
   },
+  memo(type, content) {
+    // Type must not be none
+    switch(type) {
+    case 'MEMO_TEXT':
+      return StellarSdk.Memo.text(content);
+    case 'MEMO_ID':
+      return StellarSdk.Memo.id(content);
+    case 'MEMO_HASH':
+      return StellarSdk.Memo.hash(content);
+    case 'MEMO_RETURN':
+      return StellarSdk.Memo.returnHash(content);
+    default:
+      throw new Error('Unknown Stellarify memo type. Got: ' + type);
+    }
+  },
   parseAssetSlug(slug) {
     // Takes in a URL part 'XLM-native' or 'USD-stellarterm.com'
     // And converts it into a StellarSdk.Asset object

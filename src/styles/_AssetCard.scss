@@ -78,7 +78,9 @@
 
 
 .BalancesTable__row:hover .AssetCard__main,
-a.AssetPairRow:hover .AssetCard__main {
+a.AssetPairRow:hover .AssetCard__main,
+.AssetCard--button:hover .AssetCard__main,
+.AssetCard--lit .AssetCard__main {
   border: 1px solid $s-color-primary4;
   box-shadow: 0 0 1px rgba($s-color-primary4, 0.3);
 }
