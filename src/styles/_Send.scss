@@ -47,3 +47,37 @@
 .Send__assetChoice {
   text-decoration: none;
 }
+
+.Send__input {
+  padding-bottom: 0.5em;
+}
+.Send__overview {
+}
+.Send__overviewLine {
+  margin-bottom: 0;
+}
+.Send__memoNotice {
+  font-size: $s-scale-5;
+  color: $s-color-neutral4;
+  padding-left: 16px;
+}
+.Send__errorPre {
+  padding-left: 18px;
+}
+.Send__startOver {
+  margin: 1em;
+}
+.Send__resultTitle {
+  font-size: $s-scale-2;
+  margin-top: 18px;
+  margin-left: 18px;
+}
+.Send__resultContent {
+  margin-top: 18px;
+  margin-left: 18px;
+}
+.Send__submitting {
+  padding: 2em;
+  text-align: center;
+  font-size: $s-scale-2;
+}

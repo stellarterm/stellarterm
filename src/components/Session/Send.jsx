@@ -60,7 +60,7 @@ export default class Send extends React.Component {
               memoPlaceholder = '64 character hexadecimal encoded string';
               break;
           }
-          memoContentInput = <label className="s-inputGroup">
+          memoContentInput = <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Memo content</span>
             </span>
@@ -77,17 +77,17 @@ export default class Send extends React.Component {
         let dropdownClassName = "so-dropdown s-inputGroup__item S-flexItem-noFlex";
         if (d.send.memoRequired) {
           dropdownClassName += ' is-disabled';
-          memoNote = 'Recipient requires a memo. Make sure it is correct.';
+          memoNote = 'Recipient requires a memo. Please make sure it is correct.';
         }
         Step1Content = <div className="Send__content">
-          <label className="s-inputGroup">
+          <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Account ID</span>
             </span>
             <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="example: GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
           </label>
           {destinationValidationMessage}
-          <label className="s-inputGroup">
+          <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Memo type</span>
             </span>
@@ -101,7 +101,7 @@ export default class Send extends React.Component {
               </select>
             </span>
             <span className="s-inputGroup__item s-inputGroup__item--tagMin S-flexItem-share">
-              <span>{memoNote}</span>
+              <span className="Send__memoNotice">{memoNote}</span>
             </span>
           </label>
           {memoContentInput}
@@ -111,9 +111,9 @@ export default class Send extends React.Component {
           </div>
         </div>
       } else if (step > 1) {
-        let memoSummary = (d.send.memoType === 'none') ? null : <p><span>{d.send.memoType}: <strong>{d.send.memoContent}</strong></span></p>;
-        Step1Content = <div className="Send__content">
-          <p><span>Account ID: <strong>{d.send.accountId}</strong></span></p>
+        let memoSummary = (d.send.memoType === 'none') ? null : <p className="Send__overviewLine">{d.send.memoType}: <strong>{d.send.memoContent}</strong></p>;
+        Step1Content = <div className="Send__content Send__overview">
+          <p className="Send__overviewLine">Account ID: <strong>{d.send.accountId}</strong></p>
           {memoSummary}
         </div>
       }
@@ -154,7 +154,7 @@ export default class Send extends React.Component {
           </div>
         </div>
       } else if (step > 2) {
-        Step2Content = <div className="Send__content">
+        Step2Content = <div className="Send__content Send__overview">
           <AssetCard asset={d.send.step2.asset} fixed={true}></AssetCard>
         </div>
       }
@@ -180,10 +180,9 @@ export default class Send extends React.Component {
       if (amountValid === false) {
         amountValidationMessage = <p>Amount is invalid</p>
       }
-      console.log('amountValid',amountValid)
       if (step === 3) {
         Step3Content = <div className="Send__content">
-          <label className="s-inputGroup">
+          <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Amount</span>
             </span>
@@ -195,8 +194,8 @@ export default class Send extends React.Component {
           </div>
         </div>
       } else if (step > 3) {
-        Step3Content = <div className="Send__content">
-          {d.send.step3.amount} {d.send.step2.asset.getCode()}
+        Step3Content = <div className="Send__content Send__overview">
+          <p className="Send__overviewLine">Amount: <strong>{d.send.step3.amount} {d.send.step2.asset.getCode()}</strong></p>
         </div>
       }
       let Step3 = <div className={step3ClassName}>
@@ -210,7 +209,7 @@ export default class Send extends React.Component {
 
       // Step 4
       let Step4Next = step !== 4 ? null : <div className="Send__panel__next">
-        Note: Transactions on the Stellar network are irreversible. Please make sure all the transaction details are correct.
+        <p>Note: Transactions on the Stellar network are irreversible. Please make sure all the transaction details are correct.</p>
         <button className="s-button" onClick={d.send.handlers.submit}>Submit transaction</button>
       </div>
 
@@ -240,30 +239,35 @@ export default class Send extends React.Component {
         <div className="island__header">
           Send Payment
         </div>
-        Submitting transaction...
+        <div className="Send__submitting">
+          Submitting transaction...
+        </div>
       </div>
     } else if (state === 'success') {
       return <div className="island">
         <div className="island__header">
           Send Payment
         </div>
-        <h3 className="Send__title">Success!</h3>
-
-        Transaction ID: <a target="_blank" href={'https://horizon.stellar.org/transactions/' + d.send.txId}>{d.send.txId}</a>
-        <br /><br />
-        <button className="s-button" onClick={d.send.handlers.reset}>Start over</button>
+        <h3 className="Send__resultTitle">Success!</h3>
+        <div className="Send__resultContent">
+          <p>
+            Transaction ID: <a target="_blank" href={'https://horizon.stellar.org/transactions/' + d.send.txId}>{d.send.txId}</a>
+            <br />
+            Keep the transaction ID as proof of payment.
+          </p>
+        </div>
+        <button className="s-button Send__startOver" onClick={d.send.handlers.reset}>Start over</button>
       </div>
     } else { // state is error
       return <div className="island">
         <div className="island__header">
           Send Payment
         </div>
-        <h3 className="Send__title">Error</h3>
-        <pre>
+        <h3 className="Send__resultTitle">Error</h3>
+        <pre className="Send__errorPre">
           {d.send.errorDetails}
         </pre>
-        <br /><br />
-        <button className="s-button" onClick={d.send.handlers.reset}>Start over</button>
+        <button className="s-button Send__startOver" onClick={d.send.handlers.reset}>Start over</button>
       </div>
     }
   }
