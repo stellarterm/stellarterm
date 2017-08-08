@@ -116,7 +116,7 @@ const MagicSpoon = {
         }
       })
 
-    const orderbookTrades = Server.orderbook(baseBuying, counterSelling).trades().call()
+    const orderbookTrades = Server.orderbook(baseBuying, counterSelling).trades().limit(200).order('desc').call()
       .then((res) => {
         this.trades = _.map(res.records, (trade, index) => {
           return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
