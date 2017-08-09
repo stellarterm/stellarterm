@@ -23,8 +23,12 @@ let markets = [
     counterSelling: new StellarSdk.Asset('EURT', 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S'),
   },
   {
+    baseBuying: new StellarSdk.Asset('MOBI', 'GDCIUCGL7VEMMF6VYJOW75KQ5ZCLHAQBRM6EPFTKCRWUYVUOOYQCKC5A'),
+    counterSelling: StellarSdk.Asset.native(),
+  },
+  {
     baseBuying: StellarSdk.Asset.native(),
-    counterSelling: new StellarSdk.Asset('MOBI', 'GDCIUCGL7VEMMF6VYJOW75KQ5ZCLHAQBRM6EPFTKCRWUYVUOOYQCKC5A'),
+    counterSelling: new StellarSdk.Asset('NGN', 'GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2'),
   },
   {
     baseBuying: StellarSdk.Asset.native(),
