@@ -54,6 +54,10 @@ let markets = [
     baseBuying: StellarSdk.Asset.native(),
     counterSelling: new StellarSdk.Asset('JPY', 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'),
   },
+  {
+    baseBuying: new StellarSdk.Asset('SEED', 'GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF'),
+    counterSelling: StellarSdk.Asset.native(),
+  },
 ];
 
 export default class Markets extends React.Component {
