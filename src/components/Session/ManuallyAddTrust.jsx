@@ -6,23 +6,33 @@ export default class ManuallyAddTrust extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      status: 'ready', // 'ready' | 'working'
       trustCode: '',
       trustIssuer: '',
     }
 
     this.handleInputTrustCode = (event) => {
-      this.setState({trustCode: event.target.value.toUpperCase()});
+      this.setState({
+        status: 'ready',
+        trustCode: event.target.value.toUpperCase(),
+      });
     }
     this.handleInputTrustIssuer = (event) => {
-      this.setState({trustIssuer: event.target.value});
+      this.setState({
+        status: 'ready',
+        trustIssuer: event.target.value,
+      });
     }
     this.handleSubmitTrust = (event) => {
       event.preventDefault();
+      this.setState({status: 'working'});
       this.props.d.handlers.addTrust(this.state.trustCode, this.state.trustIssuer)
       .then((result) => {
-        this.forceUpdate();
+        this.setState({status: 'ready'});
       })
       .catch(error => {
+        console.log(error);
+        this.setState({status: 'ready'});
       })
     }
   }
@@ -68,7 +78,11 @@ export default class ManuallyAddTrust extends React.Component {
         if (found) {
           createButton = <button disabled={true} className="s-button">Trust line for {this.state.trustCode} exists</button>
         } else {
-          createButton = <button className="s-button" onClick={(e) => {this.handleSubmitTrust(e)}}>Create trust line for {this.state.trustCode}</button>
+          if (this.state.status === 'working') {
+            createButton = <button  disabled={true} className="s-button" onClick={(e) => {this.handleSubmitTrust(e)}}>Adding trust line for {this.state.trustCode}...</button>
+          } else {
+            createButton = <button className="s-button" onClick={(e) => {this.handleSubmitTrust(e)}}>Create trust line for {this.state.trustCode}</button>
+          }
         }
 
         let asset = new StellarSdk.Asset(this.state.trustCode, this.state.trustIssuer);
