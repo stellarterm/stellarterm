@@ -329,19 +329,30 @@ function Driver(opts) {
       // Calculate the assets that you can send to the destination
       this.send.availableAssets = {};
       this.send.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = new StellarSdk.Asset.native();
-
       let senderTrusts = {};
+
       _.each(this.session.account.balances, balance => {
-        senderTrusts[Stellarify.assetToSlug(Stellarify.asset(balance))] = true;
+        let asset = Stellarify.asset(balance);
+        let slug = Stellarify.assetToSlug(asset);
+        if (asset.isNative()) {
+          return;
+        }
+        if (asset.issuer === this.send.targetAccount.accountId()) {
+          // Edgecase: Receiver is the issuer of the asset
+          // Note: Accounts cant extend trust to themselves, so no further edgecases on this situation
+          this.send.availableAssets[slug] = asset;
+        } else {
+          senderTrusts[slug] = true;
+        }
       })
 
       _.each(this.send.targetAccount.balances, balance => {
         let asset = Stellarify.asset(balance);
-        if (asset.isNative()) {
-          return;
-        }
         let slug = Stellarify.assetToSlug(asset);
         if (senderTrusts.hasOwnProperty(slug)) {
+          this.send.availableAssets[slug] = asset;
+        } else if (asset.getIssuer() === this.session.account.accountId()) {
+          // Edgecase: Sender is the issuer of the asset
           this.send.availableAssets[slug] = asset;
         }
       })
