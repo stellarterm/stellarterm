@@ -75,7 +75,7 @@ class TermApp extends React.Component {
                   <br />
                   <br />
                   <div className="HomePage__buttonContainer">
-                    <a className="s-button" href="#exchange/XLM-native/DEMO-stellarterm.com">View exchange demo</a>
+                    <a className="s-button" href="#exchange/XLM-native/CNY-ripplefox.com">View exchange example</a>
                   </div>
                 </div>
               </div>
