@@ -36,9 +36,9 @@ export default class Send extends React.Component {
       // Step 1
       let Step1Content;
       if (step === 1) {
-        let accountIdValid = Validate.publicKey(d.send.accountId);
+        let destValid = Validate.publicKey(d.send.accountId);
         let destinationValidationMessage;
-        if (accountIdValid === false) {
+        if (destValid === false) {
           destinationValidationMessage = <p>Stellar address or account ID is invalid.</p>
         }
 
@@ -84,10 +84,10 @@ export default class Send extends React.Component {
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Destination</span>
             </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="example: username*getstargazer.com or GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
+            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.step1.destInput} onChange={d.send.handlers.updateDestination} placeholder="example: username*getstargazer.com or GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
           </label>
           {destinationValidationMessage}
-          <p className="Send__federationNotice"><strong>username*getstargazer.com</strong> resolved to <strong>GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R</strong></p>
+          <p className="Send__federationNotice"><strong>{d.send.address}</strong> resolved to <strong>{d.send.accountId}</strong></p>
           <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Memo type</span>
@@ -108,7 +108,7 @@ export default class Send extends React.Component {
           {memoContentInput}
           {memoValidationMessage}
           <div className="Send__panel__next">
-            <button className="s-button" disabled={!accountIdValid || !memoReady} onClick={d.send.handlers.step1Next}>Save and continue</button>
+            <button className="s-button" disabled={!destValid || !memoReady} onClick={d.send.handlers.step1Next}>Save and continue</button>
           </div>
         </div>
       } else if (step > 1) {

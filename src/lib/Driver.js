@@ -314,7 +314,11 @@ function Driver(opts) {
 
     // Step state is initialized by the reset functions
     resetStep1: () => {
-      this.send.accountId = '';
+      this.send.accountId = ''; // After step 1, this will be valid
+      this.send.address = ''; // After step 1, this may or may not be filled in
+      this.send.step1 = {
+        destInput: '', // For storing the raw input field
+      }
     },
 
     step2: {},
@@ -365,11 +369,33 @@ function Driver(opts) {
       };
     },
 
+    loadTargetAccountDetails: () => {
+      if (Validate.publicKey(this.send.accountId)) {
+        this.Server.loadAccount(this.send.accountId)
+        .then((account) => {
+          if (account.id === this.send.accountId) {
+            // Prevent race conditions using this check
+            this.send.targetAccount = account;
+            this.send.calculateAvailableAssets();
+            trigger.send();
+          }
+        })
+        .catch(() => {})
+      }
+    },
+
     accountId: '',
     handlers: {
-      updateAccountId: (e) => {
-        this.send.accountId = e.target.value;
+      updateDestination: (e) => {
+        this.send.step1.destInput = e.target.value;
+
+        // Reset the defaults
+        this.send.accountId = '';
+        this.send.address = '';
         this.send.memoRequired = false;
+        this.send.addressNotFound = false;
+
+        // Check for memo requirements in the destination
         if (directory.destinations.hasOwnProperty(this.send.accountId)) {
           let destination = directory.destinations[this.send.accountId];
           if (destination.requiredMemoType) {
@@ -377,18 +403,32 @@ function Driver(opts) {
             this.send.memoType = destination.requiredMemoType;
           }
         }
-        this.send.targetAccount = null;
-        if (Validate.publicKey(this.send.accountId)) {
-          this.Server.loadAccount(this.send.accountId)
-          .then((account) => {
-            if (account.id === this.send.accountId) {
-              // Prevent race conditions using this check
-              this.send.targetAccount = account;
-              this.send.calculateAvailableAssets();
-              trigger.send();
+
+        // Prevent race race conditions
+        let destInput = this.send.step1.destInput;
+
+        if (Validate.address(this.send.step1.destInput).ready) {
+          StellarSdk.FederationServer.resolve(this.send.step1.destInput)
+          .then((federationRecord) => {
+            if (destInput !== this.send.step1.destInput) {
+              return;
             }
+            this.send.address = this.send.step1.destInput;
+            this.send.accountId = federationRecord['account_id'];
+            trigger.send();
+            this.send.loadTargetAccountDetails();
           })
-          .catch(() => {})
+          .catch(e => {
+            if (destInput !== this.send.step1.destInput) {
+              return;
+            }
+            this.send.addressNotFound = true;
+            trigger.send();
+          })
+        } else if (Validate.publicKey(this.send.step1.destInput)) {
+          this.send.accountId = this.send.step1.destInput;
+          // Async loading of target account
+          this.send.loadTargetAccountDetails();
         }
 
         trigger.send();
