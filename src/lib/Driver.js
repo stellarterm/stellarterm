@@ -155,9 +155,28 @@ const MagicSpoon = {
 
       // Potential optimization: If we load the horizon results into the array in the correct order
       // then sorting will run at near optimal runtime
+
+      // First sort it in reverse so that we can filter
       this.trades.sort((a,b) => {
-        return a[0]-b[0];
+        return b[0]-a[0];
       });
+
+      // Iterate on trades from new to old
+      // Remove trades that are greater than OUTLIER_THRESHOLD times the previous value
+      const OUTLIER_THRESHOLD = 2;
+      let lastAmount = this.trades[0];
+      this.trades = _.filter(this.trades, (entry) => {
+        let currentAmount = entry[1];
+        let ratio = (currentAmount > lastAmount) ? currentAmount/lastAmount :  lastAmount/currentAmount;
+        if (ratio > OUTLIER_THRESHOLD) {
+          return false;
+        }
+        lastAmount = currentAmount;
+        return true;
+      });
+
+      _.reverse(this.trades);
+
       onUpdate();
     }
 
