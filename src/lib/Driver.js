@@ -117,23 +117,52 @@ const MagicSpoon = {
         }
       })
 
-    const orderbookTrades = Server.orderbook(baseBuying, counterSelling).trades().limit(200).order('desc').call()
-      .then((res) => {
-        this.trades = _.filter(
-          _.map(res.records, (trade, index) => {
-            return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
-          }),
-          (entry) => {
-            // Remote NaN elements that cause gaps in the chart.
-            // NaN values happens when the trade bought and sold 0.0000000 of each asset
-            return !isNaN(entry[1]);
-          }
-        );
-        this.trades.sort((a,b) => {
-          return a[0]-b[0];
-        });
-        onUpdate();
+    let fetchManyTrades = async () => {
+      let records = [];
+      let satisfied = false;
+      let first = true;
+      let depth = 0;
+      const MAX_DEPTH = 5;
+      let prevCall;
+
+      while (!satisfied && depth < MAX_DEPTH) {
+        depth += 1;
+        let tradeResults;
+        if (first) {
+          tradeResults = await Server.orderbook(baseBuying, counterSelling).trades().limit(200).order('desc').call()
+          first = false;
+        } else {
+          tradeResults = await prevCall();
+        }
+        prevCall = tradeResults.next;
+
+        if (tradeResults.records.length < 200) {
+          satisfied = true;
+        }
+        Array.prototype.push.apply(records, tradeResults.records);
+      }
+      // Optimization: use this filter before saving it into the records array
+      this.trades = _.filter(
+        _.map(records, (trade, index) => {
+          return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
+        }),
+        (entry) => {
+          // Remote NaN elements that cause gaps in the chart.
+          // NaN values happens when the trade bought and sold 0.0000000 of each asset
+          return !isNaN(entry[1]);
+        }
+      );
+
+      // Potential optimization: If we load the horizon results into the array in the correct order
+      // then sorting will run at near optimal runtime
+      this.trades.sort((a,b) => {
+        return a[0]-b[0];
       });
+      onUpdate();
+    }
+
+    fetchManyTrades();
+
 
     this.close = streamingOrderbookClose;
     // TODO: Close
