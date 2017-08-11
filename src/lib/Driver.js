@@ -370,7 +370,7 @@ function Driver(opts) {
     },
 
     loadTargetAccountDetails: () => {
-      if (Validate.publicKey(this.send.accountId)) {
+      if (Validate.publicKey(this.send.accountId).ready) {
         this.Server.loadAccount(this.send.accountId)
         .then((account) => {
           if (account.id === this.send.accountId) {
@@ -425,7 +425,7 @@ function Driver(opts) {
             this.send.addressNotFound = true;
             trigger.send();
           })
-        } else if (Validate.publicKey(this.send.step1.destInput)) {
+        } else if (Validate.publicKey(this.send.step1.destInput).ready) {
           this.send.accountId = this.send.step1.destInput;
           // Async loading of target account
           this.send.loadTargetAccountDetails();

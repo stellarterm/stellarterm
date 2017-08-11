@@ -15,7 +15,7 @@ const RESULT_VALID = {
   ready: true,
 }
 
-function err(errorMessage) {
+function resultError(errorMessage) {
   return {
     ready: false,
     message: errorMessage,
@@ -23,12 +23,6 @@ function err(errorMessage) {
 }
 
 const Validate = {
-  publicKey(input) {
-    if (input === '') {
-      return null;
-    }
-    return StellarSdk.Keypair.isValidPublicKey(input);
-  },
   assetCode(input) {
     return _.isString(input) && input.match(/^[a-zA-Z0-9]+$/g) && input.length > 0 && input.length < 12;
   },
@@ -51,23 +45,23 @@ const Validate = {
     switch (type) {
     case 'MEMO_ID':
       if (!input.match(/^[0-9]*$/g)) {
-        return err('MEMO_ID only accepts a positive integer.');
+        return resultError('MEMO_ID only accepts a positive integer.');
       }
       if (input !== StellarSdk.UnsignedHyper.fromString(input).toString()) {
-        return err(`MEMO_ID is an unsigned 64-bit integer and the max valid
+        return resultError(`MEMO_ID is an unsigned 64-bit integer and the max valid
                        value is ${StellarSdk.UnsignedHyper.MAX_UNSIGNED_VALUE.toString()}`)
       }
       break;
     case 'MEMO_TEXT':
       let memoTextBytes = Buffer.byteLength(input, 'utf8');
       if (memoTextBytes > 28) {
-        return err(`MEMO_TEXT accepts a string of up to 28 bytes. ${memoTextBytes} bytes entered.`);
+        return resultError(`MEMO_TEXT accepts a string of up to 28 bytes. ${memoTextBytes} bytes entered.`);
       }
       break;
     case 'MEMO_HASH':
     case 'MEMO_RETURN':
       if (!input.match(/^[0-9a-f]{64}$/gi)) {
-        return err(`${type} accepts a 32-byte hash in hexadecimal format (64 characters).`);
+        return resultError(`${type} accepts a 32-byte hash in hexadecimal format (64 characters).`);
       }
       break;
     }
@@ -83,9 +77,18 @@ const Validate = {
     // - Allows any character in user part except * and , as specified in Stellar docs
     // - Includes all valid addresses and a few invalid ones too such as fake TLD or misuse of hyphens or excessive length
     if (!input.match(/^[^\*\,]+\*([\-a-zA-Z0-9]+)?(\.[\-a-zA-Z0-9]+)*(\.[a-zA-Z0-9]{2,})$/)) {
-      return err('Stellar federation address is improperly formatted.');
+      return resultError('Stellar federation address is improperly formatted.');
     }
 
+    return RESULT_VALID;
+  },
+  publicKey(input) {
+    if (input === '') {
+      return RESULT_EMPTY;
+    }
+    if (!StellarSdk.Keypair.isValidPublicKey(input)) {
+      return resultError('Invalid public key');
+    }
     return RESULT_VALID;
   },
 };

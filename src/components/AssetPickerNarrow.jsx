@@ -29,8 +29,8 @@ export default class AssetPickerNarrow extends React.Component {
     let assetCodeValid = Validate.assetCode(newState.code);
     let resolvedIssuer = undefined; // null is for XLM
 
-    if (Validate.publicKey(newState.issuer)) {
-      resolvedIssuer = newState.issuer
+    if (Validate.publicKey(newState.issuer).ready) {
+      resolvedIssuer = newState.issuer;
     } else {
       let source = directory.getSourceByFederation(newState.issuer);
       if (source.name !== 'unknown') {

@@ -36,7 +36,7 @@ export default class Send extends React.Component {
       // Step 1
       let Step1Content;
       if (step === 1) {
-        let destValid = Validate.publicKey(d.send.accountId);
+        let destValid = Validate.publicKey(d.send.accountId).ready;
         let destinationValidationMessage;
         if (destValid === false) {
           destinationValidationMessage = <p>Stellar address or account ID is invalid.</p>
