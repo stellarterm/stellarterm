@@ -39,7 +39,7 @@ export default class Send extends React.Component {
         let accountIdValid = Validate.publicKey(d.send.accountId);
         let destinationValidationMessage;
         if (accountIdValid === false) {
-          destinationValidationMessage = <p>Account ID is invalid</p>
+          destinationValidationMessage = <p>Stellar address or account ID is invalid.</p>
         }
 
         let memoContentInput;
@@ -82,11 +82,12 @@ export default class Send extends React.Component {
         Step1Content = <div className="Send__content">
           <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
-              <span>Account ID</span>
+              <span>Destination</span>
             </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="example: GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
+            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.accountId} onChange={d.send.handlers.updateAccountId} placeholder="example: username*getstargazer.com or GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
           </label>
           {destinationValidationMessage}
+          <p className="Send__federationNotice"><strong>username*getstargazer.com</strong> resolved to <strong>GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R</strong></p>
           <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Memo type</span>
@@ -112,10 +113,18 @@ export default class Send extends React.Component {
         </div>
       } else if (step > 1) {
         let memoSummary = (d.send.memoType === 'none') ? null : <p className="Send__overviewLine">{d.send.memoType}: <strong>{d.send.memoContent}</strong></p>;
-        Step1Content = <div className="Send__content Send__overview">
-          <p className="Send__overviewLine">Account ID: <strong>{d.send.accountId}</strong></p>
-          {memoSummary}
-        </div>
+        if (d.send.address) {
+          Step1Content = <div className="Send__content Send__overview">
+            <p className="Send__overviewLine">Stellar address: <strong>{d.send.address}</strong></p>
+            <p className="Send__overviewLine">Account ID: <strong>{d.send.accountId}</strong></p>
+            {memoSummary}
+          </div>
+        } else {
+          Step1Content = <div className="Send__content Send__overview">
+            <p className="Send__overviewLine">Account ID: <strong>{d.send.accountId}</strong></p>
+            {memoSummary}
+          </div>
+        }
       }
 
       let Step1Edit;

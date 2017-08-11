@@ -1,4 +1,3 @@
-
 .Send__panel {
   padding: 16px 18px;
 }
@@ -60,6 +59,11 @@
   font-size: $s-scale-5;
   color: $s-color-neutral4;
   padding-left: 16px;
+}
+.Send__federationNotice {
+  font-size: $s-scale-5;
+  color: $s-color-neutral4;
+  line-height: 1;
 }
 .Send__errorPre {
   padding-left: 18px;
