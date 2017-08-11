@@ -150,6 +150,7 @@ export default class PriceChart extends React.Component {
         name: pairName,
         data: orderbook.trades,
         dataGrouping: {
+          groupPixelWidth: 8,
           dateTimeLabelFormats: dataGroupingDateTimeLabelFormats,
         },
         tooltip: {
