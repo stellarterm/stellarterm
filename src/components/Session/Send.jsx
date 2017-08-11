@@ -79,6 +79,14 @@ export default class Send extends React.Component {
           dropdownClassName += ' is-disabled';
           memoNote = 'Recipient requires a memo. Please make sure it is correct.';
         }
+
+        let federationNotice;
+        if (d.send.address) {
+          federationNotice = <p className="Send__federationNotice"><strong>{d.send.address}</strong> resolved to <strong>{d.send.accountId}</strong></p>
+        } else if (d.send.addressNotFound) {
+          federationNotice = <p className="Send__federationNotice">Unable to resolve address <strong>{d.send.step1.destInput}</strong></p>
+        }
+
         Step1Content = <div className="Send__content">
           <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
@@ -87,7 +95,7 @@ export default class Send extends React.Component {
             <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.step1.destInput} onChange={d.send.handlers.updateDestination} placeholder="example: username*getstargazer.com or GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
           </label>
           {destinationValidationMessage}
-          <p className="Send__federationNotice"><strong>{d.send.address}</strong> resolved to <strong>{d.send.accountId}</strong></p>
+          {federationNotice}
           <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Memo type</span>
