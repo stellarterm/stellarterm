@@ -36,9 +36,9 @@ export default class Send extends React.Component {
       // Step 1
       let Step1Content;
       if (step === 1) {
-        let destValid = Validate.publicKey(d.send.accountId).ready;
+        let destError = Validate.publicKey(d.send.step1.destInput).message && Validate.address(d.send.step1.destInput).message;
         let destinationValidationMessage;
-        if (destValid === false) {
+        if (destError) {
           destinationValidationMessage = <p>Stellar address or account ID is invalid.</p>
         }
 
@@ -116,7 +116,7 @@ export default class Send extends React.Component {
           {memoContentInput}
           {memoValidationMessage}
           <div className="Send__panel__next">
-            <button className="s-button" disabled={!destValid || !memoReady} onClick={d.send.handlers.step1Next}>Save and continue</button>
+            <button className="s-button" disabled={!d.send.accountId || !memoReady} onClick={d.send.handlers.step1Next}>Save and continue</button>
           </div>
         </div>
       } else if (step > 1) {
