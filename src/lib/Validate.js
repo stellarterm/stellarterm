@@ -82,7 +82,7 @@ const Validate = {
     // Regex covers 99% of the use cases.
     // - Allows any character in user part except * and , as specified in Stellar docs
     // - Includes all valid addresses and a few invalid ones too such as fake TLD or misuse of hyphens or excessive length
-    if (!input.match(/^[^\*\,]+\*([\-a-zA-Z0-9]+\.)*([a-zA-Z0-9]{2,}){1}$/)) {
+    if (!input.match(/^[^\*\,]+\*([\-a-zA-Z0-9]+)?(\.[\-a-zA-Z0-9]+)*(\.[a-zA-Z0-9]{2,})$/)) {
       return err('Stellar federation address is improperly formatted.');
     }
 
