@@ -139,7 +139,18 @@ class TermApp extends React.Component {
           }, 0);
           body = <Generic title="Loading orderbook">Loading</Generic>
         } else {
-          body = <Generic title="Pick a market">To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
+          // Default to a market with good activity
+          let baseBuying = StellarSdk.Asset.native();
+          let counterSelling = new StellarSdk.Asset('CNY', 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX');
+
+          this.d.handlers.setOrderbook(baseBuying, counterSelling);
+          setTimeout(() => {
+            let newUrl = Stellarify.pairToExchangeUrl(baseBuying, counterSelling);
+            history.replaceState(null, null, '#' + newUrl);
+            this.setState({
+              url: newUrl,
+            })
+          }, 0);
         }
       }
     } else {
