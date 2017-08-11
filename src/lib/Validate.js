@@ -15,7 +15,7 @@ const RESULT_VALID = {
   ready: true,
 }
 
-function result(errorMessage) {
+function err(errorMessage) {
   return {
     ready: false,
     message: errorMessage,
@@ -51,29 +51,43 @@ const Validate = {
     switch (type) {
     case 'MEMO_ID':
       if (!input.match(/^[0-9]*$/g)) {
-        return result('MEMO_ID only accepts a positive integer.');
+        return err('MEMO_ID only accepts a positive integer.');
       }
       if (input !== StellarSdk.UnsignedHyper.fromString(input).toString()) {
-        return result(`MEMO_ID is an unsigned 64-bit integer and the max valid
+        return err(`MEMO_ID is an unsigned 64-bit integer and the max valid
                        value is ${StellarSdk.UnsignedHyper.MAX_UNSIGNED_VALUE.toString()}`)
       }
       break;
     case 'MEMO_TEXT':
       let memoTextBytes = Buffer.byteLength(input, 'utf8');
       if (memoTextBytes > 28) {
-        return result(`MEMO_TEXT accepts a string of up to 28 bytes. ${memoTextBytes} bytes entered.`);
+        return err(`MEMO_TEXT accepts a string of up to 28 bytes. ${memoTextBytes} bytes entered.`);
       }
       break;
     case 'MEMO_HASH':
     case 'MEMO_RETURN':
       if (!input.match(/^[0-9a-f]{64}$/gi)) {
-        return result(`${type} accepts a 32-byte hash in hexadecimal format (64 characters).`);
+        return err(`${type} accepts a 32-byte hash in hexadecimal format (64 characters).`);
       }
       break;
     }
 
     return RESULT_VALID;
-  }
+  },
+  address(input, type) {
+    if (input === '') {
+      return RESULT_EMPTY;
+    }
+
+    // Regex covers 99% of the use cases.
+    // - Allows any character in user part except * and , as specified in Stellar docs
+    // - Includes all valid addresses and a few invalid ones too such as fake TLD or misuse of hyphens or excessive length
+    if (!input.match(/^[^\*\,]+\*([\-a-zA-Z0-9]+\.)*([a-zA-Z0-9]{2,}){1}$/)) {
+      return err('Stellar federation address is improperly formatted.');
+    }
+
+    return RESULT_VALID;
+  },
 };
 
 export default Validate;
