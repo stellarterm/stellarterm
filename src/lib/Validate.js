@@ -38,9 +38,11 @@ const Validate = {
 
   // Below are the Validators using the new compound return types
   memo(input, type) {
+    input = String(input);
     if (input === '') {
       return RESULT_EMPTY;
     }
+
     // type is of type: 'MEMO_ID' |'MEMO_TEXT' | 'MEMO_HASH' | 'MEMO_RETURN'
     switch (type) {
     case 'MEMO_ID':

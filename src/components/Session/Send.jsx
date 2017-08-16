@@ -60,11 +60,16 @@ export default class Send extends React.Component {
               memoPlaceholder = '64 character hexadecimal encoded string';
               break;
           }
+
+          let memoContentInputClassName = "s-inputGroup__item S-flexItem-share";
+          if (d.send.memoContentLocked) {
+            memoContentInputClassName += ' is-disabled';
+          }
           memoContentInput = <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
               <span>Memo content</span>
             </span>
-            <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.memoContent} onChange={d.send.handlers.updateMemoContent} placeholder={memoPlaceholder}/>
+            <input className={memoContentInputClassName} disabled={d.send.memoContentLocked} type="text" value={d.send.memoContent} onChange={d.send.handlers.updateMemoContent} placeholder={memoPlaceholder}/>
           </label>
 
           let memoV = Validate.memo(d.send.memoContent, d.send.memoType);

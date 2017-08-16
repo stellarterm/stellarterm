@@ -441,6 +441,7 @@ function Driver(opts) {
         this.send.accountId = '';
         this.send.address = '';
         this.send.memoRequired = false;
+        this.send.memoContentLocked = false;
         this.send.addressNotFound = false;
 
         // Check for memo requirements in the destination
@@ -462,7 +463,37 @@ function Driver(opts) {
               return;
             }
             this.send.address = this.send.step1.destInput;
+            if (!Validate.publicKey(federationRecord['account_id']).ready) {
+              throw new Error('Invalid account_id from federation response');
+            }
             this.send.accountId = federationRecord['account_id'];
+
+            if (federationRecord['memo_type']) {
+              switch (federationRecord['memo_type']) {
+                case 'id':
+                  this.send.memoType = 'MEMO_ID';
+                  break;
+                case 'text':
+                  this.send.memoType = 'MEMO_TEXT';
+                  break;
+                case 'hash':
+                  this.send.memoType = 'MEMO_HASH';
+                  break;
+                case 'return':
+                  this.send.memoType = 'MEMO_RETURN';
+                  break;
+                default:
+                  throw new Error('Invalid memo_type from federation response');
+              }
+
+              this.send.memoRequired = true;
+            }
+
+            if (federationRecord['memo']) {
+              this.send.memoContent = federationRecord['memo'];
+              this.send.memoContentLocked = true;
+            }
+
             trigger.send();
             this.send.loadTargetAccountDetails();
           })
@@ -470,6 +501,8 @@ function Driver(opts) {
             if (destInput !== this.send.step1.destInput) {
               return;
             }
+
+            console.error(e);
             this.send.addressNotFound = true;
             trigger.send();
           })
