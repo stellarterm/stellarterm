@@ -8,11 +8,23 @@ import _ from 'lodash';
 let markets = [
   {
     baseBuying: StellarSdk.Asset.native(),
-    counterSelling: new StellarSdk.Asset('DEMO', 'GBAMBOOZDWZPVV52RCLJQYMQNXOBLOXWNQAY2IF2FREV2WL46DBCH3BE'),
+    counterSelling: new StellarSdk.Asset('CNY', 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'),
+  },
+  {
+    baseBuying: StellarSdk.Asset.native(),
+    counterSelling: new StellarSdk.Asset('JPY', 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'),
+  },
+  {
+    baseBuying: StellarSdk.Asset.native(),
+    counterSelling: new StellarSdk.Asset('XRP', 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'),
   },
   {
     baseBuying: StellarSdk.Asset.native(),
     counterSelling: new StellarSdk.Asset('BTC', 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH'),
+  },
+  {
+    baseBuying: StellarSdk.Asset.native(),
+    counterSelling: new StellarSdk.Asset('BTC', 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'),
   },
   {
     baseBuying: StellarSdk.Asset.native(),
@@ -48,15 +60,7 @@ let markets = [
   },
   {
     baseBuying: StellarSdk.Asset.native(),
-    counterSelling: new StellarSdk.Asset('CNY', 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'),
-  },
-  {
-    baseBuying: StellarSdk.Asset.native(),
     counterSelling: new StellarSdk.Asset('PHP', 'GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP'),
-  },
-  {
-    baseBuying: StellarSdk.Asset.native(),
-    counterSelling: new StellarSdk.Asset('JPY', 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'),
   },
   {
     baseBuying: new StellarSdk.Asset('SEED', 'GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF'),
