@@ -66,6 +66,26 @@ let markets = [
     baseBuying: new StellarSdk.Asset('SEED', 'GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF'),
     counterSelling: StellarSdk.Asset.native(),
   },
+  {
+    baseBuying: new StellarSdk.Asset('CM3', 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3'),
+    counterSelling: StellarSdk.Asset.native(),
+  },
+  {
+    baseBuying: new StellarSdk.Asset('CM10', 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3'),
+    counterSelling: StellarSdk.Asset.native(),
+  },
+  {
+    baseBuying: new StellarSdk.Asset('CME', 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3'),
+    counterSelling: StellarSdk.Asset.native(),
+  },
+  {
+    baseBuying: new StellarSdk.Asset('CM3x2', 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3'),
+    counterSelling: StellarSdk.Asset.native(),
+  },
+  {
+    baseBuying: new StellarSdk.Asset('HKDC', 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3'),
+    counterSelling: StellarSdk.Asset.native(),
+  },
 ];
 
 export default class Markets extends React.Component {
