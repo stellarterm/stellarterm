@@ -47,7 +47,7 @@ StellarTerm displays logos of Stellar anchors to make it easier for end users to
 To provide a cleaner user interface, StellarTerm directory logos follow the following guidelines:
 - 100x100px
 - png format; optimized using default settings of pngquant
-- 10% (10px) of space from each edge to give space to the logo
+- 10% (10px) of space from each edge to give space to the logo. The graphic can extend up to 5% from the edge for flourishes and can extend all the way to the edge if that is how the logo is designed
 - Background color should either be relevant to the logo (such as if it's square) or transparency should be used
 
 ## Under the cover features
