@@ -40,6 +40,18 @@ let markets = [
   },
   {
     baseBuying: StellarSdk.Asset.native(),
+    counterSelling: new StellarSdk.Asset('BTC', 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF'),
+  },
+  {
+    baseBuying: StellarSdk.Asset.native(),
+    counterSelling: new StellarSdk.Asset('LTC', 'GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP'),
+  },
+  {
+    baseBuying: StellarSdk.Asset.native(),
+    counterSelling: new StellarSdk.Asset('ICN', 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR'),
+  },
+  {
+    baseBuying: StellarSdk.Asset.native(),
     counterSelling: new StellarSdk.Asset('NGN', 'GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2'),
   },
   {
