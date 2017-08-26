@@ -3,6 +3,7 @@ dist/
 .sass-cache/
 bower_components/
 src/images.js
+src/logos.js
 
 
 npm-debug.log
