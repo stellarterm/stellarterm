@@ -33,6 +33,23 @@ StellarTerm is a web based trading client for use on the Stellar network. This c
 ### Compatible with accounts from any other client
 ![Universal login](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/universal-login.png)
 
+## Directory
+StellarTerm maintains a directory page with a listing of well known assets on the Stellar network. StellarTerm currently does not fetch stellar.toml files to discover assets as a way to prevent phishing. While StellarTerm tries to be accurate, it does not endorse any issuers and can not guarantee the accuracy of the directory.
+
+To list your directory, please create a GitHub issue or email Iris Li at *stlisting@iris.li*.
+
+Anchors and assets will only be added to the directory if they seem legitimate. To be added to the StellarTerm directory, an anchor must have a domain name and a stellar.toml file correctly hosted on the domain name.
+
+### Directory logos
+StellarTerm displays logos of Stellar anchors to make it easier for end users to recognize them and protect themselves against phishing attacks. When a unknown issuer of invalid asset pair is used, an image indicating that the asset is unknown will be shown.
+
+### Directory logo guidelines
+To provide a cleaner user interface, StellarTerm directory logos follow the following guidelines:
+- 100x100px
+- png format; optimized using default settings of pngquant
+- 10% (10px) of space from each edge to give space to the logo
+- Background color should either be relevant to the logo (such as if it's square) or transparency should be used
+
 ## Under the cover features
 - No external dependencies or trackers
 - All GitHub commits [securely signed with GPG](https://github.com/blog/2144-gpg-signature-verification)
