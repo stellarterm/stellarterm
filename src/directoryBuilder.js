@@ -42,7 +42,7 @@ class DirectoryBuilder {
       name: details.domain,
       website: details.domain,
       logo: details.logo,
-      asset: {},
+      assets: {},
     }
   }
 
@@ -69,15 +69,14 @@ class DirectoryBuilder {
       throw new Error('Duplicate asset code for an issuer: ' + slug);
     }
 
-    this.issuers[details.issuer][details.code] = slug;
-
     // TODO: better validation for code and issuer
     this.assets[slug] = {
       code: details.code,
       issuer: details.issuer,
     };
 
-    this.anchors[anchorDomain].assets[details.code] = slug; // Reference back to this asset
+    this.anchors[anchorDomain].assets[details.code] = slug;
+    this.issuers[details.issuer][details.code] = slug;
   }
 
   addDestination(accountId, opts) {
@@ -98,8 +97,7 @@ class DirectoryBuilder {
     }
   }
 
-
-  getSource(domain) {
+  getAnchor(domain) {
     if (this.anchors.hasOwnProperty(domain)) {
       return this.anchors[domain];
     }
@@ -107,7 +105,7 @@ class DirectoryBuilder {
   }
 
   getAssetsByIssuer() {
-    // To be implemented when there is actually a use
+    // To be implemented when there is actually a use case
   }
 
   getAnchorByAsset() {
@@ -134,5 +132,4 @@ class DirectoryBuilder {
   getDestination(accountId) {
     return this.destinations[accountId];
   }
-
 }
