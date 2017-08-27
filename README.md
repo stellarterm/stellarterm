@@ -49,6 +49,7 @@ To provide a cleaner user interface, StellarTerm directory logos follow the foll
 - png format; optimized using default settings of pngquant
 - 10% (10px) of space from each edge to give space to the logo. The graphic can extend up to 5% from the edge for flourishes and can extend all the way to the edge if that is how the logo is designed
 - Background color should either be relevant to the logo (such as if it's square) or transparency should be used
+- Only one logo per domain name. Currently, StellarTerm does not support custom icons per currency
 
 ## Under the cover features
 - No external dependencies or trackers
