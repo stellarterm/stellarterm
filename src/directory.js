@@ -1,6 +1,7 @@
 // This is a directory that maps issuer account IDs to their issuers
 import _ from 'lodash';
 import logos from './logos';
+import directoryBuilder from './directoryBuilder';
 
 // TODO: Use functions to populate this list (which can then have stronger validation)
 let data = {
