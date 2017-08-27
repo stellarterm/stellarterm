@@ -9,6 +9,7 @@ class DirectoryBuilder {
     this.anchors = {};
     this.destinations = {};
     this.assets = {};
+    this.issuers = {};
 
     // Special anchors aren't really anchors at all!
     this.specialAnchors = {
@@ -61,6 +62,14 @@ class DirectoryBuilder {
     if (!this.anchor[details.anchor].assets.hasOwnProperty(details.code)) {
       throw new Error('Adding asset to anchor with existing asset of same code: ' + slug);
     }
+    if (!this.issuers.hasOwnProperty(details.issuer)) {
+      // Issuer doesn't exist
+      this.issuers[details.issuer] = {};
+    } else if (this.issuers[details.issuer].hasOwnProperty(details.code)) {
+      throw new Error('Duplicate asset code for an issuer: ' + slug);
+    }
+
+    this.issuers[details.issuer][details.code] = slug;
 
     // TODO: better validation for code and issuer
     this.assets[slug] = {
@@ -97,7 +106,11 @@ class DirectoryBuilder {
     return this.specialAnchors.unknown;
   }
 
-  getSourceByAsset() {
+  getAssetsByIssuer() {
+    // To be implemented when there is actually a use
+  }
+
+  getAnchorByAsset() {
     let code, issuer;
     if (arguments[0] instanceof StellarSdk.Asset) {
       code = arguments[0].getCode();
