@@ -15,7 +15,7 @@ StellarTerm is a web based trading client for use on the Stellar network. This c
 
 ![Adding trust via federation](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/adding-trust-via-federation.png)
 
-### Price history charts (coming soon)
+### Price history charts
 ![Price history charts](https://raw.githubusercontent.com/irisli/stellarterm/master/screenshots/history-chart.png)
 
 ### Ability to make offers in an intuitive manner
