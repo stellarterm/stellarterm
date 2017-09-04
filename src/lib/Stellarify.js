@@ -43,13 +43,14 @@ const Stellarify = {
       throw new Error('Stellarify.parseAssetSlug slug must be a string');
     }
 
-    let parts = slug.split('-');
-    if (parts.length !== 2) {
+    let hyphenIndex = slug.indexOf('-');
+    if (hyphenIndex < 1) {
       throw new Error('Stellarify.parseAssetSlug expected slug to be split into two with hyphen')
     }
 
-    let code = parts[0];
-    let issuer = parts[1];
+    let code = slug.substr(0, hyphenIndex);
+    let issuer = slug.substr(hyphenIndex + 1);
+
     if (code.length > 12) {
       throw new Error(`Stellarify.parseAssetSlug expected asset code to be 12 or fewer characters. Input: ${code}`)
     }
