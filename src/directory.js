@@ -126,6 +126,17 @@ let data = {
     ],
     logo: logos['equid.co'],
   },
+  'liquido.i-server.org': {
+    name: 'liquido.i-server.org',
+    website: 'https://liquido.i-server.org/',
+    assets: [
+      {
+        code: 'XLQ',
+        issuer: 'GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX',
+      }
+    ],
+    logo: logos['liquido.i-server.org'],
+  },
   'bitcoinfundi.com': {
     name: 'bitcoinfundi.com',
     website: 'https://bitcoinfundi.com/',

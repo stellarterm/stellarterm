@@ -98,6 +98,10 @@ let markets = [
     baseBuying: new StellarSdk.Asset('HKDC', 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3'),
     counterSelling: StellarSdk.Asset.native(),
   },
+  {
+    baseBuying: StellarSdk.Asset.native(),
+    counterSelling: new StellarSdk.Asset('XLQ', 'GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX'),
+  },
 ];
 
 export default class Markets extends React.Component {
