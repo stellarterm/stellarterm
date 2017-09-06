@@ -38,6 +38,9 @@ class DirectoryBuilder {
     if (logos[details.logo] === undefined) {
       throw new Error('Missing logo file: ' + details.logo);
     }
+    if (website.indexOf(anchors) == -1) {
+      throw new Error('Website URL of anchor must contain the anchor domain');
+    }
     this.anchors[details.domain] = {
       name: details.domain,
       website: details.domain,
