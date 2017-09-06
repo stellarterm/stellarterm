@@ -57,41 +57,27 @@ const Stellarify = {
 
     if (issuer === 'native') {
       if (code !== 'XLM') {
-        throw new Error(`Native issuers must have XLM code`);
+        console.error(`Native issuers must have XLM code`);
       }
       issuer = null;
     } else if (!StellarSdk.Keypair.isValidPublicKey(issuer)) {
-      // Neither native nor a public key, so we will try to resolve it
-      let source = directory.getSourceByFederation(issuer);
-      if (source.name === 'unknown') {
-        throw new Error(`Unknown issuer ${issuer}`);
-      } else {
-        let foundIssuer;
-        _.each(source.assets, asset => {
-          if (code === asset.code) {
-            foundIssuer = asset.issuer;
-          }
-        });
-        if (!foundIssuer) {
-          // TODO: Implement default address? I'd say lets just wait and see how issuers set things up
-          throw new Error(`Found issuer ${issuer} but could not find asset for issuer`);
-        }
-        issuer = foundIssuer;
+      // Since it's not a native asset and the issuer wasn't a public key,
+      // it could be an asset issued. Lets try to resolve it!
+
+      let asset = directory.getAsset(code, issuer);
+      if (asset !== null) {
+        issuer = asset.issuer;
       }
     }
 
     return new StellarSdk.Asset(code, issuer);
   },
   assetToSlug(asset) {
-    if (asset.isNative()) {
-      return 'XLM-native';
+    let resolvedAsset = directory.getAssetByAsset(asset);
+    if (resolvedAsset === null) {
+      return `${asset.getCode()}-${asset.getIssuer()}`
     }
-    let issuer = asset.getIssuer();
-    let source = directory.getSourceById(issuer)
-    if (source.name !== 'unknown') {
-      issuer = source.name;
-    }
-    return `${asset.getCode()}-${issuer}`
+    return `${resolvedAsset.code}-${resolvedAsset.domain}`
   },
   pairToExchangeUrl(baseBuying, counterSelling) {
     return `exchange/${this.assetToSlug(baseBuying)}/${this.assetToSlug(counterSelling)}`;

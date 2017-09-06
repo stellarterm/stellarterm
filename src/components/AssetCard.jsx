@@ -27,14 +27,21 @@ export default class AssetCard extends React.Component {
     }
 
     let assetCardMain;
-    let issuerId = this.props.asset.getIssuer();
-    let source = directory.getSourceById(issuerId);
 
-    let federationlink;
-    if (!source.website || this.props.noLink) {
-      federationlink = <span className="AssetCard__federation">{source.name}</span>
+    let anchor;
+    let issuerId = this.props.asset.getIssuer();
+    let directoryAsset = directory.getAssetByAsset(asset);
+    if (directoryAsset === null) {
+      anchor = directory.unknownAnchor;
     } else {
-      federationlink = <a className="AssetCard__federation" href={source.website} target="_blank">{source.name}</a>
+      anchor = directory.getAnchor(directoryAsset.domain);
+    }
+
+    let domainLink;
+    if (!anchor.website || this.props.noLink) {
+      domainLink = <span className="AssetCard__federation">{anchor.name}</span>
+    } else {
+      domainLink = <a className="AssetCard__federation" href={anchor.website} target="_blank">{anchor.name}</a>
     }
 
     let issuerAccountId;
@@ -45,12 +52,12 @@ export default class AssetCard extends React.Component {
     }
     assetCardMain = <div className="AssetCard__main">
       <div className="AssetCard__logo">
-        <img className="AssetCard__logo__image" src={source.logo}></img>
+        <img className="AssetCard__logo__image" src={anchor.logo}></img>
       </div>
       <div className="AssetCard__content">
         <div className="AssetCard__header">
           <span className="AssetCard__code">{this.props.asset.getCode()}</span>
-          {federationlink}
+          {domainLink}
         </div>
         {issuerAccountId}
       </div>
