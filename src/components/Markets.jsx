@@ -16,7 +16,7 @@ let markets = [
   },
   {
     baseBuying: StellarSdk.Asset.native(),
-    counterSelling: new StellarSdk.Asset('XRP', 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'),
+    counterSelling: new StellarSdk.Asset('XRP', 'GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ'),
   },
   {
     baseBuying: StellarSdk.Asset.native(),
@@ -24,7 +24,7 @@ let markets = [
   },
   {
     baseBuying: StellarSdk.Asset.native(),
-    counterSelling: new StellarSdk.Asset('BTC', 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM'),
+    counterSelling: new StellarSdk.Asset('BTC', 'GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI'),
   },
   {
     baseBuying: StellarSdk.Asset.native(),
