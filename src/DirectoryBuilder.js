@@ -38,31 +38,28 @@ class DirectoryBuilder {
     if (logos[details.logo] === undefined) {
       throw new Error('Missing logo file: ' + details.logo);
     }
-    if (website.indexOf(anchors) == -1) {
+    if (details.website.indexOf(details.domain) == -1) {
       throw new Error('Website URL of anchor must contain the anchor domain');
     }
     this.anchors[details.domain] = {
       name: details.domain,
-      website: details.domain,
+      website: details.website,
       logo: details.logo,
       assets: {},
     }
   }
 
-  addAsset(anchor, details) {
-    if (!this.anchors.hasOwnProperty(anchor)) {
-      throw new Error('Attempting to add asset to unknown anchor: ' + anchor);
+  addAsset(anchorDomain, details) {
+    if (!this.anchors.hasOwnProperty(anchorDomain)) {
+      throw new Error('Attempting to add asset to nonexistent anchor: ' + anchorDomain + ' slug: ' + slug);
     }
 
     let slug = details.code + '-' + details.issuer;
 
-    if (!this.assets.hasOwnProperty(slug)) {
+    if (this.assets.hasOwnProperty(slug)) {
       throw new Error('Duplicate asset: ' + slug);
     }
-    if (!this.anchor.hasOwnProperty(details.anchor)) {
-      throw new Error('Adding asset to nonexistent anchor: ' + slug);
-    }
-    if (!this.anchor[details.anchor].assets.hasOwnProperty(details.code)) {
+    if (this.anchors[anchorDomain].assets.hasOwnProperty(details.code)) {
       throw new Error('Adding asset to anchor with existing asset of same code: ' + slug);
     }
     if (!this.issuers.hasOwnProperty(details.issuer)) {
@@ -100,39 +97,41 @@ class DirectoryBuilder {
     }
   }
 
-  getAnchor(domain) {
-    if (this.anchors.hasOwnProperty(domain)) {
-      return this.anchors[domain];
-    }
-    return this.specialAnchors.unknown;
-  }
+  // getAnchor(domain) {
+  //   if (this.anchors.hasOwnProperty(domain)) {
+  //     return this.anchors[domain];
+  //   }
+  //   return this.specialAnchors.unknown;
+  // }
 
-  getAssetsByIssuer() {
-    // To be implemented when there is actually a use case
-  }
+  // getAssetsByIssuer() {
+  //   // To be implemented when there is actually a use case
+  // }
 
-  getAnchorByAsset() {
-    let code, issuer;
-    if (arguments[0] instanceof StellarSdk.Asset) {
-      code = arguments[0].getCode();
-      issuer = arguments[0].getIssuer();
-    } else {
-      code = arguments[0];
-      issuer = arguments[1];
-    }
+  // getAnchorByAsset() {
+  //   let code, issuer;
+  //   if (arguments[0] instanceof StellarSdk.Asset) {
+  //     code = arguments[0].getCode();
+  //     issuer = arguments[0].getIssuer();
+  //   } else {
+  //     code = arguments[0];
+  //     issuer = arguments[1];
+  //   }
 
-    if (issuer === undefined || issuer === null) {
-      return this.specialAnchors.stellar;
-    }
+  //   if (issuer === undefined || issuer === null) {
+  //     return this.specialAnchors.stellar;
+  //   }
 
-    // Will always return a source. If no source is found, it will return the unknown source
-    if (!dataByIssuer.hasOwnProperty(accountId)) {
-      return specialData.unknown;
-    }
-    return dataByIssuer[accountId];
-  }
+  //   // Will always return a source. If no source is found, it will return the unknown source
+  //   if (!dataByIssuer.hasOwnProperty(accountId)) {
+  //     return specialData.unknown;
+  //   }
+  //   return dataByIssuer[accountId];
+  // }
 
-  getDestination(accountId) {
-    return this.destinations[accountId];
-  }
+  // getDestination(accountId) {
+  //   return this.destinations[accountId];
+  // }
 }
+
+export default DirectoryBuilder;
