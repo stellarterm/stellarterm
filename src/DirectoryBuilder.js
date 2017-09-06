@@ -4,6 +4,10 @@ import logos from './logos';
 
 // Constraints: Data should be easily serializable into JSON (no references to each other)
 // directory.js should not depend on creating objects with StellarSdk (though its methods should support reading them)
+
+// Note: the DirectoryBuilder concept of slug is slightly different from that of Stellarify
+// slugs here can only have the format `code-accountId`
+
 class DirectoryBuilder {
   constructor() {
     this.anchors = {};
@@ -12,22 +16,21 @@ class DirectoryBuilder {
     this.issuers = {};
 
     // Special anchors aren't really anchors at all!
-    this.specialAnchors = {
-      'stellar': {
-        name: 'Stellar Network',
-        assets: [
-          {
-            code: 'XLM',
-            issuer: null,
-          }
-        ],
-        website: 'https://www.stellar.org/lumens/',
-        logo: logos['stellar'],
-      },
-      'unknown': {
-        domain: 'unknown',
-        logo: logos['unknown'],
-      }
+    this.nativeAnchor = {
+      name: 'Stellar Network',
+      website: 'https://www.stellar.org/lumens/',
+      logo: logos['stellar'],
+    };
+    this.nativeAsset = {
+      code: 'XLM',
+      issuer: null,
+      domain: 'native',
+    };
+
+    this.unknownAnchor = {
+      name: 'unknown',
+      logo: logos.unknown,
+      assets: {},
     };
   }
 
@@ -44,7 +47,7 @@ class DirectoryBuilder {
     this.anchors[details.domain] = {
       name: details.domain,
       website: details.website,
-      logo: details.logo,
+      logo: logos[details.logo],
       assets: {},
     }
   }
@@ -73,6 +76,7 @@ class DirectoryBuilder {
     this.assets[slug] = {
       code: details.code,
       issuer: details.issuer,
+      domain: anchorDomain,
     };
 
     this.anchors[anchorDomain].assets[details.code] = slug;
@@ -97,12 +101,55 @@ class DirectoryBuilder {
     }
   }
 
-  // getAnchor(domain) {
-  //   if (this.anchors.hasOwnProperty(domain)) {
-  //     return this.anchors[domain];
-  //   }
-  //   return this.specialAnchors.unknown;
-  // }
+  getAssetByDomain(code, domain) {
+    if (code === 'XLM' && domain === 'native') {
+      return this.nativeAsset;
+    }
+    if (!this.anchors.hasOwnProperty(domain)) {
+      return null;
+    }
+    if (this.anchors[domain].assets.hasOwnProperty(code)) {
+      let slug = this.anchors[domain].assets[code];
+      return {
+        code: code,
+        issuer: this.assets[slug].issuer,
+        domain: domain,
+      };
+    }
+  }
+
+  getAnchor(domain) {
+    if (!domain) {
+      return this.unknownAnchor;
+    }
+    if (domain === 'native') {
+      return this.nativeAnchor;
+    }
+    if (this.anchors.hasOwnProperty(domain)) {
+      return this.anchors[domain];
+    }
+    return this.unknownAnchor;
+  }
+
+  getAssetByAccountId(code, issuer) {
+    if (code === 'XLM' && issuer === null) {
+      return this.nativeAsset;
+    }
+
+    let slug = code + '-' + issuer;
+    if (!this.assets.hasOwnProperty(slug)) {
+      return null;
+    }
+    return this.assets[slug];
+  }
+
+  getAssetByAsset(asset) {
+    if (asset.isNative()) {
+      return this.nativeAsset;
+    }
+    return this.getAssetByAccountId(asset.getCode(), asset.getIssuer());
+  }
+
 
   // getAssetsByIssuer() {
   //   // To be implemented when there is actually a use case
