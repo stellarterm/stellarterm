@@ -64,7 +64,7 @@ const Stellarify = {
       // Since it's not a native asset and the issuer wasn't a public key,
       // it could be an asset issued. Lets try to resolve it!
 
-      let asset = directory.getAsset(code, issuer);
+      let asset = directory.getAssetByDomain(code, issuer);
       if (asset !== null) {
         issuer = asset.issuer;
       }
