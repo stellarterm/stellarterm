@@ -26,29 +26,20 @@ export default class AssetPickerNarrow extends React.Component {
     }
   }
   checkInputs(newState) {
-    let assetCodeValid = Validate.assetCode(newState.code);
-    let resolvedIssuer = undefined; // null is for XLM
-
-    if (Validate.publicKey(newState.issuer).ready) {
-      resolvedIssuer = newState.issuer;
-    } else {
-      let source = directory.getSourceByFederation(newState.issuer);
-      if (source.name !== 'unknown') {
-        _.each(source.assets, asset => {
-          if (asset.code === newState.code) {
-            resolvedIssuer = asset.issuer;
-          }
-        })
-      }
+    if (newState.code === 'XLM' && newState.issuer === '') {
+      return StellarSdk.Asset.native();
     }
 
-    if (resolvedIssuer === undefined && newState.code === 'XLM') {
-      resolvedIssuer = null;
+    let assetByAccountId = directory.getAssetByAccountId(newState.code, newState.issuer);
+    if (assetByAccountId !== null) {
+      return new StellarSdk.Asset(assetByAccountId.code, assetByAccountId.issuer);
     }
 
-    if (assetCodeValid && resolvedIssuer !== undefined) {
-      return new StellarSdk.Asset(newState.code, resolvedIssuer);
+    let assetByDomain = directory.getAssetByDomain(newState.code, newState.issuer);
+    if (assetByDomain !== null) {
+      return new StellarSdk.Asset(assetByDomain.code, assetByDomain.issuer);
     }
+
     return null;
   }
   render() {

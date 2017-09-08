@@ -21,7 +21,7 @@ directory.addAnchor({
   website: 'https://naobtc.com/',
   logo: 'naobtc.com',
 });
-directory.addAsset('stellarterm.com', {
+directory.addAsset('naobtc.com', {
   code: 'BTC',
   issuer: 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH',
 });

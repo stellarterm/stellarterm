@@ -62,13 +62,13 @@ export default class AddTrustFromFederation extends React.Component {
 
     return <div className="island">
       <div className="island__header">
-        Add trust via federation
+        Add trust via domain
       </div>
       <div className="island__paddedContent">
-        <p>You can add trust using the federation url.</p>
+        <p>You can add trust using the domain of the anchor.</p>
         <label className="s-inputGroup AddTrust__inputGroup">
           <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
-            <span>Federation URL</span>
+            <span>Anchor Domain</span>
           </span>
           <input className="s-inputGroup__item S-flexItem-share" type="text" value={this.state.federation} onChange={this.handleInputFederation} placeholder="example: coins.asia" />
         </label>

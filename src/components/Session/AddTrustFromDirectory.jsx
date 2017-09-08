@@ -10,12 +10,10 @@ export default class AddTrustFromDirectory extends React.Component {
   }
   render() {
     let rows = [];
-    _.each(directory.getAllSources(), source => {
-      _.each(source.assets, assetObj => {
-        let asset = new StellarSdk.Asset(assetObj.code, assetObj.issuer);
-        const key = assetObj.code + assetObj.issuer;
-        rows.push(<AddTrustRow key={key} d={this.props.d} asset={asset}></AddTrustRow>);
-      })
+    _.each(directory.assets, assetObj => {
+      let asset = new StellarSdk.Asset(assetObj.code, assetObj.issuer);
+      const key = assetObj.code + assetObj.issuer;
+      rows.push(<AddTrustRow key={key} d={this.props.d} asset={asset}></AddTrustRow>);
     })
     return <div className="island">
       <div className="island__header">
