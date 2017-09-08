@@ -116,9 +116,6 @@ export default class Markets extends React.Component {
     return (
       <div>
         <div className="so-back islandBack islandBack--t">
-          <CustomMarketPicker row={true}></CustomMarketPicker>
-        </div>
-        <div className="so-back islandBack">
           <div className="island">
             <div className="island__header">
               Popular exchange markets
@@ -133,6 +130,9 @@ export default class Markets extends React.Component {
             </div>
             {rows}
           </div>
+        </div>
+        <div className="so-back islandBack">
+          <CustomMarketPicker row={true}></CustomMarketPicker>
         </div>
       </div>
     );
