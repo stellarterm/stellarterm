@@ -120,13 +120,13 @@ class DirectoryBuilder {
   // - sdkAsset:StellarSdk.Asset
   getAsset(codeOrSdkAsset, domainOrAccountId) {
     if (codeOrSdkAsset instanceof StellarSdk.Asset) {
-      return getAssetBySdkAsset(codeOrSdkAsset);
+      return this.getAssetBySdkAsset(codeOrSdkAsset);
     }
 
-    if (Validate.publicKey(domainOrAccountId).ready) {
-      return getAssetByAccountId(codeOrSdkAsset, domainOrAccountId);
+    if (StellarSdk.Keypair.isValidPublicKey(domainOrAccountId)) {
+      return this.getAssetByAccountId(codeOrSdkAsset, domainOrAccountId);
     }
-    return getAssetByDomain(codeOrSdkAsset, domainOrAccountId);
+    return this.getAssetByDomain(codeOrSdkAsset, domainOrAccountId);
   }
 
   getAssetByDomain(code, domain) {
