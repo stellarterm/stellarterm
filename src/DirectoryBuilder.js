@@ -143,7 +143,7 @@ class DirectoryBuilder {
     return this.assets[slug];
   }
 
-  getAssetByAsset(asset) {
+  getAssetBySdkAsset(asset) {
     if (asset.isNative()) {
       return this.nativeAsset;
     }

@@ -30,7 +30,7 @@ export default class AssetCard extends React.Component {
 
     let anchor;
     let issuerId = this.props.asset.getIssuer();
-    let directoryAsset = directory.getAssetByAsset(asset);
+    let directoryAsset = directory.getAssetBySdkAsset(asset);
     if (directoryAsset === null) {
       anchor = directory.unknownAnchor;
     } else {

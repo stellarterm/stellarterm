@@ -73,7 +73,7 @@ const Stellarify = {
     return new StellarSdk.Asset(code, issuer);
   },
   assetToSlug(asset) {
-    let resolvedAsset = directory.getAssetByAsset(asset);
+    let resolvedAsset = directory.getAssetBySdkAsset(asset);
     if (resolvedAsset === null) {
       return `${asset.getCode()}-${asset.getIssuer()}`
     }

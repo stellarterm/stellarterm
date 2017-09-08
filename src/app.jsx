@@ -125,7 +125,7 @@ class TermApp extends React.Component {
           this.d.handlers.setOrderbook(baseBuying, counterSelling);
           body = <Exchange d={this.d}></Exchange>
         } catch (e) {
-          console.log(e.message);
+          console.error(e);
           body = <Generic title="Pick a market">Exchange url was invalid. To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
         }
       } else {
