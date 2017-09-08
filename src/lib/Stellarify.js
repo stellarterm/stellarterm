@@ -63,7 +63,6 @@ const Stellarify = {
     } else if (!StellarSdk.Keypair.isValidPublicKey(issuer)) {
       // Since it's not a native asset and the issuer wasn't a public key,
       // it could be an asset issued. Lets try to resolve it!
-
       let asset = directory.getAsset(code, issuer);
       if (asset !== null) {
         issuer = asset.issuer;

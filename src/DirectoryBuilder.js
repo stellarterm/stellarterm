@@ -101,6 +101,34 @@ class DirectoryBuilder {
     }
   }
 
+  getAnchor(domain) {
+    if (!domain) {
+      return this.unknownAnchor;
+    }
+    if (domain === 'native') {
+      return this.nativeAnchor;
+    }
+    if (this.anchors.hasOwnProperty(domain)) {
+      return this.anchors[domain];
+    }
+    return this.unknownAnchor;
+  }
+
+  // getAsset() is general and takes in any of the combination
+  // - code:string, issuerAccountId:string
+  // - code:string, anchorDomain:string
+  // - sdkAsset:StellarSdk.Asset
+  getAsset(codeOrSdkAsset, domainOrAccountId) {
+    if (codeOrSdkAsset instanceof StellarSdk.Asset) {
+      return getAssetBySdkAsset(codeOrSdkAsset);
+    }
+
+    if (Validate.publicKey(domainOrAccountId).ready) {
+      return getAssetByAccountId(codeOrSdkAsset, domainOrAccountId);
+    }
+    return getAssetByDomain(codeOrSdkAsset, domainOrAccountId);
+  }
+
   getAssetByDomain(code, domain) {
     if (code === 'XLM' && domain === 'native') {
       return this.nativeAsset;
@@ -116,19 +144,6 @@ class DirectoryBuilder {
         domain: domain,
       };
     }
-  }
-
-  getAnchor(domain) {
-    if (!domain) {
-      return this.unknownAnchor;
-    }
-    if (domain === 'native') {
-      return this.nativeAnchor;
-    }
-    if (this.anchors.hasOwnProperty(domain)) {
-      return this.anchors[domain];
-    }
-    return this.unknownAnchor;
   }
 
   getAssetByAccountId(code, issuer) {
