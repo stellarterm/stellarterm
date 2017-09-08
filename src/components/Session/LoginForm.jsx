@@ -15,6 +15,7 @@ export default class LoginForm extends React.Component {
     this.state = {
       secretInput: '',
       invalidKey: false,
+      newKeypair: null,
     }
 
     this.handleInput = (event) => {
@@ -28,6 +29,15 @@ export default class LoginForm extends React.Component {
       })
       this.props.handler(this.state.secretInput);
     }
+    this.handleGenerate = event => {
+      let keypair = StellarSdk.Keypair.random();
+      this.setState({
+        newKeypair: {
+          pubKey: keypair.accountId(),
+          secretKey: keypair.seed(),
+        }
+      });
+    }
   }
 
   render() {
@@ -37,6 +47,16 @@ export default class LoginForm extends React.Component {
     } else if (this.props.setupError) {
       errorMessage = <div className="s-alert s-alert--alert">Unable to find account. Make sure that your account is on the public network and funded with 20 lumens.</div>
     }
+
+    let newKeypairDetails;
+    if (this.state.newKeypair !== null) {
+      newKeypairDetails = <div className="LoginForm__generatedNote">
+        <p><strong>Keep your key secure. This secret key will only be showed to you once. StellarTerm does not save it and will not be able to help you recover it if lost.</strong></p>
+        <p>Public key (will be your Account ID): {this.state.newKeypair.pubKey}</p>
+        <p>Secret key (<strong>SAVE THIS AND KEEP THIS SECURE</strong>): {this.state.newKeypair.secretKey}</p>
+      </div>
+    }
+
     return <div className="so-back islandBack islandBack--t">
       <div className="island island--pb">
         <div>
@@ -69,13 +89,14 @@ export default class LoginForm extends React.Component {
         </div>
         <div className="LoginForm">
           <div className="LoginForm__form">
-            <h3>Create Account</h3>
+            <h3>Create Account Keypair</h3>
             <p>To get started on using the Stellar network, you must first create a keypair. The keypair consists of two parts:</p>
             <ul>
-              <li>Public key: The public key is used to identify the account. It is also known as an account. This public key is used for receiving funds.</li>
-              <li>Secret key: The secret key is used to access your account and make transactions. Keep this code safe and secure. Anyone with the code will have full access to the account and funds. If you lose the key, you will no longer be able to access the funds and there is no recovery mechanism.</li>
+              <li><strong>Public key</strong>: The public key is used to identify the account. It is also known as an account. This public key is used for receiving funds.</li>
+              <li><strong>Secret key</strong>: The secret key is used to access your account and make transactions. Keep this code safe and secure. Anyone with the code will have full access to the account and funds. If you lose the key, you will no longer be able to access the funds and there is no recovery mechanism.</li>
             </ul>
-            <input type="submit" className="LoginForm__generate s-button" value="Generate keypair"></input>
+            <input type="submit" className="LoginForm__generate s-button" onClick={this.handleGenerate} value="Generate keypair"></input>
+            {newKeypairDetails}
           </div>
           <div className="LoginForm__notes">
             <h3>Account generation security notes</h3>
