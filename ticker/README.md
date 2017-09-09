@@ -5,7 +5,7 @@
 ## Setup
 First, set up Serverless. Docs at: https://github.com/serverless/serverless
 
-NOTE: You should do this on a new AWS account since the clean.sh is destructive.
+NOTE: You should do this on a new AWS account since the clean.sh is destructive and serverless wants full admin powers.
 
 ```sh
 # install nvm
@@ -14,7 +14,7 @@ nvm use 6.10
 npm install -g serverless
 
 aws configure --profile user2
-
+# Change bucket name in serverless.yml
 ```
 
 ## Usage

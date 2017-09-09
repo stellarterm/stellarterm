@@ -13,6 +13,7 @@ module.exports.ticker = (event, context, callback) => {
         Bucket: process.env.BUCKET,
         Key: process.env.FILENAME,
         Body: buffer,
+        ContentType: 'application/json',
         ACL: 'public-read',
       }).promise()
     ))

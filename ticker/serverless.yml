@@ -3,7 +3,8 @@ service: ticker
 frameworkVersion: ">=1.1.0"
 
 custom:
-  bucket: ticker-stellarterm
+  bucket: api.stellarterm.com
+  filename: v1/ticker.json
 
 provider:
   name: aws
@@ -21,9 +22,12 @@ functions:
     handler: handler.ticker
     environment:
       BUCKET: ${self:custom.bucket}
-      FILENAME: ticker.json
+      FILENAME: ${self:custom.filename}
   cron:
     handler: handler.ticker
     events:
       # Invoke Lambda function every minute
       - schedule: rate(1 minute)
+    environment:
+      BUCKET: ${self:custom.bucket}
+      FILENAME: ${self:custom.filename}
