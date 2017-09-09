@@ -33,8 +33,8 @@ export default class LoginForm extends React.Component {
       let keypair = StellarSdk.Keypair.random();
       this.setState({
         newKeypair: {
-          pubKey: keypair.accountId(),
-          secretKey: keypair.seed(),
+          pubKey: keypair.publicKey(),
+          secretKey: keypair.secret(),
         }
       });
     }

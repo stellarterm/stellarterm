@@ -17,7 +17,7 @@ BigNumber.config({ EXPONENTIAL_AT: 100 });
 // should ever use the spoon.
 const MagicSpoon = {
   async Account(Server, keypair, onUpdate) {
-    let sdkAccount = await Server.loadAccount(keypair.accountId())
+    let sdkAccount = await Server.loadAccount(keypair.publicKey())
     sdkAccount.sign = transaction => {
       transaction.sign(keypair);
     };
@@ -43,7 +43,7 @@ const MagicSpoon = {
       return targetBalance;
     }
 
-    let accountEventsClose = Server.accounts().accountId(keypair.accountId()).stream({
+    let accountEventsClose = Server.accounts().accountId(keypair.publicKey()).stream({
       onmessage: res => {
         let updated = false;
         if (!_.isEqual(sdkAccount.balances, res.balances)) {
@@ -63,7 +63,7 @@ const MagicSpoon = {
     // We won't miss any offers assuming that the user only updates their offers through the client
     // with just one window open at a time
     sdkAccount.updateOffers = () => {
-      return Server.offers('accounts', keypair.accountId())
+      return Server.offers('accounts', keypair.publicKey())
         .limit(100) // TODO: Keep iterating through next() to show more than 100 offers
         .call()
         .then(res => {
