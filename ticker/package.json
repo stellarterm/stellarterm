@@ -6,6 +6,7 @@
     "bluebird": "^3.5.0",
     "lodash": "^4.17.4",
     "node-fetch": "^1.6.3",
+    "p-queue": "^2.1.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",
     "stellar-sdk": "^0.7.3"

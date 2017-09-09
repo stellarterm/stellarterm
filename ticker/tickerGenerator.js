@@ -2,8 +2,15 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 const rp = require('request-promise');
 const StellarSdk = require('stellar-sdk');
-console.log(StellarSdk);
 
+const PQueue = require('p-queue');
+const queue = new PQueue({concurrency: 20});
+const run = queue.add;
+
+StellarSdk.Network.usePublicNetwork();
+
+S = new StellarSdk.Server('https://horizon.stellar.org'); // Should never change
+StellarSdk.Network.usePublicNetwork();
 
 function tickerGenerator() {
   let finish;
@@ -18,6 +25,9 @@ function tickerGenerator() {
   };
 
   phase1(result)
+    .then(() => {
+      return phase2();
+    })
     .then(() => {
       let finalJson = JSON.stringify(result, null, 2);
       finish(finalJson);
@@ -41,6 +51,10 @@ function phase1(result) {
         result._meta.externalPrices = externalPrices;
       })
   ])
+}
+
+function phase2() {
+  return;
 }
 
 function getExternalPrices() {
