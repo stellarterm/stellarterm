@@ -8,6 +8,7 @@ const watchify = require('watchify');
 const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
 const fs = require('fs');
+const mkdirp = require('mkdirp');
 
 const reload = browserSync.reload;
 
@@ -153,4 +154,17 @@ gulp.task('production', () => {
     , () => {
       process.exit();
     });
+});
+
+gulp.task('directoryToJson', (cb) => {
+  let directory = require('./src/directory');
+
+  mkdirp('./dist/', function (err) {
+    if (err) {
+      console.error(err)
+      cb();
+    } else {
+      fs.writeFile('./dist/directory.json', directory.toJson(), cb);
+    }
+  });
 });

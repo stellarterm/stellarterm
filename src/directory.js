@@ -1,10 +1,7 @@
-// This is a directory that maps issuer account IDs to their issuers
-import _ from 'lodash';
-import logos from './logos';
-import DirectoryBuilder from './DirectoryBuilder';
+// We use let instead of import so that it can be used by vanilla js
+let DirectoryBuilder = require('./DirectoryBuilder');
 
 let directory = new DirectoryBuilder();
-
 
 directory.addAnchor({
   domain: 'stellarterm.com',
@@ -257,22 +254,4 @@ directory.addDestination('GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAV
   requiredMemoType: 'MEMO_ID',
 });
 
-
-let specialData = {
-  'Stellar Network': {
-    name: 'Stellar Network',
-    assets: [
-      {
-        code: 'XLM',
-        issuer: null,
-      }
-    ],
-    logo: logos['stellar'],
-  },
-  'unknown': {
-    name: 'unknown',
-    logo: logos['unknown'],
-  }
-};
-
-export default directory;
+module.exports = directory;

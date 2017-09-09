@@ -1,6 +1,4 @@
-// This is a directory that maps issuer account IDs to their issuers
-import _ from 'lodash';
-import logos from './logos';
+let logos = require('./logos');
 
 // Constraints: Data should be easily serializable into JSON (no references to each other)
 // directory.js should not depend on creating objects with StellarSdk (though its methods should support reading them)
@@ -32,6 +30,10 @@ class DirectoryBuilder {
       logo: logos.unknown,
       assets: {},
     };
+  }
+
+  toJson() {
+    return JSON.stringify(this, null, 2);
   }
 
   addAnchor(details) {
@@ -196,4 +198,4 @@ class DirectoryBuilder {
   // }
 }
 
-export default DirectoryBuilder;
+module.exports = DirectoryBuilder;
