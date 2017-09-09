@@ -64,7 +64,7 @@ function getExternalPrices() {
   ])
   .then(externalData => {
     return {
-      BTC: externalData[0],
+      USD_BTC: externalData[0],
       BTC_XLM: externalData[1],
       USD_XLM: _.round(externalData[0]*externalData[1],6),
     }
