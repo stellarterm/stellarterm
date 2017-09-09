@@ -5,6 +5,7 @@ function tickerGenerator() {
   let result = {
     _meta: {
       start: Math.floor(Date.now()/1000),
+      startISO: Date(),
       hello: 'world',
     },
   };

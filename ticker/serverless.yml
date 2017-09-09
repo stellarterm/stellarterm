@@ -22,3 +22,8 @@ functions:
     environment:
       BUCKET: ${self:custom.bucket}
       FILENAME: ticker.json
+  cron:
+    handler: handler.ticker
+    events:
+      # Invoke Lambda function every minute
+      - schedule: rate(1 minute)
