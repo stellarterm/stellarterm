@@ -4,6 +4,9 @@
   "dependencies": {
     "aws-sdk": "^2.7.9",
     "bluebird": "^3.5.0",
-    "node-fetch": "^1.6.3"
+    "lodash": "^4.17.4",
+    "node-fetch": "^1.6.3",
+    "request": "^2.81.0",
+    "request-promise": "^4.2.1"
   }
 }
