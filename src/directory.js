@@ -5,7 +5,7 @@ let directory = new DirectoryBuilder();
 
 directory.addAnchor({
   domain: 'stellarterm.com',
-  website: 'https://stellarterm.com/',
+  website: 'http://stellarterm.com/',
   logo: 'stellarterm.com',
 });
 directory.addAsset('stellarterm.com', {

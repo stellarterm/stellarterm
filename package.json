@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "test": "echo 'No tests yet :P'",
+    "test": "./test.sh",
     "setup": "npm install && ./node_modules/.bin/bower install",
     "start": "./node_modules/.bin/gulp watch",
     "lint": "./node_modules/.bin/eslint .",
