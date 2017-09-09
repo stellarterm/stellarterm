@@ -1,0 +1,24 @@
+service: ticker
+
+frameworkVersion: ">=1.1.0"
+
+custom:
+  bucket: ticker-stellarterm
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: us-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+functions:
+  ticker:
+    handler: handler.ticker
+    environment:
+      BUCKET: ${self:custom.bucket}
+      FILENAME: ticker.json

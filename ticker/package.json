@@ -1,0 +1,9 @@
+{
+  "name": "stellarterm-ticker",
+  "description": "Creates a ticker with information on the markets on Stellar",
+  "dependencies": {
+    "aws-sdk": "^2.7.9",
+    "bluebird": "^3.5.0",
+    "node-fetch": "^1.6.3"
+  }
+}
