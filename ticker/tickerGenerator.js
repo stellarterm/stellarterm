@@ -1,7 +1,8 @@
 const Promise = require('bluebird');
 const _ = require('lodash');
 const rp = require('request-promise');
-
+const StellarSdk = require('stellar-sdk');
+console.log(StellarSdk);
 
 
 function tickerGenerator() {
@@ -16,10 +17,7 @@ function tickerGenerator() {
     },
   };
 
-  getExternalPrices()
-    .then(externalPrices => {
-      result._meta.externalPrices = externalPrices;
-    })
+  phase1(result)
     .then(() => {
       let finalJson = JSON.stringify(result, null, 2);
       finish(finalJson);
@@ -28,6 +26,22 @@ function tickerGenerator() {
   return tickerPromise;
 }
 
+function phase1(result) {
+  return Promise.all([
+    getHorizonMain()
+      .then(main => {
+        result._meta.horizon = {
+          core_latest_ledger: main.core_latest_ledger,
+          network_passphrase: main.network_passphrase,
+        }
+      })
+    ,
+    getExternalPrices()
+      .then(externalPrices => {
+        result._meta.externalPrices = externalPrices;
+      })
+  ])
+}
 
 function getExternalPrices() {
   return Promise.all([
@@ -78,7 +92,6 @@ function getBtcPrice() {
       })
   ])
   .then(allPrices => {
-    console.log(allPrices)
     return _.round(_.mean(_.filter(allPrices, price => price !== null)), 2);
   })
 }
@@ -113,6 +126,13 @@ function getLumenPrice() {
   .then(allPrices => {
     return _.round(_.mean(_.filter(allPrices, price => price !== null)), 8);
   })
+}
+
+function getHorizonMain() {
+  return rp('https://horizon.stellar.org/')
+    .then(horizonMain => {
+      return JSON.parse(horizonMain);
+    })
 }
 
 module.exports = tickerGenerator;
