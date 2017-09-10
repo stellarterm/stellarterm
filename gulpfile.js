@@ -156,7 +156,7 @@ gulp.task('production', () => {
     });
 });
 
-gulp.task('directoryToJson', (cb) => {
+gulp.task('directoryToJson',  ['logos'], (cb) => {
   let directory = require('./src/directory');
 
   mkdirp('./dist/', function (err) {
