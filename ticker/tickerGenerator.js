@@ -59,6 +59,14 @@ function phase1(result) {
 function phase2() {
   let assets = [];
 
+  assets.push({
+    id: 'XLM-native',
+    code: 'XLM',
+    issuer: null,
+    domain: 'native',
+    slug: 'XLM-native',
+    website: 'https://www.stellar.org/lumens/',
+  })
   _.each(directory.assets, (asset, id) => {
     let r = {};
     r.id = id;
