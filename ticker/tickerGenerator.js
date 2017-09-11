@@ -7,6 +7,8 @@ const PQueue = require('p-queue');
 const queue = new PQueue({concurrency: 20});
 const run = queue.add;
 
+const directory = require('../dist/directory.json');
+
 StellarSdk.Network.usePublicNetwork();
 
 S = new StellarSdk.Server('https://horizon.stellar.org'); // Should never change
@@ -26,7 +28,8 @@ function tickerGenerator() {
 
   phase1(result)
     .then(() => {
-      return phase2();
+      result.assets = phase2();
+      return;
     })
     .then(() => {
       let finalJson = JSON.stringify(result, null, 2);
@@ -54,7 +57,21 @@ function phase1(result) {
 }
 
 function phase2() {
-  return;
+  let assets = [];
+
+  _.each(directory.assets, (asset, id) => {
+    let r = {};
+    r.id = id;
+    r.code = asset.code;
+    r.issuer = asset.issuer;
+    r.domain = asset.domain;
+    r.slug = asset.code + '-' + asset.domain;
+    r.website = directory.anchors[asset.domain].website;
+    assets.push(r)
+  });
+
+
+  return assets;
 }
 
 function getExternalPrices() {
