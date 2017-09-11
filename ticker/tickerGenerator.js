@@ -78,8 +78,11 @@ function phase2() {
     assets.push(r)
   });
 
-
   return assets;
+}
+
+function phase3() {
+
 }
 
 function getExternalPrices() {

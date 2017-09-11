@@ -12,6 +12,7 @@ class DirectoryBuilder {
     this.destinations = {};
     this.assets = {};
     this.issuers = {};
+    this.pairs = {};
 
     // Special anchors aren't really anchors at all!
     this.nativeAnchor = {
@@ -106,6 +107,24 @@ class DirectoryBuilder {
     }
   }
 
+  // Must specify by domain
+  // You can only add pairs with known issuers. Otherwise, the purpose of the directory is defeated
+  addPair(opts) {
+    let baseAsset = this.getAssetByDomain(opts.baseBuying[0], opts.baseBuying[1]);
+    let counterAsset = this.getAssetByDomain(opts.counterSelling[0], opts.counterSelling[1]);
+    if (baseAsset === null) {
+      throw new Error('Unknown baseBuying asset when adding pair: ' + opts.baseBuying[0] + '-' + opts.baseBuying[1]);
+    }
+    if (counterAsset === null) {
+      throw new Error('Unknown counterSelling asset when adding pair: ' + opts.counterSelling[0] + '-' + opts.counterSelling[1]);
+    }
+    let pairId = baseAsset.code + '-' + baseAsset.domain + '/' + counterAsset.code + '-' + counterAsset.domain;
+    this.pairs[pairId] = {
+      baseBuying: baseAsset.code + '-' + baseAsset.issuer,
+      counterSelling: counterAsset.code + '-' + counterAsset.issuer,
+    };
+  }
+
   getAnchor(domain) {
     if (!domain) {
       return this.unknownAnchor;
@@ -128,7 +147,8 @@ class DirectoryBuilder {
       return this.getAssetBySdkAsset(codeOrSdkAsset);
     }
 
-    if (StellarSdk.Keypair.isValidPublicKey(domainOrAccountId)) {
+    if (StellarSdk.Keypair.isValidPublicKey(domainOrAccountId) ||
+       domainOrAccountId === null) {
       return this.getAssetByAccountId(codeOrSdkAsset, domainOrAccountId);
     }
     return this.getAssetByDomain(codeOrSdkAsset, domainOrAccountId);
