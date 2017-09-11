@@ -7,7 +7,7 @@ const PQueue = require('p-queue');
 const queue = new PQueue({concurrency: 20});
 const run = queue.add;
 
-const directory = require('../dist/directory.json');
+const directory = require('./in/directory.json');
 
 StellarSdk.Network.usePublicNetwork();
 

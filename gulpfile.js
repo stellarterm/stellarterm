@@ -156,15 +156,11 @@ gulp.task('production', () => {
     });
 });
 
-gulp.task('directoryToJson',  ['logos'], (cb) => {
+gulp.task('directoryToJson',  ['logos'], () => {
   let directory = require('./src/directory');
 
-  mkdirp('./dist/', function (err) {
-    if (err) {
-      console.error(err)
-      cb();
-    } else {
-      fs.writeFile('./dist/directory.json', directory.toJson(), cb);
-    }
-  });
+  mkdirp.sync('./dist/');
+  mkdirp.sync('./ticker/in/');
+  fs.writeFileSync('./dist/directory.json', directory.toJson());
+  fs.writeFileSync('./ticker/in/directory.json', directory.toJson());
 });
