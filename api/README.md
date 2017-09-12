@@ -13,16 +13,6 @@ nvm use 6.10
 npm install -g serverless
 ```
 
-### Build prerequisites
-The ticker function requires the directory.json file to exist first. In order to create the directory.json file, use the gulp task in the client's build process.
-```sh
-cd stellarterm # the root of StellarTerm project
-
-# Install the prerequisites to run StellarTerm
-
-npm run directoryToJson
-```
-
 ### Locally test
 ```
 ./testTicker.sh
