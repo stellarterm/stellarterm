@@ -3,6 +3,7 @@ node_modules
 jspm_packages
 
 
+setEnvironment.sh
 
 # Serverless directories
 .serverless
