@@ -8,5 +8,4 @@ setEnvironment.sh
 # Serverless directories
 .serverless
 
-in/
 output/

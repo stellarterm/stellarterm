@@ -160,7 +160,7 @@ gulp.task('directoryToJson',  ['logos'], () => {
   let directory = require('./src/directory');
 
   mkdirp.sync('./dist/');
-  mkdirp.sync('./ticker/in/');
+  mkdirp.sync('./api/in/');
   fs.writeFileSync('./dist/directory.json', directory.toJson());
-  fs.writeFileSync('./ticker/in/directory.json', directory.toJson());
+  fs.writeFileSync('./directory.json', directory.toJson());
 });
