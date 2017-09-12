@@ -16,24 +16,26 @@ StellarSdk.Network.usePublicNetwork();
 
 function tickerGenerator() {
   let finish;
-  let tickerPromise = new Promise(function(resolve, reject){
-    finish = resolve;
-  });
   let result = {
     _meta: {
       start: Math.floor(Date.now()/1000),
       startISO: Date(),
+      dataLicense: 'Apache-2.0',
     },
   };
 
-  phase1(result)
+  let tickerPromise = Promise.resolve()
     .then(() => {
-      result.assets = phase2();
-      return;
+      phase1(result)
     })
     .then(() => {
-      let finalJson = JSON.stringify(result, null, 2);
-      finish(finalJson);
+      phase2(result)
+    })
+    .then(() => {
+      phase3(result)
+    })
+    .then(() => {
+      return JSON.stringify(result, null, 2);
     })
 
   return tickerPromise;
@@ -56,10 +58,10 @@ function phase1(result) {
   ])
 }
 
-function phase2() {
-  let assets = [];
+function phase2(result) {
+  result.assets = [];
 
-  assets.push({
+  result.assets.push({
     id: 'XLM-native',
     code: 'XLM',
     issuer: null,
@@ -75,10 +77,8 @@ function phase2() {
     r.domain = asset.domain;
     r.slug = asset.code + '-' + asset.domain;
     r.website = directory.anchors[asset.domain].website;
-    assets.push(r)
+    result.assets.push(r)
   });
-
-  return assets;
 }
 
 function phase3() {
