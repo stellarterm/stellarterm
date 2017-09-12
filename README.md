@@ -1,7 +1,7 @@
 [![Travis CI status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm)
 
 # StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/irisli/stellarterm/tree/master/api) | [directory](https://github.com/irisli/stellarterm/blob/master/src/directory.js)
-The StellarTerm ecosystem consists of multiple projects related to the [Stellar network](https://www.stellar.org/) including a [trading client](https://stellarterm.com/). The projects are in this monorepo to enable faster development speed.
+The StellarTerm ecosystem consists of multiple projects built for the [Stellar network](https://www.stellar.org/) including a [trading client](https://stellarterm.com/). The projects are in this monorepo to enable faster development speed.
 
 ## Web Client
 StellarTerm is a web based trading client for use on the Stellar network. This client aims to make it easy and safe for users of any skill level to trade on the Stellar network by making a clear and secure user interface. Try it out at [https://stellarterm.com](https://stellarterm.com/)
