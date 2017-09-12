@@ -1,13 +1,15 @@
 [![Travis CI status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm)
 
-# StellarTerm ecosystem - [client](https://github.com/irisli/stellarterm/tree/master/src) | [api](https://github.com/irisli/stellarterm/tree/master/api) | [directory](https://github.com/irisli/stellarterm/blob/master/src/directory.js)
+# StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/irisli/stellarterm/tree/master/api) | [directory](https://github.com/irisli/stellarterm/blob/master/src/directory.js)
 The StellarTerm ecosystem consists of multiple projects related to the [Stellar network](https://www.stellar.org/) including a [trading client](https://stellarterm.com/). The projects are in this monorepo to enable faster development speed.
 
 ## Web Client
 StellarTerm is a web based trading client for use on the Stellar network. This client aims to make it easy and safe for users of any skill level to trade on the Stellar network by making a clear and secure user interface. Try it out at [https://stellarterm.com](https://stellarterm.com/)
 
-## API for developers
+## API for developers (built on AWS Lambda)
 The StellarTerm API contains information on the markets on the Stellar network. This information is useful for the StellarTerm client itself as well as other developers that want to use this data.
+
+The API uses the [Serverless framework](https://serverless.com/) for deployment to [AWS Lambda](https://aws.amazon.com/lambda/). The API data is hosted on AWS S3 for high availability.
 
 It is currently under active development and is not yet finished. See it in action here: [https://api.stellarterm.com/](https://api.stellarterm.com/)
 
