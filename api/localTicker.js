@@ -1,5 +1,3 @@
-'use strict';
-
 const tickerGenerator = require('./functions/ticker');
 const fs = require('fs');
 const _ = require('lodash');

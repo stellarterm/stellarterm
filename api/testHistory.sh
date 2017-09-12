@@ -1,7 +1,5 @@
-rm output/v1/ticker.json
-node localTicker.js
+node localHistory.js
 echo '================================================================'
 echo
 echo
-cat output/v1/ticker.json
-echo
+ls output/v1/history

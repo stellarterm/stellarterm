@@ -14,7 +14,7 @@ StellarSdk.Network.usePublicNetwork();
 S = new StellarSdk.Server('https://horizon.stellar.org');
 StellarSdk.Network.usePublicNetwork();
 
-function tickerGenerator() {
+function historyGenerator() {
   let finish;
   let ticker = {
     _meta: {
@@ -24,7 +24,7 @@ function tickerGenerator() {
     },
   };
 
-  let tickerPromise = Promise.resolve()
+  let historyPromise = Promise.resolve()
     .then(() => phase1(ticker))
     .then(() => phase2(ticker))
     .then(() => phase3(ticker))
@@ -34,7 +34,7 @@ function tickerGenerator() {
       };
     })
 
-  return tickerPromise;
+  return historyPromise;
 }
 
 function phase1(ticker) {
@@ -173,4 +173,4 @@ function getHorizonMain() {
     })
 }
 
-module.exports = tickerGenerator;
+module.exports = historyGenerator;
