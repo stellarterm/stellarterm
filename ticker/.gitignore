@@ -1,7 +1,6 @@
 # package directories
 node_modules
 jspm_packages
-output.json
 
 
 
@@ -9,3 +8,4 @@ output.json
 .serverless
 
 in/
+output/

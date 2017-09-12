@@ -3,20 +3,23 @@
 const tickerGenerator = require('./tickerGenerator');
 const fetch = require('node-fetch');
 const AWS = require('aws-sdk'); // eslint-disable-line import/no-extraneous-dependencies
+const _ = require('lodash');
 
 const s3 = new AWS.S3();
 
 module.exports.ticker = (event, context, callback) => {
   tickerGenerator()
-    .then(buffer => (
-      s3.putObject({
-        Bucket: process.env.BUCKET,
-        Key: process.env.FILENAME,
-        Body: buffer,
-        ContentType: 'application/json',
-        ACL: 'public-read',
-        CacheControl: 'public, max-age=30',
-      }).promise()
-    ))
+    .then(files => {
+      return Promise.all(_.map(files, (contents, filename) => {
+        return s3.putObject({
+          Bucket: process.env.BUCKET,
+          Key: filename,
+          Body: contents,
+          ContentType: 'application/json',
+          ACL: 'public-read',
+          CacheControl: 'public, max-age=30',
+        }).promise()
+      }))
+    })
     .then(v => callback(null, v), callback);
 };

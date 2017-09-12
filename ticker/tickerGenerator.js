@@ -16,7 +16,7 @@ StellarSdk.Network.usePublicNetwork();
 
 function tickerGenerator() {
   let finish;
-  let result = {
+  let ticker = {
     _meta: {
       start: Math.floor(Date.now()/1000),
       startISO: Date(),
@@ -25,27 +25,23 @@ function tickerGenerator() {
   };
 
   let tickerPromise = Promise.resolve()
+    .then(() => phase1(ticker))
+    .then(() => phase2(ticker))
+    .then(() => phase3(ticker))
     .then(() => {
-      phase1(result)
-    })
-    .then(() => {
-      phase2(result)
-    })
-    .then(() => {
-      phase3(result)
-    })
-    .then(() => {
-      return JSON.stringify(result, null, 2);
+      return {
+        'v1/ticker.json': JSON.stringify(ticker, null, 2)
+      };
     })
 
   return tickerPromise;
 }
 
-function phase1(result) {
+function phase1(ticker) {
   return Promise.all([
     getHorizonMain()
       .then(main => {
-        result._meta.horizon = {
+        ticker._meta.horizon = {
           core_latest_ledger: main.core_latest_ledger,
           network_passphrase: main.network_passphrase,
         }
@@ -53,15 +49,15 @@ function phase1(result) {
     ,
     getExternalPrices()
       .then(externalPrices => {
-        result._meta.externalPrices = externalPrices;
+        ticker._meta.externalPrices = externalPrices;
       })
   ])
 }
 
-function phase2(result) {
-  result.assets = [];
+function phase2(ticker) {
+  ticker.assets = [];
 
-  result.assets.push({
+  ticker.assets.push({
     id: 'XLM-native',
     code: 'XLM',
     issuer: null,
@@ -77,11 +73,11 @@ function phase2(result) {
     r.domain = asset.domain;
     r.slug = asset.code + '-' + asset.domain;
     r.website = directory.anchors[asset.domain].website;
-    result.assets.push(r)
+    ticker.assets.push(r)
   });
 }
 
-function phase3() {
+function phase3(ticker) {
 
 }
 
