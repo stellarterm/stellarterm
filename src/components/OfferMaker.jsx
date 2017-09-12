@@ -3,6 +3,7 @@ import Stellarify from '../lib/Stellarify';
 import Printify from '../lib/Printify';
 import BigNumber from 'bignumber.js';
 import _ from 'lodash';
+import PropTypes from 'prop-types';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
@@ -252,5 +253,5 @@ export default class OfferMaker extends React.Component {
 };
 
 OfferMaker.propTypes = {
-  side: React.PropTypes.oneOf(['buy', 'sell']).isRequired,
+  side: PropTypes.oneOf(['buy', 'sell']).isRequired,
 }

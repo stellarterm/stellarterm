@@ -20,6 +20,7 @@
     "gulp-sass": "^3.1.0",
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
+    "prop-types": "^15.5.10",
     "solar-css": "git+https://github.com/stellar/solar.git",
     "solar-stellarterm": "git+https://github.com/irisli/solar-stellarterm.git"
   },
