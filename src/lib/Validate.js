@@ -88,7 +88,7 @@ const Validate = {
     if (input === '') {
       return RESULT_EMPTY;
     }
-    if (!StellarSdk.Keypair.isValidPublicKey(input)) {
+    if (!StellarSdk.StrKey.isValidEd25519PublicKey(input)) {
       return resultError('Invalid public key');
     }
     return RESULT_VALID;

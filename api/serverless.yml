@@ -1,0 +1,30 @@
+service: ticker
+
+frameworkVersion: ">=1.1.0"
+
+custom:
+  bucket: ${env:STELLARTERM_S3_BUCKET}
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: dev
+  region: us-west-2
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:*
+      Resource: "arn:aws:s3:::${self:custom.bucket}/*"
+
+functions:
+  ticker:
+    handler: handler.ticker
+    environment:
+      BUCKET: ${self:custom.bucket}
+  cronTicker:
+    handler: handler.ticker
+    events:
+      # Invoke Lambda function every minute
+      - schedule: rate(1 minute)
+    environment:
+      BUCKET: ${self:custom.bucket}

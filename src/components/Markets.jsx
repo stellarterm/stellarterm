@@ -5,6 +5,9 @@ import CustomMarketPicker from './CustomMarketPicker.jsx';
 import Stellarify from '../lib/Stellarify';
 import _ from 'lodash';
 
+
+// FREEZE!
+// Data is now in directory.js
 let markets = [
   {
     baseBuying: StellarSdk.Asset.native(),

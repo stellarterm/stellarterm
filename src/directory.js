@@ -1,10 +1,7 @@
-// This is a directory that maps issuer account IDs to their issuers
-import _ from 'lodash';
-import logos from './logos';
-import DirectoryBuilder from './DirectoryBuilder';
+// We use let instead of import so that it can be used by vanilla js
+let DirectoryBuilder = require('./DirectoryBuilder');
 
 let directory = new DirectoryBuilder();
-
 
 directory.addAnchor({
   domain: 'stellarterm.com',
@@ -236,6 +233,104 @@ directory.addAsset('erc20.papayame.com', {
 });
 
 
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['CNY', 'ripplefox.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['JPY', 'vcbear.net'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['XRP', 'vcbear.net'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'naobtc.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'vcbear.net'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['EURT', 'tempo.eu.com'],
+});
+directory.addPair({
+  baseBuying: ['BTC', 'naobtc.com'],
+  counterSelling: ['EURT', 'tempo.eu.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['MOBI', 'mobius.network'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'btc.papayame.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['LTC', 'ltc.papayame.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['ICN', 'erc20.papayame.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['NGN', 'tonaira.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['GFT', 'gft.network'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['EQD', 'equid.co'],
+});
+directory.addPair({
+  baseBuying: ['BTC', 'naobtc.com'],
+  counterSelling: ['EQD', 'equid.co'],
+});
+directory.addPair({
+  baseBuying: ['EURT', 'tempo.eu.com'],
+  counterSelling: ['PHP', 'coins.asia'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['PHP', 'coins.asia'],
+});
+directory.addPair({
+  baseBuying: ['SEED', 'collective21.org'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['CM3', 'cryptomover.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['CM10', 'cryptomover.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['CME', 'cryptomover.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['CM3x2', 'cryptomover.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['HKDC', 'cryptomover.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['XLQ', 'liquido.i-server.org'],
+});
+
+
 directory.addDestination('GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM', {
   name: 'Kraken',
   requiredMemoType: 'MEMO_ID',
@@ -257,22 +352,4 @@ directory.addDestination('GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAV
   requiredMemoType: 'MEMO_ID',
 });
 
-
-let specialData = {
-  'Stellar Network': {
-    name: 'Stellar Network',
-    assets: [
-      {
-        code: 'XLM',
-        issuer: null,
-      }
-    ],
-    logo: logos['stellar'],
-  },
-  'unknown': {
-    name: 'unknown',
-    logo: logos['unknown'],
-  }
-};
-
-export default directory;
+module.exports = directory;

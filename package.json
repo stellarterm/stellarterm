@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "test": "echo 'No tests yet :P'",
+    "test": "./test.sh",
     "setup": "npm install && ./node_modules/.bin/bower install",
     "start": "./node_modules/.bin/gulp watch",
     "lint": "./node_modules/.bin/eslint .",
@@ -19,6 +19,8 @@
     "gulp": "^3.9.1",
     "gulp-sass": "^3.1.0",
     "lodash": "^4.17.4",
+    "mkdirp": "^0.5.1",
+    "prop-types": "^15.5.10",
     "solar-css": "git+https://github.com/stellar/solar.git",
     "solar-stellarterm": "git+https://github.com/irisli/solar-stellarterm.git"
   },

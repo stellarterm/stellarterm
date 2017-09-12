@@ -1,6 +1,4 @@
-// This is a directory that maps issuer account IDs to their issuers
-import _ from 'lodash';
-import logos from './logos';
+let logos = require('./logos');
 
 // Constraints: Data should be easily serializable into JSON (no references to each other)
 // directory.js should not depend on creating objects with StellarSdk (though its methods should support reading them)
@@ -14,6 +12,7 @@ class DirectoryBuilder {
     this.destinations = {};
     this.assets = {};
     this.issuers = {};
+    this.pairs = {};
 
     // Special anchors aren't really anchors at all!
     this.nativeAnchor = {
@@ -34,12 +33,19 @@ class DirectoryBuilder {
     };
   }
 
+  toJson() {
+    return JSON.stringify(this, null, 2);
+  }
+
   addAnchor(details) {
     if (this.anchors[details.domain] !== undefined) {
       throw new Error('Duplicate anchor in directory: ' + details.domain);
     }
     if (logos[details.logo] === undefined) {
       throw new Error('Missing logo file: ' + details.logo);
+    }
+    if (details.website.indexOf('http://') !== -1) {
+      throw new Error('Website URL must use https://');
     }
     if (details.website.indexOf(details.domain) == -1) {
       throw new Error('Website URL of anchor must contain the anchor domain');
@@ -101,6 +107,24 @@ class DirectoryBuilder {
     }
   }
 
+  // Must specify by domain
+  // You can only add pairs with known issuers. Otherwise, the purpose of the directory is defeated
+  addPair(opts) {
+    let baseAsset = this.getAssetByDomain(opts.baseBuying[0], opts.baseBuying[1]);
+    let counterAsset = this.getAssetByDomain(opts.counterSelling[0], opts.counterSelling[1]);
+    if (baseAsset === null) {
+      throw new Error('Unknown baseBuying asset when adding pair: ' + opts.baseBuying[0] + '-' + opts.baseBuying[1]);
+    }
+    if (counterAsset === null) {
+      throw new Error('Unknown counterSelling asset when adding pair: ' + opts.counterSelling[0] + '-' + opts.counterSelling[1]);
+    }
+    let pairId = baseAsset.code + '-' + baseAsset.domain + '/' + counterAsset.code + '-' + counterAsset.domain;
+    this.pairs[pairId] = {
+      baseBuying: baseAsset.code + '-' + baseAsset.issuer,
+      counterSelling: counterAsset.code + '-' + counterAsset.issuer,
+    };
+  }
+
   getAnchor(domain) {
     if (!domain) {
       return this.unknownAnchor;
@@ -123,7 +147,8 @@ class DirectoryBuilder {
       return this.getAssetBySdkAsset(codeOrSdkAsset);
     }
 
-    if (StellarSdk.Keypair.isValidPublicKey(domainOrAccountId)) {
+    if (StellarSdk.StrKey.isValidEd25519PublicKey(domainOrAccountId) ||
+       domainOrAccountId === null) {
       return this.getAssetByAccountId(codeOrSdkAsset, domainOrAccountId);
     }
     return this.getAssetByDomain(codeOrSdkAsset, domainOrAccountId);
@@ -196,4 +221,4 @@ class DirectoryBuilder {
   // }
 }
 
-export default DirectoryBuilder;
+module.exports = DirectoryBuilder;

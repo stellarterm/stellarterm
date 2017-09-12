@@ -1,8 +1,9 @@
 const React = window.React = require('react');
 
+// TODO: Move this into Validator
 const isValidSecretKey = input => {
   try {
-    StellarSdk.Keypair.fromSeed(input);
+    StellarSdk.Keypair.fromSecret(input);
     return true;
   } catch (e) {
     return false;
@@ -33,8 +34,8 @@ export default class LoginForm extends React.Component {
       let keypair = StellarSdk.Keypair.random();
       this.setState({
         newKeypair: {
-          pubKey: keypair.accountId(),
-          secretKey: keypair.seed(),
+          pubKey: keypair.publicKey(),
+          secretKey: keypair.secret(),
         }
       });
     }

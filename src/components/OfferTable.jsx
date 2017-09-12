@@ -1,7 +1,7 @@
 const React = window.React = require('react');
 const _ = require('lodash');
 import Printify from '../lib/Printify';
-
+import PropTypes from 'prop-types';
 
 
 const oddBackground = '#f7f7f7';
@@ -42,6 +42,6 @@ export default function OfferTable(props) {
   </div>
 }
 OfferTable.propTypes = {
-  offers: React.PropTypes.arrayOf(React.PropTypes.object).isRequired,
-  side: React.PropTypes.oneOf(['buy', 'sell']).isRequired,
+  offers: PropTypes.arrayOf(PropTypes.object).isRequired,
+  side: PropTypes.oneOf(['buy', 'sell']).isRequired,
 };
