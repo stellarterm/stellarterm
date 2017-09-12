@@ -610,7 +610,7 @@ function Driver(opts) {
     logIn: async (secretKey) => {
       let keypair;
       try {
-        keypair = StellarSdk.Keypair.fromSeed(secretKey);
+        keypair = StellarSdk.Keypair.fromSecret(secretKey);
       } catch (e) {
         console.log('Invalid secret key');
         return;

@@ -147,7 +147,7 @@ class DirectoryBuilder {
       return this.getAssetBySdkAsset(codeOrSdkAsset);
     }
 
-    if (StellarSdk.Keypair.isValidPublicKey(domainOrAccountId) ||
+    if (StellarSdk.StrKey.isValidEd25519PublicKey(domainOrAccountId) ||
        domainOrAccountId === null) {
       return this.getAssetByAccountId(codeOrSdkAsset, domainOrAccountId);
     }

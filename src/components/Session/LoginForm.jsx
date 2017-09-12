@@ -1,8 +1,9 @@
 const React = window.React = require('react');
 
+// TODO: Move this into Validator
 const isValidSecretKey = input => {
   try {
-    StellarSdk.Keypair.fromSeed(input);
+    StellarSdk.Keypair.fromSecret(input);
     return true;
   } catch (e) {
     return false;

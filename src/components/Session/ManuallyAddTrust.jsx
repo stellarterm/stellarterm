@@ -49,7 +49,7 @@ export default class ManuallyAddTrust extends React.Component {
       if (!trustCode.match(/^[a-zA-Z0-9]+$/g)) {
         errors.push('Asset code must contain only letters and/or numbers');
       }
-      if (!StellarSdk.Keypair.isValidPublicKey(this.state.trustIssuer)) {
+      if (!StellarSdk.StrKey.isValidEd25519PublicKey(this.state.trustIssuer)) {
         errors.push('Asset issuer account ID must be a valid account ID');
       }
 
