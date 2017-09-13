@@ -50,6 +50,10 @@ const MagicSpoon = {
           sdkAccount.balances = res.balances;
           updated = true;
         }
+        if (!_.isEqual(sdkAccount.sequence, res.sequence)) {
+          sdkAccount.balances = res.balances;
+          updated = true;
+        }
 
         if (updated) {
           onUpdate();
