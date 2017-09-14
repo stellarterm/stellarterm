@@ -3,14 +3,13 @@ const _ = require('lodash');
 const rp = require('request-promise');
 const StellarSdk = require('stellar-sdk');
 const niceRound = require('./utils/niceRound');
+const tradeWalker = require('./utils/tradeWalker');
 
 const PQueue = require('p-queue');
 const queue = new PQueue({concurrency: 20});
 const run = queue.add;
 
 const directory = require('../directory.json');
-
-StellarSdk.Network.usePublicNetwork();
 
 Server = new StellarSdk.Server('https://horizon.stellar.org');
 StellarSdk.Network.usePublicNetwork();
@@ -116,6 +115,11 @@ function phase3(ticker) {
           asset.price_XLM = niceRound(pair.price);
           asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
         }
+
+        return tradeWalker.walkUntil(Server, pair.baseBuying, pair.counterSelling, 86400)
+          .then(tradesList => {
+            pair.numTrades24h = tradesList.length;
+          })
       })
   }));
 }
