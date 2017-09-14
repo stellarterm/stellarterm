@@ -119,6 +119,12 @@ class DirectoryBuilder {
       throw new Error('Unknown counterSelling asset when adding pair: ' + opts.counterSelling[0] + '-' + opts.counterSelling[1]);
     }
     let pairId = baseAsset.code + '-' + baseAsset.domain + '/' + counterAsset.code + '-' + counterAsset.domain;
+    if (this.pairs.hasOwnProperty(pairId)) {
+      throw new Error('Adding duplicate trading pair: ' + pairId);
+    }
+    if (this.pairs.hasOwnProperty(counterAsset.code + '-' + counterAsset.domain + '/' + baseAsset.code + '-' + baseAsset.domain)) {
+      throw new Error('Adding duplicate trading pair (in reverse): ' + pairId);
+    }
     this.pairs[pairId] = {
       baseBuying: baseAsset.code + '-' + baseAsset.issuer,
       counterSelling: counterAsset.code + '-' + counterAsset.issuer,

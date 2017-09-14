@@ -385,9 +385,9 @@
     }
   },
   "pairs": {
-    "XLM-native/CNY-ripplefox.com": {
-      "baseBuying": "XLM-null",
-      "counterSelling": "CNY-GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX"
+    "CNY-ripplefox.com/XLM-native": {
+      "baseBuying": "CNY-GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX",
+      "counterSelling": "XLM-null"
     },
     "XLM-native/JPY-vcbear.net": {
       "baseBuying": "XLM-null",
