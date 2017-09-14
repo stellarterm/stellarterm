@@ -99,6 +99,7 @@ function phase3(ticker) {
         }
         pair.bid = _.round(res.bids[0].price, 7);
         pair.ask = _.round(res.asks[0].price, 7);
+        // pair.spread = _.round(1 - pair.bid/pair.ask, 4);
         pair.price = _.round((parseFloat(pair.bid) + parseFloat(pair.ask))/2, 7);
         if (baseBuying.isNative()) {
           asset = _.find(ticker.assets, {

@@ -3,5 +3,5 @@ node localTicker.js
 echo '================================================================'
 echo
 echo
-# cat output/v1/ticker.json
+cat output/v1/ticker.json
 echo
