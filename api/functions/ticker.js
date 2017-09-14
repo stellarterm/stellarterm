@@ -2,6 +2,7 @@ const Promise = require('bluebird');
 const _ = require('lodash');
 const rp = require('request-promise');
 const StellarSdk = require('stellar-sdk');
+const niceRound = require('./utils/niceRound');
 
 const PQueue = require('p-queue');
 const queue = new PQueue({concurrency: 20});
@@ -11,7 +12,7 @@ const directory = require('../directory.json');
 
 StellarSdk.Network.usePublicNetwork();
 
-S = new StellarSdk.Server('https://horizon.stellar.org');
+Server = new StellarSdk.Server('https://horizon.stellar.org');
 StellarSdk.Network.usePublicNetwork();
 
 function tickerGenerator() {
@@ -26,7 +27,7 @@ function tickerGenerator() {
 
   let tickerPromise = Promise.resolve()
     .then(() => phase1(ticker))
-    .then(() => phase2(ticker))
+    .then(() => loadAssets(ticker))
     .then(() => phase3(ticker))
     .then(() => {
       return {
@@ -54,7 +55,7 @@ function phase1(ticker) {
   ])
 }
 
-function phase2(ticker) {
+function loadAssets(ticker) {
   ticker.assets = [];
 
   ticker.assets.push({
@@ -78,7 +79,42 @@ function phase2(ticker) {
 }
 
 function phase3(ticker) {
+  ticker.pairs = {};
+  _.each(directory.pairs, (pairData, id) => {
+    ticker.pairs[id] = {
+      baseBuying: pairData.baseBuying,
+      counterSelling: pairData.counterSelling,
+    };
+  });
 
+  return Promise.all(_.map(ticker.pairs, pair => {
+    let baseBuying     = new StellarSdk.Asset(pair.baseBuying.code, pair.baseBuying.issuer);
+    let counterSelling = new StellarSdk.Asset(pair.counterSelling.code, pair.counterSelling.issuer);
+    return Server.orderbook(baseBuying, counterSelling).call()
+      .then((res) => {
+        if (res.bids.length === 0 || res.asks.length === 0) {
+          return;
+        }
+        pair.bid = _.round(res.bids[0].price, 7);
+        pair.ask = _.round(res.asks[0].price, 7);
+        pair.price = _.round((parseFloat(pair.bid) + parseFloat(pair.ask))/2, 7);
+        if (baseBuying.isNative()) {
+          asset = _.find(ticker.assets, {
+            code: pair.counterSelling.code,
+            issuer: pair.counterSelling.issuer,
+          });
+          asset.price_XLM = niceRound(1/pair.price);
+          asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
+        } else if (counterSelling.isNative()) {
+          asset = _.find(ticker.assets, {
+            code: pair.baseBuying.code,
+            issuer: pair.baseBuying.issuer,
+          });
+          asset.price_XLM = niceRound(pair.price);
+          asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
+        }
+      })
+  }));
 }
 
 function getExternalPrices() {

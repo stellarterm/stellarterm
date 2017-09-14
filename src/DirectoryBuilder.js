@@ -126,8 +126,14 @@ class DirectoryBuilder {
       throw new Error('Adding duplicate trading pair (in reverse): ' + pairId);
     }
     this.pairs[pairId] = {
-      baseBuying: baseAsset.code + '-' + baseAsset.issuer,
-      counterSelling: counterAsset.code + '-' + counterAsset.issuer,
+      baseBuying: {
+        code: baseAsset.code,
+        issuer: baseAsset.issuer,
+      },
+      counterSelling: {
+        code: counterAsset.code,
+        issuer: counterAsset.issuer,
+      },
     };
   }
 
