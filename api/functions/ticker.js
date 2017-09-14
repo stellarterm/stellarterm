@@ -65,6 +65,8 @@ function loadAssets(ticker) {
     domain: 'native',
     slug: 'XLM-native',
     website: 'https://www.stellar.org/lumens/',
+    price_XLM: 1, // LOL 1 dogecoin = 1 dogecoin; 1 lumen = 1 lumen
+    price_USD: ticker._meta.externalPrices.USD_XLM,
   })
   _.each(directory.assets, (asset, id) => {
     let r = {};
