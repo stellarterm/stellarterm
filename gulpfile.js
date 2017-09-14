@@ -159,7 +159,5 @@ gulp.task('production', () => {
 gulp.task('directoryToJson',  ['logos'], () => {
   let directory = require('./src/directory');
 
-  mkdirp.sync('./api/in/');
-  fs.writeFileSync('./api/in/directory.json', directory.toJson());
   fs.writeFileSync('./directory.json', directory.toJson());
 });

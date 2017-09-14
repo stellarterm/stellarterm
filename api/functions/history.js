@@ -20,7 +20,7 @@ function historyGenerator() {
     _meta: {
       start: Math.floor(Date.now()/1000),
       startISO: Date(),
-      dataLicense: 'Apache-2.0',
+      apiLicense: 'Apache-2.0',
     },
   };
 
