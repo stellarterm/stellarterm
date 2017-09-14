@@ -3,15 +3,6 @@ let DirectoryBuilder = require('./DirectoryBuilder');
 
 let directory = new DirectoryBuilder();
 
-directory.addAnchor({
-  domain: 'stellarterm.com',
-  website: 'https://stellarterm.com/',
-  logo: 'stellarterm.com',
-});
-directory.addAsset('stellarterm.com', {
-  code: 'DEMO',
-  issuer: 'GBAMBOOZDWZPVV52RCLJQYMQNXOBLOXWNQAY2IF2FREV2WL46DBCH3BE',
-});
 
 directory.addAnchor({
   domain: 'naobtc.com',
@@ -23,6 +14,23 @@ directory.addAsset('naobtc.com', {
   issuer: 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH',
 });
 
+directory.addAnchor({
+  domain: 'vcbear.net',
+  website: 'https://vcbear.net/',
+  logo: 'vcbear.net',
+});
+directory.addAsset('vcbear.net', {
+  code: 'JPY',
+  issuer: 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM',
+});
+directory.addAsset('vcbear.net', {
+  code: 'XRP',
+  issuer: 'GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ',
+});
+directory.addAsset('vcbear.net', {
+  code: 'BTC',
+  issuer: 'GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI',
+});
 
 directory.addAnchor({
   domain: 'coins.asia',
@@ -47,17 +55,6 @@ directory.addAsset('tempo.eu.com', {
 
 
 directory.addAnchor({
-  domain: 'moni.com',
-  website: 'https://moni.com/',
-  logo: 'moni.com',
-});
-directory.addAsset('moni.com', {
-  code: 'EUR',
-  issuer: 'GAKBPBDMW6CTRDCXNAPSVJZ6QAN3OBNRG6CWI27FGDQT2ZJJEMDRXPKK',
-});
-
-
-directory.addAnchor({
   domain: 'ripplefox.com',
   website: 'https://ripplefox.com/anchor/',
   logo: 'ripplefox.com',
@@ -65,6 +62,36 @@ directory.addAnchor({
 directory.addAsset('ripplefox.com', {
   code: 'CNY',
   issuer: 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX',
+});
+
+directory.addAnchor({
+  domain: 'btc.papayame.com',
+  website: 'https://btc.papayame.com/',
+  logo: 'papayame.com',
+});
+directory.addAsset('btc.papayame.com', {
+  code: 'BTC',
+  issuer: 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF',
+});
+
+directory.addAnchor({
+  domain: 'ltc.papayame.com',
+  website: 'https://ltc.papayame.com/',
+  logo: 'papayame.com',
+});
+directory.addAsset('ltc.papayame.com', {
+  code: 'LTC',
+  issuer: 'GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP',
+});
+
+directory.addAnchor({
+  domain: 'erc20.papayame.com',
+  website: 'https://erc20.papayame.com/',
+  logo: 'papayame.com',
+});
+directory.addAsset('erc20.papayame.com', {
+  code: 'ICN',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
 });
 
 directory.addAnchor({
@@ -97,7 +124,25 @@ directory.addAsset('collective21.org', {
   issuer: 'GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF',
 });
 
+directory.addAnchor({
+  domain: 'liquido.i-server.org',
+  website: 'https://liquido.i-server.org/',
+  logo: 'liquido.i-server.org',
+});
+directory.addAsset('liquido.i-server.org', {
+  code: 'XLQ',
+  issuer: 'GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX',
+});
 
+directory.addAnchor({
+  domain: 'moni.com',
+  website: 'https://moni.com/',
+  logo: 'moni.com',
+});
+directory.addAsset('moni.com', {
+  code: 'EUR',
+  issuer: 'GAKBPBDMW6CTRDCXNAPSVJZ6QAN3OBNRG6CWI27FGDQT2ZJJEMDRXPKK',
+});
 
 directory.addAnchor({
   domain: 'tonaira.com',
@@ -109,7 +154,6 @@ directory.addAsset('tonaira.com', {
   issuer: 'GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2',
 });
 
-
 directory.addAnchor({
   domain: 'equid.co',
   website: 'https://equid.co/',
@@ -118,17 +162,6 @@ directory.addAnchor({
 directory.addAsset('equid.co', {
   code: 'EQD',
   issuer: 'GCGEQJR3E5BVMQYSNCHPO6NPP3KOT4VVZHIOLSRSNLE2GFY7EWVSLLTN',
-});
-
-
-directory.addAnchor({
-  domain: 'liquido.i-server.org',
-  website: 'https://liquido.i-server.org/',
-  logo: 'liquido.i-server.org',
-});
-directory.addAsset('liquido.i-server.org', {
-  code: 'XLQ',
-  issuer: 'GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX',
 });
 
 directory.addAnchor({
@@ -144,26 +177,6 @@ directory.addAsset('bitcoinfundi.com', {
   code: 'BTC',
   issuer: 'GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R',
 });
-
-directory.addAnchor({
-  domain: 'vcbear.net',
-  website: 'https://vcbear.net/',
-  logo: 'vcbear.net',
-});
-directory.addAsset('vcbear.net', {
-  code: 'JPY',
-  issuer: 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM',
-});
-directory.addAsset('vcbear.net', {
-  code: 'XRP',
-  issuer: 'GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ',
-});
-directory.addAsset('vcbear.net', {
-  code: 'BTC',
-  issuer: 'GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI',
-});
-
-
 
 directory.addAnchor({
   domain: 'cryptomover.com',
@@ -203,33 +216,13 @@ directory.addAsset('readycash.com.ng', {
 
 
 directory.addAnchor({
-  domain: 'btc.papayame.com',
-  website: 'https://btc.papayame.com/',
-  logo: 'papayame.com',
+  domain: 'stellarterm.com',
+  website: 'https://stellarterm.com/',
+  logo: 'stellarterm.com',
 });
-directory.addAsset('btc.papayame.com', {
-  code: 'BTC',
-  issuer: 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF',
-});
-
-directory.addAnchor({
-  domain: 'ltc.papayame.com',
-  website: 'https://ltc.papayame.com/',
-  logo: 'papayame.com',
-});
-directory.addAsset('ltc.papayame.com', {
-  code: 'LTC',
-  issuer: 'GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP',
-});
-
-directory.addAnchor({
-  domain: 'erc20.papayame.com',
-  website: 'https://erc20.papayame.com/',
-  logo: 'papayame.com',
-});
-directory.addAsset('erc20.papayame.com', {
-  code: 'ICN',
-  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+directory.addAsset('stellarterm.com', {
+  code: 'DEMO',
+  issuer: 'GBAMBOOZDWZPVV52RCLJQYMQNXOBLOXWNQAY2IF2FREV2WL46DBCH3BE',
 });
 
 
