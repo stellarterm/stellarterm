@@ -113,7 +113,7 @@ function phase3(ticker) {
               });
               asset.price_XLM = niceRound(1/pair.price);
               asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
-              pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'boughtAmount'));
+              pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'baseAmount'));
               asset.volume24h_XLM = pair.volume24h_XLM;
               asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
             } else if (counterSelling.isNative()) {
@@ -123,7 +123,7 @@ function phase3(ticker) {
               });
               asset.price_XLM = niceRound(pair.price);
               asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
-              pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'soldAmount'));
+              pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'counterAmount'));
               asset.volume24h_XLM = pair.volume24h_XLM;
               asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
             }

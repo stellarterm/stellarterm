@@ -3,7 +3,23 @@ const StellarSdk = require('stellar-sdk');
 
 let tradeWalker = {};
 
+function matchesAsset(res, tradeType, asset) {
+  let prefix;
+  if (tradeType === 'bought') {
+    prefix = 'bought';
+  } else if (tradeType === 'sold') {
+    prefix = 'sold';
+  } else {
+    throw new TypeError('tradeType argument for matchesAsset is supposed to be either bought or sold');
+  }
+
+  return (res[prefix + '_asset_type'] === 'native' && asset.code === 'XLM' && asset.issuer === null)
+    ||
+  (res[prefix + '_asset_code'] === asset.code && res[prefix + '_asset_issuer'] === asset.issuer);
+}
+
 // Walks until we hit pastSeconds in the past
+// Will also rectify the trades
 tradeWalker.walkUntil = function walkUntil(Server, baseBuying, counterSelling, pastSeconds) {
   let records = [];
   let satisfied = false;
@@ -27,25 +43,28 @@ tradeWalker.walkUntil = function walkUntil(Server, baseBuying, counterSelling, p
         return;
       }
 
-      // Make sure our catch is good: https://github.com/stellar/horizon/issues/396
-      let matchesBuying = (res.bought_asset_type === 'native' && baseBuying.code === 'XLM' && baseBuying.issuer === null)
-          ||
-        (res.bought_asset_code === baseBuying.code && res.bought_asset_issuer === baseBuying.issuer);
-      let matchesSelling = (res.sold_asset_type === 'native' && counterSelling.code === 'XLM' && counterSelling.issuer === null)
-          ||
-        (res.sold_asset_code === counterSelling.code && res.sold_asset_issuer === counterSelling.issuer);
-      let isCorrectPairing = matchesBuying && matchesSelling
-      if (!isCorrectPairing) {
-        // Ahh I succumed to De Morgan's laws
-        return;
-      }
+      let boughtMatchesBase = matchesAsset(res, 'bought', baseBuying);
+      let boughtMatchesCounter = matchesAsset(res, 'bought', counterSelling);
+      let soldMatchesBase = matchesAsset(res, 'sold', baseBuying);
+      let soldMatchesCounter = matchesAsset(res, 'sold', counterSelling);
 
       let processedTrade = {
         tradeTime,
-        boughtAmount: parseFloat(res.bought_amount),
-        soldAmount: parseFloat(res.sold_amount),
       }
-      processedTrade.price = _.round(processedTrade.boughtAmount/processedTrade.soldAmount, 7);
+      if (boughtMatchesBase && soldMatchesCounter) {
+        // Trade happened in the direction we are looking at
+        processedTrade.type = 'buy';
+        processedTrade.baseAmount = parseFloat(res.bought_amount);
+        processedTrade.counterAmount = parseFloat(res.sold_amount);
+        processedTrade.price = _.round(processedTrade.baseAmount/processedTrade.counterAmount, 7);
+      } else if (boughtMatchesCounter && soldMatchesBase) {
+        processedTrade.type = 'sell';
+        processedTrade.baseAmount = parseFloat(res.sold_amount);
+        processedTrade.counterAmount = parseFloat(res.bought_amount);
+        processedTrade.price = _.round(processedTrade.counterAmount/processedTrade.baseAmount, 7);
+      } else {
+        console.log('Horizon returned irrelevant trade pair');
+      }
 
       records.push(processedTrade);
     })
