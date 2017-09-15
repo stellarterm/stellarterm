@@ -31,15 +31,17 @@ tradeWalker.walkUntil = function walkUntil(Server, baseBuying, counterSelling, p
       // De Morgan, you cant confuse us if we don't try to use your laws!!! Ok this is already confusing
       if (
         !(
-          (res.bought_asset_type === 'native' && baseBuying.code === 'XLM' && baseBuying.issuer === null)
-            ||
-          (res.bought_asset_code === baseBuying.code && res.bought_asset_issuer === baseBuying.issuer)
-        )
-        ||
-        !(
-          (res.sold_asset_type === 'native' && counterSelling.code === 'XLM' && counterSelling.issuer === null)
-            ||
-          (res.sold_asset_code === counterSelling.code && res.sold_asset_issuer === counterSelling.issuer)
+          (
+            (res.bought_asset_type === 'native' && baseBuying.code === 'XLM' && baseBuying.issuer === null)
+              ||
+            (res.bought_asset_code === baseBuying.code && res.bought_asset_issuer === baseBuying.issuer)
+          )
+          ||
+          !(
+            (res.sold_asset_type === 'native' && counterSelling.code === 'XLM' && counterSelling.issuer === null)
+              ||
+            (res.sold_asset_code === counterSelling.code && res.sold_asset_issuer === counterSelling.issuer)
+          )
         )
       ) {
         return;
