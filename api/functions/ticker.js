@@ -28,6 +28,7 @@ function tickerGenerator() {
     .then(() => phase1(ticker))
     .then(() => loadAssets(ticker))
     .then(() => phase3(ticker))
+    .then(() => phase4(ticker))
     .then(() => {
       return {
         'v1/ticker.json': JSON.stringify(ticker, null, 2)
@@ -98,7 +99,7 @@ function phase3(ticker) {
         }
         pair.bid = _.round(res.bids[0].price, 7);
         pair.ask = _.round(res.asks[0].price, 7);
-        // pair.spread = _.round(1 - pair.bid/pair.ask, 4);
+        pair.spread = _.round(1 - pair.bid/pair.ask, 4);
         pair.price = _.round((parseFloat(pair.bid) + parseFloat(pair.ask))/2, 7);
 
 
@@ -111,6 +112,9 @@ function phase3(ticker) {
                 code: pair.counterSelling.code,
                 issuer: pair.counterSelling.issuer,
               });
+              // TODO: Add num trades for other trade pairs too
+              asset.numTrades24h = pair.numTrades24h;
+              asset.spread = pair.spread;
               asset.price_XLM = niceRound(1/pair.price);
               asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
               pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'baseAmount'));
@@ -121,6 +125,9 @@ function phase3(ticker) {
                 code: pair.baseBuying.code,
                 issuer: pair.baseBuying.issuer,
               });
+              // TODO: Add num trades for other trade pairs too
+              asset.numTrades24h = pair.numTrades24h;
+              asset.spread = pair.spread;
               asset.price_XLM = niceRound(pair.price);
               asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
               pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'counterAmount'));
@@ -130,6 +137,41 @@ function phase3(ticker) {
           })
       })
   }));
+}
+
+function phase4(ticker) {
+  // Assign a score to each asset
+  _.each(ticker.assets, asset => {
+    if (asset.id === 'XLM-native') {
+      asset.score = 100;
+      return;
+    }
+    // Has orderbook relating to XLM
+    if (asset.price_XLM === undefined) {
+      asset.score = 0;
+    }
+    asset.score = 1;
+
+    if (asset.volume24h_USD === undefined || asset.volume24h_USD === 0 || asset.volume24h_USD <= 10) {
+      return;
+    }
+
+    // We want the score to be slightly more stable, so just a little spread can negatively influence
+    // It's also a easy fix for issuers
+    let spreadMultiplier = (1-asset.spread)*(1-asset.spread)*(1-asset.spread); // range: [0,1]
+
+    // Volume really helps!
+    let volumeScore = Math.log10(10 + asset.volume24h_USD);
+
+    // numTrades is helpful too. Especially the first few num trades are important!
+    let numTradesScore = Math.log10(asset.numTrades24h+10);
+
+    asset.score = asset.score + spreadMultiplier*volumeScore*numTradesScore;
+  });
+
+  ticker.assets.sort((a,b) => {
+    return b.score - a.score;
+  });
 }
 
 function getExternalPrices() {
