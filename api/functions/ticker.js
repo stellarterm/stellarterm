@@ -214,15 +214,6 @@ function phase4(ticker) {
     // Helps distinguish between assets that only have offers and nothing much else
     let spreadPenalty = Math.pow((1-asset.spread), 5); // range: [0,1]
 
-
-    console.log();
-    console.log(asset.code, asset.domain);
-    console.log('spreadPenalty', spreadPenalty);
-    console.log('numOffersScore', numOffersScore);
-    console.log('depth10Score', depth10Score);
-    console.log('volumeScore', volumeScore);
-    console.log('numTradesScore', numTradesScore);
-
     asset.activityScore = spreadPenalty * (numOffersScore + depth10Score + volumeScore + numTradesScore);
   });
 
