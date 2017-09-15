@@ -143,14 +143,14 @@ function phase4(ticker) {
   // Assign a score to each asset
   _.each(ticker.assets, asset => {
     if (asset.id === 'XLM-native') {
-      asset.score = 100;
+      asset.activityLevel = 100;
       return;
     }
     // Has orderbook relating to XLM
     if (asset.price_XLM === undefined) {
-      asset.score = 0;
+      asset.activityLevel = 0;
     }
-    asset.score = 1;
+    asset.activityLevel = 1;
 
     if (asset.volume24h_USD === undefined || asset.volume24h_USD === 0 || asset.volume24h_USD <= 10) {
       return;
@@ -166,11 +166,11 @@ function phase4(ticker) {
     // numTrades is helpful too. Especially the first few num trades are important!
     let numTradesScore = Math.log10(asset.numTrades24h+10);
 
-    asset.score = asset.score + spreadMultiplier*volumeScore*numTradesScore;
+    asset.activityLevel = asset.activityLevel + spreadMultiplier*volumeScore*numTradesScore;
   });
 
   ticker.assets.sort((a,b) => {
-    return b.score - a.score;
+    return b.activityLevel - a.activityLevel;
   });
 }
 
