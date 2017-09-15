@@ -100,25 +100,33 @@ function phase3(ticker) {
         pair.ask = _.round(res.asks[0].price, 7);
         // pair.spread = _.round(1 - pair.bid/pair.ask, 4);
         pair.price = _.round((parseFloat(pair.bid) + parseFloat(pair.ask))/2, 7);
-        if (baseBuying.isNative()) {
-          asset = _.find(ticker.assets, {
-            code: pair.counterSelling.code,
-            issuer: pair.counterSelling.issuer,
-          });
-          asset.price_XLM = niceRound(1/pair.price);
-          asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
-        } else if (counterSelling.isNative()) {
-          asset = _.find(ticker.assets, {
-            code: pair.baseBuying.code,
-            issuer: pair.baseBuying.issuer,
-          });
-          asset.price_XLM = niceRound(pair.price);
-          asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
-        }
+
 
         return tradeWalker.walkUntil(Server, pair.baseBuying, pair.counterSelling, 86400)
           .then(tradesList => {
             pair.numTrades24h = tradesList.length;
+
+            if (baseBuying.isNative()) {
+              asset = _.find(ticker.assets, {
+                code: pair.counterSelling.code,
+                issuer: pair.counterSelling.issuer,
+              });
+              asset.price_XLM = niceRound(1/pair.price);
+              asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
+              pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'boughtAmount'));
+              asset.volume24h_XLM = pair.volume_XLM;
+              asset.volume24h_USD = niceRound(pair.volume_XLM * ticker._meta.externalPrices.USD_XLM);
+            } else if (counterSelling.isNative()) {
+              asset = _.find(ticker.assets, {
+                code: pair.baseBuying.code,
+                issuer: pair.baseBuying.issuer,
+              });
+              asset.price_XLM = niceRound(pair.price);
+              asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
+              pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'soldAmount'));
+              asset.volume24h_XLM = pair.volume_XLM;
+              asset.volume24h_USD = niceRound(pair.volume_XLM * ticker._meta.externalPrices.USD_XLM);
+            }
           })
       })
   }));
