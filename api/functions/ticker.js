@@ -114,8 +114,8 @@ function phase3(ticker) {
               asset.price_XLM = niceRound(1/pair.price);
               asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
               pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'boughtAmount'));
-              asset.volume24h_XLM = pair.volume_XLM;
-              asset.volume24h_USD = niceRound(pair.volume_XLM * ticker._meta.externalPrices.USD_XLM);
+              asset.volume24h_XLM = pair.volume24h_XLM;
+              asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
             } else if (counterSelling.isNative()) {
               asset = _.find(ticker.assets, {
                 code: pair.baseBuying.code,
@@ -124,8 +124,8 @@ function phase3(ticker) {
               asset.price_XLM = niceRound(pair.price);
               asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
               pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'soldAmount'));
-              asset.volume24h_XLM = pair.volume_XLM;
-              asset.volume24h_USD = niceRound(pair.volume_XLM * ticker._meta.externalPrices.USD_XLM);
+              asset.volume24h_XLM = pair.volume24h_XLM;
+              asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
             }
           })
       })
