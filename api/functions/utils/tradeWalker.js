@@ -28,22 +28,15 @@ tradeWalker.walkUntil = function walkUntil(Server, baseBuying, counterSelling, p
       }
 
       // Make sure our catch is good: https://github.com/stellar/horizon/issues/396
-      // De Morgan, you cant confuse us if we don't try to use your laws!!! Ok this is already confusing
-      if (
-        !(
-          (
-            (res.bought_asset_type === 'native' && baseBuying.code === 'XLM' && baseBuying.issuer === null)
-              ||
-            (res.bought_asset_code === baseBuying.code && res.bought_asset_issuer === baseBuying.issuer)
-          )
+      let matchesBuying = (res.bought_asset_type === 'native' && baseBuying.code === 'XLM' && baseBuying.issuer === null)
           ||
-          !(
-            (res.sold_asset_type === 'native' && counterSelling.code === 'XLM' && counterSelling.issuer === null)
-              ||
-            (res.sold_asset_code === counterSelling.code && res.sold_asset_issuer === counterSelling.issuer)
-          )
-        )
-      ) {
+        (res.bought_asset_code === baseBuying.code && res.bought_asset_issuer === baseBuying.issuer);
+      let matchesSelling = (res.sold_asset_type === 'native' && counterSelling.code === 'XLM' && counterSelling.issuer === null)
+          ||
+        (res.sold_asset_code === counterSelling.code && res.sold_asset_issuer === counterSelling.issuer);
+      let isCorrectPairing = matchesBuying && matchesSelling
+      if (!isCorrectPairing) {
+        // Ahh I succumed to De Morgan's laws
         return;
       }
 
