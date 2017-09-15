@@ -12,8 +12,8 @@ tradeWalker.walkUntil(Server, {
   code: 'XLM',
   issuer: null,
 }, {
-  code:'CNY',
-  issuer: 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX'
+  code:'BTC',
+  issuer: 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF'
 }, 86400)
 .then(result => {
   console.log(result)

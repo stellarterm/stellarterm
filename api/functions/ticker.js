@@ -102,6 +102,22 @@ function phase3(ticker) {
         pair.spread = _.round(1 - pair.bid/pair.ask, 4);
         pair.price = _.round((parseFloat(pair.bid) + parseFloat(pair.ask))/2, 7);
 
+        // Depth of the market of both sides
+        let sum10PercentBidAmounts = _.sumBy(res.bids, bid => {
+          if (parseFloat(bid.price)/pair.price >= 0.9) {
+            return parseFloat(bid.amount);
+          }
+          return 0;
+        });
+        let sum10PercentAskAmounts = _.sumBy(res.asks, ask => {
+          if (parseFloat(ask.price)/pair.price <= 1.1) {
+            return parseFloat(ask.amount);
+          }
+          return 0;
+        });
+
+
+       pair.depth10Amount = _.round(sum10PercentBidAmounts + sum10PercentAskAmounts);
 
         return tradeWalker.walkUntil(Server, pair.baseBuying, pair.counterSelling, 86400)
           .then(tradesList => {
@@ -120,6 +136,12 @@ function phase3(ticker) {
               pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'baseAmount'));
               asset.volume24h_XLM = pair.volume24h_XLM;
               asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
+
+              asset.depth10_XLM = niceRound(pair.depth10Amount);
+              asset.depth10_USD = niceRound(asset.depth10_XLM*ticker._meta.externalPrices.USD_XLM);
+
+              asset.numBids = res.bids.length;
+              asset.numAsks = res.asks.length;
             } else if (counterSelling.isNative()) {
               asset = _.find(ticker.assets, {
                 code: pair.baseBuying.code,
@@ -133,6 +155,15 @@ function phase3(ticker) {
               pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'counterAmount'));
               asset.volume24h_XLM = pair.volume24h_XLM;
               asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
+
+              // TODO: Make this more accurate. This is inaccurate by up to 10% because
+              // when I flip it around here, I'm not accounting for the difference
+              // in price relative to XLM
+              asset.depth10_XLM = niceRound(pair.depth10Amount*pair.price);
+              asset.depth10_USD = niceRound(asset.depth10_XLM*ticker._meta.externalPrices.USD_XLM);
+
+              asset.numBids = res.bids.length;
+              asset.numAsks = res.asks.length;
             }
           })
       })
@@ -143,35 +174,65 @@ function phase4(ticker) {
   // Assign a score to each asset
   _.each(ticker.assets, asset => {
     if (asset.id === 'XLM-native') {
-      asset.activityLevel = 100;
+      asset.activityScore = 100;
       return;
     }
-    // Has orderbook relating to XLM
+    // Has orderbook info relating to XLM
     if (asset.price_XLM === undefined) {
-      asset.activityLevel = 0;
-    }
-    asset.activityLevel = 1;
-
-    if (asset.volume24h_USD === undefined || asset.volume24h_USD === 0 || asset.volume24h_USD <= 10) {
+      asset.activityScore = 0;
       return;
     }
 
-    // We want the score to be slightly more stable, so just a little spread can negatively influence
-    // It's also a easy fix for issuers
-    let spreadMultiplier = (1-asset.spread)*(1-asset.spread)*(1-asset.spread); // range: [0,1]
+    // Having the full amount of 20 bids and asks on each side is important since
+    // it makes the market look like there is activity
+    // It's a flat improvement so that even those without market makers can improve their ranking
+    let numOffersScore = (asset.numBids + asset.numAsks)/20; // [0,2]
 
-    // Volume really helps!
-    let volumeScore = Math.log10(10 + asset.volume24h_USD);
+    // A bonus for having an average of up to 1 trade every 24 hours. Adds
+    // more detail to the charts. However, we don't want to overemphasize taking
+    // This is again to help assets with little activity
+    let constantActivityBonus = Math.max(12, asset.numTrades24h)/24; // [0,0.5]
+
+    // For assets to do well, they don't need to have all the metrics so that
+    // assets that dont do well in one category won't get punished.
+
+    // Having good depth is SUPER important
+    // Having $1000USD in 10% depth DOUBLES the score compared to $100USD
+    // And $10k is triple compared to $100
+    let depth10Score = Math.log10(10 + asset.depth10_USD*5) - 1; // [0, infinity]
+
+    // Volume really helps! However, it's not as important as depth especially
+    // since there are no pecentage fees on the Stellar network
+    let volumeScore = Math.log10(10 + asset.volume24h_USD/20) - 1; // [0, infinity]
 
     // numTrades is helpful too. Especially the first few num trades are important!
-    let numTradesScore = Math.log10(asset.numTrades24h+10);
+    // But we want to encourage depth more than market taking
+    let numTradesScore = Math.log10(10 + asset.numTrades24h) - 1;
 
-    asset.activityLevel = asset.activityLevel + spreadMultiplier*volumeScore*numTradesScore;
+    // We want the score to be slightly more stable, so just a little spread can negatively influence
+    // It's also a easy fix for issuers. With a big spread, the other stuff is kinda useless
+    // Helps distinguish between assets that only have offers and nothing much else
+    let spreadPenalty = Math.pow((1-asset.spread), 5); // range: [0,1]
+
+
+    console.log();
+    console.log(asset.code, asset.domain);
+    console.log('spreadPenalty', spreadPenalty);
+    console.log('numOffersScore', numOffersScore);
+    console.log('depth10Score', depth10Score);
+    console.log('volumeScore', volumeScore);
+    console.log('numTradesScore', numTradesScore);
+
+    asset.activityScore = spreadPenalty * (numOffersScore + depth10Score + volumeScore + numTradesScore);
   });
 
   ticker.assets.sort((a,b) => {
-    return b.activityLevel - a.activityLevel;
+    return b.activityScore - a.activityScore;
   });
+
+  _.each(ticker.assets, asset => {
+    asset.activityScore = _.round(asset.activityScore, 3);
+  })
 }
 
 function getExternalPrices() {

@@ -32,7 +32,7 @@ tradeWalker.walkUntil = function walkUntil(Server, baseBuying, counterSelling, p
   let baseBuyingSdk = new StellarSdk.Asset(baseBuying.code, baseBuying.issuer);
   let counterSellingSdk = new StellarSdk.Asset(counterSelling.code, counterSelling.issuer);
 
-  let tradeCalls = Server.orderbook(baseBuyingSdk, counterSellingSdk).trades().limit(100).order('desc').call()
+  let tradeCalls = Server.orderbook(baseBuyingSdk, counterSellingSdk).trades().limit(200).order('desc').call()
   let processResults = tradeResults => {
     _.each(tradeResults.records, res => {
       let tradeTime = Date.parse(res.created_at)/1000
