@@ -610,14 +610,15 @@ function Driver(opts) {
   // so it makes sense to load it when the app starts.
   this.ticker = {
     ready: false,
-    content: {},
+    body: {},
   };
 
   req.getJson('https://api.stellarterm.com/v1/ticker.json')
-  .then(body => {
-    console.log(body);
+  .then(tickerData => {
+    console.log(tickerData);
+    this.ticker.ready = true;
+    _.assign(this.ticker, tickerData);
     trigger.ticker();
-
   })
   .catch(e => {
     console.error(e);

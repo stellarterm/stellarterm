@@ -24,9 +24,10 @@ export default class AssetList extends React.Component {
     }
 
     let rows = [];
-    _.each(directory.assets, (asset, index) => {
-      console.log(asset);
-
+    _.each(d.ticker.assets, (asset, index) => {
+      console.log(asset.id);
+      let sdkAsset = new StellarSdk.Asset(asset.code, asset.issuer);
+      rows.push(<div key={asset.id}><AssetCard asset={sdkAsset} noLink={true}></AssetCard></div>);
       // rows.push(<AssetPair key={index} row={true} baseBuying={market.baseBuying} counterSelling={market.counterSelling}></AssetPair>)
     })
     return (
