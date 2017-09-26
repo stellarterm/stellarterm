@@ -193,17 +193,20 @@ function phase4(ticker) {
     // This is again to help assets with little activity
     let constantActivityBonus = Math.max(12, asset.numTrades24h)/24; // [0,0.5]
 
+    // It's nice to at least show that there is something happening.
+    // Just $100 volume gets the asset a nice bonus
+    let nonzeroVolumeBonus = Math.max(1, asset.volume24h_USD/100); // [0,1]
+
     // For assets to do well, they don't need to have all the metrics so that
     // assets that dont do well in one category won't get punished.
 
     // Having good depth is SUPER important
-    // Having $1000USD in 10% depth DOUBLES the score compared to $100USD
-    // And $10k is triple compared to $100
-    let depth10Score = Math.log10(10 + asset.depth10_USD*5) - 1; // [0, infinity]
+    // Use a lower base log to make it easier to get depth points
+    let depth10Score = Math.log(4 + asset.depth10_USD)/Math.log(4) - 1; // [0, infinity]
 
     // Volume really helps! However, it's not as important as depth especially
     // since there are no pecentage fees on the Stellar network
-    let volumeScore = Math.log10(10 + asset.volume24h_USD/20) - 1; // [0, infinity]
+    let volumeScore = Math.log10(10 + asset.volume24h_USD) - 1; // [0, infinity]
 
     // numTrades is helpful too. Especially the first few num trades are important!
     // But we want to encourage depth more than market taking
