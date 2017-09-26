@@ -17,6 +17,12 @@ const Printify = {
     // Formats a number into a react element with 0s unemphasized
     return <span className="lightenZeros">{emph}{unemph}</span>;
   },
+  lighten(input) {
+    if (!_.isString(input)) {
+      throw new Error('lighten only takes in strings');
+    }
+    return <span className="lightenZeros"><span className="lightenZeros__unemph">{input}</span></span>;
+  },
 };
 
 export default Printify;
