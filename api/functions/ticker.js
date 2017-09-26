@@ -96,9 +96,18 @@ function phase3(ticker) {
     let baseBuying     = new StellarSdk.Asset(pair.baseBuying.code, pair.baseBuying.issuer);
     let counterSelling = new StellarSdk.Asset(pair.counterSelling.code, pair.counterSelling.issuer);
 
+    let asset;
     if (baseBuying.isNative()) {
+      let asset = _.find(ticker.assets, {
+        code: pair.counterSelling.code,
+        issuer: pair.counterSelling.issuer,
+      });
       asset.topTradePairSlug = pairSlug;
     } else if (counterSelling.isNative()) {
+      let asset = _.find(ticker.assets, {
+        code: pair.baseBuying.code,
+        issuer: pair.baseBuying.issuer,
+      });
       asset.topTradePairSlug = pairSlug;
     }
 
@@ -134,7 +143,7 @@ function phase3(ticker) {
             pair.numTrades24h = tradesList.length;
 
             if (baseBuying.isNative()) {
-              asset = _.find(ticker.assets, {
+              let asset = _.find(ticker.assets, {
                 code: pair.counterSelling.code,
                 issuer: pair.counterSelling.issuer,
               });
@@ -157,7 +166,7 @@ function phase3(ticker) {
               asset.numBids = res.bids.length;
               asset.numAsks = res.asks.length;
             } else if (counterSelling.isNative()) {
-              asset = _.find(ticker.assets, {
+              let asset = _.find(ticker.assets, {
                 code: pair.baseBuying.code,
                 issuer: pair.baseBuying.issuer,
               });

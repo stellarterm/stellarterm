@@ -1,8 +1,11 @@
 .AssetList {
   width: 100%;
 }
+.AssetList__head__asset {
+  text-align: center;
+}
 .AssetList__head__cell {
-  padding: 16px 16px;
+  padding: 12px;
   font-size: 16px;
 }
 .AssetList__head__amount {
@@ -12,7 +15,7 @@
   border-top: 1px solid $s-color-neutral7;
 }
 .AssetList__asset__assetCard {
-  padding: 8px 16px;
+  padding: 12px;
 }
 .AssetList__asset__amount {
   text-align: right;

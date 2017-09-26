@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import AssetCard from './AssetCard.jsx';
+import Loading from './Loading.jsx';
 import Printify from '../lib/Printify';
 import directory from '../directory.js';
 import Stellarify from '../lib/Stellarify';
@@ -20,9 +21,7 @@ export default class AssetList extends React.Component {
   render() {
     let d = this.props.d;
     if (!d.ticker.ready) {
-      return <div>
-        Loading
-      </div>
+      return <Loading size="large">Loading Stellar market data...</Loading>
     }
 
     let rows = [];
@@ -32,16 +31,20 @@ export default class AssetList extends React.Component {
       let sdkAsset = new StellarSdk.Asset(asset.code, asset.issuer);
       let priceXLM = asset.price_XLM ? Format.niceRound(asset.price_XLM): '-';
       let priceUSD = asset.price_USD ? '$' + Format.niceRound(asset.price_USD) : '-';
-      // if (asset.id == 'XLM-native') {
-      //   priceXLM =
-      // }
+      if (asset.id == 'XLM-native') {
+        priceXLM = Printify.lightenZeros('1.0000000');
+      }
+      let tradeLink;
+      if (asset.topTradePairSlug) {
+        tradeLink = <a href={'/#exchange/' + asset.topTradePairSlug}>trade</a>
+      }
       let volume24h = asset.volume24h_USD ? '$' + asset.volume24h_USD.toFixed(0) : '$0';
       rows.push(<tr key={'asset-' + asset.id} className="AssetList__asset">
         <td className="AssetList__asset__assetCard"><AssetCard asset={sdkAsset} noLink={true}></AssetCard></td>
         <td className="AssetList__asset__amount">{priceXLM}{Printify.lighten(' XLM')}</td>
         <td className="AssetList__asset__amount">{priceUSD}</td>
         <td className="AssetList__asset__amount">{volume24h}</td>
-        <td className="AssetList__asset__amount">trade</td>
+        <td className="AssetList__asset__amount">{tradeLink}</td>
       </tr>);
       // rows.push(<AssetPair key={index} row={true} baseBuying={market.baseBuying} counterSelling={market.counterSelling}></AssetPair>)
     })
@@ -49,7 +52,7 @@ export default class AssetList extends React.Component {
       <table className="AssetList">
         <thead>
           <tr>
-            <td className="AssetList__head__cell">Asset</td>
+            <td className="AssetList__head__cell AssetList__head__asset">Asset</td>
             <td className="AssetList__head__amount AssetList__head__cell">Price (XLM)</td>
             <td className="AssetList__head__amount AssetList__head__cell">Price (USD)</td>
             <td className="AssetList__head__amount AssetList__head__cell">Volume (24h)</td>
