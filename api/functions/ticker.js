@@ -89,9 +89,19 @@ function phase3(ticker) {
     };
   });
 
-  return Promise.all(_.map(ticker.pairs, pair => {
+  let lumenVolumeXLM = 0;
+  let lumenVolumeUSD = 0;
+
+  return Promise.all(_.map(ticker.pairs, (pair, pairSlug) => {
     let baseBuying     = new StellarSdk.Asset(pair.baseBuying.code, pair.baseBuying.issuer);
     let counterSelling = new StellarSdk.Asset(pair.counterSelling.code, pair.counterSelling.issuer);
+
+    if (baseBuying.isNative()) {
+      asset.topTradePairSlug = pairSlug;
+    } else if (counterSelling.isNative()) {
+      asset.topTradePairSlug = pairSlug;
+    }
+
     return Server.orderbook(baseBuying, counterSelling).call()
       .then((res) => {
         if (res.bids.length === 0 || res.asks.length === 0) {
@@ -137,6 +147,10 @@ function phase3(ticker) {
               asset.volume24h_XLM = pair.volume24h_XLM;
               asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
 
+              lumenVolumeXLM += pair.volume24h_XLM;
+              lumenVolumeUSD += asset.volume24h_USD;
+              asset.topTradePairSlug = pairSlug;
+
               asset.depth10_XLM = niceRound(pair.depth10Amount);
               asset.depth10_USD = niceRound(asset.depth10_XLM*ticker._meta.externalPrices.USD_XLM);
 
@@ -156,6 +170,10 @@ function phase3(ticker) {
               asset.volume24h_XLM = pair.volume24h_XLM;
               asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
 
+              lumenVolumeXLM += pair.volume24h_XLM;
+              lumenVolumeUSD += asset.volume24h_USD;
+              asset.topTradePairSlug = pairSlug;
+
               // TODO: Make this more accurate. This is inaccurate by up to 10% because
               // when I flip it around here, I'm not accounting for the difference
               // in price relative to XLM
@@ -167,7 +185,11 @@ function phase3(ticker) {
             }
           })
       })
-  }));
+  }))
+  .then(() => {
+    ticker.assets[0].volume24h_XLM = niceRound(lumenVolumeXLM);
+    ticker.assets[0].volume24h_USD = niceRound(lumenVolumeUSD);
+  });
 }
 
 function phase4(ticker) {
