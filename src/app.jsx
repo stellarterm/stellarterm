@@ -61,14 +61,19 @@ class TermApp extends React.Component {
     if (url === '') {
       // Home page
       body = <div>
-        <div className="so-back">
-          <h2 className="HomePage__lead">Explore the power of the Stellar distributed exchange</h2>
+        <div className="HomePage__black">
+          <div className="so-back">
+            <div className="HomePage__lead">
+              <h2 className="HomePage__lead__title">Stellar Distributed Exchange</h2>
+              <p>A trading platform that enables trustless trades between any asset on the Stellar network</p>
+            </div>
+          </div>
         </div>
-        <div className="so-back islandBack">
+        <div className="so-back islandBack HomePage__assetList">
           <div className="island">
             <AssetList d={this.props.d} limit={5}></AssetList>
             <div className="HomePage__seeMore">
-              To see more assets on the Stellar network at the <a href="#markets">market list page</a>.
+              View more assets on the <a href="#markets">market list page</a>.
             </div>
           </div>
         </div>
@@ -77,10 +82,10 @@ class TermApp extends React.Component {
             <h3 className="HomePage__sectionTitle">Make trades and send payments</h3>
             <div className="island__sub">
               <div className="island__sub__division HomePage__introImage">
-                <img className="HomePage__screenshot" src={images.order} />
+                <a href="#exchange"><img className="HomePage__screenshot" src={images.order} /></a>
               </div>
               <div className="island__sub__division HomePage__introImage">
-                <img className="HomePage__screenshot" src={images.send} />
+                <a href="#account"><img className="HomePage__screenshot" src={images.send} /></a>
               </div>
             </div>
           </div>
@@ -93,6 +98,7 @@ class TermApp extends React.Component {
               </div>
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
+                  <p>StellarTerm is just a client that can be used to access the Stellar distributed exchange. Neither StellarTerm nor the developers of it are involved with operating the Stellar network.</p>
                   <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm">star the project on GitHub</a>.</p>
                   <p>StellarTerm is developed by <a href="https://iris.li/">Iris Li</a>, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
                   <p>The project is released under the Apache-2.0 license and is released as is without warranty.</p>

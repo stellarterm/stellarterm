@@ -37,7 +37,7 @@ export default class AssetList extends React.Component {
       }
       let tradeLink;
       if (asset.topTradePairSlug) {
-        tradeLink = <a href={'/#exchange/' + asset.topTradePairSlug}>trade</a>
+        tradeLink = <a href={'#exchange/' + asset.topTradePairSlug}>trade</a>
       }
       let volume24h = asset.volume24h_USD ? '$' + asset.volume24h_USD.toFixed(0) : '$0';
       rows.push(<tr key={'asset-' + asset.id} className="AssetList__asset">
