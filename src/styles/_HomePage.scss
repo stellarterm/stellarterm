@@ -1,15 +1,36 @@
 .HomePage__lead {
-  font-size: $s-scale-c;
   margin: 0 auto;
-  width: 560px;
-  text-align: center;
+  width: 740px;
   color: #fff;
-  text-shadow: 0 1px 3px rgba(0,0,0,0.3);
-  padding-top: 90px;
-  padding-bottom: 90px;
+  text-shadow: 0 1px 3px rgba(255,255,255,0.1);
+  padding-top: 160px;
+  padding-bottom: 160px;
+  font-weight: 300;
+}
+.HomePage__lead__title {
+  font-size: $s-scale-c;
+  font-weight: 300;
 }
 .HomePage__buttonContainer {
   text-align: center;
+}
+.HomePage__black {
+  background: #111;
+  padding-bottom: 180px;
+}
+
+.HomePage__assetList {
+  margin-top: -180px;
+}
+.HomePage__seeMore {
+  font-size: $s-scale-6;
+  text-align: center;
+  padding: 12px 18px;
+  color: $s-color-neutral5;
+  border-top: 1px solid $s-color-neutral7;
+}
+.HomePage__seeMore a:hover {
+  color: $s-color-neutral3;
 }
 
 .HomePage__screenshot {

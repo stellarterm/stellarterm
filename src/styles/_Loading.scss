@@ -1,0 +1,17 @@
+.Loading {
+  display: flex;
+  align-items: center;
+  padding: 80px 0;
+}
+.Loading--large {
+  padding: 160px 0;
+}
+.Loading__message {
+  width: 100%;
+  font-size: $s-scale-2;
+  margin-bottom: 0;
+  padding-left: 18px;
+  padding-right: 18px;
+  text-align: center;
+  color: $s-color-neutral6;
+}

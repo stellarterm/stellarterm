@@ -8,6 +8,7 @@ import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import Validate from '../lib/Validate';
 import BigNumber from 'bignumber.js';
+import req from './req.js';
 import directory from '../directory';
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -322,6 +323,7 @@ function Driver(opts) {
     'orderbook',
     'orderbookPricePick',
     'send',
+    'ticker',
   ];
   const trigger = {};
   availableEvents.forEach((eventName) => {
@@ -603,6 +605,23 @@ function Driver(opts) {
   };
 
   this.send.resetAll();
+
+  // TODO: Load the ticker only when needed. For now, the majority of the uses will load the ticker at some point
+  // so it makes sense to load it when the app starts.
+  this.ticker = {
+    ready: false,
+    body: {},
+  };
+
+  req.getJson('https://api.stellarterm.com/v1/ticker.json')
+  .then(tickerData => {
+    this.ticker.ready = true;
+    _.assign(this.ticker, tickerData);
+    trigger.ticker();
+  })
+  .catch(e => {
+    console.error(e);
+  })
 
 
   // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon
