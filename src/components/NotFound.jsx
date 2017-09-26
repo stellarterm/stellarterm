@@ -1,7 +1,7 @@
 const React = window.React = require('react');
 
 export default function NotFound() {
-  return <div className="so-back islandBack">
+  return <div className="so-back islandBack islandBack--t">
     <div className="island">
       <div className="island__header">
         Page not found
