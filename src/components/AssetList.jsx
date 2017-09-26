@@ -26,8 +26,6 @@ export default class AssetList extends React.Component {
 
     let rows = [];
     _.each(d.ticker.assets, (asset, index) => {
-      console.log(asset);
-      console.log(Format)
       let sdkAsset = new StellarSdk.Asset(asset.code, asset.issuer);
       let priceXLM = asset.price_XLM ? Format.niceRound(asset.price_XLM): '-';
       let priceUSD = asset.price_USD ? '$' + Format.niceRound(asset.price_USD) : '-';

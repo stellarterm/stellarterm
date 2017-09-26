@@ -1,7 +1,6 @@
 const _ = require('lodash');
 
 exports.niceRound = function niceRound(input) {
-  console.log(input)
   if (input > 100) {
     return _.round(input, 2);
   }
