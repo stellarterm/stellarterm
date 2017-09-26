@@ -621,6 +621,15 @@ function Driver(opts) {
   })
   .catch(e => {
     console.error(e);
+    req.getJson('https://api.stellarterm.com/v1/ticker.json')
+    .then(tickerData => {
+      this.ticker.ready = true;
+      _.assign(this.ticker, tickerData);
+      trigger.ticker();
+    })
+    .catch(e => {
+      console.error(e);
+    })
   })
 
 
