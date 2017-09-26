@@ -2,6 +2,7 @@ const React = window.React = require('react');
 const ReactDOM = require('react-dom');
 const mountNode = document.getElementById('app');
 import NotFound from './components/NotFound.jsx';
+import AssetList from './components/AssetList.jsx';
 import Markets from './components/Markets.jsx';
 import Session from './components/Session.jsx';
 import Exchange from './components/Exchange.jsx';
@@ -65,20 +66,9 @@ class TermApp extends React.Component {
         </div>
         <div className="so-back islandBack">
           <div className="island">
-            <div className="island__sub">
-              <div className="island__sub__division HomePage__introImage">
-                <a href="#exchange/XLM-native/DEMO-stellarterm.com"><img className="HomePage__screenshot" src={images.charts} /></a>
-              </div>
-              <div className="island__sub__division">
-                <div className="HomePage__sideBlurb">
-                  Explore markets on the Stellar distributed exchange through interactive graphs and user friendly charts.
-                  <br />
-                  <br />
-                  <div className="HomePage__buttonContainer">
-                    <a className="s-button" href="#exchange/XLM-native/CNY-ripplefox.com">View exchange example</a>
-                  </div>
-                </div>
-              </div>
+            <AssetList d={this.props.d} limit={5}></AssetList>
+            <div className="HomePage__seeMore">
+              To see more assets on the Stellar network at the <a href="#markets">market list page</a>.
             </div>
           </div>
         </div>
