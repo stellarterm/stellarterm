@@ -13,12 +13,7 @@ export default function Send(driver) {
   this.step3 = {},
   this.accountId = '';
 
-
-
-
-  // The reason these are public is so that it is easier to debug
-
-  let init = () => {
+  const init = () => {
     this.state = 'setup'; // 'setup' | 'pending' | 'error' | 'success'
     this.memoRequired = false;
     this.memoType = 'none'; // 'none' | 'MEMO_ID' |'MEMO_TEXT' | 'MEMO_HASH' | 'MEMO_RETURN'
@@ -29,7 +24,7 @@ export default function Send(driver) {
 
 
   // Step state is initialized by the reset functions
-  let resetStep1 = () => {
+  const resetStep1 = () => {
     this.accountId = ''; // After step 1, this will be valid
     this.address = ''; // After step 1, this may or may not be filled in
     this.step1 = {
@@ -37,7 +32,7 @@ export default function Send(driver) {
     }
   };
 
-  let resetStep2 = () => {
+  const resetStep2 = () => {
     this.availableAssets = {};
     this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = new StellarSdk.Asset.native();
     this.step2 = {
@@ -45,13 +40,13 @@ export default function Send(driver) {
     };
   };
 
-  let resetStep3 = () => {
+  const resetStep3 = () => {
     this.step3 = {
       amount: '',
     };
   };
 
-  let resetAll = () => {
+  const resetAll = () => {
     init();
     resetStep1();
     resetStep2();
@@ -60,7 +55,7 @@ export default function Send(driver) {
 
   resetAll();
 
-  let loadTargetAccountDetails = () => {
+  const loadTargetAccountDetails = () => {
     if (Validate.publicKey(this.accountId).ready) {
       driver.Server.loadAccount(this.accountId)
       .then((account) => {
@@ -75,7 +70,7 @@ export default function Send(driver) {
     }
   };
 
-  let calculateAvailableAssets = () => {
+  const calculateAvailableAssets = () => {
     // Calculate the assets that you can send to the destination
     this.availableAssets = {};
     this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = new StellarSdk.Asset.native();
@@ -108,7 +103,6 @@ export default function Send(driver) {
     })
   };
 
-
   this.handlers = {
     updateDestination: (e) => {
       this.step1.destInput = e.target.value;
@@ -120,20 +114,24 @@ export default function Send(driver) {
       this.memoContentLocked = false;
       this.addressNotFound = false;
 
-      // Check for memo requirements in the destination
-      if (directory.destinations.hasOwnProperty(this.accountId)) {
-        let destination = directory.destinations[this.accountId];
-        if (destination.requiredMemoType) {
-          console.log(yup);
-          this.memoRequired = true;
-          this.memoType = destination.requiredMemoType;
+      if (Validate.publicKey(this.step1.destInput).ready) {
+        this.accountId = this.step1.destInput;
+
+        // Check for memo requirements in the destination
+        if (directory.destinations.hasOwnProperty(this.accountId)) {
+          let destination = directory.destinations[this.accountId];
+          if (destination.requiredMemoType) {
+            this.memoRequired = true;
+            this.memoType = destination.requiredMemoType;
+          }
         }
-      }
 
-      // Prevent race race conditions
-      let destInput = this.step1.destInput;
+        // Async loading of target account
+        loadTargetAccountDetails();
+      } else if (Validate.address(this.step1.destInput).ready) {
+        // Prevent race race conditions
+        let destInput = this.step1.destInput;
 
-      if (Validate.address(this.step1.destInput).ready) {
         StellarSdk.FederationServer.resolve(this.step1.destInput)
         .then((federationRecord) => {
           if (destInput !== this.step1.destInput) {
@@ -183,10 +181,6 @@ export default function Send(driver) {
           this.addressNotFound = true;
           this.event.trigger();
         })
-      } else if (Validate.publicKey(this.step1.destInput).ready) {
-        this.accountId = this.step1.destInput;
-        // Async loading of target account
-        loadTargetAccountDetails();
       }
 
       this.event.trigger();
