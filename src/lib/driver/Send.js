@@ -1,16 +1,17 @@
+import _ from 'lodash';
+
 import MagicSpoon from '../MagicSpoon';
 import Stellarify from '../Stellarify';
 import directory from '../../directory';
 import Validate from '../Validate';
-import _ from 'lodash';
 import Event from '../Event';
 
 export default function Send(driver) {
   this.event = new Event();
 
   // Constraint: Each step is allowed to safely assume that the previous steps are finished
-  this.step2 = {},
-  this.step3 = {},
+  this.step2 = {};
+  this.step3 = {};
   this.accountId = '';
 
   const init = () => {
@@ -29,7 +30,7 @@ export default function Send(driver) {
     this.address = ''; // After step 1, this may or may not be filled in
     this.step1 = {
       destInput: '', // For storing the raw input field
-    }
+    };
   };
 
   const resetStep2 = () => {
@@ -66,7 +67,7 @@ export default function Send(driver) {
           this.event.trigger();
         }
       })
-      .catch(() => {})
+      .catch(() => {});
     }
   };
 
@@ -74,11 +75,11 @@ export default function Send(driver) {
     // Calculate the assets that you can send to the destination
     this.availableAssets = {};
     this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = new StellarSdk.Asset.native();
-    let senderTrusts = {};
+    const senderTrusts = {};
 
-    _.each(driver.session.account.balances, balance => {
-      let asset = Stellarify.asset(balance);
-      let slug = Stellarify.assetToSlug(asset);
+    _.each(driver.session.account.balances, (balance) => {
+      const asset = Stellarify.asset(balance);
+      const slug = Stellarify.assetToSlug(asset);
       if (asset.isNative()) {
         return;
       }
@@ -89,18 +90,18 @@ export default function Send(driver) {
       } else {
         senderTrusts[slug] = true;
       }
-    })
+    });
 
-    _.each(this.targetAccount.balances, balance => {
-      let asset = Stellarify.asset(balance);
-      let slug = Stellarify.assetToSlug(asset);
+    _.each(this.targetAccount.balances, (balance) => {
+      const asset = Stellarify.asset(balance);
+      const slug = Stellarify.assetToSlug(asset);
       if (senderTrusts.hasOwnProperty(slug)) {
         this.availableAssets[slug] = asset;
       } else if (asset.getIssuer() === driver.session.account.accountId()) {
         // Edgecase: Sender is the issuer of the asset
         this.availableAssets[slug] = asset;
       }
-    })
+    });
   };
 
   this.handlers = {
@@ -119,7 +120,7 @@ export default function Send(driver) {
 
         // Check for memo requirements in the destination
         if (directory.destinations.hasOwnProperty(this.accountId)) {
-          let destination = directory.destinations[this.accountId];
+          const destination = directory.destinations[this.accountId];
           if (destination.requiredMemoType) {
             this.memoRequired = true;
             this.memoType = destination.requiredMemoType;
@@ -130,7 +131,7 @@ export default function Send(driver) {
         loadTargetAccountDetails();
       } else if (Validate.address(this.step1.destInput).ready) {
         // Prevent race race conditions
-        let destInput = this.step1.destInput;
+        const destInput = this.step1.destInput;
 
         StellarSdk.FederationServer.resolve(this.step1.destInput)
         .then((federationRecord) => {
@@ -138,13 +139,13 @@ export default function Send(driver) {
             return;
           }
           this.address = this.step1.destInput;
-          if (!Validate.publicKey(federationRecord['account_id']).ready) {
+          if (!Validate.publicKey(federationRecord.account_id).ready) {
             throw new Error('Invalid account_id from federation response');
           }
-          this.accountId = federationRecord['account_id'];
+          this.accountId = federationRecord.account_id;
 
-          if (federationRecord['memo_type']) {
-            switch (federationRecord['memo_type']) {
+          if (federationRecord.memo_type) {
+            switch (federationRecord.memo_type) {
               case 'id':
                 this.memoType = 'MEMO_ID';
                 break;
@@ -164,23 +165,23 @@ export default function Send(driver) {
             this.memoRequired = true;
           }
 
-          if (federationRecord['memo']) {
-            this.memoContent = federationRecord['memo'];
+          if (federationRecord.memo) {
+            this.memoContent = federationRecord.memo;
             this.memoContentLocked = true;
           }
 
           this.event.trigger();
           loadTargetAccountDetails();
         })
-        .catch(e => {
+        .catch(err => {
           if (destInput !== this.step1.destInput) {
             return;
           }
 
-          console.error(e);
+          console.error(err);
           this.addressNotFound = true;
           this.event.trigger();
-        })
+        });
       }
 
       this.event.trigger();
@@ -233,7 +234,7 @@ export default function Send(driver) {
       this.event.trigger();
       let result;
       try {
-        let sendMemo = (this.memoType === 'none') ? undefined : {
+        const sendMemo = (this.memoType === 'none') ? undefined : {
           type: this.memoType,
           content: this.memoContent,
         };
@@ -245,7 +246,7 @@ export default function Send(driver) {
         });
         this.txId = result.hash;
         this.state = 'success';
-      } catch(err) {
+      } catch (err) {
         this.state = 'error';
         if (err instanceof Error) {
           this.errorDetails = err.message;
@@ -258,7 +259,7 @@ export default function Send(driver) {
     reset: () => {
       resetAll();
       this.event.trigger();
-    }
+    },
   };
 }
 
