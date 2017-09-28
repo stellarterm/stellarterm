@@ -1,30 +1,28 @@
 import req from '../req.js';
-import _ from 'lodash';
+import Event from '../Event';
 
-export default function Ticker(trigger) {
-  let state = {
-    ready: false,
-    body: {},
-  };
+const RETRY_INTERVAL = 1000; // ms
 
+export default function Ticker() {
+  this.event = new Event();
+
+  this.ready = false;
+  this.data = {};
+
+  this.load();
+}
+
+Ticker.prototype.load = function() {
   req.getJson('https://api.stellarterm.com/v1/ticker.json')
   .then(tickerData => {
-    state.ready = true;
-    _.assign(state, tickerData);
-    trigger();
+    this.ready = true;
+    this.data = tickerData;
+    this.event.trigger();
   })
   .catch(e => {
-    console.error(e);
-    req.getJson('https://api.stellarterm.com/v1/ticker.json')
-    .then(tickerData => {
-      state.ready = true;
-      _.assign(state, tickerData);
-      trigger();
-    })
-    .catch(e => {
-      console.error(e);
-    })
+    console.log('Unable to load ticker');
+    setTimeout(() => {
+      this.load();
+    }, RETRY_INTERVAL)
   })
-
-  return state;
 }

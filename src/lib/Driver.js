@@ -314,8 +314,7 @@ function Driver(opts) {
 
   this.send.resetAll();
 
-  console.log(trigger)
-  this.ticker = new Ticker(trigger.ticker);
+  this.ticker = new Ticker();
 
   // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon
   this.orderbook = {

@@ -11,21 +11,19 @@ import _ from 'lodash';
 export default class AssetList extends React.Component {
   constructor(props) {
     super(props);
-    this.listenId = this.props.d.listenTicker(() => {
-      this.forceUpdate();
-    });
+    this.dTicker = props.d.ticker;
+    this.listenId = this.dTicker.event.listen(() => {this.forceUpdate()});
   }
   componentWillUnmount() {
-    this.props.d.unlistenTicker(this.listenId);
+    this.dTicker.event.unlisten(this.listenId);
   }
   render() {
-    let d = this.props.d;
-    if (!d.ticker.ready) {
+    if (!this.dTicker.ready) {
       return <Loading size="large">Loading Stellar market data...</Loading>
     }
 
     let rows = [];
-    _.each(d.ticker.assets, (asset, index) => {
+    _.each(this.dTicker.data.assets, (asset, index) => {
       if (this.props.limit && index >= this.props.limit) {
         return;
       }

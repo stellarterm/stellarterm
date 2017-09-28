@@ -1,3 +1,6 @@
+// DEPRECATED: Use Event instead
+// Byol supports multiple events where as Event only supports one event per object
+
 export default function Byol() {
   const events = {}; // Build your own listener
   // returns a event id reference that can be used to unlisten
