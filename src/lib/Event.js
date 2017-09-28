@@ -15,7 +15,7 @@ export default function Event() {
   };
 
   this.unlisten = listenerId => {
-    if (!isFinite(id)) {
+    if (!isFinite(listenerId)) {
       throw new Error('Listener ID must be a number');
     }
     if (listenerId > nextIndex) {
