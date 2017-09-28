@@ -6,6 +6,7 @@ const isValidSecretKey = input => {
     StellarSdk.Keypair.fromSecret(input);
     return true;
   } catch (e) {
+    console.error(e);
     return false;
   }
 }
@@ -24,10 +25,11 @@ export default class LoginForm extends React.Component {
     }
     this.handleSubmit = (event) => {
       event.preventDefault();
-      isValidSecretKey(this.state.secretInput);
-      this.setState({
-        invalidKey: true,
-      })
+      if (!isValidSecretKey(this.state.secretInput)) {
+        return this.setState({
+          invalidKey: true,
+        })
+      }
       this.props.handler(this.state.secretInput);
     }
     this.handleGenerate = event => {
