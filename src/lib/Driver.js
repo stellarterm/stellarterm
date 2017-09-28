@@ -9,9 +9,11 @@ import Stellarify from '../lib/Stellarify';
 import MagicSpoon from '../lib/MagicSpoon';
 import Validate from '../lib/Validate';
 import BigNumber from 'bignumber.js';
+BigNumber.config({ EXPONENTIAL_AT: 100 });
 import req from './req.js';
 import directory from '../directory';
-BigNumber.config({ EXPONENTIAL_AT: 100 });
+
+import Ticker from './driver/Ticker.js';
 
 
 
@@ -23,6 +25,7 @@ function Driver(opts) {
 
   const byol = new Byol();
 
+  // TODO: Make this whole thing better
   const availableEvents = [
     'session',
     'orderbook',
@@ -311,32 +314,8 @@ function Driver(opts) {
 
   this.send.resetAll();
 
-  // TODO: Load the ticker only when needed. For now, the majority of the uses will load the ticker at some point
-  // so it makes sense to load it when the app starts.
-  this.ticker = {
-    ready: false,
-    body: {},
-  };
-
-  req.getJson('https://api.stellarterm.com/v1/ticker.json')
-  .then(tickerData => {
-    this.ticker.ready = true;
-    _.assign(this.ticker, tickerData);
-    trigger.ticker();
-  })
-  .catch(e => {
-    console.error(e);
-    req.getJson('https://api.stellarterm.com/v1/ticker.json')
-    .then(tickerData => {
-      this.ticker.ready = true;
-      _.assign(this.ticker, tickerData);
-      trigger.ticker();
-    })
-    .catch(e => {
-      console.error(e);
-    })
-  })
-
+  console.log(trigger)
+  this.ticker = new Ticker(trigger.ticker);
 
   // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon
   this.orderbook = {
