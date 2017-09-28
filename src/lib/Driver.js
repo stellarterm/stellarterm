@@ -26,12 +26,11 @@ function Driver(opts) {
 
   const byol = new Byol();
 
-  // TODO: Make this whole thing better
+  // DEPRECATED: Follow the examples in the driver folder for future features
   const availableEvents = [
     'session',
     'orderbook',
     'orderbookPricePick',
-    'send',
   ];
   const trigger = {};
   availableEvents.forEach((eventName) => {
@@ -47,12 +46,6 @@ function Driver(opts) {
     setupError: false, // Couldn't find account
     account: null, // MagicSpoon.Account instance
   };
-  // this.session = {
-  //   state: 'in',
-  //   setupError: false, // Couldn't find account
-  //   account: {
-  //   }, // MagicSpoon.Account instance
-  // };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
   let forceUpdateAccountOffers = () => {
@@ -138,6 +131,5 @@ function Driver(opts) {
     }
   };
 }
-
 
 export default Driver;
