@@ -25,7 +25,6 @@ export default function Event() {
   };
 
   this.trigger = opts => {
-    console.log('hello')
     listeners.forEach(cb => {
       if (cb) {
         cb();

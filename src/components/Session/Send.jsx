@@ -7,12 +7,10 @@ import _ from 'lodash';
 export default class Send extends React.Component {
   constructor(props) {
     super(props);
-    this.listenId = this.props.d.listenSend(() => {
-      this.forceUpdate();
-    });
+    this.listenId = this.props.d.send.event.listen(() => {this.forceUpdate()});
   }
   componentWillUnmount() {
-    this.props.d.unlistenSend(this.listenId);
+    this.props.d.send.event.unlisten(this.listenId);
   }
   render() {
     let d = this.props.d;
