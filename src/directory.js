@@ -13,7 +13,10 @@ directory.addAsset('naobtc.com', {
   code: 'BTC',
   issuer: 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH',
 });
-
+directory.addAsset('naobtc.com', {
+  code: 'XEL',
+  issuer: 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH',
+});
 directory.addAnchor({
   domain: 'vcbear.net',
   website: 'https://vcbear.net/',
@@ -85,12 +88,32 @@ directory.addAsset('ltc.papayame.com', {
 });
 
 directory.addAnchor({
-  domain: 'erc20.papayame.com',
-  website: 'https://erc20.papayame.com/',
+  domain: 'apay.io',
+  website: 'https://apay.io',
   logo: 'papayame.com',
 });
-directory.addAsset('erc20.papayame.com', {
+directory.addAsset('apay.io', {
   code: 'ICN',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+});
+directory.addAsset('apay.io', {
+  code: 'ETH',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+});
+directory.addAsset('apay.io', {
+  code: 'BAT',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+});
+directory.addAsset('apay.io', {
+  code: 'OMG',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+});
+directory.addAsset('apay.io', {
+  code: 'REP',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+});
+directory.addAsset('apay.io', {
+  code: 'ZRX',
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
 });
 
@@ -203,29 +226,6 @@ directory.addAsset('cryptomover.com', {
   code: 'HKDC',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
 });
-
-directory.addAnchor({
-  domain: 'readycash.com.ng',
-  website: 'https://readycash.com.ng/',
-  logo: 'readycash.com.ng',
-});
-directory.addAsset('readycash.com.ng', {
-  code: 'NGN',
-  issuer: 'GA3TKVAAVRPSOO7YAKCTFA2Z22PJMFT2YWNJLNMTIVLVLEPLE2SZIRXU',
-});
-
-
-directory.addAnchor({
-  domain: 'stellarterm.com',
-  website: 'https://stellarterm.com/',
-  logo: 'stellarterm.com',
-});
-directory.addAsset('stellarterm.com', {
-  code: 'DEMO',
-  issuer: 'GBAMBOOZDWZPVV52RCLJQYMQNXOBLOXWNQAY2IF2FREV2WL46DBCH3BE',
-});
-
-
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['CNY', 'ripplefox.com'],
@@ -241,6 +241,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'naobtc.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['XEL', 'naobtc.com'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
@@ -268,7 +272,27 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
-  counterSelling: ['ICN', 'erc20.papayame.com'],
+  counterSelling: ['ETH', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BAT', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['ICN', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['OMG', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['REP', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['ZRX', 'apay.io'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
@@ -322,8 +346,6 @@ directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['XLQ', 'liquido.i-server.org'],
 });
-
-
 directory.addDestination('GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM', {
   name: 'Kraken',
   requiredMemoType: 'MEMO_ID',
