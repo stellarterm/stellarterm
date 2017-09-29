@@ -65,7 +65,7 @@ class TermApp extends React.Component {
           <div className="so-back">
             <div className="HomePage__lead">
               <h2 className="HomePage__lead__title">Stellar Distributed Exchange</h2>
-              <p>A trading platform that enables trustless trades between any asset on the Stellar network</p>
+              <p>A trading platform that enables near-instant trades between any asset on the Stellar network</p>
             </div>
           </div>
         </div>
