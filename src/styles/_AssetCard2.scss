@@ -1,26 +1,29 @@
+.AssetCard2 {
+  border: 1px solid $s-color-neutral7;
+  border-radius: $s-var-radius;
+  overflow:hidden;
+  width: 100%;
+}
+.AssetCard2--boxy {
+  border-radius: 0;
+}
+
+.AssetCard2__addon {
+  border-top: 1px solid $s-color-neutral7;
+}
 .AssetCard2__main {
   background: $s-color-neutral8;
-  border-radius: $s-var-radius;
   display: flex;
   align-items: center;
-  border: 1px solid $s-color-neutral7;
-  overflow:hidden;
-  width: 330px;
   position: relative;
   color: #000; // #000 which will then have opacity applied
 }
   .AssetCard2__logo {
     width: 50px;
     height: 50px;
-    flex: 0 0 auto;
     margin-right: 8px;
   }
-  .AssetCard2__logo__image {
-    width: 50px;
-    height: 50px;
-    margin: 0;
-    display: block;
-  }
+
   .AssetCard2__content {
     display: flex;
     flex-direction: column;

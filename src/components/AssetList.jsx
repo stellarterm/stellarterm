@@ -38,7 +38,7 @@ export default class AssetList extends React.Component {
       }
       let volume24h = asset.volume24h_USD ? '$' + asset.volume24h_USD.toFixed(0) : '$0';
       rows.push(<tr key={'asset-' + asset.id} className="AssetList__asset">
-        <td className="AssetList__asset__assetCard"><AssetCard2 code={asset.code} issuer={asset.issuer} noLink={true}></AssetCard2></td>
+        <td className="AssetList__asset__assetCard"><AssetCard2 code={asset.code} issuer={asset.issuer} boxy={false}></AssetCard2></td>
         <td className="AssetList__asset__amount">{priceXLM}{Printify.lighten(' XLM')}</td>
         <td className="AssetList__asset__amount">{priceUSD}</td>
         <td className="AssetList__asset__amount">{volume24h}</td>

@@ -9,9 +9,6 @@ export default class AssetCard2 extends React.Component {
     super(props);
   }
   render() {
-    let containerClassName = 'AssetCard2';
-
-    let assetCardMain;
     let asset;
     if (this.props.domain !== undefined) {
       asset = directory.getAsset(this.props.code, this.props.domain)
@@ -22,29 +19,28 @@ export default class AssetCard2 extends React.Component {
     }
 
     let anchor = directory.getAnchor(asset.domain);
+    let issuerAccountId = (asset.issuer === null) ? 'native lumens' : asset.issuer;
 
-    console.log(asset)
-    let issuerAccountId;
-    if (asset.issuer === null) {
-      issuerAccountId = <p className="AssetCard2__issuerAccountId">native lumens</p>
-    } else {
-      issuerAccountId = <p className="AssetCard2__issuerAccountId">{asset.issuer}</p>
-    }
-    assetCardMain = <div className="AssetCard2__main">
-      <div className="AssetCard2__logo">
-        <img className="AssetCard2__logo__image" src={anchor.logo}></img>
-      </div>
+    let assetCardMain = <div className="AssetCard2__main">
+      <img className="AssetCard2__logo" src={anchor.logo}></img>
       <div className="AssetCard2__content">
         <div className="AssetCard2__header">
           <span className="AssetCard2__header__code">{asset.code}</span>
           <span className="AssetCard2__header__domain">{anchor.name}</span>
         </div>
-        {issuerAccountId}
+        <p className="AssetCard2__issuerAccountId">{issuerAccountId}</p>
       </div>
     </div>
 
+    let containerClassName = 'AssetCard2';
+
+
+    if (this.props.boxy) {
+      containerClassName += ' AssetCard2--boxy';
+    }
+
     if (this.props.children) {
-      containerClassName += ' AssetCard--container';
+      containerClassName += ' AssetCard2--container';
       return <div className={containerClassName}>
         {assetCardMain}
         <div className="AssetCard2__addon">
@@ -52,6 +48,7 @@ export default class AssetCard2 extends React.Component {
         </div>
       </div>
     }
+
     return <div className={containerClassName}>
       {assetCardMain}
     </div>
