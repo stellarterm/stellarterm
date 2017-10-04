@@ -1,7 +1,6 @@
 import req from '../req.js';
 import Event from '../Event';
 
-const RETRY_INTERVAL = 1000; // ms
 
 export default function Ticker() {
   this.event = new Event();
@@ -12,7 +11,12 @@ export default function Ticker() {
   this.load();
 }
 
-Ticker.prototype.load = function() {
+const MAX_ATTEMPTS = 5;
+
+Ticker.prototype.load = function(attempt) {
+  if (attempt >= MAX_ATTEMPTS) {
+    return;
+  }
   req.getJson('https://api.stellarterm.com/v1/ticker.json')
   .then(tickerData => {
     this.ready = true;
@@ -21,8 +25,11 @@ Ticker.prototype.load = function() {
   })
   .catch(e => {
     console.log('Unable to load ticker');
+    if (!attempt) {
+      attempt = 0;
+    }
     setTimeout(() => {
-      this.load();
-    }, RETRY_INTERVAL)
+      this.load(attempt + 1);
+    }, 100)
   })
 }
