@@ -2,8 +2,15 @@ const React = window.React = require('react');
 import Printify from '../lib/Printify';
 import directory from '../directory';
 
+// This is AssetCard2, the preferred way of displaying an asset in stellarterm.
+// The parent container should be 340px or wider
 
-// Unlike AssetCard (original), this one does not link to the domain. Users can simply type it in the address bar
+// Options
+//  - boxy: removes the rounded borders
+
+// You may also pass in children elements to sit nicely with the AssetCard2.
+// The children elements are responsible for padding within the AssetCard
+
 export default class AssetCard2 extends React.Component {
   constructor(props) {
     super(props);
@@ -20,6 +27,7 @@ export default class AssetCard2 extends React.Component {
 
     let anchor = directory.getAnchor(asset.domain);
     let issuerAccountId = (asset.issuer === null) ? 'native lumens' : asset.issuer;
+    // Unlike AssetCard (original), this one does not link to the domain. Users can simply type it in the address bar
 
     let assetCardMain = <div className="AssetCard2__main">
       <img className="AssetCard2__logo" src={anchor.logo}></img>
