@@ -1,0 +1,70 @@
+.AssetCard2__main {
+  background: $s-color-neutral8;
+  border-radius: $s-var-radius;
+  display: flex;
+  align-items: center;
+  border: 1px solid $s-color-neutral7;
+  overflow:hidden;
+  width: 330px;
+  position: relative;
+  color: #000; // #000 which will then have opacity applied
+}
+  .AssetCard2__logo {
+    width: 50px;
+    height: 50px;
+    flex: 0 0 auto;
+    margin-right: 8px;
+  }
+  .AssetCard2__logo__image {
+    width: 50px;
+    height: 50px;
+    margin: 0;
+    display: block;
+  }
+  .AssetCard2__content {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+    height: 40px;
+    padding-bottom: 2px;
+  }
+  .AssetCard2__header {
+    display: flex;
+    align-items: baseline;
+  }
+  .AssetCard2__header {
+     color: #000;
+     opacity: 0.8;
+     height: 21px;
+     margin-bottom: 4px;
+  }
+  .AssetCard2__spacer {
+    width: 100px;
+  }
+  .AssetCard2__header__code {
+    font-weight: 400;
+    font-size: $s-scale-1;
+    line-height: 20px;
+    margin-right: 4px;
+  }
+  .AssetCard2__header__domain {
+    text-decoration: none;
+    font-size: $s-scale-4;
+    line-height: 20px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .AssetCard2__issuerAccountId {
+    margin: 0;
+    font-size: 8px;
+    font-weight: 400;
+    padding-left: 1px; // Fine tuning for alignment due to keming stuff
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.3;
+    height: 8px;
+    line-height: 1;
+  }

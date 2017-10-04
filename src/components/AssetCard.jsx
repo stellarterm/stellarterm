@@ -2,6 +2,7 @@ const React = window.React = require('react');
 import Printify from '../lib/Printify';
 import directory from '../directory';
 
+// New code should use AssetCard2 instead of this AssetCard
 export default class AssetCard extends React.Component {
   constructor(props) {
     super(props);
