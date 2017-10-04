@@ -1,0 +1,13 @@
+// This file sets the defaults of elements according to how we want
+
+
+body {
+  color: $s-color-neutral1;
+}
+
+* {
+  // border size utilities style a borders' width and style, but leave colors to
+  // the default. The default css border is #000 which is not something we ever
+  // want. Instead, we set the default to the darkest neutral color.
+  border-color: $s-color-neutral1;
+}

@@ -1,0 +1,105 @@
+// Modifier classes are supposed to use -- and not __
+// The __ is just here to support code that used the wrong separator
+
+.s-button {
+  z-index: 1;
+
+  padding: $so-inputPadding;
+  border: 1px solid $s-color-primary3;
+
+  box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  background: $s-color-primary4;
+  color: $s-color-neutral9;
+  text-decoration: none;
+}
+
+.s-button:hover {
+  z-index: 2;
+  border: 1px solid $s-color-primary2;
+  background: $s-color-primary3;
+  color: $s-color-neutral9;
+}
+.s-button:active,
+.s-button.is-active,
+:checked + .s-button {
+  z-index: 3;
+  border: 1px solid $s-color-primary1;
+  background: $s-color-primary2;
+  box-shadow: none;
+  color: $s-color-neutral9;
+}
+
+:checked:focus + .s-button {
+  // TODO: figure out focus outline
+  outline: auto 5px -webkit-focus-ring-color;
+}
+
+.s-button.is-disabled,
+.s-button:disabled {
+  border: 1px solid $s-color-neutral4;
+  background: $s-color-neutral8;
+  color: $s-color-neutral5;
+  box-shadow: none;
+}
+.s-button.is-disabled:hover,
+.s-button:disabled:hover {
+  z-index: 1; // reset z-index so that it doesn't show above hover
+}
+
+.s-button__min, .s-button--min {
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+  box-shadow: none;
+}
+.s-button__min:active, .s-button--min:active,
+.s-button__min.is-active, .s-button--min.is-active,
+:checked + .s-button__min, :checked + .s-button--min,
+.s-button.s-button__min:hover, .s-button.s-button--min:hover // extra .s-button for specificity since :checked + has high specificity
+{
+  border: 1px solid currentColor;
+  background: transparent;
+  color: inherit;
+}
+
+.s-button__light, .s-button--light {
+  border: 1px solid $s-color-neutral6;
+  background: $s-color-neutral9;
+  color: $s-color-neutral2;
+  box-shadow: none;
+}
+.s-button__light.is-active, .s-button--light.is-active,
+:checked + .s-button__light, :checked + .s-button--light {
+  border: 1px solid $s-color-primary3;
+  background: $s-color-primary4;
+  color: $s-color-neutral9;
+}
+.s-button__light:hover, .s-button--light:hover {
+  border: 1px solid $s-color-neutral6;
+  background: $s-color-neutral8;
+  color: $s-color-neutral2;
+  // box-shadow: inset 0 -1px 0 $s-color-neutral6;
+}
+.s-button__light:active, .s-button--light:active {
+  border: 1px solid $s-color-primary2;
+  background: $s-color-primary2;
+  color: $s-color-neutral9;
+}
+.s-button__light:active:hover, .s-button--light:active:hover,
+.s-button__light.is-active:hover, .s-button--light.is-active:hover,
+:checked + .s-button__light:hover, :checked + .s-button--light:hover {
+  border: 1px solid $s-color-primary2;
+  background: $s-color-primary3;
+  color: $s-color-neutral9;
+  // box-shadow: inset 0 -1px 0 $s-color-primary2;
+}
+.s-button__light.is-disabled, .s-button__light.is-disabled,
+.s-button__light:disabled, .s-button__light:disabled,
+.s-button__light.is-disabled:hover, .s-button__light.is-disabled:hover,
+.s-button__light:disabled:hover, .s-button__light:disabled:hover {
+  border: 1px solid $s-color-neutral6;
+  background: $s-color-neutral8;
+  color: $s-color-neutral6;
+}
+.s-button.is-disabled { // yet to be implemented because use case not encountered yet
+}

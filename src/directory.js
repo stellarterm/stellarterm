@@ -8,6 +8,7 @@ directory.addAnchor({
   domain: 'naobtc.com',
   website: 'https://naobtc.com/',
   logo: 'naobtc.com',
+  color: '#08b5e5',
 });
 directory.addAsset('naobtc.com', {
   code: 'BTC',
@@ -21,6 +22,7 @@ directory.addAnchor({
   domain: 'vcbear.net',
   website: 'https://vcbear.net/',
   logo: 'vcbear.net',
+  color: '#0c88b6',
 });
 directory.addAsset('vcbear.net', {
   code: 'JPY',
@@ -39,6 +41,7 @@ directory.addAnchor({
   domain: 'coins.asia',
   website: 'https://coins.asia/',
   logo: 'coins.asia',
+  color: '#04bcfc',
 });
 directory.addAsset('coins.asia', {
   code: 'PHP',
@@ -50,6 +53,7 @@ directory.addAnchor({
   domain: 'tempo.eu.com',
   website: 'https://tempo.eu.com/',
   logo: 'tempo.eu.com',
+  color: '#1b92de',
 });
 directory.addAsset('tempo.eu.com', {
   code: 'EURT',
@@ -61,6 +65,7 @@ directory.addAnchor({
   domain: 'ripplefox.com',
   website: 'https://ripplefox.com/anchor/',
   logo: 'ripplefox.com',
+  color: '#fc682a',
 });
 directory.addAsset('ripplefox.com', {
   code: 'CNY',
@@ -71,6 +76,7 @@ directory.addAnchor({
   domain: 'btc.papayame.com',
   website: 'https://btc.papayame.com/',
   logo: 'papayame.com',
+  color: '#efa443',
 });
 directory.addAsset('btc.papayame.com', {
   code: 'BTC',
@@ -81,6 +87,7 @@ directory.addAnchor({
   domain: 'ltc.papayame.com',
   website: 'https://ltc.papayame.com/',
   logo: 'papayame.com',
+  color: '#efa443',
 });
 directory.addAsset('ltc.papayame.com', {
   code: 'LTC',
@@ -91,6 +98,7 @@ directory.addAnchor({
   domain: 'apay.io',
   website: 'https://apay.io',
   logo: 'papayame.com',
+  color: '#efa443',
 });
 directory.addAsset('apay.io', {
   code: 'ICN',
@@ -121,6 +129,7 @@ directory.addAnchor({
   domain: 'mobius.network',
   website: 'https://mobius.network/',
   logo: 'mobius.network',
+  color: '#6f39fc',
 });
 directory.addAsset('mobius.network', {
   code: 'MOBI',
@@ -131,6 +140,7 @@ directory.addAnchor({
   domain: 'gft.network',
   website: 'https://gft.network/',
   logo: 'gft.network',
+  color: '#ddaa7b',
 });
 directory.addAsset('gft.network', {
   code: 'GFT',
@@ -141,6 +151,7 @@ directory.addAnchor({
   domain: 'collective21.org',
   website: 'https://collective21.org/',
   logo: 'collective21.org',
+  color: '#3abfce',
 });
 directory.addAsset('collective21.org', {
   code: 'SEED',
@@ -171,6 +182,7 @@ directory.addAnchor({
   domain: 'tonaira.com',
   website: 'https://tonaira.com/',
   logo: 'tonaira.com',
+  color: '#82be37',
 });
 directory.addAsset('tonaira.com', {
   code: 'NGN',
@@ -205,6 +217,7 @@ directory.addAnchor({
   domain: 'cryptomover.com',
   website: 'https://cryptomover.com/',
   logo: 'cryptomover.com',
+  color: '#fbd364',
 });
 directory.addAsset('cryptomover.com', {
   code: 'CM3',

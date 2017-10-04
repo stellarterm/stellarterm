@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-import AssetCard from './AssetCard.jsx';
+import AssetCard2 from './AssetCard2.jsx';
 import Loading from './Loading.jsx';
 import Printify from '../lib/Printify';
 import directory from '../directory.js';
@@ -27,7 +27,6 @@ export default class AssetList extends React.Component {
       if (this.props.limit && index >= this.props.limit) {
         return;
       }
-      let sdkAsset = new StellarSdk.Asset(asset.code, asset.issuer);
       let priceXLM = asset.price_XLM ? Format.niceRound(asset.price_XLM): '-';
       let priceUSD = asset.price_USD ? '$' + Format.niceRound(asset.price_USD) : '-';
       if (asset.id == 'XLM-native') {
@@ -39,7 +38,7 @@ export default class AssetList extends React.Component {
       }
       let volume24h = asset.volume24h_USD ? '$' + asset.volume24h_USD.toFixed(0) : '$0';
       rows.push(<tr key={'asset-' + asset.id} className="AssetList__asset">
-        <td className="AssetList__asset__assetCard"><AssetCard asset={sdkAsset} noLink={true}></AssetCard></td>
+        <td className="AssetList__asset__assetCard"><AssetCard2 code={asset.code} issuer={asset.issuer} boxy={false}></AssetCard2></td>
         <td className="AssetList__asset__amount">{priceXLM}{Printify.lighten(' XLM')}</td>
         <td className="AssetList__asset__amount">{priceUSD}</td>
         <td className="AssetList__asset__amount">{volume24h}</td>

@@ -98,7 +98,7 @@ export default class PriceChart extends React.Component {
       colors: ['#9291e0'], // Purple from background gradient
       chart: {
         style: {
-          fontFamily: 'Clear Sans',
+          fontFamily: 'Source Sans Pro',
         },
         spacingBottom: 18,
         spacingTop: 18,
