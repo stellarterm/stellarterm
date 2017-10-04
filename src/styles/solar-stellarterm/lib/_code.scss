@@ -1,0 +1,11 @@
+@mixin so-code {
+  padding: 1em;
+  margin: 0;
+  border-radius: 2px;
+  background: $s-color-neutral8;
+}
+
+@mixin so-code__wrap {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}

@@ -1,0 +1,17 @@
+
+.s-inputGroup__item--tag,
+.s-inputGroup__item--tagFlat,
+.s-inputGroup__item--tagMin {
+}
+
+// Our uses always assume that tag is on the left unless marked otherwise
+.s-inputGroup__item--tag {
+  padding-left: 1em;
+  background: $s-color-neutral8;
+  border-radius: $s-var-radius 0 0 $s-var-radius;
+  border: 1px solid $s-color-neutral6;
+  border-right: 0;
+}
+.s-inputGroup__item--tag + .s-inputGroup__item {
+  border-radius: 0 $s-var-radius $s-var-radius 0;
+}

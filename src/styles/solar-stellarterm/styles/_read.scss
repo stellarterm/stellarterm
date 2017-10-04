@@ -1,0 +1,64 @@
+// s-read sections are those with a long amount of text meant for reading.
+// The parent element is an element and not a class so that nested element
+// styles can still be overridable by classes inside.
+
+// Here is an illustration:
+//   .s-someComponent {}; // specificity: 0,0,1,0; // a component inside read
+//   s-read-md p {};      // specificity: 0,0,0,2; // won't override .s-someComponent
+//   .s-read-md p  {};    // specificity: 0,0,1,1; // will override .s-someComponent
+
+s-read-md {}
+
+s-read-md :first-child {
+  margin-top: 0;
+}
+
+s-read-md table {
+  display: block;
+  overflow: auto;
+  width: 100%;
+}
+s-read-md table td, s-read-md table th {
+  padding: 0.5em;
+  border: 1px solid $s-color-neutral7;
+}
+s-read-md code { // meant for inline code
+  background: $s-color-primary9;
+  outline: 1px solid $s-color-primary8;
+}
+s-read-md pre > code { // undo the above inline code styles for code blocks
+  background: inherit;
+  outline: 0;
+}
+s-read-md pre {
+  @include so-code;
+}
+s-read-md h1,
+s-read-md h2,
+s-read-md h3,
+s-read-md h4,
+s-read-md h5,
+s-read-md h6 {
+  margin-top: 1em;
+  margin-bottom: 0.25em;
+}
+s-read-md a {
+  color: $s-color-primary3;
+}
+s-read-md table {
+  margin-bottom: 1em;
+}
+
+s-read-md ul {
+  list-style-position: outside;
+  padding-left: 2em;
+}
+
+s-read-md ul, s-read-md ol {
+  margin-bottom: 1em;
+}
+
+s-read-md img {
+  max-width: calc(900px - 6em);
+  height: auto;
+}

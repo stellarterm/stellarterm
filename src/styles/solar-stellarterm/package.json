@@ -1,0 +1,20 @@
+{
+  "name": "solar-stellarterm",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Forked version of Stellar Development Foundation's solar framework theme",
+  "main": "index.json",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/irisli/solar-stellarterm.git"
+  },
+  "author": "Stellar Development Foundation (https://www.stellar.org/)",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/irisli/solar-stellarterm/issues"
+  },
+  "homepage": "https://github.com/irisli/solar-stellarterm"
+}

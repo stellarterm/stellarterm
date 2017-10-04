@@ -1,0 +1,43 @@
+// so-siteHeader is the module for creating headers in Stellar
+
+// It follows specific dimensions (for desktop mode)
+// No set defined height
+// 18px of "padding" (on top and bottom). In most cases (in desktop), the logo
+// will be 42px (28px font size * 1.5 line height).
+
+// The baselines of the items should be aligned to the baseline of the .so-logo
+// baseline (when aligned using flex-end). If using flex aligns don't work, you
+// can fine tune the verticalness using paddings inside the content (not the
+// parent siteHeader).
+
+// Aligning baselines manually is more difficult than using `align-items: baseline;`.
+// but the manual method gives much more flexibility. `.so-siteHeader__simpleAlign`
+// naively aligns simple text items to the main item.
+
+// Max font size is $s-scale-1 (28px)
+
+.so-siteHeader {
+  @include S-flex-rowWrap();
+  align-items: flex-end;
+  padding: 18px 0;
+}
+.so-siteHeader__simpleAlign {
+  margin-bottom: 3px;
+}
+
+.so-siteHeader__navList {
+  color: $s-color-primary4;
+}
+.so-siteHeader__navList__item {
+  text-decoration: none;
+}
+.so-siteHeader__navList__item:hover {
+  text-decoration: underline;
+}
+.so-siteHeader__navList__item.is-currentItem {
+  color: $s-color-neutral2;
+}
+
+.so-siteHeader__emptyLogo {
+  height: 42px;
+}

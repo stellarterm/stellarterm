@@ -1,0 +1,17 @@
+// Graphics in css should be for just decorational items
+
+@mixin so-graphic($name, $nativeWidth, $nativeHeight) {
+  width: $nativeWidth/2 + px;
+  height: $nativeHeight/2 + px;
+  background-size: $nativeWidth/2 + px $nativeHeight/2 + px;
+  background-image: url($so-graphicsPath + $name);
+}
+
+.so-graphic {
+  display: inline-block;
+  background-repeat: no-repeat;
+}
+
+// Graphics that use so-graphic should not live here. It should be in the repo
+// of the project that uses the graphics.
+// Any graphics in solar should be inlined

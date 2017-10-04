@@ -1,0 +1,29 @@
+// backChunks is a page container system made up of two main parts: back and chunk
+//    back: the background layer that contains paddings and may or may not have
+//      a background.
+//    chunk: element with set max width that holds the content. also serves as
+//      a container for columns
+
+// RULES:
+//   a `back` can not be nested inside another `back`
+//   a `chunk` should not be nested inside another `chunk`
+//   a `back` should contain 1 or more `chunks` and nothing else
+
+.so-back {
+  // 2em absolute padding
+  padding-left: 36px;
+  padding-right: 36px;
+}
+
+.so-chunk {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 980px;
+}
+
+// clearfix
+.so-chunk:after {
+  content: "";
+  display: table;
+  clear: both;
+}

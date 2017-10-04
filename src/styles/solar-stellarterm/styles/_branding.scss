@@ -1,0 +1,42 @@
+// to use .ss-logo on a dark background, set the font color of the parent .ss-logo
+// and the color setting will cascade to the separator and subSite.
+
+.so-logo, a.so-logo {
+  @include S-flex-row();
+  align-items: baseline;
+  text-decoration: none;
+  // font size is set in .so-logo so that both the separator and subSite inherits it
+  font-size: $s-scale-1;
+  color: $s-color-neutral2;
+}
+.so-logo:hover, a.so-logo {
+  text-decoration: none;
+}
+  .so-logo__main, a.so-logo__main {
+    color: $s-color-primary4;
+    font-weight: 700; // TODO: update to variable
+    // TODO: improve how we do font smoothing (mixin, consistency)
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-transform: lowercase;
+    text-decoration: none;
+  }
+  .so-logo__main:hover, a.so-logo__main:hover {
+    text-decoration: underline;
+  }
+  .so-logo__separator {
+    align-self: center;
+    // currently fine tuned to $s-scale-1 but may need to be adjusted when
+    // the parent font size changes
+    height: 0.8em;
+    margin-left: 0.4em;
+    margin-right: 0.4em;
+    border-left: 1px solid currentColor;
+  }
+  .so-logo__subSite {
+    font-size: $s-scale-4;
+    text-decoration: none;
+  }
+  .so-logo__subSite:hover {
+    text-decoration: underline;
+  }
