@@ -19,6 +19,7 @@ class DirectoryBuilder {
       name: 'Stellar Network',
       website: 'https://www.stellar.org/lumens/',
       logo: logos['stellar'],
+      color: '#08b5e5',
     };
     this.nativeAsset = {
       code: 'XLM',
@@ -55,6 +56,13 @@ class DirectoryBuilder {
       website: details.website,
       logo: logos[details.logo],
       assets: {},
+    }
+
+    if (details.color) {
+      if (!details.color.match(/^#([A-Fa-f0-9]{6})/)) {
+        throw new Error('Color must be in hex format with 6 characters (example: #c0ffee). Got: ' + details.color);
+      }
+      this.anchors[details.domain].color = details.color;
     }
   }
 

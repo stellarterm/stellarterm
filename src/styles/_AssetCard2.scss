@@ -3,6 +3,7 @@
   border-radius: $s-var-radius;
   overflow:hidden;
   width: 100%;
+  background: #fff;
 }
 .AssetCard2--boxy {
   border-radius: 0;
@@ -38,7 +39,7 @@
   }
   .AssetCard2__header {
      color: #000;
-     opacity: 0.8;
+     opacity: 0.85;
      height: 21px;
      margin-bottom: 4px;
   }
