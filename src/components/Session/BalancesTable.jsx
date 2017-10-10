@@ -4,6 +4,8 @@ import Printify from '../../lib/Printify';
 import AssetCard2 from '../AssetCard2.jsx';
 import RemoveTrustLink from './RemoveTrustLink.jsx';
 import _ from 'lodash';
+import directory from '../../directory';
+
 
 export default class BalancesTable extends React.Component {
   constructor(props) {
@@ -12,46 +14,15 @@ export default class BalancesTable extends React.Component {
 
   render() {
     let account = this.props.d.session.account;
-
-    let nativeBalances = [];
-    let knownBalances = [];
-    let unknownBalances = [];
-    account.balances.forEach(balance => {
-      if (balance.asset_type === 'native') {
-        return nativeBalances.push(balance);
-      }
-      return unknownBalances.push(balance);
-    });
-
-    const reorderedBalances = nativeBalances.concat(knownBalances, unknownBalances);
-
-    let balanceCards = [];
-    reorderedBalances.forEach(balance => {
-      let balanceAsset = Stellarify.asset(balance);
-      let limit = balance.limit == '922337203685.4775807' ? 'maximum': balance.limit;
-
-      let removeLink = <RemoveTrustLink balance={balance} d={this.props.d}></RemoveTrustLink>
-
-      let limitCell = <td className="BalancesTable__row__item">N/A</td>;
-      if (balance.asset_type !== 'native') {
-        limitCell = <td className="BalancesTable__row__item">Trust limit: {limit}<br />{removeLink}</td>
-      }
-
-      let code = balance.asset_code;
-      let issuer = balance.asset_issuer;
-      if (balance.asset_type === 'native') {
-        code = 'XLM';
-        issuer = null;
-      }
-
-      balanceCards.push(<tr className="BalancesTable__row" key={balance.asset_issuer + balance.asset_code}>
+    let allBalances = account.getSortedBalances(); // From MagicSpoon.Account
+    let balanceRows = allBalances.map(balance => {
+      return <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
         <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
-          <AssetCard2 code={code} issuer={issuer}></AssetCard2>
+          <AssetCard2 code={balance.code} issuer={balance.issuer}></AssetCard2>
         </td>
         <td className="BalancesTable__row__item BalancesTable__row__item--amount">{Printify.lightenZeros(balance.balance)}</td>
-        {limitCell}
-      </tr>);
-    })
+      </tr>
+    });
 
     return <div className="island">
       <div className="island__header">
@@ -60,14 +31,12 @@ export default class BalancesTable extends React.Component {
       <table className="BalancesTable">
         <thead>
           <tr className="BalancesTable__head">
-            <td className="BalancesTable__head__asset">Asset</td>
-            <td className="BalancesTable__head__amount">Balance</td>
-            <td className="BalancesTable__head__cell">Trust</td>
+            <td className="BalancesTable__head__cell BalancesTable__head__asset">Asset</td>
+            <td className="BalancesTable__head__cell BalancesTable__head__amount">Balance</td>
           </tr>
         </thead>
         <tbody>
-          {balanceCards}
-
+          {balanceRows}
         </tbody>
       </table>
     </div>

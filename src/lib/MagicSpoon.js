@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import BigNumber from 'bignumber.js';
+import directory from '../directory';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
@@ -32,7 +33,34 @@ const MagicSpoon = {
         });
       }
       return targetBalance;
-    }
+    };
+
+    sdkAccount.getSortedBalances = () => {
+      let nativeBalances = [];
+      let knownBalances = [];
+      let unknownBalances = [];
+      sdkAccount.balances.forEach(sdkBalance => {
+        if (sdkBalance.asset_type === 'native') {
+          return nativeBalances.push({
+            code: 'XLM',
+            issuer: null,
+            balance: sdkBalance.balance,
+          });
+        }
+        let newBalance = { // Yay shoes :P
+          code: sdkBalance.asset_code,
+          issuer: sdkBalance.asset_issuer,
+          balance: sdkBalance.balance,
+        };
+        let asset = directory.resolveAssetByAccountId(newBalance.code, newBalance.issuer);
+        if (asset.domain === 'unknown') {
+          return unknownBalances.push(newBalance);
+        }
+        return knownBalances.push(newBalance);
+      });
+
+      return nativeBalances.concat(knownBalances, unknownBalances);
+    };
 
     let accountEventsClose = Server.accounts().accountId(keypair.publicKey()).stream({
       onmessage: res => {
