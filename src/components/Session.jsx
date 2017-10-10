@@ -31,7 +31,7 @@ class Session extends React.Component {
       return <LoginForm setupError={setupError} handler={this.logIn}></LoginForm>
     } else if (state === 'unfunded') {
       return <Generic title={'Account is unfunded'}><Loading darker={true}>
-        Send at least 20 lumens to this account to create it.
+        Send at least 20 lumens to this account to activate it.
         <br />
         <br />
         Account ID: {d.session.unfundedAccountId}
