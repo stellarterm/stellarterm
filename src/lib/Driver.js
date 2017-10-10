@@ -44,6 +44,7 @@ function Driver(opts) {
   this.session = {
     state: 'out',
     setupError: false, // Couldn't find account
+    unfundedAccountId: '',
     account: null, // MagicSpoon.Account instance
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
@@ -69,7 +70,8 @@ function Driver(opts) {
       try {
         keypair = StellarSdk.Keypair.fromSecret(secretKey);
       } catch (e) {
-        console.log('Invalid secret key');
+        console.log('Invalid secret key! We should never reach here!');
+        console.error(e);
         return;
       }
       this.session.setupError = false;
@@ -83,6 +85,12 @@ function Driver(opts) {
         this.session.state = 'in';
         trigger.session();
       } catch (e) {
+        if (e.data) {
+          this.session.state = 'unfunded';
+          this.session.unfundedAccountId = keypair.publicKey();
+          trigger.session();
+          return;
+        }
         this.session.state = 'out';
         this.session.setupError = true;
         trigger.session();

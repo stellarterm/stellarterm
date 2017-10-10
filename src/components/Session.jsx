@@ -7,6 +7,7 @@ import AddTrustFromFederation from './Session/AddTrustFromFederation.jsx';
 import AddTrustFromDirectory from './Session/AddTrustFromDirectory.jsx';
 import Send from './Session/Send.jsx';
 import Generic from './Generic.jsx';
+import Loading from './Loading.jsx';
 
 class Session extends React.Component {
   constructor(props) {
@@ -28,8 +29,15 @@ class Session extends React.Component {
     let setupError = d.session.setupError;
     if (state === 'out') {
       return <LoginForm setupError={setupError} handler={this.logIn}></LoginForm>
+    } else if (state === 'unfunded') {
+      return <Generic title={'Account is unfunded'}><Loading darker={true}>
+        Send at least 20 lumens to this account to create it.
+        <br />
+        <br />
+        Account ID: {d.session.unfundedAccountId}
+      </Loading></Generic>
     } else if (state === 'loading') {
-      return <Generic title="Loading account">Loading account</Generic>
+      return <Generic title="Loading account"><Loading>Contacting network and loading account</Loading></Generic>
     } else if (state === 'in') {
       let content;
       let part1 = this.props.urlParts[1];

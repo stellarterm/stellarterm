@@ -2,11 +2,17 @@ const React = window.React = require('react');
 
 export default class Loading extends React.Component {
   render() {
-    let loadingSizeClass = '';
+    let loadingClass = '';
     if (this.props.size === 'large') {
-      loadingSizeClass = ' Loading--large';
+      loadingClass = ' Loading--large';
     }
-    return <div className={'Loading' + loadingSizeClass}>
+
+    // Use darker for when text contains content that should be legible
+    if (this.props.darker) {
+      loadingClass = ' Loading--darker';
+    }
+
+    return <div className={'Loading' + loadingClass}>
       <p className="Loading__message">{this.props.children}</p>
     </div>
   }

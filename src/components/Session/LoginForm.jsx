@@ -48,7 +48,7 @@ export default class LoginForm extends React.Component {
     if (this.state.invalidKey) {
       errorMessage = <div className="s-alert s-alert--alert">Invalid secret key. Hint: it starts with the letter S and is all uppercase</div>
     } else if (this.props.setupError) {
-      errorMessage = <div className="s-alert s-alert--alert">Unable to find account. Make sure that your account is on the public network and funded with 20 lumens.</div>
+      errorMessage = <div className="s-alert s-alert--alert">Unable to contact network. Please check your internet connection and allow connections to horizon.stellar.org. Maybe a adblocker is preventing the client from communicating with the network.</div>
     }
 
     let newKeypairDetails;

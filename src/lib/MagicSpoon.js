@@ -327,7 +327,6 @@ const MagicSpoon = {
       asset: opts.asset,
       limit: sdkLimit,
     };
-    console.log('changing trust')
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
       .build();
