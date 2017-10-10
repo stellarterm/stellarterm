@@ -145,6 +145,7 @@ class DirectoryBuilder {
     };
   }
 
+  // Always returns something regardless of what is put in
   getAnchor(domain) {
     if (!domain) {
       return this.unknownAnchor;
@@ -158,10 +159,11 @@ class DirectoryBuilder {
     return this.unknownAnchor;
   }
 
-  // getAsset() is general and takes in any of the combination
+  // getAsset() is general and takes in any of the combination:
   // - code:string, issuerAccountId:string
   // - code:string, anchorDomain:string
   // - sdkAsset:StellarSdk.Asset
+  // All functions that are getAssset*() will return null if the asset is not found
   getAsset(codeOrSdkAsset, domainOrAccountId) {
     if (codeOrSdkAsset instanceof StellarSdk.Asset) {
       return this.getAssetBySdkAsset(codeOrSdkAsset);
@@ -174,6 +176,7 @@ class DirectoryBuilder {
     return this.getAssetByDomain(codeOrSdkAsset, domainOrAccountId);
   }
 
+  // Returns null if asset is not found
   getAssetByDomain(code, domain) {
     if (code === 'XLM' && domain === 'native') {
       return this.nativeAsset;
@@ -191,6 +194,7 @@ class DirectoryBuilder {
     }
   }
 
+  // Returns unknown if asset is not found
   getAssetByAccountId(code, issuer) {
     if (code === 'XLM' && issuer === null) {
       return this.nativeAsset;
@@ -203,13 +207,27 @@ class DirectoryBuilder {
     return this.assets[slug];
   }
 
+  // Finds an asset by the accountId but if it fails, we will still return
+  // an asset but with an empty domain
+  resolveAssetByAccountId(code, issuer) {
+    let asset = this.getAssetByAccountId(code, issuer);
+    if (asset) {
+      return asset;
+    }
+
+    return {
+      code,
+      issuer,
+      domain: 'unknown',
+    }
+  }
+
   getAssetBySdkAsset(asset) {
     if (asset.isNative()) {
       return this.nativeAsset;
     }
     return this.getAssetByAccountId(asset.getCode(), asset.getIssuer());
   }
-
 
   // getAssetsByIssuer() {
   //   // To be implemented when there is actually a use case

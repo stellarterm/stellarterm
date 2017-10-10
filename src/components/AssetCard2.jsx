@@ -25,11 +25,18 @@ export default class AssetCard2 extends React.Component {
     super(props);
   }
   render() {
-    let asset;
+    if (!this.props.code) {
+      throw new Error('AssetCard2 expects to get a code in the props. Instead, got: ' + this.props.code)
+    }
+
+    let asset = {};
     if (this.props.domain !== undefined) {
-      asset = directory.getAsset(this.props.code, this.props.domain)
+      asset = directory.getAssetByDomain(this.props.code, this.props.domain);
+      if (asset === null) {
+        throw new Error('AssetCard2 expects domains to point to a valid asset/anchor. Please do validation before calling AssetCard2');
+      }
     } else if (this.props.issuer !== undefined) {
-      asset = directory.getAsset(this.props.code, this.props.issuer)
+      asset = directory.resolveAssetByAccountId(this.props.code, this.props.issuer);
     } else {
       throw new Error('AssetCard2 expects to get either domain or issuer');
     }

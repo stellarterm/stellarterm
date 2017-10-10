@@ -1,7 +1,7 @@
 const React = window.React = require('react');
 import Stellarify from '../../lib/Stellarify';
 import Printify from '../../lib/Printify';
-import AssetCard from '../AssetCard.jsx';
+import AssetCard2 from '../AssetCard2.jsx';
 import RemoveTrustLink from './RemoveTrustLink.jsx';
 import _ from 'lodash';
 
@@ -37,9 +37,16 @@ export default class BalancesTable extends React.Component {
         limitCell = <td>Trust limit: {limit}<br />{removeLink}</td>
       }
 
+      let code = balance.asset_code;
+      let issuer = balance.asset_issuer;
+      if (balance.asset_type === 'native') {
+        code = 'XLM';
+        issuer = null;
+      }
+
       balanceCards.push(<tr className="BalancesTable__row" key={balance.asset_issuer + balance.asset_code}>
         <td>
-          <AssetCard asset={balanceAsset} fixed={true}></AssetCard>
+          <AssetCard2 code={code} issuer={issuer}></AssetCard2>
         </td>
         <td className="BalancesTable__row__amount">{Printify.lightenZeros(balance.balance)}</td>
         {limitCell}
