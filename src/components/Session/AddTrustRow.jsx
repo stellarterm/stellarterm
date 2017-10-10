@@ -60,7 +60,7 @@ export default class AddTrustRow extends React.Component {
     }
 
     return <div className="AddTrustRow row">
-      <div className="row__fixedAsset">
+      <div className="row__assetCard2">
         <AssetCard2 code={this.props.asset.getCode()} issuer={this.props.asset.getIssuer()}></AssetCard2>
       </div>
       <div className="row__shareOption">
