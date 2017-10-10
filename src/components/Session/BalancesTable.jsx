@@ -16,7 +16,6 @@ export default class BalancesTable extends React.Component {
     let account = this.props.d.session.account;
     let allBalances = account.getSortedBalances(); // From MagicSpoon.Account
     let balanceRows = allBalances.map(balance => {
-      console.log(balance)
       return <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
         <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
           <AssetCard2 code={balance.code} issuer={balance.issuer}></AssetCard2>

@@ -78,7 +78,7 @@ const MagicSpoon = {
           updated = true;
         }
         if (!_.isEqual(sdkAccount.sequence, res.sequence)) {
-          sdkAccount.balances = res.balances;
+          sdkAccount.sequence = res.sequence;
           updated = true;
         }
 
@@ -87,6 +87,24 @@ const MagicSpoon = {
         }
       }
     });
+
+    sdkAccount.refresh = async () => {
+      let newAccount = await Server.loadAccount(keypair.publicKey());
+      sdkAccount.applyNewBalances(newAccount.balances);
+    };
+
+    sdkAccount.applyNewBalances = (newBalances) => {
+      let updated = false;
+      if (!_.isEqual(sdkAccount.balances, newBalances)) {
+        sdkAccount.balances = newBalances;
+        updated = true;
+      }
+
+      if (updated) {
+        onUpdate();
+      }
+    };
+
 
     sdkAccount.offers = {};
 
@@ -309,13 +327,16 @@ const MagicSpoon = {
       asset: opts.asset,
       limit: sdkLimit,
     };
-
+    console.log('changing trust')
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
       .build();
     spoonAccount.sign(transaction);
-    const transactionResult = Server.submitTransaction(transaction);
-    return transactionResult;
+    return Server.submitTransaction(transaction)
+      .then(txResult => {
+        sdkAccount.refresh();
+        return txResult;
+      });
   },
   async removeOffer(Server, spoonAccount, offerId) {
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)

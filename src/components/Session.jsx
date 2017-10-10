@@ -40,8 +40,9 @@ class Session extends React.Component {
       } else if (part1 === 'addTrust') {
         content = <div>
           <Generic title="Assets in the Stellar Network">
-            To use assets on the Stellar Network, an account must "accept" that asset first.
-            Additionally, the Stellar Network prevents spam by instituting a minimum balance that is similar to a refundable deposit. Each asset you accept increases your minimum balance.
+            To receive assets on the Stellar network, you must first accept the asset.
+            <br /><br />
+            The Stellar network prevents spam by instituting a minimum balance that is similar to a refundable deposit. Each asset you accept increases your minimum balance.
           </Generic>
           <div className="so-back islandBack">
             <ManageCurrentTrust d={d}></ManageCurrentTrust>
@@ -71,7 +72,7 @@ class Session extends React.Component {
               <nav className="subNav__nav">
                 <a className="subNav__nav__item" href="#account">Balances</a>
                 <a className="subNav__nav__item" href="#account/send">Send</a>
-                <a className="subNav__nav__item" href="#account/addTrust">Manage assets</a>
+                <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
               </nav>
             </div>
           </div>
