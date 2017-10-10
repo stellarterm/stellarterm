@@ -1,7 +1,7 @@
 const React = window.React = require('react');
 import Stellarify from '../../lib/Stellarify';
 import Printify from '../../lib/Printify';
-import AssetCard from '../AssetCard.jsx';
+import AssetCard2 from '../AssetCard2.jsx';
 import _ from 'lodash';
 
 export default class AddTrustRow extends React.Component {
@@ -53,15 +53,15 @@ export default class AddTrustRow extends React.Component {
       }
     } else {
       if (found) {
-        button = <span className="AddTrustRow__exists">Trust line for {this.props.asset.getCode()} exists</span>
+        button = <span className="AddTrustRow__exists">{this.props.asset.getCode()} accepted</span>
       } else {
-        button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Create trust line for {this.props.asset.getCode()}</button>
+        button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Accept {this.props.asset.getCode()}</button>
       }
     }
 
-    return <div className="row">
+    return <div className="AddTrustRow row">
       <div className="row__fixedAsset">
-        <AssetCard asset={this.props.asset} fixed={true}></AssetCard>
+        <AssetCard2 code={this.props.asset.getCode()} issuer={this.props.asset.getIssuer()}></AssetCard2>
       </div>
       <div className="row__shareOption">
         {button}

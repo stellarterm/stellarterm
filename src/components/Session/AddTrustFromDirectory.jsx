@@ -17,7 +17,7 @@ export default class AddTrustFromDirectory extends React.Component {
     })
     return <div className="island">
       <div className="island__header">
-        Add trust from known anchors
+        Accept more assets
       </div>
       <div className="island__paddedContent">
         <p>This is a list of anchors from the Stellar community.<br />Note: StellarTerm does not endorse any of these anchors.</p>
