@@ -35,16 +35,24 @@ const MagicSpoon = {
       return targetBalance;
     };
 
-    sdkAccount.getSortedBalances = () => {
+    // Should always return at least one item (which is lumens)
+    sdkAccount.getSortedBalances = (opts) => {
+      if (!opts) {
+        opts = {};
+      }
       let nativeBalances = [];
       let knownBalances = [];
       let unknownBalances = [];
       sdkAccount.balances.forEach(sdkBalance => {
         if (sdkBalance.asset_type === 'native') {
+          if (opts.hideNative) {
+            return;
+          }
           return nativeBalances.push({
             code: 'XLM',
             issuer: null,
             balance: sdkBalance.balance,
+            sdkBalance,
           });
         }
         let newBalance = { // Yay shoes :P

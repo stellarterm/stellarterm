@@ -28,14 +28,14 @@ export default class BalancesTable extends React.Component {
     let balance = this.props.balance;
     if (balance.balance === '0.0000000') {
       if (this.state.status === 'ready') {
-        return <a className="BalancesTable__row__removeLink" onClick={this.handleRemoveTrust}>Remove trust</a>
+        return <a className="BalancesTable__row__removeLink" onClick={this.handleRemoveTrust}>Remove asset</a>
       } else if (this.state.status === 'pending') {
-        return <span className="BalancesTable__row__removeLink">Removing trust ...</span>
+        return <span className="BalancesTable__row__removeLink">Removing asset ...</span>
       } else {
-        return <a className="BalancesTable__row__removeLink" onClick={this.handleRemoveTrust}>Errored when removing trust</a>
+        return <a className="BalancesTable__row__removeLink" onClick={this.handleRemoveTrust}>Errored when removing asset</a>
       }
     } else {
-      return <span className="BalancesTable__row__removeLink">Trust is removable when balance is 0</span>
+      return <span className="BalancesTable__row__removeLink">Asset can be removed when balance is 0</span>
     }
   }
 }

@@ -12,62 +12,31 @@ export default class ManageCurrentTrust extends React.Component {
 
   render() {
     let account = this.props.d.session.account;
+    let allBalances = account.getSortedBalances({hideNative: true}); // From MagicSpoon.Account
 
-    let nativeBalances = [];
-    let knownBalances = [];
-    let unknownBalances = [];
-    account.balances.forEach(balance => {
-      if (balance.asset_type === 'native') {
-        return nativeBalances.push(balance);
-      }
-      return unknownBalances.push(balance);
-    });
-
-    const reorderedBalances = nativeBalances.concat(knownBalances, unknownBalances);
-
-    let balanceCards = [];
-    reorderedBalances.forEach(balance => {
-      let balanceAsset = Stellarify.asset(balance);
-      let limit = balance.limit == '922337203685.4775807' ? 'maximum': balance.limit;
-
+    let rows = allBalances.map(balance => {
       let removeLink = <RemoveTrustLink balance={balance} d={this.props.d}></RemoveTrustLink>
-
-      let limitCell = <td className="ManageCurrentTrust__row__item">N/A</td>;
-      if (balance.asset_type !== 'native') {
-        limitCell = <td className="ManageCurrentTrust__row__item">Trust limit: {limit}<br />{removeLink}</td>
-      }
-
-      let code = balance.asset_code;
-      let issuer = balance.asset_issuer;
-      if (balance.asset_type === 'native') {
-        code = 'XLM';
-        issuer = null;
-      }
-
-      balanceCards.push(<tr className="ManageCurrentTrust__row" key={balance.asset_issuer + balance.asset_code}>
-        <td className="ManageCurrentTrust__row__item ManageCurrentTrust__row__item--assetCard">
-          <AssetCard2 code={code} issuer={issuer}></AssetCard2>
+      return <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
+        <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
+          <AssetCard2 code={balance.code} issuer={balance.issuer}></AssetCard2>
         </td>
-        <td className="ManageCurrentTrust__row__item ManageCurrentTrust__row__item--amount">{Printify.lightenZeros(balance.balance)}</td>
-        {limitCell}
-      </tr>);
-    })
+        <td className="ManageCurrentTrust__row__item">{removeLink}</td>
+      </tr>
+    });
 
     return <div className="island">
       <div className="island__header">
-        Balances for {this.props.d.session.account.accountId()}
+        Assets you accept
       </div>
       <table className="ManageCurrentTrust">
         <thead>
           <tr className="ManageCurrentTrust__head">
             <td className="ManageCurrentTrust__head__asset">Asset</td>
-            <td className="ManageCurrentTrust__head__amount">Balance</td>
-            <td className="ManageCurrentTrust__head__cell">Trust</td>
+            <td className="ManageCurrentTrust__head__cell">Manage</td>
           </tr>
         </thead>
         <tbody>
-          {balanceCards}
-
+          {rows}
         </tbody>
       </table>
     </div>
