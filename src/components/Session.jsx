@@ -1,6 +1,7 @@
 const React = window.React = require('react');
 import LoginForm from './Session/LoginForm.jsx';
 import AccountView from './Session/AccountView.jsx';
+import ManageCurrentTrust from './Session/ManageCurrentTrust.jsx';
 import ManuallyAddTrust from './Session/ManuallyAddTrust.jsx';
 import AddTrustFromFederation from './Session/AddTrustFromFederation.jsx';
 import AddTrustFromDirectory from './Session/AddTrustFromDirectory.jsx';
@@ -39,6 +40,9 @@ class Session extends React.Component {
       } else if (part1 === 'addTrust') {
         content = <div>
           <div className="so-back islandBack islandBack--t">
+            <ManageCurrentTrust d={d}></ManageCurrentTrust>
+          </div>
+          <div className="so-back islandBack">
             <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
           </div>
           <div className="so-back islandBack">

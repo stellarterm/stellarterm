@@ -5,7 +5,7 @@ import AssetCard2 from '../AssetCard2.jsx';
 import RemoveTrustLink from './RemoveTrustLink.jsx';
 import _ from 'lodash';
 
-export default class BalancesTable extends React.Component {
+export default class ManageCurrentTrust extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -32,9 +32,9 @@ export default class BalancesTable extends React.Component {
 
       let removeLink = <RemoveTrustLink balance={balance} d={this.props.d}></RemoveTrustLink>
 
-      let limitCell = <td className="BalancesTable__row__item">N/A</td>;
+      let limitCell = <td className="ManageCurrentTrust__row__item">N/A</td>;
       if (balance.asset_type !== 'native') {
-        limitCell = <td className="BalancesTable__row__item">Trust limit: {limit}<br />{removeLink}</td>
+        limitCell = <td className="ManageCurrentTrust__row__item">Trust limit: {limit}<br />{removeLink}</td>
       }
 
       let code = balance.asset_code;
@@ -44,11 +44,11 @@ export default class BalancesTable extends React.Component {
         issuer = null;
       }
 
-      balanceCards.push(<tr className="BalancesTable__row" key={balance.asset_issuer + balance.asset_code}>
-        <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
+      balanceCards.push(<tr className="ManageCurrentTrust__row" key={balance.asset_issuer + balance.asset_code}>
+        <td className="ManageCurrentTrust__row__item ManageCurrentTrust__row__item--assetCard">
           <AssetCard2 code={code} issuer={issuer}></AssetCard2>
         </td>
-        <td className="BalancesTable__row__item BalancesTable__row__item--amount">{Printify.lightenZeros(balance.balance)}</td>
+        <td className="ManageCurrentTrust__row__item ManageCurrentTrust__row__item--amount">{Printify.lightenZeros(balance.balance)}</td>
         {limitCell}
       </tr>);
     })
@@ -57,12 +57,12 @@ export default class BalancesTable extends React.Component {
       <div className="island__header">
         Balances for {this.props.d.session.account.accountId()}
       </div>
-      <table className="BalancesTable">
+      <table className="ManageCurrentTrust">
         <thead>
-          <tr className="BalancesTable__head">
-            <td className="BalancesTable__head__asset">Asset</td>
-            <td className="BalancesTable__head__amount">Balance</td>
-            <td className="BalancesTable__head__cell">Trust</td>
+          <tr className="ManageCurrentTrust__head">
+            <td className="ManageCurrentTrust__head__asset">Asset</td>
+            <td className="ManageCurrentTrust__head__amount">Balance</td>
+            <td className="ManageCurrentTrust__head__cell">Trust</td>
           </tr>
         </thead>
         <tbody>
