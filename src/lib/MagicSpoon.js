@@ -334,7 +334,7 @@ const MagicSpoon = {
     spoonAccount.sign(transaction);
     return Server.submitTransaction(transaction)
       .then(txResult => {
-        sdkAccount.refresh();
+        spoonAccount.refresh();
         return txResult;
       });
   },

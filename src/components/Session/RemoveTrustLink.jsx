@@ -1,15 +1,18 @@
 const React = window.React = require('react');
 
-export default class BalancesTable extends React.Component {
+export default class RemoveTrustLink extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       status: 'ready', // Can be: ready, pending, or error
     };
 
+    // TODO: If we successfully remove trust, then React gets unhappy because this element disappears
+    // Warning: Can only update a mounted or mounting component. This usually means you called setState, replaceState, or forceUpdate on an unmounted component. This is a no-op.
+    // Please check the code for the BalancesTable component.
     this.handleRemoveTrust = e => {
       e.preventDefault();
-      this.props.d.handlers.removeTrust(this.props.balance.asset_code, this.props.balance.asset_issuer)
+      this.props.d.handlers.removeTrust(this.props.balance.code, this.props.balance.issuer)
       .then(res => {
         console.log('Successfully removed trust', res);
       })

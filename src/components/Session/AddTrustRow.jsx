@@ -22,9 +22,8 @@ export default class AddTrustRow extends React.Component {
         this.setState({status: 'ready'})
       })
       .catch(error => {
-        console.log(error)
-        let errorType = 'unkonwn';
-        if (error.extras.result_codes.operations[0] === 'op_low_reserve') {
+        let errorType = 'unknown';
+        if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
           errorType = 'lowReserve';
         }
 
@@ -48,7 +47,7 @@ export default class AddTrustRow extends React.Component {
       button = <button className="s-button" disabled={true} onClick={(e) => this.handleSubmitTrust(e)}>Creating trust line for {this.props.asset.getCode()}...</button>
     } else if (this.state.status === 'error') {
       if (this.state.errorType === 'lowReserve') {
-        button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Error: Not enough lumens for reserve</button>
+        button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Error: Not enough lumens</button>
       } else {
         button = <button className="s-button" onClick={(e) => this.handleSubmitTrust(e)}>Error creating trust line for {this.props.asset.getCode()}</button>
       }
