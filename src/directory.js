@@ -16,7 +16,7 @@ directory.addAsset('naobtc.com', {
 });
 directory.addAsset('naobtc.com', {
   code: 'XEL',
-  issuer: 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH',
+  issuer: 'GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS',
 });
 directory.addAnchor({
   domain: 'vcbear.net',
