@@ -271,7 +271,7 @@ export default class Send extends React.Component {
         <h3 className="Send__resultTitle">Success!</h3>
         <div className="Send__resultContent">
           <p>
-            Transaction ID: <a target="_blank" href={'https://horizon.stellar.org/transactions/' + d.send.txId}>{d.send.txId}</a>
+            Transaction ID: <a target="_blank" href={d.Server.serverUrl + '/transactions/' + d.send.txId}>{d.send.txId}</a>
             <br />
             Keep the transaction ID as proof of payment.
           </p>
