@@ -7,6 +7,7 @@ import Markets from './components/Markets.jsx';
 import Session from './components/Session.jsx';
 import Exchange from './components/Exchange.jsx';
 import Generic from './components/Generic.jsx';
+import Loading from './components/Loading.jsx';
 import Stellarify from './lib/Stellarify';
 import url from 'url';
 import Header from './components/Header.jsx';
@@ -17,15 +18,18 @@ let network = {
   horizonUrl: 'https://horizon.stellar.org',
   networkPassphrase: StellarSdk.Networks.PUBLIC,
   isDefault: true, // If it's default, then we don't show a notice bar at the top
+  isTestnet: false,
+  isCustom: false,
 };
 
 if (window.location.hash === '#testnet') {
-  window.location.hash = '';
   network.isDefault = false;
+  network.isTestnet = true;
   network.horizonUrl = 'https://horizon-testnet.stellar.org';
   network.networkPassphrase = StellarSdk.Networks.TESTNET;
 } else if (window.stCustomConfig.horizonUrl) {
   network.isDefault = false;
+  network.isCustom = true;
   network.horizonUrl = window.stCustomConfig.horizonUrl;
   if (window.stCustomConfig.networkPassphrase) {
     network.networkPassphrase = window.stCustomConfig.networkPassphrase;
@@ -118,6 +122,18 @@ class TermApp extends React.Component {
           </div>
         </div>
       </div>
+    } else if (urlParts[0] === 'testnet') {
+      if (network.isTestnet) {
+        body = <Generic title="Test network">
+          You are running on the <a href="https://www.stellar.org/developers/guides/concepts/test-net.html">Stellar test network</a>. This network is for development purposes only and the test network may be occasionally reset.
+          <br />
+          To create a test account on the test network, use the <a href="https://www.stellar.org/laboratory/#account-creator?network=test">Friendbot to get some test lumens</a>.
+        </Generic>
+      } else {
+        body = <Generic title="Please refresh the page to switch to testnet"><Loading darker={true}>
+          Please refresh the page to switch to testnet.
+        </Loading></Generic>
+      }
     } else if (urlParts[0] === 'account') {
       body = <Session d={this.d} urlParts={urlParts}></Session>
     } else if (urlParts[0] === 'markets') {
