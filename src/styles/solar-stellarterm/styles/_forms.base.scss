@@ -17,6 +17,13 @@ html input.is-disabled {
   background-color: $s-color-neutral8;
   cursor: not-allowed;
 }
+
+.deposit-currency .dropdown {
+  padding: 20px;
+  padding-top: 10px;
+  width: 200px;
+}
+
 // Calculations:
 // Right box width height = text size * 1.5 line height + 0.6666 of $so-inputPadding = 2.16666em
 // Select right padding = Right box width height + 1em from $so-inputPadding = 3.1666em
