@@ -17,12 +17,9 @@ import Ticker from './driver/Ticker.js';
 import Send from './driver/Send.js';
 
 
-
-// Using old school "classes" because I'm old school and it's simpler to
-// understand. I may use the ES6 form later though.
 function Driver(opts) {
-  this.Server = new StellarSdk.Server(opts.horizonUrl); // Should never change
-  this.Server.serverUrl = opts.horizonUrl;
+  this.Server = new StellarSdk.Server(opts.network.horizonUrl);
+  this.Server.serverUrl = opts.network.horizonUrl;
 
   const byol = new Byol();
 

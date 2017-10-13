@@ -55,6 +55,40 @@ gulp.task('images', (cb) => {
   fs.writeFile('./src/images.js', file, cb);
 });
 
+
+// Build time config only for CUSTOM builds of StellarTerm
+gulp.task('customConfig', (cb) => {
+  let configFile = '\n// This file generated during the gulp build process.\n';
+  configFile += 'window.stCustomConfig = ';
+
+  let configObj = {};
+  if (process.env.STELLARTERM_CUSTOM_HORIZON_URL) {
+    configObj.horizonUrl = process.env.STELLARTERM_CUSTOM_HORIZON_URL;
+
+    if (configObj.horizonUrl.indexOf('http') !== 0) {
+      throw new Error('STELLARTERM_CUSTOM_HORIZON_URL environment variable must begin with http. Got: ' + process.env.STELLARTERM_CUSTOM_HORIZON_URL);
+    }
+
+    if (configObj.horizonUrl.substr(-1) === '/') {
+      throw new Error('STELLARTERM_CUSTOM_HORIZON_URL must not have a trailing slash. Got: ' + process.env.STELLARTERM_CUSTOM_HORIZON_URL);
+    }
+  }
+
+  if (process.env.STELLARTERM_CUSTOM_NETWORK_PASSPHRASE) {
+    if (!configObj.horizonUrl) {
+      throw new Error('To use STELLARTERM_CUSTOM_NETWORK_PASSPHRASE, the environment variable STELLARTERM_CUSTOM_HORIZON_URL must also be set');
+    }
+
+    configObj.networkPassphrase = process.env.STELLARTERM_CUSTOM_NETWORK_PASSPHRASE;
+  }
+
+  configFile += JSON.stringify(configObj, null, 2);
+
+  configFile += ';\n';
+  mkdirp('./dist');
+  fs.writeFile('./dist/customConfig.js', configFile, cb);
+});
+
 // Logos for the directory
 gulp.task('logos', (cb) => {
   let file = 'let logos = {\n';
@@ -90,6 +124,9 @@ const bundler = watchify(browserify({
   cache: {},
   packageCache: {},
   fullPaths: false,
+  insertGlobalVars: {
+    horizonUrl: function () { return ''; }
+  }
 }));
 const rebundle = () => bundler.bundle()
     // log errors if they happen
@@ -112,7 +149,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe($.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'images', 'logos', 'scripts', 'copyBower'];
+const baseTasks = ['html', 'styles', 'customConfig', 'images', 'logos', 'scripts', 'copyBower'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {

@@ -11,7 +11,18 @@ export default class Header extends React.Component {
     this.props.d.unlistenSession(this.listenId);
   }
   render() {
+    let networkBar;
+    console.log(this.props.network)
+    if (!this.props.network.isDefault) {
+      networkBar = <div className="so-back HeaderNetworkBarBack">
+        <div className="so-chunk HeaderNetworkBar">
+          <span>Horizon url: <strong>{this.props.network.horizonUrl}</strong></span>
+          <span>Network passphrase: <strong>{this.props.network.networkPassphrase}</strong></span>
+        </div>
+      </div>
+    }
     return <div className="HeaderBackBack">
+      {networkBar}
       <div className="so-back HeaderBack">
         <div className="so-chunk Header">
           <nav className="Header__nav">

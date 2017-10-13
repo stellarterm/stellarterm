@@ -1,6 +1,15 @@
 .HeaderBackBack {
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
+
+.HeaderNetworkBarBack {
+  background: $s-color-primary7;
+  padding: 8px 0;
+}
+.HeaderNetworkBar {
+  display: flex;
+  justify-content: space-between;
+}
 .HeaderBack {
   background: #fff;
   position: relative;

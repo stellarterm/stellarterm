@@ -13,23 +13,30 @@ import Header from './components/Header.jsx';
 import Driver from './lib/Driver';
 import images from './images';
 
-let network = {};
+let network = {
+  horizonUrl: 'https://horizon.stellar.org',
+  networkPassphrase: StellarSdk.Networks.PUBLIC,
+  isDefault: true, // If it's default, then we don't show a notice bar at the top
+};
 
-let useLiveNetwork = () => {
-  network.horizonUrl = 'https://horizon.stellar.org';
-  StellarSdk.Network.usePublicNetwork();
-}
-let useTestNetwork = () => {
+if (window.location.hash === '#testnet') {
+  window.location.hash = '';
+  network.isDefault = false;
   network.horizonUrl = 'https://horizon-testnet.stellar.org';
-  StellarSdk.Network.useTestNetwork();
+  network.networkPassphrase = StellarSdk.Networks.TESTNET;
+} else if (window.stCustomConfig.horizonUrl) {
+  network.isDefault = false;
+  network.horizonUrl = window.stCustomConfig.horizonUrl;
+  if (window.stCustomConfig.networkPassphrase) {
+    network.networkPassphrase = window.stCustomConfig.networkPassphrase;
+  }
 }
-useLiveNetwork();
-// useTestNetwork();
+
+StellarSdk.Network.use(new StellarSdk.Network(network.networkPassphrase));
 
 let driver = new Driver({
-  horizonUrl: network.horizonUrl,
+  network,
 });
-
 
 const parseUrl = (href) => {
   let hash = url.parse(href).hash;
@@ -48,6 +55,9 @@ class TermApp extends React.Component {
       url: parseUrl(window.location.href)
     };
     window.addEventListener('hashchange', (e) => {
+      if (e.newURL.indexOf('/#testnet') !== -1) {
+        window.location.reload();
+      }
       this.setState({
         url: parseUrl(e.newURL)
       })
@@ -154,7 +164,7 @@ class TermApp extends React.Component {
     }
 
     return <div>
-      <Header d={this.props.d} urlParts={urlParts}></Header>
+      <Header d={this.props.d} urlParts={urlParts} network={network}></Header>
       {body}
     </div>;
 
