@@ -72,8 +72,10 @@ function Driver(opts) {
         return;
       }
       this.session.setupError = false;
-      this.session.state = 'loading';
-      trigger.session();
+      if (this.session.state !== 'unfunded') {
+        this.session.state = 'loading';
+        trigger.session();
+      }
 
       try {
         this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
@@ -85,6 +87,13 @@ function Driver(opts) {
         if (e.data) {
           this.session.state = 'unfunded';
           this.session.unfundedAccountId = keypair.publicKey();
+          setTimeout(() => {
+            console.log('Checking to see if account has been created yet');
+            if (this.session.state === 'unfunded') {
+              // Avoid race conditions
+              this.handlers.logIn(secretKey);
+            }
+          }, 2000)
           trigger.session();
           return;
         }
