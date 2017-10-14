@@ -1,0 +1,55 @@
+const React = window.React = require('react');
+import AssetCard2 from '../AssetCard2.jsx';
+import AddTrustRow from './AddTrustRow.jsx';
+import directory from '../../directory';
+import _ from 'lodash';
+
+export default class DepositAnchors extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    // TODO NNS 1 - temporary, thread from props/state
+    const currentAsset = this.props.d.session.account.getSortedBalances({hideNative: true})[0];
+    const currentCode = currentAsset.code;
+
+    let rows = [];
+    _.each(directory.anchors, anchor => {
+      _.each(anchor.assets, assetId => {
+        const assetParts = assetId.split('-');
+        const assetCode = assetParts[0];
+
+        if (assetCode === currentCode) {
+          const assetIssuer = assetParts[1];
+          const name = anchor.name;
+          const row = (<tr className="row BalancesTable__row" key={name + "_" + assetCode + "_" + assetIssuer}>
+              <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
+                <AssetCard2 code={assetCode} issuer={assetIssuer}/>
+              </td>
+              <td className="BalancesTable__row__item BalancesTable__row__item--amount">
+                Hello
+              </td>
+            </tr>);
+          rows.push(row);
+        }
+      });
+    });
+
+    return (<div className="island">
+      <div className="island__header">
+        Anchors accepting deposits
+      </div>
+      <div className="island__paddedContent">
+        <p>This is a list of anchors from the Stellar community.<br/>
+        Note: StellarTerm does not endorse any of these anchors.</p>
+      </div>
+      <div>
+        <table className="BalancesTable">
+          <tbody>
+            {rows}
+          </tbody>
+        </table>
+      </div>
+    </div>);
+  }
+}

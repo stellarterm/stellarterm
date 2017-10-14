@@ -7,6 +7,7 @@ import AddTrustFromFederation from './Session/AddTrustFromFederation.jsx';
 import AddTrustFromDirectory from './Session/AddTrustFromDirectory.jsx';
 import Send from './Session/Send.jsx';
 import DepositCurrency from './Session/DepositCurrency.jsx';
+import DepositAnchors from './Session/DepositAnchors.jsx';
 import Generic from './Generic.jsx';
 import Loading from './Loading.jsx';
 
@@ -76,6 +77,9 @@ class Session extends React.Component {
         content = <div>
           <div className="so-back islandBack islandBack--t">
             <DepositCurrency d={d}/>
+          </div>
+          <div className="so-back islandBack">
+            <DepositAnchors d={d}/>
           </div>
         </div>
       }
