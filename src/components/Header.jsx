@@ -15,9 +15,11 @@ export default class Header extends React.Component {
     console.log(this.props.network)
     if (!this.props.network.isDefault) {
       networkBar = <div className="so-back HeaderNetworkBarBack">
-        <div className="so-chunk HeaderNetworkBar">
-          <span>Horizon url: <strong>{this.props.network.horizonUrl}</strong></span>
-          <span>Network passphrase: <strong>{this.props.network.networkPassphrase}</strong></span>
+        <div className="so-chunk">
+          <div className="HeaderNetworkBar">
+            <span>Horizon url: <strong>{this.props.network.horizonUrl}</strong></span>
+            <span>Network passphrase: <strong>{this.props.network.networkPassphrase}</strong></span>
+          </div>
         </div>
       </div>
     }
