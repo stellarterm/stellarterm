@@ -12,7 +12,6 @@ export default class Header extends React.Component {
   }
   render() {
     let networkBar;
-    console.log(this.props.network)
     if (!this.props.network.isDefault) {
       networkBar = <div className="so-back HeaderNetworkBarBack">
         <div className="so-chunk">

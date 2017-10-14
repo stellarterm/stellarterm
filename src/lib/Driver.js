@@ -2,24 +2,18 @@
 // (Well, it knows about everything except for routing)
 // Most everything else is just stateless
 // This is similar to Redux except more flexible for faster development
-import Printify from '../lib/Printify';
-import Byol from './Byol';
 import _ from 'lodash';
-import Stellarify from '../lib/Stellarify';
-import MagicSpoon from '../lib/MagicSpoon';
-import Validate from '../lib/Validate';
 import BigNumber from 'bignumber.js';
+import Byol from './Byol';
+import MagicSpoon from '../lib/MagicSpoon';
+import Ticker from './driver/Ticker';
+import Send from './driver/Send';
+
 BigNumber.config({ EXPONENTIAL_AT: 100 });
-import req from './req.js';
-import directory from '../directory';
 
-import Ticker from './driver/Ticker.js';
-import Send from './driver/Send.js';
-
-
-function Driver(opts) {
-  this.Server = new StellarSdk.Server(opts.network.horizonUrl);
-  this.Server.serverUrl = opts.network.horizonUrl;
+function Driver(driverOpts) {
+  this.Server = new StellarSdk.Server(driverOpts.network.horizonUrl);
+  this.Server.serverUrl = driverOpts.network.horizonUrl;
 
   const byol = new Byol();
 
@@ -33,7 +27,7 @@ function Driver(opts) {
   availableEvents.forEach((eventName) => {
     this[`listen${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`] = cb => byol.listen(eventName, cb);
     this[`unlisten${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`] = id => byol.unlisten(eventName, id);
-    trigger[eventName] = (opts) => byol.trigger(eventName, opts);
+    trigger[eventName] = opts => byol.trigger(eventName, opts);
   });
 
   // ----- Initializations above this line -----
@@ -46,12 +40,12 @@ function Driver(opts) {
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
-  let forceUpdateAccountOffers = () => {
-    let updateFn = _.get(this.session, 'account.updateOffers');
+  const forceUpdateAccountOffers = () => {
+    const updateFn = _.get(this.session, 'account.updateOffers');
     if (updateFn) {
       updateFn();
     }
-  }
+  };
 
   this.send = new Send(this);
   this.ticker = new Ticker();
@@ -93,7 +87,7 @@ function Driver(opts) {
               // Avoid race conditions
               this.handlers.logIn(secretKey);
             }
-          }, 2000)
+          }, 2000);
           trigger.session();
           return;
         }
@@ -102,31 +96,24 @@ function Driver(opts) {
         trigger.session();
       }
     },
-    createOffer: async (side, opts) => {
-      return MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
-        baseBuying: this.orderbook.baseBuying,
-        counterSelling: this.orderbook.counterSelling,
-      }));
-    },
-    addTrust: async (code, issuer) => {
+    createOffer: async (side, opts) => MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
+      baseBuying: this.orderbook.baseBuying,
+      counterSelling: this.orderbook.counterSelling,
+    })),
+    addTrust: async (code, issuer) =>
       // For simplicity, currently only adds max trust line
-      return MagicSpoon.changeTrust(this.Server, this.session.account, {
-        asset: new StellarSdk.Asset(code, issuer),
-      })
-    },
-    removeTrust: async (code, issuer) => {
-      return await MagicSpoon.changeTrust(this.Server, this.session.account, {
-        asset: new StellarSdk.Asset(code, issuer),
-        limit: '0',
-      })
-    },
-    removeOffer: async (offerId) => {
-      return MagicSpoon.removeOffer(this.Server, this.session.account, offerId);
-    },
+       MagicSpoon.changeTrust(this.Server, this.session.account, {
+         asset: new StellarSdk.Asset(code, issuer),
+       }),
+    removeTrust: async (code, issuer) => await MagicSpoon.changeTrust(this.Server, this.session.account, {
+      asset: new StellarSdk.Asset(code, issuer),
+      limit: '0',
+    }),
+    removeOffer: async offerId => MagicSpoon.removeOffer(this.Server, this.session.account, offerId),
     orderbookPricePick: (price) => {
       trigger.orderbookPricePick({
         price,
-      })
+      });
     },
     setOrderbook: (baseBuying, counterSelling) => {
       // If orderbook is already set, then this is a no-op
@@ -142,7 +129,7 @@ function Driver(opts) {
         trigger.orderbook();
         forceUpdateAccountOffers();
       });
-    }
+    },
   };
 }
 
