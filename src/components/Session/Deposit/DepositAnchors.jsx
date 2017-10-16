@@ -20,12 +20,16 @@ export default class DepositAnchors extends React.Component {
           const name = anchor.name;
           const asset = new StellarSdk.Asset(assetCode, assetIssuer);
           // TODO NNS 2 - we will need to update the directory to add the deposit instructions, this may require updating the datamodel
-          const row = (<tr className="row BalancesTable__row" key={name + "_" + assetCode + "_" + assetIssuer}>
-              <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
+          const row = (<tr className="row" key={name + "_" + assetCode + "_" + assetIssuer}>
+              <td className="row__item--assetCard">
                 <AssetCard2 code={assetCode} issuer={assetIssuer}/>
               </td>
-              <td className="BalancesTable__row__item BalancesTable__row__item--amount">
-                <TrustButton d={this.props.d} asset={asset} message="Coming soon..."/>
+              <td className="row__shareOption">
+                <TrustButton
+                  d={this.props.d}
+                  asset={asset}
+                  message="Coming soon..."
+                  trustMessage={"Trust " + asset.getCode()}/>
               </td>
             </tr>);
           rows.push(row);
@@ -42,7 +46,7 @@ export default class DepositAnchors extends React.Component {
         Note: StellarTerm does not endorse any of these anchors.</p>
       </div>
       <div>
-        <table className="BalancesTable">
+        <table className="row__full_width">
           <tbody>
             {rows}
           </tbody>

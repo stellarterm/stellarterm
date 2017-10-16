@@ -27,6 +27,16 @@
   justify-content: center;
   flex: 1;
 }
+
+.row__full_width {
+  width: 100%;
+}
+
+.row__item--assetCard {
+  padding: 8px;
+  width: 340px;
+}
+
 .row__message--error {
   color: $s-color-alert;
 }

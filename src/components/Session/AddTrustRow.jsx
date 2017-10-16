@@ -13,7 +13,12 @@ export default class AddTrustRow extends React.Component {
       <div className="row__assetCard2">
         <AssetCard2 code={this.props.asset.getCode()} issuer={this.props.asset.getIssuer()} />
       </div>
-      <TrustButton d={this.props.d} asset={this.props.asset} message={this.props.asset.getCode() + " accepted"}/>
+      <TrustButton
+        d={this.props.d}
+        asset={this.props.asset}
+        message={this.props.asset.getCode() + " accepted"}
+        trustMessage={"Accept " + this.props.asset.getCode()}
+        />
     </div>
   }
 }
