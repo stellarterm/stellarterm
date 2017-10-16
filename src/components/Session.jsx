@@ -6,8 +6,7 @@ import ManuallyAddTrust from './Session/ManuallyAddTrust.jsx';
 import AddTrustFromFederation from './Session/AddTrustFromFederation.jsx';
 import AddTrustFromDirectory from './Session/AddTrustFromDirectory.jsx';
 import Send from './Session/Send.jsx';
-import DepositCurrency from './Session/DepositCurrency.jsx';
-import DepositAnchors from './Session/DepositAnchors.jsx';
+import Deposit from './Session/Deposit.jsx';
 import Generic from './Generic.jsx';
 import Loading from './Loading.jsx';
 
@@ -74,14 +73,7 @@ class Session extends React.Component {
           </div>
         </div>
       } else if (part1 === 'deposit') {
-        content = <div>
-          <div className="so-back islandBack islandBack--t">
-            <DepositCurrency d={d}/>
-          </div>
-          <div className="so-back islandBack">
-            <DepositAnchors d={d}/>
-          </div>
-        </div>
+        content = (<div><Deposit d={d}/></div>);
       }
 
       return <div>

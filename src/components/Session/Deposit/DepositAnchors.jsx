@@ -1,7 +1,7 @@
 const React = window.React = require('react');
-import AssetCard2 from '../AssetCard2.jsx';
-import TrustButton from './TrustButton.jsx';
-import directory from '../../directory';
+import AssetCard2 from '../../AssetCard2.jsx';
+import TrustButton from '../TrustButton.jsx';
+import directory from '../../../directory';
 import _ from 'lodash';
 
 export default class DepositAnchors extends React.Component {
@@ -9,17 +9,13 @@ export default class DepositAnchors extends React.Component {
     super(props);
   }
   render() {
-    // TODO NNS 1 - temporary, thread from props/state
-    const currentAsset = this.props.d.session.account.getSortedBalances({hideNative: true})[0];
-    const currentCode = currentAsset.code;
-
     let rows = [];
     _.each(directory.anchors, anchor => {
       _.each(anchor.assets, assetId => {
         const assetParts = assetId.split('-');
         const assetCode = assetParts[0];
 
-        if (assetCode === currentCode) {
+        if (assetCode === this.props.selectedAssetCode) {
           const assetIssuer = assetParts[1];
           const name = anchor.name;
           const asset = new StellarSdk.Asset(assetCode, assetIssuer);
