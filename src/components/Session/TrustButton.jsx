@@ -50,7 +50,7 @@ export default class TrustButton extends React.Component {
       }
     } else {
       if (found) {
-        button = <span className="AddTrustRow__exists">{this.props.asset.getCode()} accepted</span>
+        button = <span className="AddTrustRow__exists">{this.props.message}</span>
       } else {
         button = <button className="s-button" onClick={this._handleSubmitTrust.bind(this)}>Accept {this.props.asset.getCode()}</button>
       }
