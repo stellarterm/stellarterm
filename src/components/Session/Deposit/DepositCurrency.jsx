@@ -10,7 +10,6 @@ export default class DepositCurrency extends React.Component {
     const options = this.props.allAssets.map(asset => ({ value: asset.code, label: asset.code }));
     const selectedValue = { value: this.props.selectedAsset, label: this.props.selectedAsset };
     
-    // TODO NNS 1 - add icon via optionRenderer and valueRenderer
     return (
       <div>
         <Select

@@ -19,7 +19,6 @@ export default class DepositAnchors extends React.Component {
           const assetIssuer = assetParts[1];
           const name = anchor.name;
           const asset = new StellarSdk.Asset(assetCode, assetIssuer);
-          // TODO NNS 2 - we will need to update the directory to add the deposit instructions, this may require updating the datamodel
           const row = (<tr className="row" key={name + "_" + assetCode + "_" + assetIssuer}>
               <td className="row__item--assetCard">
                 <AssetCard2 code={assetCode} issuer={assetIssuer}/>
