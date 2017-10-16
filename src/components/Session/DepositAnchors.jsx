@@ -1,6 +1,6 @@
 const React = window.React = require('react');
 import AssetCard2 from '../AssetCard2.jsx';
-import AddTrustRow from './AddTrustRow.jsx';
+import TrustButton from './TrustButton.jsx';
 import directory from '../../directory';
 import _ from 'lodash';
 
@@ -22,12 +22,13 @@ export default class DepositAnchors extends React.Component {
         if (assetCode === currentCode) {
           const assetIssuer = assetParts[1];
           const name = anchor.name;
+          const asset = new StellarSdk.Asset(assetCode, assetIssuer);
           const row = (<tr className="row BalancesTable__row" key={name + "_" + assetCode + "_" + assetIssuer}>
               <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
                 <AssetCard2 code={assetCode} issuer={assetIssuer}/>
               </td>
               <td className="BalancesTable__row__item BalancesTable__row__item--amount">
-                Hello
+                <TrustButton d={this.props.d} asset={asset}/>
               </td>
             </tr>);
           rows.push(row);
