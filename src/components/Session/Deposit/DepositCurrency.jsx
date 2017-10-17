@@ -7,7 +7,8 @@ export default class DepositCurrency extends React.Component {
   }
 
   render() {
-    const options = this.props.allAssets.map(asset => ({ value: asset.code, label: asset.code }));
+    const codes = Array.from(new Set(this.props.allAssets.map(asset => asset.code)));
+    const options = codes.map(code => ({ value: code, label: code }));
     const selectedValue = { value: this.props.selectedAsset, label: this.props.selectedAsset };
     
     return (
