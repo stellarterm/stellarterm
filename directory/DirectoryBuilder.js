@@ -1,4 +1,6 @@
 let logos = require('./logos');
+// We depend on logos being compiled to a js script so that it can be trivially included
+// in the StellarTerm client without webpack
 
 // Constraints: Data should be easily serializable into JSON (no references to each other)
 // directory.js should not depend on creating objects with StellarSdk (though its methods should support reading them)

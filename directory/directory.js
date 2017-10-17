@@ -1,8 +1,6 @@
 // We use let instead of import so that it can be used by vanilla js
-let DirectoryBuilder = require('./DirectoryBuilder');
-
-let directory = new DirectoryBuilder();
-
+const DirectoryBuilder = require('./DirectoryBuilder');
+const directory = new DirectoryBuilder();
 
 directory.addAnchor({
   domain: 'naobtc.com',
