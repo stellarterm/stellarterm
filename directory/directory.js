@@ -4,7 +4,8 @@
 // not endorse any of this information.
 
 const DirectoryBuilder = require('./DirectoryBuilder');
-const directory = new DirectoryBuilder();
+let directory = new DirectoryBuilder();
+directory.DirectoryBuilder = DirectoryBuilder;
 
 directory.addAnchor({
   domain: 'naobtc.com',
