@@ -4,12 +4,16 @@
   "description": "The directory as used in StellarTerm",
   "main": "directory.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./checkBuild.sh"
   },
   "keywords": [
     "stellar",
     "stellarterm"
   ],
   "author": "Iris Li",
-  "license": "Apache-2.0"
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/irisli/stellarterm/issues"
+  },
+  "homepage": "https://github.com/irisli/stellarterm/tree/master/directory#readme"
 }
