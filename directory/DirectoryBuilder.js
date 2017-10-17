@@ -161,22 +161,23 @@ class DirectoryBuilder {
     return this.unknownAnchor;
   }
 
+  // DEPRECATED so that we won't have a external dependency of StellarSdk
   // getAsset() is general and takes in any of the combination:
   // - code:string, issuerAccountId:string
   // - code:string, anchorDomain:string
   // - sdkAsset:StellarSdk.Asset
   // All functions that are getAssset*() will return null if the asset is not found
-  getAsset(codeOrSdkAsset, domainOrAccountId) {
-    if (codeOrSdkAsset instanceof StellarSdk.Asset) {
-      return this.getAssetBySdkAsset(codeOrSdkAsset);
-    }
+  // getAsset(codeOrSdkAsset, domainOrAccountId) {
+  //   if (codeOrSdkAsset instanceof StellarSdk.Asset) {
+  //     return this.getAssetBySdkAsset(codeOrSdkAsset);
+  //   }
 
-    if (StellarSdk.StrKey.isValidEd25519PublicKey(domainOrAccountId) ||
-       domainOrAccountId === null) {
-      return this.getAssetByAccountId(codeOrSdkAsset, domainOrAccountId);
-    }
-    return this.getAssetByDomain(codeOrSdkAsset, domainOrAccountId);
-  }
+  //   if (StellarSdk.StrKey.isValidEd25519PublicKey(domainOrAccountId) ||
+  //      domainOrAccountId === null) {
+  //     return this.getAssetByAccountId(codeOrSdkAsset, domainOrAccountId);
+  //   }
+  //   return this.getAssetByDomain(codeOrSdkAsset, domainOrAccountId);
+  // }
 
   // Returns null if asset is not found
   getAssetByDomain(code, domain) {
@@ -231,34 +232,18 @@ class DirectoryBuilder {
     return this.getAssetByAccountId(asset.getCode(), asset.getIssuer());
   }
 
+  getDestination(accountId) {
+    return this.destinations[accountId];
+  }
+
   // getAssetsByIssuer() {
   //   // To be implemented when there is actually a use case
   // }
 
   // getAnchorByAsset() {
-  //   let code, issuer;
-  //   if (arguments[0] instanceof StellarSdk.Asset) {
-  //     code = arguments[0].getCode();
-  //     issuer = arguments[0].getIssuer();
-  //   } else {
-  //     code = arguments[0];
-  //     issuer = arguments[1];
-  //   }
-
-  //   if (issuer === undefined || issuer === null) {
-  //     return this.specialAnchors.stellar;
-  //   }
-
-  //   // Will always return a source. If no source is found, it will return the unknown source
-  //   if (!dataByIssuer.hasOwnProperty(accountId)) {
-  //     return specialData.unknown;
-  //   }
-  //   return dataByIssuer[accountId];
+  //   // To be implemented when there is actually a use case
   // }
 
-  // getDestination(accountId) {
-  //   return this.destinations[accountId];
-  // }
 }
 
 module.exports = DirectoryBuilder;

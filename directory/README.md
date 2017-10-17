@@ -26,6 +26,7 @@ directory.getAssetByDomain(code, domain);
 directory.getAssetByAccountId(code, issuer);
 directory.resolveAssetByAccountId(code, issuer);
 directory.getAssetBySdkAsset(asset);
+directory.getDestination(accountId);
 ```
 
 #### Starting from a fresh directory
