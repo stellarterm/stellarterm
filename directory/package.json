@@ -1,0 +1,15 @@
+{
+  "name": "stellarterm-directory",
+  "version": "0.0.1",
+  "description": "The directory as used in StellarTerm",
+  "main": "directory.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "stellar",
+    "stellarterm"
+  ],
+  "author": "Iris Li",
+  "license": "Apache-2.0"
+}

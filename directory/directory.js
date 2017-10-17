@@ -1,4 +1,8 @@
-// We use let instead of import so that it can be used by vanilla js
+// This code is licensed under Apache-2.0.
+// It is released without warranty.
+// This is simply for informational purposes. The creators of this file does
+// not endorse any of this information.
+
 const DirectoryBuilder = require('./DirectoryBuilder');
 const directory = new DirectoryBuilder();
 
