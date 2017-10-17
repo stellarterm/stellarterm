@@ -1,7 +1,7 @@
 [![Travis CI status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm)
 
-# StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/irisli/stellarterm/tree/master/api) | [directory](https://github.com/irisli/stellarterm/blob/master/src/directory.js)
-The StellarTerm ecosystem consists of multiple projects built for the [Stellar network](https://www.stellar.org/) including a [trading client](https://stellarterm.com/). The projects are in this monorepo to enable faster development speed.
+# StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/irisli/stellarterm/tree/master/api) | [directory](https://github.com/irisli/stellarterm/blob/master/directory/)
+This StellarTerm monorepo consists of multiple projects built for the [Stellar network](https://www.stellar.org/) including a [trading client](https://stellarterm.com/). The projects are in this monorepo to enable faster development speed.
 
 ## Web Client
 StellarTerm is a web based trading client for use on the Stellar network. This client aims to make it easy and safe for users of any skill level to trade on the Stellar network by making a clear and secure user interface. Try it out at [https://stellarterm.com](https://stellarterm.com/)
@@ -13,25 +13,12 @@ The API uses the [Serverless framework](https://serverless.com/) for deployment 
 
 It is currently under active development and is not yet finished. See it in action here: [https://api.stellarterm.com/](https://api.stellarterm.com/)
 
-## Directory
-StellarTerm maintains a manually curated directory file with a listing of well known assets on the Stellar network. StellarTerm currently does not fetch stellar.toml files to discover assets as a way to prevent phishing. While StellarTerm tries to be accurate, it does not endorse any issuers and can not guarantee the accuracy of the directory.
+## [Directory](https://github.com/irisli/stellarterm/blob/master/directory/README.md)
+StellarTerm maintains a manually curated directory file with a listing of well known anchors and assets on the Stellar network. For more information, see the [directory README](https://github.com/irisli/stellarterm/blob/master/directory/README.md).
 
-To list your directory, please create a GitHub issue or email Iris Li at *stlisting@iris.li*.
+-------------------------------------------------------------------------------
 
-Anchors and assets will only be added to the directory if they seem legitimate. To be added to the StellarTerm directory, an anchor must have a domain name and a stellar.toml file correctly hosted on the domain name.
-
-### Directory logos
-StellarTerm displays logos of Stellar anchors to make it easier for end users to recognize them and protect themselves against phishing attacks. When a unknown issuer of invalid asset pair is used, an image indicating that the asset is unknown will be shown.
-
-### Directory logo guidelines
-To provide a cleaner user interface, StellarTerm directory logos follow the following guidelines:
-- 100x100px
-- png format; optimized using default settings of pngquant
-- 10% (10px) of space from each edge to give space to the logo. The graphic can extend up to 5% from the edge for flourishes and can extend all the way to the edge if that is how the logo is designed
-- Background color should either be relevant to the logo (such as if it's square) or transparency should be used
-- Only one logo per domain name. Currently, StellarTerm does not support custom icons per currency
-
-## StellarTerm custom network
+## StellarTerm client custom network
 
 ### Testnet
 To use the testnet, simply add `#testnet` to the url to activate it. To exit, refresh the page where the url is not `#testnet`.

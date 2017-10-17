@@ -89,33 +89,6 @@ gulp.task('customConfig', (cb) => {
   fs.writeFile('./dist/customConfig.js', configFile, cb);
 });
 
-// Logos for the directory
-gulp.task('logos', (cb) => {
-  let file = 'let logos = {\n';
-
-  fs.readdirSync('./logos')
-    .filter(filename => {
-      return filename.match(/\.png$/);
-    })
-    .forEach(filename => {
-      let match = filename.match(/(.+)\.png$/);
-      if (match === null) {
-        return;
-      }
-      let logoName = match[1];
-
-      // Unlike in the images task, we only support png
-      let image = fs.readFileSync(`./logos/${filename}`);
-      let b64 = new Buffer(image).toString('base64');
-      file += `  '${logoName}': 'data:image/png;base64, ${b64}',\n`
-    })
-
-  // DONTDO: Useless and worthless optimization not worth pursuing: use Promise.all on fs instead of sync
-
-  file += '};\nmodule.exports = logos;';
-  fs.writeFile('./src/logos.js', file, cb);
-});
-
 // browserify
 const bundler = watchify(browserify({
   entries: ['./src/app.jsx'],
@@ -149,7 +122,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe($.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'images', 'logos', 'scripts', 'copyBower'];
+const baseTasks = ['html', 'styles', 'customConfig', 'images', 'scripts', 'copyBower'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {
@@ -191,10 +164,4 @@ gulp.task('production', () => {
     , () => {
       process.exit();
     });
-});
-
-gulp.task('directoryToJson',  ['logos'], () => {
-  let directory = require('./src/directory');
-
-  fs.writeFileSync('./directory.json', directory.toJson());
 });
