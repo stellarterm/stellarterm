@@ -1,5 +1,5 @@
 // This code is licensed under Apache-2.0.
-// It is released without warranty.
+// It is released AS-IS and without warranty.
 // This is simply for informational purposes. The creators of this file does
 // not endorse any of this information.
 
