@@ -52,7 +52,8 @@ export default class AssetCard2 extends React.Component {
 
     let issuerAccountId = (asset.issuer === null) ? 'native lumens' : asset.issuer;
     // Unlike AssetCard (original), this one does not link to the domain. Users can simply type it in the address bar
-    let assetCardMain = <div className="AssetCard2__main" style={backgroundStyle} onClick={() => window.open(anchor.website, '_blank')}>
+
+    let assetCardMain = <div className="AssetCard2__main" style={backgroundStyle}>
       <img className="AssetCard2__logo" src={anchor.logo}></img>
       <div className="AssetCard2__content">
         <div className="AssetCard2__header">
