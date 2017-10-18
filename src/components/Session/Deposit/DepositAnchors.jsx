@@ -36,21 +36,16 @@ export default class DepositAnchors extends React.Component {
       });
     });
 
-    return (<div className="island">
-      <div className="island__header">
-        Anchors accepting deposits
-      </div>
+    return (<div>
       <div className="island__paddedContent">
         <p>This is a list of anchors from the Stellar community.<br/>
         Note: StellarTerm does not endorse any of these anchors.</p>
       </div>
-      <div>
-        <table className="row__full_width">
-          <tbody>
-            {rows}
-          </tbody>
-        </table>
-      </div>
+      <table className="row__full_width">
+        <tbody>
+          {rows}
+        </tbody>
+      </table>
     </div>);
   }
 }

@@ -21,18 +21,22 @@ export default class Deposit extends React.Component {
     let currencyPicker;
     let anchors;
     if (allAssets.length == 0) {
-      const noTrustLines = (<div>
+      const noTrustLines = (<div className="Generic__content">
         You haven't trusted any assets. Click here to <a href="#account/addTrust">create your first trust line</a>.
         </div>);
       currencyPicker = noTrustLines;
       anchors = noTrustLines;
     } else {
-      currencyPicker = (<DepositCurrency
-        d={this.props.d}
-        allAssets={allAssets}
-        selectedAsset={this.state.selectedAsset || allAssets[0].code}
-        onCurrencyChange={this._onCurrencyChange.bind(this)}
-        />);
+      currencyPicker = (
+        <div className="dropdown s-inputGroup__item S-flexItem-noFlex">
+          <DepositCurrency
+            d={this.props.d}
+            allAssets={allAssets}
+            selectedAsset={this.state.selectedAsset || allAssets[0].code}
+            onCurrencyChange={this._onCurrencyChange.bind(this)}
+            />
+        </div>
+      );
       anchors = (<DepositAnchors
         d={this.props.d}
         selectedAssetCode={this.state.selectedAsset || allAssets[0].code}
@@ -51,13 +55,16 @@ export default class Deposit extends React.Component {
               <br/>
               You'll find a selection of currencies in the tabs below. Start by choosing a currency to deposit.
             </div>
-            <div className="dropdown s-inputGroup__item S-flexItem-noFlex">
             {currencyPicker}
-            </div>
           </div>
         </div>
         <div className="so-back islandBack">
-          {anchors}
+          <div className="island">
+            <div className="island__header">
+              Anchors accepting deposits
+            </div>
+            {anchors}
+          </div>
         </div>
       </div>
     );
