@@ -86,7 +86,7 @@ class Session extends React.Component {
                 <a className="subNav__nav__item" href="#account">Balances</a>
                 <a className="subNav__nav__item" href="#account/send">Send</a>
                 <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
-                {() => showDeposits ? <a className="subNav__nav__item" href="#account/deposit">Deposit</a> : null}
+                {showDeposits ? <a className="subNav__nav__item" href="#account/deposit">Deposit</a> : null}
               </nav>
             </div>
           </div>
