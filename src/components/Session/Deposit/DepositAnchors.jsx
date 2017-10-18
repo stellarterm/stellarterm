@@ -19,6 +19,7 @@ export default class DepositAnchors extends React.Component {
           const assetIssuer = assetParts[1];
           const name = anchor.name;
           const asset = new StellarSdk.Asset(assetCode, assetIssuer);
+          const instructions = directory.assets[assetId].instructions;
           const row = (<tr className="row" key={name + "_" + assetCode + "_" + assetIssuer}>
               <td className="row__item--assetCard">
                 <AssetCard2 code={assetCode} issuer={assetIssuer}/>
@@ -27,7 +28,7 @@ export default class DepositAnchors extends React.Component {
                 <TrustButton
                   d={this.props.d}
                   asset={asset}
-                  message="Coming soon..."
+                  message={instructions}
                   trustMessage={"Trust " + asset.getCode()}/>
               </td>
             </tr>);

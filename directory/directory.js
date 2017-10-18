@@ -16,10 +16,12 @@ directory.addAnchor({
 directory.addAsset('naobtc.com', {
   code: 'BTC',
   issuer: 'GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH',
+  instructions: 'https://naobtc.com/#/howto/deposit',
 });
 directory.addAsset('naobtc.com', {
   code: 'XEL',
   issuer: 'GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS',
+  instructions: 'https://naobtc.com/#/howto/deposit',
 });
 directory.addAnchor({
   domain: 'vcbear.net',
@@ -30,14 +32,17 @@ directory.addAnchor({
 directory.addAsset('vcbear.net', {
   code: 'JPY',
   issuer: 'GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM',
+  instructions: 'https://www.vcbear.net/signin',
 });
 directory.addAsset('vcbear.net', {
   code: 'XRP',
   issuer: 'GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ',
+  instructions: 'https://www.vcbear.net/signin',
 });
 directory.addAsset('vcbear.net', {
   code: 'BTC',
   issuer: 'GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI',
+  instructions: 'https://www.vcbear.net/signin',
 });
 
 directory.addAnchor({
@@ -73,6 +78,7 @@ directory.addAnchor({
 directory.addAsset('ripplefox.com', {
   code: 'CNY',
   issuer: 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX',
+  instructions: 'Leave your address in the message to seller when you order the item: https://shop109149722.taobao.com',
 });
 
 directory.addAnchor({
@@ -84,6 +90,7 @@ directory.addAnchor({
 directory.addAsset('btc.papayame.com', {
   code: 'BTC',
   issuer: 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF',
+  instructions: 'https://btc.papayame.com/',
 });
 
 directory.addAnchor({
@@ -95,6 +102,7 @@ directory.addAnchor({
 directory.addAsset('ltc.papayame.com', {
   code: 'LTC',
   issuer: 'GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP',
+  instructions: 'https://ltc.papayame.com/',
 });
 
 directory.addAnchor({
@@ -106,26 +114,32 @@ directory.addAnchor({
 directory.addAsset('apay.io', {
   code: 'ICN',
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
 });
 directory.addAsset('apay.io', {
   code: 'ETH',
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
 });
 directory.addAsset('apay.io', {
   code: 'BAT',
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
 });
 directory.addAsset('apay.io', {
   code: 'OMG',
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
 });
 directory.addAsset('apay.io', {
   code: 'REP',
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
 });
 directory.addAsset('apay.io', {
   code: 'ZRX',
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
 });
 
 directory.addAnchor({
@@ -148,6 +162,7 @@ directory.addAnchor({
 directory.addAsset('gft.network', {
   code: 'GFT',
   issuer: 'GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN',
+  instructions: 'https://gft.network/network/treasury#gft-purchase-and-withdrawal',
 });
 
 directory.addAnchor({
