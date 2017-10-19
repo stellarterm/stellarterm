@@ -93,8 +93,10 @@ class DirectoryBuilder {
       code: details.code,
       issuer: details.issuer,
       domain: anchorDomain,
-      instructions: details.instructions || "Coming Soon...",
     };
+    if (details.instructions) {
+        this.assets[slug]['instructions'] = details.instructions;
+    }
 
     this.anchors[anchorDomain].assets[details.code] = slug;
     this.issuers[details.issuer][details.code] = slug;

@@ -219,14 +219,12 @@
     "PHP-GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP": {
       "code": "PHP",
       "issuer": "GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP",
-      "domain": "coins.asia",
-      "instructions": "Coming Soon..."
+      "domain": "coins.asia"
     },
     "EURT-GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S": {
       "code": "EURT",
       "issuer": "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S",
-      "domain": "tempo.eu.com",
-      "instructions": "Coming Soon..."
+      "domain": "tempo.eu.com"
     },
     "CNY-GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX": {
       "code": "CNY",
@@ -285,8 +283,7 @@
     "MOBI-GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH": {
       "code": "MOBI",
       "issuer": "GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH",
-      "domain": "mobius.network",
-      "instructions": "Coming Soon..."
+      "domain": "mobius.network"
     },
     "GFT-GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN": {
       "code": "GFT",
@@ -297,74 +294,62 @@
     "SEED-GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF": {
       "code": "SEED",
       "issuer": "GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF",
-      "domain": "collective21.org",
-      "instructions": "Coming Soon..."
+      "domain": "collective21.org"
     },
     "XLQ-GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX": {
       "code": "XLQ",
       "issuer": "GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX",
-      "domain": "liquido.i-server.org",
-      "instructions": "Coming Soon..."
+      "domain": "liquido.i-server.org"
     },
     "EUR-GAKBPBDMW6CTRDCXNAPSVJZ6QAN3OBNRG6CWI27FGDQT2ZJJEMDRXPKK": {
       "code": "EUR",
       "issuer": "GAKBPBDMW6CTRDCXNAPSVJZ6QAN3OBNRG6CWI27FGDQT2ZJJEMDRXPKK",
-      "domain": "moni.com",
-      "instructions": "Coming Soon..."
+      "domain": "moni.com"
     },
     "NGN-GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2": {
       "code": "NGN",
       "issuer": "GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2",
-      "domain": "tonaira.com",
-      "instructions": "Coming Soon..."
+      "domain": "tonaira.com"
     },
     "EQD-GCGEQJR3E5BVMQYSNCHPO6NPP3KOT4VVZHIOLSRSNLE2GFY7EWVSLLTN": {
       "code": "EQD",
       "issuer": "GCGEQJR3E5BVMQYSNCHPO6NPP3KOT4VVZHIOLSRSNLE2GFY7EWVSLLTN",
-      "domain": "equid.co",
-      "instructions": "Coming Soon..."
+      "domain": "equid.co"
     },
     "USD-GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R": {
       "code": "USD",
       "issuer": "GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R",
-      "domain": "bitcoinfundi.com",
-      "instructions": "Coming Soon..."
+      "domain": "bitcoinfundi.com"
     },
     "BTC-GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R": {
       "code": "BTC",
       "issuer": "GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R",
-      "domain": "bitcoinfundi.com",
-      "instructions": "Coming Soon..."
+      "domain": "bitcoinfundi.com"
     },
     "CM3-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM3",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com",
-      "instructions": "Coming Soon..."
+      "domain": "cryptomover.com"
     },
     "CM10-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM10",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com",
-      "instructions": "Coming Soon..."
+      "domain": "cryptomover.com"
     },
     "CME-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CME",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com",
-      "instructions": "Coming Soon..."
+      "domain": "cryptomover.com"
     },
     "CM3x2-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM3x2",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com",
-      "instructions": "Coming Soon..."
+      "domain": "cryptomover.com"
     },
     "HKDC-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "HKDC",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com",
-      "instructions": "Coming Soon..."
+      "domain": "cryptomover.com"
     }
   },
   "issuers": {

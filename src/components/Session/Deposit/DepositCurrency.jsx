@@ -1,5 +1,4 @@
 const React = window.React = require('react');
-const Currencies = require('../../../currencies');
 import Select from 'react-select';
 
 export default class DepositCurrency extends React.Component {
@@ -7,14 +6,8 @@ export default class DepositCurrency extends React.Component {
     super(props);
 
     this.optionRenderer = (option) => {
-      let logo = Currencies[option.value];
-      if (!logo) {
-        logo = Currencies['unknown'];
-      }
-
       return (
         <div className="Deposit__dropdown_option">
-          <img className="Deposit__dropdown_option_img" src={logo}/>
           <div>{option.label}</div>
         </div>
       );
