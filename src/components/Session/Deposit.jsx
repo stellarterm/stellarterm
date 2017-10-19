@@ -10,10 +10,6 @@ export default class Deposit extends React.Component {
     }
   }
 
-  _onCurrencyChange(newAsset) {
-    this.setState({ 'selectedAsset': newAsset });
-  }
-
   render() {
     const account = this.props.d.session.account;
     const allAssets = account.getSortedBalances({hideNative: true}); // From MagicSpoon.Account
@@ -28,12 +24,12 @@ export default class Deposit extends React.Component {
       anchors = noTrustLines;
     } else {
       currencyPicker = (
-        <div className="dropdown s-inputGroup__item S-flexItem-noFlex">
+        <div className="Deposit__dropdown s-inputGroup__item S-flexItem-noFlex">
           <DepositCurrency
             d={this.props.d}
             allAssets={allAssets}
             selectedAsset={this.state.selectedAsset || allAssets[0].code}
-            onCurrencyChange={this._onCurrencyChange.bind(this)}
+            onCurrencyChange={ newAsset => this.setState({ 'selectedAsset': newAsset }) }
             />
         </div>
       );
@@ -46,7 +42,7 @@ export default class Deposit extends React.Component {
     return (
       <div>
         <div className="so-back islandBack islandBack--t">
-          <div className="deposit-currency island">
+          <div className="island">
             <div className="island__header">
               Pick a currency for the deposit
             </div>

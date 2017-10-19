@@ -8,27 +8,27 @@ export default class TrustButton extends React.Component {
       status: 'ready', // ready, error, or pending
       errorType: '', // 'unknown' | 'lowReserve'
     }
-  }
 
-  _handleSubmitTrust(event) {
-    event.preventDefault();
-    this.setState({status: 'pending'});
-    this.props.d.handlers.addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
-    .then((result) => {
-      this.forceUpdate();
-      this.setState({status: 'ready'});
-    })
-    .catch(error => {
-      let errorType = 'unknown';
-      if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
-        errorType = 'lowReserve';
-      }
+    this.handleSubmitTrust = (event) => {
+      event.preventDefault();
+      this.setState({status: 'pending'});
+      this.props.d.handlers.addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
+      .then((result) => {
+        this.forceUpdate();
+        this.setState({status: 'ready'});
+      })
+      .catch(error => {
+        let errorType = 'unknown';
+        if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
+          errorType = 'lowReserve';
+        }
 
-      this.setState({
-        status: 'error',
-        errorType: errorType,
+        this.setState({
+          status: 'error',
+          errorType: errorType,
+        });
       });
-    });
+    };
   }
 
   render() {
@@ -41,12 +41,12 @@ export default class TrustButton extends React.Component {
 
     let button;
     if (this.state.status === 'pending') {
-      button = <button className="s-button" disabled={true} onClick={this._handleSubmitTrust.bind(this)}>Creating trust line for {this.props.asset.getCode()}...</button>
+      button = <button className="s-button" disabled={true} onClick={this.handleSubmitTrust}>Creating trust line for {this.props.asset.getCode()}...</button>
     } else if (this.state.status === 'error') {
       if (this.state.errorType === 'lowReserve') {
-        button = <button className="s-button" onClick={this._handleSubmitTrust.bind(this)}>Error: Not enough lumens</button>
+        button = <button className="s-button" onClick={this.handleSubmitTrust}>Error: Not enough lumens</button>
       } else {
-        button = <button className="s-button" onClick={this._handleSubmitTrust.bind(this)}>Error creating trust line for {this.props.asset.getCode()}</button>
+        button = <button className="s-button" onClick={this.handleSubmitTrust}>Error creating trust line for {this.props.asset.getCode()}</button>
       }
     } else {
       if (found) {
@@ -56,7 +56,7 @@ export default class TrustButton extends React.Component {
           button = <span className="AddTrustRow__exists">{this.props.message}</span>
         }
       } else {
-        button = <button className="s-button" onClick={this._handleSubmitTrust.bind(this)}>{this.props.trustMessage}</button>
+        button = <button className="s-button" onClick={this.handleSubmitTrust}>{this.props.trustMessage}</button>
       }
     }
 

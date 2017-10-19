@@ -14,8 +14,8 @@ export default class DepositCurrency extends React.Component {
     }
 
     return (
-      <div className="Deposit__dropdown">
-        <img className="Deposit__dropdown_img" src={logo}/>
+      <div className="Deposit__dropdown_option">
+        <img className="Deposit__dropdown_option_img" src={logo}/>
         <div>{option.label}</div>
       </div>
     );

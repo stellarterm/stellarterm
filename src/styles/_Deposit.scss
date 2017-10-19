@@ -1,10 +1,16 @@
-.Deposit__dropdown_img {
+.Deposit__dropdown {
+	padding: 20px;
+	padding-top: 10px;
+	width: 200px;
+}
+
+.Deposit__dropdown_option {
+	display: flex;
+}
+
+.Deposit__dropdown_option_img {
 	height: 30px;
 	width: 30px;
 	margin-right: 20px;
 	margin-top: 2px;
-}
-
-.Deposit__dropdown {
-	display: flex;
 }
