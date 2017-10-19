@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-const Assets = require('../../../assets');
+const Currencies = require('../../../currencies');
 import Select from 'react-select';
 
 export default class DepositCurrency extends React.Component {
@@ -7,9 +7,9 @@ export default class DepositCurrency extends React.Component {
     super(props);
 
     this.optionRenderer = (option) => {
-      let logo = Assets[option.value];
+      let logo = Currencies[option.value];
       if (!logo) {
-        logo = Assets['unknown'];
+        logo = Currencies['unknown'];
       }
 
       return (

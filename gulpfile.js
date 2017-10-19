@@ -37,7 +37,7 @@ gulp.task('images', (cb) => {
       mimeType = 'jpeg';
     }
 
-    let image = fs.readFileSync(`./images/${name}.${mimeType}`);
+    let image = fs.readFileSync(`./images/${name}.${extension}`);
     let b64 = new Buffer(image).toString('base64');
     file += `  '${name}': 'data:image/${mimeType};base64, ${b64}',\n`
   };
@@ -53,6 +53,36 @@ gulp.task('images', (cb) => {
 
   file += '};\nmodule.exports = images;';
   fs.writeFile('./src/images.js', file, cb);
+});
+
+// Images (For big images that get turned into base64)
+gulp.task('currencies', (cb) => {
+  let file = 'let currencies = {\n';
+  let addImage = (name, extension) => {
+    // Known to support jpg, png, gif. Supports others if mime type matches extension
+    let mimeType = extension;
+    if (extension === 'jpg') {
+      mimeType = 'jpeg';
+    }
+
+    let image = fs.readFileSync(`./images/currencies/${name}.${extension}`);
+    let b64 = new Buffer(image).toString('base64');
+    file += `  '${name}': 'data:image/${mimeType};base64, ${b64}',\n`
+  };
+
+  addImage('BTC','png');
+  addImage('ETH','png');
+  addImage('EUR','png');
+  addImage('GFT','png');
+  addImage('JPY','jpg');
+  addImage('LTC','png');
+  addImage('MOBI','png');
+  addImage('PHP','png');
+  addImage('unknown','png');
+  addImage('USD','png');
+
+  file += '};\nmodule.exports = currencies;';
+  fs.writeFile('./src/currencies.js', file, cb);
 });
 
 
@@ -122,7 +152,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe($.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'images', 'scripts', 'copyBower'];
+const baseTasks = ['html', 'styles', 'customConfig', 'images', 'currencies', 'scripts', 'copyBower'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {

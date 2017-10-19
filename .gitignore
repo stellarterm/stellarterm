@@ -3,6 +3,7 @@ dist/
 .sass-cache/
 bower_components/
 src/images.js
+src/currencies.js
 
 npm-debug.log
 
