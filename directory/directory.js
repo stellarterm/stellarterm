@@ -136,7 +136,7 @@ directory.addAnchor({
 });
 directory.addAsset('mobius.network', {
   code: 'MOBI',
-  issuer: 'GDCIUCGL7VEMMF6VYJOW75KQ5ZCLHAQBRM6EPFTKCRWUYVUOOYQCKC5A',
+  issuer: 'GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH',
 });
 
 directory.addAnchor({
