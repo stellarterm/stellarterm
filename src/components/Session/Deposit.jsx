@@ -17,7 +17,7 @@ export default class Deposit extends React.Component {
     let currencyPicker;
     let anchors;
     if (allAssets.length == 0) {
-      const noTrustLines = (<div className="Generic__content">
+      const noTrustLines = (<div className="Deposit__content">
         You haven't trusted any assets. Click here to <a href="#account/addTrust">create your first trust line</a>.
         </div>);
       currencyPicker = noTrustLines;
@@ -46,7 +46,7 @@ export default class Deposit extends React.Component {
             <div className="island__header">
               Pick a currency for the deposit
             </div>
-            <div className="Generic__content">
+            <div className="Deposit__content">
               If you want to deposit or withdraw funds, either in fiat or from other blockchains, you may use an anchor service to do so.
               <br/>
               You'll find a selection of currencies in the tabs below. Start by choosing a currency to deposit.

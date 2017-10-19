@@ -50,7 +50,7 @@ export default class TrustButton extends React.Component {
       }
     } else {
       if (found) {
-        if (this.props.message.startsWith("http://") || this.props.message.startsWith("https://")) {
+        if (this.props.message.startsWith("https://")) {
           button = <button onClick={() => window.open(this.props.message, '_blank')}>{this.props.message}</button>
         } else {
           button = <span className="AddTrustRow__exists">{this.props.message}</span>
