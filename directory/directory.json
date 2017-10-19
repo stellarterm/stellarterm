@@ -189,152 +189,182 @@
     "BTC-GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH": {
       "code": "BTC",
       "issuer": "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH",
-      "domain": "naobtc.com"
+      "domain": "naobtc.com",
+      "instructions": "https://naobtc.com/#/howto/deposit"
     },
     "XEL-GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS": {
       "code": "XEL",
       "issuer": "GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS",
-      "domain": "naobtc.com"
+      "domain": "naobtc.com",
+      "instructions": "https://naobtc.com/#/howto/deposit"
     },
     "JPY-GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM": {
       "code": "JPY",
       "issuer": "GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM",
-      "domain": "vcbear.net"
+      "domain": "vcbear.net",
+      "instructions": "https://www.vcbear.net/signin"
     },
     "XRP-GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ": {
       "code": "XRP",
       "issuer": "GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ",
-      "domain": "vcbear.net"
+      "domain": "vcbear.net",
+      "instructions": "https://www.vcbear.net/signin"
     },
     "BTC-GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI": {
       "code": "BTC",
       "issuer": "GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI",
-      "domain": "vcbear.net"
+      "domain": "vcbear.net",
+      "instructions": "https://www.vcbear.net/signin"
     },
     "PHP-GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP": {
       "code": "PHP",
       "issuer": "GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP",
-      "domain": "coins.asia"
+      "domain": "coins.asia",
+      "instructions": "Coming Soon..."
     },
     "EURT-GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S": {
       "code": "EURT",
       "issuer": "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S",
-      "domain": "tempo.eu.com"
+      "domain": "tempo.eu.com",
+      "instructions": "Coming Soon..."
     },
     "CNY-GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX": {
       "code": "CNY",
       "issuer": "GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX",
-      "domain": "ripplefox.com"
+      "domain": "ripplefox.com",
+      "instructions": "Leave your address in the message to seller when you order the item: https://shop109149722.taobao.com"
     },
     "BTC-GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF": {
       "code": "BTC",
       "issuer": "GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF",
-      "domain": "btc.papayame.com"
+      "domain": "btc.papayame.com",
+      "instructions": "https://btc.papayame.com/"
     },
     "LTC-GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP": {
       "code": "LTC",
       "issuer": "GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP",
-      "domain": "ltc.papayame.com"
+      "domain": "ltc.papayame.com",
+      "instructions": "https://ltc.papayame.com/"
     },
     "ICN-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "ICN",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "ETH-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "ETH",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "BAT-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "BAT",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "OMG-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "OMG",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "REP-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "REP",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "ZRX-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "ZRX",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "MOBI-GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH": {
       "code": "MOBI",
       "issuer": "GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH",
-      "domain": "mobius.network"
+      "domain": "mobius.network",
+      "instructions": "Coming Soon..."
     },
     "GFT-GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN": {
       "code": "GFT",
       "issuer": "GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN",
-      "domain": "gft.network"
+      "domain": "gft.network",
+      "instructions": "https://gft.network/network/treasury#gft-purchase-and-withdrawal"
     },
     "SEED-GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF": {
       "code": "SEED",
       "issuer": "GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF",
-      "domain": "collective21.org"
+      "domain": "collective21.org",
+      "instructions": "Coming Soon..."
     },
     "XLQ-GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX": {
       "code": "XLQ",
       "issuer": "GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX",
-      "domain": "liquido.i-server.org"
+      "domain": "liquido.i-server.org",
+      "instructions": "Coming Soon..."
     },
     "EUR-GAKBPBDMW6CTRDCXNAPSVJZ6QAN3OBNRG6CWI27FGDQT2ZJJEMDRXPKK": {
       "code": "EUR",
       "issuer": "GAKBPBDMW6CTRDCXNAPSVJZ6QAN3OBNRG6CWI27FGDQT2ZJJEMDRXPKK",
-      "domain": "moni.com"
+      "domain": "moni.com",
+      "instructions": "Coming Soon..."
     },
     "NGN-GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2": {
       "code": "NGN",
       "issuer": "GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2",
-      "domain": "tonaira.com"
+      "domain": "tonaira.com",
+      "instructions": "Coming Soon..."
     },
     "EQD-GCGEQJR3E5BVMQYSNCHPO6NPP3KOT4VVZHIOLSRSNLE2GFY7EWVSLLTN": {
       "code": "EQD",
       "issuer": "GCGEQJR3E5BVMQYSNCHPO6NPP3KOT4VVZHIOLSRSNLE2GFY7EWVSLLTN",
-      "domain": "equid.co"
+      "domain": "equid.co",
+      "instructions": "Coming Soon..."
     },
     "USD-GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R": {
       "code": "USD",
       "issuer": "GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R",
-      "domain": "bitcoinfundi.com"
+      "domain": "bitcoinfundi.com",
+      "instructions": "Coming Soon..."
     },
     "BTC-GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R": {
       "code": "BTC",
       "issuer": "GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R",
-      "domain": "bitcoinfundi.com"
+      "domain": "bitcoinfundi.com",
+      "instructions": "Coming Soon..."
     },
     "CM3-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM3",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "instructions": "Coming Soon..."
     },
     "CM10-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM10",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "instructions": "Coming Soon..."
     },
     "CME-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CME",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "instructions": "Coming Soon..."
     },
     "CM3x2-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM3x2",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "instructions": "Coming Soon..."
     },
     "HKDC-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "HKDC",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "instructions": "Coming Soon..."
     }
   },
   "issuers": {
