@@ -189,27 +189,32 @@
     "BTC-GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH": {
       "code": "BTC",
       "issuer": "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH",
-      "domain": "naobtc.com"
+      "domain": "naobtc.com",
+      "instructions": "https://naobtc.com/#/howto/deposit"
     },
     "XEL-GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS": {
       "code": "XEL",
       "issuer": "GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS",
-      "domain": "naobtc.com"
+      "domain": "naobtc.com",
+      "instructions": "https://naobtc.com/#/howto/deposit"
     },
     "JPY-GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM": {
       "code": "JPY",
       "issuer": "GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM",
-      "domain": "vcbear.net"
+      "domain": "vcbear.net",
+      "instructions": "https://www.vcbear.net/signin"
     },
     "XRP-GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ": {
       "code": "XRP",
       "issuer": "GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ",
-      "domain": "vcbear.net"
+      "domain": "vcbear.net",
+      "instructions": "https://www.vcbear.net/signin"
     },
     "BTC-GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI": {
       "code": "BTC",
       "issuer": "GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI",
-      "domain": "vcbear.net"
+      "domain": "vcbear.net",
+      "instructions": "https://www.vcbear.net/signin"
     },
     "PHP-GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP": {
       "code": "PHP",
@@ -224,47 +229,56 @@
     "CNY-GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX": {
       "code": "CNY",
       "issuer": "GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX",
-      "domain": "ripplefox.com"
+      "domain": "ripplefox.com",
+      "instructions": "Leave your address in the message to seller when you order the item: https://shop109149722.taobao.com"
     },
     "BTC-GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF": {
       "code": "BTC",
       "issuer": "GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF",
-      "domain": "btc.papayame.com"
+      "domain": "btc.papayame.com",
+      "instructions": "https://btc.papayame.com/"
     },
     "LTC-GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP": {
       "code": "LTC",
       "issuer": "GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP",
-      "domain": "ltc.papayame.com"
+      "domain": "ltc.papayame.com",
+      "instructions": "https://ltc.papayame.com/"
     },
     "ICN-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "ICN",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "ETH-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "ETH",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "BAT-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "BAT",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "OMG-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "OMG",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "REP-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "REP",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "ZRX-GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR": {
       "code": "ZRX",
       "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR",
-      "domain": "apay.io"
+      "domain": "apay.io",
+      "instructions": "https://apay.io/"
     },
     "MOBI-GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH": {
       "code": "MOBI",
@@ -274,7 +288,8 @@
     "GFT-GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN": {
       "code": "GFT",
       "issuer": "GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN",
-      "domain": "gft.network"
+      "domain": "gft.network",
+      "instructions": "https://gft.network/network/treasury#gft-purchase-and-withdrawal"
     },
     "SEED-GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF": {
       "code": "SEED",

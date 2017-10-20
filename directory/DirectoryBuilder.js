@@ -94,6 +94,9 @@ class DirectoryBuilder {
       issuer: details.issuer,
       domain: anchorDomain,
     };
+    if (details.instructions) {
+        this.assets[slug]['instructions'] = details.instructions;
+    }
 
     this.anchors[anchorDomain].assets[details.code] = slug;
     this.issuers[details.issuer][details.code] = slug;

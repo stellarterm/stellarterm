@@ -23,6 +23,7 @@
     "lodash": "^4.17.4",
     "mkdirp": "^0.5.1",
     "prop-types": "^15.5.10",
+    "react-select": "~1.0.0-rc.10",
     "solar-css": "git+https://github.com/stellar/solar.git"
   },
   "devDependencies": {

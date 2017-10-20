@@ -37,7 +37,7 @@ gulp.task('images', (cb) => {
       mimeType = 'jpeg';
     }
 
-    let image = fs.readFileSync(`./images/${name}.${mimeType}`);
+    let image = fs.readFileSync(`./images/${name}.${extension}`);
     let b64 = new Buffer(image).toString('base64');
     file += `  '${name}': 'data:image/${mimeType};base64, ${b64}',\n`
   };

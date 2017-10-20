@@ -6,6 +6,7 @@ import ManuallyAddTrust from './Session/ManuallyAddTrust.jsx';
 import AddTrustFromFederation from './Session/AddTrustFromFederation.jsx';
 import AddTrustFromDirectory from './Session/AddTrustFromDirectory.jsx';
 import Send from './Session/Send.jsx';
+import Deposit from './Session/Deposit.jsx';
 import Generic from './Generic.jsx';
 import Loading from './Loading.jsx';
 
@@ -71,6 +72,8 @@ class Session extends React.Component {
             <Send d={d}></Send>
           </div>
         </div>
+      } else if (part1 === 'deposit') {
+        content = (<div><Deposit d={d}/></div>);
       }
 
       return <div>
@@ -81,6 +84,7 @@ class Session extends React.Component {
                 <a className="subNav__nav__item" href="#account">Balances</a>
                 <a className="subNav__nav__item" href="#account/send">Send</a>
                 <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
+                <a className="subNav__nav__item" href="#account/deposit">Deposit</a>
               </nav>
             </div>
           </div>
