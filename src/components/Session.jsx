@@ -84,7 +84,7 @@ class Session extends React.Component {
                 <a className="subNav__nav__item" href="#account">Balances</a>
                 <a className="subNav__nav__item" href="#account/send">Send</a>
                 <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
-                <a className="subNav__nav__item" href="#account/deposit">Deposit</a>
+                {/*<a className="subNav__nav__item" href="#account/deposit">Deposit</a>*/}
               </nav>
             </div>
           </div>
