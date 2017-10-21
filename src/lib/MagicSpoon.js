@@ -173,8 +173,9 @@ const MagicSpoon = {
       let depth = 0;
       const MAX_DEPTH = 5;
       let prevCall;
+      let startTime = Date.now();
 
-      while (!satisfied && depth < MAX_DEPTH) {
+      while (!satisfied && depth < MAX_DEPTH && Date.now() - startTime < 5000) {
         depth += 1;
         let tradeResults;
         if (first) {
