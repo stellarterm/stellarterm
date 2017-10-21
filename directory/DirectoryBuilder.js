@@ -55,6 +55,7 @@ class DirectoryBuilder {
     }
     this.anchors[details.domain] = {
       name: details.domain,
+      displayName: details.displayName,
       website: details.website,
       logo: logos[details.logo],
       assets: {},
