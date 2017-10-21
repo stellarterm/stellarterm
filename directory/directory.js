@@ -229,15 +229,16 @@ directory.addAsset('equid.co', {
 });
 
 directory.addAnchor({
-  domain: 'bitcoinfundi.com',
-  website: 'https://bitcoinfundi.com/',
-  logo: 'bitcoinfundi.com',
+  domain: 'golix.io',
+  website: 'https://golix.io/',
+  logo: 'golix.io',
+  displayName: 'Golix',
 });
-directory.addAsset('bitcoinfundi.com', {
+directory.addAsset('golix.io', {
   code: 'USD',
   issuer: 'GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R',
 });
-directory.addAsset('bitcoinfundi.com', {
+directory.addAsset('golix.io', {
   code: 'BTC',
   issuer: 'GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R',
 });
