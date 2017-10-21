@@ -82,34 +82,25 @@ directory.addAsset('ripplefox.com', {
 });
 
 directory.addAnchor({
-  domain: 'btc.papayame.com',
-  website: 'https://btc.papayame.com/',
+  domain: 'apay.io',
+  website: 'https://apay.io/',
   logo: 'papayame.com',
-  color: '#efa443',
+  color: '#efa344',
 });
-directory.addAsset('btc.papayame.com', {
+directory.addAsset('apay.io', {
+  code: 'BCH',
+  issuer: 'GAEGOS7I6TYZSVHPSN76RSPIVL3SELATXZWLFO4DIAFYJF7MPAHFE7H4',
+  instructions: 'https://apay.io/',
+});
+directory.addAsset('apay.io', {
   code: 'BTC',
   issuer: 'GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF',
-  instructions: 'https://btc.papayame.com/',
+  instructions: 'https://apay.io/',
 });
-
-directory.addAnchor({
-  domain: 'ltc.papayame.com',
-  website: 'https://ltc.papayame.com/',
-  logo: 'papayame.com',
-  color: '#efa443',
-});
-directory.addAsset('ltc.papayame.com', {
+directory.addAsset('apay.io', {
   code: 'LTC',
   issuer: 'GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP',
-  instructions: 'https://ltc.papayame.com/',
-});
-
-directory.addAnchor({
-  domain: 'apay.io',
-  website: 'https://apay.io',
-  logo: 'papayame.com',
-  color: '#efa443',
+  instructions: 'https://apay.io/',
 });
 directory.addAsset('apay.io', {
   code: 'ICN',
@@ -138,6 +129,26 @@ directory.addAsset('apay.io', {
 });
 directory.addAsset('apay.io', {
   code: 'ZRX',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
+});
+directory.addAsset('apay.io', {
+  code: 'KIN',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
+});
+directory.addAsset('apay.io', {
+  code: 'LINK',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
+});
+directory.addAsset('apay.io', {
+  code: 'MTL',
+  issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+  instructions: 'https://apay.io/',
+});
+directory.addAsset('apay.io', {
+  code: 'SALT',
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
   instructions: 'https://apay.io/',
 });
@@ -295,11 +306,15 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
-  counterSelling: ['BTC', 'btc.papayame.com'],
+  counterSelling: ['BCH', 'apay.io'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
-  counterSelling: ['LTC', 'ltc.papayame.com'],
+  counterSelling: ['BTC', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['LTC', 'apay.io'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
@@ -324,6 +339,22 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['ZRX', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['KIN', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['LINK', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['MTL', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['SALT', 'apay.io'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
@@ -396,6 +427,18 @@ directory.addDestination('GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQI
 directory.addDestination('GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAVS7', {
   name: 'Changelly',
   requiredMemoType: 'MEMO_ID',
+});
+directory.addDestination('GBR3RS2Z277FER476OFHFXQJRKYSQX4Z7XNWO65AN3QPRUANUASANG3L', {
+  name: 'PapayaBot',
+  requiredMemoType: 'MEMO_TEXT',
+});
+directory.addDestination('GBGVRE5DH6HGNYNLWQITKRQYGR4PWQEH6MOE5ELPY3I4XJPTZ7CVT4YW', {
+  name: 'PapayaSwap',
+  requiredMemoType: 'MEMO_TEXT',
+});
+directory.addDestination('GBQWA6DU6OXHH4AVTFCONQ76LHEWQVZAW7SFSW4PPCAI2NX4MJDZUYDW', {
+  name: 'Piiko',
+  requiredMemoType: 'MEMO_TEXT',
 });
 
 module.exports = directory;
