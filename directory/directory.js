@@ -440,5 +440,13 @@ directory.addDestination('GBQWA6DU6OXHH4AVTFCONQ76LHEWQVZAW7SFSW4PPCAI2NX4MJDZUY
   name: 'Piiko',
   requiredMemoType: 'MEMO_TEXT',
 });
+directory.addDestination('GBKTJSNUSR6OCXA5WDWGT33MNSCNQHOBQUBYC7TVS7BOXDKWFNHI4QNH', {
+  name: 'Exrates',
+  requiredMemoType: 'MEMO_TEXT',
+});
+directory.addDestination('GC4KAS6W2YCGJGLP633A6F6AKTCV4WSLMTMIQRSEQE5QRRVKSX7THV6S', {
+  name: 'BitcoinIndonesia',
+  requiredMemoType: 'MEMO_TEXT',
+});
 
 module.exports = directory;
