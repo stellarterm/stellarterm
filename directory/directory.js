@@ -172,6 +172,18 @@ directory.addAsset('mobius.network', {
 });
 
 directory.addAnchor({
+  domain: 'flutterwave.com',
+  website: 'https://flutterwave.com/',
+  logo: 'mobius.network',
+  color: '#febe12',
+  displayName: 'Flutterwave',
+});
+directory.addAsset('flutterwave.com', {
+  code: 'NGN',
+  issuer: 'GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW',
+});
+
+directory.addAnchor({
   domain: 'gft.network',
   website: 'https://gft.network/',
   logo: 'gft.network',
