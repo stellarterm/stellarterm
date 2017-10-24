@@ -8,10 +8,25 @@ const fetchesTicker = async () => {
     const page = await browser.newPage();
 
     await page.goto(fileUrl('./dist/index.html'));
-    console.log('Test to see if assetlist appears within 4 seconds. (This means the ticker successfully loaded)')
+    console.log('Test ticker.json can load. See if assetlist appears within 4 seconds.')
     await page.waitForSelector('.AssetList__asset', {
       timeout: 4000,
     });
+
+
+    console.log('Test we can connect to Horizon. See if the pricechart says loading.')
+    await page.click('a[href="#exchange"]');
+    await page.waitForSelector('#PriceChart', {
+      timeout: 4000,
+    });
+
+    console.log('Test to see if we can load trade history chart.')
+    await page.waitForSelector('.highcharts-root', {
+      timeout: 8000,
+    });
+
+    // await page.screenshot({path: 'screenshot.png'});
+
   } catch(e) {
     console.log(e)
     await browser.close();
