@@ -12,6 +12,7 @@ directory.addAnchor({
   website: 'https://naobtc.com/',
   logo: 'naobtc.com',
   color: '#08b5e5',
+  displayName: 'NaoBTC',
 });
 directory.addAsset('naobtc.com', {
   code: 'BTC',
@@ -28,6 +29,7 @@ directory.addAnchor({
   website: 'https://vcbear.net/',
   logo: 'vcbear.net',
   color: '#0c88b6',
+  displayName: 'VCBear',
 });
 directory.addAsset('vcbear.net', {
   code: 'JPY',
@@ -50,6 +52,7 @@ directory.addAnchor({
   website: 'https://coins.asia/',
   logo: 'coins.asia',
   color: '#04bcfc',
+  displayName: 'coins.asia',
 });
 directory.addAsset('coins.asia', {
   code: 'PHP',
@@ -62,6 +65,7 @@ directory.addAnchor({
   website: 'https://tempo.eu.com/',
   logo: 'tempo.eu.com',
   color: '#1b92de',
+  displayName: 'TEMPO',
 });
 directory.addAsset('tempo.eu.com', {
   code: 'EURT',
@@ -74,6 +78,7 @@ directory.addAnchor({
   website: 'https://ripplefox.com/anchor/',
   logo: 'ripplefox.com',
   color: '#fc682a',
+  displayName: 'RippleFox',
 });
 directory.addAsset('ripplefox.com', {
   code: 'CNY',
@@ -86,6 +91,7 @@ directory.addAnchor({
   website: 'https://apay.io/',
   logo: 'papayame.com',
   color: '#efa344',
+  displayName: 'apay.io',
 });
 directory.addAsset('apay.io', {
   code: 'BCH',
@@ -158,6 +164,7 @@ directory.addAnchor({
   website: 'https://mobius.network/',
   logo: 'mobius.network',
   color: '#6f39fc',
+  displayName: 'Mobius',
 });
 directory.addAsset('mobius.network', {
   code: 'MOBI',
@@ -169,6 +176,7 @@ directory.addAnchor({
   website: 'https://gft.network/',
   logo: 'gft.network',
   color: '#ddaa7b',
+  displayName: 'GFT',
 });
 directory.addAsset('gft.network', {
   code: 'GFT',
@@ -181,6 +189,7 @@ directory.addAnchor({
   website: 'https://collective21.org/',
   logo: 'collective21.org',
   color: '#3abfce',
+  displayName: 'Collective21',
 });
 directory.addAsset('collective21.org', {
   code: 'SEED',
@@ -191,6 +200,7 @@ directory.addAnchor({
   domain: 'liquido.i-server.org',
   website: 'https://liquido.i-server.org/',
   logo: 'liquido.i-server.org',
+  displayName: 'Liquido',
 });
 directory.addAsset('liquido.i-server.org', {
   code: 'XLQ',
@@ -201,6 +211,7 @@ directory.addAnchor({
   domain: 'moni.com',
   website: 'https://moni.com/',
   logo: 'moni.com',
+  displayName: 'MONI',
 });
 directory.addAsset('moni.com', {
   code: 'EUR',
@@ -212,6 +223,7 @@ directory.addAnchor({
   website: 'https://tonaira.com/',
   logo: 'tonaira.com',
   color: '#82be37',
+  displayName: 'Tonaira',
 });
 directory.addAsset('tonaira.com', {
   code: 'NGN',
@@ -222,6 +234,7 @@ directory.addAnchor({
   domain: 'equid.co',
   website: 'https://equid.co/',
   logo: 'equid.co',
+  displayName: 'eQuid',
 });
 directory.addAsset('equid.co', {
   code: 'EQD',
@@ -248,6 +261,7 @@ directory.addAnchor({
   website: 'https://cryptomover.com/',
   logo: 'cryptomover.com',
   color: '#fbd364',
+  displayName: 'Cryptomover',
 });
 directory.addAsset('cryptomover.com', {
   code: 'CM3',
@@ -439,6 +453,14 @@ directory.addDestination('GBGVRE5DH6HGNYNLWQITKRQYGR4PWQEH6MOE5ELPY3I4XJPTZ7CVT4
 });
 directory.addDestination('GBQWA6DU6OXHH4AVTFCONQ76LHEWQVZAW7SFSW4PPCAI2NX4MJDZUYDW', {
   name: 'Piiko',
+  requiredMemoType: 'MEMO_TEXT',
+});
+directory.addDestination('GBKTJSNUSR6OCXA5WDWGT33MNSCNQHOBQUBYC7TVS7BOXDKWFNHI4QNH', {
+  name: 'Exrates',
+  requiredMemoType: 'MEMO_TEXT',
+});
+directory.addDestination('GC4KAS6W2YCGJGLP633A6F6AKTCV4WSLMTMIQRSEQE5QRRVKSX7THV6S', {
+  name: 'BitcoinIndonesia',
   requiredMemoType: 'MEMO_TEXT',
 });
 
