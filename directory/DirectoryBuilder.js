@@ -53,6 +53,10 @@ class DirectoryBuilder {
     if (details.website.indexOf(details.domain) == -1) {
       throw new Error('Website URL of anchor must contain the anchor domain');
     }
+    if (!details.displayName) {
+      throw new Error('Display name is required for anchor: ' + details.domain);
+    }
+
     this.anchors[details.domain] = {
       name: details.domain,
       displayName: details.displayName,
