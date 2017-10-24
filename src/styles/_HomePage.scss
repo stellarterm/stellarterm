@@ -5,22 +5,22 @@
   text-shadow: 0 1px 3px rgba(255,255,255,0.1);
   padding-top: 120px;
   padding-bottom: 120px;
-  font-weight: 300;
+  font-weight: 400;
 }
 .HomePage__lead__title {
   font-size: $s-scale-c;
-  font-weight: 300;
+  font-weight: 400;
 }
 .HomePage__buttonContainer {
   text-align: center;
 }
 .HomePage__black {
-  background: #111;
-  padding-bottom: 180px;
+  background: $s-color-primary4;
+  padding-bottom: 90px;
 }
 
 .HomePage__assetList {
-  margin-top: -180px;
+  margin-top: -90px;
 }
 .HomePage__seeMore {
   font-size: $s-scale-6;
