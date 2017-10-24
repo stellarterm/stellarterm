@@ -174,7 +174,7 @@ directory.addAsset('mobius.network', {
 directory.addAnchor({
   domain: 'flutterwave.com',
   website: 'https://flutterwave.com/',
-  logo: 'mobius.network',
+  logo: 'flutterwave.com',
   color: '#febe12',
   displayName: 'Flutterwave',
 });
