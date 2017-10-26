@@ -26,7 +26,16 @@ export default class OfferTables extends React.Component {
     let counterLabel = orderbook.counterSelling.getCode();
 
     let buyDepth = 0;
+    let cappedBuyDepth = 0;
+    let buyBestPrice;
     let buys = _.map(orderbook.bids, (bid) => {
+      // Only add to the depth if the offer is within 20% of the best offer (closest to the spread)
+      if (!buyBestPrice) {
+        buyBestPrice = Number(bid.price);
+      }
+      if (buyBestPrice/Number(bid.price) < 1.2) {
+        cappedBuyDepth += Number(bid.amount);
+      }
       buyDepth += Number(bid.amount);
       return {
         key: `${bid.price}-${bid.amount}`,
@@ -38,7 +47,15 @@ export default class OfferTables extends React.Component {
     });
 
     let sellDepth = 0;
+    let cappedSellDepth = 0;
+    let sellBestPrice;
     let sells = _.map(orderbook.asks, (ask) => {
+      if (!sellBestPrice) {
+        sellBestPrice = Number(ask.price);
+      }
+      if (Number(ask.price)/sellBestPrice < 1.2) {
+        cappedSellDepth += Number(ask.amount) * Number(ask.price);
+      }
       sellDepth += Number(ask.amount) * Number(ask.price);
       return {
         key: `${ask.price}-${ask.amount}`,
@@ -49,7 +66,7 @@ export default class OfferTables extends React.Component {
       }
     });
 
-    let maxDepth = BigNumber.max(buyDepth.toFixed(7), sellDepth.toFixed(7));
+    let maxDepth = BigNumber.max(cappedBuyDepth.toFixed(7), cappedSellDepth.toFixed(7));
 
     return (
       <div className="OfferTables island__sub">
