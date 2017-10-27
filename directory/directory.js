@@ -8,6 +8,22 @@ let directory = new DirectoryBuilder();
 directory.DirectoryBuilder = DirectoryBuilder;
 
 directory.addAnchor({
+  domain: 'stronghold.co',
+  website: 'https://stronghold.co',
+  logo: 'stronghold.co',
+  color: '#13ce66',
+  displayName: 'Stronghold',
+});
+directory.addAsset('stronghold.co', {
+  code: 'BTC',
+  issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
+  instructions: 'https://stronghold.co/send-receive-bitcoin.html',
+});
+directory.addAsset('stronghold.co', {
+  code: 'ETH',
+  issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
+  instructions: 'https://stronghold.co/send-receive-ethereum.html',
+});directory.addAnchor({
   domain: 'naobtc.com',
   website: 'https://naobtc.com/',
   logo: 'naobtc.com',
