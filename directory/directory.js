@@ -42,6 +42,7 @@ directory.addAsset('naobtc.com', {
   issuer: 'GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS',
   instructions: 'https://naobtc.com/#/howto/deposit',
 });
+
 directory.addAnchor({
   domain: 'vcbear.net',
   website: 'https://vcbear.net/',
@@ -324,6 +325,14 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['XRP', 'vcbear.net'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'stronghold.co'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['ETH', 'stronghold.co'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
