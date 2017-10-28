@@ -1,7 +1,7 @@
 #!/bin/sh
 npm run directory # Makes sure the directory is valid
 
-# The ticker test is currently broken
+# Ticker test disabled for now
 # cd api
 # echo "Test api ticker generator"
 # node localTicker.js
