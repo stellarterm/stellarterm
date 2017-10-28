@@ -23,7 +23,9 @@ directory.addAsset('stronghold.co', {
   code: 'ETH',
   issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
   instructions: 'https://stronghold.co/send-receive-ethereum.html',
-});directory.addAnchor({
+});
+
+directory.addAnchor({
   domain: 'naobtc.com',
   website: 'https://naobtc.com/',
   logo: 'naobtc.com',
