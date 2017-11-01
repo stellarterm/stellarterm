@@ -128,6 +128,15 @@ DirectoryBuilder.prototype.addDestination = function(accountId, opts) {
     }
     this.destinations[accountId].requiredMemoType = opts.requiredMemoType;
   }
+
+  this.destinations[accountId].mergeOpAccepted = false;
+  if (opts.mergeOpAccepted !== undefined) {
+    if (opts.mergeOpAccepted === true) {
+      this.destinations[accountId].mergeOpAccepted = true;
+    } else if (opts.mergeOpAccepted !== false) {
+      throw new Error('Destination opts.mergeOpAccepted must either be true or false');
+    }
+  }
 }
 
 // Must specify by domain
