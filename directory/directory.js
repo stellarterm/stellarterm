@@ -8,6 +8,19 @@ let directory = new DirectoryBuilder();
 directory.DirectoryBuilder = DirectoryBuilder;
 
 directory.addAnchor({
+  domain: 'smartlands.io',
+  website: 'https://smartlands.io',
+  logo: 'smartlands.io',
+  color: '#35AB62',
+  displayName: 'Smartlands',
+});
+directory.addAsset('smartlands.io', {
+  code: 'SLT',
+  issuer: 'GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP',
+  instructions: 'https://smartlands.io',
+});
+
+directory.addAnchor({
   domain: 'stronghold.co',
   website: 'https://stronghold.co',
   logo: 'stronghold.co',
