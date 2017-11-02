@@ -800,6 +800,16 @@
         "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
       }
     },
+    "XLM-native/SLT-smartlands.io": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "SLT",
+        "issuer": "GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP"
+      }
+    },
     "XLM-native/NGN-tonaira.com": {
       "baseBuying": {
         "code": "XLM",

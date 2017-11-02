@@ -425,6 +425,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
+  counterSelling: ['SLT', 'smartlands.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
   counterSelling: ['NGN', 'tonaira.com'],
 });
 directory.addPair({
