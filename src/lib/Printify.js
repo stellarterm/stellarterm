@@ -1,11 +1,16 @@
 const React = window.React = require('react');
+import BigNumber from 'bignumber.js';
 import _ from 'lodash';
 
 // For pretty printing in the UI
 const Printify = {
-  lightenZeros(number) {
+  lightenZeros(number, numDecimals) {
     if (!_.isString(number)) {
       throw new Error('lightenZeros only takes in strings');
+    }
+
+    if (numDecimals !== undefined) {
+      number = new BigNumber(number).toFixed(numDecimals);
     }
 
     let emph = number.replace(/\.?0+$/, '');

@@ -1,8 +1,8 @@
 const React = window.React = require('react');
 const _ = require('lodash');
 import Printify from '../lib/Printify';
+import Format from '../lib/Format';
 import PropTypes from 'prop-types';
-
 
 const oddBackground = '#f7f7f7';
 const buyBackground = '#dcf6de';
@@ -10,6 +10,12 @@ const sellBackground = '#fed6d8';
 
 // Dumb component that mainly renders the UI
 export default function OfferTable(props) {
+  let depthNumDecimals = 7;
+  let priceNumDecimals = 7;
+  if (props.offers.length > 0) {
+    depthNumDecimals = Math.max(3, Format.niceNumDecimals(props.offers[0].depth));
+    priceNumDecimals = Math.max(4, Format.niceNumDecimals(props.offers[props.offers.length - 1].price))
+  }
   return <div className="OfferTable">
     <div className="OfferTable__header">
       <div className="OfferTable__header__item">Price</div>
@@ -33,10 +39,10 @@ export default function OfferTable(props) {
             key={offer.key}
             style={rowStyle}
             onClick={() => props.d.handlers.orderbookPricePick(offer.price)}>
-            <td className="OfferTable__row__item">{Printify.lightenZeros(offer.price)}</td>
+            <td className="OfferTable__row__item">{Printify.lightenZeros(offer.price, priceNumDecimals)}</td>
             <td className="OfferTable__row__item">{Printify.lightenZeros(offer.base)}</td>
             <td className="OfferTable__row__item">{Printify.lightenZeros(offer.counter)}</td>
-            <td className="OfferTable__row__item">{Printify.lightenZeros(offer.depth)}</td>
+            <td className="OfferTable__row__item">{Printify.lightenZeros(offer.depth, depthNumDecimals)}</td>
           </tr>
         })
       }
