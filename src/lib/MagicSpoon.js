@@ -106,6 +106,50 @@ const MagicSpoon = {
     };
 
 
+    sdkAccount.explainReserve = () => {
+      let items = [];
+      let sumentries = 0;
+
+      let entriesTrustlines = sdkAccount.balances.length - 1;
+      let entriesOffers = Object.keys(sdkAccount.offers).length;
+      let entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers;
+
+      items.push({
+        entryType: 'Base reserve',
+        amount: 2,
+        XLM: 20,
+      });
+
+      items.push({
+        entryType: 'Trustlines',
+        amount: entriesTrustlines,
+        XLM: entriesTrustlines * 10,
+      });
+
+      items.push({
+        entryType: 'Offers',
+        amount: entriesOffers,
+        XLM: entriesOffers * 10,
+      });
+      items.push({
+        entryType: 'Others',
+        amount: entriesOthers,
+        XLM: entriesOthers * 10,
+      });
+      items.push({
+        entryType: 'Extra',
+        amount: '',
+        XLM: 1,
+      });
+
+      let totalLumens = _.sumBy(items, 'XLM');
+      return {
+        items,
+        totalLumens,
+      }
+    };
+
+
     sdkAccount.offers = {};
 
     // Horizon offers for account doesn't return us updates. So we will have to manually update it.
@@ -130,6 +174,7 @@ const MagicSpoon = {
     sdkAccount.close = () => {
       accountEventsClose();
     };
+
 
     return sdkAccount;
   },

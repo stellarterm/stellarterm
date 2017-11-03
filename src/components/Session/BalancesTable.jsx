@@ -24,21 +24,16 @@ export default class BalancesTable extends React.Component {
       </tr>
     });
 
-    return <div className="island">
-      <div className="island__header">
-        Balances for {this.props.d.session.account.accountId()}
-      </div>
-      <table className="BalancesTable">
-        <thead>
-          <tr className="BalancesTable__head">
-            <td className="BalancesTable__head__cell BalancesTable__head__asset">Asset</td>
-            <td className="BalancesTable__head__cell BalancesTable__head__amount">Balance</td>
-          </tr>
-        </thead>
-        <tbody>
-          {balanceRows}
-        </tbody>
-      </table>
-    </div>
+    return <table className="BalancesTable">
+      <thead>
+        <tr className="BalancesTable__head">
+          <td className="BalancesTable__head__cell BalancesTable__head__asset">Asset</td>
+          <td className="BalancesTable__head__cell BalancesTable__head__amount">Balance</td>
+        </tr>
+      </thead>
+      <tbody>
+        {balanceRows}
+      </tbody>
+    </table>
   }
 }

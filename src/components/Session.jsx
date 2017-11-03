@@ -43,7 +43,10 @@ class Session extends React.Component {
       let content;
       let part1 = this.props.urlParts[1];
       if (part1 === undefined) {
-        content = <div className="so-back islandBack islandBack--t">
+        content = <div>
+          <Generic title={`Account ID: ${this.props.d.session.account.accountId()}`}>
+            You can receive transactions with you account ID. The types of assets you can receive are limited to those you <a href="#account/addTrust">accept</a>.
+          </Generic>
           <AccountView d={d}></AccountView>
         </div>
       } else if (part1 === 'addTrust') {

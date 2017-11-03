@@ -1,0 +1,44 @@
+.MinBalance__sub {
+  padding-top: 16px;
+}
+.MinBalance__sub--table {
+  flex: 0 1 300px;
+  width: 300px;
+}
+
+
+.MinBalance__table {
+  width: 100%;
+  // font-size: $s-scale-4;
+  margin-bottom: 20px;
+}
+.MinBalance__table tr {
+  line-height: 2;
+}
+
+.MinBalance__table tr:nth-child(odd) {
+  background-color: $s-color-neutral8;
+}
+.MinBalance__table tr:last-child {
+  background: none;
+}
+
+.MinBalance__table__head {
+  font-weight: 600;
+}
+.MinBalance__table__head tr {
+  background: none;
+}
+
+.MinBalance__table__type {
+  padding-left: 14px;
+}
+
+.MinBalance__table__lumens {
+  text-align: right;
+  padding-right: 14px;
+}
+
+.MinBalance__table__total {
+  border-top: 1px solid $s-color-neutral7;
+}
