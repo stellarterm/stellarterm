@@ -358,6 +358,14 @@ directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['PHP', 'coins.asia'],
 });
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['NGN', 'flutterwave.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['NGN', 'tonaira.com'],
+});
 
 // Pairs involving "BTC"
 // "BTC" should be counterSelling
@@ -446,10 +454,6 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SLT', 'smartlands.io'],
-  counterSelling: ['XLM', 'native'],
-});
-directory.addPair({
-  baseBuying: ['NGN', 'tonaira.com'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({

@@ -630,6 +630,26 @@
         "issuer": "GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP"
       }
     },
+    "XLM-native/NGN-flutterwave.com": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "NGN",
+        "issuer": "GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW"
+      }
+    },
+    "XLM-native/NGN-tonaira.com": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "NGN",
+        "issuer": "GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2"
+      }
+    },
     "XLM-native/BTC-stronghold.co": {
       "baseBuying": {
         "code": "XLM",
@@ -834,16 +854,6 @@
       "baseBuying": {
         "code": "SLT",
         "issuer": "GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP"
-      },
-      "counterSelling": {
-        "code": "XLM",
-        "issuer": null
-      }
-    },
-    "NGN-tonaira.com/XLM-native": {
-      "baseBuying": {
-        "code": "NGN",
-        "issuer": "GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2"
       },
       "counterSelling": {
         "code": "XLM",
