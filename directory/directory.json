@@ -580,66 +580,6 @@
         "issuer": "GBVAOIACNSB7OVUXJYC5UE2D4YK2F7A24T7EE5YOMN4CE6GCHUTOUQXM"
       }
     },
-    "XLM-native/XRP-vcbear.net": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "XRP",
-        "issuer": "GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ"
-      }
-    },
-    "XLM-native/BTC-stronghold.co": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "BTC",
-        "issuer": "GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG"
-      }
-    },
-    "XLM-native/ETH-stronghold.co": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "ETH",
-        "issuer": "GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG"
-      }
-    },
-    "XLM-native/BTC-naobtc.com": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "BTC",
-        "issuer": "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"
-      }
-    },
-    "XLM-native/XEL-naobtc.com": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "XEL",
-        "issuer": "GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS"
-      }
-    },
-    "XLM-native/BTC-vcbear.net": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "BTC",
-        "issuer": "GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI"
-      }
-    },
     "XLM-native/EURT-tempo.eu.com": {
       "baseBuying": {
         "code": "XLM",
@@ -660,194 +600,14 @@
         "issuer": "GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S"
       }
     },
-    "XLM-native/MOBI-mobius.network": {
+    "XLM-native/HKDC-cryptomover.com": {
       "baseBuying": {
         "code": "XLM",
         "issuer": null
       },
       "counterSelling": {
-        "code": "MOBI",
-        "issuer": "GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH"
-      }
-    },
-    "XLM-native/BCH-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "BCH",
-        "issuer": "GAEGOS7I6TYZSVHPSN76RSPIVL3SELATXZWLFO4DIAFYJF7MPAHFE7H4"
-      }
-    },
-    "XLM-native/BTC-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "BTC",
-        "issuer": "GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF"
-      }
-    },
-    "XLM-native/LTC-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "LTC",
-        "issuer": "GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP"
-      }
-    },
-    "XLM-native/ETH-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "ETH",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/BAT-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "BAT",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/ICN-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "ICN",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/OMG-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "OMG",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/REP-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "REP",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/ZRX-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "ZRX",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/KIN-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "KIN",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/LINK-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "LINK",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/MTL-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "MTL",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/SALT-apay.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "SALT",
-        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
-      }
-    },
-    "XLM-native/SLT-smartlands.io": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "SLT",
-        "issuer": "GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP"
-      }
-    },
-    "XLM-native/NGN-tonaira.com": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "NGN",
-        "issuer": "GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2"
-      }
-    },
-    "XLM-native/GFT-gft.network": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "GFT",
-        "issuer": "GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN"
-      }
-    },
-    "XLM-native/EQD-equid.co": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "EQD",
-        "issuer": "GCGEQJR3E5BVMQYSNCHPO6NPP3KOT4VVZHIOLSRSNLE2GFY7EWVSLLTN"
-      }
-    },
-    "BTC-naobtc.com/EQD-equid.co": {
-      "baseBuying": {
-        "code": "BTC",
-        "issuer": "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"
-      },
-      "counterSelling": {
-        "code": "EQD",
-        "issuer": "GCGEQJR3E5BVMQYSNCHPO6NPP3KOT4VVZHIOLSRSNLE2GFY7EWVSLLTN"
+        "code": "HKDC",
+        "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3"
       }
     },
     "EURT-tempo.eu.com/PHP-coins.asia": {
@@ -870,6 +630,246 @@
         "issuer": "GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP"
       }
     },
+    "XLM-native/BTC-stronghold.co": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "BTC",
+        "issuer": "GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG"
+      }
+    },
+    "XLM-native/BTC-naobtc.com": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "BTC",
+        "issuer": "GATEMHCCKCY67ZUCKTROYN24ZYT5GK4EQZ65JJLDHKHRUZI3EUEKMTCH"
+      }
+    },
+    "XLM-native/BTC-apay.io": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "BTC",
+        "issuer": "GAUTUYY2THLF7SGITDFMXJVYH3LHDSMGEAKSBU267M2K7A3W543CKUEF"
+      }
+    },
+    "XLM-native/BTC-vcbear.net": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "BTC",
+        "issuer": "GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI"
+      }
+    },
+    "XRP-vcbear.net/XLM-native": {
+      "baseBuying": {
+        "code": "XRP",
+        "issuer": "GA7FCCMTTSUIC37PODEL6EOOSPDRILP6OQI5FWCWDDVDBLJV72W6RINZ"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "ETH-stronghold.co/XLM-native": {
+      "baseBuying": {
+        "code": "ETH",
+        "issuer": "GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "XEL-naobtc.com/XLM-native": {
+      "baseBuying": {
+        "code": "XEL",
+        "issuer": "GAXELY4AOIRVONF7V25BUPDNKZYIVT6CWURG7R2I6NQU26IQSQODBVCS"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "MOBI-mobius.network/XLM-native": {
+      "baseBuying": {
+        "code": "MOBI",
+        "issuer": "GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "BCH-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "BCH",
+        "issuer": "GAEGOS7I6TYZSVHPSN76RSPIVL3SELATXZWLFO4DIAFYJF7MPAHFE7H4"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "LTC-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "LTC",
+        "issuer": "GC5LOR3BK6KIOK7GKAUD5EGHQCMFOGHJTC7I3ELB66PTDFXORC2VM5LP"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "ETH-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "ETH",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "BAT-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "BAT",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "ICN-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "ICN",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "OMG-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "OMG",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "REP-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "REP",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "ZRX-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "ZRX",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "KIN-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "KIN",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "LINK-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "LINK",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "MTL-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "MTL",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "SALT-apay.io/XLM-native": {
+      "baseBuying": {
+        "code": "SALT",
+        "issuer": "GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "SLT-smartlands.io/XLM-native": {
+      "baseBuying": {
+        "code": "SLT",
+        "issuer": "GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "NGN-tonaira.com/XLM-native": {
+      "baseBuying": {
+        "code": "NGN",
+        "issuer": "GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "GFT-gft.network/XLM-native": {
+      "baseBuying": {
+        "code": "GFT",
+        "issuer": "GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "EQD-equid.co/XLM-native": {
+      "baseBuying": {
+        "code": "EQD",
+        "issuer": "GCGEQJR3E5BVMQYSNCHPO6NPP3KOT4VVZHIOLSRSNLE2GFY7EWVSLLTN"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
     "SEED-collective21.org/XLM-native": {
       "baseBuying": {
         "code": "SEED",
@@ -880,64 +880,54 @@
         "issuer": null
       }
     },
-    "XLM-native/CM3-cryptomover.com": {
+    "CM3-cryptomover.com/XLM-native": {
       "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
         "code": "CM3",
         "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3"
-      }
-    },
-    "XLM-native/CM10-cryptomover.com": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
       },
       "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "CM10-cryptomover.com/XLM-native": {
+      "baseBuying": {
         "code": "CM10",
         "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3"
-      }
-    },
-    "XLM-native/CME-cryptomover.com": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
       },
       "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "CME-cryptomover.com/XLM-native": {
+      "baseBuying": {
         "code": "CME",
         "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3"
-      }
-    },
-    "XLM-native/CM3x2-cryptomover.com": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
       },
       "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "CM3x2-cryptomover.com/XLM-native": {
+      "baseBuying": {
         "code": "CM3x2",
         "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3"
-      }
-    },
-    "XLM-native/HKDC-cryptomover.com": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
       },
       "counterSelling": {
-        "code": "HKDC",
-        "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3"
-      }
-    },
-    "XLM-native/XLQ-liquido.i-server.org": {
-      "baseBuying": {
         "code": "XLM",
         "issuer": null
-      },
-      "counterSelling": {
+      }
+    },
+    "XLQ-liquido.i-server.org/XLM-native": {
+      "baseBuying": {
         "code": "XLQ",
         "issuer": "GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
       }
     }
   },

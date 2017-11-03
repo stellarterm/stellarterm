@@ -327,6 +327,9 @@ directory.addAsset('cryptomover.com', {
   code: 'HKDC',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
 });
+
+// Pairs involving "fiat" assets
+// "Fiat" asset should be counterSelling
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['CNY', 'ripplefox.com'],
@@ -337,30 +340,6 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
-  counterSelling: ['XRP', 'vcbear.net'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['BTC', 'stronghold.co'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['ETH', 'stronghold.co'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['BTC', 'naobtc.com'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['XEL', 'naobtc.com'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['BTC', 'vcbear.net'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
   counterSelling: ['EURT', 'tempo.eu.com'],
 });
 directory.addPair({
@@ -369,79 +348,7 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
-  counterSelling: ['MOBI', 'mobius.network'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['BCH', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['BTC', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['LTC', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['ETH', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['BAT', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['ICN', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['OMG', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['REP', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['ZRX', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['KIN', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['LINK', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['MTL', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['SALT', 'apay.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['SLT', 'smartlands.io'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['NGN', 'tonaira.com'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['GFT', 'gft.network'],
-});
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['EQD', 'equid.co'],
-});
-directory.addPair({
-  baseBuying: ['BTC', 'naobtc.com'],
-  counterSelling: ['EQD', 'equid.co'],
+  counterSelling: ['HKDC', 'cryptomover.com'],
 });
 directory.addPair({
   baseBuying: ['EURT', 'tempo.eu.com'],
@@ -451,34 +358,133 @@ directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['PHP', 'coins.asia'],
 });
+
+// Pairs involving "BTC"
+// "BTC" should be counterSelling
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'stronghold.co'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'naobtc.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'apay.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'vcbear.net'],
+});
+
+// Pairs involving XLM
+// XLM should be counterSelling
+directory.addPair({
+  baseBuying: ['XRP', 'vcbear.net'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ETH', 'stronghold.co'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XEL', 'naobtc.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['MOBI', 'mobius.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['BCH', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['LTC', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ETH', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['BAT', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ICN', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['OMG', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['REP', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ZRX', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['KIN', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['LINK', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['MTL', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['SALT', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['SLT', 'smartlands.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['NGN', 'tonaira.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['GFT', 'gft.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['EQD', 'equid.co'],
+  counterSelling: ['XLM', 'native'],
+});
 directory.addPair({
   baseBuying: ['SEED', 'collective21.org'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['CM3', 'cryptomover.com'],
+  baseBuying: ['CM3', 'cryptomover.com'],
+  counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['CM10', 'cryptomover.com'],
+  baseBuying: ['CM10', 'cryptomover.com'],
+  counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['CME', 'cryptomover.com'],
+  baseBuying: ['CME', 'cryptomover.com'],
+  counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['CM3x2', 'cryptomover.com'],
+  baseBuying: ['CM3x2', 'cryptomover.com'],
+  counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['HKDC', 'cryptomover.com'],
+  baseBuying: ['XLQ', 'liquido.i-server.org'],
+  counterSelling: ['XLM', 'native'],
 });
-directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['XLQ', 'liquido.i-server.org'],
-});
+
 directory.addDestination('GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM', {
   name: 'Kraken',
   requiredMemoType: 'MEMO_ID',

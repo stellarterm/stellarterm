@@ -142,6 +142,9 @@ DirectoryBuilder.prototype.addDestination = function(accountId, opts) {
 // Must specify by domain
 // You can only add pairs with known issuers. Otherwise, the purpose of the directory is defeated
 DirectoryBuilder.prototype.addPair = function(opts) {
+  if (!opts.baseBuying || !opts.counterSelling) {
+    throw new Error('Both baseBuying and counterSelling are required when adding pair. (You probably have a duplicate?)');
+  }
   let baseAsset = this.getAssetByDomain(opts.baseBuying[0], opts.baseBuying[1]);
   let counterAsset = this.getAssetByDomain(opts.counterSelling[0], opts.counterSelling[1]);
   if (baseAsset === null) {
