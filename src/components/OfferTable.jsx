@@ -14,7 +14,11 @@ export default function OfferTable(props) {
   let priceNumDecimals = 7;
   if (props.offers.length > 0) {
     depthNumDecimals = Math.max(3, Format.niceNumDecimals(props.offers[0].depth));
-    priceNumDecimals = Math.max(4, Format.niceNumDecimals(props.offers[props.offers.length - 1].price))
+    if (props.side === 'buy') {
+      priceNumDecimals = Math.max(4, Format.niceNumDecimals(props.offers[props.offers.length - 1].price))
+    } else {
+      priceNumDecimals = Math.max(4, Format.niceNumDecimals(props.offers[0].price))
+    }
   }
   return <div className="OfferTable">
     <div className="OfferTable__header">
