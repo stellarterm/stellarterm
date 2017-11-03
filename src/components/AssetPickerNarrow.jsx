@@ -40,6 +40,10 @@ export default class AssetPickerNarrow extends React.Component {
       return new StellarSdk.Asset(assetByDomain.code, assetByDomain.issuer);
     }
 
+    if (Validate.publicKey(newState.issuer).ready && Validate.assetCode(newState.code)) {
+      return new StellarSdk.Asset(newState.code, newState.issuer);
+    }
+
     return null;
   }
   render() {
