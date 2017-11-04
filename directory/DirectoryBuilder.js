@@ -137,6 +137,15 @@ DirectoryBuilder.prototype.addDestination = function(accountId, opts) {
       throw new Error('Destination opts.mergeOpAccepted must either be true or false');
     }
   }
+
+  this.destinations[accountId].pathPaymentAccepted = false;
+  if (opts.pathPaymentAccepted !== undefined) {
+    if (opts.pathPaymentAccepted === true) {
+      this.destinations[accountId].pathPaymentAccepted = true;
+    } else if (opts.pathPaymentAccepted !== false) {
+      throw new Error('Destination opts.pathPaymentAccepted must either be true or false');
+    }
+  }
 }
 
 // Must specify by domain
