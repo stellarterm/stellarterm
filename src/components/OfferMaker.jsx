@@ -223,11 +223,17 @@ export default class OfferMaker extends React.Component {
     let error;
     if (this.state.errorMessage) {
       if (this.state.errorType === 'lowReserve') {
-        error = <div className="s-alert s-alert--alert OfferMaker__message">Unable to create offer because the account does not have enough lumens to meet the <a href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance" target="_blanke">base reserve</a>. Send at least 11 more lumens to this account to fix this issue.</div>;
+        error = <div className="s-alert s-alert--alert OfferMaker__message">Unable to create offer because the account does not have enough lumens to meet the <a href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance" target="_blank">minimum balance</a>. For more info, see <a href="#account">the minimum balance section</a> of the account page.<br /><br />Possible solutions:
+          <ul className="OfferMaker__errorList">
+            <li>Send 11 lumens to your account</li>
+            <li>Decrease your minimum balance by deleting an offer</li>
+            <li>Decrease your minimum balance by <a href="#account/addTrust">unaccepting an asset</a></li>
+          </ul>
+        </div>;
       } else {
         error = <div className="s-alert s-alert--alert OfferMaker__message">Failed to create offer. Possible reasons why:
           <ul className="OfferMaker__errorList">
-            <li>Not enough funds to complete order</li>
+            <li>Not enough funds to complete order.</li>
           </ul>
         </div>;
       }
