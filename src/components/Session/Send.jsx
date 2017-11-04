@@ -195,20 +195,26 @@ export default class Send extends React.Component {
         Step3Edit = <a className="Send__title__edit" onClick={d.send.handlers.step3Edit}>Edit</a>;
       }
       let Step3Content;
-      let amountValid = Validate.amount(d.send.step3.amount);
-      let amountValidationMessage;
-      let maxLumenSpend = d.session.account.maxLumenSpend();
-      if (amountValid === false) {
-        amountValidationMessage = <p>Amount is invalid</p>
-      } else if (d.send.step2.asset !== null) {
-        if (d.send.step2.asset.code === 'XLM' && d.send.step2.asset.issuer === undefined) {
-          if (Number(d.send.step3.amount) > Number(d.session.account.maxLumenSpend())) {
-            amountValid = false;
-            amountValidationMessage = <p>You may only send up to <strong>{maxLumenSpend} lumens</strong> due to the minimum balance requirements. For more information, see the <a href="#account">minimum balance tool</a>.</p>
+      if (step === 3) {
+        let amountValid = Validate.amount(d.send.step3.amount);
+        let amountValidationMessage;
+        let maxLumenSpend = d.session.account.maxLumenSpend();
+        let yourBalance;
+        if (amountValid === false) {
+          amountValidationMessage = <p>Amount is invalid</p>
+        } else if (d.send.step2.asset !== null) {
+          let targetBalance = d.session.account.getBalance(new StellarSdk.Asset(d.send.step2.asset.code, d.send.step2.asset.issuer));
+          if (targetBalance !== null) {
+            yourBalance = <p>You have {targetBalance} {d.send.step2.asset.code}.</p>
+          }
+
+          if (d.send.step2.asset.code === 'XLM' && d.send.step2.asset.issuer === undefined) {
+            if (Number(d.send.step3.amount) > Number(d.session.account.maxLumenSpend())) {
+              amountValid = false;
+              amountValidationMessage = <p>You may only send up to <strong>{maxLumenSpend} lumens</strong> due to the minimum balance requirements. For more information, see the <a href="#account">minimum balance tool</a>.</p>
+            }
           }
         }
-      }
-      if (step === 3) {
         Step3Content = <div className="Send__content">
           <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
@@ -216,6 +222,7 @@ export default class Send extends React.Component {
             </span>
             <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.step3.amount} onChange={d.send.handlers.updateAmount} placeholder="" />
           </label>
+          {yourBalance}
           {amountValidationMessage}
           <div className="Send__panel__next">
             <button className="s-button" disabled={!amountValid} onClick={d.send.handlers.step3Next}>Save and continue</button>
