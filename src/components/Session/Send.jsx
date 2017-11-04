@@ -197,8 +197,16 @@ export default class Send extends React.Component {
       let Step3Content;
       let amountValid = Validate.amount(d.send.step3.amount);
       let amountValidationMessage;
+      let maxLumenSpend = d.session.account.maxLumenSpend();
       if (amountValid === false) {
         amountValidationMessage = <p>Amount is invalid</p>
+      } else if (d.send.step2.asset !== null) {
+        if (d.send.step2.asset.code === 'XLM' && d.send.step2.asset.issuer === undefined) {
+          if (Number(d.send.step3.amount) > Number(d.session.account.maxLumenSpend())) {
+            amountValid = false;
+            amountValidationMessage = <p>You may only send up to <strong>{maxLumenSpend} lumens</strong> due to the minimum balance requirements. For more information, see the <a href="#account">minimum balance tool</a>.</p>
+          }
+        }
       }
       if (step === 3) {
         Step3Content = <div className="Send__content">

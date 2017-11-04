@@ -14,6 +14,10 @@ const MagicSpoon = {
       transaction.sign(keypair);
     };
 
+    sdkAccount.getLumenBalance = () => {
+      return sdkAccount.balances[sdkAccount.balances.length - 1].balance;
+    }
+
     // Expects StellarSdk.Asset
     // Returns null if there is no trust
     // Returns string of balance if exists
@@ -147,6 +151,22 @@ const MagicSpoon = {
         items,
         totalLumens,
       }
+    };
+
+    // Will always be less than or equal to the current balance
+    sdkAccount.calculatePaddedReserve = () => {
+      let networkReserve = (2 + sdkAccount.subentry_count) * 10;
+      let extra = 1;
+      return networkReserve + extra;
+    }
+
+    sdkAccount.maxLumenSpend = () => {
+      let balance = sdkAccount.getLumenBalance();
+      let reserve = sdkAccount.calculatePaddedReserve();
+      if (reserve > balance) {
+        return 0;
+      }
+      return new BigNumber(balance).minus(reserve).toFixed(7);
     };
 
 
