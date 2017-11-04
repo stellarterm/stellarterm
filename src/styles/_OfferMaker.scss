@@ -20,6 +20,11 @@
   margin-left: 2em;
 }
 
+.OfferMaker__insufficientBalance {
+  font-size: $s-scale-5;
+  margin-bottom: 0.5em;
+  color: $s-color-alert;
+}
 .OfferMaker__youHave {
   font-size: $s-scale-5;
   margin-bottom: 0.5em;

@@ -168,6 +168,7 @@ export default class OfferMaker extends React.Component {
 
     let youHave;
     let hasAllTrust = false;
+    let insufficientBalanceMessage;
     if (this.props.d.session.state === 'in') {
       let baseBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.baseBuying);
       let counterBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.counterSelling);
@@ -179,9 +180,19 @@ export default class OfferMaker extends React.Component {
       let targetAsset = this.props.side === 'buy' ? this.props.d.orderbook.counterSelling : this.props.d.orderbook.baseBuying;
 
       if (targetBalance) {
-        youHave = <div className="OfferMaker__youHave">You have {targetBalance} {targetAsset.getCode()}</div>;
+        let inputSpendAmount = this.props.side === 'buy' ? this.state.total : this.state.amount;
+        let maxOffer = targetBalance;
+        if (targetAsset.isNative()) {
+          maxOffer = this.props.d.session.account.maxLumenSpend();
+          youHave = <div className="OfferMaker__youHave">You may create an offer of up to {maxOffer} XLM. <br />For more info, see <a href="#account">the minimum balance section</a>.</div>;
+        } else {
+          youHave = <div className="OfferMaker__youHave">You have {targetBalance} {targetAsset.getCode()}</div>;
+        }
+        if (Number(inputSpendAmount) > Number(maxOffer)) {
+          insufficientBalanceMessage = <p className="OfferMaker__insufficientBalance">Error: You do not have enough {targetAsset.getCode()} to create this offer.</p>;
+        }
       } else {
-        youHave = <div className="OfferMaker__youHave">Must <a href="#account/addTrust">create trust line</a> for {targetAsset.getCode()} to trade</div>;
+        youHave = <p className="OfferMaker__youHave">Must <a href="#account/addTrust">create trust line</a> for {targetAsset.getCode()} to trade</p>;
       }
     }
 
@@ -189,7 +200,7 @@ export default class OfferMaker extends React.Component {
     if (this.props.d.session.state === 'in') {
       if (this.state.buttonState === 'ready') {
         if (hasAllTrust) {
-          submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid}></input>
+          submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid || insufficientBalanceMessage}></input>
         } else {
           submit = <input type="submit" className="s-button" value="Trust required" disabled={true}></input>
         }
@@ -254,6 +265,7 @@ export default class OfferMaker extends React.Component {
         </table>
         <div className="OfferMaker__overview">
           {youHave}
+          {insufficientBalanceMessage}
           {summary}
           {error}
           {success}
