@@ -1,9 +1,5 @@
 language: node_js
 
-cache:
-  directories:
-    - $HOME/.npm
-    - "node_modules/puppeteer"
 node_js:
   - node
 install:
