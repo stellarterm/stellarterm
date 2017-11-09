@@ -136,7 +136,8 @@ function phase3(ticker) {
         });
 
 
-       pair.depth10Amount = _.round(sum10PercentBidAmounts + sum10PercentAskAmounts);
+        // We get the min so that it can't be gamed by the issuer making a large sell wall
+        pair.depth10Amount = _.round(Math.min(sum10PercentBidAmounts, sum10PercentAskAmounts));
 
         return tradeWalker.walkUntil(Server, pair.baseBuying, pair.counterSelling, 86400)
           .then(tradesList => {
