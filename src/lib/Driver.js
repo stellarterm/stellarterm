@@ -15,7 +15,7 @@ BigNumber.config({ EXPONENTIAL_AT: 100 });
 function Driver(driverOpts) {
   this.Server = new StellarSdk.Server(driverOpts.network.horizonUrl);
   this.Server.serverUrl = driverOpts.network.horizonUrl;
-  this.LedgerApi = new Ledger.Api(new Ledger.comm(3));
+  this.LedgerApi = new Ledger.Api(new Ledger.comm(2));
 
   const byol = new Byol();
 
@@ -39,6 +39,7 @@ function Driver(driverOpts) {
     setupError: false, // Couldn't find account
     unfundedAccountId: '',
     account: null, // MagicSpoon.Account instance
+    useLedger: false
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
@@ -69,6 +70,8 @@ function Driver(driverOpts) {
           await LedgerApi.getPublicKey_async(bip32Path).then((result) => {
             keypair = StellarSdk.Keypair.fromPublicKey(result.publicKey);
           });
+          this.session.useLedger = true;
+          trigger.session();
         }
       } catch (e) {
         console.log('Invalid secret key! We should never reach here!');

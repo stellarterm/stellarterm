@@ -13,6 +13,12 @@ export default function Send(driver) {
   this.step2 = {};
   this.step3 = {};
   this.accountId = '';
+  this.ledgerStatus = 'None';
+
+  const ledgerListener = (status) => {
+    this.ledgerStatus = status;
+    this.event.trigger();
+  };
 
   const init = () => {
     this.state = 'setup'; // 'setup' | 'pending' | 'error' | 'success'
@@ -21,6 +27,7 @@ export default function Send(driver) {
     this.memoContent = '';
     this.targetAccount = null;
     this.step = 1; // Starts at 1. Natural indexing corresponds to the step numbers
+    driver.LedgerApi.addDeviceListener(ledgerListener);
   };
 
 
