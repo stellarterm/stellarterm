@@ -37,6 +37,11 @@ directory.addAsset('stronghold.co', {
   issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
   instructions: 'https://stronghold.co/send-receive-ethereum.html',
 });
+directory.addAsset('stronghold.co', {
+  code: 'XLM',
+  issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
+  instructions: 'hhttp://stronghold.co/send-receive-lumens.html',
+});
 
 directory.addAnchor({
   domain: 'naobtc.com',
