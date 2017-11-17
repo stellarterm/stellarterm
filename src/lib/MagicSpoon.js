@@ -8,10 +8,20 @@ import directory from '../directory';
 // It's in the same file as the driver because the driver is the only one that
 // should ever use the spoon.
 const MagicSpoon = {
-  async Account(Server, keypair, onUpdate) {
+  async Account(Server, keypair, LedgerApi, onUpdate) {
     let sdkAccount = await Server.loadAccount(keypair.publicKey())
-    sdkAccount.sign = transaction => {
-      transaction.sign(keypair);
+    sdkAccount.sign = async transaction => {
+      if (typeof LedgerApi === 'undefined') {
+        await transaction.sign(keypair);
+      } else {
+        let signature = null;
+        await LedgerApi.signTxHash_async("44'/148'/0'", transaction.hash()).then((result) => {
+          signature = result.signature;
+          let hint = keypair.signatureHint();
+          let decorated = new StellarSdk.xdr.DecoratedSignature({hint, signature});
+          transaction.signatures.push(decorated);
+        });
+      }
     };
 
     sdkAccount.getLumenBalance = () => {
@@ -307,7 +317,7 @@ const MagicSpoon = {
   // opts.price -- Exchange ratio selling/buying
   // opts.amount -- Here, it's relative to the base (JS-sdk does: Total amount selling)
   // opts.type -- String of either 'buy' or 'sell' (relative to base currency)
-  createOffer(Server, spoonAccount, side, opts) {
+  async createOffer(Server, spoonAccount, side, opts) {
     let sdkBuying;
     let sdkSelling;
     let sdkPrice;
@@ -341,7 +351,7 @@ const MagicSpoon = {
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.manageOffer(operationOpts))
       .build();
-    spoonAccount.sign(transaction);
+    await spoonAccount.sign(transaction);
     return Server.submitTransaction(transaction)
       .then(res => {
         console.log('Offer create success');
@@ -376,12 +386,12 @@ const MagicSpoon = {
     }
 
     transaction = transaction.build();
-    spoonAccount.sign(transaction);
+    await spoonAccount.sign(transaction);
 
     const transactionResult = await Server.submitTransaction(transaction);
     return transactionResult;
   },
-  changeTrust(Server, spoonAccount, opts) {
+  async changeTrust(Server, spoonAccount, opts) {
     let sdkLimit;
     if (typeof opts.limit === 'string' || opts.limit instanceof String) {
       sdkLimit = opts.limit;
@@ -396,7 +406,7 @@ const MagicSpoon = {
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
       .build();
-    spoonAccount.sign(transaction);
+    await spoonAccount.sign(transaction);
     return Server.submitTransaction(transaction)
       .then(txResult => {
         spoonAccount.refresh();
@@ -413,7 +423,7 @@ const MagicSpoon = {
         offerId,
       }))
       .build();
-    spoonAccount.sign(transaction);
+    await spoonAccount.sign(transaction);
     const transactionResult = await Server.submitTransaction(transaction);
     spoonAccount.updateOffers();
     return transactionResult;

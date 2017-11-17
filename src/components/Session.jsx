@@ -20,6 +20,7 @@ class Session extends React.Component {
     // Static functions from driver
     this.handlers = this.props.d.handlers;
     this.logIn = this.props.d.handlers.logIn;
+    this.ledgerListener = this.props.d.handlers.ledgerListener;
   }
   componentWillUnmount() {
     this.props.d.unlistenSession(this.listenId);
@@ -29,7 +30,7 @@ class Session extends React.Component {
     let state = d.session.state;
     let setupError = d.session.setupError;
     if (state === 'out') {
-      return <LoginForm setupError={setupError} handler={this.logIn}></LoginForm>
+      return <LoginForm setupError={setupError} handler={this.logIn} ledgerListener={this.ledgerListener}></LoginForm>
     } else if (state === 'unfunded') {
       return <Generic title={'Account is unfunded'}><Loading darker={true}>
         Send at least 20 lumens to this account to activate it.

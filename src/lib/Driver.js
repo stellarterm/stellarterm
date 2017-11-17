@@ -8,12 +8,14 @@ import Byol from './Byol';
 import MagicSpoon from '../lib/MagicSpoon';
 import Ticker from './driver/Ticker';
 import Send from './driver/Send';
+import Ledger from 'stellar-ledger-api';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
 function Driver(driverOpts) {
   this.Server = new StellarSdk.Server(driverOpts.network.horizonUrl);
   this.Server.serverUrl = driverOpts.network.horizonUrl;
+  this.LedgerApi = new Ledger.Api(new Ledger.comm(3));
 
   const byol = new Byol();
 
@@ -56,10 +58,18 @@ function Driver(driverOpts) {
   };
 
   this.handlers = {
-    logIn: async (secretKey) => {
+    logIn: async (key, useLedger, bip32Path) => {
       let keypair;
+      let LedgerApi;
       try {
-        keypair = StellarSdk.Keypair.fromSecret(secretKey);
+        if (!useLedger) {
+          keypair = StellarSdk.Keypair.fromSecret(key);
+        } else {
+          LedgerApi = new Ledger.Api(new Ledger.comm(120));
+          await LedgerApi.getPublicKey_async(bip32Path).then((result) => {
+            keypair = StellarSdk.Keypair.fromPublicKey(result.publicKey);
+          });
+        }
       } catch (e) {
         console.log('Invalid secret key! We should never reach here!');
         console.error(e);
@@ -72,7 +82,7 @@ function Driver(driverOpts) {
       }
 
       try {
-        this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
+        this.session.account = await MagicSpoon.Account(this.Server, keypair, LedgerApi, () => {
           trigger.session();
         });
         this.session.state = 'in';
@@ -85,7 +95,7 @@ function Driver(driverOpts) {
             console.log('Checking to see if account has been created yet');
             if (this.session.state === 'unfunded') {
               // Avoid race conditions
-              this.handlers.logIn(secretKey);
+              this.handlers.logIn(key, useLedger, bip32Path);
             }
           }, 2000);
           trigger.session();
@@ -130,6 +140,9 @@ function Driver(driverOpts) {
         forceUpdateAccountOffers();
       });
     },
+    ledgerListener: (listener) => {
+      this.LedgerApi.addDeviceListener(listener);
+    }
   };
 }
 

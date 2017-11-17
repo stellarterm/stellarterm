@@ -18,6 +18,7 @@ export default class LoginForm extends React.Component {
       secretInput: '',
       invalidKey: false,
       newKeypair: null,
+      ledgerStatus: 'None'
     }
 
     this.handleInput = (event) => {
@@ -30,7 +31,7 @@ export default class LoginForm extends React.Component {
           invalidKey: true,
         })
       }
-      this.props.handler(this.state.secretInput);
+      this.props.handler(this.state.secretInput, false);
     }
     this.handleGenerate = event => {
       let keypair = StellarSdk.Keypair.random();
@@ -41,6 +42,13 @@ export default class LoginForm extends React.Component {
         }
       });
     }
+    this.proceedWithLedger = () => {
+      let bip32Path = "44'/148'/0'";
+      props.handler(null, true, bip32Path);
+    }
+    props.ledgerListener((status, msg) =>{
+      this.setState({ ledgerStatus: status });
+    })
   }
 
   render() {
@@ -59,6 +67,8 @@ export default class LoginForm extends React.Component {
         <p>Secret key (<strong>SAVE THIS AND KEEP THIS SECURE</strong>): {this.state.newKeypair.secretKey}</p>
       </div>
     }
+
+    let ledgerStatus = this.state.ledgerStatus === 'Connected' ? 'Connected' : 'Not Connected';
 
     return <div className="so-back islandBack islandBack--t">
       <div className="island island--pb">
@@ -84,6 +94,24 @@ export default class LoginForm extends React.Component {
               <ul>
                 <li>Check the url to make sure you are on the correct website.</li>
                 <li>Stellarterm does not save your secret key. It is stored on your browser and will be deleted once the page is refreshed or exited.</li>
+                <li>For extra security, you can <a href="https://github.com/irisli/stellarterm">build from source</a> or <a href="https://github.com/stellarterm/stellarterm.github.io/">download from GitHub</a> and verify the hash.</li>
+                <li>StellarTerm is released under the Apache 2.0. It is provided "AS IS" without warranty. The developer is not responsible for any losses and activities caused by the application.</li>
+              </ul>
+            </div>
+          </div>
+          <div className="LoginForm">
+            <div className="LoginForm__form">
+              <p className="LoginForm__intro">Ledger Nano S ({ledgerStatus})</p>
+              <form onSubmit={this.proceedWithLedger}>
+                <div>
+                  <input type="submit" className="LoginForm__submit s-button" value="Proceed with Ledger" disabled={ledgerStatus !== 'Connected'}/>
+                </div>
+              </form>
+            </div>
+            <div className="LoginForm__notes">
+              <h3>Security notes</h3>
+              <ul>
+                <li>Check the url to make sure you are on the correct website.</li>
                 <li>For extra security, you can <a href="https://github.com/irisli/stellarterm">build from source</a> or <a href="https://github.com/stellarterm/stellarterm.github.io/">download from GitHub</a> and verify the hash.</li>
                 <li>StellarTerm is released under the Apache 2.0. It is provided "AS IS" without warranty. The developer is not responsible for any losses and activities caused by the application.</li>
               </ul>
