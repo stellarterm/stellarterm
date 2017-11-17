@@ -40,7 +40,7 @@ directory.addAsset('stronghold.co', {
 directory.addAsset('stronghold.co', {
   code: 'XLM',
   issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
-  instructions: 'hhttp://stronghold.co/send-receive-lumens.html',
+  instructions: 'https://stronghold.co/send-receive-lumens.html',
 });
 
 directory.addAnchor({
