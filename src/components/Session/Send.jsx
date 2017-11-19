@@ -245,7 +245,7 @@ export default class Send extends React.Component {
       // Step 4
       let Step4Next = step !== 4 ? null : <div className="Send__panel__next">
         <p>Note: Transactions on the Stellar network are irreversible. Please make sure all the transaction details are correct.</p>
-        <button className="s-button" onClick={d.send.handlers.submit} disabled={d.session.useLedger && d.send.ledgerStatus !== 'Connected'}>Submit transaction</button>
+        <button className="s-button" onClick={d.send.handlers.submit}>Submit transaction</button>
       </div>
 
       let Step4 = <div className={step4ClassName}>

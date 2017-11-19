@@ -11,6 +11,18 @@ const isValidSecretKey = input => {
   }
 }
 
+const isValidBip32Path = input => {
+  if (!input.startsWith("44'/148'")) {
+    return false;
+  }
+  input.split('/').forEach(function (element) {
+    if (!element.toString().endsWith('\'')) {
+      return false;
+    }
+  });
+  return true;
+}
+
 export default class LoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -18,11 +30,16 @@ export default class LoginForm extends React.Component {
       secretInput: '',
       invalidKey: false,
       newKeypair: null,
-      ledgerStatus: 'None'
+      ledgerStatus: 'None',
+      bip32Path: "44'/148'/0'"
     }
 
     this.handleInput = (event) => {
-      this.setState({secretInput: event.target.value});
+      if (event.target.name === 'bip32Path') {
+        this.setState({bip32Path: event.target.value});
+      } else {
+        this.setState({secretInput: event.target.value});
+      }
     }
     this.handleSubmit = (event) => {
       event.preventDefault();
@@ -42,13 +59,20 @@ export default class LoginForm extends React.Component {
         }
       });
     }
-    this.proceedWithLedger = () => {
-      let bip32Path = "44'/148'/0'";
-      props.handler(null, true, bip32Path);
+    this.proceedWithLedger = (event) => {
+      event.preventDefault();
+      if (!isValidBip32Path(this.state.bip32Path)) {
+        return this.setState({
+          invalidBip32Path: true
+        });
+      }
+      props.handler(null, true, this.state.bip32Path);
     }
-    props.ledgerListener((status, msg) =>{
-      this.setState({ ledgerStatus: status });
-    })
+    props.connectLedger(() => {
+      this.setState({ ledgerStatus: 'Connected' });
+    }, (err) => {
+      this.setState({ ledgerStatus: 'Error: ' + err });
+    });
   }
 
   render() {
@@ -69,6 +93,10 @@ export default class LoginForm extends React.Component {
     }
 
     let ledgerStatus = this.state.ledgerStatus === 'Connected' ? 'Connected' : 'Not Connected';
+    let ledgerErrorMessage;
+    if (this.state.invalidBip32Path) {
+      ledgerErrorMessage = <div className="s-alert s-alert--alert">Invalid BIP32 path. Stellar BIP32 paths must be of the form 44'/148'/n'.</div>
+    }
 
     return <div className="so-back islandBack islandBack--t">
       <div className="island island--pb">
@@ -103,6 +131,10 @@ export default class LoginForm extends React.Component {
             <div className="LoginForm__form">
               <p className="LoginForm__intro">Ledger Nano S ({ledgerStatus})</p>
               <form onSubmit={this.proceedWithLedger}>
+                <div>
+                  <input name="bip32Path" type="text" className="LoginForm__password" value={this.state.bip32Path} onChange={this.handleInput} placeholder="BIP32 path: 44'/148'/0'" />
+                </div>
+                {ledgerErrorMessage}
                 <div>
                   <input type="submit" className="LoginForm__submit s-button" value="Proceed with Ledger" disabled={ledgerStatus !== 'Connected'}/>
                 </div>

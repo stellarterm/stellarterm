@@ -15,7 +15,6 @@ BigNumber.config({ EXPONENTIAL_AT: 100 });
 function Driver(driverOpts) {
   this.Server = new StellarSdk.Server(driverOpts.network.horizonUrl);
   this.Server.serverUrl = driverOpts.network.horizonUrl;
-  this.LedgerApi = new Ledger.Api(new Ledger.comm(2));
 
   const byol = new Byol();
 
@@ -67,11 +66,18 @@ function Driver(driverOpts) {
           keypair = StellarSdk.Keypair.fromSecret(key);
         } else {
           LedgerApi = new Ledger.Api(new Ledger.comm(120));
-          await LedgerApi.getPublicKey_async(bip32Path).then((result) => {
-            keypair = StellarSdk.Keypair.fromPublicKey(result.publicKey);
-          });
-          this.session.useLedger = true;
-          trigger.session();
+          try {
+            await LedgerApi.getPublicKey_async(bip32Path).then((result) => {
+              keypair = StellarSdk.Keypair.fromPublicKey(result.publicKey);
+            }).catch((e) => {
+              throw e;
+            });
+            this.session.useLedger = true;
+          } catch (e) {
+            console.log('Error getting public key from Ledger');
+            console.log(e);
+            return;
+          }
         }
       } catch (e) {
         console.log('Invalid secret key! We should never reach here!');
@@ -143,8 +149,8 @@ function Driver(driverOpts) {
         forceUpdateAccountOffers();
       });
     },
-    ledgerListener: (listener) => {
-      this.LedgerApi.addDeviceListener(listener);
+    connectLedger: (onSuccess, onError) => {
+      new Ledger.Api(new Ledger.comm(20)).connect(onSuccess, onError);
     }
   };
 }
