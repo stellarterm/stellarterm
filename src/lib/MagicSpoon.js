@@ -2,23 +2,24 @@ import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import BigNumber from 'bignumber.js';
 import directory from '../directory';
+import Ledger from 'stellar-ledger-api';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
 // It's in the same file as the driver because the driver is the only one that
 // should ever use the spoon.
 const MagicSpoon = {
-  async Account(Server, keypair, LedgerApi, onUpdate) {
+  async Account(Server, keypair, bip32Path, onUpdate) {
     let sdkAccount = await Server.loadAccount(keypair.publicKey())
     sdkAccount.sign = async transaction => {
-      if (typeof LedgerApi === 'undefined') {
+      if (typeof bip32Path === 'undefined') {
         await transaction.sign(keypair);
       } else {
         let signature = null;
-        await LedgerApi.signTxHash_async("44'/148'/0'", transaction.hash()).then((result) => {
+        await new Ledger.Api(new Ledger.comm(30)).signTx_async(bip32Path, transaction).then((result) => {
           signature = result.signature;
           let hint = keypair.signatureHint();
-          let decorated = new StellarSdk.xdr.DecoratedSignature({hint, signature});
+          let decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
           transaction.signatures.push(decorated);
         });
       }

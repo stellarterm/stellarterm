@@ -60,14 +60,12 @@ function Driver(driverOpts) {
   this.handlers = {
     logIn: async (key, useLedger, bip32Path) => {
       let keypair;
-      let LedgerApi;
       try {
         if (!useLedger) {
           keypair = StellarSdk.Keypair.fromSecret(key);
         } else {
-          LedgerApi = new Ledger.Api(new Ledger.comm(120));
           try {
-            await LedgerApi.getPublicKey_async(bip32Path).then((result) => {
+            await new Ledger.Api(new Ledger.comm(20)).getPublicKey_async(bip32Path).then((result) => {
               keypair = StellarSdk.Keypair.fromPublicKey(result.publicKey);
             }).catch((e) => {
               throw e;
@@ -91,7 +89,7 @@ function Driver(driverOpts) {
       }
 
       try {
-        this.session.account = await MagicSpoon.Account(this.Server, keypair, LedgerApi, () => {
+        this.session.account = await MagicSpoon.Account(this.Server, keypair, bip32Path, () => {
           trigger.session();
         });
         this.session.state = 'in';
