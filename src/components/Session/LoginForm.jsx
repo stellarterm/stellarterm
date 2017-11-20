@@ -129,23 +129,24 @@ export default class LoginForm extends React.Component {
           </div>
           <div className="LoginForm">
             <div className="LoginForm__form">
-              <p className="LoginForm__intro">Ledger Nano S ({ledgerStatus})</p>
+              <p className="LoginForm__intro">Sign in with Ledger Nano S</p>
               <form onSubmit={this.proceedWithLedger}>
                 <div>
-                  <input name="bip32Path" type="text" className="LoginForm__password" value={this.state.bip32Path} onChange={this.handleInput} placeholder="BIP32 path: 44'/148'/0'" />
+                  <input name="bip32Path" type="text" className="LoginForm__password" value={this.state.bip32Path} onChange={this.handleInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
                 </div>
                 {ledgerErrorMessage}
                 <div>
-                  <input type="submit" className="LoginForm__submit s-button" value="Proceed with Ledger" disabled={ledgerStatus !== 'Connected'}/>
+                  <input type="submit" className="LoginForm__submit s-button" value="Sign in with Ledger" disabled={ledgerStatus !== 'Connected'}/>
                 </div>
               </form>
             </div>
             <div className="LoginForm__notes">
-              <h3>Security notes</h3>
+              <h3>Instructions</h3>
               <ul>
-                <li>Check the url to make sure you are on the correct website.</li>
-                <li>For extra security, you can <a href="https://github.com/irisli/stellarterm">build from source</a> or <a href="https://github.com/stellarterm/stellarterm.github.io/">download from GitHub</a> and verify the hash.</li>
-                <li>StellarTerm is released under the Apache 2.0. It is provided "AS IS" without warranty. The developer is not responsible for any losses and activities caused by the application.</li>
+                <li>Ledger Nano S support is available on Chrome and Opera.</li>
+                <li>Install the Stellar app with the <a href="https://www.ledgerwallet.com/apps/manager">Ledger Manager</a>.</li>
+                <li>Enable browser support in the app settings.</li>
+                <li>Choose the BIP32 path of the account you want use: 44'/148'/n' where n is the account index. Or use the default account 44'/148'/0'.</li>
               </ul>
             </div>
           </div>
