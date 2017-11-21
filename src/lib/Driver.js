@@ -58,11 +58,11 @@ function Driver(driverOpts) {
   };
 
   this.handlers = {
-    logIn: async (key, useLedger, bip32Path) => {
+    logIn: async (secretKey, useLedger, bip32Path) => {
       let keypair;
       try {
         if (!useLedger) {
-          keypair = StellarSdk.Keypair.fromSecret(key);
+          keypair = StellarSdk.Keypair.fromSecret(secretKey);
         } else {
           try {
             await new Ledger.Api(new Ledger.comm(20)).getPublicKey_async(bip32Path).then((result) => {
@@ -102,7 +102,7 @@ function Driver(driverOpts) {
             console.log('Checking to see if account has been created yet');
             if (this.session.state === 'unfunded') {
               // Avoid race conditions
-              this.handlers.logIn(key, useLedger, bip32Path);
+              this.handlers.logIn(secretKey, useLedger, bip32Path);
             }
           }, 2000);
           trigger.session();
