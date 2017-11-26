@@ -1,0 +1,70 @@
+// This file contains all the styles for the Effects History Table Component: HistoryTable.jsx
+
+.HistoryTable {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.HistoryTable__head{
+  display: flex;
+  border-bottom: 1px solid $s-color-neutral7;
+}
+.HistoryTable__head__cell {
+  padding: 12px;
+  font-size: 16px;
+}
+.HistoryTable__head__category{
+  flex: 0.5;
+  text-align: left;
+}
+.HistoryTable__head__action {
+  text-align: center;
+  flex: 1;
+}
+.HistoryTable__head__description {
+  text-align: center;
+  flex: 10;
+}
+.HistoryTable__head__date {
+  text-align: right;
+  flex: 2;
+  margin-right: 50px;
+}
+.HistoryTable__body {
+  flex: 1;
+  flex-direction: column;
+  height: 500px;
+  overflow-y: scroll;
+  min-height:0;
+}
+.HistoryTable__row {
+  border-top: 1px solid $s-color-neutral7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  line-height: 15pt;
+  padding: 10px;
+  overflow: hidden;
+}
+.HistoryTable__category {
+  font-weight: bold;
+  font-size: 8pt;
+}
+.HistoryTable__row__item--category {
+  flex: 1;
+}
+.HistoryTable__row__item--action {
+  flex: 1;
+  text-align: center;
+}
+.HistoryTable__row__item--description {
+  flex: 10;
+  height: 100%;
+}
+.HistoryTable__row__item--date {
+  flex: 2;
+  text-align: right;
+}
+.HistoryTable__row:nth-child(even) {
+  background: #f4f4f5
+}

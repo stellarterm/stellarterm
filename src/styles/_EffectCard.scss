@@ -1,0 +1,102 @@
+// This file contains all the styles for the Asset Effect Card Component: AssetEffectCard.jsx
+// This file also containes all the styles for the Effect Card Component: EffectCard.jsx
+
+.EffectCard {
+  overflow:hidden;
+  width: 100%;
+  display: flex;
+  height: 100%;
+  margin-left: 10px;
+}
+.EffectCard__main {
+  border-radius: 5px;
+  background: $s-color-neutral8;
+  border: 1px solid $s-color-neutral7;
+  border-radius: $s-var-radius;
+  padding-right: 5px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-left: 10px;
+  color: #000; // #000 which will then have opacity applied
+}
+.EffectCard__logo {
+  width: 25px;
+  height: 25px;
+  margin-right: 8px;
+}
+.EffectCard__content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  overflow: hidden;
+  height: 30px;
+  padding-bottom: 2px;
+}
+.EffectCard__header {
+  display: flex;
+  align-items: baseline;
+  color: #000;
+  opacity: 0.85;
+  height: 21px;
+  margin-bottom: 4px;
+}
+.EffectCard__header__code {
+  font-weight: 400;
+  font-size: $s-scale-1/2;
+  line-height: 20px;
+  margin-right: 4px;
+}
+.EffectCard__header__domain {
+  text-decoration: none;
+  font-size: $s-scale-4/2;
+  line-height: 20px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.EffectCard__issuerAccountId {
+  margin: 0;
+  font-size: 6px;
+  font-weight: 400;
+  padding-left: 1px; // Fine tuning for alignment due to keming stuff
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  opacity: 0.6;
+  height: 8px;
+  line-height: 1;
+}
+.EffectCard__spacer {
+  width: 10px;
+}
+.EffectCard__details {
+  flex: 1;
+}
+.EffectCard__time {
+  flex: 1;
+  text-align: right;
+}
+.EffectCard__publickey {
+  font-size: 8pt;
+}
+.EffectCard__container {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  font-size: 9pt;
+}
+.EffectCard__domain__container {
+  font-size: 9pt;
+  margin-left: 10px;
+}
+.EffectCard__domain {
+  font-style: italic;
+  font-size: 10pt;
+}
+.EffectCard__threshold {
+  font-size: 9pt;
+}
+.EffectCard__flags {
+  display: flex;
+}
