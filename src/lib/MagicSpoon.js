@@ -1,4 +1,4 @@
- import _ from 'lodash';
+import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import BigNumber from 'bignumber.js';
 import directory from '../directory';

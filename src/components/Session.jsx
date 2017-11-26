@@ -83,7 +83,7 @@ class Session extends React.Component {
               <HistoryView d={d}></HistoryView>
             </div>
         </div>
-      );
+        );
       } else if (part1 === 'deposit') {
         content = (<div><Deposit d={d}/></div>);
       }
