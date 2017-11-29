@@ -148,7 +148,7 @@ function Driver(driverOpts) {
       });
     },
     connectLedger: (onSuccess, onError) => {
-      new Ledger.Api(new Ledger.comm(20)).connect(onSuccess, onError);
+      new Ledger.Api(new Ledger.comm(Number.MAX_VALUE)).connect(onSuccess, onError);
     }
   };
 }
