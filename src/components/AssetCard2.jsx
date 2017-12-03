@@ -64,6 +64,17 @@ export default class AssetCard2 extends React.Component {
       </div>
     </div>
 
+    let effectAssetCardMain = <div className="EffectCard__main" style={Object.assign(backgroundStyle, borderStyle)}>
+      <img className="EffectCard__logo" src={anchor.logo}></img>
+      <div className="EffectCard__content">
+        <div className="EffectCard__header">
+          <span className="EffectCard__header__code">{asset.code}</span>
+          <span className="EffectCard__header__domain">{anchor.name}</span>
+        </div>
+        <p className="EffectCard__issuerAccountId">{issuerAccountId}</p>
+      </div>
+    </div>
+
     let containerClassName = 'AssetCard2';
 
     if (this.props.boxy) {
@@ -80,7 +91,7 @@ export default class AssetCard2 extends React.Component {
       </div>
     }
 
-    return <div className={containerClassName} style={borderStyle}>
+    return this.props.isEffect ? effectAssetCardMain : <div className={containerClassName} style={borderStyle}>
       {assetCardMain}
     </div>
   }

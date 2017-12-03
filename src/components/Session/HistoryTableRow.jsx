@@ -17,7 +17,7 @@
 */
 const React = window.React = require('react');
 import Printify from '../../lib/Printify';
-import AssetCardEffect from './AssetCardEffect.jsx';
+import AssetCard2 from '../AssetCard2.jsx';
 
 const decAtIndex = (input, index) => {
   return parseInt(input.substr(index,2),16);
@@ -28,7 +28,7 @@ const hexToRgba = (input, opacity) => {
 
 const BACKGROUND_OPACITY = 0.08;
 
-export default class EffectCard extends React.Component {
+export default class HistoryTableRow extends React.Component {
   constructor(props) {
     super(props);
   }
@@ -97,7 +97,7 @@ export default class EffectCard extends React.Component {
             // this will be the source (the merged account).
             const publicKey = d.to ? d.to : ( d.from ? d.from : d.source_account || "")
             EffectCardMain = <div className="EffectCard">
-              <AssetCardEffect code={d.asset_code || 'XLM'} issuer={d.asset_issuer || null} />
+              <AssetCard2 code={d.asset_code || 'XLM'} issuer={d.asset_issuer || null} isEffect={true}/>
               <div className="EffectCard__container">
                 <div>Amount: {Printify.lightenZeros(d.amount)}</div>
                 <div>{ direction + publicKey}</div>
@@ -122,14 +122,14 @@ export default class EffectCard extends React.Component {
       // SDK, only completed trades.
       case 'trade':
         EffectCardMain = <div className="EffectCard">
-          <AssetCardEffect code={d.sold_asset_code || 'XLM'} issuer={d.sold_asset_issuer || null} />
+          <AssetCard2 code={d.sold_asset_code || 'XLM'} issuer={d.sold_asset_issuer || null} isEffect={true} />
           <div className="EffectCard__container">
             <div>Amount:</div>
             <div>{Printify.lightenZeros(d.sold_amount)}</div>
           </div>
           {"\u2192"}
           <div className="EffectCard__spacer"></div>
-          <AssetCardEffect code={d.bought_asset_code || 'XLM'} issuer={d.bought_asset_issuer || null} />
+          <AssetCard2 code={d.bought_asset_code || 'XLM'} issuer={d.bought_asset_issuer || null} isEffect={true} />
           <div className="EffectCard__container">
             <div>Amount:</div>
             <div>{Printify.lightenZeros(d.bought_amount)}</div>
@@ -141,7 +141,7 @@ export default class EffectCard extends React.Component {
       // Each has the same relevant data, so they all return the same component.
       case 'trustline':
         EffectCardMain = <div className="EffectCard">
-          <AssetCardEffect code={d.asset_code} issuer={d.asset_issuer} />
+          <AssetCard2 code={d.asset_code} issuer={d.asset_issuer} isEffect={true}/>
         </div>
         break;
     }

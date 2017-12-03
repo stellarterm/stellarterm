@@ -18,7 +18,7 @@
   text-align: left;
 }
 .HistoryTable__head__action {
-  text-align: center;
+  text-align: left;
   flex: 1;
 }
 .HistoryTable__head__description {
@@ -26,16 +26,15 @@
   flex: 10;
 }
 .HistoryTable__head__date {
-  text-align: right;
-  flex: 2;
-  margin-right: 50px;
+  text-align: center;
+  flex: 1;
 }
 .HistoryTable__body {
   flex: 1;
   flex-direction: column;
+  min-height:0;
   height: 500px;
   overflow-y: scroll;
-  min-height:0;
 }
 .HistoryTable__row {
   border-top: 1px solid $s-color-neutral7;

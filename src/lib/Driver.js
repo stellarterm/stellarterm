@@ -37,6 +37,15 @@ function Driver(driverOpts) {
     setupError: false, // Couldn't find account
     unfundedAccountId: '',
     account: null, // MagicSpoon.Account instance
+    filters: {
+      trade: true,
+      account: true,
+      signer: true,
+      trustline: true,
+    },
+    transactionHistory: null,
+    fullTransactionHistory: null,
+    filteredTxHistory: null,
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
@@ -75,6 +84,7 @@ function Driver(driverOpts) {
         this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
           trigger.session();
         });
+        this.session.fullTransactionHistory = await MagicSpoon.fullHistory(this.Server, this.session.account.account_id);
         this.session.state = 'in';
         trigger.session();
       } catch (e) {
@@ -129,6 +139,41 @@ function Driver(driverOpts) {
         trigger.orderbook();
         forceUpdateAccountOffers();
       });
+    },
+    loadHistory: async () => {
+      this.session.state = 'loading';
+      trigger.session();
+      this.session.transactionHistory = await MagicSpoon.loadHistory(this.Server, this.session.fullTransactionHistory.records.slice(0, 6));
+      this.session.filteredTxHistory = this.session.transactionHistory;
+      this.session.state = 'in';
+      trigger.session();
+
+      MagicSpoon.loadHistory(this.Server, this.session.fullTransactionHistory.records.slice(6, 201), (data) => {
+        this.session.transactionHistory.push(data);
+        trigger.session();
+      });
+
+      MagicSpoon.refresh(this.Server, this.session.account.account_id, async (res) => {
+        const check = !_.includes(this.session.fullTransactionHistory.records.map(x => x.id), res.id)
+        if(check) {
+          const resp = await res.operation();
+          const resp2 = await resp.transaction();
+          res.category = res.type;
+          let obj = Object.assign(resp, resp2, res)
+
+          // Need better way for this
+          this.session.transactionHistory.unshift(obj);
+          let filtered = Object.keys(this.session.filters).filter( x => this.session.filters[x]);
+          this.session.filteredTxHistory = this.session.transactionHistory.filter( x => filtered.indexOf(x.type.split("_")[0]) !== -1 );
+          trigger.session();
+        }
+      })
+    },
+    filterHistory: async (e) => {
+      this.session.filters[e.target.name] = !this.session.filters[e.target.name];
+      let filtered = Object.keys(this.session.filters).filter( x => this.session.filters[x]);
+      this.session.filteredTxHistory = this.session.transactionHistory.filter( x => filtered.indexOf(x.type.split("_")[0]) !== -1 );
+      trigger.session();
     },
   };
 }

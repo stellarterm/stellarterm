@@ -77,13 +77,17 @@ class Session extends React.Component {
           </div>
         </div>
       } else if (part1 === 'transactionHistory') {
-        content = (
-          <div>
-            <div className="so-back islandBack islandBack--t">
-              <HistoryView d={d}></HistoryView>
-            </div>
-        </div>
-        );
+        if(this.props.d.session.transactionHistory){
+          content = (
+            <div>
+              <div className="so-back islandBack islandBack--t">
+                <HistoryView d={d}></HistoryView>
+              </div>
+          </div>
+          );
+        } else {
+          this.handlers.loadHistory()
+        }
       } else if (part1 === 'deposit') {
         content = (<div><Deposit d={d}/></div>);
       }

@@ -2,6 +2,7 @@ import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import BigNumber from 'bignumber.js';
 import directory from '../directory';
+import bluebird from 'bluebird';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
@@ -10,31 +11,6 @@ import directory from '../directory';
 const MagicSpoon = {
   async Account(Server, keypair, onUpdate) {
     let sdkAccount = await Server.loadAccount(keypair.publicKey())
-
-    let effectsHistory = await Server.effects().forAccount((keypair.publicKey())).limit(200).order('desc').call();
-
-    // Gets the nested information for each effect.
-    let effectsHistoryPromises = await effectsHistory.records.map( async (x) =>{
-        const resp = await Server.operations().operation(x.id.split("-")[0]).call();
-        const resp2 = await Server.transactions().transaction(resp._links.transaction.href.split("/")[4]).call();
-        x.category = x.type;
-        x.type_of = resp.type;
-        return Object.assign(resp, resp2, x)
-    })
-
-    // Since effectsHistoryPromises initially returns promises, this
-    // executes the promises and then sets the complete effects
-    // history array to correct sdkAccount property when resolved.
-    Promise.all(effectsHistoryPromises).then( x => {
-      sdkAccount.effectHistory = x;
-      onUpdate();
-    } )
-
-    // Since the effects won't be completely loaded upon component
-    // mounting, this will return the initial array with partial
-    // data such as effect name and effect type.
-    effectsHistory.records.forEach(x => { x.category = x.type });
-    sdkAccount.effectHistory = effectsHistory.records;
 
     sdkAccount.sign = transaction => {
       transaction.sign(keypair);
@@ -112,27 +88,6 @@ const MagicSpoon = {
           updated = true;
         }
 
-        if (updated) {
-          onUpdate();
-        }
-      }
-    });
-
-    let transactionEventsClose = Server.effects().forAccount(keypair.publicKey()).stream({
-      onmessage: async (res) => {
-        let updated = false;
-
-        // If the effect is not included in the effectHistory property, include it. Here
-        // the id's are compared and then the nested information is loaded, in a similar
-        // process to the one above.
-        if (!_.includes(sdkAccount.effectHistory.map(x => x.id), res.id)) {
-          const resp = await Server.operations().operation(res.id.split("-")[0]).call();
-          const resp2 = await Server.transactions().transaction(resp._links.transaction.href.split("/")[4]).call();
-          res.category = res.type;
-          let obj = Object.assign(resp, resp2, res)
-          sdkAccount.effectHistory.unshift(obj);
-          updated = true;
-        }
         if (updated) {
           onUpdate();
         }
@@ -465,6 +420,35 @@ const MagicSpoon = {
     spoonAccount.updateOffers();
     return transactionResult;
   },
+  async fullHistory(Server, publicKey) {
+    return await Server.effects().forAccount(publicKey).limit(200).order('desc').call();
+  },
+  async refresh(Server, publicKey, cb) {
+    Server.effects().forAccount(publicKey).stream({
+      onmessage: async (res) => {
+        cb(res)
+      }
+    });
+  },
+  async loadHistory(Server, effectsArr, callback) {
+
+    // Gets the nested information for each effect.
+    let effectsHistoryPromises = effectsArr.map( async (x) =>{
+        const resp = await x.operation();
+        const resp2 = await resp.transaction();
+        x.category = x.type;
+        x.type_of = resp.type;
+        return Object.assign(resp, resp2, x)
+    })
+    
+    if(callback) {
+      bluebird.each(effectsHistoryPromises, (data) => {
+        callback(data)
+      }, {concurrency: 1});
+    } else {
+      return Promise.all(effectsHistoryPromises)
+    }
+  }
 };
 
 

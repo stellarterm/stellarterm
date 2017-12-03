@@ -10,9 +10,8 @@
   4) Date (time since and ledger sequence number)
 */
 const React = window.React = require('react');
-import EffectCard from './EffectCard.jsx';
-import DateCard from './DateCard.jsx';
-import {daysSince} from '../../lib/Format';
+import HistoryTableRow from './HistoryTableRow.jsx';
+import {niceDate} from '../../lib/Format';
 
 export default class HistoryTable extends React.Component {
   constructor(props) {
@@ -20,22 +19,14 @@ export default class HistoryTable extends React.Component {
   }
 
   render() {
-    let account = this.props.d.session.account;
-
     // From MagicSpoon.Account
-    let allEffects = account.effectHistory;
-
-    // Filter the checkboxes to only get the "checked" ones
-    let filtered = Object.keys(this.props.filters).filter( x => this.props.filters[x]);
-
-    // Filter the effects according to the checkboxes
-    // x.category.split("_")[0] is the type of the effect (ie for account_created --> account)
-    allEffects = allEffects.filter( x => filtered.indexOf(x.category.split("_")[0]) !== -1 );
+    let allEffects = this.props.d.session.filteredTxHistory;
 
     const effectsRows = allEffects.map(effect => {
 
       const effectType = effect.category.split("_")[0];
-      const effectCard = <EffectCard type={effectType} data={effect}/>
+      const effectCard = <HistoryTableRow type={effectType} data={effect}/>
+      const niceDateObj = niceDate(effect.created_at);
 
       return <tr className="HistoryTable__row" key={effect.id}>
         <td className="HistoryTable__row__item--category">
@@ -53,7 +44,15 @@ export default class HistoryTable extends React.Component {
             {effectCard}
           </td>
           <td className="HistoryTable__row__item--date">
-            <DateCard time={daysSince(effect.created_at)} ledger={effect.ledger_attr}/>
+            <div className="DateCard">
+              <div className="DateCard__date">
+                  {niceDateObj.time}<br />
+                  {niceDateObj.date}
+              </div>
+              <div className="DateCard__ledger">
+                  Ledger #{effect.ledger_attr}
+              </div>
+            </div>
           </td>
       </tr>
     });
