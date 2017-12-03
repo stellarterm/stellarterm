@@ -11,7 +11,6 @@ import bluebird from 'bluebird';
 const MagicSpoon = {
   async Account(Server, keypair, onUpdate) {
     let sdkAccount = await Server.loadAccount(keypair.publicKey())
-
     sdkAccount.sign = transaction => {
       transaction.sign(keypair);
     };
@@ -420,17 +419,25 @@ const MagicSpoon = {
     spoonAccount.updateOffers();
     return transactionResult;
   },
-  async fullHistory(Server, publicKey) {
+  async loadEffectHistorySkeleton(Server, publicKey) {
+    // Returns the skeleton of effect history of up to the last 200 effects.
     return await Server.effects().forAccount(publicKey).limit(200).order('desc').call();
   },
-  async refresh(Server, publicKey, cb) {
+  async effectHistoryStream(Server, publicKey, check, add) {
     Server.effects().forAccount(publicKey).stream({
       onmessage: async (res) => {
-        cb(res)
+        let answer = await check(res);
+        if(answer) {
+          const resp = await Server.operations().operation(res.id.split("-")[0]).call();
+          const resp2 = await Server.transactions().transaction(resp._links.transaction.href.split("/")[4]).call();
+          res.category = res.type;
+          let obj = Object.assign(resp, resp2, res)
+          add(obj);
+        }
       }
     });
   },
-  async loadHistory(Server, effectsArr, callback) {
+  async loadInitialEffectHistory(Server, effectsArr, callback) {
 
     // Gets the nested information for each effect.
     let effectsHistoryPromises = effectsArr.map( async (x) =>{
@@ -440,7 +447,14 @@ const MagicSpoon = {
         x.type_of = resp.type;
         return Object.assign(resp, resp2, x)
     })
-    
+
+    // Lazy load the table
+    // 1) First time no callback is included. Thus,
+    //    the first 7 effects are returned. These
+    //    effects are displayed so that the table
+    //    appears to run fast.
+    // 2) We load the rest of the effects in batches,
+    //    adding them to the table as they come in.
     if(callback) {
       bluebird.each(effectsHistoryPromises, (data) => {
         callback(data)

@@ -12,8 +12,6 @@
   The reasoning behind this design is modularity. If, in the future,
   another effect is added, it simply requires adding another case to
   the switch statement.
-
-  This will return an empty div if the data is not yet loaded.
 */
 const React = window.React = require('react');
 import Printify from '../../lib/Printify';

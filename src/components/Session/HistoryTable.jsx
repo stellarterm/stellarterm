@@ -20,7 +20,7 @@ export default class HistoryTable extends React.Component {
 
   render() {
     // From MagicSpoon.Account
-    let allEffects = this.props.d.session.filteredTxHistory;
+    let allEffects = this.props.d.session.filteredEffectHistory;
 
     const effectsRows = allEffects.map(effect => {
 

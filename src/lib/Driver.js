@@ -43,9 +43,9 @@ function Driver(driverOpts) {
       signer: true,
       trustline: true,
     },
-    transactionHistory: null,
-    fullTransactionHistory: null,
-    filteredTxHistory: null,
+    effectHistory: null,
+    effectHistorySkeleton: null,
+    filteredEffectHistory: null,
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
@@ -84,7 +84,7 @@ function Driver(driverOpts) {
         this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
           trigger.session();
         });
-        this.session.fullTransactionHistory = await MagicSpoon.fullHistory(this.Server, this.session.account.account_id);
+        this.session.fullEffectHistory = await MagicSpoon.loadEffectHistorySkeleton(this.Server, this.session.account.account_id);
         this.session.state = 'in';
         trigger.session();
       } catch (e) {
@@ -142,37 +142,29 @@ function Driver(driverOpts) {
     },
     loadHistory: async () => {
       this.session.state = 'loading';
-      trigger.session();
-      this.session.transactionHistory = await MagicSpoon.loadHistory(this.Server, this.session.fullTransactionHistory.records.slice(0, 6));
-      this.session.filteredTxHistory = this.session.transactionHistory;
+      this.session.effectHistory = await MagicSpoon.loadInitialEffectHistory(this.Server, this.session.fullEffectHistory.records.slice(0, 6));
+      this.session.filteredEffectHistory = this.session.effectHistory;
       this.session.state = 'in';
       trigger.session();
 
-      MagicSpoon.loadHistory(this.Server, this.session.fullTransactionHistory.records.slice(6, 201), (data) => {
-        this.session.transactionHistory.push(data);
+      MagicSpoon.loadInitialEffectHistory(this.Server, this.session.fullEffectHistory.records.slice(6, 201), (data) => {
+        this.session.effectHistory.push(data);
         trigger.session();
       });
 
-      MagicSpoon.refresh(this.Server, this.session.account.account_id, async (res) => {
-        const check = !_.includes(this.session.fullTransactionHistory.records.map(x => x.id), res.id)
-        if(check) {
-          const resp = await res.operation();
-          const resp2 = await resp.transaction();
-          res.category = res.type;
-          let obj = Object.assign(resp, resp2, res)
-
-          // Need better way for this
-          this.session.transactionHistory.unshift(obj);
+      MagicSpoon.effectHistoryStream(this.Server, this.session.account.account_id, async (res) => {
+        return !_.includes(this.session.fullEffectHistory.records.map(x => x.id), res.id);
+      }, (res) => {
+          this.session.effectHistory.unshift(res);
           let filtered = Object.keys(this.session.filters).filter( x => this.session.filters[x]);
-          this.session.filteredTxHistory = this.session.transactionHistory.filter( x => filtered.indexOf(x.type.split("_")[0]) !== -1 );
+          this.session.filteredEffectHistory = this.session.effectHistory.filter( x => filtered.indexOf(x.type.split("_")[0]) !== -1 );
           trigger.session();
-        }
       })
     },
     filterHistory: async (e) => {
       this.session.filters[e.target.name] = !this.session.filters[e.target.name];
       let filtered = Object.keys(this.session.filters).filter( x => this.session.filters[x]);
-      this.session.filteredTxHistory = this.session.transactionHistory.filter( x => filtered.indexOf(x.type.split("_")[0]) !== -1 );
+      this.session.filteredEffectHistory = this.session.effectHistory.filter( x => filtered.indexOf(x.type.split("_")[0]) !== -1 );
       trigger.session();
     },
   };
