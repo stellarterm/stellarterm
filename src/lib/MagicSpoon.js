@@ -419,33 +419,30 @@ const MagicSpoon = {
     spoonAccount.updateOffers();
     return transactionResult;
   },
-  async loadEffectHistorySkeleton(Server, publicKey) {
-    // Returns the skeleton of effect history of up to the last 200 effects.
+  async preloadEffectHistoryOutline(Server, publicKey) {
     return await Server.effects().forAccount(publicKey).limit(200).order('desc').call();
   },
-  async effectHistoryStream(Server, publicKey, check, add) {
+  async effectHistoryStream(Server, publicKey, checkIfNew, addCallback) {
     Server.effects().forAccount(publicKey).stream({
-      onmessage: async (res) => {
-        let answer = await check(res);
-        if(answer) {
-          const resp = await Server.operations().operation(res.id.split("-")[0]).call();
-          const resp2 = await Server.transactions().transaction(resp._links.transaction.href.split("/")[4]).call();
-          res.category = res.type;
-          let obj = Object.assign(resp, resp2, res)
-          add(obj);
+      onmessage: async (x) => {
+        let isNew = await checkIfNew(x);
+        if(isNew) {
+          const operation = await x.operation();
+          const transaction = await operation.transaction();
+          x.category = x.type;
+          addCallback(Object.assign(operation, transaction, x));
         }
       }
     });
   },
-  async loadInitialEffectHistory(Server, effectsArr, callback) {
+  async loadEffectHistory(Server, effectsArr, addCallback) {
 
     // Gets the nested information for each effect.
     let effectsHistoryPromises = effectsArr.map( async (x) =>{
-        const resp = await x.operation();
-        const resp2 = await resp.transaction();
-        x.category = x.type;
-        x.type_of = resp.type;
-        return Object.assign(resp, resp2, x)
+      const operation = await x.operation();
+      const transaction = await operation.transaction();
+      x.category = x.type;
+      return Object.assign(operation, transaction, x);
     })
 
     // Lazy load the table
@@ -455,9 +452,9 @@ const MagicSpoon = {
     //    appears to run fast.
     // 2) We load the rest of the effects in batches,
     //    adding them to the table as they come in.
-    if(callback) {
+    if(addCallback) {
       bluebird.each(effectsHistoryPromises, (data) => {
-        callback(data)
+        addCallback(data)
       }, {concurrency: 1});
     } else {
       return Promise.all(effectsHistoryPromises)

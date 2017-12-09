@@ -17,23 +17,14 @@ const React = window.React = require('react');
 import Printify from '../../lib/Printify';
 import AssetCard2 from '../AssetCard2.jsx';
 
-const decAtIndex = (input, index) => {
-  return parseInt(input.substr(index,2),16);
-}
-const hexToRgba = (input, opacity) => {
-  return 'rgba(' + decAtIndex(input, 1) + ',' + decAtIndex(input, 3) + ',' + decAtIndex(input, 5) + ',' + BACKGROUND_OPACITY + ')';
-}
-
-const BACKGROUND_OPACITY = 0.08;
-
 export default class HistoryTableRow extends React.Component {
   constructor(props) {
     super(props);
   }
   render() {
     const d = this.props.data
-
     let EffectCardMain;
+
     switch(this.props.type) {
 
       // Case 1 ACCOUNT
@@ -45,11 +36,11 @@ export default class HistoryTableRow extends React.Component {
           case 'account_created':
             EffectCardMain = <div className="EffectCard">
               <div className="EffectCard__container">
-                <div>Starting Balance: {d.starting_balance ? Printify.lightenZeros(d.starting_balance) : <div></div>}</div>
+                <div>Starting Balance: {Printify.lightenZeros(d.starting_balance)}</div>
                 <div>{"Funded By: " + d.funder}</div>
               </div>
             </div>
-            break;
+          break;
 
           // Case 1.2 HOME DOMAIN UPDATED
           // Returns a compnent with the name of the new home domain.
@@ -59,22 +50,19 @@ export default class HistoryTableRow extends React.Component {
                 Home domain updated: <span className="EffectCard__domain">{d.home_domain}</span>
               </div>
             </div>
-            break;
+          break;
 
           // Case 1.3 FLAGS UPDATED
           // Returns a component listing the updated flags (both set and/or clear).
           case "account_flags_updated":
             EffectCardMain = <div className="EffectCard">
               <div className="EffectCard__domain__container">
-                Flags updated: {
-                    d.set_flags_s ? <div className="EffectCard__flags">{d.set_flags_s.map( (x,i) => "set_flag_" + x ).join(", ")} </div>: <div></div>
-                  }
-                  {
-                    d.clear_flags_s ? <div className="EffectCard__flags">{d.clear_flags_s.map( (x,i) => "clear_flag_" + x ).join(", ")} </div>: <div></div>
-                  }
+                Flags updated:
+                { d.set_flags_s ? <div className="EffectCard__flags">{d.set_flags_s.map( flag => "set_flag_" + flag ).join(", ")} </div>: <div></div> }
+                { d.clear_flags_s ? <div className="EffectCard__flags">{d.clear_flags_s.map( flag => "clear_flag_" + flag ).join(", ")} </div>: <div></div> }
               </div>
             </div>
-            break;
+          break;
 
           // Case 1.4 THRESHOLDS UPDATED
           // Returns a component with the updated thresholds
@@ -84,7 +72,7 @@ export default class HistoryTableRow extends React.Component {
                 Threshold weights updated -- Low: {d.low_threshold} -- Medium: {d.med_threshold} -- High: {d.high_threshold}
               </div>
             </div>
-            break;
+          break;
 
           // Case 1.5 and 1.6 CREDITED and DEBITED
           // Returns a component with the asset, the amount, and the source/destination
@@ -113,11 +101,10 @@ export default class HistoryTableRow extends React.Component {
             <div>{"Public Key: " + d.public_key}</div>
           </div>
         </div>
-        break;
+      break;
 
       // Case 3 TRADE
-      // For now, pending and updated offers are not recorded by the Effects
-      // SDK, only completed trades.
+      // For now, pending and updated offers are not recorded by the Effects SDK, only completed trades.
       case 'trade':
         EffectCardMain = <div className="EffectCard">
           <AssetCard2 code={d.sold_asset_code || 'XLM'} issuer={d.sold_asset_issuer || null} isEffect={true} />
@@ -141,9 +128,9 @@ export default class HistoryTableRow extends React.Component {
         EffectCardMain = <div className="EffectCard">
           <AssetCard2 code={d.asset_code} issuer={d.asset_issuer} isEffect={true}/>
         </div>
-        break;
+      break;
     }
 
-    return d.ledger_attr ? EffectCardMain : <div></div>
+    return EffectCardMain
   }
 };

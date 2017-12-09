@@ -1,9 +1,8 @@
 /*
   This file contains the Effects History Component.
   This component is the parent of the Effects History
-  Table Component: HistoryTable.jsx. It also has
-  checkboxes used to filter effects. These are
-  managed by a local state.
+  Table Component: HistoryTable.jsx. It has checkboxes
+  used to filter effects.
 */
 const React = window.React = require('react');
 import HistoryTable from './HistoryTable.jsx';

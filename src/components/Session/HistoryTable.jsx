@@ -3,11 +3,11 @@
   This component displays relevant information about
   all the effects of an account in descending chronological order.
   It is meant to be visual, concise, scanable, minimal, and
-  clean, with four catagories:
+  clean, with four columns:
   1) Effect type
-  2) Sub action (ie CREATE for account_create)
+  2) Action (ie CREATE for account_create)
   3) Description
-  4) Date (time since and ledger sequence number)
+  4) Date (absolute time, date, and ledger sequence number)
 */
 const React = window.React = require('react');
 import HistoryTableRow from './HistoryTableRow.jsx';
@@ -19,13 +19,11 @@ export default class HistoryTable extends React.Component {
   }
 
   render() {
-    // From MagicSpoon.Account
     let allEffects = this.props.d.session.filteredEffectHistory;
 
     const effectsRows = allEffects.map(effect => {
 
       const effectType = effect.category.split("_")[0];
-      const effectCard = <HistoryTableRow type={effectType} data={effect}/>
       const niceDateObj = niceDate(effect.created_at);
 
       return <tr className="HistoryTable__row" key={effect.id}>
@@ -37,11 +35,11 @@ export default class HistoryTable extends React.Component {
             // For trade, the type is simply trade, thus, effect.category.split("_")[1] does not exist.
             // So, here we maunally create the sub action that will be displayed.
             // For the rest, effect.category.split("_")[1] is the sub action (ie for account_created --> created)
-            effectType === 'trade' ? 'TRADED' : effect.category.split("_")[1] ? effect.category.split("_")[1].toUpperCase() : ""
+            effectType === 'trade' ? 'traded' : effect.category.split("_")[1] || effect.category.split("_")[1].toUpperCase()
           }
         </td>
           <td className="HistoryTable__row__item--description">
-            {effectCard}
+            <HistoryTableRow type={effectType} data={effect}/>
           </td>
           <td className="HistoryTable__row__item--date">
             <div className="DateCard">

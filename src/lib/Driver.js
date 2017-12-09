@@ -44,8 +44,6 @@ function Driver(driverOpts) {
       trustline: true,
     },
     effectHistory: null,
-    effectHistorySkeleton: null,
-    filteredEffectHistory: null,
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
@@ -84,7 +82,7 @@ function Driver(driverOpts) {
         this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
           trigger.session();
         });
-        this.session.fullEffectHistory = await MagicSpoon.loadEffectHistorySkeleton(this.Server, this.session.account.account_id);
+        this.session.fullEffectHistory = await MagicSpoon.preloadEffectHistoryOutline(this.Server, this.session.account.account_id);
         this.session.state = 'in';
         trigger.session();
       } catch (e) {
@@ -142,12 +140,12 @@ function Driver(driverOpts) {
     },
     loadHistory: async () => {
       this.session.state = 'loading';
-      this.session.effectHistory = await MagicSpoon.loadInitialEffectHistory(this.Server, this.session.fullEffectHistory.records.slice(0, 6));
+      this.session.effectHistory = await MagicSpoon.loadEffectHistory(this.Server, this.session.fullEffectHistory.records.slice(0, 6));
       this.session.filteredEffectHistory = this.session.effectHistory;
       this.session.state = 'in';
       trigger.session();
 
-      MagicSpoon.loadInitialEffectHistory(this.Server, this.session.fullEffectHistory.records.slice(6, 201), (data) => {
+      MagicSpoon.loadEffectHistory(this.Server, this.session.fullEffectHistory.records.slice(6, 201), (data) => {
         this.session.effectHistory.push(data);
         trigger.session();
       });
