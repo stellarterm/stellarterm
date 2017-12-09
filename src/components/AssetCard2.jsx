@@ -53,7 +53,7 @@ export default class AssetCard2 extends React.Component {
     let issuerAccountId = (asset.issuer === null) ? 'native lumens' : asset.issuer;
     // Unlike AssetCard (original), this one does not link to the domain. Users can simply type it in the address bar
 
-    let assetCardMain = <div className="AssetCard2__main" style={backgroundStyle}>
+    let assetCardMain = <div className={this.props.isEffect ? "EffectCard__main" : "AssetCard2__main"} style={backgroundStyle}>
       <img className="AssetCard2__logo" src={anchor.logo}></img>
       <div className="AssetCard2__content">
         <div className="AssetCard2__header">
@@ -61,17 +61,6 @@ export default class AssetCard2 extends React.Component {
           <span className="AssetCard2__header__domain">{anchor.name}</span>
         </div>
         <p className="AssetCard2__issuerAccountId">{issuerAccountId}</p>
-      </div>
-    </div>
-
-    let effectAssetCardMain = <div className="EffectCard__main" style={Object.assign(backgroundStyle, borderStyle)}>
-      <img className="EffectCard__logo" src={anchor.logo}></img>
-      <div className="EffectCard__content">
-        <div className="EffectCard__header">
-          <span className="EffectCard__header__code">{asset.code}</span>
-          <span className="EffectCard__header__domain">{anchor.name}</span>
-        </div>
-        <p className="EffectCard__issuerAccountId">{issuerAccountId}</p>
       </div>
     </div>
 
@@ -91,7 +80,7 @@ export default class AssetCard2 extends React.Component {
       </div>
     }
 
-    return this.props.isEffect ? effectAssetCardMain : <div className={containerClassName} style={borderStyle}>
+    return this.props.isEffect ? assetCardMain : <div className={containerClassName} style={borderStyle}>
       {assetCardMain}
     </div>
   }
