@@ -218,6 +218,12 @@
       "mergeOpAccepted": false,
       "pathPaymentAccepted": false
     },
+    "GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A": {
+      "name": "Binance",
+      "requiredMemoType": "MEMO_ID",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false
+    },
     "GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM": {
       "name": "BTC38",
       "requiredMemoType": "MEMO_ID",
