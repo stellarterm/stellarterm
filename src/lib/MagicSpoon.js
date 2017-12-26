@@ -244,7 +244,7 @@ const MagicSpoon = {
         depth += 1;
         let tradeResults;
         if (first) {
-          tradeResults = await Server.orderbook(baseBuying, counterSelling).trades().limit(200).order('desc').call()
+          tradeResults = await Server.trades().forAssetPair(baseBuying, counterSelling).limit(200).order('desc').call()
           first = false;
         } else {
           tradeResults = await prevCall();
@@ -258,8 +258,8 @@ const MagicSpoon = {
       }
       // Optimization: use this filter before saving it into the records array
       this.trades = _.filter(
-        _.map(records, (trade, index) => {
-          return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
+        _.map(records, (trade) => {
+          return [new Date(trade.ledger_close_time).getTime(), new BigNumber(trade.counter_amount).dividedBy(trade.base_amount).toNumber()];
         }),
         (entry) => {
           // Remote NaN elements that cause gaps in the chart.
