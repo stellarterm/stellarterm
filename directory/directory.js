@@ -534,5 +534,17 @@ directory.addDestination('GC4KAS6W2YCGJGLP633A6F6AKTCV4WSLMTMIQRSEQE5QRRVKSX7THV
   name: 'BitcoinIndonesia',
   requiredMemoType: 'MEMO_TEXT',
 });
+directory.addDestination('GCO2IP3MJNUOKS4PUDI4C7LGGMQDJGXG3COYX3WSB4HHNAHKYV5YL3VC', {
+  name: 'Binance',
+  requiredMemoType: 'MEMO_ID',
+});
+directory.addDestination('GBOEEVARKVASOQSSXCAHNTGJTVALJE2QM3AQQ2K3VXACQ6JJREQRJZKB', {
+  name: 'OKEX',
+  requiredMemoType: 'MEMO_ID',
+});
+directory.addDestination('GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIFQ2', {
+  name: 'AEX',
+  requiredMemoType: 'MEMO_ID',
+});
 
 module.exports = directory;

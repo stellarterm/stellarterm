@@ -259,6 +259,24 @@
       "requiredMemoType": "MEMO_TEXT",
       "mergeOpAccepted": false,
       "pathPaymentAccepted": false
+    },
+    "GCO2IP3MJNUOKS4PUDI4C7LGGMQDJGXG3COYX3WSB4HHNAHKYV5YL3VC": {
+      "name": "Binance",
+      "requiredMemoType": "MEMO_ID",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false
+    },
+    "GBOEEVARKVASOQSSXCAHNTGJTVALJE2QM3AQQ2K3VXACQ6JJREQRJZKB": {
+      "name": "OKEX",
+      "requiredMemoType": "MEMO_ID",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false
+    },
+    "GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIFQ2": {
+      "name": "AEX",
+      "requiredMemoType": "MEMO_ID",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false
     }
   },
   "assets": {
