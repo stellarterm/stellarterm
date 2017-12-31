@@ -37,3 +37,14 @@ exports.niceNumDecimals = function niceNumDecimals(input) {
   }
   return 7;
 };
+
+// Input a date object and output a formatted date object for display purposes
+// EX: { time: 11:15 AM, date: 12/07/17}
+exports.niceDate = function niceDate(input) {
+  const date = (new Date(input)).toLocaleString()
+  const splitDate = date.split(",");
+  return {
+    time: splitDate[1].split(":").slice(0,2).join(":") + " " + splitDate[1].split(":")[2].split(" ")[1],
+    date: splitDate[0]
+  }
+};

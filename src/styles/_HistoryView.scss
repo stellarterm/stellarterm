@@ -1,0 +1,14 @@
+.HistoryView__header {
+  display: flex;
+  justify-content: space-between;
+}
+.HistoryView__header__left {
+  flex: 1;
+}
+.HistoryView__header__right {
+  text-align: right;
+  flex: 1;
+}
+.HistoryView_checkbox {
+  margin-right: 10px;
+}

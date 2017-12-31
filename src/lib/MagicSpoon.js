@@ -2,6 +2,7 @@ import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import BigNumber from 'bignumber.js';
 import directory from '../directory';
+import bluebird from 'bluebird';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
@@ -418,6 +419,47 @@ const MagicSpoon = {
     spoonAccount.updateOffers();
     return transactionResult;
   },
+  async preloadEffectHistoryOutline(Server, publicKey) {
+    return await Server.effects().forAccount(publicKey).limit(200).order('desc').call();
+  },
+  async effectHistoryStream(Server, publicKey, checkIfNew, addCallback) {
+    Server.effects().forAccount(publicKey).stream({
+      onmessage: async (x) => {
+        let isNew = await checkIfNew(x);
+        if(isNew) {
+          const operation = await x.operation();
+          const transaction = await operation.transaction();
+          x.category = x.type;
+          addCallback(Object.assign(operation, transaction, x));
+        }
+      }
+    });
+  },
+  async loadEffectHistory(Server, effectsArr, addCallback) {
+
+    // Gets the nested information for each effect.
+    let effectsHistoryPromises = effectsArr.map( async (x) =>{
+      const operation = await x.operation();
+      const transaction = await operation.transaction();
+      x.category = x.type;
+      return Object.assign(operation, transaction, x);
+    })
+
+    // Lazy load the table
+    // 1) First time no callback is included. Thus,
+    //    the first 7 effects are returned. These
+    //    effects are displayed so that the table
+    //    appears to run fast.
+    // 2) We load the rest of the effects in batches,
+    //    adding them to the table as they come in.
+    if(addCallback) {
+      bluebird.each(effectsHistoryPromises, (data) => {
+        addCallback(data)
+      }, {concurrency: 1});
+    } else {
+      return Promise.all(effectsHistoryPromises)
+    }
+  }
 };
 
 
