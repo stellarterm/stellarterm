@@ -426,7 +426,7 @@ const MagicSpoon = {
     Server.effects().forAccount(publicKey).stream({
       onmessage: async (x) => {
         let isNew = await checkIfNew(x);
-        if(isNew) {
+        if (isNew) {
           const operation = await x.operation();
           const transaction = await operation.transaction();
           x.category = x.type;
@@ -452,7 +452,7 @@ const MagicSpoon = {
     //    appears to run fast.
     // 2) We load the rest of the effects in batches,
     //    adding them to the table as they come in.
-    if(addCallback) {
+    if (addCallback) {
       bluebird.each(effectsHistoryPromises, (data) => {
         addCallback(data)
       }, {concurrency: 1});
