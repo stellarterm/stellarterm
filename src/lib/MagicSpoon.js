@@ -419,6 +419,59 @@ const MagicSpoon = {
     spoonAccount.updateOffers();
     return transactionResult;
   },
+  async History(Server, publicKey, onUpdate) {
+    let history = {
+      records: [],
+      details: {},
+    };
+
+    // TODO: Support new transactions
+    const initialWalk = async (results) => {
+      let newResults;
+      if (results === null) {
+        newResults = await Server.effects().forAccount(publicKey).limit(200).order('desc').call();
+      } else {
+        newResults = await results.next();
+      }
+
+      if (newResults.records.length !== 0) {
+        history.records = history.records.concat(newResults.records);
+        onUpdate();
+        initialWalk(newResults);
+      }
+    };
+
+    initialWalk(null);
+
+    // We continuous walk through records to try to fetch details with a cooldown of 0 seconds.
+    // If there is nothing new, then we try again in 5 seconds.
+    const detailWalk = async () => {
+      let fetchTarget = null;
+      for (let i = 0; i < history.records.length; i++) {
+        let record = history.records[i];
+        if (fetchTarget == null && history.details[record.id] === undefined) {
+          fetchTarget = i;
+        }
+      }
+
+      if (fetchTarget === null) {
+        setTimeout(detailWalk, 1000);
+      } else {
+        let record = history.records[fetchTarget];
+
+        const operation = await record.operation();
+        const transaction = await operation.transaction();
+        record.category = record.type;
+        history.details[record.id] = Object.assign(operation, transaction, record);
+        onUpdate();
+        detailWalk();
+      }
+    }
+    detailWalk();
+
+
+    return history;
+  },
   async preloadEffectHistoryOutline(Server, publicKey) {
     return await Server.effects().forAccount(publicKey).limit(200).order('desc').call();
   },

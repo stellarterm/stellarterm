@@ -8,6 +8,7 @@ import Byol from './Byol';
 import MagicSpoon from '../lib/MagicSpoon';
 import Ticker from './driver/Ticker';
 import Send from './driver/Send';
+import History from './driver/History';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -55,6 +56,7 @@ function Driver(driverOpts) {
   };
 
   this.send = new Send(this);
+  this.history = new History(this);
   this.ticker = new Ticker();
 
   // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon

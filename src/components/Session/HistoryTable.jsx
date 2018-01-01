@@ -11,35 +11,43 @@
 */
 const React = window.React = require('react');
 import HistoryTableRow from './HistoryTableRow.jsx';
+import Loading from '../Loading.jsx';
 import {niceDate} from '../../lib/Format';
 
 export default class HistoryTable extends React.Component {
   constructor(props) {
     super(props);
   }
-
   render() {
-    let allEffects = this.props.d.session.filteredEffectHistory;
+    let spoonHistory = this.props.d.history.spoonHistory;
 
-    const effectsRows = allEffects.map(effect => {
+    if (spoonHistory === null) {
+      return <Loading size="large">Loading transaction history...</Loading>
+    }
 
-      const effectType = effect.category.split("_")[0];
-      const niceDateObj = niceDate(effect.created_at);
+    const effectsRows = spoonHistory.records.map(record => {
+      let details = spoonHistory.details[record.id];
+      if (details === undefined) {
+        return;
+      }
 
-      return <tr className="HistoryTable__row" key={effect.id}>
+      const effectType = details.category.split('_')[0];
+      const niceDateObj = niceDate(details.created_at);
+
+      return <tr className="HistoryTable__row" key={details.id}>
         <td className="HistoryTable__row__item--category">
           <div className="HistoryTable__category">{effectType.toUpperCase()}</div>
         </td>
         <td className="HistoryTable__row__item--action">
           {
-            // For trade, the type is simply trade, thus, effect.category.split("_")[1] does not exist.
+            // For trade, the type is simply trade, thus, details.category.split("_")[1] does not exist.
             // So, here we maunally create the sub action that will be displayed.
-            // For the rest, effect.category.split("_")[1] is the sub action (ie for account_created --> created)
-            effectType === 'trade' ? 'traded' : effect.category.split("_")[1] || effect.category.split("_")[1].toUpperCase()
+            // For the rest, details.category.split("_")[1] is the sub action (ie for account_created --> created)
+            effectType === 'trade' ? 'traded' : details.category.split("_")[1] || details.category.split("_")[1].toUpperCase()
           }
         </td>
           <td className="HistoryTable__row__item--description">
-            <HistoryTableRow type={effectType} data={effect}/>
+            <HistoryTableRow type={effectType} data={details}/>
           </td>
           <td className="HistoryTable__row__item--date">
             <div className="DateCard">
@@ -48,7 +56,7 @@ export default class HistoryTable extends React.Component {
                   {niceDateObj.date}
               </div>
               <div className="DateCard__ledger">
-                  Ledger #{effect.ledger_attr}
+                  Ledger #{details.ledger_attr}
               </div>
             </div>
           </td>

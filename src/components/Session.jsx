@@ -76,18 +76,12 @@ class Session extends React.Component {
             <Send d={d}></Send>
           </div>
         </div>
-      } else if (part1 === 'effectHistory') {
-        if(this.props.d.session.effectHistory){
-          content = (
-            <div>
-              <div className="so-back islandBack islandBack--t">
-                <HistoryView d={d}></HistoryView>
-              </div>
+      } else if (part1 === 'history') {
+        content = <div>
+          <div className="so-back islandBack islandBack--t">
+            <HistoryView d={d}></HistoryView>
           </div>
-          );
-        } else {
-          this.handlers.loadHistory()
-        }
+        </div>
       } else if (part1 === 'deposit') {
         content = (<div><Deposit d={d}/></div>);
       }
@@ -100,7 +94,7 @@ class Session extends React.Component {
                 <a className="subNav__nav__item" href="#account">Balances</a>
                 <a className="subNav__nav__item" href="#account/send">Send</a>
                 <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
-                <a className="subNav__nav__item" href="#account/effectHistory">History</a>
+                <a className="subNav__nav__item" href="#account/history">History</a>
                 {/*<a className="subNav__nav__item" href="#account/deposit">Deposit</a>*/}
               </nav>
             </div>

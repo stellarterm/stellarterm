@@ -8,7 +8,18 @@ const React = window.React = require('react');
 import HistoryTable from './HistoryTable.jsx';
 
 export default class HistoryView extends React.Component {
+  constructor(props) {
+    super(props);
+    this.props.d.history.handlers.touch();
+
+    this.listenId = this.props.d.history.event.listen(() => {this.forceUpdate()});
+  }
+  componentWillUnmount() {
+    this.props.d.history.event.unlisten(this.listenId);
+  }
   render() {
+    // IF HISTORY IS NOT LOADED, THEN SHOW A LOADING SCREEN
+
     return <div>
       <div className="so-back islandBack">
         <div className="island">
@@ -27,5 +38,6 @@ export default class HistoryView extends React.Component {
         </div>
       </div>
     </div>
+
   }
 }
