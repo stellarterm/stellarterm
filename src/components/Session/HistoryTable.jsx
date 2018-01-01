@@ -52,8 +52,9 @@ export default class HistoryTable extends React.Component {
           <td className="HistoryTable__row__item--date">
             <div className="DateCard">
               <div className="DateCard__date">
-                  {niceDateObj.time}<br />
                   {niceDateObj.date}
+                  <br />
+                  {niceDateObj.time}
               </div>
               <div className="DateCard__ledger">
                   Ledger #{details.ledger_attr}
