@@ -15,7 +15,7 @@ export default class LoginForm extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      secretInput: '',
+      secretInput: 'SBZE44AZ7Q4MURALHHCDV7GQGV22BCFXPXFKW7KRCVNMAICVEPZ5TM7C',
       invalidKey: false,
       newKeypair: null,
     }

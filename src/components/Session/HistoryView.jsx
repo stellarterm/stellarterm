@@ -19,7 +19,6 @@ export default class HistoryView extends React.Component {
   }
   render() {
     // IF HISTORY IS NOT LOADED, THEN SHOW A LOADING SCREEN
-
     return <div>
       <div className="so-back islandBack">
         <div className="island">

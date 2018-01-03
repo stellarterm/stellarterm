@@ -163,8 +163,6 @@ function Driver(driverOpts) {
     },
     filterHistory: async (e) => {
       this.session.filters[e.target.name] = !this.session.filters[e.target.name];
-      let filtered = Object.keys(this.session.filters).filter( x => this.session.filters[x]);
-      this.session.filteredEffectHistory = this.session.effectHistory.filter( x => filtered.indexOf(x.type.split("_")[0]) !== -1 );
       trigger.session();
     },
   };
