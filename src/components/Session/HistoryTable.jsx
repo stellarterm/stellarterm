@@ -25,7 +25,7 @@ export default class HistoryTable extends React.Component {
 
     const effectsRows = spoonHistory.records.map(record => {
       let details = spoonHistory.details[record.id];
-      if ((details === undefined) || (!this.props.d.session.filters[record.type.split("_")[0]])) {
+      if ((details === undefined) || (!this.props.filters[record.type.split("_")[0]])) {
         return;
       }
 

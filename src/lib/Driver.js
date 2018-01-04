@@ -38,13 +38,6 @@ function Driver(driverOpts) {
     setupError: false, // Couldn't find account
     unfundedAccountId: '',
     account: null, // MagicSpoon.Account instance
-    filters: {
-      trade: true,
-      account: true,
-      signer: true,
-      trustline: true,
-    },
-    effectHistory: null,
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
@@ -84,7 +77,6 @@ function Driver(driverOpts) {
         this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
           trigger.session();
         });
-        this.session.fullEffectHistory = await MagicSpoon.preloadEffectHistoryOutline(this.Server, this.session.account.account_id);
         this.session.state = 'in';
         trigger.session();
       } catch (e) {
@@ -139,31 +131,6 @@ function Driver(driverOpts) {
         trigger.orderbook();
         forceUpdateAccountOffers();
       });
-    },
-    loadHistory: async () => {
-      this.session.state = 'loading';
-      this.session.effectHistory = await MagicSpoon.loadEffectHistory(this.Server, this.session.fullEffectHistory.records.slice(0, 6));
-      this.session.filteredEffectHistory = this.session.effectHistory;
-      this.session.state = 'in';
-      trigger.session();
-
-      MagicSpoon.loadEffectHistory(this.Server, this.session.fullEffectHistory.records.slice(6, 201), (data) => {
-        this.session.effectHistory.push(data);
-        trigger.session();
-      });
-
-      MagicSpoon.effectHistoryStream(this.Server, this.session.account.account_id, async (res) => {
-        return !_.includes(this.session.fullEffectHistory.records.map(x => x.id), res.id);
-      }, (res) => {
-          this.session.effectHistory.unshift(res);
-          let filtered = Object.keys(this.session.filters).filter( x => this.session.filters[x]);
-          this.session.filteredEffectHistory = this.session.effectHistory.filter( x => filtered.indexOf(x.type.split("_")[0]) !== -1 );
-          trigger.session();
-      })
-    },
-    filterHistory: async (e) => {
-      this.session.filters[e.target.name] = !this.session.filters[e.target.name];
-      trigger.session();
     },
   };
 }
