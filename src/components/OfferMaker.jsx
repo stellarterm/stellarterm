@@ -125,8 +125,7 @@ export default class OfferMaker extends React.Component {
       })
       .catch(result => {
         let errorType;
-
-        if (result.extras.result_codes.operations[0] === 'op_low_reserve') {
+        if (result.extras && result.extras.result_codes.operations[0] === 'op_low_reserve') {
           errorType = 'lowReserve';
         }
         this.setState({

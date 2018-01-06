@@ -11,6 +11,18 @@ const isValidSecretKey = input => {
   }
 }
 
+const isValidBip32Path = input => {
+  if (!input.startsWith("44'/148'")) {
+    return false;
+  }
+  input.split('/').forEach(function (element) {
+    if (!element.toString().endsWith('\'')) {
+      return false;
+    }
+  });
+  return true;
+}
+
 export default class LoginForm extends React.Component {
   constructor(props) {
     super(props);
@@ -18,10 +30,16 @@ export default class LoginForm extends React.Component {
       secretInput: '',
       invalidKey: false,
       newKeypair: null,
+      ledgerStatus: 'None',
+      bip32Path: "44'/148'/0'"
     }
 
     this.handleInput = (event) => {
-      this.setState({secretInput: event.target.value});
+      if (event.target.name === 'bip32Path') {
+        this.setState({bip32Path: event.target.value});
+      } else {
+        this.setState({secretInput: event.target.value});
+      }
     }
     this.handleSubmit = (event) => {
       event.preventDefault();
@@ -30,7 +48,7 @@ export default class LoginForm extends React.Component {
           invalidKey: true,
         })
       }
-      this.props.handler(this.state.secretInput);
+      this.props.handler(this.state.secretInput, false);
     }
     this.handleGenerate = event => {
       let keypair = StellarSdk.Keypair.random();
@@ -41,6 +59,20 @@ export default class LoginForm extends React.Component {
         }
       });
     }
+    this.proceedWithLedger = (event) => {
+      event.preventDefault();
+      if (!isValidBip32Path(this.state.bip32Path)) {
+        return this.setState({
+          invalidBip32Path: true
+        });
+      }
+      props.handler(null, true, this.state.bip32Path);
+    }
+    props.connectLedger(() => {
+      this.setState({ ledgerStatus: 'Connected' });
+    }, (err) => {
+      this.setState({ ledgerStatus: 'Error: ' + err });
+    });
   }
 
   render() {
@@ -58,6 +90,12 @@ export default class LoginForm extends React.Component {
         <p>Public key (will be your Account ID): {this.state.newKeypair.pubKey}</p>
         <p>Secret key (<strong>SAVE THIS AND KEEP THIS SECURE</strong>): {this.state.newKeypair.secretKey}</p>
       </div>
+    }
+
+    let ledgerStatus = this.state.ledgerStatus === 'Connected' ? 'Connected' : 'Not Connected';
+    let ledgerErrorMessage;
+    if (this.state.invalidBip32Path) {
+      ledgerErrorMessage = <div className="s-alert s-alert--alert">Invalid BIP32 path. Stellar BIP32 paths must be of the form 44'/148'/n'.</div>
     }
 
     return <div className="so-back islandBack islandBack--t">
@@ -86,6 +124,29 @@ export default class LoginForm extends React.Component {
                 <li>Stellarterm does not save your secret key. It is stored on your browser and will be deleted once the page is refreshed or exited.</li>
                 <li>For extra security, you can <a href="https://github.com/irisli/stellarterm">build from source</a> or <a href="https://github.com/stellarterm/stellarterm.github.io/">download from GitHub</a> and verify the hash.</li>
                 <li>StellarTerm is released under the Apache 2.0. It is provided "AS IS" without warranty. The developer is not responsible for any losses and activities caused by the application.</li>
+              </ul>
+            </div>
+          </div>
+          <div className="LoginForm">
+            <div className="LoginForm__form">
+              <p className="LoginForm__intro">Sign in with Ledger Nano S</p>
+              <form onSubmit={this.proceedWithLedger}>
+                <div>
+                  <input name="bip32Path" type="text" className="LoginForm__password" value={this.state.bip32Path} onChange={this.handleInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
+                </div>
+                {ledgerErrorMessage}
+                <div>
+                  <input type="submit" className="LoginForm__submit s-button" value="Sign in with Ledger" disabled={ledgerStatus !== 'Connected'}/>
+                </div>
+              </form>
+            </div>
+            <div className="LoginForm__notes">
+              <h3>Instructions</h3>
+              <ul>
+                <li>Ledger Nano S support is available on Chrome and Opera.</li>
+                <li>Install the Stellar app with the <a href="https://www.ledgerwallet.com/apps/manager">Ledger Manager</a>.</li>
+                <li>Enable browser support in the app settings.</li>
+                <li>Choose the BIP32 path of the account you want use: 44'/148'/n' where n is the account index. Or use the default account 44'/148'/0'.</li>
               </ul>
             </div>
           </div>

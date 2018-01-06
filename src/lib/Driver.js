@@ -8,6 +8,7 @@ import Byol from './Byol';
 import MagicSpoon from '../lib/MagicSpoon';
 import Ticker from './driver/Ticker';
 import Send from './driver/Send';
+import Ledger from 'stellar-ledger-api';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -37,6 +38,7 @@ function Driver(driverOpts) {
     setupError: false, // Couldn't find account
     unfundedAccountId: '',
     account: null, // MagicSpoon.Account instance
+    useLedger: false
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
@@ -56,10 +58,25 @@ function Driver(driverOpts) {
   };
 
   this.handlers = {
-    logIn: async (secretKey) => {
+    logIn: async (secretKey, useLedger, bip32Path) => {
       let keypair;
       try {
-        keypair = StellarSdk.Keypair.fromSecret(secretKey);
+        if (!useLedger) {
+          keypair = StellarSdk.Keypair.fromSecret(secretKey);
+        } else {
+          try {
+            await new Ledger.Api(new Ledger.comm(20)).getPublicKey_async(bip32Path).then((result) => {
+              keypair = StellarSdk.Keypair.fromPublicKey(result.publicKey);
+            }).catch((e) => {
+              throw e;
+            });
+            this.session.useLedger = true;
+          } catch (e) {
+            console.log('Error getting public key from Ledger');
+            console.log(e);
+            return;
+          }
+        }
       } catch (e) {
         console.log('Invalid secret key! We should never reach here!');
         console.error(e);
@@ -72,7 +89,7 @@ function Driver(driverOpts) {
       }
 
       try {
-        this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
+        this.session.account = await MagicSpoon.Account(this.Server, keypair, bip32Path, () => {
           trigger.session();
         });
         this.session.state = 'in';
@@ -85,7 +102,7 @@ function Driver(driverOpts) {
             console.log('Checking to see if account has been created yet');
             if (this.session.state === 'unfunded') {
               // Avoid race conditions
-              this.handlers.logIn(secretKey);
+              this.handlers.logIn(secretKey, useLedger, bip32Path);
             }
           }, 2000);
           trigger.session();
@@ -130,6 +147,9 @@ function Driver(driverOpts) {
         forceUpdateAccountOffers();
       });
     },
+    connectLedger: (onSuccess, onError) => {
+      new Ledger.Api(new Ledger.comm(Number.MAX_VALUE)).connect(onSuccess, onError);
+    }
   };
 }
 
