@@ -85,7 +85,7 @@ class TermApp extends React.Component {
         </div>
         <div className="so-back islandBack HomePage__assetList">
           <div className="island">
-            <AssetList d={this.props.d} limit={5}></AssetList>
+            <AssetList d={this.props.d} limit={6}></AssetList>
             <div className="HomePage__seeMore">
               View more assets on the <a href="#markets">market list page</a>.
             </div>
@@ -93,28 +93,16 @@ class TermApp extends React.Component {
         </div>
         <div className="so-back islandBack">
           <div className="island">
-            <h3 className="HomePage__sectionTitle">Make trades and send payments</h3>
             <div className="island__sub">
-              <div className="island__sub__division HomePage__introImage">
-                <a href="#exchange"><img className="HomePage__screenshot" src={images.order} /></a>
-              </div>
-              <div className="island__sub__division HomePage__introImage">
-                <a href="#account"><img className="HomePage__screenshot" src={images.send} /></a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="so-back islandBack">
-          <div className="island">
-            <div className="island__sub">
-              <div className="island__sub__division HomePage__introImage">
-                <a href="https://github.com/irisli/stellarterm"><img className="HomePage__screenshot" src={images.github} /></a>
-              </div>
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
                   <p>StellarTerm is just a client that can be used to access the Stellar distributed exchange. Neither StellarTerm nor the developers of it are involved with operating the Stellar network.</p>
-                  <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm">star the project on GitHub</a>.</p>
                   <p>StellarTerm is developed by <a href="https://iris.li/">Iris Li</a>, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
+                </div>
+              </div>
+              <div className="island__sub__division">
+                <div className="HomePage__sideBlurb">
+                  <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm">star the project on GitHub</a>.</p>
                   <p>The project is released under the Apache-2.0 license and is released as is without warranty.</p>
                 </div>
               </div>
