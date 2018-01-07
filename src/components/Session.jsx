@@ -36,6 +36,9 @@ class Session extends React.Component {
         Send at least 20 lumens to this account to activate it.
         <br />
         <br />
+        This is required by the Stellar network. You can buy lumens from an exchange.
+        <br />
+        <br />
         Account ID: {d.session.unfundedAccountId}
       </Loading></Generic>
     } else if (state === 'loading') {
