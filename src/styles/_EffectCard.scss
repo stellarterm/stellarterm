@@ -1,0 +1,31 @@
+.EffectCard {
+  overflow:hidden;
+  width: 100%;
+  display: flex;
+  margin-left: 10px;
+}
+.EffectCard__main {
+  border-radius: 5px;
+  background: $s-color-neutral8;
+  border: 1px solid $s-color-neutral7;
+  border-radius: $s-var-radius;
+  padding-right: 5px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-left: 10px;
+  color: #000; // #000 which will then have opacity applied
+}
+.EffectCard__container {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+  font-size: 11pt;
+}
+.EffectCard__container__title {
+  font-size: 20pt;
+}
+.EffectCard__container__header {
+  font-size: 8pt;
+  font-weight: bold;
+}

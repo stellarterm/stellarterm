@@ -9,6 +9,7 @@ import Send from './Session/Send.jsx';
 import Deposit from './Session/Deposit.jsx';
 import Generic from './Generic.jsx';
 import Loading from './Loading.jsx';
+import HistoryView from './Session/HistoryView.jsx';
 
 class Session extends React.Component {
   constructor(props) {
@@ -75,6 +76,12 @@ class Session extends React.Component {
             <Send d={d}></Send>
           </div>
         </div>
+      } else if (part1 === 'history') {
+        content = <div>
+          <div className="so-back islandBack islandBack--t">
+            <HistoryView d={d}></HistoryView>
+          </div>
+        </div>
       } else if (part1 === 'deposit') {
         content = (<div><Deposit d={d}/></div>);
       }
@@ -87,6 +94,7 @@ class Session extends React.Component {
                 <a className="subNav__nav__item" href="#account">Balances</a>
                 <a className="subNav__nav__item" href="#account/send">Send</a>
                 <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
+                <a className="subNav__nav__item" href="#account/history">History</a>
                 {/*<a className="subNav__nav__item" href="#account/deposit">Deposit</a>*/}
               </nav>
             </div>

@@ -51,11 +51,15 @@ body {
 
 @import 'AssetList';
 
+@import 'EffectCard';
+@import 'DateCard';
 
 @import 'LoginForm';
 @import 'AccountView';
+@import 'HistoryView';
 @import 'MinBalance';
 @import 'BalancesTable';
+@import 'HistoryTable';
 @import 'ManageCurrentTrust';
 @import 'Send';
 @import 'AddTrust';

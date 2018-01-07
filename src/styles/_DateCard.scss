@@ -1,0 +1,15 @@
+.DateCard {
+  overflow:hidden;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+.DateCard__date {
+  flex: 1;
+  font-size: 12pt;
+}
+.DateCard__ledger {
+  flex: 1;
+  font-size: 8pt;
+}
