@@ -104,6 +104,7 @@ class TermApp extends React.Component {
                 <div className="HomePage__sideBlurb">
                   <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm">star the project on GitHub</a>.</p>
                   <p>The project is released under the Apache-2.0 license and is released as is without warranty.</p>
+                  <p><a href="#privacy">Privacy policy</a></p>
                 </div>
               </div>
             </div>
@@ -122,6 +123,17 @@ class TermApp extends React.Component {
           Please refresh the page to switch to testnet.
         </Loading></Generic>
       }
+    } else if (urlParts[0] === 'privacy') {
+      body = <Generic title="Privacy Policy">
+        <p>StellarTerm does not track you. StellarTerm does not store cookies and the website does not contain any analytics scripts. StellarTerm developers never see your public or private keys.</p>
+        <p>However, StellarTerm.com is hosted on GitHub, AWS, and Cloudflare infrastructure. They may and do have their own tracking systems on their servers. Those services have their own privacy policies and is not covered by this privacy policy.</p>
+        <p>Lastly, just because StellarTerm does not track you, it does not mean your actions are private. Take note of other privacy issues that may affect you:</p>
+        <ul>
+          <li>Stellar is a public ledger. Anyone can see anything that happens on the network.</li>
+          <li>Your computer might be compromised.</li>
+          <li>The StellarTerm website might be compromised.</li>
+        </ul>
+      </Generic>
     } else if (urlParts[0] === 'account') {
       body = <Session d={this.d} urlParts={urlParts}></Session>
     } else if (urlParts[0] === 'markets') {
