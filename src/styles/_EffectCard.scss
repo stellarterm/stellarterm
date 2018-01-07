@@ -16,26 +16,16 @@
   margin-left: 10px;
   color: #000; // #000 which will then have opacity applied
 }
-.EffectCard__spacer {
-  width: 10px;
-}
 .EffectCard__container {
   margin-left: 10px;
   display: flex;
   flex-direction: column;
-  font-size: 9pt;
+  font-size: 11pt;
 }
-.EffectCard__domain__container {
-  font-size: 9pt;
-  margin-left: 10px;
+.EffectCard__container__title {
+  font-size: 20pt;
 }
-.EffectCard__domain {
-  font-style: italic;
-  font-size: 10pt;
-}
-.EffectCard__threshold {
-  font-size: 9pt;
-}
-.EffectCard__flags {
-  display: flex;
+.EffectCard__container__header {
+  font-size: 8pt;
+  font-weight: bold;
 }

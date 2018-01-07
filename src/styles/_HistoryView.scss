@@ -12,3 +12,22 @@
 .HistoryView_checkbox {
   margin-right: 10px;
 }
+.HistoryView__asset {
+  text-decoration-style: dotted;
+  position: relative;
+  font-size: 10pt;
+  text-decoration: underline;
+  margin-left: 2px;
+  cursor: pointer;
+}
+.HistoryView__asset__card {
+  display: none;
+}
+.HistoryView__asset:hover .HistoryView__asset__card{
+  display: block;
+  position: absolute;
+  bottom: -50px;
+  right: -200px;
+  height: 100px;
+  z-index: 100;
+}
