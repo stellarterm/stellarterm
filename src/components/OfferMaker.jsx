@@ -125,9 +125,15 @@ export default class OfferMaker extends React.Component {
       })
       .catch(result => {
         let errorType;
-
-        if (result.extras.result_codes.operations[0] === 'op_low_reserve') {
-          errorType = 'lowReserve';
+        console.log(result)
+        try {
+          if (result.data.extras.result_codes.operations[0] === 'buy_not_authorized') {
+            errorType = 'buyNotAuthorized';
+          } else if (result.data.extras.result_codes.operations[0] === 'op_low_reserve') {
+            errorType = 'lowReserve';
+          }
+        } catch(e) {
+          errorType = 'unknown';
         }
         this.setState({
           buttonState: 'ready',
@@ -222,7 +228,11 @@ export default class OfferMaker extends React.Component {
 
     let error;
     if (this.state.errorMessage) {
-      if (this.state.errorType === 'lowReserve') {
+      if (this.state.errorType === 'buyNotAuthorized') {
+        error = <div className="s-alert s-alert--alert OfferMaker__message">
+          Unable to create offer because the issuer has not authorized you to trade this asset. To fix this issue, check with the issuer's website.<br /><br />NOTE: Some issuers are restrictive in who they authorize.
+        </div>;
+      } else if (this.state.errorType === 'lowReserve') {
         error = <div className="s-alert s-alert--alert OfferMaker__message">Unable to create offer because the account does not have enough lumens to meet the <a href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance" target="_blank">minimum balance</a>. For more info, see <a href="#account">the minimum balance section</a> of the account page.<br /><br />Possible solutions:
           <ul className="OfferMaker__errorList">
             <li>Send 11 lumens to your account</li>
