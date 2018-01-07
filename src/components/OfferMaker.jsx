@@ -33,10 +33,10 @@ export default class OfferMaker extends React.Component {
     }
   }
   componentWillUnmount() {
-    this.props.d.unlistenSession(this.listenSessionId);
+    // this.props.d.unlistenSession(this.listenSessionId);
     // TODO: fix the unlistening
-    this.props.d.unlistenSession(this.listenOrderbookId);
-    this.props.d.unlistenSession(this.listenOrderbookPricePickId);
+    this.props.d.unlistenOrderbook(this.listenOrderbookId);
+    this.props.d.unlistenOrderbook(this.listenOrderbookPricePickId);
   }
   constructor(props) {
     super(props);

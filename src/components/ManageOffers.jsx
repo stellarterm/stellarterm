@@ -11,7 +11,8 @@ export default class ManageOffers extends React.Component {
     });
   }
   componentWillUnmount() {
-    this.props.d.unlistenSession(this.listenSessionId);
+    // Uh, why does this break the login flow?
+    // this.props.d.unlistenSession(this.listenSessionId);
   }
   render() {
     if (this.props.d.session.state !== 'in') {

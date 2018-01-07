@@ -13,7 +13,7 @@ export default class OfferTables extends React.Component {
     });
   }
   componentWillUnmount() {
-    this.props.d.unlistenSession(this.listenOrderbookId);
+    // this.props.d.unlistenSession(this.listenOrderbookId);
   }
   render() {
     if (!this.props.d.orderbook.ready) {
