@@ -32,10 +32,10 @@ tradeWalker.walkUntil = function walkUntil(Server, baseBuying, counterSelling, p
   let baseBuyingSdk = new StellarSdk.Asset(baseBuying.code, baseBuying.issuer);
   let counterSellingSdk = new StellarSdk.Asset(counterSelling.code, counterSelling.issuer);
 
-  let tradeCalls = Server.orderbook(baseBuyingSdk, counterSellingSdk).trades().limit(200).order('desc').call()
+  let tradeCalls = Server.trades().forAssetPair(baseBuyingSdk, counterSellingSdk).limit(200).order('desc').call()
   let processResults = tradeResults => {
     _.each(tradeResults.records, res => {
-      let tradeTime = Date.parse(res.created_at)/1000
+      let tradeTime = Date.parse(res.ledger_close_time)/1000
       if (start - tradeTime > pastSeconds) {
         satisfied = true;
       }
@@ -43,28 +43,14 @@ tradeWalker.walkUntil = function walkUntil(Server, baseBuying, counterSelling, p
         return;
       }
 
-      let boughtMatchesBase = matchesAsset(res, 'bought', baseBuying);
-      let boughtMatchesCounter = matchesAsset(res, 'bought', counterSelling);
-      let soldMatchesBase = matchesAsset(res, 'sold', baseBuying);
-      let soldMatchesCounter = matchesAsset(res, 'sold', counterSelling);
-
       let processedTrade = {
         tradeTime,
       }
-      if (boughtMatchesBase && soldMatchesCounter) {
-        // Trade happened in the direction we are looking at
-        processedTrade.type = 'buy';
-        processedTrade.baseAmount = parseFloat(res.bought_amount);
-        processedTrade.counterAmount = parseFloat(res.sold_amount);
-        processedTrade.price = _.round(processedTrade.baseAmount/processedTrade.counterAmount, 7);
-      } else if (boughtMatchesCounter && soldMatchesBase) {
-        processedTrade.type = 'sell';
-        processedTrade.baseAmount = parseFloat(res.sold_amount);
-        processedTrade.counterAmount = parseFloat(res.bought_amount);
-        processedTrade.price = _.round(processedTrade.counterAmount/processedTrade.baseAmount, 7);
-      } else {
-        console.log('Horizon returned irrelevant trade pair');
-      }
+
+      processedTrade.type = res.base_is_seller ? 'sell' : 'buy';
+      processedTrade.baseAmount = parseFloat(res.base_amount);
+      processedTrade.counterAmount = parseFloat(res.counter_amount);
+      processedTrade.price = _.round(processedTrade.counterAmount/processedTrade.baseAmount, 7);
 
       records.push(processedTrade);
     })
