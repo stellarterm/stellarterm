@@ -538,6 +538,10 @@ directory.addDestination('GCO2IP3MJNUOKS4PUDI4C7LGGMQDJGXG3COYX3WSB4HHNAHKYV5YL3
   name: 'Binance',
   requiredMemoType: 'MEMO_ID',
 });
+directory.addDestination('GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A', {
+  name: 'Binance',
+  requiredMemoType: 'MEMO_ID',
+});
 directory.addDestination('GBOEEVARKVASOQSSXCAHNTGJTVALJE2QM3AQQ2K3VXACQ6JJREQRJZKB', {
   name: 'OKEX',
   requiredMemoType: 'MEMO_ID',
