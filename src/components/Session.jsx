@@ -33,7 +33,7 @@ class Session extends React.Component {
       return <LoginForm setupError={setupError} handler={this.logIn}></LoginForm>
     } else if (state === 'unfunded') {
       return <Generic title={'Account is unfunded'}><Loading darker={true}>
-        Send at least 20 lumens to this account to activate it.
+        Send at least 1 lumens to this account to activate it.
         <br />
         <br />
         This is required by the Stellar network. You can buy lumens from an exchange.

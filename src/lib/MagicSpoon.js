@@ -120,30 +120,30 @@ const MagicSpoon = {
 
       items.push({
         entryType: 'Base reserve',
-        amount: 2,
-        XLM: 20,
+        amount: 1,
+        XLM: 1,
       });
 
       items.push({
         entryType: 'Trustlines',
         amount: entriesTrustlines,
-        XLM: entriesTrustlines * 10,
+        XLM: entriesTrustlines * 0.5,
       });
 
       items.push({
         entryType: 'Offers',
         amount: entriesOffers,
-        XLM: entriesOffers * 10,
+        XLM: entriesOffers * 0.5,
       });
       items.push({
         entryType: 'Others',
         amount: entriesOthers,
-        XLM: entriesOthers * 10,
+        XLM: entriesOthers * 0.5,
       });
       items.push({
         entryType: 'Extra',
         amount: '',
-        XLM: 1,
+        XLM: 0.5,
       });
 
       let totalLumens = _.sumBy(items, 'XLM');
@@ -155,7 +155,7 @@ const MagicSpoon = {
 
     // Will always be less than or equal to the current balance
     sdkAccount.calculatePaddedReserve = () => {
-      let networkReserve = (2 + sdkAccount.subentry_count) * 10;
+      let networkReserve = (2 + sdkAccount.subentry_count) * 0.5;
       let extra = 1;
       return networkReserve + extra;
     }
@@ -363,7 +363,7 @@ const MagicSpoon = {
       }));
     } catch(e) {
       if (!opts.asset.isNative()) {
-        throw new Error('Destination account does not exist. To create it, you must send a minimum of 20 lumens to create it');
+        throw new Error('Destination account does not exist. To create it, you must send a minimum of 1 lumens to create it');
       }
       transaction = transaction.addOperation(StellarSdk.Operation.createAccount({
         destination: opts.destination,
