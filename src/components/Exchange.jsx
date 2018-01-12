@@ -50,7 +50,7 @@ export default class Exchange extends React.Component {
       if (aggregateDepth < 50000) {
         thinOrderbookWarning = <div className="Exchange__warning">
           <div className="s-alert s-alert--warning">
-            <strong>Warning: This asset does not have much market support. You will likely get a unfavorable exchange rate and lose money.</strong>
+            <strong>Warning: This asset does not have much market support. You will likely get an unfavorable exchange rate and lose money.</strong>
           </div>
         </div>
       }
