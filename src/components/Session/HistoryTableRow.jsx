@@ -120,25 +120,49 @@ export default class HistoryTableRow extends React.Component {
             }
             break;
 
-          // Case 1.5 and 1.6 CREDITED and DEBITED
+          // Case 1.5, 1.6, and 1.7 SELF SENT, CREDITED and DEBITED
           // Returns a component with the asset, the amount, and the source/destination
           default:
-            var details = {
-              title: d.category === 'account_debited' ? "Sent" : "Received",
-              attributes: [
-                {
-                  header: "AMOUNT: ",
-                  value: Printify.lightenZeros(d.amount),
-                  isAsset: true,
-                  asset_code: d.asset_code,
-                  asset_issuer: d.asset_issuer,
-                  domain: d.asset_code ? directory.resolveAssetByAccountId(d.asset_code, d.asset_issuer).domain : "native",
-                },
-                {
-                  header: d.category === 'account_debited' ? "TO:  " : "FROM:  ",
-                  value: d.to ? d.to : ( d.from ? d.from : d.source_account || ""),
-                }
-              ]
+            if(d.to == d.from && d.category === 'account_debited') {
+              var details = {
+                title: "Sent to self",
+                attributes: [
+                  {
+                    header: "AMOUNT: ",
+                    value: Printify.lightenZeros(d.amount),
+                    isAsset: true,
+                    asset_code: d.asset_code,
+                    asset_issuer: d.asset_issuer,
+                    domain: d.asset_code ? directory.resolveAssetByAccountId(d.asset_code, d.asset_issuer).domain : "native",
+                  },
+                  {
+                    header: "TO: ",
+                    value: d.to + " (self)",
+                  },
+                  {
+                    header: "FROM:  ",
+                    value: d.from + " (self)",
+                  }
+                ]
+              }
+            } else {
+              var details = {
+                title: d.category === 'account_debited' ? "Sent" : "Received",
+                attributes: [
+                  {
+                    header: "AMOUNT: ",
+                    value: Printify.lightenZeros(d.amount),
+                    isAsset: true,
+                    asset_code: d.asset_code,
+                    asset_issuer: d.asset_issuer,
+                    domain: d.asset_code ? directory.resolveAssetByAccountId(d.asset_code, d.asset_issuer).domain : "native",
+                  },
+                  {
+                    header: d.category === 'account_debited' ? "TO:  " : "FROM:  ",
+                    value: d.to ? d.to : ( d.from ? d.from : d.source_account || ""),
+                  }
+                ]
+              }
             }
         }
         break;
