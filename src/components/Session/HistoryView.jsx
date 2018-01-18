@@ -6,6 +6,8 @@
 */
 const React = window.React = require('react');
 import HistoryTable from './HistoryTable.jsx';
+import Generic from '../Generic.jsx';
+
 
 export default class HistoryView extends React.Component {
   constructor(props) {
@@ -30,7 +32,11 @@ export default class HistoryView extends React.Component {
   render() {
     // IF HISTORY IS NOT LOADED, THEN SHOW A LOADING SCREEN
     return <div>
-      <div className="so-back islandBack">
+      <Generic>
+        <p>The history shown here is buggy. Please use Stellar.Expert to view your account history.</p>
+        <p><a href={'https://stellar.expert/explorer/account/' + this.props.d.session.account.account_id}>https://stellar.expert/explorer/account/{this.props.d.session.account.account_id}</a></p>
+      </Generic>
+      {/*<div className="so-back islandBack">
         <div className="island">
           <div className="island__header">
             <div className="HistoryView__header">
@@ -46,6 +52,7 @@ export default class HistoryView extends React.Component {
           <HistoryTable d={this.props.d} filters={this.state}></HistoryTable>
         </div>
       </div>
+      */}
     </div>
 
   }

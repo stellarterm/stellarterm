@@ -57,11 +57,17 @@ function Driver(driverOpts) {
     ready: false,
   };
 
+  window.driver = this;
+
   this.handlers = {
-    logIn: async (secretKey) => {
+    logIn: async (secretKey, opts) => {
       let keypair;
       try {
-        keypair = StellarSdk.Keypair.fromSecret(secretKey);
+        if (opts && opts.publicKey !== undefined) {
+          keypair = StellarSdk.Keypair.fromPublicKey(opts.publicKey);
+        } else {
+          keypair = StellarSdk.Keypair.fromSecret(secretKey);
+        }
       } catch (e) {
         console.log('Invalid secret key! We should never reach here!');
         console.error(e);
