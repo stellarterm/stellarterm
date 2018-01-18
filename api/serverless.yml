@@ -10,7 +10,7 @@ provider:
   runtime: nodejs6.10
   stage: dev
   region: us-west-2
-  timeout: 30
+  timeout: 180
   memorySize: 256
   iamRoleStatements:
     - Effect: Allow
