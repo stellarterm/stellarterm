@@ -154,7 +154,7 @@ class TermApp extends React.Component {
               <p>
                 <ul>
                   <li>Must be a known entity in the cryptocurrency space. I will not sell this site to a scammer.</li>
-                  <li>Serious offers only.</li>
+                  <li>Serious offers only. Minimum is $100,000.</li>
                   <li>Other details are negotiable.</li>
                 </ul>
               </p>
