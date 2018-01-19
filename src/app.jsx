@@ -77,6 +77,13 @@ class TermApp extends React.Component {
       body = <div>
         <div className="HomePage__black">
           <div className="so-back">
+            {/*<div className="HomePage__forSaleContainer">
+              <p className="HomePage__forSale">
+                StellarTerm.com is for sale. More <a href="#sale">details on the sale page</a>.
+                <br />
+                For now, StellarTerm will continue to operate normally.
+              </p>
+            </div>*/}
             <div className="HomePage__lead">
               <h2 className="HomePage__lead__title">Trade on the <a href="https://www.stellar.org/developers/guides/concepts/exchange.html">Stellar Distributed Exchange</a></h2>
               <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm">open source</a> client for the <a href="https://www.stellar.org/">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
@@ -111,6 +118,64 @@ class TermApp extends React.Component {
           </div>
         </div>
       </div>
+    } else if (urlParts[0] === 'sale') {
+        body = <div className="Sale">
+          <div className="Sale__intro so-back">
+            <div className="Sale__intro__content so-chunk">
+              <p>StellarTerm is the most popular trading client on the Stellar network.
+              <br />The author of StellarTerm is looking to sell this domain.</p>
+            </div>
+          </div>
+          <div className="island">
+            <div className="Sale__section">
+              <h2>What you get</h2>
+              <p>
+                <ul>
+                  <li>StellarTerm.com domain name</li>
+                  <li>Social media accounts for Twitter and Facebook</li>
+                  <li>GitHub organization: github.com/stellarterm</li>
+                  <li>Relevant AWS items</li>
+                </ul>
+              </p>
+            </div>
+            <div className="Sale__section">
+              <h2>Analytics</h2>
+              <p>StellarTerm currently uses Cloudflare. Here is a screenshot from the analytics dashboard. This is just for informational purposes and is not a guarantee that StellarTerm will see this many users in the future.</p>
+              <br />
+              <img alt="StellarTerm" className="Sale__analytics" src="https://user-images.githubusercontent.com/5728307/35127936-19f80e40-fc69-11e7-8cd0-dee25270e822.png" />
+            </div>
+            <div className="Sale__section">
+              <h2>Currently open source</h2>
+              <p>The code behind StellarTerm is currently open source and licensed under the Apache-2.0 license. Anyone can use and make modifications to the code however they like.</p>
+              <p>The purchaser has the right to keep source changes private. The purchaser may also completely change the website.</p>
+            </div>
+            <div className="Sale__section">
+              <h2>Details</h2>
+              <p>
+                <ul>
+                  <li>Must be a known entity in the cryptocurrency space. I will not sell this site to a scammer.</li>
+                  <li>Minimum offer is $100,000.</li>
+                  <li>Other details are negotiable.</li>
+                </ul>
+              </p>
+            </div>
+            <div className="Sale__section">
+              <h2>Stipulations</h2>
+              <p>
+                <ul>
+                  <li>Developer support is NOT included. (Negotiable)</li>
+                  <li>The sale does not come with any warranty other than successful transfer of what is listed under "What you get".</li>
+                  <li>You must maintain clear indication that the ownership is different.</li>
+                  <li>Source code not for sale, but is still Apache-2.0. You get rights to copy, modify, and redistribute under any software license.</li>
+                </ul>
+              </p>
+            </div>
+            <div className="Sale__section">
+              <h2>Contact</h2>
+              <p>The contact information for the seller is available at <a href="https://iris.li/">https://iris.li/</a></p>
+            </div>
+          </div>
+        </div>
     } else if (urlParts[0] === 'testnet') {
       if (network.isTestnet) {
         body = <Generic title="Test network">

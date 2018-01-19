@@ -18,11 +18,11 @@
   font-weight: 300;
   line-height: 30px;
 }
-.HomePage__black a {
+.HomePage__lead a {
   position: relative;
   text-decoration: none;
 }
-.HomePage__black a:after {
+.HomePage__lead a:after {
   content: '';
   display: block;
   position: absolute;
@@ -81,4 +81,21 @@
   padding-top: 30px;
   padding-bottom: 20px;
   font-size: $s-scale-2;
+}
+
+.HomePage__forSaleContainer {
+  padding-top: 20px;
+  text-align: center;
+}
+
+.HomePage__forSale {
+  background: #ffffdd;
+  margin: 0 auto;
+  border: 1px solid #dddd00;
+  padding: 12px 24px;
+  border-radius: 4px;
+  // width: 500px;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: left;
 }
