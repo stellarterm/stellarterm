@@ -74,8 +74,15 @@ export default function Send(driver) {
   const calculateAvailableAssets = () => {
     // Calculate the assets that you can send to the destination
     this.availableAssets = {};
-    this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = new StellarSdk.Asset.native();
+    this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = {
+      asset: new StellarSdk.Asset.native(),
+      sendable: true,
+    };
     const senderTrusts = {};
+    const receiverTrusts = {};
+
+    let sendableAssets = {};
+    let unSendableAssets = {};
 
     _.each(driver.session.account.balances, (balance) => {
       const asset = Stellarify.asset(balance);
@@ -95,12 +102,54 @@ export default function Send(driver) {
     _.each(this.targetAccount.balances, (balance) => {
       const asset = Stellarify.asset(balance);
       const slug = Stellarify.assetToSlug(asset);
+      if (asset.isNative()) {
+        return;
+      }
+      // We don't really care about the usecase of sending to issuer.
+      receiverTrusts[slug] = true;
+    });
+
+    _.each(this.targetAccount.balances, (balance) => {
+      const asset = Stellarify.asset(balance);
+      const slug = Stellarify.assetToSlug(asset);
       if (senderTrusts.hasOwnProperty(slug)) {
-        this.availableAssets[slug] = asset;
+        sendableAssets[slug] = {
+          asset: asset,
+          sendable: true,
+        };
       } else if (asset.getIssuer() === driver.session.account.accountId()) {
         // Edgecase: Sender is the issuer of the asset
-        this.availableAssets[slug] = asset;
+        sendableAssets[slug] = {
+          asset: asset,
+          sendable: true,
+        };
+      } else {
+        // Asset can't be sent.
       }
+    });
+
+    // Show stuff the recipient doesn't trust
+    _.each(driver.session.account.balances, balance => {
+      const asset = Stellarify.asset(balance);
+      const slug = Stellarify.assetToSlug(asset);
+      if (asset.isNative()) {
+        return;
+      }
+
+      if (!sendableAssets.hasOwnProperty(slug) && !receiverTrusts.hasOwnProperty(slug)) {
+        unSendableAssets[slug] = {
+          asset: asset,
+          sendable: false,
+          reason: 'receiverNoTrust',
+        };
+      }
+    })
+
+    _.each(sendableAssets, (availability, slug) => {
+      this.availableAssets[slug] = availability;
+    });
+    _.each(unSendableAssets, (availability, slug) => {
+      this.availableAssets[slug] = availability;
     });
   };
 
@@ -212,7 +261,7 @@ export default function Send(driver) {
     },
     step2PickAsset: (slug) => {
       // Step 2 doesn't have a next button because this acts as the next button
-      this.step2.asset = this.availableAssets[slug];
+      this.step2.availability = this.availableAssets[slug];
       this.step = 3;
       this.event.trigger();
     },
@@ -240,7 +289,7 @@ export default function Send(driver) {
         };
         result = await MagicSpoon.sendPayment(driver.Server, driver.session.account, {
           destination: this.accountId,
-          asset: this.step2.asset,
+          asset: this.step2.availability.asset,
           amount: this.step3.amount,
           memo: sendMemo,
         });

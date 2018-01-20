@@ -154,19 +154,27 @@ export default class Send extends React.Component {
 
       let Step2Content;
       if (step === 2) {
-        let assetCards = _.map(d.send.availableAssets, (asset,slug) => {
+        let assetCards = _.map(d.send.availableAssets, (availability,slug) => {
+          let rightSide;
+          if (availability.sendable) {
+            rightSide = <div className="row__shareOption">
+              <a className="s-button" onClick={() => {d.send.handlers.step2PickAsset(slug)}}>Send {availability.asset.getCode()}</a>
+            </div>
+          } else {
+            rightSide = <div className="row__shareOption">
+              Destination does not accept this asset.
+            </div>
+          }
+
           return <div className="row--lite" key={slug}>
             <div className="row__fixedAsset">
-              <AssetCard asset={asset} fixed={true}></AssetCard>
+              <AssetCard asset={availability.asset} fixed={true}></AssetCard>
             </div>
-            <div className="row__shareOption">
-              <a className="s-button" onClick={() => {d.send.handlers.step2PickAsset(slug)}}>Send {asset.getCode()}</a>
-            </div>
+            {rightSide}
           </div>
         })
 
         Step2Content = <div className="Send__content">
-          Select an asset to send. These are assets that both you and the recipient trusts.
           <div className="Send__assetPicker">
             {assetCards}
           </div>
@@ -175,7 +183,7 @@ export default class Send extends React.Component {
         </div>
       } else if (step > 2) {
         Step2Content = <div className="Send__content Send__overview">
-          <AssetCard asset={d.send.step2.asset} fixed={true}></AssetCard>
+          <AssetCard asset={d.send.step2.availability.asset} fixed={true}></AssetCard>
         </div>
       }
       let Step2Edit;
@@ -202,13 +210,13 @@ export default class Send extends React.Component {
         let yourBalance;
         if (amountValid === false) {
           amountValidationMessage = <p>Amount is invalid</p>
-        } else if (d.send.step2.asset !== null) {
-          let targetBalance = d.session.account.getBalance(new StellarSdk.Asset(d.send.step2.asset.code, d.send.step2.asset.issuer));
+        } else if (d.send.step2.availability.asset !== null) {
+          let targetBalance = d.session.account.getBalance(new StellarSdk.Asset(d.send.step2.availability.asset.code, d.send.step2.availability.asset.issuer));
           if (targetBalance !== null) {
-            yourBalance = <p>You have {targetBalance} {d.send.step2.asset.code}.</p>
+            yourBalance = <p>You have {targetBalance} {d.send.step2.availability.asset.code}.</p>
           }
 
-          if (d.send.step2.asset.code === 'XLM' && d.send.step2.asset.issuer === undefined) {
+          if (d.send.step2.availability.asset.code === 'XLM' && d.send.step2.availability.asset.issuer === undefined) {
             if (Number(d.send.step3.amount) > Number(d.session.account.maxLumenSpend())) {
               amountValid = false;
               amountValidationMessage = <p>You may only send up to <strong>{maxLumenSpend} lumens</strong> due to the minimum balance requirements. For more information, see the <a href="#account">minimum balance tool</a>.</p>
@@ -230,7 +238,7 @@ export default class Send extends React.Component {
         </div>
       } else if (step > 3) {
         Step3Content = <div className="Send__content Send__overview">
-          <p className="Send__overviewLine">Amount: <strong>{d.send.step3.amount} {d.send.step2.asset.getCode()}</strong></p>
+          <p className="Send__overviewLine">Amount: <strong>{d.send.step3.amount} {d.send.step2.availability.asset.getCode()}</strong></p>
         </div>
       }
       let Step3 = <div className={step3ClassName}>
