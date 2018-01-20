@@ -15,19 +15,22 @@
 .HistoryView__asset {
   text-decoration-style: dotted;
   position: relative;
-  font-size: 10pt;
   text-decoration: underline;
   margin-left: 2px;
   cursor: pointer;
 }
 .HistoryView__asset__card {
   display: none;
+  position: absolute;
+  left: 0;
+  top: -50px;
+  width: 300px;
+  z-index: 100;
 }
 .HistoryView__asset:hover .HistoryView__asset__card{
   display: block;
-  position: absolute;
-  bottom: -50px;
-  right: -200px;
-  height: 100px;
-  z-index: 100;
+}
+
+.HistoryView__asset__card .AssetCard2 {
+  box-shadow: 0 0 4px 0 rgba(0,0,0,1);
 }

@@ -1,5 +1,4 @@
 .EffectCard {
-  overflow:hidden;
   width: 100%;
   display: flex;
   margin-left: 10px;
@@ -20,12 +19,17 @@
   margin-left: 10px;
   display: flex;
   flex-direction: column;
-  font-size: 11pt;
 }
 .EffectCard__container__title {
-  font-size: 20pt;
+  font-size: 24px;
+  margin-bottom: 9px;
+  font-weight: 400;
+  margin-left: 100px;
 }
 .EffectCard__container__header {
-  font-size: 8pt;
+  display: inline-block;
+  min-width: 100px;
   font-weight: bold;
+  text-align: right;
+  padding-right: 6px;
 }

@@ -237,11 +237,11 @@ export default class HistoryTableRow extends React.Component {
 
     return (<div className="EffectCard">
       <div className="EffectCard__container">
-        <h1 className="EffectCard__container__title">{details.title}</h1>
+        <h3 className="EffectCard__container__title">{details.title}</h3>
         {
           details.attributes.map( (x,i) => (
-            <div key={i}>
-              <span className="EffectCard__container__header">{x.header}</span> {x.value}
+            <div key={i} className="EffectCard__line">
+              <span className="EffectCard__container__header">{x.header} </span> {x.value}
                   {
                     x.isAsset ?
                       (<span className="HistoryView__asset">
