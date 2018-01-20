@@ -48,8 +48,23 @@ class Session extends React.Component {
       let part1 = this.props.urlParts[1];
       if (part1 === undefined) {
         content = <div>
-          <Generic title={`Account ID: ${this.props.d.session.account.accountId()}`}>
-            You can receive transactions with your account ID. The types of assets you can receive are limited to those you <a href="#account/addTrust">accept</a>.
+          <Generic title={`Your Account ID: ${this.props.d.session.account.accountId()}`}>
+            <h2>How to receive payments</h2>
+            <p>To receive a payment from someone else, you share with them your account ID which <strong>begins with a G</strong>. You are only able to send funds inside your account ID.</p>
+
+            <p>Your account ID is <strong>{this.props.d.session.account.accountId()}</strong></p>
+            <p><strong>WARNING</strong>: Make sure the account ID you share belongs to you. If you give someone else the wrong account ID, the funds will be sent to the wrong account.</p>
+
+            <div className="Generic__divider"></div>
+            <h2>Where is the money stored?</h2>
+            <p>In the Stellar network, funds exist on the network and can only be moved by whoever has the secret key. This means that your secret key is extremely sensitive, and whoever has access to it can move the funds.</p>
+
+            <p>However, money is <strong>NOT</strong> actually <em>"inside"</em> StellarTerm. StellarTerm is just a helpful tool that helps you use your secret key to make transactions.</p>
+
+            <p><strong>WARNING</strong>: Be extremely careful with your secret key and only use it on trusted websites. Always check the url to make sure you are on the right website.</p>
+            <div className="Generic__divider"></div>
+            <h2>Accepting different kinds of assets</h2>
+            By default, your account is only configured to accept <strong>XLM</strong>. In order to receive other assets, you must <a href="#account/addTrust">accept</a> them using the <strong>Accept assets</strong> tool.
           </Generic>
           <AccountView d={d}></AccountView>
         </div>
