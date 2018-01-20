@@ -21,15 +21,16 @@
   flex-direction: column;
 }
 .EffectCard__container__title {
-  font-size: 24px;
   margin-bottom: 9px;
   font-weight: 400;
-  margin-left: 100px;
+  margin-left: 80px;
 }
 .EffectCard__container__header {
   display: inline-block;
-  min-width: 100px;
+  min-width: 80px;
   font-weight: bold;
   text-align: right;
   padding-right: 6px;
+}
+.EffectCard__line {
 }
