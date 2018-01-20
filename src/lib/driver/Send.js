@@ -35,7 +35,10 @@ export default function Send(driver) {
 
   const resetStep2 = () => {
     this.availableAssets = {};
-    this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = new StellarSdk.Asset.native();
+    this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = {
+      asset: new StellarSdk.Asset.native(),
+      sendable: true,
+    };
     this.step2 = {
       asset: null,
     };

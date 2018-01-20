@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-import AssetCard from '../AssetCard.jsx';
+import AssetCard2 from '../AssetCard2.jsx';
 import Stellarify from '../../lib/Stellarify';
 import Validate from '../../lib/Validate';
 import _ from 'lodash';
@@ -155,6 +155,10 @@ export default class Send extends React.Component {
       let Step2Content;
       if (step === 2) {
         let assetCards = _.map(d.send.availableAssets, (availability,slug) => {
+          if (availability === undefined) {
+            console.log('Undefined availability')
+            return;
+          }
           let rightSide;
           if (availability.sendable) {
             rightSide = <div className="row__shareOption">
@@ -165,10 +169,10 @@ export default class Send extends React.Component {
               Destination does not accept this asset.
             </div>
           }
-
+          console.log(availability)
           return <div className="row--lite" key={slug}>
             <div className="row__fixedAsset">
-              <AssetCard asset={availability.asset} fixed={true}></AssetCard>
+              <AssetCard2 code={availability.asset.getCode()} issuer={availability.asset.getIssuer()} />
             </div>
             {rightSide}
           </div>
@@ -182,8 +186,8 @@ export default class Send extends React.Component {
           </div>
         </div>
       } else if (step > 2) {
-        Step2Content = <div className="Send__content Send__overview">
-          <AssetCard asset={d.send.step2.availability.asset} fixed={true}></AssetCard>
+        Step2Content = <div className="Send__content Send__overview Send__assetContainer">
+          <AssetCard2 code={d.send.step2.availability.asset.getCode()} issuer={d.send.step2.availability.asset.getIssuer()} />
         </div>
       }
       let Step2Edit;

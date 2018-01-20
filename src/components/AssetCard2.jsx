@@ -30,15 +30,19 @@ export default class AssetCard2 extends React.Component {
     }
 
     let asset = {};
-    if (this.props.domain !== undefined) {
-      asset = directory.getAssetByDomain(this.props.code, this.props.domain);
-      if (asset === null) {
-        throw new Error('AssetCard2 expects domains to point to a valid asset/anchor. Please do validation before calling AssetCard2');
-      }
-    } else if (this.props.issuer !== undefined) {
-      asset = directory.resolveAssetByAccountId(this.props.code, this.props.issuer);
+    if (this.props.code === 'XLM' && this.props.domain === undefined && this.props.issuer === undefined) {
+      asset = directory.nativeAsset;
     } else {
-      throw new Error('AssetCard2 expects to get either domain or issuer');
+      if (this.props.domain !== undefined) {
+        asset = directory.getAssetByDomain(this.props.code, this.props.domain);
+        if (asset === null) {
+          throw new Error('AssetCard2 expects domains to point to a valid asset/anchor. Please do validation before calling AssetCard2');
+        }
+      } else if (this.props.issuer !== undefined) {
+        asset = directory.resolveAssetByAccountId(this.props.code, this.props.issuer);
+      } else {
+        throw new Error('AssetCard2 expects to get either domain or issuer. Input code: ' + this.props.code + ' Domain: ' + this.props.domain + ' Issuer: ' + this.props.issuer);
+      }
     }
 
     let anchor = directory.getAnchor(asset.domain);
