@@ -179,7 +179,7 @@ export default class HistoryTableRow extends React.Component {
               value: d.weight,
             },
             {
-              header: "PUBLIC KEY USED: ",
+              header: "KEY USED: ",
               value: d.public_key,
             }
           ]
