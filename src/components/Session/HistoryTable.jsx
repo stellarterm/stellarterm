@@ -23,6 +23,7 @@ export default class HistoryTable extends React.Component {
       return <Loading size="large">Loading transaction history...</Loading>
     }
 
+    let amountLoaded = 0;
     const effectsRows = spoonHistory.records.map(record => {
       let details = spoonHistory.details[record.id];
       if ((details === undefined) || (!this.props.filters[record.type.split("_")[0]])) {
@@ -31,6 +32,7 @@ export default class HistoryTable extends React.Component {
 
       const effectType = details.category.split('_')[0];
       const niceDateObj = niceDate(details.created_at);
+      amountLoaded += 1;
 
       return <tr className="HistoryTable__row" key={details.id}>
           <td className="HistoryTable__row__item--description">
@@ -42,6 +44,8 @@ export default class HistoryTable extends React.Component {
                   {niceDateObj.date}
                   <br />
                   {niceDateObj.time}
+                  <br />
+                  {niceDateObj.timezone}
               </div>
               <div className="DateCard__ledger">
                   Ledger #{details.ledger_attr}
@@ -50,6 +54,12 @@ export default class HistoryTable extends React.Component {
           </td>
       </tr>
     });
+
+    let totalRecords = spoonHistory.records.length;
+
+    effectsRows.push(<tr className="HistoryTable__row HistoryTable__row__loading" key={'loading'}>
+      <td>Loading ({amountLoaded}/{totalRecords})</td>
+    </tr>)
 
     return (
       <table className="HistoryTable">

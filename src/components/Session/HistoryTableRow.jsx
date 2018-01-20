@@ -255,6 +255,14 @@ export default class HistoryTableRow extends React.Component {
             </div>
           ))
         }
+        <div className="HistoryView__external">
+          View in external website:&nbsp;
+          <a href={'https://stellar.expert/explorer/tx/' + d.transaction_hash}>stellar.expert</a>&nbsp;
+          <a href={'https://horizon.stellar.org/transactions/' + d.transaction_hash}>Horizon</a>
+        </div>
+        <div className="HistoryView__external">
+          Transaction ID: <strong>{d.transaction_hash}</strong>
+        </div>
       </div>
     </div>)
   }
