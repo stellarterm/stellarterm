@@ -16,12 +16,17 @@ export default class LoginForm extends React.Component {
     super(props);
     this.state = {
       secretInput: '',
+      show: false,
       invalidKey: false,
       newKeypair: null,
     }
 
     this.handleInput = (event) => {
       this.setState({secretInput: event.target.value});
+    }
+    this.toggleShow = (event) => {
+      event.preventDefault();
+      this.setState({show: !this.state.show});
     }
     this.handleSubmit = (event) => {
       event.preventDefault();
@@ -60,6 +65,8 @@ export default class LoginForm extends React.Component {
       </div>
     }
 
+    let inputType = this.state.show ? 'text' : 'password';
+
     return <div className="so-back islandBack islandBack--t">
       <div className="island island--pb">
         <div>
@@ -70,9 +77,12 @@ export default class LoginForm extends React.Component {
             <div className="LoginForm__form">
               <p className="LoginForm__intro">Log in with your secret key to manage your account.</p>
               <form onSubmit={this.handleSubmit}>
-                <div>
-                  <input type="password" className="LoginForm__password" value={this.state.secretInput} onChange={this.handleInput} placeholder="Secret key (example: SBSMVCIWBL3HDB7N4EI3QKBKI4D5ZDSSDF7TMPB.....)" />
-                </div>
+                <label className="s-inputGroup LoginForm__inputGroup">
+                  <input type={inputType} className="s-inputGroup__item S-flexItem-share LoginForm__password" value={this.state.secretInput} onChange={this.handleInput} placeholder="Secret key (example: SBSMVCIWBL3HDB7N4EI3QKBKI4D5ZDSSDF7TMPB.....)" />
+                  <div>
+                    <a className="LoginForm__show s-button s-button--light" onClick={this.toggleShow}>Show</a>
+                  </div>
+                </label>
                 {errorMessage}
                 <div>
                   <input type="submit" className="LoginForm__submit s-button" value="Log in"></input>
