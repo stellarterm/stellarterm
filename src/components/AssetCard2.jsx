@@ -60,7 +60,7 @@ export default class AssetCard2 extends React.Component {
           <span className="AssetCard2__header__code">{asset.code}</span>
           <span className="AssetCard2__header__domain">{anchor.name}</span>
         </div>
-        <p className="AssetCard2__issuerAccountId">{issuerAccountId}</p>
+        <p className="AssetCard2__issuerAccountId">Issuer (<strong>not you</strong>): {issuerAccountId}</p>
       </div>
     </div>
 
