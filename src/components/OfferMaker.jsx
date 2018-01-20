@@ -131,9 +131,12 @@ export default class OfferMaker extends React.Component {
             errorType = 'buyNotAuthorized';
           } else if (result.data.extras.result_codes.operations[0] === 'op_low_reserve') {
             errorType = 'lowReserve';
+          } else {
+            errorType = result.data.extras.result_codes.operations[0];
           }
         } catch(e) {
-          errorType = 'unknown';
+          console.error(e)
+          errorType = 'unknownResponse';
         }
         this.setState({
           buttonState: 'ready',
@@ -244,6 +247,7 @@ export default class OfferMaker extends React.Component {
         error = <div className="s-alert s-alert--alert OfferMaker__message">Failed to create offer. Possible reasons why:
           <ul className="OfferMaker__errorList">
             <li>Not enough funds to complete order.</li>
+            <li>Error code: {this.state.errorType}</li>
           </ul>
         </div>;
       }
