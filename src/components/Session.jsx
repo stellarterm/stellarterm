@@ -97,9 +97,7 @@ class Session extends React.Component {
         </div>
       } else if (part1 === 'inflation') {
         content = <div>
-          <div className="so-back islandBack">
-            <Inflation d={d}></Inflation>
-          </div>
+          <Inflation d={d}></Inflation>
         </div>
       } else if (part1 === 'history') {
         content = <div>
