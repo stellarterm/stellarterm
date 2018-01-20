@@ -17,7 +17,6 @@
   position: relative;
   text-decoration: underline;
   margin-left: 2px;
-  cursor: pointer;
 }
 .HistoryView__asset__card {
   display: none;
@@ -33,4 +32,40 @@
 
 .HistoryView__asset__card .AssetCard2 {
   box-shadow: 0 0 4px 0 rgba(0,0,0,1);
+}
+.HistoryView__card {
+  width: 100%;
+  display: flex;
+  margin-left: 10px;
+}
+.HistoryView__card__main {
+  border-radius: 5px;
+  background: $s-color-neutral8;
+  border: 1px solid $s-color-neutral7;
+  border-radius: $s-var-radius;
+  padding-right: 5px;
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-left: 10px;
+  color: #000; // #000 which will then have opacity applied
+}
+.HistoryView__card__container {
+  margin-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+.HistoryView__card__container__title {
+  margin-bottom: 9px;
+  font-weight: 400;
+  margin-left: 80px;
+}
+.HistoryView__card__container__header {
+  display: inline-block;
+  min-width: 80px;
+  font-weight: bold;
+  text-align: right;
+  padding-right: 6px;
+}
+.HistoryView__card__line {
 }
