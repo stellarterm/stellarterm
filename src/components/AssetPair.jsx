@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-import AssetCard from './AssetCard.jsx';
+import AssetCard2 from './AssetCard2.jsx';
 import AssetPickerNarrow from './AssetPickerNarrow.jsx';
 import Stellarify from '../lib/Stellarify';
 import _ from 'lodash';
@@ -11,11 +11,11 @@ export default class AssetPair extends React.Component {
   render() {
     let content = <div className="AssetPair">
       <div className="AssetPair__card">
-        <AssetCard asset={this.props.baseBuying} noLink={true}></AssetCard>
+        <AssetCard2 code={this.props.baseBuying.getCode()} issuer={this.props.baseBuying.getIssuer()}></AssetCard2>
       </div>
       <div className="AssetPair__separator"></div>
       <div className="AssetPair__card">
-        <AssetCard asset={this.props.counterSelling} noLink={true}></AssetCard>
+        <AssetCard2 code={this.props.counterSelling.getCode()} issuer={this.props.counterSelling.getIssuer()}></AssetCard2>
       </div>
     </div>;
 
