@@ -90,6 +90,13 @@ export default class Send extends React.Component {
           federationNotice = <p className="Send__federationNotice">Unable to resolve address <strong>{d.send.step1.destInput}</strong></p>
         }
 
+        let selfSendNotice;
+        if (d.send.step1.destInput === d.session.account.account_id) {
+          selfSendNotice = <div className="s-alert s-alert--warning">
+            <strong>Warning: You are sending to yourself!</strong>
+          </div>
+        }
+
         Step1Content = <div className="Send__content">
           <label className="s-inputGroup Send__input">
             <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
@@ -97,6 +104,7 @@ export default class Send extends React.Component {
             </span>
             <input className="s-inputGroup__item S-flexItem-share" type="text" value={d.send.step1.destInput} onChange={d.send.handlers.updateDestination} placeholder="example: username*getstargazer.com or GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
           </label>
+          {selfSendNotice}
           {destinationValidationMessage}
           {federationNotice}
           <label className="s-inputGroup Send__input">
