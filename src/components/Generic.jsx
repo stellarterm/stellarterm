@@ -7,7 +7,11 @@ export default function Generic(props) {
       {props.title}
     </div>
   }
-  return <div className="so-back islandBack islandBack--t">
+  let containerClassName = 'so-back islandBack'
+  if (!props.noTopPadding) {
+    containerClassName += ' islandBack--t';
+  }
+  return <div className={containerClassName}>
     <div className="island">
       {header}
       <div className="Generic__content">

@@ -95,6 +95,7 @@ const MagicSpoon = {
     sdkAccount.refresh = async () => {
       let newAccount = await Server.loadAccount(keypair.publicKey());
       sdkAccount.applyNewBalances(newAccount.balances);
+      sdkAccount.inflation_destination = newAccount.inflation_destination
     };
 
     sdkAccount.applyNewBalances = (newBalances) => {
@@ -374,6 +375,18 @@ const MagicSpoon = {
     if (opts.memo) {
       transaction = transaction.addMemo(Stellarify.memo(opts.memo.type, opts.memo.content));
     }
+
+    transaction = transaction.build();
+    spoonAccount.sign(transaction);
+
+    const transactionResult = await Server.submitTransaction(transaction);
+    return transactionResult;
+  },
+  async setInflation(Server, spoonAccount, inflationDest) {
+    let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+    transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
+      inflationDest: inflationDest,
+    }));
 
     transaction = transaction.build();
     spoonAccount.sign(transaction);
