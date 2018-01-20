@@ -120,25 +120,49 @@ export default class HistoryTableRow extends React.Component {
             }
             break;
 
-          // Case 1.5 and 1.6 CREDITED and DEBITED
+          // Case 1.5, 1.6, and 1.7 SELF SENT, CREDITED and DEBITED
           // Returns a component with the asset, the amount, and the source/destination
           default:
-            var details = {
-              title: d.category === 'account_debited' ? "Sent" : "Received",
-              attributes: [
-                {
-                  header: "AMOUNT: ",
-                  value: Printify.lightenZeros(d.amount),
-                  isAsset: true,
-                  asset_code: d.asset_code,
-                  asset_issuer: d.asset_issuer,
-                  domain: d.asset_code ? directory.resolveAssetByAccountId(d.asset_code, d.asset_issuer).domain : "native",
-                },
-                {
-                  header: d.category === 'account_debited' ? "TO:  " : "FROM:  ",
-                  value: d.to ? d.to : ( d.from ? d.from : d.source_account || ""),
-                }
-              ]
+            if(d.to == d.from && d.category === 'account_debited') {
+              var details = {
+                title: "Sent to self",
+                attributes: [
+                  {
+                    header: "AMOUNT: ",
+                    value: Printify.lightenZeros(d.amount),
+                    isAsset: true,
+                    asset_code: d.asset_code,
+                    asset_issuer: d.asset_issuer,
+                    domain: d.asset_code ? directory.resolveAssetByAccountId(d.asset_code, d.asset_issuer).domain : "native",
+                  },
+                  {
+                    header: "TO: ",
+                    value: d.to + " (self)",
+                  },
+                  {
+                    header: "FROM:  ",
+                    value: d.from + " (self)",
+                  }
+                ]
+              }
+            } else {
+              var details = {
+                title: d.category === 'account_debited' ? "Sent" : "Received",
+                attributes: [
+                  {
+                    header: "AMOUNT: ",
+                    value: Printify.lightenZeros(d.amount),
+                    isAsset: true,
+                    asset_code: d.asset_code,
+                    asset_issuer: d.asset_issuer,
+                    domain: d.asset_code ? directory.resolveAssetByAccountId(d.asset_code, d.asset_issuer).domain : "native",
+                  },
+                  {
+                    header: d.category === 'account_debited' ? "TO:  " : "FROM:  ",
+                    value: d.to ? d.to : ( d.from ? d.from : d.source_account || ""),
+                  }
+                ]
+              }
             }
         }
         break;
@@ -211,13 +235,13 @@ export default class HistoryTableRow extends React.Component {
         break;
     }
 
-    return (<div className="EffectCard">
-      <div className="EffectCard__container">
-        <h1 className="EffectCard__container__title">{details.title}</h1>
+    return (<div className="HistoryView__card">
+      <div className="HistoryView__card__container">
+        <h3 className="HistoryView__card__container__title">{details.title}</h3>
         {
           details.attributes.map( (x,i) => (
-            <div key={i}>
-              <span className="EffectCard__container__header">{x.header}</span> {x.value}
+            <div key={i} className="HistoryView__card__line">
+              <span className="HistoryView__card__container__header">{x.header} </span> {x.value}
                   {
                     x.isAsset ?
                       (<span className="HistoryView__asset">
@@ -231,6 +255,14 @@ export default class HistoryTableRow extends React.Component {
             </div>
           ))
         }
+        <div className="HistoryView__external">
+          View in external website:&nbsp;
+          <a href={'https://stellar.expert/explorer/tx/' + d.transaction_hash}>stellar.expert</a>&nbsp;
+          <a href={'https://horizon.stellar.org/transactions/' + d.transaction_hash}>Horizon</a>
+        </div>
+        <div className="HistoryView__external">
+          Transaction ID: <strong>{d.transaction_hash}</strong>
+        </div>
       </div>
     </div>)
   }

@@ -9,7 +9,7 @@
 }
 .HistoryTable__head__cell {
   padding: 12px;
-  font-size: 16px;
+  font-size: 16px 16px 20px 16px;
 }
 .HistoryTable__head__category{
   flex: 0.5;
@@ -37,13 +37,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  line-height: 15pt;
-  padding: 10px;
-  overflow: hidden;
+  padding: 16px;
 }
 .HistoryTable__category {
   font-weight: bold;
-  font-size: 8pt;
+  font-size: 8px;
 }
 .HistoryTable__row__item--category {
   flex: 1;
@@ -61,5 +59,8 @@
   text-align: right;
 }
 .HistoryTable__row:nth-child(even) {
-  background: #f4f4f5
+  background: #f4f4f5;
+}
+.HistoryTable__row.HistoryTable__row__loading {
+  background: none;
 }
