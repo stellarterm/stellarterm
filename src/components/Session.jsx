@@ -48,7 +48,7 @@ class Session extends React.Component {
       let part1 = this.props.urlParts[1];
       if (part1 === undefined) {
         content = <div>
-          <Generic title={`Your Account ID: ${this.props.d.session.account.accountId()}`}>
+          <Generic title={`Your Wallet Account ID: ${this.props.d.session.account.accountId()}`}>
             <h2>How to receive payments</h2>
             <p>To receive a payment from someone else, you share with them your account ID which <strong>begins with a G</strong>. You are only able to send funds inside your account ID.</p>
 
