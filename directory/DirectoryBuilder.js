@@ -146,6 +146,19 @@ DirectoryBuilder.prototype.addDestination = function(accountId, opts) {
       throw new Error('Destination opts.pathPaymentAccepted must either be true or false');
     }
   }
+
+  if (Array.isArray(opts.acceptedAssetsWhitelist)) {
+    this.destinations[accountId].acceptedAssetsWhitelist = [];
+    opts.acceptedAssetsWhitelist.forEach(assetSlug => {
+      if (typeof assetSlug !== 'string') {
+        throw new Error('Destination opts.acceptedAssetsWhitelist must be string. Got: ' + assetSlug);
+      } else if (assetSlug.indexOf('-') < 1) {
+        throw new Error('Destination opts.acceptedAssetsWhitelist must be in slug format like XLM-native or BTC-GA7B. Got: ' + assetSlug);
+      }
+
+      this.destinations[accountId].acceptedAssetsWhitelist.push(assetSlug);
+    });
+  }
 }
 
 // Must specify by domain

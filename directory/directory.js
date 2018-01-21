@@ -550,5 +550,9 @@ directory.addDestination('GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIF
   name: 'AEX',
   requiredMemoType: 'MEMO_ID',
 });
+directory.addDestination('GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH', {
+  name: 'Mobius Issuer',
+  acceptedAssetsWhitelist: [],
+})
 
 module.exports = directory;

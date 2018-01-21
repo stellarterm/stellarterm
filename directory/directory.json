@@ -283,6 +283,12 @@
       "requiredMemoType": "MEMO_ID",
       "mergeOpAccepted": false,
       "pathPaymentAccepted": false
+    },
+    "GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH": {
+      "name": "Mobius Issuer",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false,
+      "acceptedAssetsWhitelist": []
     }
   },
   "assets": {

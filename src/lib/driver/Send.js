@@ -154,6 +154,19 @@ export default function Send(driver) {
     _.each(unSendableAssets, (availability, slug) => {
       this.availableAssets[slug] = availability;
     });
+
+    if (directory.destinations.hasOwnProperty(this.accountId)) {
+      let whitelist = directory.destinations[this.accountId].acceptedAssetsWhitelist;
+      if (whitelist) {
+        this.availableAssets = _.map(this.availableAssets, (availability, slug) => {
+          if (whitelist.indexOf(slug) === -1) {
+            availability.sendable = false;
+            availability.reason = 'assetNotWhitelisted';
+          }
+          return availability
+        });
+      }
+    }
   };
 
   this.handlers = {
