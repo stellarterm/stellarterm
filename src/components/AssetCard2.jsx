@@ -54,7 +54,7 @@ export default class AssetCard2 extends React.Component {
       backgroundStyle.background = rgbaColor;
     }
 
-    let issuerAccountId = (asset.issuer === null) ? 'native lumens' : asset.issuer;
+    let issuerAccountId = (asset.issuer === null) ? 'native lumens' : asset.issuer.slice(0,28) + '...';
     // Unlike AssetCard (original), this one does not link to the domain. Users can simply type it in the address bar
 
     let assetCardMain = <div className="AssetCard2__main" style={backgroundStyle}>
