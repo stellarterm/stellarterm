@@ -57,6 +57,13 @@ export default class Inflation extends React.Component {
       inflationDestInfo = <div>
         <p>You are currently <strong>not</strong> voting for any inflation destination.</p>
       </div>
+    } else if (account.inflation_destination === 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW') {
+      inflationDestInfo = <div>
+        <p>You are currently voting for: <strong>{account.inflation_destination}</strong> (StellarTerm)</p>
+        <div className="Generic__divider"></div>
+        <h3 className="Inflation__thankYou">Thank you for your support!</h3>
+        <p>Having your vote pointed towards StellarTerm doesn't cost you anything. However, you are supporting future development of StellarTerm. Thank you!</p>
+      </div>
     } else {
       inflationDestInfo = <div>
         <p>You are currently voting for: <strong>{account.inflation_destination}</strong></p>
