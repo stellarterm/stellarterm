@@ -236,7 +236,7 @@ export default class OfferMaker extends React.Component {
           Unable to create offer because the issuer has not authorized you to trade this asset. To fix this issue, check with the issuer's website.<br /><br />NOTE: Some issuers are restrictive in who they authorize.
         </div>;
       } else if (this.state.errorType === 'lowReserve') {
-        error = <div className="s-alert s-alert--alert OfferMaker__message">Unable to create offer because the account does not have enough lumens to meet the <a href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance" target="_blank">minimum balance</a>. For more info, see <a href="#account">the minimum balance section</a> of the account page.<br /><br />Possible solutions:
+        error = <div className="s-alert s-alert--alert OfferMaker__message">Unable to create offer because the account does not have enough lumens to meet the <a href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance" target="_blank" rel="nofollow noopener noreferrer">minimum balance</a>. For more info, see <a href="#account">the minimum balance section</a> of the account page.<br /><br />Possible solutions:
           <ul className="OfferMaker__errorList">
             <li>Send 11 lumens to your account</li>
             <li>Decrease your minimum balance by deleting an offer</li>
