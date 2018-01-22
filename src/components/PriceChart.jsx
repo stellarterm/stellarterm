@@ -209,7 +209,7 @@ export default class PriceChart extends React.Component {
       },
     };
 
-    Highcharts.stockChart('PriceChart', highstockOptions);
+    window.Highcharts.stockChart('PriceChart', highstockOptions);
   }
   shouldComponentUpdate() {
     return false;
