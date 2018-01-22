@@ -32,6 +32,7 @@ export default class Header extends React.Component {
             <a className="Header__nav__item" href="#markets">Markets</a>
             <a className="Header__nav__item" href="#account">Account</a>
           </nav>
+          <span className="Header__version">v{window.stBuildInfo.version}</span>
         </div>
       </div>
     </div>

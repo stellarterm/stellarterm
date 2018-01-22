@@ -78,8 +78,8 @@ class TermApp extends React.Component {
         <div className="HomePage__black">
           <div className="so-back">
             <div className="HomePage__lead">
-              <h2 className="HomePage__lead__title">Trade on the <a href="https://www.stellar.org/developers/guides/concepts/exchange.html">Stellar Distributed Exchange</a></h2>
-              <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm">open source</a> client for the <a href="https://www.stellar.org/">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
+              <h2 className="HomePage__lead__title">Trade on the <a href="https://www.stellar.org/developers/guides/concepts/exchange.html"  target="_blank" rel="nofollow noopener noreferrer">Stellar Distributed Exchange</a></h2>
+              <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm"  target="_blank" rel="nofollow noopener noreferrer">open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
             </div>
           </div>
         </div>
@@ -97,12 +97,12 @@ class TermApp extends React.Component {
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
                   <p>StellarTerm is just a client that can be used to access the Stellar distributed exchange. Neither StellarTerm nor the developers of it are involved with operating the Stellar network.</p>
-                  <p>StellarTerm is developed by <a href="https://iris.li/">Iris Li</a>, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
+                  <p>StellarTerm is developed by <a href="https://iris.li/" target="_blank" rel="nofollow noopener noreferrer">Iris Li</a>, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
                 </div>
               </div>
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
-                  <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm">star the project on GitHub</a>.</p>
+                  <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm" target="_blank" rel="nofollow noopener noreferrer">star the project on GitHub</a>.</p>
                   <p>The project is released under the Apache-2.0 license and is released as is without warranty.</p>
                   <p><a href="#privacy">Privacy policy</a></p>
                 </div>
@@ -172,9 +172,9 @@ class TermApp extends React.Component {
     } else if (urlParts[0] === 'testnet') {
       if (network.isTestnet) {
         body = <Generic title="Test network">
-          You are running on the <a href="https://www.stellar.org/developers/guides/concepts/test-net.html">Stellar test network</a>. This network is for development purposes only and the test network may be occasionally reset.
+          You are running on the <a href="https://www.stellar.org/developers/guides/concepts/test-net.html"  target="_blank" rel="nofollow noopener noreferrer">Stellar test network</a>. This network is for development purposes only and the test network may be occasionally reset.
           <br />
-          To create a test account on the test network, use the <a href="https://www.stellar.org/laboratory/#account-creator?network=test">Friendbot to get some test lumens</a>.
+          To create a test account on the test network, use the <a href="https://www.stellar.org/laboratory/#account-creator?network=test"  target="_blank" rel="nofollow noopener noreferrer">Friendbot to get some test lumens</a>.
         </Generic>
       } else {
         body = <Generic title="Please refresh the page to switch to testnet"><Loading darker={true}>
