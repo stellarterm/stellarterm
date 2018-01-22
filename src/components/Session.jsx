@@ -126,11 +126,9 @@ class Session extends React.Component {
           <Inflation d={d}></Inflation>
         </ErrorBoundary>
       } else if (part1 === 'history') {
-        content = <ErrorBoundary><div>
-          <div className="so-back islandBack islandBack--t">
-            <HistoryView d={d}></HistoryView>
-          </div>
-        </div></ErrorBoundary>
+        content = <ErrorBoundary>
+          <HistoryView d={d}></HistoryView>
+        </ErrorBoundary>
       } else if (part1 === 'deposit') {
         content = (<div><Deposit d={d}/></div>);
       }
