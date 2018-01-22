@@ -77,13 +77,6 @@ class TermApp extends React.Component {
       body = <div>
         <div className="HomePage__black">
           <div className="so-back">
-            <div className="HomePage__forSaleContainer">
-              <p className="HomePage__forSale">
-                StellarTerm.com is for sale. More <a href="#sale">details on the sale page</a>.
-                <br />
-                For now, StellarTerm will continue to operate normally.
-              </p>
-            </div>
             <div className="HomePage__lead">
               <h2 className="HomePage__lead__title">Trade on the <a href="https://www.stellar.org/developers/guides/concepts/exchange.html">Stellar Distributed Exchange</a></h2>
               <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm">open source</a> client for the <a href="https://www.stellar.org/">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
