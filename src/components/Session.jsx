@@ -47,6 +47,10 @@ class Session extends React.Component {
     } else if (state === 'in') {
       // Inflation helps fund development of StellarTerm to make it better
       if (!d.session.inflationDone) {
+        let currentVoteNote = '';
+        if (d.session.account.inflation_destination) {
+          currentVoteNote = ' This will overwrite your current inflation destination.'
+        }
         return <div>
           <Generic>
             <h2 className="Session__welcomeTitle">Welcome to StellarTerm!</h2>
@@ -56,7 +60,7 @@ class Session extends React.Component {
               StellarTerm is free open source software. You can support future development by voting for StellarTerm. The Stellar network rewards accounts that receive many votes through an "<a href="https://www.stellar.org/developers/guides/concepts/inflation.html" target="_blank" rel="nofollow noopener noreferrer">inflation system</a>". It is free to vote for StellarTerm and only requires a vote transaction (0.00001 XLM). Note: other wallets do this without your permission, so if you use another wallet and they tamper with your account, this message may show up again.
               <br />
               <br />
-              By pressing "continue", your account will vote to support the future of StellarTerm (no further action needed). Thank you for your support!
+              By pressing "continue", your account will vote to support the future of StellarTerm. Thank you for your support!{currentVoteNote}
               <div className="Session__inflation__next">
                 <button className="s-button" onClick={d.handlers.vote}>Continue</button>
                 <a className="Session__inflation__next__noThanks" onClick={d.handlers.noThanks}>No thanks</a>

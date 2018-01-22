@@ -97,6 +97,7 @@ function Driver(driverOpts) {
 
         let inflationDoneDestinations = {
           'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW': true,
+          'GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT': true,
         };
 
         if (inflationDoneDestinations[this.session.account.inflation_destination]) {
