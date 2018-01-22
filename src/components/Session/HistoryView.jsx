@@ -38,10 +38,10 @@ export default class HistoryView extends React.Component {
             <div className="HistoryView__header">
               <div className="HistoryView__header__left">Account History</div>
               <div className="HistoryView__header__right">
-                Trade <input name="trade" type="checkbox" checked={this.state.trade} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/>
-                Account <input name="account" type="checkbox" checked={this.state.account} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/>
-                Signer <input name="signer" type="checkbox" checked={this.state.signer} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/>
-                Trustline <input name="trustline" type="checkbox" checked={this.state.trustline} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/>
+                <label>Trade <input name="trade" type="checkbox" checked={this.state.trade} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
+                <label>Account <input name="account" type="checkbox" checked={this.state.account} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
+                <label>Signer <input name="signer" type="checkbox" checked={this.state.signer} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
+                <label>Trustline <input name="trustline" type="checkbox" checked={this.state.trustline} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
               </div>
             </div>
           </div>
