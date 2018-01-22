@@ -1,10 +1,19 @@
 .Generic__content {
   padding: 0.75em 18px;
 }
-
+.Generic__lightTitle {
+  font-weight: 400;
+}
 .Generic__divider {
   width: calc(100% + 36px);
   border-top: 1px solid #ddd;
   margin-left: -18px;
   margin-bottom: 18px;
+}
+.Generic__table {
+  margin-bottom: 18px;
+}
+.Generic__table td {
+  padding: 4px 18px;
+  border: 1px solid #ddd;
 }

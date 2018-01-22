@@ -7,6 +7,7 @@ import Markets from './components/Markets.jsx';
 import Session from './components/Session.jsx';
 import Exchange from './components/Exchange.jsx';
 import Generic from './components/Generic.jsx';
+import Download from './components/Download.jsx';
 import Loading from './components/Loading.jsx';
 import Stellarify from './lib/Stellarify';
 import url from 'url';
@@ -111,6 +112,8 @@ class TermApp extends React.Component {
           </div>
         </div>
       </div>
+    } else if (urlParts[0] === 'download') {
+      body = <Download />
     } else if (urlParts[0] === 'sale') {
         body = <div className="Sale">
           <div className="Sale__intro so-back">
@@ -172,7 +175,7 @@ class TermApp extends React.Component {
     } else if (urlParts[0] === 'testnet') {
       if (network.isTestnet) {
         body = <Generic title="Test network">
-          You are running on the <a href="https://www.stellar.org/developers/guides/concepts/test-net.html"  target="_blank" rel="nofollow noopener noreferrer">Stellar test network</a>. This network is for development purposes only and the test network may be occasionally reset.
+          You are running on the <a href="https://www.stellar.org/developers/guides/concepts/test-net.html" target="_blank" rel="nofollow noopener noreferrer">Stellar test network</a>. This network is for development purposes only and the test network may be occasionally reset.
           <br />
           To create a test account on the test network, use the <a href="https://www.stellar.org/laboratory/#account-creator?network=test"  target="_blank" rel="nofollow noopener noreferrer">Friendbot to get some test lumens</a>.
         </Generic>
