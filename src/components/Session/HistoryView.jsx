@@ -20,17 +20,33 @@ export default class HistoryView extends React.Component {
         signer: true,
         trustline: true,
     }
+    this.updateFilter = (name) => {
+      this.setState({ [name] : !this.state[name]});
+    }
   }
   componentWillUnmount() {
     this.props.d.history.event.unlisten(this.listenId);
   }
 
-  updateFilter(e) {
-    this.setState({ [e.target.name] : !this.state[e.target.name]});
-  }
+
 
   render() {
     // IF HISTORY IS NOT LOADED, THEN SHOW A LOADING SCREEN
+
+    let toggles = <div class="s-buttonGroup HistoryView__header__right__buttonGroup">
+      <button class={"s-button s-button--light" + (this.state.trade ? ' is-active' : '')} onClick={() => {this.updateFilter('trade')}}>Trade</button>
+      <button class={"s-button s-button--light" + (this.state.account ? ' is-active' : '')} onClick={() => {this.updateFilter('account')}}>Account</button>
+      <button class={"s-button s-button--light" + (this.state.signer ? ' is-active' : '')} onClick={() => {this.updateFilter('signer')}}>Signer</button>
+      <button class={"s-button s-button--light" + (this.state.trustline ? ' is-active' : '')} onClick={() => {this.updateFilter('trustline')}}>Trustline</button>
+    </div>
+
+
+    // <label>Trade <input name="trade" type="checkbox" checked={this.state.trade} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
+    // <label>Account <input name="account" type="checkbox" checked={this.state.account} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
+    // <label>Signer <input name="signer" type="checkbox" checked={this.state.signer} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
+    // <label>Trustline <input name="trustline" type="checkbox" checked={this.state.trustline} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
+
+
     return <div>
       {<div className="so-back islandBack islandBack--t">
         <div className="island">
@@ -38,10 +54,7 @@ export default class HistoryView extends React.Component {
             <div className="HistoryView__header">
               <div className="HistoryView__header__left">Account History</div>
               <div className="HistoryView__header__right">
-                <label>Trade <input name="trade" type="checkbox" checked={this.state.trade} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
-                <label>Account <input name="account" type="checkbox" checked={this.state.account} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
-                <label>Signer <input name="signer" type="checkbox" checked={this.state.signer} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
-                <label>Trustline <input name="trustline" type="checkbox" checked={this.state.trustline} onChange={this.updateFilter.bind(this)} className="HistoryView_checkbox"/></label>
+                <span className="HistoryView__header__right__label">Filter: </span>{toggles}
               </div>
             </div>
           </div>

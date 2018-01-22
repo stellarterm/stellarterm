@@ -8,9 +8,16 @@
 .HistoryView__header__right {
   text-align: right;
   flex: 1;
+  display: flex;
+  justify-content: flex-end;
 }
-.HistoryView_checkbox {
-  margin-right: 10px;
+.HistoryView__header__right__label {
+  font-size: 18px;
+  margin-right: 8px;
+}
+.HistoryView__header__right__buttonGroup {
+  display: inline-block;
+  font-size: 14px;
 }
 .HistoryView__asset {
   text-decoration-style: dotted;
