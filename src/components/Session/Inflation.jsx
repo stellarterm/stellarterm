@@ -79,7 +79,7 @@ export default class Inflation extends React.Component {
     let state = d.send.state;
     return <div className="Inflation">
       <Generic title="Inflation in the Stellar Network">
-        <p>The Stellar network has a system called "inflation" in which new coins are issued every week. Accounts can <strong>vote</strong> for which accounts get these new coins. Accounts that receive more than about 5 million XLM worth of votes get to receive inflation.</p>
+        <p>The Stellar network has a system called "inflation" in which new coins are issued every week. Accounts can <strong>vote</strong> for which accounts get these new coins. Accounts that receive more than about 50 million XLM worth of votes get to receive inflation.</p>
 
         <p>Read more about <a href="https://www.stellar.org/developers/guides/concepts/inflation.html" target="_blank">inflation on the Stellar developer docs</a>.</p>
 
