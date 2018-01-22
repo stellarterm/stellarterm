@@ -1,5 +1,7 @@
 language: node_js
 
+git:
+  depth: 10000
 node_js:
   - node
 install:
