@@ -37,6 +37,7 @@ function Driver(driverOpts) {
     state: 'out',
     setupError: false, // Couldn't find account
     unfundedAccountId: '',
+    inflationDone: false,
     account: null, // MagicSpoon.Account instance
   };
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
@@ -60,6 +61,15 @@ function Driver(driverOpts) {
   window.driver = this;
 
   this.handlers = {
+    vote: () => {
+      this.session.inflationDone = true;
+      MagicSpoon.setInflation(this.Server, this.session.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
+      trigger.session();
+    },
+    noThanks: () => {
+      this.session.inflationDone = true;
+      trigger.session();
+    },
     logIn: async (secretKey, opts) => {
       let keypair;
       try {
@@ -84,6 +94,14 @@ function Driver(driverOpts) {
           trigger.session();
         });
         this.session.state = 'in';
+
+        let inflationDoneDestinations = {
+          'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW': true,
+        };
+
+        if (inflationDoneDestinations[this.session.account.inflation_destination]) {
+          this.session.inflationDone = true;
+        }
         trigger.session();
       } catch (e) {
         if (e.data) {

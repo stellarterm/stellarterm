@@ -45,6 +45,26 @@ class Session extends React.Component {
     } else if (state === 'loading') {
       return <Generic title="Loading account"><Loading>Contacting network and loading account</Loading></Generic>
     } else if (state === 'in') {
+      // Inflation helps fund development of StellarTerm to make it better
+      if (!d.session.inflationDone) {
+        return <div>
+          <Generic>
+            <h2 className="Session__welcomeTitle">Welcome to StellarTerm!</h2>
+            <p>Please make sure you have your secret keys (starts with "S") securely backed up. You should protect your secret key and never share it with anyone.</p>
+            <div className="Generic__divider"></div>
+            <div className="Session__inflation">
+              StellarTerm is free open source software. You can support future development by voting for StellarTerm. The Stellar network rewards accounts that receive many votes through an "<a href="https://www.stellar.org/developers/guides/concepts/inflation.html">inflation system</a>". It is free to vote for StellarTerm and only requires a vote transaction (0.00002 XLM). Note: other wallets do this without your permission, so if you use another wallet and they tamper with your account, this message may show up again.
+              <br />
+              <br />
+              By pressing "continue", your account will vote to support the future of StellarTerm (no further action needed). Thank you for your support!
+              <div className="Session__inflation__next">
+                <button className="s-button" onClick={d.handlers.vote}>Continue</button>
+                <a className="Session__inflation__next__noThanks" onClick={d.handlers.noThanks}>No thanks</a>
+              </div>
+            </div>
+          </Generic>
+        </div>
+      }
       let content;
       let part1 = this.props.urlParts[1];
       if (part1 === undefined) {
@@ -62,7 +82,7 @@ class Session extends React.Component {
 
             <p>However, money is <strong>NOT</strong> actually <em>"inside"</em> StellarTerm. StellarTerm is just a helpful tool that helps you use your secret key to make transactions.</p>
 
-            <p><strong>WARNING</strong>: Be extremely careful with your secret key and only use it on trusted websites. Always check the url to make sure you are on the right website.</p>
+            <p><strong>WARNING</strong>: Be extremely careful with your secret key and do not share it with anybody. Always check the url to make sure you are on the right website.</p>
             <div className="Generic__divider"></div>
             <h2>Accepting different kinds of assets</h2>
             By default, your account is only configured to accept <strong>XLM</strong>. In order to receive other assets, you must <a href="#account/addTrust">accept</a> them using the <strong>Accept assets</strong> tool.

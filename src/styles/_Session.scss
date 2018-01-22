@@ -1,0 +1,27 @@
+.Session__inflation {
+
+}
+.Session__welcomeTitle {
+  margin-bottom: 12px;
+}
+.Session__inflation__next {
+  display: flex;
+  align-items: baseline;
+  margin-top: 24px;
+}
+.Session__inflation__next__noThanks {
+  font-size: 13px;
+  margin-left: 24px;
+  line-height: 1;
+  text-decoration: none;
+  position: relative;
+}
+.Session__inflation__next__noThanks:after {
+  content: '';
+  display: block;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  border-bottom: 1px dotted rgba(0,0,0,0.5);
+}

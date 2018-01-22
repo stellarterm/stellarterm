@@ -7,6 +7,9 @@ import _ from 'lodash';
 export default class Inflation extends React.Component {
   constructor(props) {
     super(props);
+    this.listenId = this.props.d.listenSession(() => {
+      this.forceUpdate();
+    });
 
     this.state = {
       status: 'ready', // 'ready' | 'working'
@@ -32,6 +35,7 @@ export default class Inflation extends React.Component {
           result: 'success',
         });
         this.props.d.session.account.refresh();
+        setTimeout(() => {this.forceUpdate()}, 1000);
       } catch (e) {
         console.error(e);
         this.setState({
@@ -42,6 +46,7 @@ export default class Inflation extends React.Component {
     }
   }
   componentWillUnmount() {
+    this.props.d.unlistenSession(this.listenId);
   }
   render() {
     let d = this.props.d;

@@ -195,6 +195,7 @@ class TermApp extends React.Component {
         <p>Lastly, just because StellarTerm does not track you, it does not mean your actions are private. Take note of other privacy issues that may affect you:</p>
         <ul>
           <li>Stellar is a public ledger. Anyone can see anything that happens on the network.</li>
+          <li>Your inflation vote is publicly visible.</li>
           <li>Your computer might be compromised.</li>
           <li>The StellarTerm website might be compromised.</li>
         </ul>
