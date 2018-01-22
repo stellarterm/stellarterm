@@ -14,13 +14,24 @@
   background: #fff;
   position: relative;
 }
-.Header__nav {
-  height: 72px;
+.Header {
   display: flex;
-  align-items: baseline;
   padding-top: 18px;
   padding-left: 18px;
   padding-right: 18px;
+  align-items: baseline;
+  justify-content: space-between;
+}
+.Header:after {
+  display: none;
+}
+.Header__version {
+  opacity: 0.5;
+}
+.Header__nav {
+  height: 54px;
+  display: flex;
+  align-items: baseline;
 }
 .Header__nav__item {
   margin-right: 36px;
