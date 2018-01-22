@@ -39,6 +39,7 @@ export default class HistoryTableRow extends React.Component {
   }
   render() {
     const d = this.props.data
+    let details;
 
     switch(this.props.type) {
 
@@ -49,7 +50,7 @@ export default class HistoryTableRow extends React.Component {
           // Case 1.1 CREATED
           // Returns a component with the starting balance and the funding public key.
           case 'account_created':
-            var details = {
+            details = {
               title: "Account Created",
               attributes: [
                 {
@@ -71,7 +72,7 @@ export default class HistoryTableRow extends React.Component {
           // Case 1.2 HOME DOMAIN UPDATED
           // Returns a compnent with the name of the new home domain.
           case "account_home_domain_updated":
-            var details = {
+            details = {
               title: "Home Domain updated",
               attributes: [
                 {
@@ -87,7 +88,7 @@ export default class HistoryTableRow extends React.Component {
           case "account_flags_updated":
             const setFlags = d.set_flags_s ? d.set_flags_s.map( flag => "set_flag_" + flag ).join(", ") : ""
             const clearFlags = d.clear_flags_s ? d.clear_flags_s.map( flag => "clear_flag_" + flag ).join(", ") : ""
-            var details = {
+            details = {
               title: "Flags updated",
               attributes: [
                 {
@@ -101,7 +102,7 @@ export default class HistoryTableRow extends React.Component {
           // Case 1.4 THRESHOLDS UPDATED
           // Returns a component with the updated thresholds
           case "account_thresholds_updated":
-            var details = {
+            details = {
               title: "Thresholds Weights updated",
               attributes: [
                 {
@@ -124,7 +125,7 @@ export default class HistoryTableRow extends React.Component {
           // Returns a component with the asset, the amount, and the source/destination
           default:
             if(d.to == d.from && d.category === 'account_debited') {
-              var details = {
+              details = {
                 title: "Sent to self",
                 attributes: [
                   {
@@ -146,7 +147,7 @@ export default class HistoryTableRow extends React.Component {
                 ]
               }
             } else {
-              var details = {
+              details = {
                 title: d.category === 'account_debited' ? "Sent" : "Received",
                 attributes: [
                   {
@@ -170,26 +171,39 @@ export default class HistoryTableRow extends React.Component {
       // Case 2 SIGNER
       // Each has the same relevant data, so they all return the same component.
       case 'signer':
-        var action = d.category.split("_")[1]
-        var details = {
-          title: "Signer " + action,
-          attributes: [
-            {
-              header: "KEY WEIGHT: ",
-              value: d.weight,
-            },
-            {
-              header: "KEY USED: ",
-              value: d.public_key,
-            }
-          ]
+        var action = d.category.split("_")[1];
+        console.log(action, d, d.inflation_dest)
+        if (d.inflation_dest) {
+          details = {
+            title: "Inflation set",
+            attributes: [
+              {
+                header: "INFLATION DEST: ",
+                value: d.inflation_dest,
+              }
+            ]
+          }
+        } else {
+          details = {
+            title: "Signer " + action,
+            attributes: [
+              {
+                header: "KEY WEIGHT: ",
+                value: d.weight,
+              },
+              {
+                header: "KEY: ",
+                value: d.public_key,
+              }
+            ]
+          }
         }
         break;
 
       // Case 3 TRADE
       // For now, pending and updated offers are not recorded by the Effects SDK, only completed trades.
       case 'trade':
-        var details = {
+        details = {
           title: "Traded",
           attributes: [
             {
@@ -215,7 +229,7 @@ export default class HistoryTableRow extends React.Component {
       // Case 4 Trustline
       // Each has the same relevant data, so they all return the same component.
       case 'trustline':
-        var details = {
+        details = {
           title: "Trustline " + d.category.split("_")[1],
           attributes: [
             {

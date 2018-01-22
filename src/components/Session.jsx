@@ -53,7 +53,7 @@ class Session extends React.Component {
             <p>Please make sure you have your secret keys (starts with "S") securely backed up. You should protect your secret key and never share it with anyone.</p>
             <div className="Generic__divider"></div>
             <div className="Session__inflation">
-              StellarTerm is free open source software. You can support future development by voting for StellarTerm. The Stellar network rewards accounts that receive many votes through an "<a href="https://www.stellar.org/developers/guides/concepts/inflation.html">inflation system</a>". It is free to vote for StellarTerm and only requires a vote transaction (0.00002 XLM). Note: other wallets do this without your permission, so if you use another wallet and they tamper with your account, this message may show up again.
+              StellarTerm is free open source software. You can support future development by voting for StellarTerm. The Stellar network rewards accounts that receive many votes through an "<a href="https://www.stellar.org/developers/guides/concepts/inflation.html">inflation system</a>". It is free to vote for StellarTerm and only requires a vote transaction (0.00001 XLM). Note: other wallets do this without your permission, so if you use another wallet and they tamper with your account, this message may show up again.
               <br />
               <br />
               By pressing "continue", your account will vote to support the future of StellarTerm (no further action needed). Thank you for your support!
