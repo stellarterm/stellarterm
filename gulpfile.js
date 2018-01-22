@@ -9,6 +9,7 @@ const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
 const fs = require('fs');
 const mkdirp = require('mkdirp');
+const execSync = require('child_process').execSync;
 
 const reload = browserSync.reload;
 
@@ -89,6 +90,22 @@ gulp.task('customConfig', (cb) => {
   fs.writeFile('./dist/customConfig.js', configFile, cb);
 });
 
+// Build time information
+gulp.task('buildInfo', (cb) => {
+  let buildInfo = '\n// This file generated during the gulp build process.\n';
+  buildInfo += 'window.stBuildInfo = ';
+
+  let infoObj = {};
+
+  infoObj.version = parseInt(execSync('git rev-list --count HEAD').toString().trim());
+
+
+  buildInfo += JSON.stringify(infoObj, null, 2);
+  buildInfo += ';\n';
+  mkdirp('./dist');
+  fs.writeFile('./dist/buildInfo.js', buildInfo, cb);
+});
+
 // browserify
 const bundler = watchify(browserify({
   entries: ['./src/app.jsx'],
@@ -122,7 +139,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe($.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'images', 'scripts', 'copyBower'];
+const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {
