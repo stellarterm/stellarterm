@@ -50,6 +50,5 @@ export default class HistoryView extends React.Component {
       </div>
       }
     </div>
-
   }
 }

@@ -9,6 +9,7 @@ import Send from './Session/Send.jsx';
 import Inflation from './Session/Inflation.jsx';
 import Deposit from './Session/Deposit.jsx';
 import Generic from './Generic.jsx';
+import ErrorBoundary from './ErrorBoundary.jsx';
 import Loading from './Loading.jsx';
 import HistoryView from './Session/HistoryView.jsx';
 
@@ -71,8 +72,9 @@ class Session extends React.Component {
       }
       let content;
       let part1 = this.props.urlParts[1];
+
       if (part1 === undefined) {
-        content = <div>
+        content = <ErrorBoundary>
           <Generic title={`Your Wallet Account ID: ${this.props.d.session.account.accountId()}`}>
             <h2>How to receive payments</h2>
             <p>To receive a payment from someone else, you share with them your account ID which <strong>begins with a G</strong>. You are only able to send funds inside your account ID.</p>
@@ -92,9 +94,9 @@ class Session extends React.Component {
             By default, your account is only configured to accept <strong>XLM</strong>. In order to receive other assets, you must <a href="#account/addTrust">accept</a> them using the <strong>Accept assets</strong> tool.
           </Generic>
           <AccountView d={d}></AccountView>
-        </div>
+        </ErrorBoundary>
       } else if (part1 === 'addTrust') {
-        content = <div>
+        content = <ErrorBoundary>
           <Generic title="Assets in the Stellar Network">
             To receive assets on the Stellar network, you must first accept the asset.
             <br /><br />
@@ -112,23 +114,23 @@ class Session extends React.Component {
           <div className="so-back islandBack">
             <ManuallyAddTrust d={d}></ManuallyAddTrust>
           </div>
-        </div>
+        </ErrorBoundary>
       } else if (part1 === 'send') {
-        content = <div>
+        content = <ErrorBoundary>
           <div className="so-back islandBack islandBack--t">
             <Send d={d}></Send>
           </div>
-        </div>
+        </ErrorBoundary>
       } else if (part1 === 'inflation') {
-        content = <div>
+        content = <ErrorBoundary>
           <Inflation d={d}></Inflation>
-        </div>
+        </ErrorBoundary>
       } else if (part1 === 'history') {
-        content = <div>
+        content = <ErrorBoundary><div>
           <div className="so-back islandBack islandBack--t">
             <HistoryView d={d}></HistoryView>
           </div>
-        </div>
+        </div></ErrorBoundary>
       } else if (part1 === 'deposit') {
         content = (<div><Deposit d={d}/></div>);
       }

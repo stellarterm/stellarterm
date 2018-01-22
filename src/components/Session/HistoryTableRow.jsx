@@ -40,7 +40,6 @@ export default class HistoryTableRow extends React.Component {
   render() {
     const d = this.props.data
     let details;
-
     switch(this.props.type) {
 
       // Case 1 ACCOUNT
