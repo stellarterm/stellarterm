@@ -201,17 +201,19 @@ export default class OfferMaker extends React.Component {
           insufficientBalanceMessage = <p className="OfferMaker__insufficientBalance">Error: You do not have enough {targetAsset.getCode()} to create this offer.</p>;
         }
       } else {
-        youHave = <p className="OfferMaker__youHave">Must <a href="#account/addTrust">create trust line</a> for {targetAsset.getCode()} to trade</p>;
+        youHave = <p className="OfferMaker__youHave">Must <a href="#account/addTrust">accept the asset {targetAsset.getCode()}</a> to trade</p>;
       }
     }
 
     let submit;
+    let acccept;
     if (this.props.d.session.state === 'in') {
       if (this.state.buttonState === 'ready') {
         if (hasAllTrust) {
           submit = <input type="submit" className="s-button" value={capitalizedSide + ' ' + baseAssetName} disabled={!this.state.valid || insufficientBalanceMessage}></input>
         } else {
-          submit = <input type="submit" className="s-button" value="Trust required" disabled={true}></input>
+          submit = <input type="submit" className="s-button" value="Action required: accept asset" disabled={true}></input>
+          acccept = <div>To fix this issue, go to the <a href="#account/addTrust">account page and accept the assetts</a> in this orderbook.</div>
         }
       } else {
         submit = <input type="submit" className="s-button" disabled={true} value="Creating offer..." disabled={true}></input>
@@ -290,6 +292,7 @@ export default class OfferMaker extends React.Component {
           {error}
           {success}
           {submit}
+          {acccept}
         </div>
       </form>
     </div>
