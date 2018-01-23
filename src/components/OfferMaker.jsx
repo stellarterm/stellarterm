@@ -136,7 +136,7 @@ export default class OfferMaker extends React.Component {
           }
         } catch(e) {
           console.error(e)
-          errorType = 'unknownResponse';
+          errorType = 'unknownResponse - ' + e.message;
         }
         this.setState({
           buttonState: 'ready',
