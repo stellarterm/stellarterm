@@ -19,12 +19,26 @@ class Session extends React.Component {
     this.listenId = this.props.d.listenSession(() => {
       this.forceUpdate();
     });
+    this.mounted = true;
+
+    // KLUDGE: The event listeners are kinda messed up
+    this.checkLoginStatus = () => {
+      if (this.mounted) {
+        if (this.props.d.session.state === 'in') {
+          this.forceUpdate();
+        } else {
+          setTimeout(this.checkLoginStatus, 20)
+        }
+      }
+    }
+    setTimeout(this.checkLoginStatus, 20)
 
     // Static functions from driver
     this.handlers = this.props.d.handlers;
     this.logIn = this.props.d.handlers.logIn;
   }
   componentWillUnmount() {
+    this.mounted = false;
     this.props.d.unlistenSession(this.listenId);
   }
   render() {

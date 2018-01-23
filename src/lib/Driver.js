@@ -25,6 +25,7 @@ function Driver(driverOpts) {
     'orderbookPricePick',
   ];
   const trigger = {};
+  window.trigger = trigger;
   availableEvents.forEach((eventName) => {
     this[`listen${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`] = cb => byol.listen(eventName, cb);
     this[`unlisten${eventName.charAt(0).toUpperCase()}${eventName.slice(1)}`] = id => byol.unlisten(eventName, id);
