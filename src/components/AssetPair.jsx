@@ -9,13 +9,21 @@ export default class AssetPair extends React.Component {
     super(props);
   }
   render() {
+    let baseCard;
+    let counterCard;
+    if (this.props.baseBuying !== null) {
+      baseCard = <AssetCard2 code={this.props.baseBuying.getCode()} issuer={this.props.baseBuying.getIssuer()}></AssetCard2>
+    }
+    if (this.props.counterSelling !== null) {
+      counterCard = <AssetCard2 code={this.props.counterSelling.getCode()} issuer={this.props.counterSelling.getIssuer()}></AssetCard2>
+    }
     let content = <div className="AssetPair">
       <div className="AssetPair__card">
-        <AssetCard2 code={this.props.baseBuying.getCode()} issuer={this.props.baseBuying.getIssuer()}></AssetCard2>
+        {baseCard}
       </div>
       <div className="AssetPair__separator"></div>
       <div className="AssetPair__card">
-        <AssetCard2 code={this.props.counterSelling.getCode()} issuer={this.props.counterSelling.getIssuer()}></AssetCard2>
+        {counterCard}
       </div>
     </div>;
 
