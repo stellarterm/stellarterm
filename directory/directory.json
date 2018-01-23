@@ -717,6 +717,26 @@
         "issuer": "GCLRUZDCWBHS7VIFCT43BARPP63BHR32HMEVKXYQODA5BU6SIGFK4HL2"
       }
     },
+    "XLM-native/EUR-moni.com": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "EUR",
+        "issuer": "GAKBPBDMW6CTRDCXNAPSVJZ6QAN3OBNRG6CWI27FGDQT2ZJJEMDRXPKK"
+      }
+    },
+    "XLM-native/USD-golix.io": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "USD",
+        "issuer": "GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R"
+      }
+    },
     "XLM-native/BTC-stronghold.co": {
       "baseBuying": {
         "code": "XLM",
@@ -757,6 +777,16 @@
         "issuer": "GDXTJEK4JZNSTNQAWA53RZNS2GIKTDRPEUWDXELFMKU52XNECNVDVXDI"
       }
     },
+    "XLM-native/BTC-golix.io": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "BTC",
+        "issuer": "GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R"
+      }
+    },
     "XRP-vcbear.net/XLM-native": {
       "baseBuying": {
         "code": "XRP",
@@ -770,6 +800,16 @@
     "ETH-stronghold.co/XLM-native": {
       "baseBuying": {
         "code": "ETH",
+        "issuer": "GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "XLM-stronghold.co/XLM-native": {
+      "baseBuying": {
+        "code": "XLM",
         "issuer": "GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG"
       },
       "counterSelling": {
@@ -951,6 +991,16 @@
       "baseBuying": {
         "code": "SEED",
         "issuer": "GDPFSEBZO2W4TLWZO7FIMMG3QONHXYVF6LUULI6HUJS6PJLE4TRZEXLF"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "RMT-sureremit.co/XLM-native": {
+      "baseBuying": {
+        "code": "RMT",
+        "issuer": "GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN"
       },
       "counterSelling": {
         "code": "XLM",

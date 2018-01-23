@@ -384,6 +384,14 @@ directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['NGN', 'tonaira.com'],
 });
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['EUR', 'moni.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['USD', 'golix.io'],
+});
 
 // Pairs involving "BTC"
 // "BTC" should be counterSelling
@@ -403,6 +411,10 @@ directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'vcbear.net'],
 });
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'golix.io'],
+});
 
 // Pairs involving XLM
 // XLM should be counterSelling
@@ -412,6 +424,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['ETH', 'stronghold.co'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'stronghold.co'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
@@ -484,6 +500,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SEED', 'collective21.org'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['RMT', 'sureremit.co'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
