@@ -237,7 +237,7 @@ const MagicSpoon = {
       let satisfied = false;
       let first = true;
       let depth = 0;
-      const MAX_DEPTH = 5;
+      const MAX_DEPTH = 3;
       let prevCall;
       let startTime = Date.now();
 
@@ -245,7 +245,8 @@ const MagicSpoon = {
         depth += 1;
         let tradeResults;
         if (first) {
-          tradeResults = await Server.trades().forAssetPair(baseBuying, counterSelling).limit(200).order('desc').call()
+          tradeResults = await Server.tradeAggregation(baseBuying, counterSelling, 1514764800, Date.now() + 86400000, 900000).limit(200).order('desc').call()
+          // tradeResults = await Server.trades().forAssetPair(baseBuying, counterSelling).limit(200).order('desc').call()
           first = false;
         } else {
           tradeResults = await prevCall();
@@ -260,7 +261,7 @@ const MagicSpoon = {
       // Optimization: use this filter before saving it into the records array
       this.trades = _.filter(
         _.map(records, (trade) => {
-          return [new Date(trade.ledger_close_time).getTime(), new BigNumber(trade.counter_amount).dividedBy(trade.base_amount).toNumber()];
+          return [new Date(trade.timestamp).getTime(), parseFloat(trade.avg)];
         }),
         (entry) => {
           // Remote NaN elements that cause gaps in the chart.
@@ -279,17 +280,17 @@ const MagicSpoon = {
 
       // Iterate on trades from new to old
       // Remove trades that are greater than OUTLIER_THRESHOLD times the previous value
-      const OUTLIER_THRESHOLD = 2;
-      let lastAmount = this.trades[0];
-      this.trades = _.filter(this.trades, (entry) => {
-        let currentAmount = entry[1];
-        let ratio = (currentAmount > lastAmount) ? currentAmount/lastAmount :  lastAmount/currentAmount;
-        if (ratio > OUTLIER_THRESHOLD) {
-          return false;
-        }
-        lastAmount = currentAmount;
-        return true;
-      });
+      // const OUTLIER_THRESHOLD = 2;
+      // let lastAmount = this.trades[0];
+      // this.trades = _.filter(this.trades, (entry) => {
+      //   let currentAmount = entry[1];
+      //   let ratio = (currentAmount > lastAmount) ? currentAmount/lastAmount :  lastAmount/currentAmount;
+      //   if (ratio > OUTLIER_THRESHOLD) {
+      //     return false;
+      //   }
+      //   lastAmount = currentAmount;
+      //   return true;
+      // });
 
       _.reverse(this.trades);
 
