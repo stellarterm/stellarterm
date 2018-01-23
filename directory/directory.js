@@ -109,6 +109,19 @@ directory.addAsset('tempo.eu.com', {
   issuer: 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S',
 });
 
+directory.addAnchor({
+  domain: 'sureremit.co',
+  website: 'https://sureremit.co',
+  logo: 'sureremit.co',
+  color: '#dc5126',
+  displayName: 'SureRemit',
+});
+directory.addAsset('sureremit.co', {
+  code: 'RMT',
+  issuer: 'GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN',
+  instructions: 'https://sureremit.co',
+});
+
 
 directory.addAnchor({
   domain: 'ripplefox.com',
