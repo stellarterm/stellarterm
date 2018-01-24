@@ -89,12 +89,14 @@ export default class PriceChart extends React.Component {
     const pairName = `${orderbook.baseBuying.code}/${orderbook.counterSelling.code}`;
     window.elem = elem;
 
+    this.orderbook = orderbook;
+
     if (orderbook.trades.length === 0) {
       elem.getElementsByClassName('PriceChart__message')[0].textContent = `No trade history for ${pairName}`;
       return;
     }
 
-    const highstockOptions = {
+    this.highstockOptions = {
       colors: ['#9291e0'], // Purple from background gradient
       chart: {
         style: {
@@ -128,8 +130,8 @@ export default class PriceChart extends React.Component {
           },
           {
             type: 'day',
-            count: 3,
-            text: '3d',
+            count: 4,
+            text: '4d',
           },
           {
             type: 'week',
@@ -144,7 +146,7 @@ export default class PriceChart extends React.Component {
             type: 'all',
             text: 'All',
           }],
-        selected: 5,
+        selected: 2,
       },
       series: [{
         name: pairName,
@@ -209,9 +211,12 @@ export default class PriceChart extends React.Component {
       },
     };
 
-    window.Highcharts.stockChart('PriceChart', highstockOptions);
+    this.stockChart = window.Highcharts.stockChart('PriceChart', this.highstockOptions);
   }
   shouldComponentUpdate() {
+    if (this.stockChart !== undefined) {
+      this.stockChart.series[0].setData(this.orderbook.trades)
+    }
     return false;
   }
   render() {

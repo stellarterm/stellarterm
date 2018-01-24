@@ -237,11 +237,12 @@ const MagicSpoon = {
       let satisfied = false;
       let first = true;
       let depth = 0;
-      const MAX_DEPTH = 3;
+      const MAX_DEPTH = 20;
       let prevCall;
       let startTime = Date.now();
+      let fetchTimeout = 20000; // milliseconds before we stop fetching history
 
-      while (!satisfied && depth < MAX_DEPTH && Date.now() - startTime < 5000) {
+      while (!satisfied && depth < MAX_DEPTH && Date.now() - startTime < fetchTimeout) {
         depth += 1;
         let tradeResults;
         if (first) {
@@ -257,48 +258,35 @@ const MagicSpoon = {
           satisfied = true;
         }
         Array.prototype.push.apply(records, tradeResults.records);
-      }
-      // Optimization: use this filter before saving it into the records array
-      this.trades = _.filter(
-        _.map(records, (trade) => {
-          return [new Date(trade.timestamp).getTime(), parseFloat(trade.avg)];
-        }),
-        (entry) => {
-          // Remote NaN elements that cause gaps in the chart.
-          // NaN values happens when the trade bought and sold 0.0000000 of each asset
-          return !isNaN(entry[1]);
+
+        // Optimization: use this filter before saving it into the records array
+        this.trades = _.filter(
+          _.map(records, (trade) => {
+            return [new Date(trade.timestamp).getTime(), parseFloat(trade.avg)];
+          }),
+          (entry) => {
+            // Remote NaN elements that cause gaps in the chart.
+            // NaN values happens when the trade bought and sold 0.0000000 of each asset
+            return !isNaN(entry[1]);
+          }
+        );
+
+        // Potential optimization: If we load the horizon results into the array in the correct order
+        // then sorting will run at near optimal runtime
+        this.trades.sort((a,b) => {
+          return a[0]-b[0];
+        });
+        if (depth > 1) {
+          // Only show progressive updates when we already have 2 pages
+          // 2 pages = 400 records
+          // 400 records * 15 minutes = 100 hours = 4 days.
+          onUpdate();
         }
-      );
-
-      // Potential optimization: If we load the horizon results into the array in the correct order
-      // then sorting will run at near optimal runtime
-
-      // First sort it in reverse so that we can filter
-      this.trades.sort((a,b) => {
-        return b[0]-a[0];
-      });
-
-      // Iterate on trades from new to old
-      // Remove trades that are greater than OUTLIER_THRESHOLD times the previous value
-      // const OUTLIER_THRESHOLD = 2;
-      // let lastAmount = this.trades[0];
-      // this.trades = _.filter(this.trades, (entry) => {
-      //   let currentAmount = entry[1];
-      //   let ratio = (currentAmount > lastAmount) ? currentAmount/lastAmount :  lastAmount/currentAmount;
-      //   if (ratio > OUTLIER_THRESHOLD) {
-      //     return false;
-      //   }
-      //   lastAmount = currentAmount;
-      //   return true;
-      // });
-
-      _.reverse(this.trades);
-
+      }
       onUpdate();
     }
 
     fetchManyTrades();
-
 
     this.close = streamingOrderbookClose;
     // TODO: Close
