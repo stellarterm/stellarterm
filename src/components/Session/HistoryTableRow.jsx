@@ -171,7 +171,6 @@ export default class HistoryTableRow extends React.Component {
       // Each has the same relevant data, so they all return the same component.
       case 'signer':
         var action = d.category.split("_")[1];
-        console.log(action, d, d.inflation_dest)
         if (d.inflation_dest) {
           details = {
             title: "Inflation set",
