@@ -33,11 +33,11 @@ export default class HistoryView extends React.Component {
   render() {
     // IF HISTORY IS NOT LOADED, THEN SHOW A LOADING SCREEN
 
-    let toggles = <div class="s-buttonGroup HistoryView__header__right__buttonGroup">
-      <button class={"s-button s-button--light" + (this.state.trade ? ' is-active' : '')} onClick={() => {this.updateFilter('trade')}}>Trade</button>
-      <button class={"s-button s-button--light" + (this.state.account ? ' is-active' : '')} onClick={() => {this.updateFilter('account')}}>Account</button>
-      <button class={"s-button s-button--light" + (this.state.signer ? ' is-active' : '')} onClick={() => {this.updateFilter('signer')}}>Signer</button>
-      <button class={"s-button s-button--light" + (this.state.trustline ? ' is-active' : '')} onClick={() => {this.updateFilter('trustline')}}>Trustline</button>
+    let toggles = <div className="s-buttonGroup HistoryView__header__right__buttonGroup">
+      <button className={"s-button s-button--light" + (this.state.trade ? ' is-active' : '')} onClick={() => {this.updateFilter('trade')}}>Trade</button>
+      <button className={"s-button s-button--light" + (this.state.account ? ' is-active' : '')} onClick={() => {this.updateFilter('account')}}>Account</button>
+      <button className={"s-button s-button--light" + (this.state.signer ? ' is-active' : '')} onClick={() => {this.updateFilter('signer')}}>Signer</button>
+      <button className={"s-button s-button--light" + (this.state.trustline ? ' is-active' : '')} onClick={() => {this.updateFilter('trustline')}}>Trustline</button>
     </div>
 
 
