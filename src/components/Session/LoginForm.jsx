@@ -6,7 +6,7 @@ const isValidSecretKey = input => {
     StellarSdk.Keypair.fromSecret(input);
     return true;
   } catch (e) {
-    console.error(e);
+    // console.error(e);
     return false;
   }
 }

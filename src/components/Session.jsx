@@ -24,8 +24,9 @@ class Session extends React.Component {
     // KLUDGE: The event listeners are kinda messed up
     this.checkLoginStatus = () => {
       if (this.mounted) {
-        if (this.props.d.session.state === 'in') {
+        if (this.props.d.session.state === 'in' || this.props.d.session.state === 'unfunded' ) {
           this.forceUpdate();
+          setTimeout(this.checkLoginStatus, 200)
         } else {
           setTimeout(this.checkLoginStatus, 20)
         }
