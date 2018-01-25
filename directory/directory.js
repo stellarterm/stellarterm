@@ -431,6 +431,10 @@ directory.addPair({
 // Pairs involving XLM
 // XLM should be counterSelling
 directory.addPair({
+  baseBuying: ['SLM', 'superlumen.org'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
   baseBuying: ['XRP', 'vcbear.net'],
   counterSelling: ['XLM', 'native'],
 });
@@ -539,6 +543,10 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 
+directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
+    name: 'Superlumen Issuer',
+    requiredMemoType: 'MEMO_ID',
+});
 directory.addDestination('GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM', {
   name: 'Kraken',
   requiredMemoType: 'MEMO_ID',

@@ -220,6 +220,12 @@
     }
   },
   "destinations": {
+    "GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI": {
+      "name": "Superlumen Issuer",
+      "requiredMemoType": "MEMO_ID",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false
+    },
     "GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM": {
       "name": "Kraken",
       "requiredMemoType": "MEMO_ID",
@@ -803,6 +809,16 @@
       "counterSelling": {
         "code": "BTC",
         "issuer": "GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R"
+      }
+    },
+    "SLM-superlumen.org/XLM-native": {
+      "baseBuying": {
+        "code": "SLM",
+        "issuer": "GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
       }
     },
     "XRP-vcbear.net/XLM-native": {
