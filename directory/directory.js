@@ -8,6 +8,18 @@ let directory = new DirectoryBuilder();
 directory.DirectoryBuilder = DirectoryBuilder;
 
 directory.addAnchor({
+  domain: 'superlumen.org',
+  website: 'https://www.superlumen.org/',
+  logo: 'superlumen.org',
+  color: '#1c4664',
+  displayName: 'Superlumens',
+});
+directory.addAsset('superlumen.org', {
+  code: 'SLM',
+  issuer: 'GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI',
+});
+
+directory.addAnchor({
   domain: 'smartlands.io',
   website: 'https://smartlands.io',
   logo: 'smartlands.io',
