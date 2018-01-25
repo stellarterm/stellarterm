@@ -1,5 +1,5 @@
 const puppeteer = require('puppeteer');
-const fileUrl = require('./file-url');
+const fileUrl = require('file-url');
 const assert = require('assert');
 
 const fetchesTicker = async () => {
