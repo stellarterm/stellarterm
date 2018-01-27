@@ -60,6 +60,9 @@ function Driver(driverOpts) {
   };
 
   window.driver = this;
+  window.view = (accountId) => {
+    this.handlers.logIn('',{publicKey:accountId})
+  }
 
   this.handlers = {
     vote: () => {
