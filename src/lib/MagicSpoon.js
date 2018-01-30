@@ -263,6 +263,13 @@ const MagicSpoon = {
         this.trades = _.filter(
           _.map(records, (trade) => {
             return [new Date(trade.timestamp).getTime(), parseFloat(trade.avg)];
+            // return [
+            //   new Date(trade.timestamp).getTime(),
+            //   parseFloat(trade.open),
+            //   parseFloat(trade.high),
+            //   parseFloat(trade.low),
+            //   parseFloat(trade.close),
+            // ];
           }),
           (entry) => {
             // Remote NaN elements that cause gaps in the chart.
