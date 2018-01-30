@@ -34,32 +34,28 @@ export default class AssetList extends React.Component {
       }
       let tradeLink;
       if (asset.topTradePairSlug) {
-        tradeLink = <a href={'#exchange/' + asset.topTradePairSlug}>trade</a>
+        tradeLink = <span className="AssetList__asset__amount__trade">trade</span>
       }
       let volume24h = asset.volume24h_USD ? '$' + asset.volume24h_USD.toFixed(0) : '$0';
-      rows.push(<tr key={'asset-' + asset.id} className="AssetList__asset">
-        <td className="AssetList__asset__assetCard"><AssetCard2 code={asset.code} issuer={asset.issuer} boxy={false}></AssetCard2></td>
-        <td className="AssetList__asset__amount">{priceXLM}{Printify.lighten(' XLM')}</td>
-        <td className="AssetList__asset__amount">{priceUSD}</td>
-        <td className="AssetList__asset__amount">{volume24h}</td>
-        <td className="AssetList__asset__amount">{tradeLink}</td>
-      </tr>);
+      rows.push(<a href={'#exchange/' + asset.topTradePairSlug} key={'asset-' + asset.id} className="AssetList__asset">
+        <div className="AssetList__asset__assetCard"><AssetCard2 code={asset.code} issuer={asset.issuer} boxy={false}></AssetCard2></div>
+        <div className="AssetList__asset__amount">{priceXLM}{Printify.lighten(' XLM')}</div>
+        <div className="AssetList__asset__amount">{priceUSD}</div>
+        <div className="AssetList__asset__amount">{volume24h}</div>
+        <div className="AssetList__asset__amount">{tradeLink}</div>
+      </a>);
       // rows.push(<AssetPair key={index} row={true} baseBuying={market.baseBuying} counterSelling={market.counterSelling}></AssetPair>)
     })
     return (
-      <table className="AssetList">
-        <thead>
-          <tr>
-            <td className="AssetList__head__cell AssetList__head__asset">Asset</td>
-            <td className="AssetList__head__amount AssetList__head__cell">Price (XLM)</td>
-            <td className="AssetList__head__amount AssetList__head__cell">Price (USD)</td>
-            <td className="AssetList__head__amount AssetList__head__cell">Volume (24h)</td>
-          </tr>
-        </thead>
-        <tbody>
-          {rows}
-        </tbody>
-      </table>
+      <div className="AssetList">
+        <div className="AssetList__head__row">
+          <div className="AssetList__head__cell AssetList__head__asset">Asset</div>
+          <div className="AssetList__head__cell AssetList__head__amount">Price (XLM)</div>
+          <div className="AssetList__head__cell AssetList__head__amount">Price (USD)</div>
+          <div className="AssetList__head__cell AssetList__head__amount">Volume (24h)</div>
+        </div>
+        {rows}
+      </div>
     );
   }
 };

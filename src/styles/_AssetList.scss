@@ -1,5 +1,10 @@
 .AssetList {
   width: 100%;
+  display: table;
+  border-collapse: collapse;
+}
+.AssetList__head__row {
+  display: table-row;
 }
 .AssetList__head__asset {
   text-align: center;
@@ -7,28 +12,42 @@
 .AssetList__head__cell {
   padding: 12px;
   font-size: 16px;
+  display: table-cell;
+  vertical-align: middle;
+  font-weight: 600;
+}
+.AssetList__asset__amount__trade {
+  border-bottom: 1px dotted $s-color-neutral5;
 }
 .AssetList__head__amount {
   text-align: right;
 }
 .AssetList__asset {
-  border-top: 1px solid $s-color-neutral7;
+  border-top: 1px solid $s-color-neutral8;
+  display: table-row;
+  text-decoration: none;
+}
+.AssetList__asset:hover {
+  background: #fbfbfc;
 }
 .AssetList__asset__assetCard {
   padding: 8px;
-  width: 340px;
+  width: 300px;
+  display: table-cell;
 }
 .AssetList__asset__amount {
   text-align: right;
   padding: 0 16px;
   font-size: 16px;
+  display: table-cell;
+  vertical-align: middle;
 }
 .AssetListFooter {
   font-size: $s-scale-6;
   text-align: center;
   padding: 12px 18px;
   color: $s-color-neutral5;
-  border-top: 1px solid $s-color-neutral7;
+  border-top: 1px solid $s-color-neutral8;
 }
 .AssetListFooter a:hover {
   color: $s-color-neutral3;

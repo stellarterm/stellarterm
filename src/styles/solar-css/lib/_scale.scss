@@ -57,9 +57,10 @@ $s-scale-3: $s-scale-base1Px
         + px;
 
 // base2/scale^-1
-$s-scale-4: $s-scale-base2Px
-        / $s-scale-ratio
-        + px;
+// $s-scale-4: $s-scale-base2Px
+//         / $s-scale-ratio
+//         + px;
+$s-scale-4: 16px;
 
 // base1/scale^-1
 $s-scale-5: $s-scale-base1Px
