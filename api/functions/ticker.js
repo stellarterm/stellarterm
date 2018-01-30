@@ -234,7 +234,12 @@ function phase4(ticker) {
 
     // Having good depth is SUPER important
     // Use a lower base log to make it easier to get depth points
-    let depth10Score = Math.log(4 + asset.depth10_USD)/Math.log(4) - 1; // [0, infinity]
+    let depth10Score = 0.5 * (Math.log(2 + asset.depth10_USD)/Math.log(2) - 1); // [0, infinity]
+
+    // Lets also add a linear component to depth score.
+    // Again, we are emphasizing depth. Cap it at $100k.
+    // $50k depth should cover the bases of small users.
+    depth10Score += Math.min(10, asset.depth10_USD/10000); // += [0, 10]
 
     // Volume really helps! However, it's not as important as depth especially
     // since there are no pecentage fees on the Stellar network
