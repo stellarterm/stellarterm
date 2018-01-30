@@ -26,13 +26,13 @@ class Session extends React.Component {
       if (this.mounted) {
         if (this.props.d.session.state === 'in' || this.props.d.session.state === 'unfunded' ) {
           this.forceUpdate();
-          setTimeout(this.checkLoginStatus, 200)
+          setTimeout(this.checkLoginStatus, 500)
         } else {
-          setTimeout(this.checkLoginStatus, 20)
+          setTimeout(this.checkLoginStatus, 50)
         }
       }
     }
-    setTimeout(this.checkLoginStatus, 20)
+    setTimeout(this.checkLoginStatus, 50)
 
     // Static functions from driver
     this.handlers = this.props.d.handlers;
