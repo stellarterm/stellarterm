@@ -13,11 +13,11 @@ import _ from 'lodash';
 
 
 // Highstock configuration
-const minuteFullDateFormat = '%e %b %Y %H:%M';
-const minutePartDateFormat = '%e %b %H:%M';
-const dayPartDateFormat = '%e %b';
-const dayFullDateFormat = '%e %b %Y';
-const monthFullDateFormat = '%b %Y';
+const minuteFullDateFormat = '%Y-%m-%d %H:%M';
+const minutePartDateFormat = '%m-%d %H:%M';
+const dayPartDateFormat = '%m-%d';
+const dayFullDateFormat = '%Y-%m-%d';
+const monthFullDateFormat = '%Y-%m';
 // Display time in UK format: 17 January 2017 15:37
 
 const axisDTLF = {
@@ -27,10 +27,10 @@ const axisDTLF = {
   second: minutePartDateFormat,
   minute: minutePartDateFormat,
   hour: minutePartDateFormat,
-  day: dayPartDateFormat,
-  week: dayFullDateFormat,
-  month: monthFullDateFormat,
-  year: monthFullDateFormat,
+  day: minutePartDateFormat,
+  week: minuteFullDateFormat,
+  month: dayFullDateFormat,
+  year: dayFullDateFormat,
 };
 
 const dateTimeLabelFormats = {
