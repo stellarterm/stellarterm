@@ -1,17 +1,22 @@
 # StellarTerm Directory
 StellarTerm maintains a manually curated directory file with a listing of well known anchors and assets on the Stellar network. StellarTerm currently does not fetch stellar.toml files to discover assets as a way to prevent phishing. The creators of this file does not endorse any of this information contained in the directory. There may be mistakes in this directory (and historically there have been).
 
-To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request. Your asset is not guaranteed to make it into the directory and service is will not be fast as this is a free service.
+## How to get listed
+Anchors and assets will only be added to the directory if they seem potentially legitimate (StellarTerm does not endorse any of these assets).
 
-Anchors and assets will only be added to the directory if they seem potentially legitimate. To be added to the StellarTerm directory, an anchor must have a domain name and a stellar.toml file correctly hosted on the domain name.
+Please gather the *3 things needed* first. To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request with changes implemented.
 
-## Listing requirements:
-1. Must be a project that seems potentially legitimate
-2. Must have a stellar.toml correctly hosted. Information on how to do this is here: https://www.stellar.org/developers/guides/concepts/stellar-toml.html
-3. Provide a logo (with the format given below). Either 100x100 or a high resolution square logo.
-4. Provide a brand color for use in the StellarToml asset "cards" in the format #RRGGBB
+## 3 things needed:
+### 1. Stellar.toml hosted on your site
+Must have a stellar.toml correctly hosted. Information on how to do this is here: https://www.stellar.org/developers/guides/concepts/stellar-toml.html
 
-Once you have all these things, you can create a pull request adding these changes or open a GitHub issue with this information.
+Also, make sure to configure CORS correctly. Instructions are available in [the Stellar Developer docs](https://www.stellar.org/developers/guides/concepts/stellar-toml.html#enabling-cross-origin-resource-sharing-cors).
+
+### 2. Square logo that meets guidelines
+Logo should be in the format as below. Alternatively, you may create a GitHub issue with a high resolution logo and the developers of StellarTerm will adjust it (the process will be slower).
+
+### 3. Brand color in #RRGGBB
+This color is used in the StellarToml asset "cards" for the border. The background of the asset "cards" are lightened.
 
 ## Directory logos
 StellarTerm displays logos of Stellar anchors to make it easier for end users to recognize them and protect themselves against phishing attacks. When a unknown issuer of invalid asset pair is used, an image indicating that the asset is unknown will be shown.
@@ -20,8 +25,8 @@ StellarTerm displays logos of Stellar anchors to make it easier for end users to
 To provide a cleaner user interface, StellarTerm directory logos follow the following guidelines:
 - 100x100px
 - png format; optimized using default settings of pngquant
-- 10% (10px) of space from each edge to give space to the logo. The graphic can extend up to 5% from the edge for flourishes and can extend all the way to the edge if that is how the logo is designed
-- Background color should either be relevant to the logo (such as if it's square) or transparency should be used
+- 10px of space from each edge (leaving 80px for content) of space from each edge to give space to the logo. The graphic can extend up to 5% from the edge for flourishes and can extend all the way to the edge if that is how the logo is designed
+- Background color should either be relevant to the logo (such as if it's square) or *transparency* should be used
 - Only one logo per domain name. Currently, StellarTerm does not support custom icons per currency
 
 
