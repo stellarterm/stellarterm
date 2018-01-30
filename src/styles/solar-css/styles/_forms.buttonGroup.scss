@@ -1,0 +1,108 @@
+// s-buttonGroup usage:
+// <div class="s-buttonGroup">
+//   <span class="s-button">A</span>
+//   <span class="s-button">B</span>
+//   <span class="s-button">C</span>
+// </div>
+
+.s-buttonGroup {
+  @include S-flex-row;
+}
+
+.s-buttonGroup--vertical {
+  flex-direction: column;
+}
+
+// make sure spacing is correct
+.s-buttonGroup > .s-button:not(:last-child),
+.s-buttonGroup__wrapper:not(:last-child) {
+  margin-right: -1px;
+}
+
+.s-buttonGroup--vertical > .s-button:not(:last-child),
+.s-buttonGroup--vertical > .s-buttonGroup__wrapper:not(:last-child) {
+  margin-right: 0;
+  margin-bottom: -1px;
+}
+
+.s-buttonGroup .s-button,
+.s-buttonGroup__wrapper .s-button {
+  border-radius: 0;
+}
+.s-buttonGroup > .s-button:first-of-type,
+.s-buttonGroup__wrapper:first-of-type .s-button {
+  border-top-left-radius: $s-var-radius;
+  border-bottom-left-radius: $s-var-radius;
+}
+.s-buttonGroup > .s-button:last-of-type,
+.s-buttonGroup__wrapper:last-of-type .s-button {
+  border-top-right-radius: $s-var-radius;
+  border-bottom-right-radius: $s-var-radius;
+}
+
+.s-buttonGroup--vertical .s-button:first-of-type,
+.s-buttonGroup--vertical > .s-buttonGroup__wrapper:first-of-type .s-button {
+  border-radius: $s-var-radius $s-var-radius 0 0;
+}
+.s-buttonGroup--vertical > .s-button:last-of-type,
+.s-buttonGroup--vertical > .s-buttonGroup__wrapper:last-of-type .s-button {
+  border-radius: 0 0 $s-var-radius $s-var-radius;
+}
+.s-buttonGroup--vertical > .s-button:first-of-type:last-of-type,
+.s-buttonGroup--vertical > .s-buttonGroup__wrapper:first-of-type:last-of-type .s-button {
+  // Only element
+  border-radius: $s-var-radius;
+}
+
+.s-buttonGroup__radio {
+  position: absolute !important;
+  clip: rect(0px, 0px, 0px, 0px);
+  clip-path: inset(0px, 0px, 0px, 0px);
+}
+
+
+// .s-buttonGroup can be used with radiobutton inputs. This will allow toggling
+// of buttons using pure css
+
+// Usage #1: input nested inside label
+// This approach is simpler and does not require management of the "id" and the
+// "for" attribute
+// <form class="s-buttonGroup">
+//   <label class="s-buttonGroup__wrapper">
+//     <input type="radio" class="s-buttonGroup__radio" name="favorite-letter" value="A" checked>
+//     <span class="s-button">A</span>
+//   </label>
+//   <label class="s-buttonGroup__wrapper">
+//     <input type="radio" class="s-buttonGroup__radio" name="favorite-letter" value="B">
+//     <span class="s-button">B</span>
+//   </label>
+//   <label class="s-buttonGroup__wrapper">
+//     <input type="radio" class="s-buttonGroup__radio" name="favorite-letter" value="C">
+//     <span class="s-button">C</span>
+//   </label>
+// </form>
+
+// Usage #2: input adjacent to label
+// This approach does not nest the input meaning that one must make sure the
+// "id" and "for" attribute match. Some say it is better to do it this way due
+// to accessibility concerns
+// <form class="s-buttonGroup">
+//   <input type="radio" class="s-buttonGroup__radio" id="radio_a" name="favorite-letter" value="A" checked>
+//   <label class="s-button" for="radio_a">A</label>
+//
+//   <input type="radio" class="s-buttonGroup__radio" id="radio_b" name="favorite-letter" value="B">
+//   <label class="s-button" for="radio_b">B</label>
+//
+//   <input type="radio" class="s-buttonGroup__radio" id="radio_c" name="favorite-letter" value="C">
+//   <label class="s-button" for="radio_c">C</label>
+// </form>
+
+// TO disable a radio element, you have to disable both the input and the label like so:
+//   <label class="s-buttonGroup__wrapper">
+//     <input type="radio" class="s-buttonGroup__radio" name="favorite-letter" value="B" disabled="disabled">
+//     <span class="s-button is-disabled">B</span>
+//   </label>
+//
+//   <input type="radio" class="s-buttonGroup__radio" id="radio_b" name="favorite-letter" value="B" disabled="disabled">
+//   <label class="s-button is-disabled" for="radio_b">B</label>
+//

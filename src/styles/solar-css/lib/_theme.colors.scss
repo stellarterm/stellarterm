@@ -1,0 +1,64 @@
+// important functions for deriving colors
+@function whiten($color, $percent){
+  @return mix(white, $color, $percent);
+}
+@function blacken($color, $percent){
+  @return mix(black, $color, $percent);
+}
+
+// These should only be used to derive main colors
+$s-color-primaryRoot: #08b5e5; // a bright brand color
+$s-color-neutralRoot: blacken(#5b6a72,60);
+
+// Themes that override root colors will need to regenerate these
+// These color names are stable and will not change
+$s-color-neutral1: $s-color-neutralRoot;
+$s-color-neutral2: whiten($s-color-neutralRoot, 10%);
+$s-color-neutral3: whiten($s-color-neutralRoot, 20%);
+$s-color-neutral4: whiten($s-color-neutralRoot, 35%);
+$s-color-neutral5: whiten($s-color-neutralRoot, 50%);
+$s-color-neutral6: whiten($s-color-neutralRoot, 70%);
+$s-color-neutral7: whiten($s-color-neutralRoot, 85%);
+$s-color-neutral8: whiten($s-color-neutralRoot, 95%);
+$s-color-neutral9: whiten($s-color-neutralRoot, 100%);
+
+$s-color-primary1: blacken($s-color-primaryRoot, 40%);
+$s-color-primary2: blacken($s-color-primaryRoot, 30%);
+$s-color-primary3: blacken($s-color-primaryRoot, 20%);
+$s-color-primary4: $s-color-primaryRoot;
+$s-color-primary5: whiten($s-color-primaryRoot, 20%);
+$s-color-primary6: whiten($s-color-primaryRoot, 40%);
+$s-color-primary7: whiten($s-color-primaryRoot, 60%);
+$s-color-primary8: whiten($s-color-primaryRoot, 80%);
+$s-color-primary9: whiten($s-color-primaryRoot, 90%);
+
+// Lists of all the colors
+$s-color-neutralList:
+  neutral1 $s-color-neutral1,
+  neutral2 $s-color-neutral2,
+  neutral3 $s-color-neutral3,
+  neutral4 $s-color-neutral4,
+  neutral5 $s-color-neutral5,
+  neutral6 $s-color-neutral6,
+  neutral7 $s-color-neutral7,
+  neutral8 $s-color-neutral8,
+  neutral9 $s-color-neutral9;
+
+$s-color-primaryList:
+  primary1 $s-color-primary1,
+  primary2 $s-color-primary2,
+  primary3 $s-color-primary3,
+  primary4 $s-color-primary4,
+  primary5 $s-color-primary5,
+  primary6 $s-color-primary6,
+  primary7 $s-color-primary7,
+  primary8 $s-color-primary8,
+  primary9 $s-color-primary9;
+
+$s-color-listList: $s-color-neutralList $s-color-primaryList;
+
+// These are saturated colors that can stand alone on a white (#fff) background
+$s-color-success: #383;
+$s-color-info: #69f;
+$s-color-warning: #ee8;
+$s-color-alert: #d12;

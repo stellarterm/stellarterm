@@ -1,0 +1,31 @@
+// breakpoint sizes are calculated quadratically
+// 20x^2+100x+360
+$r-breakpoint-xs: 360px;
+$r-breakpoint-s: 480px;
+$r-breakpoint-m: 640px;
+$r-breakpoint-l: 840px;
+$r-breakpoint-xl: 1080px;
+$r-breakpoint-2xl: 1360px;
+$r-breakpoint-3xl: 1680px;
+
+
+// Usage example: @include r-media(xl) { .thing { background: pink; } }
+
+// This is made available through a mixin and not just a breakpoint name since
+// it keeps the constraint that breakpoints be min-width
+@mixin r-media($size) {
+  $targetBreakpoint: 0;
+
+       @if $size == xs { $targetBreakpoint: $r-breakpoint-xs; }
+   @else if $size == s { $targetBreakpoint: $r-breakpoint-s; }
+   @else if $size == m { $targetBreakpoint: $r-breakpoint-m; }
+   @else if $size == l { $targetBreakpoint: $r-breakpoint-l; }
+   @else if $size == xl { $targetBreakpoint: $r-breakpoint-xl; }
+   @else if $size == 2xl { $targetBreakpoint: $r-breakpoint-2xl; }
+   @else if $size == 3xl { $targetBreakpoint: $r-breakpoint-3xl; }
+  @else { @error 'Invalid breakpoint name'; }
+
+  @media (min-width: $targetBreakpoint) {
+    @content;
+  }
+}

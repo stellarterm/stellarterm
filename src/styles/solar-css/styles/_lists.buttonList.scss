@@ -1,0 +1,27 @@
+// .s-buttonList is designed to NOT use a <ul><li> list. Instead, use any element
+// with .s-button as a direct child of .s-buttonList. The <button> element is
+// preferred since it semantically indicates it is a button.
+
+.s-buttonList {
+  @include S-flex-rowWrap();
+  list-style: none;
+}
+  // .s-buttonList__item {
+  //   display: block;
+  //
+  //   padding: 0.25em 1em;
+  //   margin-right: 0.25em;
+  //   // transparent border so that hover states don't cause a jitter
+  //   border: 1px solid transparent;
+  //
+  //   border-radius: $s-var-radius;
+  //   background: transparent;
+  // }
+  // .s-buttonList__item.is-active {
+  //   border-color: currentColor;
+  // }
+  // .s-buttonList__item:hover {
+  // }
+  // .s-buttonList__item:last-child {
+  //   margin-right: 0;
+  // }

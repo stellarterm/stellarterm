@@ -1,0 +1,45 @@
+@mixin s-webApp {
+  @include S-flex-col;
+
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+}
+@mixin s-webApp--scrollable {
+  overflow-y: scroll;
+}
+
+@mixin s-webApp-bar {
+  @include S-flexItem-noFlex;
+  @include S-flex-row;
+}
+
+@mixin s-webApp-content {
+  @include S-flexItem-auto;
+
+  height: 0;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+@mixin s-webApp__fill {
+  @include S-flexItem-auto;
+}
+
+// tab bar
+@mixin s-webApp-tabBar {
+  @include S-flex-row;
+  list-style-type: none;
+
+  li {
+    @include S-flexItem-auto;
+    display: inline-block;
+    text-align: center;
+  }
+
+  li a {
+    width: 100%;
+  }
+}

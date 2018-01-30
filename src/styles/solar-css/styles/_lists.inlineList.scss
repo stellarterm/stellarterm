@@ -1,0 +1,17 @@
+.s-inlineList {
+  @include S-flex-row();
+  list-style: none;
+}
+  .s-inlineList__item {
+    margin-right: 1.5em;
+  }
+  .s-inlineList__item:last-child {
+    margin-right: 0;
+  }
+
+  .s-inlineList--wide .s-inlineList__item {
+    margin-right: 3em;
+  }
+  .s-inlineList--wide .s-inlineList__item:last-child {
+    margin-right: 0;
+  }

@@ -1,0 +1,21 @@
+html {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.s-header, h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  line-height: 1.25em;
+}
+
+.s-header--h1, h1 { font-size: $s-scale-1; }
+.s-header--h2, h2 { font-size: $s-scale-2; }
+.s-header--h3, h3 { font-size: $s-scale-3; }
+.s-header--h4, h4 { font-size: $s-scale-4; }
+.s-header--h5, h5 { font-size: $s-scale-5; }
+.s-header--h6, h6 { font-size: $s-scale-6; }
+
+a {
+
+}

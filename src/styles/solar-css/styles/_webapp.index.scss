@@ -1,0 +1,23 @@
+// may be deprecated
+.s-webApp, .K-webApp {
+  @include s-webApp();
+}
+.K-webApp--scrollable {
+  @include s-webApp--scrollable();
+}
+
+.s-webApp-bar, .K-webApp__bar {
+  @include s-webApp-bar();
+}
+
+.s-webApp-content, .K-webApp__content {
+  @include s-webApp-content();
+}
+
+.s-webApp__fill, .K-webApp__fill {
+  @include s-webApp__fill();
+}
+
+.s-webApp-tabBar {
+  @include s-webApp-tabBar();
+}

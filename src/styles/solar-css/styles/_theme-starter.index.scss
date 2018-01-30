@@ -1,0 +1,153 @@
+// This file is no longer used. It exists for historical reasons to preserve
+// some of the designs made in this file.
+//
+// // TODO: this function doesn't belong here
+// @function kInlineImage-caret-down($fillColor) {
+//   @return url('data:image/svg+xml;utf8,<svg width="7" height="4" viewBox="0 0 14 8" xmlns="http://www.w3.org/2000/svg" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns"><path d="M0 0l7 8 7-8h-14z" sketch:type="MSShapeGroup" fill="#{$fillColor}"/></svg>');
+// }
+//
+//
+// // general buttons and inputs
+// .s-button,
+// input,
+// select {
+//   // padding top/bottom: (1.333[..]^2*18-18-2)/2/18
+//   // Then, adjusted to be more balanced since equal top/bottom would have balance on the top
+//   padding: 0.35em 0.6666em 0.3166em 0.6666em;
+//   margin: 0;
+//   border: 1px solid $s-color-F;
+//
+//   background: #fff;
+// }
+//
+// // button
+// .s-button {
+//     border: 1px solid blacken($s-color-primary, 15%);
+//     background: $s-color-primary;
+//     color: $s-color-button-text;
+//   &:hover {
+//     border: 1px solid blacken($s-color-primary, 30%);
+//     background: blacken($s-color-primary, 10%);
+//   }
+//   &:active {
+//     border: 1px solid blacken($s-color-primary, 45%);
+//     background: blacken($s-color-primary, 20%);
+//   }
+// }
+// .s-button, .s-button:link {
+//   text-decoration: none;
+// }
+//
+// // a "well" effect (into screen; away from user)
+// // buttons shouldn't have these since they are meant to be clicked once
+// input:focus,
+// select:focus {
+//   box-shadow: inset 0px 1px 2px $s-color-shadow;
+// }
+//
+// // add aprimary color border
+// input:focus,
+// select:focus {
+//   border: 1px solid darken($s-color-primary,30%);
+// }
+//
+// // remove default outline glow and add a primary color border
+// .s-button:focus,
+// input:focus,
+// select:focus {
+//   // remove the default webkit glow without causing permanent damage
+//   // webkit default is -webkit-focus-ring-color. Other browsers might be
+//   // different. Leave it to the UA defaults
+//   outline-width: 0;
+// }
+//
+// // reset ios safari default inset shadow
+// input[type="text"] {
+//   -webkit-appearance:none;
+// }
+//
+// select {
+//   padding-right: 28px; // 14 + 7*2 space so the text does not collide with the caret
+//   -webkit-appearance: none;
+//
+//   cursor: pointer;
+//   background: #fff
+//     kInlineImage-caret-down($s-color-F)
+//     no-repeat
+//     calc(100% - 7px) 50%
+//     ;
+// }
+//
+// // starter z-indexes
+// .s-button:hover,
+// input:hover,
+// select:hover {
+//   z-index: 1;
+// }
+// .s-button:focus,
+// input:focus,
+// select:focus {
+//   z-index: 2;
+// }
+//
+//
+// // s-inputGroup
+// .s-inputGroup {
+//   margin-bottom: 0.66666em;
+// }
+// .s-inputGroup__item--tag {
+//   border: 1px solid $s-color-F;
+//   background: whiten($s-color-G, 50%);
+// }
+// .s-inputGroup__item--block {
+//   // Keep the box model consistent with tags
+//   border: 1px solid transparent;
+// }
+//
+//
+// // border collapse management
+//
+// // Prevent double borders by targeting form items that have something on their
+// // left. In effect, this consistently gives border to the higher layered elements (the ones
+// // that appear later) by allowing their borders be the dominant one that shows up.
+// // The later ones already cover the previous ones' box-shadow and outline glow.
+// // If the theme uses other colors for borders, an alternate way to do this is by
+// // setting margin-right to -1px;
+// //
+// // This does not get applied to full because full has the whole row. In
+// // [mobile first] responsive layouts from full to main, the consumer developer
+// // would simply remove border-right themself. This covers most use cases in which
+// // responsiveness goes from full to just a main item.
+// //
+// // TL;DR this removes border-right sizing on the right side of inputs with
+// // (supposedly) nothing on their right.
+// //
+// // EDIT: wait nvm the above is false. margin-right: -1px is much better than border-right: 0;
+// // Styles look better this way and are easier to reset
+// //
+// // EDIT2: Keep it simple and decouple from flex
+// // EDIT3: it is possible to make everything have a bit of negative margin and cancel it out
+// .s-inputGroup {
+//   padding-right: 1px;
+//   padding-bottom: 1px;
+// }
+// .s-inputGroup__item {
+//   margin-bottom: -1px;
+//   margin-right: -1px;
+// }
+//
+// // We want things to line up in an input group when things get bigger
+// .s-inputGroup input,
+// .s-inputGroup select,
+// .s-inputGroup .s-button,
+// .s-inputGroup__item--tag,
+// .s-inputGroup__item--tagFlat {
+//   // padding left and right: in inputGroups, even the big items should line up
+//   padding-left: 12px;
+//   padding-right: 12px;
+// }
+//
+// // reapply the padding on selects
+// .s-inputGroup select {
+//   padding-right: 28px;
+// }

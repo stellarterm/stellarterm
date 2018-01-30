@@ -1,0 +1,33 @@
+// library-bundle import not necessary
+
+// core styles
+@import 'base.normalize';
+@import 'base.border-box';
+@import 'base.basic-elements';
+@import 'base.page';
+
+@import 'typography.base';
+
+@import 'elements.links';
+
+@import 'components.alerts';
+
+@import 'forms.base';
+@import 'forms.buttons';
+@import 'forms.inputGroup';
+@import 'forms.buttonGroup';
+
+@import 'lists.inlineList';
+@import 'lists.buttonList';
+
+@import 'layout.flex';
+
+// INCUBATED theme layers
+
+// a slightly opinionated base styles aiming for usability and themability
+// for basic things that has to do with theming
+// theme-starter.index is current broken
+// @import 'theme-starter.index';
+
+// (likely deprecated) incubated solar-webApp module
+@import 'webapp.index';

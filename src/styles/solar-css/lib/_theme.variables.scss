@@ -1,0 +1,5 @@
+// Widget developers should develop with attention to border radius.
+
+// There is just one border radius size. If app developers want to use multiple
+// sizes, they can do that in their own theme.
+$s-var-radius: 3px;

@@ -1,0 +1,24 @@
+p {
+  margin: 0;
+  margin-bottom: 1em;
+}
+
+// Some button styles in the common forms.base to consolidate properties
+.s-button {
+  display: inline-block;
+  margin: 0;
+  // background: none;
+  border-radius: $s-var-radius;
+  cursor: pointer;
+}
+
+.s-button.is-disabled,
+.s-button:disabled {
+  cursor: not-allowed;
+}
+
+
+.s-button__min {
+}
+.s-button__light {
+}

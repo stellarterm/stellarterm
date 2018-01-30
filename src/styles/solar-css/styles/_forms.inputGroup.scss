@@ -1,0 +1,49 @@
+
+
+.s-inputGroup {
+  @include S-flex-row();
+  flex-wrap: wrap;
+}
+
+// Unfortunately, consumer developers are unable to change classes. They may
+// override the flex settings. Stylings should be set on the base item (and not modifiers) much as possible.
+.s-inputGroup__item {
+  @include S-flexItem-auto;
+}
+// primary flex modifiers
+// .s-inputGroup__item--full {
+//   flex: 12 0 100%;
+// }
+// .s-inputGroup__item--addon {
+//   flex: 0 0 auto;
+// }
+
+// auxiliary position modifiers
+.s-inputGroup__item--flexEnd {
+  align-self: flex-end;
+}
+.s-inputGroup__item--flexStart {
+  align-self: flex-start;
+}
+.s-inputGroup__item--tag,
+.s-inputGroup__item--tagFlat,
+.s-inputGroup__item--tagMin {
+  align-items: center;
+  display: flex;
+}
+
+
+// border radius is a part of the core solar so that widget developers will
+// remember to use the correct radius for special cases such as multi-line inputGroups
+.s-inputGroup__item {
+  border-radius: $s-var-radius;
+}
+// TODO: figure out how to do this
+// .s-inputGroup__item:first-child {
+//   border-top-left-radius: $s-var-radius;
+//   border-bottom-left-radius: $s-var-radius;
+// }
+// .s-inputGroup__item:last-child {
+//   border-top-right-radius: $s-var-radius;
+//   border-bottom-right-radius: $s-var-radius;
+// }

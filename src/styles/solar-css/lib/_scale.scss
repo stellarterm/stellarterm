@@ -1,0 +1,168 @@
+// The Solar core default scale uses:
+// http://www.modularscale.com/?18,21&px&1.33333333333333333333&js&text
+// This basic example assumes that we use two bases and one scale. Themes that wish
+// to change this will have to redefine all these variables
+// Additionally, themes that want to redefine the type system may choose to use
+// the modularscale-sass plugin. However, for defaults, it is an overkill. These
+// variables are here to provide a simple common functionality between widgets
+// (a main philosophy tenet of solar).
+$s-scale-base1Px: 18;
+$s-scale-base2Px: 21; // bigger than base1
+$s-scale-ratio: 1.33333333333333333333; // more decimals for more precision
+
+
+// Absolute scale
+// base2*scale^3
+$s-scale-d: $s-scale-base2Px
+        * $s-scale-ratio
+        * $s-scale-ratio
+        * $s-scale-ratio
+        + px;
+
+// base1*scale^3
+$s-scale-c: $s-scale-base1Px
+        * $s-scale-ratio
+        * $s-scale-ratio
+        * $s-scale-ratio
+        + px;
+
+// base2*scale^2
+$s-scale-b: $s-scale-base2Px
+        * $s-scale-ratio
+        * $s-scale-ratio
+        + px;
+
+// base1*scale^2
+$s-scale-a: $s-scale-base1Px
+        * $s-scale-ratio
+        * $s-scale-ratio
+        + px;
+
+// base2*scale^1
+$s-scale-1: $s-scale-base2Px
+        * $s-scale-ratio
+        + px;
+
+// base1*scale^1
+$s-scale-2: $s-scale-base1Px
+        * $s-scale-ratio
+        + px;
+
+// base2*scale^0
+$s-scale-3: $s-scale-base2Px
+          + px;
+
+// base1*scale^0
+$s-scale-4: $s-scale-base1Px
+        + px;
+
+// base2/scale^-1
+$s-scale-5: $s-scale-base2Px
+        / $s-scale-ratio
+        + px;
+
+// base1/scale^-1
+$s-scale-6: $s-scale-base1Px
+        / $s-scale-ratio
+        + px;
+
+// base2*scale^-2
+$s-scale-7: $s-scale-base2Px
+        / $s-scale-ratio
+        / $s-scale-ratio
+        + px;
+
+// base1*scale^-2
+$s-scale-8: $s-scale-base1Px
+        / $s-scale-ratio
+        / $s-scale-ratio
+        + px;
+
+
+
+// Relative scale
+// For the same of simplicity, not using exponents
+// In this default scale, each time we increase by "one", we are actually going
+// up by two levels. For example, inheriting a base font size of $s-scale-3 and
+// then using $s-scale-up1, we actually end up at $s-scale-1. Using $s-scale-up1
+// would bring us to $s-scale-b
+//
+// The usefulness of the relative type scale is not just limited to font sizes.
+// These are extremely useful for other elements such as paddings. Sizes like up5
+// have very little usage for font sizes but can be used in paddings relative to
+// the
+$s-scale-up1raw: $s-scale-ratio;
+$s-scale-up2raw: $s-scale-ratio
+        * $s-scale-ratio;
+$s-scale-up3raw: $s-scale-ratio
+        * $s-scale-ratio
+        * $s-scale-ratio;
+$s-scale-up4raw: $s-scale-ratio
+        * $s-scale-ratio
+        * $s-scale-ratio
+        * $s-scale-ratio;
+$s-scale-up5raw: $s-scale-ratio
+        * $s-scale-ratio
+        * $s-scale-ratio
+        * $s-scale-ratio
+        * $s-scale-ratio;
+$s-scale-down1raw: 1
+        / $s-scale-ratio;
+$s-scale-down2raw: 1
+        / $s-scale-ratio
+        / $s-scale-ratio;
+$s-scale-down3raw: 1
+        / $s-scale-ratio
+        / $s-scale-ratio
+        / $s-scale-ratio;
+$s-scale-down4raw: 1
+        / $s-scale-ratio
+        / $s-scale-ratio
+        / $s-scale-ratio
+        / $s-scale-ratio;
+$s-scale-down5raw: 1
+        / $s-scale-ratio
+        / $s-scale-ratio
+        / $s-scale-ratio
+        / $s-scale-ratio
+        / $s-scale-ratio;
+
+$s-scale-up1: $s-scale-up1raw + em;
+$s-scale-up2: $s-scale-up2raw + em;
+$s-scale-up3: $s-scale-up3raw + em;
+$s-scale-up4: $s-scale-up4raw + em;
+$s-scale-up5: $s-scale-up5raw + em;
+$s-scale-down1: $s-scale-down1raw + em;
+$s-scale-down2: $s-scale-down2raw + em;
+$s-scale-down3: $s-scale-down3raw + em;
+$s-scale-down4: $s-scale-down4raw + em;
+$s-scale-down5: $s-scale-down5raw + em;
+
+
+// // tests:
+// .s-scale-debug-absolute {
+//   s-scale-d: $s-scale-d;
+//   s-scale-c: $s-scale-c;
+//   s-scale-b: $s-scale-b;
+//   s-scale-a: $s-scale-a;
+//   s-scale-1: $s-scale-1;
+//   s-scale-2: $s-scale-2;
+//   s-scale-3: $s-scale-3;
+//   s-scale-4: $s-scale-4;
+//   s-scale-5: $s-scale-5;
+//   s-scale-6: $s-scale-6;
+//   s-scale-7: $s-scale-7;
+//   s-scale-8: $s-scale-8;
+// }
+// .s-scale-debug-relative {
+//   s-scale-up5: $s-scale-up5;
+//   s-scale-up4: $s-scale-up4;
+//   s-scale-up3: $s-scale-up3;
+//   s-scale-up2: $s-scale-up2;
+//   s-scale-up1: $s-scale-up1;
+//   s-scale-down1: $s-scale-down1;
+//   s-scale-down2: $s-scale-down2;
+//   s-scale-down3: $s-scale-down3;
+//   s-scale-down4: $s-scale-down4;
+//   s-scale-down5: $s-scale-down5;
+// }
