@@ -13,7 +13,6 @@ import Stellarify from './lib/Stellarify';
 import url from 'url';
 import Header from './components/Header.jsx';
 import Driver from './lib/Driver';
-import images from './images';
 
 let network = {
   horizonUrl: 'https://horizon.stellar.org',
