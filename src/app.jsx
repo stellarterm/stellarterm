@@ -86,7 +86,7 @@ class TermApp extends React.Component {
         <div className="so-back islandBack HomePage__assetList">
           <div className="island">
             <AssetList d={this.props.d} limit={6}></AssetList>
-            <div className="HomePage__seeMore">
+            <div className="AssetListFooter">
               View more assets on the <a href="#markets">market list page</a>.
             </div>
           </div>
