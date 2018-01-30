@@ -33,6 +33,19 @@ directory.addAsset('smartlands.io', {
 });
 
 directory.addAnchor({
+  domain: 'irene.energy',
+  website: 'https://irene.energy',
+  logo: 'irene.energy',
+  color: '#38909a',
+  displayName: 'TELLUS',
+});
+directory.addAsset('irene.energy', {
+  code: 'TELLUS',
+  issuer: 'GBMWAAYKW4FVA57YE6CEAT4XL6LKFXKEBWVPNBRWOLJBF233N2UFKKBW',
+  instructions: 'https://irene.energy',
+});
+
+directory.addAnchor({
   domain: 'stronghold.co',
   website: 'https://stronghold.co',
   logo: 'stronghold.co',
@@ -436,6 +449,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XRP', 'vcbear.net'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['TELLUS', 'irene.energy'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
