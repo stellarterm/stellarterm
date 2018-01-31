@@ -41,7 +41,7 @@ directory.addAnchor({
 });
 directory.addAsset('irene.energy', {
   code: 'TELLUS',
-  issuer: 'GBMWAAYKW4FVA57YE6CEAT4XL6LKFXKEBWVPNBRWOLJBF233N2UFKKBW',
+  issuer: 'GBBRMEXJMS3L7Y3DZZ2AHBD545GZ72OAEHHEFKGZAHHASHGWMHK5P6PL',
   instructions: 'https://irene.energy',
 });
 
