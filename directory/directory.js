@@ -259,19 +259,6 @@ directory.addAsset('flutterwave.com', {
 });
 
 directory.addAnchor({
-  domain: 'gft.network',
-  website: 'https://gft.network/',
-  logo: 'gft.network',
-  color: '#ddaa7b',
-  displayName: 'GFT',
-});
-directory.addAsset('gft.network', {
-  code: 'GFT',
-  issuer: 'GAAZUE4PKMKLA7QC2MPUIUXY7BZK2WUCK7Q5EELSDLK4FE3X4DZTSCKN',
-  instructions: 'https://gft.network/network/treasury#gft-purchase-and-withdrawal',
-});
-
-directory.addAnchor({
   domain: 'collective21.org',
   website: 'https://collective21.org/',
   logo: 'collective21.org',
@@ -521,10 +508,6 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SLT', 'smartlands.io'],
-  counterSelling: ['XLM', 'native'],
-});
-directory.addPair({
-  baseBuying: ['GFT', 'gft.network'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
