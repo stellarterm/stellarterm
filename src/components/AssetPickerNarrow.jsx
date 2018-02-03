@@ -16,7 +16,7 @@ export default class AssetPickerNarrow extends React.Component {
       e.preventDefault();
       let newState = _.assign({}, this.state)
       if (type === 'code') {
-        newState.code = e.target.value.toUpperCase();
+        newState.code = e.target.value;
       } else {
         newState.issuer = e.target.value;
       }
