@@ -98,9 +98,9 @@ export default function Send(driver) {
         // Note: Accounts cant extend trust to themselves, so no further edgecases on this situation
         this.availableAssets[slug] = {
           asset: asset,
-          sendable: true,
+          sendable: true
         };
-        receiverTrusts[slug] = true
+        receiverTrusts[slug] = true;
       } else {
         senderTrusts[slug] = true;
       }
