@@ -9,6 +9,7 @@ import MagicSpoon from '../lib/MagicSpoon';
 import Ticker from './driver/Ticker';
 import Send from './driver/Send';
 import History from './driver/History';
+import Session from './driver/Session';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -32,24 +33,7 @@ function Driver(driverOpts) {
     trigger[eventName] = opts => byol.trigger(eventName, opts);
   });
 
-  // ----- Initializations above this line -----
-  // Only the driver should change the session.
-  this.session = {
-    state: 'out',
-    setupError: false, // Couldn't find account
-    unfundedAccountId: '',
-    inflationDone: false,
-    account: null, // MagicSpoon.Account instance
-  };
-  // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
-  // It shouldn't cause too much of an overhead
-  const forceUpdateAccountOffers = () => {
-    const updateFn = _.get(this.session, 'account.updateOffers');
-    if (updateFn) {
-      updateFn();
-    }
-  };
-
+  this.session = new Session(this);
   this.send = new Send(this);
   this.history = new History(this);
   this.ticker = new Ticker();
@@ -158,7 +142,7 @@ function Driver(driverOpts) {
       }
       this.orderbook = new MagicSpoon.Orderbook(this.Server, baseBuying, counterSelling, () => {
         trigger.orderbook();
-        forceUpdateAccountOffers();
+        this.session.forceUpdateAccountOffers();
       });
     },
   };
