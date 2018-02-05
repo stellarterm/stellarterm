@@ -10,17 +10,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  opacity: 1;
 
-  background: rgba(128,128,128,0.6);
+  transition: all 0.4s;
+  background: rgba(160,160,160,0.4);
   // For the future: (right now, it's behind a browser feature flag that is off by default)
   // backdrop-filter: blur(2px);
   // -webkit-backdrop-filter: blur(2px);
+}
+.GlobalModalBackdrop.is-hidden {
+  pointer-events: none;
+  opacity: 0;
 }
 .GlobalModal {
   padding: 20px;
 
   border-radius: 3px;
-  background: rgba(255,255,255,0.9);
+  background: #fff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
 

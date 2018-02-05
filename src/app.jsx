@@ -184,7 +184,7 @@ class TermApp extends React.Component {
     }
 
     return <div>
-      <GlobalModal></GlobalModal>
+      <GlobalModal d={this.props.d}></GlobalModal>
       <div>
         <Header d={this.props.d} urlParts={urlParts} network={network}></Header>
         {body}

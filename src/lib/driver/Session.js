@@ -84,10 +84,26 @@ export default function Send(driver) {
         this.event.trigger();
       }
     },
-    vote: () => {
-      this.inflationDone = true;
-      MagicSpoon.setInflation(driver.Server, this.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
-      this.event.trigger();
+    sign: () => {
+      return driver.modal.handlers.activate('sign')
+      .then((modalResult) => {
+        console.log(modalResult)
+        return modalResult
+      })
+    },
+    signAndSubmit: async () => {
+      // Either returns a cancel or finish with the transaction-in-flight Promise
+      // (finish only means modal finished; It does NOT mean the transaction succeeded)
+      let signResult = await this.handlers.sign();
+      return signResult;
+    },
+    vote: async () => {
+      let result = await this.handlers.signAndSubmit();
+      if (result.status === 'finish') {
+        this.inflationDone = true;
+        MagicSpoon.setInflation(driver.Server, this.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
+        this.event.trigger();
+      }
     },
     noThanks: () => {
       this.inflationDone = true;
