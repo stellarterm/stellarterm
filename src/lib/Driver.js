@@ -52,11 +52,11 @@ function Driver(driverOpts) {
     vote: () => {
       this.session.inflationDone = true;
       MagicSpoon.setInflation(this.Server, this.session.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
-      trigger.session();
+      this.session.event.trigger();
     },
     noThanks: () => {
       this.session.inflationDone = true;
-      trigger.session();
+      this.session.event.trigger();
     },
     logIn: async (secretKey, opts) => {
       let keypair;
@@ -74,12 +74,12 @@ function Driver(driverOpts) {
       this.session.setupError = false;
       if (this.session.state !== 'unfunded') {
         this.session.state = 'loading';
-        trigger.session();
+        this.session.event.trigger();
       }
 
       try {
         this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
-          trigger.session();
+          this.session.event.trigger();
         });
         this.session.state = 'in';
 
@@ -91,7 +91,7 @@ function Driver(driverOpts) {
         if (inflationDoneDestinations[this.session.account.inflation_destination]) {
           this.session.inflationDone = true;
         }
-        trigger.session();
+        this.session.event.trigger();
       } catch (e) {
         if (e.data) {
           this.session.state = 'unfunded';
@@ -103,12 +103,12 @@ function Driver(driverOpts) {
               this.handlers.logIn(secretKey);
             }
           }, 2000);
-          trigger.session();
+          this.session.event.trigger();
           return;
         }
         this.session.state = 'out';
         this.session.setupError = true;
-        trigger.session();
+        this.session.event.trigger();
       }
     },
     createOffer: async (side, opts) => MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
