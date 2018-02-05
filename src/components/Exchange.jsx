@@ -18,17 +18,17 @@ export default class Exchange extends React.Component {
     this.props.d.unlistenOrderbook(this.listenId);
   }
   render() {
-    if (!this.props.d.orderbook.ready) {
+    if (!this.props.d.orderbook.data.ready) {
       return <Generic title="Loading orderbook">Loading orderbook data from Horizon</Generic>
     }
 
     let thinOrderbookWarning;
-    let orderbook = this.props.d.orderbook;
+    let data = this.props.d.orderbook.data;
     let ticker = this.props.d.ticker;
 
     if (ticker.ready) {
-      let baseSlug = Stellarify.assetToSlug(orderbook.baseBuying);
-      let counterSlug = Stellarify.assetToSlug(orderbook.baseBuying);
+      let baseSlug = Stellarify.assetToSlug(data.baseBuying);
+      let counterSlug = Stellarify.assetToSlug(data.counterSelling);
 
       let aggregateDepth = 0;
 

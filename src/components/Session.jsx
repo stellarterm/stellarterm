@@ -19,9 +19,9 @@ class Session extends React.Component {
     this.listenId = this.props.d.session.event.listen(() => {this.forceUpdate()});
     this.mounted = true;
 
-    KLUDGE: The event listeners are kinda messed up
-    Uncomment if state changes aren't working. But with the new refactor, this dead code should be removed
-    For now, it's just extra insurance
+    // KLUDGE: The event listeners are kinda messed up
+    // Uncomment if state changes aren't working. But with the new refactor, this dead code should be removed
+    // For now, it's just extra insurance
     this.checkLoginStatus = () => {
       if (this.mounted) {
         if (this.props.d.session.state === 'in' || this.props.d.session.state === 'unfunded' ) {

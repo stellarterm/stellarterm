@@ -12,7 +12,8 @@ export default class OfferMakers extends React.Component {
     // this.props.d.unlistenSession(this.listenOrderbookId);
   }
   render() {
-    if (!this.props.d.orderbook.ready) {
+    if (!this.props.d.orderbook.data.ready) {
+      console.log(this.props.d.orderbook.data.ready)
       return <div>Loading</div>;
     }
 

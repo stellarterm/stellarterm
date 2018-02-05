@@ -10,6 +10,7 @@ import Ticker from './driver/Ticker';
 import Send from './driver/Send';
 import History from './driver/History';
 import Session from './driver/Session';
+import Orderbook from './driver/Orderbook';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -34,14 +35,10 @@ function Driver(driverOpts) {
   });
 
   this.session = new Session(this);
+  this.orderbook = new Orderbook(this);
   this.send = new Send(this);
   this.history = new History(this);
   this.ticker = new Ticker();
-
-  // TODO: Possible (rare) race condition since ready: false can mean either: 1. no pair picked, 2. Loading orderbook from horizon
-  this.orderbook = {
-    ready: false,
-  };
 
   window.driver = this;
   window.view = (accountId) => {
@@ -49,15 +46,15 @@ function Driver(driverOpts) {
   }
 
   this.handlers = {
-    createOffer: async (side, opts) => MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
-      baseBuying: this.orderbook.baseBuying,
-      counterSelling: this.orderbook.counterSelling,
-    })),
-    addTrust: async (code, issuer) =>
-      // For simplicity, currently only adds max trust line
-       MagicSpoon.changeTrust(this.Server, this.session.account, {
-         asset: new StellarSdk.Asset(code, issuer),
-       }),
+    // createOffer: async (side, opts) => MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
+    //   baseBuying: this.orderbook.baseBuying,
+    //   counterSelling: this.orderbook.counterSelling,
+    // })),
+    // addTrust: async (code, issuer) =>
+    //   // For simplicity, currently only adds max trust line
+    //    MagicSpoon.changeTrust(this.Server, this.session.account, {
+    //      asset: new StellarSdk.Asset(code, issuer),
+    //    }),
     removeTrust: async (code, issuer) => await MagicSpoon.changeTrust(this.Server, this.session.account, {
       asset: new StellarSdk.Asset(code, issuer),
       limit: '0',
@@ -68,21 +65,21 @@ function Driver(driverOpts) {
         price,
       });
     },
-    setOrderbook: (baseBuying, counterSelling) => {
-      // If orderbook is already set, then this is a no-op
-      // Expects baseBuying and counterSelling to StellarSdk.Asset objects
-      if (this.orderbook.ready && this.orderbook.baseBuying.equals(baseBuying) && this.orderbook.counterSelling.equals(counterSelling)) {
-        return;
-      }
+    // setOrderbook: (baseBuying, counterSelling) => {
+    //   // If orderbook is already set, then this is a no-op
+    //   // Expects baseBuying and counterSelling to StellarSdk.Asset objects
+    //   if (this.orderbook.ready && this.orderbook.baseBuying.equals(baseBuying) && this.orderbook.counterSelling.equals(counterSelling)) {
+    //     return;
+    //   }
 
-      if (this.orderbook.close) {
-        this.orderbook.close();
-      }
-      this.orderbook = new MagicSpoon.Orderbook(this.Server, baseBuying, counterSelling, () => {
-        trigger.orderbook();
-        this.session.forceUpdateAccountOffers();
-      });
-    },
+    //   if (this.orderbook.close) {
+    //     this.orderbook.close();
+    //   }
+    //   this.orderbook = new MagicSpoon.Orderbook(this.Server, baseBuying, counterSelling, () => {
+    //     trigger.orderbook();
+    //     this.session.forceUpdateAccountOffers();
+    //   });
+    // },
   };
 }
 

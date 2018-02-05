@@ -18,7 +18,7 @@ export default class ManageOffers extends React.Component {
     if (this.props.d.session.state !== 'in') {
       return <div className="island__paddedContent"><a href="#account">Log in</a> to see your open offers</div>;
     }
-    let orderbook = this.props.d.orderbook;
+    let orderbook = this.props.d.orderbook.data;
 
     let rectifiedBuyOffers = [];
     let rectifiedSellOffers = [];

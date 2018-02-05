@@ -93,6 +93,12 @@ export default function Send(driver) {
       this.inflationDone = true;
       this.event.trigger();
     },
+    addTrust: async (code, issuer) => {
+      // For simplicity, currently only adds max trust line
+      MagicSpoon.changeTrust(this.Server, this.session.account, {
+        asset: new StellarSdk.Asset(code, issuer),
+      });
+    },
   };
 }
 

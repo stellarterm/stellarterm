@@ -212,7 +212,6 @@ const MagicSpoon = {
         this.counterSelling = counterSelling;
         this.ready = true;
         onUpdate();
-
       });
     let streamingOrderbookClose = Server.orderbook(baseBuying, counterSelling)
       .stream({

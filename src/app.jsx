@@ -147,16 +147,16 @@ class TermApp extends React.Component {
           let baseBuying = Stellarify.parseAssetSlug(urlParts[1]);
           let counterSelling = Stellarify.parseAssetSlug(urlParts[2]);
 
-          this.d.handlers.setOrderbook(baseBuying, counterSelling);
+          this.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
           body = <Exchange d={this.d}></Exchange>
         } catch (e) {
           console.error(e);
           body = <Generic title="Pick a market">Exchange url was invalid. To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
         }
       } else {
-        if (this.d.orderbook.ready) {
+        if (this.d.orderbook.data.ready) {
           setTimeout(() => {
-            let newUrl = Stellarify.pairToExchangeUrl(this.d.orderbook.baseBuying, this.d.orderbook.counterSelling);
+            let newUrl = Stellarify.pairToExchangeUrl(this.d.orderbook.data.baseBuying, this.d.orderbook.data.counterSelling);
             history.replaceState(null, null, '#' + newUrl);
             this.setState({
               url: newUrl,
@@ -168,7 +168,7 @@ class TermApp extends React.Component {
           let baseBuying = new StellarSdk.Asset('MOBI', 'GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH');
           let counterSelling = StellarSdk.Asset.native();
 
-          this.d.handlers.setOrderbook(baseBuying, counterSelling);
+          this.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
           setTimeout(() => {
             let newUrl = Stellarify.pairToExchangeUrl(baseBuying, counterSelling);
             history.replaceState(null, null, '#' + newUrl);
