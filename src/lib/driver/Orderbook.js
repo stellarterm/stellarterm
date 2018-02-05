@@ -19,8 +19,8 @@ export default function Send(driver) {
 
   this.handlers = {
     createOffer: async (side, opts) => MagicSpoon.createOffer(driver.Server, driver.session.account, side, _.assign(opts, {
-      baseBuying: this.baseBuying,
-      counterSelling: this.counterSelling,
+      baseBuying: this.data.baseBuying,
+      counterSelling: this.data.counterSelling,
     })),
     addTrust: async (code, issuer) =>
       // For simplicity, currently only adds max trust line

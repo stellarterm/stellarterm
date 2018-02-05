@@ -6,13 +6,10 @@ import _ from 'lodash';
 export default class ManageOffers extends React.Component {
   constructor(props) {
     super(props);
-    this.listenSessionId = props.d.listenSession(() => {
-      this.forceUpdate();
-    });
+    this.listenId = this.props.d.session.event.listen(() => {this.forceUpdate()});
   }
   componentWillUnmount() {
-    // Uh, why does this break the login flow?
-    // this.props.d.unlistenSession(this.listenSessionId);
+    this.props.d.session.event.unlisten(this.listenId);
   }
   render() {
     if (this.props.d.session.state !== 'in') {
