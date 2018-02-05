@@ -49,15 +49,6 @@ function Driver(driverOpts) {
   }
 
   this.handlers = {
-    vote: () => {
-      this.session.inflationDone = true;
-      MagicSpoon.setInflation(this.Server, this.session.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
-      this.session.event.trigger();
-    },
-    noThanks: () => {
-      this.session.inflationDone = true;
-      this.session.event.trigger();
-    },
     createOffer: async (side, opts) => MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
       baseBuying: this.orderbook.baseBuying,
       counterSelling: this.orderbook.counterSelling,

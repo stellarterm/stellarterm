@@ -84,6 +84,15 @@ export default function Send(driver) {
         this.event.trigger();
       }
     },
+    vote: () => {
+      this.inflationDone = true;
+      MagicSpoon.setInflation(driver.Server, this.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
+      this.event.trigger();
+    },
+    noThanks: () => {
+      this.inflationDone = true;
+      this.event.trigger();
+    },
   };
 }
 
