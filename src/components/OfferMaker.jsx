@@ -127,7 +127,9 @@ export default class OfferMaker extends React.Component {
         let errorType;
         console.log(result)
         try {
-          if (result.data.extras.result_codes.operations[0] === 'buy_not_authorized') {
+          if (result.data === undefined) {
+            errorType = 'clientError - ' + result.message;
+          } else if (result.data.extras.result_codes.operations[0] === 'buy_not_authorized') {
             errorType = 'buyNotAuthorized';
           } else if (result.data.extras.result_codes.operations[0] === 'op_low_reserve') {
             errorType = 'lowReserve';
