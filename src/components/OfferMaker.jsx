@@ -108,44 +108,54 @@ export default class OfferMaker extends React.Component {
         amount: this.state.amount,
         total: this.state.total,
       })
-      .then(result => {
-        this.setState({
-          buttonState: 'ready',
-          successMessage: 'Offer successfully created',
-        })
-      })
-      .catch(result => {
-        let errorType;
-        console.log(result)
-        try {
-          if (result.data === undefined) {
-            errorType = 'clientError - ' + result.message;
-          } else if (result.data.extras.result_codes.operations[0] === 'buy_not_authorized') {
-            errorType = 'buyNotAuthorized';
-          } else if (result.data.extras.result_codes.operations[0] === 'op_low_reserve') {
-            errorType = 'lowReserve';
-          } else {
-            errorType = result.data.extras.result_codes.operations[0];
-          }
-        } catch(e) {
-          console.error(e)
-          errorType = 'unknownResponse - ' + e.message;
-        }
-        this.setState({
-          buttonState: 'ready',
-          errorMessage: true,
-          errorType,
-        })
-      })
+      .then(signAndSubmitResult => {
+        if (signAndSubmitResult.status === 'finish') {
+          this.setState({
+            valid: false,
+            buttonState: 'pending',
+            // amount: '',
+            // total: '',
+            successMessage: '',
+            errorMessage: false,
+          });
 
-      this.setState({
-        valid: false,
-        buttonState: 'pending',
-        amount: '',
-        total: '',
-        successMessage: '',
-        errorMessage: false,
-      });
+          signAndSubmitResult.serverResult
+          .then(result => {
+            this.setState({
+              buttonState: 'ready',
+              successMessage: 'Offer successfully created',
+            })
+          })
+          .catch(result => {
+            let errorType;
+            try {
+              if (result.data === undefined) {
+                errorType = 'clientError - ' + result.message;
+              } else if (result.data && result.data.extras) {
+                if (result.data.extras.result_codes.operations === undefined) {
+                  errorType = result.data.extras.result_codes.transaction;
+                } else {
+                  // Common errors:
+                  // errorType = 'buy_not_authorized'
+                  // errorType = 'op_low_reserve'
+                  errorType = result.data.extras.result_codes.operations[0];
+                }
+              } else {
+                errorType = 'unknownResponse - ' + e.message;
+              }
+            } catch(e) {
+              console.error(e)
+              errorType = 'unknownResponse - ' + e.message;
+            }
+
+            this.setState({
+              buttonState: 'ready',
+              errorMessage: true,
+              errorType,
+            })
+          })
+        }
+      })
     }
   }
   render() {
@@ -226,11 +236,11 @@ export default class OfferMaker extends React.Component {
 
     let error;
     if (this.state.errorMessage) {
-      if (this.state.errorType === 'buyNotAuthorized') {
+      if (this.state.errorType === 'buy_not_authorized') {
         error = <div className="s-alert s-alert--alert OfferMaker__message">
           Unable to create offer because the issuer has not authorized you to trade this asset. To fix this issue, check with the issuer's website.<br /><br />NOTE: Some issuers are restrictive in who they authorize.
         </div>;
-      } else if (this.state.errorType === 'lowReserve') {
+      } else if (this.state.errorType === 'op_low_reserve') {
         error = <div className="s-alert s-alert--alert OfferMaker__message">Unable to create offer because the account does not have enough lumens to meet the <a href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance" target="_blank" rel="nofollow noopener noreferrer">minimum balance</a>. For more info, see <a href="#account">the minimum balance section</a> of the account page.<br /><br />Possible solutions:
           <ul className="OfferMaker__errorList">
             <li>Send 11 lumens to your account</li>
@@ -238,10 +248,13 @@ export default class OfferMaker extends React.Component {
             <li>Decrease your minimum balance by <a href="#account/addTrust">unaccepting an asset</a></li>
           </ul>
         </div>;
+      } else if (this.state.errorType === 'tx_bad_seq') {
+        error = <div className="s-alert s-alert--alert OfferMaker__message">
+          Transaction failed because sequence got out of sync. Please reload StellarTerm and try again.
+        </div>;
       } else {
-        error = <div className="s-alert s-alert--alert OfferMaker__message">Failed to create offer. Possible reasons why:
+        error = <div className="s-alert s-alert--alert OfferMaker__message">Failed to create offer.
           <ul className="OfferMaker__errorList">
-            <li>Not enough funds to complete order.</li>
             <li>Error code: {this.state.errorType}</li>
           </ul>
         </div>;

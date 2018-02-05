@@ -22,7 +22,6 @@ function Driver(driverOpts) {
   this.ticker = new Ticker();
   this.modal = new Modal(this);
 
-  window.driver = this;
   window.view = (accountId) => {
     this.session.handlers.logIn('',{publicKey:accountId})
   }

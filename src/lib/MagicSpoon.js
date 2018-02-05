@@ -303,7 +303,7 @@ const MagicSpoon = {
   // opts.price -- Exchange ratio selling/buying
   // opts.amount -- Here, it's relative to the base (JS-sdk does: Total amount selling)
   // opts.type -- String of either 'buy' or 'sell' (relative to base currency)
-  createOffer(Server, spoonAccount, side, opts) {
+  buildTxCreateOffer(Server, spoonAccount, side, opts) {
     let sdkBuying;
     let sdkSelling;
     let sdkPrice;
@@ -337,14 +337,8 @@ const MagicSpoon = {
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.manageOffer(operationOpts))
       .build();
-    spoonAccount.sign(transaction);
-    return Server.submitTransaction(transaction)
-      .then(res => {
-        console.log('Offer create success');
-        console.log(res)
-        spoonAccount.updateOffers(); // Just to be doubly sure
-        return;
-      })
+
+    return transaction;
   },
   async sendPayment(Server, spoonAccount,  opts) {
     // sendPayment will detect if the account is a new account. If so, then it will

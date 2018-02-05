@@ -111,13 +111,15 @@ export default function Send(driver) {
         let serverResult = driver.Server.submitTransaction(tx).then((transactionResult) => {
           console.log('Confirmed tx\nhash:', tx.hash().toString('hex'))
           return transactionResult;
-        }).catch((error) => {
-          console.log('Failed tx\nhash:', tx.hash().toString('hex'))
-          console.log(error);
-          throw new Error(error);
         })
+        .catch(error => {
+          console.log('Failed tx\nhash:', tx.hash().toString('hex'))
+          throw error;
+        })
+
         return {
           status: 'finish',
+          serverResult: serverResult,
         }
       }
       return signResult;
@@ -145,10 +147,13 @@ export default function Send(driver) {
       asset: new StellarSdk.Asset(code, issuer),
       limit: '0',
     }),
-    createOffer: async (side, opts) => MagicSpoon.createOffer(driver.Server, this.account, side, _.assign(opts, {
-      baseBuying: driver.orderbook.data.baseBuying,
-      counterSelling: driver.orderbook.data.counterSelling,
-    })),
+    createOffer: async (side, opts) => {
+      let tx = MagicSpoon.buildTxCreateOffer(driver.Server, this.account, side, _.assign(opts, {
+        baseBuying: driver.orderbook.data.baseBuying,
+        counterSelling: driver.orderbook.data.counterSelling,
+      }));
+      return await this.handlers.signAndSubmit(tx);
+    },
     removeOffer: async offerId => MagicSpoon.removeOffer(driver.Server, this.account, offerId),
   };
 }
