@@ -13,10 +13,10 @@ export default class OfferMaker extends React.Component {
       let state = {};
 
       // Initialize price
-      if (this.props.side === 'buy' && this.props.d.orderbook.bids.length > 0) {
-        state.price = new BigNumber(this.props.d.orderbook.bids[0].price).toString() // Get rid of extra 0s
-      } else if (this.props.d.orderbook.asks.length > 0) { // Proptypes validation makes sure this is sell
-        state.price = new BigNumber(this.props.d.orderbook.asks[0].price).toString() // Get rid of extra 0s
+      if (this.props.side === 'buy' && this.props.d.orderbook.data.bids.length > 0) {
+        state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString() // Get rid of extra 0s
+      } else if (this.props.d.orderbook.data.bids.length > 0) { // Proptypes validation makes sure this is sell
+        state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString() // Get rid of extra 0s
       }
 
       state.errorType = '';
@@ -33,27 +33,18 @@ export default class OfferMaker extends React.Component {
     }
   }
   componentWillUnmount() {
-    // this.props.d.unlistenSession(this.listenSessionId);
-    // TODO: fix the unlistening
-    this.props.d.unlistenOrderbook(this.listenOrderbookId);
-    this.props.d.unlistenOrderbook(this.listenOrderbookPricePickId);
+    this.props.d.orderbook.event.unlisten(this.listenId);
   }
   constructor(props) {
     super(props);
     this.initialized = false;
 
-    this.listenSessionId = props.d.listenSession(() => {
-      this.forceUpdate();
+    this.listenId = this.props.d.orderbook.event.listen((data) => {
+      if (data && data.pickPrice) {
+        this.updateState('price', data.pickPrice);
+      }
     });
 
-    this.listenOrderbookId = props.d.listenOrderbook(() => {
-      this.setState(this.initialize());
-      this.forceUpdate();
-    });
-
-    this.listenOrderbookPricePickId = this.props.d.listenOrderbookPricePick(opts => {
-      this.updateState('price', opts.price);
-    });
 
     this.state = {
       valid: false,
@@ -67,7 +58,7 @@ export default class OfferMaker extends React.Component {
       successMessage: '',
     };
 
-    if (this.props.d.orderbook.ready) {
+    if (this.props.d.orderbook.data.ready) {
       this.state = Object.assign(this.state, this.initialize());
     }
 
@@ -112,7 +103,7 @@ export default class OfferMaker extends React.Component {
     this.handleSubmit = (e) => {
       // TODO: Hook up with driver
       e.preventDefault();
-      props.d.handlers.createOffer(props.side, {
+      props.d.orderbook.handlers.createOffer(props.side, {
         price: this.state.price,
         amount: this.state.amount,
         total: this.state.total,
@@ -127,7 +118,9 @@ export default class OfferMaker extends React.Component {
         let errorType;
         console.log(result)
         try {
-          if (result.data.extras.result_codes.operations[0] === 'buy_not_authorized') {
+          if (result.data === undefined) {
+            errorType = 'clientError - ' + result.message;
+          } else if (result.data.extras.result_codes.operations[0] === 'buy_not_authorized') {
             errorType = 'buyNotAuthorized';
           } else if (result.data.extras.result_codes.operations[0] === 'op_low_reserve') {
             errorType = 'lowReserve';
@@ -156,7 +149,7 @@ export default class OfferMaker extends React.Component {
     }
   }
   render() {
-    if (!this.props.d.orderbook.ready) {
+    if (!this.props.d.orderbook.data.ready) {
       return <div>Loading</div>;
     }
 
@@ -165,8 +158,8 @@ export default class OfferMaker extends React.Component {
       capitalizedSide = 'Sell';
     }
 
-    let baseAssetName = this.props.d.orderbook.baseBuying.getCode();
-    let counterAssetName = this.props.d.orderbook.counterSelling.getCode();
+    let baseAssetName = this.props.d.orderbook.data.baseBuying.getCode();
+    let counterAssetName = this.props.d.orderbook.data.counterSelling.getCode();
 
     let title;
     if (this.props.side === 'buy') {
@@ -179,14 +172,14 @@ export default class OfferMaker extends React.Component {
     let hasAllTrust = false;
     let insufficientBalanceMessage;
     if (this.props.d.session.state === 'in') {
-      let baseBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.baseBuying);
-      let counterBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.counterSelling);
+      let baseBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.data.baseBuying);
+      let counterBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.data.counterSelling);
 
       if (baseBalance !== null && counterBalance !== null) {
         hasAllTrust = true;
       }
       let targetBalance = this.props.side === 'buy' ? counterBalance : baseBalance;
-      let targetAsset = this.props.side === 'buy' ? this.props.d.orderbook.counterSelling : this.props.d.orderbook.baseBuying;
+      let targetAsset = this.props.side === 'buy' ? this.props.d.orderbook.data.counterSelling : this.props.d.orderbook.data.baseBuying;
 
       if (targetBalance) {
         let inputSpendAmount = this.props.side === 'buy' ? this.state.total : this.state.amount;

@@ -10,25 +10,23 @@ import Stellarify from '../lib/Stellarify';
 export default class Exchange extends React.Component {
   constructor(props) {
     super(props);
-    this.listenId = this.props.d.listenOrderbook(() => {
-      this.forceUpdate();
-    });
+    this.unsub = this.props.d.orderbook.event.sub(() => {this.forceUpdate()});
   }
   componentWillUnmount() {
-    this.props.d.unlistenOrderbook(this.listenId);
+    this.unsub();
   }
   render() {
-    if (!this.props.d.orderbook.ready) {
+    if (!this.props.d.orderbook.data.ready) {
       return <Generic title="Loading orderbook">Loading orderbook data from Horizon</Generic>
     }
 
     let thinOrderbookWarning;
-    let orderbook = this.props.d.orderbook;
+    let data = this.props.d.orderbook.data;
     let ticker = this.props.d.ticker;
 
     if (ticker.ready) {
-      let baseSlug = Stellarify.assetToSlug(orderbook.baseBuying);
-      let counterSlug = Stellarify.assetToSlug(orderbook.baseBuying);
+      let baseSlug = Stellarify.assetToSlug(data.baseBuying);
+      let counterSlug = Stellarify.assetToSlug(data.counterSelling);
 
       let aggregateDepth = 0;
 

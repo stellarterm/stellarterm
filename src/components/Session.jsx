@@ -16,38 +16,34 @@ import HistoryView from './Session/HistoryView.jsx';
 class Session extends React.Component {
   constructor(props) {
     super(props);
-    this.listenId = this.props.d.listenSession(() => {
-      this.forceUpdate();
-    });
+    this.listenId = this.props.d.session.event.listen(() => {this.forceUpdate()});
     this.mounted = true;
 
     // KLUDGE: The event listeners are kinda messed up
+    // Uncomment if state changes aren't working. But with the new refactor, this dead code should be removed
+    // For now, it's just extra insurance
     this.checkLoginStatus = () => {
       if (this.mounted) {
         if (this.props.d.session.state === 'in' || this.props.d.session.state === 'unfunded' ) {
           this.forceUpdate();
-          setTimeout(this.checkLoginStatus, 500)
+          setTimeout(this.checkLoginStatus, 2000)
         } else {
-          setTimeout(this.checkLoginStatus, 50)
+          setTimeout(this.checkLoginStatus, 100)
         }
       }
     }
-    setTimeout(this.checkLoginStatus, 50)
-
-    // Static functions from driver
-    this.handlers = this.props.d.handlers;
-    this.logIn = this.props.d.handlers.logIn;
+    setTimeout(this.checkLoginStatus, 100)
   }
   componentWillUnmount() {
     this.mounted = false;
-    this.props.d.unlistenSession(this.listenId);
+    this.props.d.session.event.unlisten(this.listenId);
   }
   render() {
     let d = this.props.d;
     let state = d.session.state;
     let setupError = d.session.setupError;
     if (state === 'out') {
-      return <LoginForm setupError={setupError} handler={this.logIn}></LoginForm>
+      return <LoginForm setupError={setupError} d={d}></LoginForm>
     } else if (state === 'unfunded') {
       return <Generic title={'Account is unfunded'}><Loading darker={true}>
         Send at least 1 lumens to this account to activate it.
@@ -78,8 +74,8 @@ class Session extends React.Component {
               <br />
               By pressing "continue", your account will vote for the StellarTerm inflation account. Thank you for your support!{currentVoteNote}
               <div className="Session__inflation__next">
-                <button className="s-button" onClick={d.handlers.vote}>Continue</button>
-                <a className="Session__inflation__next__noThanks" onClick={d.handlers.noThanks}>No thanks</a>
+                <button className="s-button" onClick={d.session.handlers.vote}>Continue</button>
+                <a className="Session__inflation__next__noThanks" onClick={d.session.handlers.noThanks}>No thanks</a>
               </div>
             </div>
           </Generic>

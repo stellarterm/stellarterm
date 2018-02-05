@@ -3,12 +3,8 @@ const React = window.React = require('react');
 export default class Header extends React.Component {
   constructor(props) {
     super(props);
-    this.listenId = this.props.d.listenSession(() => {
-      this.forceUpdate();
-    });
   }
   componentWillUnmount() {
-    this.props.d.unlistenSession(this.listenId);
   }
   render() {
     let networkBar;

@@ -8,27 +8,23 @@ import _ from 'lodash';
 export default class OfferTables extends React.Component {
   constructor(props) {
     super(props);
-    this.listenOrderbookId = props.d.listenOrderbook(() => {
-      this.forceUpdate();
-    });
   }
   componentWillUnmount() {
-    // this.props.d.unlistenSession(this.listenOrderbookId);
   }
   render() {
-    if (!this.props.d.orderbook.ready) {
+    if (!this.props.d.orderbook.data.ready) {
       return <div>Loading</div>;
     }
 
-    let orderbook = this.props.d.orderbook;
+    let data = this.props.d.orderbook.data;
 
-    let baseLabel = orderbook.baseBuying.getCode();
-    let counterLabel = orderbook.counterSelling.getCode();
+    let baseLabel = data.baseBuying.getCode();
+    let counterLabel = data.counterSelling.getCode();
 
     let buyDepth = 0;
     let cappedBuyDepth = 0;
     let buyBestPrice;
-    let buys = _.map(orderbook.bids, (bid) => {
+    let buys = _.map(data.bids, (bid) => {
       // Only add to the depth if the offer is within 20% of the best offer (closest to the spread)
       if (!buyBestPrice) {
         buyBestPrice = Number(bid.price);
@@ -49,7 +45,7 @@ export default class OfferTables extends React.Component {
     let sellDepth = 0;
     let cappedSellDepth = 0;
     let sellBestPrice;
-    let sells = _.map(orderbook.asks, (ask) => {
+    let sells = _.map(data.asks, (ask) => {
       if (!sellBestPrice) {
         sellBestPrice = Number(ask.price);
       }

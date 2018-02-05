@@ -113,64 +113,6 @@ class TermApp extends React.Component {
       </div>
     } else if (urlParts[0] === 'download') {
       body = <Download />
-    } else if (urlParts[0] === 'sale') {
-        body = <div className="Sale">
-          <div className="Sale__intro so-back">
-            <div className="Sale__intro__content so-chunk">
-              <p>StellarTerm is the most popular trading client on the Stellar network.
-              <br />The author of StellarTerm is looking to sell this domain.</p>
-            </div>
-          </div>
-          <div className="island">
-            <div className="Sale__section">
-              <h2>What you get</h2>
-              <p>
-                <ul>
-                  <li>StellarTerm.com domain name</li>
-                  <li>Social media accounts for Twitter and Facebook</li>
-                  <li>GitHub organization: github.com/stellarterm</li>
-                  <li>Relevant AWS items</li>
-                </ul>
-              </p>
-            </div>
-            <div className="Sale__section">
-              <h2>Analytics</h2>
-              <p>StellarTerm currently uses Cloudflare. Here is a screenshot from the analytics dashboard. This is just for informational purposes and is not a guarantee that StellarTerm will see this many users in the future.</p>
-              <br />
-              <img alt="StellarTerm" className="Sale__analytics" src="https://user-images.githubusercontent.com/5728307/35127936-19f80e40-fc69-11e7-8cd0-dee25270e822.png" />
-            </div>
-            <div className="Sale__section">
-              <h2>Currently open source</h2>
-              <p>The code behind StellarTerm is currently open source and licensed under the Apache-2.0 license. Anyone can use and make modifications to the code however they like.</p>
-              <p>The purchaser has the right to keep source changes private. The purchaser may also completely change the website.</p>
-            </div>
-            <div className="Sale__section">
-              <h2>Details</h2>
-              <p>
-                <ul>
-                  <li>Must be a known entity in the cryptocurrency space. I will not sell this site to a scammer.</li>
-                  <li>Serious offers only. Minimum is $100,000.</li>
-                  <li>Other details are negotiable.</li>
-                </ul>
-              </p>
-            </div>
-            <div className="Sale__section">
-              <h2>Stipulations</h2>
-              <p>
-                <ul>
-                  <li>Developer support is NOT included. (Negotiable)</li>
-                  <li>The sale does not come with any warranty other than successful transfer of what is listed under "What you get".</li>
-                  <li>You must maintain clear indication that the ownership is different.</li>
-                  <li>Source code not for sale, but is still Apache-2.0. You get rights to copy, modify, and redistribute under any software license.</li>
-                </ul>
-              </p>
-            </div>
-            <div className="Sale__section">
-              <h2>Contact</h2>
-              <p>The contact information for the seller is available at <a href="https://iris.li/">https://iris.li/</a></p>
-            </div>
-          </div>
-        </div>
     } else if (urlParts[0] === 'testnet') {
       if (network.isTestnet) {
         body = <Generic title="Test network">
@@ -205,16 +147,16 @@ class TermApp extends React.Component {
           let baseBuying = Stellarify.parseAssetSlug(urlParts[1]);
           let counterSelling = Stellarify.parseAssetSlug(urlParts[2]);
 
-          this.d.handlers.setOrderbook(baseBuying, counterSelling);
+          this.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
           body = <Exchange d={this.d}></Exchange>
         } catch (e) {
           console.error(e);
           body = <Generic title="Pick a market">Exchange url was invalid. To begin, go to the <a href="#markets">market list page</a> and pick a trading pair.</Generic>
         }
       } else {
-        if (this.d.orderbook.ready) {
+        if (this.d.orderbook.data.ready) {
           setTimeout(() => {
-            let newUrl = Stellarify.pairToExchangeUrl(this.d.orderbook.baseBuying, this.d.orderbook.counterSelling);
+            let newUrl = Stellarify.pairToExchangeUrl(this.d.orderbook.data.baseBuying, this.d.orderbook.data.counterSelling);
             history.replaceState(null, null, '#' + newUrl);
             this.setState({
               url: newUrl,
@@ -226,7 +168,7 @@ class TermApp extends React.Component {
           let baseBuying = new StellarSdk.Asset('MOBI', 'GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH');
           let counterSelling = StellarSdk.Asset.native();
 
-          this.d.handlers.setOrderbook(baseBuying, counterSelling);
+          this.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
           setTimeout(() => {
             let newUrl = Stellarify.pairToExchangeUrl(baseBuying, counterSelling);
             history.replaceState(null, null, '#' + newUrl);

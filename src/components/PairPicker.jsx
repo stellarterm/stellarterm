@@ -5,20 +5,16 @@ import AssetPair from './AssetPair.jsx';
 export default class PairPicker extends React.Component {
   constructor(props) {
     super(props);
-    this.listenOrderbookId = this.props.d.listenOrderbook(() => {
-      this.forceUpdate();
-    });
   }
   componentWillUnmount() {
-    this.props.d.unlistenSession(this.listenOrderbookId);
   }
   render() {
-    if (!this.props.d.orderbook.ready) {
+    if (!this.props.d.orderbook.data.ready) {
       return <div>loading</div>
     }
 
-    let baseBuying = this.props.d.orderbook.baseBuying;
-    let counterSelling = this.props.d.orderbook.counterSelling;
+    let baseBuying = this.props.d.orderbook.data.baseBuying;
+    let counterSelling = this.props.d.orderbook.data.counterSelling;
 
     return (
       <div className="island">

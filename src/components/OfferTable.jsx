@@ -42,7 +42,7 @@ export default function OfferTable(props) {
             className="OfferTable__row"
             key={offer.key}
             style={rowStyle}
-            onClick={() => props.d.handlers.orderbookPricePick(offer.price)}>
+            onClick={() => props.d.orderbook.handlers.pickPrice(offer.price)}>
             <td className="OfferTable__row__item">{Printify.lightenZeros(offer.price, priceNumDecimals)}</td>
             <td className="OfferTable__row__item">{Printify.lightenZeros(offer.base)}</td>
             <td className="OfferTable__row__item">{Printify.lightenZeros(offer.counter)}</td>

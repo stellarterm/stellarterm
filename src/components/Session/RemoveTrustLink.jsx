@@ -12,7 +12,7 @@ export default class RemoveTrustLink extends React.Component {
     // Please check the code for the BalancesTable component.
     this.handleRemoveTrust = e => {
       e.preventDefault();
-      this.props.d.handlers.removeTrust(this.props.balance.code, this.props.balance.issuer)
+      this.props.d.session.handlers.removeTrust(this.props.balance.code, this.props.balance.issuer)
       .then(res => {
         console.log('Successfully removed trust', res);
       })
