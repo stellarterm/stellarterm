@@ -85,17 +85,7 @@ export default class Inflation extends React.Component {
 
     let state = d.send.state;
     return <div className="Inflation">
-      <Generic title="Inflation in the Stellar Network">
-        <p>The Stellar network has a system called "inflation" in which new coins are issued every week. Accounts can <strong>vote</strong> for which accounts get these new coins. Accounts that receive more than about 50 million XLM worth of votes get to receive inflation.</p>
-
-        <p>Read more about <a href="https://www.stellar.org/developers/guides/concepts/inflation.html" target="_blank">inflation on the Stellar developer docs</a>.</p>
-
-        <div className="Generic__divider"></div>
-        <p>Some community members have come together to create inflation pools. You can search the web to find these inflation pools.</p>
-
-        <p><strong>WARNING</strong>: Do not give your secret key to any inflation pools. They <strong>NEVER</strong> need your secret key for any reason. If they ask for your secret key, it is a scam trying to steal your money.</p>
-      </Generic>
-      <Generic title="Set your inflation destination" noTopPadding>
+      <Generic title="Set your inflation destination">
         {inflationDestInfo}
         <div className="Generic__divider"></div>
 
