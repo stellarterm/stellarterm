@@ -1,6 +1,7 @@
 const React = window.React = require('react');
 const ReactDOM = require('react-dom');
 const mountNode = document.getElementById('app');
+import GlobalModal from './components/GlobalModal.jsx';
 import NotFound from './components/NotFound.jsx';
 import AssetList from './components/AssetList.jsx';
 import Markets from './components/Markets.jsx';
@@ -183,8 +184,11 @@ class TermApp extends React.Component {
     }
 
     return <div>
-      <Header d={this.props.d} urlParts={urlParts} network={network}></Header>
-      {body}
+      <GlobalModal></GlobalModal>
+      <div>
+        <Header d={this.props.d} urlParts={urlParts} network={network}></Header>
+        {body}
+      </div>
     </div>;
 
   }

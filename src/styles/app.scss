@@ -16,10 +16,14 @@ body {
   font-size: $s-scale-4;
   min-width: 1052px;
 }
+#app {
+  position: relative;
+}
 
 @import 'island';
 @import 'lightenZeros';
 
+@import 'GlobalModal';
 @import 'Header';
 @import 'subNav';
 @import 'HomePage';
