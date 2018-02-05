@@ -35,7 +35,7 @@ export default class LoginForm extends React.Component {
           invalidKey: true,
         })
       }
-      this.props.handler(this.state.secretInput);
+      this.props.d.session.handlers.logIn(this.state.secretInput);
     }
     this.handleGenerate = event => {
       let keypair = StellarSdk.Keypair.random();

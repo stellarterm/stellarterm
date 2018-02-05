@@ -45,7 +45,7 @@ function Driver(driverOpts) {
 
   window.driver = this;
   window.view = (accountId) => {
-    this.handlers.logIn('',{publicKey:accountId})
+    this.session.handlers.logIn('',{publicKey:accountId})
   }
 
   this.handlers = {
@@ -57,59 +57,6 @@ function Driver(driverOpts) {
     noThanks: () => {
       this.session.inflationDone = true;
       this.session.event.trigger();
-    },
-    logIn: async (secretKey, opts) => {
-      let keypair;
-      try {
-        if (opts && opts.publicKey !== undefined) {
-          keypair = StellarSdk.Keypair.fromPublicKey(opts.publicKey);
-        } else {
-          keypair = StellarSdk.Keypair.fromSecret(secretKey);
-        }
-      } catch (e) {
-        console.log('Invalid secret key! We should never reach here!');
-        console.error(e);
-        return;
-      }
-      this.session.setupError = false;
-      if (this.session.state !== 'unfunded') {
-        this.session.state = 'loading';
-        this.session.event.trigger();
-      }
-
-      try {
-        this.session.account = await MagicSpoon.Account(this.Server, keypair, () => {
-          this.session.event.trigger();
-        });
-        this.session.state = 'in';
-
-        let inflationDoneDestinations = {
-          'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW': true,
-          'GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT': true,
-        };
-
-        if (inflationDoneDestinations[this.session.account.inflation_destination]) {
-          this.session.inflationDone = true;
-        }
-        this.session.event.trigger();
-      } catch (e) {
-        if (e.data) {
-          this.session.state = 'unfunded';
-          this.session.unfundedAccountId = keypair.publicKey();
-          setTimeout(() => {
-            console.log('Checking to see if account has been created yet');
-            if (this.session.state === 'unfunded') {
-              // Avoid race conditions
-              this.handlers.logIn(secretKey);
-            }
-          }, 2000);
-          this.session.event.trigger();
-          return;
-        }
-        this.session.state = 'out';
-        this.session.setupError = true;
-        this.session.event.trigger();
-      }
     },
     createOffer: async (side, opts) => MagicSpoon.createOffer(this.Server, this.session.account, side, _.assign(opts, {
       baseBuying: this.orderbook.baseBuying,
