@@ -32,9 +32,9 @@ export default function Send(driver) {
       limit: '0',
     }),
     removeOffer: async offerId => MagicSpoon.removeOffer(driver.Server, driver.session.account, offerId),
-    orderbookPricePick: (price) => {
-      trigger.orderbookPricePick({
-        price,
+    pickPrice: (price) => {
+      this.event.trigger({
+        pickPrice: price,
       });
     },
     setOrderbook: (baseBuying, counterSelling) => {

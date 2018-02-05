@@ -24,10 +24,11 @@ export default function Event() {
     listeners[listenerId] = null;
   };
 
-  this.trigger = opts => {
+  // Trigger can be called with an object that is passed to the listener
+  this.trigger = (data) => {
     listeners.forEach(cb => {
       if (cb) {
-        cb();
+        cb(data);
       }
     })
   };

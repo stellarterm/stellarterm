@@ -33,10 +33,7 @@ export default class OfferMaker extends React.Component {
     }
   }
   componentWillUnmount() {
-    // this.props.d.unlistenSession(this.listenSessionId);
-    // TODO: fix the unlistening
-    this.props.d.unlistenOrderbook(this.listenOrderbookId);
-    this.props.d.unlistenOrderbook(this.listenOrderbookPricePickId);
+    this.props.d.orderbook.event.unlisten(this.listenId);
   }
   constructor(props) {
     super(props);
@@ -51,9 +48,12 @@ export default class OfferMaker extends React.Component {
       this.forceUpdate();
     });
 
-    this.listenOrderbookPricePickId = this.props.d.listenOrderbookPricePick(opts => {
-      this.updateState('price', opts.price);
+    this.listenId = this.props.d.orderbook.event.listen((data) => {
+      if (data.pickPrice) {
+        this.updateState('price', data.pickPrice);
+      }
     });
+
 
     this.state = {
       valid: false,

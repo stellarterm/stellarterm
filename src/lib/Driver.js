@@ -60,11 +60,11 @@ function Driver(driverOpts) {
       limit: '0',
     }),
     removeOffer: async offerId => MagicSpoon.removeOffer(this.Server, this.session.account, offerId),
-    orderbookPricePick: (price) => {
-      trigger.orderbookPricePick({
-        price,
-      });
-    },
+    // orderbookPricePick: (price) => {
+    //   trigger.orderbookPricePick({
+    //     price,
+    //   });
+    // },
     // setOrderbook: (baseBuying, counterSelling) => {
     //   // If orderbook is already set, then this is a no-op
     //   // Expects baseBuying and counterSelling to StellarSdk.Asset objects
