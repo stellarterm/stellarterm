@@ -55,11 +55,11 @@ function Driver(driverOpts) {
     //    MagicSpoon.changeTrust(this.Server, this.session.account, {
     //      asset: new StellarSdk.Asset(code, issuer),
     //    }),
-    removeTrust: async (code, issuer) => await MagicSpoon.changeTrust(this.Server, this.session.account, {
-      asset: new StellarSdk.Asset(code, issuer),
-      limit: '0',
-    }),
-    removeOffer: async offerId => MagicSpoon.removeOffer(this.Server, this.session.account, offerId),
+    // removeTrust: async (code, issuer) => await MagicSpoon.changeTrust(this.Server, this.session.account, {
+    //   asset: new StellarSdk.Asset(code, issuer),
+    //   limit: '0',
+    // }),
+    // removeOffer: async offerId => MagicSpoon.removeOffer(this.Server, this.session.account, offerId),
     // orderbookPricePick: (price) => {
     //   trigger.orderbookPricePick({
     //     price,

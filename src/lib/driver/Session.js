@@ -22,7 +22,7 @@ export default function Send(driver) {
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
   this.forceUpdateAccountOffers = () => {
-    const updateFn = _.get(this.session, 'account.updateOffers');
+    const updateFn = _.get(this, 'account.updateOffers');
     if (updateFn) {
       updateFn();
     }
@@ -95,10 +95,15 @@ export default function Send(driver) {
     },
     addTrust: async (code, issuer) => {
       // For simplicity, currently only adds max trust line
-      MagicSpoon.changeTrust(this.Server, this.session.account, {
+      MagicSpoon.changeTrust(driver.Server, this.account, {
         asset: new StellarSdk.Asset(code, issuer),
       });
     },
+    removeTrust: async (code, issuer) => await MagicSpoon.changeTrust(driver.Server, this.account, {
+      asset: new StellarSdk.Asset(code, issuer),
+      limit: '0',
+    }),
+    removeOffer: async offerId => MagicSpoon.removeOffer(driver.Server, this.account, offerId),
   };
 }
 
