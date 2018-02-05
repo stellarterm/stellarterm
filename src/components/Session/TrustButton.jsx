@@ -12,12 +12,11 @@ export default class TrustButton extends React.Component {
     this.handleSubmitTrust = (event) => {
       event.preventDefault();
       this.setState({status: 'pending'});
+
       this.props.d.session.handlers.addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
-      .then((result) => {
-        this.forceUpdate();
+      .then(() => {
         this.setState({status: 'ready'});
-      })
-      .catch(error => {
+      }).catch((error) => {
         let errorType = 'unknown';
         if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
           errorType = 'lowReserve';
@@ -28,6 +27,7 @@ export default class TrustButton extends React.Component {
           errorType: errorType,
         });
       });
+
     };
   }
 

@@ -95,7 +95,7 @@ export default function Send(driver) {
     },
     addTrust: async (code, issuer) => {
       // For simplicity, currently only adds max trust line
-      MagicSpoon.changeTrust(driver.Server, this.account, {
+      return MagicSpoon.changeTrust(driver.Server, this.account, {
         asset: new StellarSdk.Asset(code, issuer),
       });
     },
