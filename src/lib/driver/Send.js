@@ -96,7 +96,11 @@ export default function Send(driver) {
       if (asset.issuer === this.targetAccount.accountId()) {
         // Edgecase: Receiver is the issuer of the asset
         // Note: Accounts cant extend trust to themselves, so no further edgecases on this situation
-        this.availableAssets[slug] = asset;
+        this.availableAssets[slug] = {
+          asset: asset,
+          sendable: true
+        };
+        receiverTrusts[slug] = true;
       } else {
         senderTrusts[slug] = true;
       }
