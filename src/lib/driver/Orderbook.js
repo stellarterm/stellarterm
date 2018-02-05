@@ -16,22 +16,7 @@ export default function Send(driver) {
   };
   init();
 
-
   this.handlers = {
-    createOffer: async (side, opts) => MagicSpoon.createOffer(driver.Server, driver.session.account, side, _.assign(opts, {
-      baseBuying: this.data.baseBuying,
-      counterSelling: this.data.counterSelling,
-    })),
-    // addTrust: async (code, issuer) =>
-    //   // For simplicity, currently only adds max trust line
-    //    MagicSpoon.changeTrust(driver.Server, driver.session.account, {
-    //      asset: new StellarSdk.Asset(code, issuer),
-    //    }),
-    // removeTrust: async (code, issuer) => await MagicSpoon.changeTrust(driver.Server, driver.session.account, {
-    //   asset: new StellarSdk.Asset(code, issuer),
-    //   limit: '0',
-    // }),
-    // removeOffer: async offerId => MagicSpoon.removeOffer(driver.Server, driver.session.account, offerId),
     pickPrice: (price) => {
       this.event.trigger({
         pickPrice: price,

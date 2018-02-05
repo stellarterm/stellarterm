@@ -145,6 +145,10 @@ export default function Send(driver) {
       asset: new StellarSdk.Asset(code, issuer),
       limit: '0',
     }),
+    createOffer: async (side, opts) => MagicSpoon.createOffer(driver.Server, this.account, side, _.assign(opts, {
+      baseBuying: driver.orderbook.data.baseBuying,
+      counterSelling: driver.orderbook.data.counterSelling,
+    })),
     removeOffer: async offerId => MagicSpoon.removeOffer(driver.Server, this.account, offerId),
   };
 }

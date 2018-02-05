@@ -103,7 +103,7 @@ export default class OfferMaker extends React.Component {
     this.handleSubmit = (e) => {
       // TODO: Hook up with driver
       e.preventDefault();
-      props.d.orderbook.handlers.createOffer(props.side, {
+      props.d.session.handlers.createOffer(props.side, {
         price: this.state.price,
         amount: this.state.amount,
         total: this.state.total,
