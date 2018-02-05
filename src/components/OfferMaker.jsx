@@ -39,17 +39,8 @@ export default class OfferMaker extends React.Component {
     super(props);
     this.initialized = false;
 
-    this.listenSessionId = props.d.listenSession(() => {
-      this.forceUpdate();
-    });
-
-    this.listenOrderbookId = props.d.listenOrderbook(() => {
-      this.setState(this.initialize());
-      this.forceUpdate();
-    });
-
     this.listenId = this.props.d.orderbook.event.listen((data) => {
-      if (data.pickPrice) {
+      if (data && data.pickPrice) {
         this.updateState('price', data.pickPrice);
       }
     });

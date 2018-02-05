@@ -10,12 +10,10 @@ import Stellarify from '../lib/Stellarify';
 export default class Exchange extends React.Component {
   constructor(props) {
     super(props);
-    this.listenId = this.props.d.listenOrderbook(() => {
-      this.forceUpdate();
-    });
+    this.listenId = this.props.d.orderbook.event.listen(() => {this.forceUpdate()});
   }
   componentWillUnmount() {
-    this.props.d.unlistenOrderbook(this.listenId);
+    this.props.d.orderbook.event.unlisten(this.listenId);
   }
   render() {
     if (!this.props.d.orderbook.data.ready) {

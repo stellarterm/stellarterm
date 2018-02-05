@@ -67,16 +67,18 @@ export default class PriceChart extends React.Component {
     this.rendered = false;
   }
   componentDidMount() {
-    if (this.props.d.orderbook.trades !== undefined) {
-      this.renderChart(this.props.d.orderbook, this.props.d.orderbook.trades);
+    if (this.props.d.orderbook.data.trades !== undefined) {
+      this.renderChart(this.props.d.orderbook.data, this.props.d.orderbook.data.trades);
     } else {
-      this.listenId = this.props.d.listenOrderbook(() => {
-        if (!this.rendered && this.props.d.orderbook.trades !== undefined) {
-          this.renderChart(this.props.d.orderbook, this.props.d.orderbook.trades);
+      this.listenId = this.props.d.orderbook.event.listen(() => {
+        if (!this.rendered && this.props.d.orderbook.data.trades !== undefined) {
+          this.renderChart(this.props.d.orderbook.data, this.props.d.orderbook.data.trades);
         }
       });
-      // TODO: Clean up listener
     }
+  }
+  componentWillUnmount() {
+    this.props.d.orderbook.event.unlisten(this.listenId);
   }
   renderChart(orderbook) {
     this.rendered = true;

@@ -48,7 +48,7 @@ export default function Send(driver) {
         this.data.close();
       }
       this.data = new MagicSpoon.Orderbook(driver.Server, baseBuying, counterSelling, () => {
-        trigger.orderbook();
+        this.event.trigger();
         driver.session.forceUpdateAccountOffers();
       });
     },
