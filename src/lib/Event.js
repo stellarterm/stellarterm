@@ -1,5 +1,15 @@
-// Use this over Byol. This only supports one event. It turned out that
-// we really only need 1 event per category since performance is not an issue.
+/*
+  This is how to use it in your jsx component
+
+  constructor(props) {
+    super(props);
+    this.unsub = this.props.d.orderbook.event.sub(() => {this.forceUpdate()});
+  }
+  componentWillUnmount() {
+    this.unsub();
+  }
+
+*/
 
 export default function Event() {
   // This will break at approximately 9007199254740992+1 listens :P

@@ -1,11 +1,7 @@
-// The driver maintains the state of the application and drives everything.
-// (Well, it knows about everything except for routing)
-// Most everything else is just stateless
-// This is similar to Redux except more flexible for faster development
 import _ from 'lodash';
 import BigNumber from 'bignumber.js';
-import Byol from './Byol';
 import MagicSpoon from '../lib/MagicSpoon';
+
 import Ticker from './driver/Ticker';
 import Send from './driver/Send';
 import History from './driver/History';
