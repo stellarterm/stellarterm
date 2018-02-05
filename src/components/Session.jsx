@@ -22,17 +22,17 @@ class Session extends React.Component {
     // KLUDGE: The event listeners are kinda messed up
     // Uncomment if state changes aren't working. But with the new refactor, this dead code should be removed
     // For now, it's just extra insurance
-    this.checkLoginStatus = () => {
-      if (this.mounted) {
-        if (this.props.d.session.state === 'in' || this.props.d.session.state === 'unfunded' ) {
-          this.forceUpdate();
-          setTimeout(this.checkLoginStatus, 2000)
-        } else {
-          setTimeout(this.checkLoginStatus, 100)
-        }
-      }
-    }
-    setTimeout(this.checkLoginStatus, 100)
+    // this.checkLoginStatus = () => {
+    //   if (this.mounted) {
+    //     if (this.props.d.session.state === 'in' || this.props.d.session.state === 'unfunded' ) {
+    //       this.forceUpdate();
+    //       setTimeout(this.checkLoginStatus, 2000)
+    //     } else {
+    //       setTimeout(this.checkLoginStatus, 100)
+    //     }
+    //   }
+    // }
+    // setTimeout(this.checkLoginStatus, 100)
 
     // Static functions from driver
     this.handlers = this.props.d.handlers;
