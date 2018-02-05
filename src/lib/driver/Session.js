@@ -6,6 +6,8 @@ import directory from '../../directory';
 import Validate from '../Validate';
 import Event from '../Event';
 
+let DEVELOPMENT_TO_PROMPT = true;
+
 export default function Send(driver) {
   this.event = new Event();
 
@@ -84,24 +86,48 @@ export default function Send(driver) {
         this.event.trigger();
       }
     },
-    sign: () => {
+
+    sign: (tx) => {
+      console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
       return driver.modal.handlers.activate('sign')
       .then((modalResult) => {
-        console.log(modalResult)
+        if (modalResult.status === 'finish') {
+          this.account.sign(tx);
+          console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
+          return {
+            status: 'finish',
+            signedTx: tx
+          };
+        }
         return modalResult
       })
     },
-    signAndSubmit: async () => {
+    signAndSubmit: async (tx) => {
       // Either returns a cancel or finish with the transaction-in-flight Promise
       // (finish only means modal finished; It does NOT mean the transaction succeeded)
-      let signResult = await this.handlers.sign();
+      let signResult = await this.handlers.sign(tx);
+      if (signResult.status === 'finish') {
+        console.log('Signing tx\nhash:', tx.hash().toString('hex'))
+        let serverResult = driver.Server.submitTransaction(tx).then((transactionResult) => {
+          console.log('Confirmed tx\nhash:', tx.hash().toString('hex'))
+          return transactionResult;
+        }).catch((error) => {
+          console.log('Failed tx\nhash:', tx.hash().toString('hex'))
+          console.log(error);
+          throw new Error(error);
+        })
+        return {
+          status: 'finish',
+        }
+      }
       return signResult;
     },
+
     vote: async () => {
-      let result = await this.handlers.signAndSubmit();
+      let tx = MagicSpoon.buildTxSetInflation(this.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
+      let result = await this.handlers.signAndSubmit(tx);
       if (result.status === 'finish') {
         this.inflationDone = true;
-        MagicSpoon.setInflation(driver.Server, this.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
         this.event.trigger();
       }
     },

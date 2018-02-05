@@ -377,17 +377,14 @@ const MagicSpoon = {
     const transactionResult = await Server.submitTransaction(transaction);
     return transactionResult;
   },
-  async setInflation(Server, spoonAccount, inflationDest) {
+  buildTxSetInflation(spoonAccount, inflationDest) {
     let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
     transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
       inflationDest: inflationDest,
     }));
-
     transaction = transaction.build();
-    spoonAccount.sign(transaction);
 
-    const transactionResult = await Server.submitTransaction(transaction);
-    return transactionResult;
+    return transaction;
   },
   changeTrust(Server, spoonAccount, opts) {
     let sdkLimit;

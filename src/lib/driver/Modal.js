@@ -7,6 +7,7 @@ export default function Modal(driver) {
 
   const init = () => {
     this.active = false; // false or true
+    this.inputData = null;
   };
   init();
 
@@ -20,7 +21,7 @@ export default function Modal(driver) {
   this.handlers = {
     // To activate a modal, use d.modal.activate
     // The callback will give you an object that always contains status
-    activate: (modalName) => {
+    activate: (modalName, inputData) => {
       if (this.active) {
         // You can only activate if not already active
         console.error('Bug: Trying to create ' + modalName + ' but a modal is already active');
@@ -30,6 +31,7 @@ export default function Modal(driver) {
       }
 
       this.active = true;
+      this.inputData = inputData;
       this.event.trigger();
       return new Promise(function(resolve, reject){
         activeResolver = resolve;
