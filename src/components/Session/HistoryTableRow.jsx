@@ -146,8 +146,24 @@ export default class HistoryTableRow extends React.Component {
                 ]
               }
             } else {
+              let title;
+              let toFromRow = {};
+              if (d.category === 'account_debited') {
+                title = 'Sent';
+                toFromRow = {
+                  header: 'TO: ',
+                  value: d.to,
+                }
+              } else {
+                title = 'Received';
+                toFromRow = {
+                  header: d.category === 'account_debited' ? "TO:  " : "FROM:  ",
+                  value: d.from
+                }
+              }
+
               details = {
-                title: d.category === 'account_debited' ? "Sent" : "Received",
+                title: title,
                 attributes: [
                   {
                     header: "AMOUNT: ",
@@ -157,10 +173,7 @@ export default class HistoryTableRow extends React.Component {
                     asset_issuer: d.asset_issuer,
                     domain: d.asset_code ? directory.resolveAssetByAccountId(d.asset_code, d.asset_issuer).domain : "native",
                   },
-                  {
-                    header: d.category === 'account_debited' ? "TO:  " : "FROM:  ",
-                    value: d.to ? d.to : ( d.from ? d.from : d.source_account || ""),
-                  }
+                  toFromRow
                 ]
               }
             }
