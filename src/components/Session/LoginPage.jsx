@@ -39,6 +39,15 @@ export default class LoginPage extends React.Component {
     this.handleInput = (event) => {
       this.setState({secretInput: event.target.value});
     }
+    this.proceedWithLedger = (event) => {
+      event.preventDefault();
+      if (!isValidBip32Path(this.state.bip32Path)) {
+        return this.setState({
+          invalidBip32Path: true
+        });
+      }
+      this.props.d.session.handlers.logInWithLedger(this.state.bip32Path);
+    }
     this.toggleShow = (event) => {
       event.preventDefault();
       this.setState({show: !this.state.show});

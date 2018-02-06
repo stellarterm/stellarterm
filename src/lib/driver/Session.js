@@ -45,6 +45,15 @@ export default function Send(driver) {
         authType: 'pubkey',
       });
     },
+    logInWithLedger: async (bip32Path) => {
+
+      // TODO
+
+      let keypair = StellarSdk.Keypair.fromPublicKey('GD3Y2TP4XCFPC2UXXWOD6S3LRHJ53JV56FACKMCLZIILPNZVQ4KUMFOK');
+      return this.handlers.logIn(keypair, {
+        authType: 'ledger',
+      });
+    },
     logIn: async (keypair, opts) => {
       this.setupError = false;
       if (this.state !== 'unfunded') {
