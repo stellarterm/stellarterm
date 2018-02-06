@@ -81,16 +81,20 @@ const MagicSpoon = {
           sdkAccount.balances = res.balances;
           updated = true;
         }
-        if (!_.isEqual(sdkAccount.sequence, res.sequence)) {
-          sdkAccount.sequence = res.sequence;
-          updated = true;
-        }
+
+        // We shouldn't pull latest sequence number. It'll only go out of sync if user is using the account in two places
 
         if (updated) {
           onUpdate();
         }
       }
     });
+
+    sdkAccount.decrementSequence = () => {
+      sdkAccount._baseAccount.sequence = sdkAccount._baseAccount.sequence.sub(1);
+      window.s = sdkAccount._baseAccount.sequence
+      sdkAccount.sequence = sdkAccount._baseAccount.sequence.toString();
+    }
 
     sdkAccount.refresh = async () => {
       let newAccount = await Server.loadAccount(keypair.publicKey());
@@ -336,7 +340,7 @@ const MagicSpoon = {
     };
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.manageOffer(operationOpts))
-      .build();
+      // DONT call .build()
 
     return transaction;
   },
@@ -376,7 +380,7 @@ const MagicSpoon = {
     transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
       inflationDest: inflationDest,
     }));
-    transaction = transaction.build();
+    // DONT call .build()
 
     return transaction;
   },

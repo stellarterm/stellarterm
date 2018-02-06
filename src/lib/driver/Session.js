@@ -1,5 +1,6 @@
 import _ from 'lodash';
 
+import BigNumber from 'bignumber.js';
 import MagicSpoon from '../MagicSpoon';
 import Stellarify from '../Stellarify';
 import directory from '../../directory';
@@ -88,7 +89,7 @@ export default function Send(driver) {
     },
 
     sign: (tx) => {
-      console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
+      console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\nsequence: ' + tx.sequence, '\n\n' + tx.toEnvelope().toXDR('base64'))
       return driver.modal.handlers.activate('sign')
       .then((modalResult) => {
         if (modalResult.status === 'finish') {
@@ -102,32 +103,49 @@ export default function Send(driver) {
         return modalResult
       })
     },
-    signAndSubmit: async (tx) => {
+    buildSignSubmit: async (txBuilder) => {
       // Either returns a cancel or finish with the transaction-in-flight Promise
       // (finish only means modal finished; It does NOT mean the transaction succeeded)
-      let signResult = await this.handlers.sign(tx);
-      if (signResult.status === 'finish') {
-        console.log('Signing tx\nhash:', tx.hash().toString('hex'))
-        let serverResult = driver.Server.submitTransaction(tx).then((transactionResult) => {
-          console.log('Confirmed tx\nhash:', tx.hash().toString('hex'))
-          return transactionResult;
-        })
-        .catch(error => {
-          console.log('Failed tx\nhash:', tx.hash().toString('hex'))
-          throw error;
-        })
 
-        return {
-          status: 'finish',
-          serverResult: serverResult,
-        }
+      // This will also undo the sequence number that stellar-sdk magically adds
+      let result = {
+        status: 'cancel',
       }
-      return signResult;
+
+      let tx = txBuilder.build();
+      try {
+        let signResult = await this.handlers.sign(tx);
+        if (signResult.status === 'finish') {
+          console.log('Signing tx\nhash:', tx.hash().toString('hex'))
+          let serverResult = driver.Server.submitTransaction(tx).then((transactionResult) => {
+            console.log('Confirmed tx\nhash:', tx.hash().toString('hex'))
+            return transactionResult;
+          })
+          .catch(error => {
+            console.log('Failed tx\nhash:', tx.hash().toString('hex'))
+            throw error;
+          })
+
+          result = {
+            status: 'finish',
+            serverResult: serverResult,
+          }
+        }
+      } catch(e) {
+        console.log(e)
+      }
+
+      if (result.status !== 'finish') {
+        this.account.decrementSequence();
+        console.log('Reset sequence back to ' + this.account.sequence)
+      }
+
+      return result;
     },
 
     vote: async () => {
-      let tx = MagicSpoon.buildTxSetInflation(this.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
-      let result = await this.handlers.signAndSubmit(tx);
+      let txBuilder = MagicSpoon.buildTxSetInflation(this.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
+      let result = await this.handlers.buildSignSubmit(txBuilder);
       if (result.status === 'finish') {
         this.inflationDone = true;
         this.event.trigger();
@@ -152,7 +170,7 @@ export default function Send(driver) {
         baseBuying: driver.orderbook.data.baseBuying,
         counterSelling: driver.orderbook.data.counterSelling,
       }));
-      return await this.handlers.signAndSubmit(tx);
+      return await this.handlers.buildSignSubmit(tx);
     },
     removeOffer: async offerId => MagicSpoon.removeOffer(driver.Server, this.account, offerId),
   };
