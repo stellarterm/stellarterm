@@ -6,10 +6,10 @@ import _ from 'lodash';
 export default class ManageOffers extends React.Component {
   constructor(props) {
     super(props);
-    this.listenId = this.props.d.session.event.listen(() => {this.forceUpdate()});
+    this.unsub = this.props.d.session.event.sub(() => {this.forceUpdate()});
   }
   componentWillUnmount() {
-    this.props.d.session.event.unlisten(this.listenId);
+    this.unsub();
   }
   render() {
     if (this.props.d.session.state !== 'in') {

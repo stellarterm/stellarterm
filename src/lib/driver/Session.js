@@ -179,7 +179,17 @@ export default function Send(driver) {
       }));
       return await this.handlers.buildSignSubmit(tx);
     },
-    removeOffer: async offerId => MagicSpoon.removeOffer(driver.Server, this.account, offerId),
+    removeOffer: async (offerId) => {
+      let tx = MagicSpoon.buildTxRemoveOffer(driver.Server, this.account, offerId);
+      let bssResult = await this.handlers.buildSignSubmit(tx);
+      if (bssResult.status === 'finish') {
+        bssResult.serverResult.then(res => {
+          this.account.updateOffers();
+          return res;
+        })
+      }
+      return bssResult;
+    },
   };
 }
 

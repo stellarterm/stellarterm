@@ -400,8 +400,8 @@ const MagicSpoon = {
       .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
       // DONT call .build()
   },
-  async removeOffer(Server, spoonAccount, offerId) {
-    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+  buildTxRemoveOffer(Server, spoonAccount, offerId) {
+    return new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.manageOffer({
         buying: StellarSdk.Asset.native(),
         selling: new StellarSdk.Asset('REMOVE', spoonAccount.accountId()),
@@ -409,11 +409,7 @@ const MagicSpoon = {
         price: '1',
         offerId,
       }))
-      .build();
-    spoonAccount.sign(transaction);
-    const transactionResult = await Server.submitTransaction(transaction);
-    spoonAccount.updateOffers();
-    return transactionResult;
+      // DONT call .build()
   },
   async History(Server, publicKey, onUpdate) {
     let history = {

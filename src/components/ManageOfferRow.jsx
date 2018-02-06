@@ -11,8 +11,17 @@ export default class ManageOffers extends React.Component {
     this.handleCancel = e => {
       e.preventDefault();
       this.props.d.session.handlers.removeOffer(this.props.rectifiedOffer.id)
-      this.setState({
-        ready: false,
+      .then(bssResult => {
+        if (bssResult.status === 'finish') {
+          this.setState({ready: false})
+          return bssResult.serverResult
+          .catch(err => {
+            console.log('Errored when cancelling offer', err);
+            this.setState({
+              ready: 'true',
+            })
+          })
+        }
       })
     }
   }
