@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-import LoginForm from './Session/LoginForm.jsx';
+import LoginPage from './Session/LoginPage.jsx';
 import AccountView from './Session/AccountView.jsx';
 import ManageCurrentTrust from './Session/ManageCurrentTrust.jsx';
 import ManuallyAddTrust from './Session/ManuallyAddTrust.jsx';
@@ -43,7 +43,7 @@ class Session extends React.Component {
     let state = d.session.state;
     let setupError = d.session.setupError;
     if (state === 'out') {
-      return <LoginForm setupError={setupError} d={d}></LoginForm>
+      return <LoginPage setupError={setupError} d={d}></LoginPage>
     } else if (state === 'unfunded') {
       return <Generic title={'Account is unfunded'}><Loading darker={true}>
         Send at least 1 lumens to this account to activate it.
