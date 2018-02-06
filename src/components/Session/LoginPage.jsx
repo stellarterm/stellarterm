@@ -39,6 +39,9 @@ export default class LoginPage extends React.Component {
     this.handleInput = (event) => {
       this.setState({secretInput: event.target.value});
     }
+    this.handleBip32PathInput = (event) => {
+      this.setState({bip32Path: event.target.value});
+    }
     this.proceedWithLedger = (event) => {
       event.preventDefault();
       if (!isValidBip32Path(this.state.bip32Path)) {
@@ -165,7 +168,7 @@ export default class LoginPage extends React.Component {
             <form onSubmit={this.proceedWithLedger}>
 
               <label className="s-inputGroup LoginPage__inputGroup LoginPage__inputGroup--path">
-                <input name="bip32Path" type="text" className="s-inputGroup__item" value={this.state.bip32Path} onChange={this.handleInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
+                <input name="bip32Path" type="text" className="s-inputGroup__item" value={this.state.bip32Path} onChange={this.handleBip32PathInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
               </label>
               {ledgerErrorMessage}
               <div>
