@@ -187,7 +187,7 @@ export default class LoginPage extends React.Component {
               Create account
             </a>
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'login' ? ' is-active' : '')} onClick={() => {this.setTab('login')}}>
-              Log in with secret
+              Log in with key
             </a>
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'ledger' ? ' is-active' : '')} onClick={() => {this.setTab('ledger')}}>
               Log in with Ledger

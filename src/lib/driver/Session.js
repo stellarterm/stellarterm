@@ -32,21 +32,20 @@ export default function Send(driver) {
     }
   };
 
-
   this.handlers = {
-    logInWithSecret: async (secretKey, opts) => {
-      let keypair;
-      try {
-        if (opts && opts.publicKey !== undefined) {
-          keypair = StellarSdk.Keypair.fromPublicKey(opts.publicKey);
-        } else {
-          keypair = StellarSdk.Keypair.fromSecret(secretKey);
-        }
-      } catch (e) {
-        console.log('Invalid secret key! We should never reach here!');
-        console.error(e);
-        return;
-      }
+    logInWithSecret: async (secretKey) => {
+      let keypair = StellarSdk.Keypair.fromSecret(secretKey);
+      return this.handlers.logIn(keypair, {
+        authType: 'secret',
+      });
+    },
+    logInWithPublicKey: async (accountId) => {
+      let keypair = StellarSdk.Keypair.fromPublicKey(accountId);
+      return this.handlers.logIn(keypair, {
+        authType: 'pubkey',
+      });
+    },
+    logIn: async (keypair, opts) => {
       this.setupError = false;
       if (this.state !== 'unfunded') {
         this.state = 'loading';
@@ -58,7 +57,7 @@ export default function Send(driver) {
           this.event.trigger();
         });
         this.state = 'in';
-        this.authType = 'secret';
+        this.authType = opts.authType;
 
         let inflationDoneDestinations = {
           'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW': true,
@@ -77,7 +76,7 @@ export default function Send(driver) {
             console.log('Checking to see if account has been created yet');
             if (this.state === 'unfunded') {
               // Avoid race conditions
-              this.handlers.logInWithSecret(secretKey);
+              this.handlers.logIn(keypair, opts);
             }
           }, 2000);
           this.event.trigger();

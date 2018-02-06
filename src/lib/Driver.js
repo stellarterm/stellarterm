@@ -23,7 +23,7 @@ function Driver(driverOpts) {
   this.modal = new Modal(this);
 
   window.view = (accountId) => {
-    this.session.handlers.logIn('',{publicKey:accountId})
+    this.session.handlers.logInWithPublicKey(accountId)
   }
 }
 
