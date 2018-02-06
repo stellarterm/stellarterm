@@ -148,10 +148,13 @@ export default function Send(driver) {
       return result; // bssResult
     },
 
-    vote: async () => {
-      let txBuilder = MagicSpoon.buildTxSetInflation(this.account, 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
-      let result = await this.handlers.buildSignSubmit(txBuilder);
-      if (result.status === 'finish') {
+    setInflation: async (destination) => {
+      let txBuilder = MagicSpoon.buildTxSetInflation(this.account, destination);
+      return await this.handlers.buildSignSubmit(txBuilder);
+    },
+    voteContinue: async () => {
+      let bssResult = await this.handlers.setInflation('GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW');
+      if (bssResult.status === 'finish') {
         this.inflationDone = true;
         this.event.trigger();
       }

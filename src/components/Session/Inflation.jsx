@@ -20,26 +20,32 @@ export default class Inflation extends React.Component {
       });
     }
     this.handleSubmit = async (event) => {
-      this.setState({
-        status: 'working',
-        result: '',
-      });
+      this.props.d.session.handlers.setInflation(this.state.inflationDest)
+      .then(bssResult => {
+        if (bssResult.status === 'finish') {
+          this.setState({
+            status: 'working',
+            result: '',
+          });
 
-      try {
-        let inflationResult = await MagicSpoon.setInflation(this.props.d.Server, this.props.d.session.account, this.state.inflationDest);
-        this.setState({
-          status: 'ready',
-          result: 'success',
-        });
-        this.props.d.session.account.refresh();
-        setTimeout(() => {this.forceUpdate()}, 1000);
-      } catch (e) {
-        console.error(e);
-        this.setState({
-          status: 'ready',
-          result: 'error',
-        });
-      }
+          return bssResult.serverResult
+          .then(() => {
+            this.setState({
+              status: 'ready',
+              result: 'success',
+            });
+            this.props.d.session.account.refresh();
+            setTimeout(() => {this.forceUpdate()}, 1000);
+          })
+          .catch((error) => {
+            console.error(e);
+            this.setState({
+              status: 'ready',
+              result: 'error',
+            });
+          });
+        }
+      })
     }
   }
   componentWillUnmount() {

@@ -74,7 +74,7 @@ class Session extends React.Component {
               <br />
               By pressing "continue", your account will vote for the StellarTerm inflation account. Thank you for your support!{currentVoteNote}
               <div className="Session__inflation__next">
-                <button className="s-button" onClick={d.session.handlers.vote}>Continue</button>
+                <button className="s-button" onClick={d.session.handlers.voteContinue}>Continue</button>
                 <a className="Session__inflation__next__noThanks" onClick={d.session.handlers.noThanks}>No thanks</a>
               </div>
             </div>
