@@ -6,6 +6,7 @@ import Stellarify from '../Stellarify';
 import directory from '../../directory';
 import Validate from '../Validate';
 import Event from '../Event';
+const StellarLedger = window.StellarLedger;
 
 let DEVELOPMENT_TO_PROMPT = true;
 

@@ -139,7 +139,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe($.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower'];
+const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower', 'copyBrowserDeps'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {
@@ -161,6 +161,9 @@ gulp.task('css-reload', ['styles'], bsReload);
 
 gulp.task('copyBower', () => gulp.src('bower_components/**/*')
     .pipe(gulp.dest('dist/bower_components/')));
+
+gulp.task('copyBrowserDeps', () => gulp.src('src/browser_deps/**/*')
+    .pipe(gulp.dest('dist/browser_deps/')));
 
 // Build production site.
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
