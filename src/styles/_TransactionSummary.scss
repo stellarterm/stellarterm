@@ -36,3 +36,10 @@
 .TransactionSummary__row__content__inline + .TransactionSummary__row__content__inline {
   margin-top: 12px;
 }
+.TransactionSummary__row__content__inline__content pre {
+  margin: 0;
+  font-size: $s-scale-5;
+}
+.TransactionSummary__row__content__inline__content__assetCard {
+  width: 300px;
+}

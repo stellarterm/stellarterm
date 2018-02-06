@@ -116,8 +116,8 @@ export default class OfferMaker extends React.Component {
           this.setState({
             valid: false,
             buttonState: 'pending',
-            // amount: '',
-            // total: '',
+            amount: '',
+            total: '',
             successMessage: '',
             errorMessage: false,
           });

@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-
+import AssetCard2 from './AssetCard2.jsx';
 
 // operationsMap is modified code from Stellar Laboratory licensed under Apache-2.0
 // Interesting trivia: This was written by Iris Li in 2015 while at SDF
@@ -80,37 +80,68 @@ export default function TransactionSummary(props) {
     let op = tx.operations[i];
     let attributes = [];
 
+    let label = operationsMap[op.type].label;
+    if (op.type === 'changeTrust') {
+      if (op['limit'] === '0') {
+        label = 'Remove Asset';
+      } else if (op['limit'] === '922337203685.4775807') {
+        label = 'Accept Asset';
+      }
+    }
+
     for (let attr in op) {
       let value = op[attr];
       if (attr === 'type') {
         // no-op
+      } else if (attr === 'limit') {
+        // No need to show limit
       } else {
         if (value !== undefined) {
+          let displayValue;
+          if (value.code !== undefined) {
+            displayValue = <div className="TransactionSummary__row__content__inline__content__assetCard">
+              <AssetCard2 code={value.code} issuer={value.issuer}></AssetCard2>
+            </div>
+          } else if (value === '922337203685.4775807') { // 2^63-1, the max number in Stellar, 64-bit fixed int
+            displayValue = 'maximum'; // Hmm, is this even used anywhere?
+          } else if (typeof value === 'string') {
+            displayValue = value;
+          } else {
+            displayValue = <pre>{JSON.stringify(value, null, 2)}</pre>
+          }
+
+          let name;
+          if (attr === 'line') {
+            // Don't show title for assets
+          } else {
+            name = attr;
+          }
+
           attributes.push({
-            name: attr,
-            value: value,
+            key: attr,
+            name: name,
+            display: displayValue,
           })
         }
       }
     }
 
-
-    rows.push(<div key={'op' + i} className="TransactionSummary__row">
+    rows.push(<div key={'table_op' + i} className="TransactionSummary__row">
       <div className="TransactionSummary__row__label">
-        {operationsMap[op.type].label}
+        {label}
       </div>
       <div className="TransactionSummary__row__content">
         {attributes.map(attribute => {
-          return <div key={name} className="TransactionSummary__row__content__inline">
-            <p className="TransactionSummary__row__content__inline__title">{attribute.name}</p>
-            <p className="TransactionSummary__row__content__inline__content">{attribute.value}</p>
-          </div>
+          return <article key={attribute.key} className="TransactionSummary__row__content__inline">
+            {attribute.name ? <p className="TransactionSummary__row__content__inline__title">{attribute.name}</p> : null}
+            <div className="TransactionSummary__row__content__inline__content">{attribute.display}</div>
+          </article>
         })}
       </div>
     </div>);
   }
   return <div className="TransactionSummary">
-    <div key="source" className="TransactionSummary__row TransactionSummary__row--first">
+    <div key="table_source" className="TransactionSummary__row TransactionSummary__row--first">
       <div className="TransactionSummary__row__label">
         Source
       </div>
@@ -118,7 +149,7 @@ export default function TransactionSummary(props) {
         {tx.source}
       </div>
     </div>
-    <div key="sequence" className="TransactionSummary__row">
+    <div key="table_sequence" className="TransactionSummary__row">
       <div className="TransactionSummary__row__label">
         Sequence
       </div>
