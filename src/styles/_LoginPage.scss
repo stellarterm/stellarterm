@@ -1,11 +1,45 @@
+
 .LoginPage {
-  width: 680px;
-  margin: 0 auto;
+  display: flex;
+}
+.LoginPage__sidebar {
+  background: #fafafb;
+  padding-top: 16px;
+  width: 200px;
+  flex: 0 0 200px;
+  padding-left: 18px;
+  border-right: 1px solid $s-color-neutral7;
+}
+.LoginPage__sidebar__tab {
+  border-radius: 3px 0 0 3px;
+  background: #fff;
+  margin-bottom: 16px;
+  padding: 12px 18px;
+  display: block;
+  border-top: 1px solid $s-color-neutral7;
+  border-left: 1px solid $s-color-neutral7;
+  border-bottom: 1px solid $s-color-neutral7;
+  text-decoration: none;
+}
+.LoginPage__sidebar__tab.is-active {
+  background: $s-color-primary4;
+  font-weight: bold;
+  color: #fff;
+  border-color: $s-color-primary3;
+}
+.LoginPage__sidebar__tab:hover {
+  text-decoration: underline
+}
+.LoginPage__body {
+  flex: 1;
+}
+.LoginPage__box {
   border: 1px solid $s-color-primary7;
   background: $s-color-primary9;
   border-radius: $s-var-radius;
-  margin-top: 2em;
+  margin: 16px 18px;
 }
+
 .LoginPage__form {
   padding: 20px;
 }
