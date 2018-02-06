@@ -14,23 +14,25 @@ export default class TrustButton extends React.Component {
 
       this.props.d.session.handlers.addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
       .then(bssResult => {
-        this.setState({status: 'pending'});
-        return bssResult.serverResult;
-      })
-      .then(() => {
-        this.setState({status: 'ready'});
-      }).catch((error) => {
-        let errorType = 'unknown';
-        if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
-          errorType = 'lowReserve';
+        if (bssResult.status === 'finish') {
+          this.setState({status: 'pending'});
+          return bssResult.serverResult
+          .then(() => {
+            this.setState({status: 'ready'});
+          })
+          .catch((error) => {
+            let errorType = 'unknown';
+            if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
+              errorType = 'lowReserve';
+            }
+
+            this.setState({
+              status: 'error',
+              errorType: errorType,
+            });
+          });
         }
-
-        this.setState({
-          status: 'error',
-          errorType: errorType,
-        });
-      });
-
+      })
     };
   }
 

@@ -27,15 +27,17 @@ export default class ManuallyAddTrust extends React.Component {
       event.preventDefault();
       this.props.d.session.handlers.addTrust(this.state.trustCode, this.state.trustIssuer)
       .then(bssResult => {
-        this.setState({status: 'working'});
-        return bssResult.serverResult;
-      })
-      .then(serverResult => {
-        this.setState({status: 'ready'});
-      })
-      .catch(error => {
-        console.log(error);
-        this.setState({status: 'ready'});
+        if (bssResult.status === 'finish') {
+          this.setState({status: 'working'});
+          return bssResult.serverResult
+          .then(serverResult => {
+            this.setState({status: 'ready'});
+          })
+          .catch(error => {
+            console.log(error);
+            this.setState({status: 'ready'});
+          })
+        }
       })
     }
   }

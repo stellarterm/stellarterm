@@ -94,7 +94,7 @@ export default function Send(driver) {
       .then((modalResult) => {
         if (modalResult.status === 'finish') {
           this.account.sign(tx);
-          console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
+          console.log('Signed tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
           return {
             status: 'finish',
             signedTx: tx
@@ -117,7 +117,7 @@ export default function Send(driver) {
       try {
         let signResult = await this.handlers.sign(tx);
         if (signResult.status === 'finish') {
-          console.log('Signing tx\nhash:', tx.hash().toString('hex'))
+          console.log('Submitting tx\nhash:', tx.hash().toString('hex'))
           let serverResult = driver.Server.submitTransaction(tx).then((transactionResult) => {
             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'))
             this.account.refresh();
@@ -164,10 +164,14 @@ export default function Send(driver) {
       });
       return await this.handlers.buildSignSubmit(tx);
     },
-    removeTrust: async (code, issuer) => await MagicSpoon.changeTrust(driver.Server, this.account, {
-      asset: new StellarSdk.Asset(code, issuer),
+    removeTrust: async (code, issuer) => {
+      // Trust lines are removed by setting limit to 0
+      let tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
+        asset: new StellarSdk.Asset(code, issuer),
       limit: '0',
-    }),
+      });
+      return await this.handlers.buildSignSubmit(tx);
+    },
     createOffer: async (side, opts) => {
       let tx = MagicSpoon.buildTxCreateOffer(driver.Server, this.account, side, _.assign(opts, {
         baseBuying: driver.orderbook.data.baseBuying,
