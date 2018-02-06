@@ -1,0 +1,38 @@
+.TransactionSummary {
+  width: 700px;
+  border: 1px solid $s-color-neutral7;
+  border-radius: 3px;
+}
+
+.TransactionSummary__row {
+  display: flex;
+  font-size: $s-scale-4;
+}
+.TransactionSummary__row + .TransactionSummary__row {
+  border-top: 1px solid $s-color-neutral7;
+}
+.TransactionSummary__row__label {
+  width: 150px;
+  padding: 8px 18px;
+  font-weight: bold;
+  align-items: center;
+  display: flex;
+}
+.TransactionSummary__row__content {
+  flex: 1;
+  width: 150px;
+  padding: 8px 18px;
+}
+.TransactionSummary__row__content__inline__title {
+  font-size: $s-scale-5;
+  color: $s-color-neutral5;
+  margin-bottom: 0;
+  line-height: 1;
+}
+.TransactionSummary__row__content__inline__content {
+  margin-bottom: 0;
+}
+
+.TransactionSummary__row__content__inline + .TransactionSummary__row__content__inline {
+  margin-top: 12px;
+}

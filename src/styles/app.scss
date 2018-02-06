@@ -23,7 +23,6 @@ body {
 @import 'island';
 @import 'lightenZeros';
 
-@import 'GlobalModal';
 @import 'Header';
 @import 'subNav';
 @import 'HomePage';
@@ -57,6 +56,9 @@ body {
 @import 'AssetList';
 
 @import 'DateCard';
+
+@import 'GlobalModal';
+@import 'TransactionSummary';
 
 @import 'LoginForm';
 @import 'Session';

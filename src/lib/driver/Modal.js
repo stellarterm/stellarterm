@@ -7,6 +7,7 @@ export default function Modal(driver) {
 
   const init = () => {
     this.active = false; // false or true
+    this.modalName = '';
     this.inputData = null;
   };
   init();
@@ -31,6 +32,7 @@ export default function Modal(driver) {
       }
 
       this.active = true;
+      this.modalName = modalName;
       this.inputData = inputData;
       this.event.trigger();
       return new Promise(function(resolve, reject){

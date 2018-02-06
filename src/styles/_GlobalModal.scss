@@ -23,18 +23,27 @@
   opacity: 0;
 }
 .GlobalModal {
-  padding: 20px;
+  max-width: 90vw;
 
   border-radius: 3px;
   background: #fff;
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
 }
+.GlobalModal__header {
+  background-color: $s-color-neutral8;
+  border-bottom: 1px solid $s-color-neutral7;
+  border-radius: 3px 3px 0 0;
+
+  padding: 11px 18px 9px 18px;
+  font-size: $s-scale-3;
+}
 
 .GlobalModal__content {
   min-width: 400px;
-  padding-bottom: 20px;
+  padding: 16px 18px;
 }
 .GlobalModal__navigation {
   display: flex;
   justify-content: space-between;
+  padding: 0 18px 16px 18px;
 }
