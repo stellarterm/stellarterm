@@ -45,11 +45,7 @@ gulp.task('images', (cb) => {
 
 
 
-  addImage('charts','png');
-  addImage('order','png');
-  addImage('send','png');
-  addImage('github','png');
-
+  addImage('ledger-app','png');
 
 
   file += '};\nmodule.exports = images;';
