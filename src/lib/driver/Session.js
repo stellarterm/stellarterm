@@ -104,6 +104,7 @@ export default function Send(driver) {
       })
     },
     buildSignSubmit: async (txBuilder) => {
+      // Returns: bssResult which contains status and (if finish) serverResult
       // Either returns a cancel or finish with the transaction-in-flight Promise
       // (finish only means modal finished; It does NOT mean the transaction succeeded)
 
@@ -119,6 +120,7 @@ export default function Send(driver) {
           console.log('Signing tx\nhash:', tx.hash().toString('hex'))
           let serverResult = driver.Server.submitTransaction(tx).then((transactionResult) => {
             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'))
+            this.account.refresh();
             return transactionResult;
           })
           .catch(error => {
@@ -137,10 +139,9 @@ export default function Send(driver) {
 
       if (result.status !== 'finish') {
         this.account.decrementSequence();
-        console.log('Reset sequence back to ' + this.account.sequence)
       }
 
-      return result;
+      return result; // bssResult
     },
 
     vote: async () => {
@@ -156,10 +157,12 @@ export default function Send(driver) {
       this.event.trigger();
     },
     addTrust: async (code, issuer) => {
-      // For simplicity, currently only adds max trust line
-      return MagicSpoon.changeTrust(driver.Server, this.account, {
+      // We only add max trust line
+      // Having a "limit" is a design mistake in Stellar that was carried over from the Ripple codebase
+      let tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
         asset: new StellarSdk.Asset(code, issuer),
       });
+      return await this.handlers.buildSignSubmit(tx);
     },
     removeTrust: async (code, issuer) => await MagicSpoon.changeTrust(driver.Server, this.account, {
       asset: new StellarSdk.Asset(code, issuer),

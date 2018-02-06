@@ -11,9 +11,12 @@ export default class TrustButton extends React.Component {
 
     this.handleSubmitTrust = (event) => {
       event.preventDefault();
-      this.setState({status: 'pending'});
 
       this.props.d.session.handlers.addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
+      .then(bssResult => {
+        this.setState({status: 'pending'});
+        return bssResult.serverResult;
+      })
       .then(() => {
         this.setState({status: 'ready'});
       }).catch((error) => {

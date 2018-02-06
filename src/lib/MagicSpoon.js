@@ -384,7 +384,7 @@ const MagicSpoon = {
 
     return transaction;
   },
-  changeTrust(Server, spoonAccount, opts) {
+  buildTxChangeTrust(Server, spoonAccount, opts) {
     let sdkLimit;
     if (typeof opts.limit === 'string' || opts.limit instanceof String) {
       sdkLimit = opts.limit;
@@ -396,15 +396,9 @@ const MagicSpoon = {
       asset: opts.asset,
       limit: sdkLimit,
     };
-    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+    return new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
-      .build();
-    spoonAccount.sign(transaction);
-    return Server.submitTransaction(transaction)
-      .then(txResult => {
-        spoonAccount.refresh();
-        return txResult;
-      });
+      // DONT call .build()
   },
   async removeOffer(Server, spoonAccount, offerId) {
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
