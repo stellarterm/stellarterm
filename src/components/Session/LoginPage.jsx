@@ -149,9 +149,9 @@ export default class LoginPage extends React.Component {
       let ledgerSignInButton;
 
       if (ledgerStatus) {
-        ledgerSignInButton = <input type="submit" className="LoginPage__submit s-button" value="Sign in with Ledger"/>
+        ledgerSignInButton = <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Sign in with Ledger"/>
       } else {
-        ledgerSignInButton = <input type="submit" className="LoginPage__submit s-button" value="Connect Ledger on a supported browser" disabled={true}/>
+        ledgerSignInButton = <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Connect Ledger on a supported browser" disabled={true}/>
       }
       let ledgerErrorMessage;
       if (this.state.invalidBip32Path) {
@@ -163,9 +163,10 @@ export default class LoginPage extends React.Component {
           <div className="LoginPage__form">
             <p className="LoginPage__intro">Sign in with Ledger Nano S</p>
             <form onSubmit={this.proceedWithLedger}>
-              <div>
-                <input name="bip32Path" type="text" className="LoginPage__password" value={this.state.bip32Path} onChange={this.handleInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
-              </div>
+
+              <label className="s-inputGroup LoginPage__inputGroup LoginPage__inputGroup--path">
+                <input name="bip32Path" type="text" className="s-inputGroup__item" value={this.state.bip32Path} onChange={this.handleInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
+              </label>
               {ledgerErrorMessage}
               <div>
                 {ledgerSignInButton}
