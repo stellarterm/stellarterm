@@ -46,12 +46,12 @@ export default class TrustButton extends React.Component {
 
     let button;
     if (this.state.status === 'pending') {
-      button = <button className="s-button" disabled={true} onClick={this.handleSubmitTrust}>Creating trust line for {this.props.asset.getCode()}...</button>
+      button = <button className="s-button" disabled={true} onClick={this.handleSubmitTrust}>Accepting asset {this.props.asset.getCode()}...</button>
     } else if (this.state.status === 'error') {
       if (this.state.errorType === 'lowReserve') {
-        button = <button className="s-button" onClick={this.handleSubmitTrust}>Error: Not enough lumens</button>
+        button = <button className="s-button" onClick={this.handleSubmitTrust}>Error: Not enough lumens. See the <a href="#account">minimum balance section</a> for more info</button>
       } else {
-        button = <button className="s-button" onClick={this.handleSubmitTrust}>Error creating trust line for {this.props.asset.getCode()}</button>
+        button = <button className="s-button" onClick={this.handleSubmitTrust}>Error accepting asset {this.props.asset.getCode()}</button>
       }
     } else {
       if (found) {

@@ -4,6 +4,7 @@ import Printify from '../lib/Printify';
 import BigNumber from 'bignumber.js';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
+import TrustButton from './Session/TrustButton.jsx';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
@@ -171,6 +172,9 @@ export default class OfferMaker extends React.Component {
       capitalizedSide = 'Sell';
     }
 
+    let baseBuying = this.props.d.orderbook.data.baseBuying;
+    let counterSelling = this.props.d.orderbook.data.counterSelling;
+
     let baseAssetName = this.props.d.orderbook.data.baseBuying.getCode();
     let counterAssetName = this.props.d.orderbook.data.counterSelling.getCode();
 
@@ -184,9 +188,18 @@ export default class OfferMaker extends React.Component {
     let youHave;
     let hasAllTrust = false;
     let insufficientBalanceMessage;
+    let trustNeededAssets = [];
+
     if (this.props.d.session.state === 'in') {
       let baseBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.data.baseBuying);
       let counterBalance = this.props.d.session.account.getBalance(this.props.d.orderbook.data.counterSelling);
+
+      if (baseBalance === null) {
+        trustNeededAssets.push(this.props.d.orderbook.data.baseBuying);
+      }
+      if (counterBalance === null) {
+        trustNeededAssets.push(this.props.d.orderbook.data.counterSelling);
+      }
 
       if (baseBalance !== null && counterBalance !== null) {
         hasAllTrust = true;
@@ -199,7 +212,7 @@ export default class OfferMaker extends React.Component {
         let maxOffer = targetBalance;
         if (targetAsset.isNative()) {
           maxOffer = this.props.d.session.account.maxLumenSpend();
-          youHave = <div className="OfferMaker__youHave">You may create an offer of up to {maxOffer} XLM. <br />For more info, see <a href="#account">the minimum balance section</a>.</div>;
+          youHave = <div className="OfferMaker__youHave">You may trade up to {maxOffer} XLM (due to <a href="#account">minimum balance requirements</a>).</div>;
         } else {
           youHave = <div className="OfferMaker__youHave">You have {targetBalance} {targetAsset.getCode()}</div>;
         }
@@ -207,7 +220,10 @@ export default class OfferMaker extends React.Component {
           insufficientBalanceMessage = <p className="OfferMaker__insufficientBalance">Error: You do not have enough {targetAsset.getCode()} to create this offer.</p>;
         }
       } else {
-        youHave = <p className="OfferMaker__youHave">Must <a href="#account/addTrust">accept the asset {targetAsset.getCode()}</a> to trade</p>;
+        youHave = <div>
+          <p className="OfferMaker__youHave">Must <a href="#account/addTrust">accept the asset {targetAsset.getCode()}</a> to trade</p>
+
+        </div>
       }
     }
 
@@ -269,6 +285,33 @@ export default class OfferMaker extends React.Component {
       success = <div className="s-alert s-alert--success OfferMaker__message">{this.state.successMessage}</div>;
     }
 
+    let overview;
+
+    if (this.props.d.session.state === 'in' && !hasAllTrust) {
+      overview = <div>
+        <p className="OfferMaker__enable">To trade, activate these assets on your account:</p>
+        {trustNeededAssets.map((asset, index) => {
+          return <TrustButton
+            key={asset.getCode() + '-' + asset.getIssuer()}
+            d={this.props.d}
+            asset={asset}
+            message={asset.getCode() + " accepted"}
+            trustMessage={"Accept " + asset.getCode()}
+            />
+        })}
+      </div>
+    } else {
+      overview = <div className="OfferMaker__overview">
+        {youHave}
+        {insufficientBalanceMessage}
+        {summary}
+        {error}
+        {success}
+        {submit}
+        {acccept}
+      </div>
+    }
+
     return <div>
       <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
       <form onSubmit={this.handleSubmit}  disabled={!this.state.valid || this.state.buttonState === 'pending'}>
@@ -294,15 +337,7 @@ export default class OfferMaker extends React.Component {
             </tr>
           </tbody>
         </table>
-        <div className="OfferMaker__overview">
-          {youHave}
-          {insufficientBalanceMessage}
-          {summary}
-          {error}
-          {success}
-          {submit}
-          {acccept}
-        </div>
+        {overview}
       </form>
     </div>
   }
