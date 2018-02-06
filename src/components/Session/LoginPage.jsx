@@ -11,6 +11,18 @@ const isValidSecretKey = input => {
   }
 }
 
+const isValidBip32Path = input => {
+  if (!input.startsWith("44'/148'")) {
+    return false;
+  }
+  input.split('/').forEach(function (element) {
+    if (!element.toString().endsWith('\'')) {
+      return false;
+    }
+  });
+  return true;
+}
+
 export default class LoginPage extends React.Component {
   constructor(props) {
     super(props);
@@ -19,7 +31,9 @@ export default class LoginPage extends React.Component {
       show: false,
       invalidKey: false,
       newKeypair: null,
-      currentTab: 'login', // 'login', 'createAccount'
+      ledgerStatus: 'None',
+      bip32Path: "44'/148'/0'",
+      currentTab: 'login', // 'login', 'createAccount', 'ledger'
     }
 
     this.handleInput = (event) => {
@@ -121,6 +135,45 @@ export default class LoginPage extends React.Component {
           </div>
         </div>
       </div>
+    } else if (this.state.currentTab === 'ledger') {
+      let ledgerStatus = this.state.ledgerStatus === 'Connected' ? 'Connected' : 'Not Connected';
+      let ledgerSignInButton;
+
+      if (ledgerStatus) {
+        ledgerSignInButton = <input type="submit" className="LoginPage__submit s-button" value="Sign in with Ledger"/>
+      } else {
+        ledgerSignInButton = <input type="submit" className="LoginPage__submit s-button" value="Connect Ledger on a supported browser" disabled={true}/>
+      }
+      let ledgerErrorMessage;
+      if (this.state.invalidBip32Path) {
+        ledgerErrorMessage = <div className="s-alert s-alert--alert">Invalid BIP32 path. Stellar BIP32 paths must be of the form 44'/148'/n'.</div>
+      }
+
+      body = <div className="LoginPage__body">
+        <div className="LoginPage__box">
+          <div className="LoginPage__form">
+            <p className="LoginPage__intro">Sign in with Ledger Nano S</p>
+            <form onSubmit={this.proceedWithLedger}>
+              <div>
+                <input name="bip32Path" type="text" className="LoginPage__password" value={this.state.bip32Path} onChange={this.handleInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
+              </div>
+              {ledgerErrorMessage}
+              <div>
+                {ledgerSignInButton}
+              </div>
+            </form>
+          </div>
+          <div className="LoginPage__notes">
+            <h3>Instructions</h3>
+            <ul>
+              <li>Ledger Nano S support is available on Chrome and Opera.</li>
+              <li>Install the Stellar app with the <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">Ledger Manager</a>.</li>
+              <li>Enable browser support in the app settings.</li>
+              <li>Choose the BIP32 path of the account you want use: 44'/148'/n' where n is the account index. Or use the default account 44'/148'/0'.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
     }
 
     return <div className="so-back islandBack islandBack--t">
@@ -130,11 +183,14 @@ export default class LoginPage extends React.Component {
         </div>
         <div className="LoginPage">
           <div className="LoginPage__sidebar">
-            <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'login' ? ' is-active' : '')} onClick={() => {this.setTab('login')}}>
-              Log in
-            </a>
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'createAccount' ? ' is-active' : '')} onClick={() => {this.setTab('createAccount')}}>
               Create account
+            </a>
+            <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'login' ? ' is-active' : '')} onClick={() => {this.setTab('login')}}>
+              Log in with secret
+            </a>
+            <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'ledger' ? ' is-active' : '')} onClick={() => {this.setTab('ledger')}}>
+              Log in with Ledger
             </a>
           </div>
           {body}
