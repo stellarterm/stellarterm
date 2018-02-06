@@ -11,7 +11,7 @@ const isValidSecretKey = input => {
   }
 }
 
-export default class LoginForm extends React.Component {
+export default class LoginPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -58,7 +58,7 @@ export default class LoginForm extends React.Component {
 
     let newKeypairDetails;
     if (this.state.newKeypair !== null) {
-      newKeypairDetails = <div className="LoginForm__generatedNote">
+      newKeypairDetails = <div className="LoginPage__generatedNote">
         <p><strong>Keep your key secure. This secret key will only be showed to you once. StellarTerm does not save it and will not be able to help you recover it if lost.</strong></p>
         <p>Public key (will be your Account ID): {this.state.newKeypair.pubKey}</p>
         <p>Secret key (<strong>SAVE THIS AND KEEP THIS SECURE</strong>): {this.state.newKeypair.secretKey}</p>
@@ -73,23 +73,23 @@ export default class LoginForm extends React.Component {
           <div className="island__header">
             Log in
           </div>
-          <div className="LoginForm">
-            <div className="LoginForm__form">
-              <p className="LoginForm__intro">Log in with your secret key to manage your account.</p>
+          <div className="LoginPage">
+            <div className="LoginPage__form">
+              <p className="LoginPage__intro">Log in with your secret key to manage your account.</p>
               <form onSubmit={this.handleSubmit}>
-                <label className="s-inputGroup LoginForm__inputGroup">
-                  <input type={inputType} className="s-inputGroup__item S-flexItem-share LoginForm__password" value={this.state.secretInput} onChange={this.handleInput} placeholder="Secret key (example: SBSMVCIWBL3HDB7N4EI3QKBKI4D5ZDSSDF7TMPB.....)" />
+                <label className="s-inputGroup LoginPage__inputGroup">
+                  <input type={inputType} className="s-inputGroup__item S-flexItem-share LoginPage__password" value={this.state.secretInput} onChange={this.handleInput} placeholder="Secret key (example: SBSMVCIWBL3HDB7N4EI3QKBKI4D5ZDSSDF7TMPB.....)" />
                   <div>
-                    <a className="LoginForm__show s-button s-button--light" onClick={this.toggleShow}>Show</a>
+                    <a className="LoginPage__show s-button s-button--light" onClick={this.toggleShow}>Show</a>
                   </div>
                 </label>
                 {errorMessage}
                 <div>
-                  <input type="submit" className="LoginForm__submit s-button" value="Log in"></input>
+                  <input type="submit" className="LoginPage__submit s-button" value="Log in"></input>
                 </div>
               </form>
             </div>
-            <div className="LoginForm__notes">
+            <div className="LoginPage__notes">
               <h3>Security notes</h3>
               <ul>
                 <li>Check the url to make sure you are on the correct website.</li>
@@ -100,18 +100,18 @@ export default class LoginForm extends React.Component {
             </div>
           </div>
         </div>
-        <div className="LoginForm">
-          <div className="LoginForm__form">
+        <div className="LoginPage">
+          <div className="LoginPage__form">
             <h3>Create Account Keypair</h3>
             <p>To get started on using the Stellar network, you must first create a keypair. The keypair consists of two parts:</p>
             <ul>
               <li><strong>Public key</strong>: The public key is used to identify the account. It is also known as an account. This public key is used for receiving funds.</li>
               <li><strong>Secret key</strong>: The secret key is used to access your account and make transactions. Keep this code safe and secure. Anyone with the code will have full access to the account and funds. If you lose the key, you will no longer be able to access the funds and there is no recovery mechanism.</li>
             </ul>
-            <input type="submit" className="LoginForm__generate s-button" onClick={this.handleGenerate} value="Generate keypair"></input>
+            <input type="submit" className="LoginPage__generate s-button" onClick={this.handleGenerate} value="Generate keypair"></input>
             {newKeypairDetails}
           </div>
-          <div className="LoginForm__notes">
+          <div className="LoginPage__notes">
             <h3>Account generation security notes</h3>
             <p>The key is generated using entropy from <a href="https://github.com/dchest/tweetnacl-js#random-bytes-generation">TweetNaCl's randomByte function</a> which, in most browsers, uses getRandomValues from the <a href="https://w3c.github.io/webcrypto/Overview.html">Web Cryptography API</a>. However, using a secure random number generation does not protect you from a compromised computer. Take great care to make sure your computer is secure and do not run this on a computer you do not trust.</p>
           </div>

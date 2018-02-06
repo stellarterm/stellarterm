@@ -1,4 +1,4 @@
-.LoginForm {
+.LoginPage {
   width: 680px;
   margin: 0 auto;
   border: 1px solid $s-color-primary7;
@@ -6,34 +6,34 @@
   border-radius: $s-var-radius;
   margin-top: 2em;
 }
-.LoginForm__form {
+.LoginPage__form {
   padding: 20px;
 }
-.LoginForm__inputGroup {
+.LoginPage__inputGroup {
   margin-bottom: 9px;
 }
-.LoginForm__password {
+.LoginPage__password {
   border-top-right-radius: 0;
   border-bottom-right-radius: 0;
   border-right: none;
 }
-.LoginForm__show {
+.LoginPage__show {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
 }
-.LoginForm__notes {
+.LoginPage__notes {
   border-top: 1px solid $s-color-primary7;
   padding: 20px;
 }
 
-.LoginForm ul {
+.LoginPage ul {
   margin-left: 2em;
 }
 
-.LoginForm__generate {
+.LoginPage__generate {
   margin-top: 1em;
 }
 
-.LoginForm__generatedNote {
+.LoginPage__generatedNote {
   padding-top: 1em;
 }
