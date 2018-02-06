@@ -33,17 +33,20 @@ export default class OfferMaker extends React.Component {
     }
   }
   componentWillUnmount() {
-    this.props.d.orderbook.event.unlisten(this.listenId);
+    this.orderbookUnsub();
+    this.sessionUnsub();
   }
   constructor(props) {
     super(props);
     this.initialized = false;
 
-    this.listenId = this.props.d.orderbook.event.listen((data) => {
+    this.orderbookUnsub = this.props.d.orderbook.event.sub((data) => {
       if (data && data.pickPrice) {
         this.updateState('price', data.pickPrice);
       }
     });
+    this.sessionUnsub = this.props.d.session.event.sub(() => {this.forceUpdate()});
+
 
 
     this.state = {
