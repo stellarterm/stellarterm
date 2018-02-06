@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-
+const images = require('../../images');
 // TODO: Move this into Validator
 const isValidSecretKey = input => {
   try {
@@ -174,7 +174,28 @@ export default class LoginPage extends React.Component {
             </form>
           </div>
           <div className="LoginPage__notes">
-            <h3>Instructions</h3>
+            <h3>Setup instructions</h3>
+            <ol>
+              <li>Get a Ledger Nano S and connect it to your computer.</li>
+              <li>Set up your Ledger Nano S by following instructions on the Ledger Nano site: <a href="https://www.ledgerwallet.com/start/" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/start/</a></li>
+              <li>Install the <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">Ledger Manager</a> app on your computer: <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/apps/manager</a></li>
+              <li>Inside the Ledger Manager app, go to Applications and install the Stellar app:
+                <br />
+                <img src={images['ledger-app']} alt="Stellar app installation inside Ledger Manager" width="355" height="77" />
+              </li>
+              <li>
+                On your Ledger device, nagivate to the Stellar app. Press both buttons to enter the app.
+                <br />
+                <img src={images['ledger-nano-picture']} alt="Ledger Nano photo" width="300" height="135" />
+              </li>
+              <li>
+                Inside the app, go to <strong>Settings</strong>, then <strong>Browser support</strong>, then select yes and press both buttons.
+              </li>
+            </ol>
+
+          </div>
+          <div className="LoginPage__notes">
+            <h3>Notes</h3>
             <ul>
               <li>Ledger Nano S support is available on Chrome and Opera.</li>
               <li>Install the Stellar app with the <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">Ledger Manager</a>.</li>
