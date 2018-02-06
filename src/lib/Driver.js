@@ -7,6 +7,7 @@ import Send from './driver/Send';
 import History from './driver/History';
 import Session from './driver/Session';
 import Orderbook from './driver/Orderbook';
+import Modal from './driver/Modal';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -19,8 +20,8 @@ function Driver(driverOpts) {
   this.send = new Send(this);
   this.history = new History(this);
   this.ticker = new Ticker();
+  this.modal = new Modal(this);
 
-  window.driver = this;
   window.view = (accountId) => {
     this.session.handlers.logIn('',{publicKey:accountId})
   }

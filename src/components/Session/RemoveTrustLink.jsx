@@ -13,17 +13,20 @@ export default class RemoveTrustLink extends React.Component {
     this.handleRemoveTrust = e => {
       e.preventDefault();
       this.props.d.session.handlers.removeTrust(this.props.balance.code, this.props.balance.issuer)
-      .then(res => {
-        console.log('Successfully removed trust', res);
-      })
-      .catch(err => {
-        console.log('Errored when removing trust', err);
-        this.setState({
-          status: 'error',
-        })
-      })
-      this.setState({
-        status: 'pending',
+      .then(bssResult => {
+        if (bssResult.status === 'finish') {
+          this.setState({status: 'pending'});
+          return bssResult.serverResult
+          .then(res => {
+            console.log('Successfully removed trust', res);
+          })
+          .catch(err => {
+            console.log('Errored when removing trust', err);
+            this.setState({
+              status: 'error',
+            })
+          })
+        }
       })
     }
   }

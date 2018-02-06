@@ -81,16 +81,20 @@ const MagicSpoon = {
           sdkAccount.balances = res.balances;
           updated = true;
         }
-        if (!_.isEqual(sdkAccount.sequence, res.sequence)) {
-          sdkAccount.sequence = res.sequence;
-          updated = true;
-        }
+
+        // We shouldn't pull latest sequence number. It'll only go out of sync if user is using the account in two places
 
         if (updated) {
           onUpdate();
         }
       }
     });
+
+    sdkAccount.decrementSequence = () => {
+      sdkAccount._baseAccount.sequence = sdkAccount._baseAccount.sequence.sub(1);
+      window.s = sdkAccount._baseAccount.sequence
+      sdkAccount.sequence = sdkAccount._baseAccount.sequence.toString();
+    }
 
     sdkAccount.refresh = async () => {
       let newAccount = await Server.loadAccount(keypair.publicKey());
@@ -303,7 +307,7 @@ const MagicSpoon = {
   // opts.price -- Exchange ratio selling/buying
   // opts.amount -- Here, it's relative to the base (JS-sdk does: Total amount selling)
   // opts.type -- String of either 'buy' or 'sell' (relative to base currency)
-  createOffer(Server, spoonAccount, side, opts) {
+  buildTxCreateOffer(Server, spoonAccount, side, opts) {
     let sdkBuying;
     let sdkSelling;
     let sdkPrice;
@@ -336,17 +340,11 @@ const MagicSpoon = {
     };
     const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.manageOffer(operationOpts))
-      .build();
-    spoonAccount.sign(transaction);
-    return Server.submitTransaction(transaction)
-      .then(res => {
-        console.log('Offer create success');
-        console.log(res)
-        spoonAccount.updateOffers(); // Just to be doubly sure
-        return;
-      })
+      // DONT call .build()
+
+    return transaction;
   },
-  async sendPayment(Server, spoonAccount,  opts) {
+  async buildTxSendPayment(Server, spoonAccount,  opts) {
     // sendPayment will detect if the account is a new account. If so, then it will
     // be a createAccount operation
     let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
@@ -371,25 +369,18 @@ const MagicSpoon = {
       transaction = transaction.addMemo(Stellarify.memo(opts.memo.type, opts.memo.content));
     }
 
-    transaction = transaction.build();
-    spoonAccount.sign(transaction);
-
-    const transactionResult = await Server.submitTransaction(transaction);
-    return transactionResult;
+    return transaction;
   },
-  async setInflation(Server, spoonAccount, inflationDest) {
+  buildTxSetInflation(spoonAccount, inflationDest) {
     let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
     transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
       inflationDest: inflationDest,
     }));
+    // DONT call .build()
 
-    transaction = transaction.build();
-    spoonAccount.sign(transaction);
-
-    const transactionResult = await Server.submitTransaction(transaction);
-    return transactionResult;
+    return transaction;
   },
-  changeTrust(Server, spoonAccount, opts) {
+  buildTxChangeTrust(Server, spoonAccount, opts) {
     let sdkLimit;
     if (typeof opts.limit === 'string' || opts.limit instanceof String) {
       sdkLimit = opts.limit;
@@ -401,18 +392,12 @@ const MagicSpoon = {
       asset: opts.asset,
       limit: sdkLimit,
     };
-    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+    return new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
-      .build();
-    spoonAccount.sign(transaction);
-    return Server.submitTransaction(transaction)
-      .then(txResult => {
-        spoonAccount.refresh();
-        return txResult;
-      });
+      // DONT call .build()
   },
-  async removeOffer(Server, spoonAccount, offerId) {
-    const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+  buildTxRemoveOffer(Server, spoonAccount, offerId) {
+    return new StellarSdk.TransactionBuilder(spoonAccount)
       .addOperation(StellarSdk.Operation.manageOffer({
         buying: StellarSdk.Asset.native(),
         selling: new StellarSdk.Asset('REMOVE', spoonAccount.accountId()),
@@ -420,11 +405,7 @@ const MagicSpoon = {
         price: '1',
         offerId,
       }))
-      .build();
-    spoonAccount.sign(transaction);
-    const transactionResult = await Server.submitTransaction(transaction);
-    spoonAccount.updateOffers();
-    return transactionResult;
+      // DONT call .build()
   },
   async History(Server, publicKey, onUpdate) {
     let history = {

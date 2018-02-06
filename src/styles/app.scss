@@ -16,6 +16,9 @@ body {
   font-size: $s-scale-4;
   min-width: 1052px;
 }
+#app {
+  position: relative;
+}
 
 @import 'island';
 @import 'lightenZeros';
@@ -54,7 +57,10 @@ body {
 
 @import 'DateCard';
 
-@import 'LoginForm';
+@import 'GlobalModal';
+@import 'TransactionSummary';
+
+@import 'LoginPage';
 @import 'Session';
 @import 'AccountView';
 @import 'HistoryView';
