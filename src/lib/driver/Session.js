@@ -88,6 +88,10 @@ export default function Send(driver) {
       }
     },
 
+    // Using buildSignSubmit is the preferred way to go. It handles sequence numbers correctly.
+    // If you use sign, you have to pay attention to sequence numbers because js-stellar-sdk's .build() updates it magically
+    // The reason this doesn't take in a TransactionBuilder so we can call build() here is that there
+    // are cases when we want to paste in a raw transaction and sign that
     sign: (tx) => {
       console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\nsequence: ' + tx.sequence, '\n\n' + tx.toEnvelope().toXDR('base64'))
       return driver.modal.handlers.activate('sign')

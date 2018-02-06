@@ -344,7 +344,7 @@ const MagicSpoon = {
 
     return transaction;
   },
-  async sendPayment(Server, spoonAccount,  opts) {
+  async buildTxSendPayment(Server, spoonAccount,  opts) {
     // sendPayment will detect if the account is a new account. If so, then it will
     // be a createAccount operation
     let transaction = new StellarSdk.TransactionBuilder(spoonAccount)
@@ -369,11 +369,7 @@ const MagicSpoon = {
       transaction = transaction.addMemo(Stellarify.memo(opts.memo.type, opts.memo.content));
     }
 
-    transaction = transaction.build();
-    spoonAccount.sign(transaction);
-
-    const transactionResult = await Server.submitTransaction(transaction);
-    return transactionResult;
+    return transaction;
   },
   buildTxSetInflation(spoonAccount, inflationDest) {
     let transaction = new StellarSdk.TransactionBuilder(spoonAccount)

@@ -299,22 +299,29 @@ export default function Send(driver) {
       this.event.trigger();
     },
     submit: async () => {
-      this.state = 'pending';
-      this.event.trigger();
-      let result;
       try {
         const sendMemo = (this.memoType === 'none') ? undefined : {
           type: this.memoType,
           content: this.memoContent,
         };
-        result = await MagicSpoon.sendPayment(driver.Server, driver.session.account, {
+
+        let tx = await MagicSpoon.buildTxSendPayment(driver.Server, driver.session.account, {
           destination: this.accountId,
           asset: this.step2.availability.asset,
           amount: this.step3.amount,
           memo: sendMemo,
         });
-        this.txId = result.hash;
-        this.state = 'success';
+
+        let bssResult = await driver.session.handlers.buildSignSubmit(tx);
+
+        if (bssResult.status === 'finish') {
+          this.state = 'pending';
+          this.event.trigger();
+
+          let result = await bssResult.serverResult;
+          this.txId = result.hash;
+          this.state = 'success';
+        }
       } catch (err) {
         this.state = 'error';
         if (err instanceof Error) {
@@ -322,8 +329,8 @@ export default function Send(driver) {
         } else {
           this.errorDetails = JSON.stringify(err, null, 2);
         }
+        this.event.trigger();
       }
-      this.event.trigger();
     },
     reset: () => {
       resetAll();
