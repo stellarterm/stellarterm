@@ -186,7 +186,7 @@ export default function Send(driver) {
       // Trust lines are removed by setting limit to 0
       let tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
         asset: new StellarSdk.Asset(code, issuer),
-      limit: '0',
+        limit: '0',
       });
       return await this.handlers.buildSignSubmit(tx);
     },
@@ -195,7 +195,14 @@ export default function Send(driver) {
         baseBuying: driver.orderbook.data.baseBuying,
         counterSelling: driver.orderbook.data.counterSelling,
       }));
-      return await this.handlers.buildSignSubmit(tx);
+      let bssResult = await this.handlers.buildSignSubmit(tx);
+      if (bssResult.status === 'finish') {
+        bssResult.serverResult.then(res => {
+          this.account.updateOffers();
+          return res;
+        })
+      }
+      return bssResult;
     },
     removeOffer: async (offerId) => {
       let tx = MagicSpoon.buildTxRemoveOffer(driver.Server, this.account, offerId);
