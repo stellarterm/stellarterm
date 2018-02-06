@@ -18,6 +18,7 @@ export default function Send(driver) {
     this.unfundedAccountId = '';
     this.inflationDone = false;
     this.account = null; // MagicSpoon.Account instance
+    this.authType = ''; // '', 'secret', 'ledger', 'pubkey'
   };
   init();
 
@@ -33,7 +34,7 @@ export default function Send(driver) {
 
 
   this.handlers = {
-    logIn: async (secretKey, opts) => {
+    logInWithSecret: async (secretKey, opts) => {
       let keypair;
       try {
         if (opts && opts.publicKey !== undefined) {
@@ -57,6 +58,7 @@ export default function Send(driver) {
           this.event.trigger();
         });
         this.state = 'in';
+        this.authType = 'secret';
 
         let inflationDoneDestinations = {
           'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW': true,
@@ -75,7 +77,7 @@ export default function Send(driver) {
             console.log('Checking to see if account has been created yet');
             if (this.state === 'unfunded') {
               // Avoid race conditions
-              this.handlers.logIn(secretKey);
+              this.handlers.logInWithSecret(secretKey);
             }
           }, 2000);
           this.event.trigger();
@@ -94,18 +96,27 @@ export default function Send(driver) {
     // are cases when we want to paste in a raw transaction and sign that
     sign: (tx) => {
       console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\nsequence: ' + tx.sequence, '\n\n' + tx.toEnvelope().toXDR('base64'))
-      return driver.modal.handlers.activate('sign', tx)
-      .then((modalResult) => {
-        if (modalResult.status === 'finish') {
-          this.account.sign(tx);
-          console.log('Signed tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
-          return {
-            status: 'finish',
-            signedTx: tx
-          };
-        }
-        return modalResult
-      })
+      if (this.authType === 'secret') {
+        this.account.sign(tx);
+        console.log('Signed tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
+        return {
+          status: 'finish',
+          signedTx: tx
+        };
+      } else {
+        return driver.modal.handlers.activate('sign', tx)
+        .then((modalResult) => {
+          if (modalResult.status === 'finish') {
+            this.account.sign(tx);
+            console.log('Signed tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
+            return {
+              status: 'finish',
+              signedTx: tx
+            };
+          }
+          return modalResult
+        })
+      }
     },
     buildSignSubmit: async (txBuilder) => {
       // Returns: bssResult which contains status and (if finish) serverResult
