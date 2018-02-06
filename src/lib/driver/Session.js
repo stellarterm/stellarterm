@@ -47,12 +47,12 @@ export default function Send(driver) {
       });
     },
     logInWithLedger: async (bip32Path) => {
-
-      // TODO
-
-      let keypair = StellarSdk.Keypair.fromPublicKey('GD3Y2TP4XCFPC2UXXWOD6S3LRHJ53JV56FACKMCLZIILPNZVQ4KUMFOK');
-      return this.handlers.logIn(keypair, {
-        authType: 'ledger',
+      new StellarLedger.Api(new StellarLedger.comm(Number.MAX_VALUE)).getPublicKey_async(bip32Path).then((result) => {
+        let keypair = StellarSdk.Keypair.fromPublicKey(result.publicKey);
+        return this.handlers.logIn(keypair, {
+          authType: 'ledger',
+          bip32Path,
+        });
       });
     },
     logIn: async (keypair, opts) => {
@@ -63,7 +63,7 @@ export default function Send(driver) {
       }
 
       try {
-        this.account = await MagicSpoon.Account(driver.Server, keypair, () => {
+        this.account = await MagicSpoon.Account(driver.Server, keypair, opts, () => {
           this.event.trigger();
         });
         this.state = 'in';
@@ -103,7 +103,7 @@ export default function Send(driver) {
     // If you use sign, you have to pay attention to sequence numbers because js-stellar-sdk's .build() updates it magically
     // The reason this doesn't take in a TransactionBuilder so we can call build() here is that there
     // are cases when we want to paste in a raw transaction and sign that
-    sign: (tx) => {
+    sign: async (tx) => {
       console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\nsequence: ' + tx.sequence, '\n\n' + tx.toEnvelope().toXDR('base64'))
       if (this.authType === 'secret') {
         this.account.sign(tx);
@@ -114,9 +114,9 @@ export default function Send(driver) {
         };
       } else {
         return driver.modal.handlers.activate('sign', tx)
-        .then((modalResult) => {
+        .then(async (modalResult) => {
           if (modalResult.status === 'finish') {
-            this.account.sign(tx);
+            await this.account.sign(tx);
             console.log('Signed tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
             return {
               status: 'finish',
