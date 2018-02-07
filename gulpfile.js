@@ -161,9 +161,6 @@ gulp.task('css-reload', ['styles'], bsReload);
 gulp.task('copyBower', () => gulp.src('bower_components/**/*')
     .pipe(gulp.dest('dist/bower_components/')));
 
-gulp.task('copyBrowserDeps', () => gulp.src('src/browser_deps/**/*')
-    .pipe(gulp.dest('dist/browser_deps/')));
-
 // Build production site.
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
     .pipe($.uglify())
