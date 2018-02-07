@@ -115,7 +115,7 @@ export default class LoginPage extends React.Component {
 
     if (this.state.currentTab === 'login') {
       body = <div className="LoginPage__body">
-        <div className="LoginPage__box">
+        <div className="LoginPage__greenBox">
           <div className="LoginPage__form">
             <p className="LoginPage__intro">Log in with your secret key to manage your account.</p>
             <form onSubmit={this.handleSubmit}>
@@ -144,7 +144,7 @@ export default class LoginPage extends React.Component {
       </div>
     } else if (this.state.currentTab === 'createAccount') {
       body = <div className="LoginPage__body">
-        <div className="LoginPage__box">
+        <div className="LoginPage__greenBox">
           <div className="LoginPage__form">
             <h3>Create Account Keypair</h3>
             <p>To get started on using the Stellar network, you must first create a keypair. The keypair consists of two parts:</p>
@@ -226,38 +226,37 @@ export default class LoginPage extends React.Component {
           <img src={images['ledger-nano-s-buttons']} className="img--noSelect" alt="Ledger Nano S" width="382" height="100" />
         </div>
 
-        <div className="LoginPage__box">
+        <div className="LoginPage__greenBox">
           {loginForm}
-          <div className="LoginPage__notes">
-            <h3>Setup instructions</h3>
-            <ol>
-              <li>Get a Ledger Nano S and connect it to your computer.</li>
-              <li>Set up your Ledger Nano S by following instructions on the Ledger Nano site: <a href="https://www.ledgerwallet.com/start/" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/start/</a></li>
-              <li>Install the <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">Ledger Manager</a> app on your computer: <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/apps/manager</a></li>
-              <li>Inside the Ledger Manager app, go to Applications and install the Stellar app:
-                <br />
-                <img src={images['ledger-app']} alt="Stellar app installation inside Ledger Manager" width="355" height="77" />
-              </li>
-              <li>
-                On your Ledger device, nagivate to the Stellar app. Press both buttons to enter the app.
-                <br />
-                <img src={images['ledger-nano-picture']} alt="Ledger Nano photo" width="300" height="135" />
-              </li>
-              <li>
-                Inside the app, go to <strong>Settings</strong>, then <strong>Browser support</strong>, then select <strong>yes</strong> and press both buttons.
-              </li>
-            </ol>
-
-          </div>
-          <div className="LoginPage__notes">
-            <h3>Notes</h3>
-            <ul>
-              <li>Ledger Nano S support is available on Chrome and Opera.</li>
-              <li>Install the Stellar app with the <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">Ledger Manager</a>.</li>
-              <li>Enable browser support in the app settings.</li>
-              <li>Choose the BIP32 path of the account you want use: 44'/148'/n' where n is the account index. Or use the default account 44'/148'/0'.</li>
-            </ul>
-          </div>
+        </div>
+        <div className="LoginPage__paddedBox">
+          <h3>Setup instructions</h3>
+          <ol>
+            <li>Get a Ledger Nano S and connect it to your computer.</li>
+            <li>Set up your Ledger Nano S by following instructions on the Ledger Nano site: <a href="https://www.ledgerwallet.com/start/" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/start/</a></li>
+            <li>Install the <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">Ledger Manager</a> app on your computer: <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/apps/manager</a></li>
+            <li>Inside the Ledger Manager app, go to Applications and install the Stellar app.
+              <br />
+              <img src={images['ledger-app']} className="img--noSelect" alt="Stellar app installation inside Ledger Manager" width="355" height="77" />
+            </li>
+            <li>
+              On your Ledger device, nagivate to the Stellar app and open the app.
+              <br />
+              <img src={images['ledger-nano-picture']} className="img--noSelect" alt="Ledger Nano photo" width="300" height="135" />
+            </li>
+            <li>
+              Inside the app, go to <strong>Settings</strong>, then <strong>Browser support</strong>, then select <strong>yes</strong> and press both buttons.
+            </li>
+          </ol>
+        </div>
+        <div className="LoginPage__paddedBox">
+          <h3>Notes</h3>
+          <ul>
+            <li>Ledger Nano S support is available on Chrome and Opera.</li>
+            <li>Install the Stellar app with the <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">Ledger Manager</a>.</li>
+            <li>Enable browser support in the app settings.</li>
+            <li>Choose the BIP32 path of the account you want use: 44'/148'/n' where n is the account index. Or use the default account 44'/148'/0'.</li>
+          </ul>
         </div>
       </div>
     }
@@ -276,7 +275,7 @@ export default class LoginPage extends React.Component {
               Log in with key
             </a>
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'ledger' ? ' is-active' : '')} onClick={() => {this.setTab('ledger')}}>
-              <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger Logo" width="75" height="20" />
+              <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger" width="75" height="20" />
             </a>
           </div>
           {body}

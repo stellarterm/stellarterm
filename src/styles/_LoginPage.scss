@@ -42,11 +42,14 @@
 .LoginPage__body {
   flex: 1;
 }
-.LoginPage__box {
+.LoginPage__greenBox {
   border: 1px solid $s-color-primary7;
   background: $s-color-primary9;
   border-radius: $s-var-radius;
   margin: 16px 18px;
+}
+.LoginPage__paddedBox {
+  padding: 16px 18px;
 }
 
 .LoginPage__form {
