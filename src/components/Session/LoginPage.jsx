@@ -24,7 +24,7 @@ export default class LoginPage extends React.Component {
       newKeypair: null,
       bip32Path: '0',
       ledgerAdvanced: false,
-      currentTab: 'ledger', // 'login', 'createAccount', 'ledger'
+      currentTab: 'login', // 'login', 'createAccount', 'ledger'
     }
 
 
@@ -270,7 +270,7 @@ export default class LoginPage extends React.Component {
         <div className="LoginPage">
           <div className="LoginPage__sidebar">
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'createAccount' ? ' is-active' : '')} onClick={() => {this.setTab('createAccount')}}>
-              Create account
+              New account
             </a>
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'login' ? ' is-active' : '')} onClick={() => {this.setTab('login')}}>
               Log in with key
