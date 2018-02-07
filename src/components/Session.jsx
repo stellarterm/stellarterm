@@ -12,6 +12,7 @@ import Generic from './Generic.jsx';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import Loading from './Loading.jsx';
 import HistoryView from './Session/HistoryView.jsx';
+import clickToSelect from '../lib/clickToSelect';
 
 class Session extends React.Component {
   constructor(props) {
@@ -84,11 +85,11 @@ class Session extends React.Component {
       if (part1 === undefined) {
         content = <ErrorBoundary>
           <Generic>
-            <h2>How to receive payments</h2>
             <div className="s-alert s-alert--primary">
-              Your Wallet Account ID: <strong>{this.props.d.session.account.accountId()}</strong>
+              <p className="Sesssion__yourId__title">Your Wallet Account ID</p>
+              <strong className="clickToSelect Sesssion__yourId__accountId" onClick={clickToSelect}>{this.props.d.session.account.accountId()}</strong>
             </div>
-            <p>To receive a payment from someone else, you share with them your account ID which <strong>begins with a G</strong>.</p>
+            <p>To receive payments, share your account ID with them (begins with a G).</p>
           </Generic>
           <Generic noTopPadding>
             <h2>Where is the money stored?</h2>
