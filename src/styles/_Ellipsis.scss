@@ -1,0 +1,6 @@
+.Ellipsis__dot {
+  transition: opacity 0.3s;
+}
+.Ellipsis__dot.is-hidden {
+  opacity: 0;
+}
