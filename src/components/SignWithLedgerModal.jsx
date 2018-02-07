@@ -1,6 +1,7 @@
 const React = window.React = require('react');
 import TransactionSummary from './TransactionSummary.jsx';
 import MagicSpoon from '../lib/MagicSpoon';
+const images = require('../images');
 
 export default class GlobalModal extends React.Component {
   constructor(props) {
@@ -52,10 +53,11 @@ export default class GlobalModal extends React.Component {
         Sign transaction with your Ledger
       </div>
       <div className="GlobalModal__content">
+        <img src={images['ledger-logo']} className="img--noSelect" alt="Ledger Logo" width="150" height="40" />
         <TransactionSummary tx={d.modal.inputData}></TransactionSummary>
       </div>
       <div className="GlobalModal__content">
-        Action required: <strong>Confirm transaction</strong> on your ledger nano. ✔<br />
+        Action required: <strong>Confirm transaction</strong> on your Ledger device. ✔<br />
       </div>
       <div className="GlobalModal__navigation">
         <button className="s-button s-button--light" onClick={() => {d.modal.handlers.cancel()}}>Cancel</button>
