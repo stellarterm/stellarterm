@@ -1,5 +1,7 @@
 const React = window.React = require('react');
 const images = require('../../images');
+
+
 // TODO: Move this into Validator
 const isValidSecretKey = input => {
   try {
@@ -31,10 +33,10 @@ export default class LoginPage extends React.Component {
       show: false,
       invalidKey: false,
       newKeypair: null,
-      ledgerStatus: 'None',
       bip32Path: "44'/148'/0'",
-      currentTab: 'login', // 'login', 'createAccount', 'ledger'
+      currentTab: 'ledger', // 'login', 'createAccount', 'ledger'
     }
+
 
     this.handleInput = (event) => {
       this.setState({secretInput: event.target.value});
@@ -49,7 +51,7 @@ export default class LoginPage extends React.Component {
           invalidBip32Path: true
         });
       }
-      this.props.d.session.handlers.logInWithLedger(this.state.bip32Path);
+      this.props.d.session.handlers.logInWithLedger(this.state.bip32Path)
     }
     this.toggleShow = (event) => {
       event.preventDefault();
@@ -78,7 +80,16 @@ export default class LoginPage extends React.Component {
     }
   }
 
+  componentDidMount() {
+    this.mounted = true;
+    setTimeout(this.tickLedger, 1);
+  }
+  componentWillUnmount() {
+    this.mounted = false;
+  }
+
   render() {
+    let d = this.props.d;
     let errorMessage;
     if (this.state.invalidKey) {
       errorMessage = <div className="s-alert s-alert--alert">Invalid secret key. Hint: it starts with the letter S and is all uppercase</div>
@@ -148,17 +159,23 @@ export default class LoginPage extends React.Component {
         </div>
       </div>
     } else if (this.state.currentTab === 'ledger') {
-      let ledgerStatus = this.state.ledgerStatus === 'Connected' ? 'Connected' : 'Not Connected';
       let ledgerSignInButton;
+      let ledgerSetupErrorMessage;
+      if (d.session.setupLedgerError) {
+        // This usually doesn't happen. To simulate this, find the line:
+        // new StellarLedger.Api(new StellarLedger.comm(NUMBER))
+        // and change the number to something low so it has a timeout
+        ledgerSetupErrorMessage = <div className="s-alert s-alert--alert LoginPage__error">Connected to Ledger but returned an error: <br /><strong>{d.session.setupLedgerError}</strong></div>
+      }
 
-      if (ledgerStatus) {
+      if (d.session.ledgerConnected) {
         ledgerSignInButton = <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Sign in with Ledger"/>
       } else {
         ledgerSignInButton = <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Connect Ledger on a supported browser" disabled={true}/>
       }
       let ledgerErrorMessage;
       if (this.state.invalidBip32Path) {
-        ledgerErrorMessage = <div className="s-alert s-alert--alert">Invalid BIP32 path. Stellar BIP32 paths must be of the form 44'/148'/n'.</div>
+        ledgerErrorMessage = <div className="s-alert s-alert--alert LoginPage__error">Invalid BIP32 path. Stellar BIP32 paths must be of the form 44'/148'/n'.</div>
       }
 
       body = <div className="LoginPage__body">
@@ -174,6 +191,7 @@ export default class LoginPage extends React.Component {
               <div>
                 {ledgerSignInButton}
               </div>
+              {ledgerSetupErrorMessage}
             </form>
           </div>
           <div className="LoginPage__notes">
@@ -192,7 +210,7 @@ export default class LoginPage extends React.Component {
                 <img src={images['ledger-nano-picture']} alt="Ledger Nano photo" width="300" height="135" />
               </li>
               <li>
-                Inside the app, go to <strong>Settings</strong>, then <strong>Browser support</strong>, then select yes and press both buttons.
+                Inside the app, go to <strong>Settings</strong>, then <strong>Browser support</strong>, then select <strong>yes</strong> and press both buttons.
               </li>
             </ol>
 

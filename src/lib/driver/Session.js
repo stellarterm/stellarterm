@@ -16,6 +16,10 @@ export default function Send(driver) {
   const init = () => {
     this.state = 'out'; // 'out', 'unfunded', 'loading', 'in'
     this.setupError = false; // Unable to contact network
+
+    this.setupLedgerError = null; // Could connect but couldn't reach address
+    this.ledgerConnected = false;
+
     this.unfundedAccountId = '';
     this.inflationDone = false;
     this.account = null; // MagicSpoon.Account instance
@@ -33,6 +37,27 @@ export default function Send(driver) {
     }
   };
 
+
+  // Ping the Ledger device to see if it is connected
+  this.pingLedger = (loop = false) => {
+    // console.log('Ledger wallet ping. Connection: ' + this.ledgerConnected)
+    new StellarLedger.Api(new StellarLedger.comm(10)).connect(success => {
+      if (this.ledgerConnected === false) {
+        this.ledgerConnected = true;
+        this.event.trigger();
+      }
+      // console.log('Ledger wallet pong. Connection: ' + this.ledgerConnected)
+      setTimeout(() => {this.pingLedger(true)}, 5000);
+    }, error => {
+      if (this.ledgerConnected === true) {
+        this.ledgerConnected = false;
+        this.event.trigger();
+      }
+      setTimeout(() => {this.pingLedger(true)}, 100);
+    })
+  }
+  setTimeout(() => {this.pingLedger(true)}, 100);
+
   this.handlers = {
     logInWithSecret: async (secretKey) => {
       let keypair = StellarSdk.Keypair.fromSecret(secretKey);
@@ -47,13 +72,29 @@ export default function Send(driver) {
       });
     },
     logInWithLedger: async (bip32Path) => {
-      new StellarLedger.Api(new StellarLedger.comm(Number.MAX_VALUE)).getPublicKey_async(bip32Path).then((result) => {
-        let keypair = StellarSdk.Keypair.fromPublicKey(result.publicKey);
+      try {
+        let connectionResult = await new StellarLedger.Api(new StellarLedger.comm(4)).getPublicKey_async(bip32Path)
+        this.setupLedgerError = null;
+        let keypair = StellarSdk.Keypair.fromPublicKey(connectionResult.publicKey);
         return this.handlers.logIn(keypair, {
           authType: 'ledger',
           bip32Path,
         });
-      });
+      } catch (error) {
+        this.setupLedgerError = error.message;
+        if (error && error.errorCode) {
+          let u2fErrorCodes = {
+              0: 'OK',
+              1: 'OTHER_ERROR',
+              2: 'BAD_REQUEST',
+              3: 'CONFIGURATION_UNSUPPORTED',
+              4: 'DEVICE_INELIGIBLE',
+              5: 'TIMEOUT (unable to communicate with device)',
+          };
+          this.setupLedgerError = u2fErrorCodes[error.errorCode];
+        }
+        this.event.trigger();
+      }
     },
     logIn: async (keypair, opts) => {
       this.setupError = false;
