@@ -40,7 +40,7 @@ export default function Send(driver) {
 
   // Ping the Ledger device to see if it is connected
   this.pingLedger = (loop = false) => {
-    console.log('Ledger wallet ping. Connection: ' + this.ledgerConnected)
+    // console.log('Ledger wallet ping. Connection: ' + this.ledgerConnected)
     new StellarLedger.Api(new StellarLedger.comm(4)).connect(success => {
       if (this.ledgerConnected === false) {
         this.ledgerConnected = true;
@@ -53,7 +53,7 @@ export default function Send(driver) {
         this.ledgerConnected = false;
         this.event.trigger();
       }
-      setTimeout(() => {this.pingLedger(true)}, 100);
+      setTimeout(() => {this.pingLedger(true)}, 1000);
     })
   }
   this.pingLedger(true);
