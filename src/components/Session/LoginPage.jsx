@@ -247,7 +247,7 @@ export default class LoginPage extends React.Component {
               Log in with key
             </a>
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'ledger' ? ' is-active' : '')} onClick={() => {this.setTab('ledger')}}>
-              Log in with Ledger
+              <img className="LoginPage__sidebar__tab__img--invertible" src={images['ledger-logo']} alt="Ledger Logo" width="100" height="26" />
             </a>
           </div>
           {body}
