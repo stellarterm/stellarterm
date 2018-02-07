@@ -74,7 +74,7 @@ const operationsMap = {
 };
 
 export default function TransactionSummary(props) {
-  let rows = [];
+  let ops = [];
   let tx = props.tx;
 
   for (let i = 0; i < tx.operations.length; i++) {
@@ -131,8 +131,6 @@ export default function TransactionSummary(props) {
             }
           }
 
-
-
           if (!hide) {
             if (attr === 'asset') {
               // Push asset to the top
@@ -153,7 +151,7 @@ export default function TransactionSummary(props) {
       }
     }
 
-    rows.push(<div key={'table_op' + i} className="TransactionSummary__row">
+    ops.push(<div key={'table_op' + i} className="TransactionSummary__row">
       <div className="TransactionSummary__row__label">
         {label}
       </div>
@@ -167,6 +165,20 @@ export default function TransactionSummary(props) {
       </div>
     </div>);
   }
+
+  console.log(tx)
+
+
+  let memo;
+  if (tx.memo._type === 'none') {
+    memo = <em className="TransactionSummary__row__content__light">none</em>
+  } else {
+    memo = <article className="TransactionSummary__row__content__inline">
+      <p className="TransactionSummary__row__content__inline__title">{tx.memo._type}</p>
+      <div className="TransactionSummary__row__content__inline__content">{tx.memo._value}</div>
+    </article>
+  }
+
   return <div className="TransactionSummary">
     <div key="table_source" className="TransactionSummary__row TransactionSummary__row--first">
       <div className="TransactionSummary__row__label">
@@ -184,13 +196,21 @@ export default function TransactionSummary(props) {
         {tx.sequence}
       </div>
     </div>
-    {rows}
+    {ops}
     <div key="table_fee" className="TransactionSummary__row">
       <div className="TransactionSummary__row__label">
         Fee
       </div>
       <div className="TransactionSummary__row__content">
         {new BigNumber(tx.fee).dividedBy(10000000).toString()} XLM <strong>{tx.fee <= 100 ? '(~$0.00)' : ''}</strong>
+      </div>
+    </div>
+    <div key="table_memo" className="TransactionSummary__row">
+      <div className="TransactionSummary__row__label">
+        Memo
+      </div>
+      <div className="TransactionSummary__row__content">
+        {memo}
       </div>
     </div>
   </div>
