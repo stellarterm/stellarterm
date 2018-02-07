@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import AssetCard2 from './AssetCard2.jsx';
+import BigNumber from 'bignumber.js';
 
 // operationsMap is modified code from Stellar Laboratory licensed under Apache-2.0
 // Interesting trivia: This was written by Iris Li in 2015 while at SDF
@@ -158,6 +159,14 @@ export default function TransactionSummary(props) {
       </div>
     </div>
     {rows}
+    <div key="table_fee" className="TransactionSummary__row">
+      <div className="TransactionSummary__row__label">
+        Fee
+      </div>
+      <div className="TransactionSummary__row__content">
+        {new BigNumber(tx.fee).dividedBy(10000000).toString()} XLM <strong>{tx.fee <= 100 ? '(~$0.00)' : ''}</strong>
+      </div>
+    </div>
   </div>
 }
 
