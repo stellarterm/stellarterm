@@ -1,5 +1,7 @@
 const React = window.React = require('react');
 const images = require('../../images');
+import Ellipsis from '../Ellipsis.jsx';
+
 
 
 // TODO: Move this into Validator
@@ -181,7 +183,7 @@ export default class LoginPage extends React.Component {
       let loginForm;
       if (!d.session.ledgerConnected) {
         loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
-          <p className="LoginPage__form--title">Scanning for Ledger Wallet connection...</p>
+          <p className="LoginPage__form--title">Scanning for Ledger Wallet connection<Ellipsis /></p>
           <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
         </div>
       } else {
