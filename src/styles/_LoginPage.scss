@@ -78,3 +78,10 @@
   margin-top: 1em;
   margin-bottom: 0;
 }
+
+.LoginBox__ledgerNanoHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 36px 16px 18px 16px;
+}

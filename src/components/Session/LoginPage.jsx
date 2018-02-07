@@ -179,6 +179,11 @@ export default class LoginPage extends React.Component {
       }
 
       body = <div className="LoginPage__body">
+        <div className="LoginBox__ledgerNanoHeader">
+          <img src={images['ledger-logo']} alt="Ledger Logo" width="300" height="78" />
+          <img src={images['ledger-nano-s-buttons']} alt="Ledger Nano S" width="382" height="100" />
+        </div>
+
         <div className="LoginPage__box">
           <div className="LoginPage__form">
             <p className="LoginPage__intro">Sign in with Ledger Nano S</p>
