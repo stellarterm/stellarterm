@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import TransactionSummary from './TransactionSummary.jsx';
+import SignWithLedgerModal from './SignWithLedgerModal.jsx';
 
 export default class GlobalModal extends React.Component {
   constructor(props) {
@@ -13,6 +14,7 @@ export default class GlobalModal extends React.Component {
   }
 
   componentDidCatch(error, info) {
+    console.error(error);
     this.setState({
     });
   }
@@ -22,13 +24,8 @@ export default class GlobalModal extends React.Component {
     let modal = d.modal;
     let body;
 
-
     if (modal.modalName === 'sign') {
       // To get tx xdr: modal.inputData.toEnvelope().toXDR('base64')
-      // Showing raw xdr is kinda scary to users though
-
-      let ops = [];
-      console.log(modal.inputData.operations)
       body = <div className="GlobalModal">
         <div className="GlobalModal__header">
           Sign transaction
@@ -41,6 +38,8 @@ export default class GlobalModal extends React.Component {
           <button className="s-button" onClick={() => {d.modal.handlers.finish()}}>Sign</button>
         </div>
       </div>
+    } else if (modal.modalName === 'signWithLedger') {
+      body = <SignWithLedgerModal d={d} />
     } else {
       body = <div className="GlobalModal">
         <div className="GlobalModal__content">

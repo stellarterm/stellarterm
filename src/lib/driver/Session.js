@@ -40,14 +40,14 @@ export default function Send(driver) {
 
   // Ping the Ledger device to see if it is connected
   this.pingLedger = (loop = false) => {
-    // console.log('Ledger wallet ping. Connection: ' + this.ledgerConnected)
-    new StellarLedger.Api(new StellarLedger.comm(5)).connect(success => {
+    console.log('Ledger wallet ping. Connection: ' + this.ledgerConnected)
+    new StellarLedger.Api(new StellarLedger.comm(4)).connect(success => {
       if (this.ledgerConnected === false) {
         this.ledgerConnected = true;
         this.event.trigger();
       }
       // console.log('Ledger wallet pong. Connection: ' + this.ledgerConnected)
-      setTimeout(() => {this.pingLedger(true)}, 5000);
+      // setTimeout(() => {this.pingLedger(true)}, 15000);
     }, error => {
       if (this.ledgerConnected === true) {
         this.ledgerConnected = false;
@@ -153,6 +153,18 @@ export default function Send(driver) {
           status: 'finish',
           signedTx: tx
         };
+      } else if (this.authType === 'ledger') {
+        return driver.modal.handlers.activate('signWithLedger', tx)
+          .then(async (modalResult) => {
+            if (modalResult.status === 'finish') {
+              console.log('Signed tx with ledger\nhash:', modalResult.output.hash().toString('hex'),'\n\n' + modalResult.output.toEnvelope().toXDR('base64'))
+              return {
+                status: 'finish',
+                signedTx: modalResult.output
+              };
+            }
+            return modalResult
+          })
       } else {
         return driver.modal.handlers.activate('sign', tx)
         .then(async (modalResult) => {

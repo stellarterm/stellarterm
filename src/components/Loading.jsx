@@ -11,7 +11,6 @@ export default class Loading extends React.Component {
     if (this.props.darker) {
       loadingClass += ' Loading--darker';
     }
-    console.log(this.props)
 
     if (this.props.left) {
       loadingClass += ' Loading--left';

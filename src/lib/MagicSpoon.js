@@ -11,20 +11,17 @@ const StellarLedger = window.StellarLedger;
 const MagicSpoon = {
   async Account(Server, keypair, opts, onUpdate) {
     let sdkAccount = await Server.loadAccount(keypair.publicKey());
-    sdkAccount.sign = async transaction => {
-      if (opts.authType === 'ledger') {
-        await new StellarLedger.Api(new StellarLedger.comm(Number.MAX_VALUE)).signTx_async(opts.bip32Path, transaction).then((result) => {
-          const signature = result.signature;
-          const hint = keypair.signatureHint();
-          const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
-          transaction.signatures.push(decorated);
-        }).catch((err) => {
-          // TODO: handle error when user declines
-          throw err;
-        });
-      } else {
-        await transaction.sign(keypair);
-      }
+    this.bip32Path = opts.bip32Path;
+
+    sdkAccount.signWithLedger = transaction => {
+      console.log('Sending to Ledger to sign');
+      return new StellarLedger.Api(new StellarLedger.comm(Number.MAX_VALUE)).signTx_async(this.bip32Path, transaction).then((result) => {
+        const signature = result.signature;
+        const hint = keypair.signatureHint();
+        const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
+        transaction.signatures.push(decorated);
+        return transaction;
+      })
     };
 
     sdkAccount.getLumenBalance = () => {

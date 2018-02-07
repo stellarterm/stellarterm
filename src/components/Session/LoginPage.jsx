@@ -216,6 +216,7 @@ export default class LoginPage extends React.Component {
         loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
           <p className="LoginPage__form--title">Scanning for Ledger Wallet connection<Ellipsis /></p>
           <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
+          <p>If it still does not show up, restart your Ledger, and refresh this webpage.</p>
         </div>
       } else {
 

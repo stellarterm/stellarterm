@@ -45,7 +45,7 @@ class Session extends React.Component {
     if (state === 'out') {
       return <LoginPage setupError={setupError} d={d}></LoginPage>
     } else if (state === 'unfunded') {
-      return <Generic title={'Account is unfunded'}><Loading darker={true} left>
+      return <Generic title={'Activate your account'}><Loading darker={true} left>
         <div className="s-alert s-alert--success">
           Your Wallet Account ID: <strong>{d.session.unfundedAccountId}</strong>
         </div>
