@@ -147,7 +147,8 @@ export default function Send(driver) {
     sign: async (tx) => {
       console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\nsequence: ' + tx.sequence, '\n\n' + tx.toEnvelope().toXDR('base64'))
       if (this.authType === 'secret') {
-        this.account.sign(tx);
+        console.log('meow')
+        this.account.signWithSecret(tx);
         console.log('Signed tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
         return {
           status: 'finish',

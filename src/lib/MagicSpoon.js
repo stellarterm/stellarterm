@@ -24,6 +24,11 @@ const MagicSpoon = {
       })
     };
 
+    sdkAccount.signWithSecret = transaction => {
+      console.log('Signing with local keypair');
+      return transaction.sign(keypair);
+    };
+
     sdkAccount.getLumenBalance = () => {
       return sdkAccount.balances[sdkAccount.balances.length - 1].balance;
     }

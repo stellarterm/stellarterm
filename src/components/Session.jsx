@@ -100,19 +100,14 @@ class Session extends React.Component {
         </ErrorBoundary>
       } else if (part1 === 'addTrust') {
         content = <ErrorBoundary>
-          <Generic title="Assets in the Stellar Network">
-            To receive assets on the Stellar network, you must first accept the asset.
-            <br /><br />
-            The Stellar network prevents spam by instituting a minimum balance that is similar to a refundable deposit. Each asset you accept increases your minimum balance.
-          </Generic>
-          <div className="so-back islandBack">
+          <div className="so-back islandBack islandBack--t">
             <ManageCurrentTrust d={d}></ManageCurrentTrust>
           </div>
           <div className="so-back islandBack">
-            <AddTrustFromFederation d={d}></AddTrustFromFederation>
+            <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
           </div>
           <div className="so-back islandBack">
-            <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
+            <AddTrustFromFederation d={d}></AddTrustFromFederation>
           </div>
           <div className="so-back islandBack">
             <ManuallyAddTrust d={d}></ManuallyAddTrust>

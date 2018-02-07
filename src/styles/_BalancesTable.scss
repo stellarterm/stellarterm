@@ -17,6 +17,11 @@
 .BalancesTable__row__item {
   padding: 16px;
 }
+.BalancesTable__row__none {
+  padding: 16px;
+  text-align: center;
+  color: $s-color-neutral3;
+}
 .BalancesTable__row__item--assetCard {
   padding: 8px;
   width: 340px;
