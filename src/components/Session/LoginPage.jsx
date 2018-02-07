@@ -181,6 +181,7 @@ export default class LoginPage extends React.Component {
           customPath = <label className="LoginPage__customPath">
             Path: <span className="LoginPage__customPath__surrounding">44'/148'/</span>
             <input style={inputWidthStyle} name="bip32Path" type="text" className="s-inputGroup__item LoginPage__customPath__input" value={this.state.bip32Path} onChange={this.handleBip32PathInput}
+              autoFocus
               onFocus={(e) => {
                 // Move the carat to the end
                 let content = e.target.value;

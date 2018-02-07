@@ -45,14 +45,11 @@ class Session extends React.Component {
     if (state === 'out') {
       return <LoginPage setupError={setupError} d={d}></LoginPage>
     } else if (state === 'unfunded') {
-      return <Generic title={'Account is unfunded'}><Loading darker={true}>
-        Send at least 1 lumens to this account to activate it.
-        <br />
-        <br />
-        This is required by the Stellar network. You can buy lumens from an exchange.
-        <br />
-        <br />
-        Account ID: {d.session.unfundedAccountId}
+      return <Generic title={'Account is unfunded'}><Loading darker={true} left>
+        <div className="s-alert s-alert--success">
+          Your Wallet Account ID: <strong>{d.session.unfundedAccountId}</strong>
+        </div>
+        To use your Stellar account, you must activate it by sending lumens to your account. You can buy lumens from an exchange and send them to your address.
       </Loading></Generic>
     } else if (state === 'loading') {
       return <Generic title="Loading account"><Loading>Contacting network and loading account</Loading></Generic>

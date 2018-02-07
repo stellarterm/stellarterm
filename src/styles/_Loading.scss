@@ -20,3 +20,7 @@
 .Loading--darker .Loading__message {
   color: $s-color-neutral3;
 }
+
+.Loading--left .Loading__message {
+  text-align: left;
+}
