@@ -181,16 +181,8 @@ export default class LoginPage extends React.Component {
       }
 
       let loginForm;
-      if (window.location.protocol !== 'https:') {
-        loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
-          <p className="LoginPage__form--title">Ledger only works on a https site.<br />Please use <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">https://stellarterm.com/</a></p>
-        </div>
-      } else if (!d.session.ledgerConnected) {
-        loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
-          <p className="LoginPage__form--title">Scanning for Ledger Wallet connection<Ellipsis /></p>
-          <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
-        </div>
-      } else {
+
+      if (d.session.ledgerConnected) {
         loginForm = <div className="LoginPage__form">
           <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
           <form onSubmit={this.proceedWithLedger}>
@@ -204,6 +196,21 @@ export default class LoginPage extends React.Component {
             {ledgerSetupErrorMessage}
           </form>
         </div>
+      } else if (!(typeof chrome !== 'undefined' && chrome.runtime)) {
+        loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
+          <p className="LoginPage__form--title">Ledger is not supported on your browser. Please use Google Chrome.</p>
+        </div>
+      } else if (window.location.protocol !== 'https:') {
+        loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
+          <p className="LoginPage__form--title">Ledger only works on a https site.<br />Please use <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">https://stellarterm.com/</a></p>
+        </div>
+      } else if (!d.session.ledgerConnected) {
+        loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
+          <p className="LoginPage__form--title">Scanning for Ledger Wallet connection<Ellipsis /></p>
+          <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
+        </div>
+      } else {
+
       }
 
       body = <div className="LoginPage__body">
