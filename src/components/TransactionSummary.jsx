@@ -166,8 +166,6 @@ export default function TransactionSummary(props) {
     </div>);
   }
 
-  console.log(tx)
-
 
   let memo;
   if (tx.memo._type === 'none') {
