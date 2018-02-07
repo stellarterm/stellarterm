@@ -178,27 +178,36 @@ export default class LoginPage extends React.Component {
         ledgerErrorMessage = <div className="s-alert s-alert--alert LoginPage__error">Invalid BIP32 path. Stellar BIP32 paths must be of the form 44'/148'/n'.</div>
       }
 
+      let loginForm;
+      if (!d.session.ledgerConnected) {
+        loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
+          <p className="LoginPage__form--title">Scanning for Ledger Wallet connection...</p>
+          <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
+        </div>
+      } else {
+        loginForm = <div className="LoginPage__form">
+          <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
+          <form onSubmit={this.proceedWithLedger}>
+            <label className="s-inputGroup LoginPage__inputGroup LoginPage__inputGroup--path">
+              <input name="bip32Path" type="text" className="s-inputGroup__item" value={this.state.bip32Path} onChange={this.handleBip32PathInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
+            </label>
+            {ledgerErrorMessage}
+            <div>
+              <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Sign in with Ledger"/>
+            </div>
+            {ledgerSetupErrorMessage}
+          </form>
+        </div>
+      }
+
       body = <div className="LoginPage__body">
         <div className="LoginBox__ledgerNanoHeader">
-          <img src={images['ledger-logo']} alt="Ledger Logo" width="300" height="78" />
-          <img src={images['ledger-nano-s-buttons']} alt="Ledger Nano S" width="382" height="100" />
+          <img src={images['ledger-logo']} className="img--noSelect" alt="Ledger Logo" width="300" height="78" />
+          <img src={images['ledger-nano-s-buttons']} className="img--noSelect" alt="Ledger Nano S" width="382" height="100" />
         </div>
 
         <div className="LoginPage__box">
-          <div className="LoginPage__form">
-            <p className="LoginPage__intro">Sign in with Ledger Nano S</p>
-            <form onSubmit={this.proceedWithLedger}>
-
-              <label className="s-inputGroup LoginPage__inputGroup LoginPage__inputGroup--path">
-                <input name="bip32Path" type="text" className="s-inputGroup__item" value={this.state.bip32Path} onChange={this.handleBip32PathInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
-              </label>
-              {ledgerErrorMessage}
-              <div>
-                {ledgerSignInButton}
-              </div>
-              {ledgerSetupErrorMessage}
-            </form>
-          </div>
+          {loginForm}
           <div className="LoginPage__notes">
             <h3>Setup instructions</h3>
             <ol>
@@ -247,7 +256,7 @@ export default class LoginPage extends React.Component {
               Log in with key
             </a>
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'ledger' ? ' is-active' : '')} onClick={() => {this.setTab('ledger')}}>
-              <img className="LoginPage__sidebar__tab__img--invertible" src={images['ledger-logo']} alt="Ledger Logo" width="100" height="26" />
+              <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger Logo" width="100" height="26" />
             </a>
           </div>
           {body}

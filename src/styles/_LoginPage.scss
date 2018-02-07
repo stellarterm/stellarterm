@@ -50,6 +50,12 @@
 .LoginPage__form {
   padding: 20px;
 }
+.LoginPage__form p:last-child {
+  margin-bottom: 0;
+}
+.LoginPage__form--title {
+  font-size: $s-scale-1;
+}
 .LoginPage__inputGroup {
   margin-bottom: 9px;
 }

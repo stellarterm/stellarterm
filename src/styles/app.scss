@@ -20,6 +20,10 @@ body {
   position: relative;
 }
 
+.img--noSelect {
+  user-select: none;
+}
+
 @import 'island';
 @import 'lightenZeros';
 
