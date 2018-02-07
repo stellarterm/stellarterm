@@ -181,7 +181,11 @@ export default class LoginPage extends React.Component {
       }
 
       let loginForm;
-      if (!d.session.ledgerConnected) {
+      if (window.location.protocol !== 'https:') {
+        loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
+          <p className="LoginPage__form--title">Ledger only works on a https site.<br />Please use <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">https://stellarterm.com/</a></p>
+        </div>
+      } else if (!d.session.ledgerConnected) {
         loginForm = <div className="LoginPage__form LoginPage__form--simpleMessage">
           <p className="LoginPage__form--title">Scanning for Ledger Wallet connection<Ellipsis /></p>
           <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
