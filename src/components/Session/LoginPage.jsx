@@ -236,7 +236,7 @@ export default class LoginPage extends React.Component {
           <h3>Setup instructions</h3>
           <ol>
             <li>Get a Ledger Nano S and connect it to your computer.</li>
-            <li>Set up your Ledger Nano S by following instructions on the Ledger Nano site: <a href="https://www.ledgerwallet.com/start/" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/start/</a></li>
+            <li>Set up your Ledger Nano S by following instructions on the Ledger site: <a href="https://www.ledgerwallet.com/start/ledger-nano-s" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/start/ledger-nano-s</a></li>
             <li>Install the <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">Ledger Manager</a> app on your computer: <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">https://www.ledgerwallet.com/apps/manager</a></li>
             <li>Inside the Ledger Manager app, go to Applications and install the Stellar app.
               <br />
