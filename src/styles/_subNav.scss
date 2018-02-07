@@ -12,14 +12,25 @@
   overflow:hidden;
 }
 .subNav__nav {
-  height: 54px;
+  height: 48px;
   display: flex;
   align-items: center;
-  padding-left: 18px;
-  padding-right: 18px;
+  padding-left: 9px;
+  padding-right: 9px;
 }
 .subNav__nav__item {
+  display: flex;
+  align-items: center;
+  padding: 0 9px;
+  height: 48px;
   margin-right: 2em;
   text-decoration: none;
   color: $s-color-neutral3;
+  border-bottom: 5px solid transparent;
+}
+.subNav__nav__item:hover {
+  border-color: $s-color-primary6;
+}
+.subNav__nav__item.is-current {
+  border-color: $s-color-primary5;
 }

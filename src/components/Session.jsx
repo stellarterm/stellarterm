@@ -136,11 +136,11 @@ class Session extends React.Component {
           <div className="so-back subNavBack">
             <div className="so-chunk subNav">
               <nav className="subNav__nav">
-                <a className="subNav__nav__item" href="#account">Balances</a>
-                <a className="subNav__nav__item" href="#account/send">Send</a>
-                <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
-                <a className="subNav__nav__item" href="#account/history">History</a>
-                <a className="subNav__nav__item" href="#account/settings">Settings</a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account' ? ' is-current' : '')} href="#account"><span>Balances</span></a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account/send' ? ' is-current' : '')} href="#account/send"><span>Send</span></a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account/addTrust' ? ' is-current' : '')} href="#account/addTrust"><span>Accept assets</span></a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account/history' ? ' is-current' : '')} href="#account/history"><span>History</span></a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account/settings' ? ' is-current' : '')} href="#account/settings"><span>Settings</span></a>
                 {/*<a className="subNav__nav__item" href="#account/deposit">Deposit</a>*/}
               </nav>
             </div>
