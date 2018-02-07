@@ -197,7 +197,7 @@ export default function TransactionSummary(props) {
     {ops}
     <div key="table_fee" className="TransactionSummary__row">
       <div className="TransactionSummary__row__label">
-        Fee
+        Network Fee
       </div>
       <div className="TransactionSummary__row__content">
         {new BigNumber(tx.fee).dividedBy(10000000).toString()} XLM <strong>{tx.fee <= 100 ? '(~$0.00)' : ''}</strong>
