@@ -90,6 +90,12 @@ export default function TransactionSummary(props) {
       }
     }
 
+    if (op.type === 'manageOffer') {
+      if (op['amount'] === '0') {
+        label = 'Delete Offer';
+      }
+    }
+
     for (let attr in op) {
       let value = op[attr];
       if (attr === 'type') {
@@ -99,6 +105,7 @@ export default function TransactionSummary(props) {
       } else {
         if (value !== undefined) {
           let displayValue;
+          let hide = false;
           if (value.code !== undefined) {
             displayValue = <div className="TransactionSummary__row__content__inline__content__assetCard">
               <AssetCard2 code={value.code} issuer={value.issuer}></AssetCard2>
@@ -118,19 +125,29 @@ export default function TransactionSummary(props) {
             name = attr;
           }
 
-          if (attr === 'asset') {
-            // Push asset to the top
-            attributes.unshift({
-              key: attr,
-              name: name,
-              display: displayValue,
-            })
-          } else {
-            attributes.push({
-              key: attr,
-              name: name,
-              display: displayValue,
-            })
+          if (op.type === 'manageOffer' && op['amount'] === '0') {
+            if (attr === 'selling' || attr === 'buying' || attr === 'amount' || attr === 'price') {
+              hide = true;
+            }
+          }
+
+
+
+          if (!hide) {
+            if (attr === 'asset') {
+              // Push asset to the top
+              attributes.unshift({
+                key: attr,
+                name: name,
+                display: displayValue,
+              })
+            } else {
+              attributes.push({
+                key: attr,
+                name: name,
+                display: displayValue,
+              })
+            }
           }
         }
       }
