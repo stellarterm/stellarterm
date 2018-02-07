@@ -137,7 +137,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe($.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower', 'copyBrowserDeps'];
+const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {
