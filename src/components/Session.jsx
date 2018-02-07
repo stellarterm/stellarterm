@@ -64,7 +64,7 @@ class Session extends React.Component {
         return <div>
           <Generic>
             <h2 className="Session__welcomeTitle">Welcome to StellarTerm!</h2>
-            <p>Please make sure you have your secret keys (starts with "S") securely backed up. You should protect your secret key and never share it with anyone.</p>
+            <p>Please make sure you have keys securely backed up. Never share your secret key or recovery phrase with anyone.</p>
             <div className="Generic__divider"></div>
             <div className="Session__inflation">
               StellarTerm is free open source software. StellarTerm does not ask for donations, but instead, asks for inflation votes. The Stellar network rewards accounts that receive many votes through an "<a href="https://www.stellar.org/developers/guides/concepts/inflation.html" target="_blank" rel="nofollow noopener noreferrer">inflation system</a>". It is free to vote for StellarTerm and only requires a vote transaction (0.00001 XLM). Note: other wallets may do this without your permission, so if you use another wallet and they tamper with your account, this message may show up again.
