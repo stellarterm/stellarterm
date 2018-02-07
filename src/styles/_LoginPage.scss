@@ -98,3 +98,18 @@
   align-items: flex-end;
   padding: 36px 32px 18px 32px;
 }
+.LoginPage__activateCustomPath {
+  align-self: center;
+  margin-left: 18px;
+}
+.LoginPage__customPath {
+  margin-left: 18px;
+}
+.LoginPage__customPath__input {
+  padding-right: 0;
+  margin-left: 3px;
+  margin-right: 4px;
+}
+.LoginPage__customPath__surrounding {
+  font-weight: bold;
+}

@@ -56,7 +56,7 @@ export default function Send(driver) {
       setTimeout(() => {this.pingLedger(true)}, 100);
     })
   }
-  setTimeout(() => {this.pingLedger(true)}, 100);
+  this.pingLedger(true);
 
   this.handlers = {
     logInWithSecret: async (secretKey) => {

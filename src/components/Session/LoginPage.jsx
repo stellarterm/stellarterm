@@ -3,7 +3,6 @@ const images = require('../../images');
 import Ellipsis from '../Ellipsis.jsx';
 
 
-
 // TODO: Move this into Validator
 const isValidSecretKey = input => {
   try {
@@ -15,18 +14,6 @@ const isValidSecretKey = input => {
   }
 }
 
-const isValidBip32Path = input => {
-  if (!input.startsWith("44'/148'")) {
-    return false;
-  }
-  input.split('/').forEach(function (element) {
-    if (!element.toString().endsWith('\'')) {
-      return false;
-    }
-  });
-  return true;
-}
-
 export default class LoginPage extends React.Component {
   constructor(props) {
     super(props);
@@ -35,7 +22,8 @@ export default class LoginPage extends React.Component {
       show: false,
       invalidKey: false,
       newKeypair: null,
-      bip32Path: "44'/148'/0'",
+      bip32Path: '0',
+      ledgerAdvanced: false,
       currentTab: 'ledger', // 'login', 'createAccount', 'ledger'
     }
 
@@ -44,16 +32,37 @@ export default class LoginPage extends React.Component {
       this.setState({secretInput: event.target.value});
     }
     this.handleBip32PathInput = (event) => {
-      this.setState({bip32Path: event.target.value});
+      if (event.target.value === '') {
+        return this.setState({bip32Path: ''});
+      }
+      let value = parseInt(event.target.value);
+      if (!Number.isInteger(value)) {
+        value = 0;
+      }
+      if (value < 0) {
+        value = 0;
+      }
+      if (value > 2147483647) { // int32: 2^31-1
+        value = 2147483647;
+      }
+      this.setState({bip32Path: '' + value});
+    }
+    this.enableAdvanced = () => {
+      this.setState({ledgerAdvanced: true});
     }
     this.proceedWithLedger = (event) => {
       event.preventDefault();
-      if (!isValidBip32Path(this.state.bip32Path)) {
-        return this.setState({
-          invalidBip32Path: true
-        });
+      // if (!isValidBip32Path(this.state.bip32Path)) {
+      //   return this.setState({
+      //     invalidBip32Path: true
+      //   });
+      // }
+      let path = 0;
+      if (this.state.bip32Path !== '') {
+        path = this.state.bip32Path;
       }
-      this.props.d.session.handlers.logInWithLedger(this.state.bip32Path)
+      console.log(path)
+      this.props.d.session.handlers.logInWithLedger("44'/148'/" + this.state.bip32Path + "'")
     }
     this.toggleShow = (event) => {
       event.preventDefault();
@@ -161,37 +170,43 @@ export default class LoginPage extends React.Component {
         </div>
       </div>
     } else if (this.state.currentTab === 'ledger') {
-      let ledgerSignInButton;
-      let ledgerSetupErrorMessage;
-      if (d.session.setupLedgerError) {
-        // This usually doesn't happen. To simulate this, find the line:
-        // new StellarLedger.Api(new StellarLedger.comm(NUMBER))
-        // and change the number to something low so it has a timeout
-        ledgerSetupErrorMessage = <div className="s-alert s-alert--alert LoginPage__error">Connected to Ledger but returned an error: <br /><strong>{d.session.setupLedgerError}</strong></div>
-      }
-
-      if (d.session.ledgerConnected) {
-        ledgerSignInButton = <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Sign in with Ledger"/>
-      } else {
-        ledgerSignInButton = <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Connect Ledger on a supported browser" disabled={true}/>
-      }
-      let ledgerErrorMessage;
-      if (this.state.invalidBip32Path) {
-        ledgerErrorMessage = <div className="s-alert s-alert--alert LoginPage__error">Invalid BIP32 path. Stellar BIP32 paths must be of the form 44'/148'/n'.</div>
-      }
-
       let loginForm;
-
       if (d.session.ledgerConnected) {
+        let ledgerSetupErrorMessage;
+        let ledgerErrorMessage;
+        if (d.session.setupLedgerError) {
+          // This usually doesn't happen. To simulate this, find the line:
+          // new StellarLedger.Api(new StellarLedger.comm(NUMBER))
+          // and change the number to something low so it has a timeout. Or, put in a invalid bip path manually.
+          ledgerSetupErrorMessage = <div className="s-alert s-alert--alert LoginPage__error">Connected to Ledger but returned an error: <br /><strong>{d.session.setupLedgerError}</strong></div>
+        }
+
+        let customPath = <a className="LoginPage__activateCustomPath" onClick={this.enableAdvanced}>Advanced: Use custom BIP32 path</a>;
+        if (this.state.ledgerAdvanced) {
+          let inputWidthStyle = {
+            width: (this.state.bip32Path.length * 8 + 32) + 'px',
+          };
+          customPath = <label className="LoginPage__customPath">
+            <span className="LoginPage__customPath__surrounding">44'/148'/</span>
+            <input style={inputWidthStyle} name="bip32Path" type="text" className="s-inputGroup__item LoginPage__customPath__input" value={this.state.bip32Path} onChange={this.handleBip32PathInput}
+              onFocus={(e) => {
+                // Move the carat to the end
+                let content = e.target.value;
+                e.target.value = '';
+                e.target.value = content;
+              }}
+             />
+            <span className="LoginPage__customPath__surrounding">'</span>
+          </label>
+        }
         loginForm = <div className="LoginPage__form">
           <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
           <form onSubmit={this.proceedWithLedger}>
-            <label className="s-inputGroup LoginPage__inputGroup LoginPage__inputGroup--path">
-              <input name="bip32Path" type="text" className="s-inputGroup__item" value={this.state.bip32Path} onChange={this.handleBip32PathInput} placeholder="BIP32 path, e.g.: 44'/148'/0'" />
-            </label>
+
             {ledgerErrorMessage}
-            <div>
+            <div className="s-inputGroup LoginPage__inputGroup">
               <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Sign in with Ledger"/>
+              {customPath}
             </div>
             {ledgerSetupErrorMessage}
           </form>

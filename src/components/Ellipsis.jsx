@@ -8,10 +8,12 @@ export default class Ellipsis extends React.Component {
     }
 
     this.tick = () => {
-      this.setState({
-        numDots: (this.state.numDots % 3) + 1,
-      });
-      setTimeout(this.tick, 400);
+      if (this.mounted) {
+        this.setState({
+          numDots: (this.state.numDots % 3) + 1,
+        });
+        setTimeout(this.tick, 400);
+      }
     }
   }
   componentDidMount() {
