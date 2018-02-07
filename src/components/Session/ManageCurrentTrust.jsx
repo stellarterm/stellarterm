@@ -24,10 +24,22 @@ export default class ManageCurrentTrust extends React.Component {
       </tr>
     });
 
+    if (rows.length === 0) {
+      rows.push(<tr className="BalancesTable__row" key={0}>
+        <td className="BalancesTable__row__none" colSpan="2">
+          You currently don't accept any assets.
+        </td>
+      </tr>)
+    }
+
     return <div className="island">
       <div className="island__header">
         Assets you accept
       </div>
+      <div className="island__paddedContent">
+        To receive assets on the Stellar network, you must first "accept" the asset.
+      </div>
+      <div className="island__separator"></div>
       <table className="ManageCurrentTrust">
         <thead>
           <tr className="ManageCurrentTrust__head">

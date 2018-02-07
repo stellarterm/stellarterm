@@ -6,6 +6,7 @@ import Stellarify from '../Stellarify';
 import directory from '../../directory';
 import Validate from '../Validate';
 import Event from '../Event';
+const StellarLedger = window.StellarLedger;
 
 let DEVELOPMENT_TO_PROMPT = true;
 
@@ -15,6 +16,10 @@ export default function Send(driver) {
   const init = () => {
     this.state = 'out'; // 'out', 'unfunded', 'loading', 'in'
     this.setupError = false; // Unable to contact network
+
+    this.setupLedgerError = null; // Could connect but couldn't reach address
+    this.ledgerConnected = false;
+
     this.unfundedAccountId = '';
     this.inflationDone = false;
     this.account = null; // MagicSpoon.Account instance
@@ -33,20 +38,65 @@ export default function Send(driver) {
   };
 
 
-  this.handlers = {
-    logInWithSecret: async (secretKey, opts) => {
-      let keypair;
-      try {
-        if (opts && opts.publicKey !== undefined) {
-          keypair = StellarSdk.Keypair.fromPublicKey(opts.publicKey);
-        } else {
-          keypair = StellarSdk.Keypair.fromSecret(secretKey);
-        }
-      } catch (e) {
-        console.log('Invalid secret key! We should never reach here!');
-        console.error(e);
-        return;
+  // Ping the Ledger device to see if it is connected
+  this.pingLedger = (loop = false) => {
+    console.log('Ledger wallet ping. Connection: ' + this.ledgerConnected)
+    new StellarLedger.Api(new StellarLedger.comm(4)).connect(success => {
+      if (this.ledgerConnected === false) {
+        this.ledgerConnected = true;
+        this.event.trigger();
       }
+      // console.log('Ledger wallet pong. Connection: ' + this.ledgerConnected)
+      // setTimeout(() => {this.pingLedger(true)}, 15000);
+    }, error => {
+      if (this.ledgerConnected === true) {
+        this.ledgerConnected = false;
+        this.event.trigger();
+      }
+      setTimeout(() => {this.pingLedger(true)}, 100);
+    })
+  }
+  this.pingLedger(true);
+
+  this.handlers = {
+    logInWithSecret: async (secretKey) => {
+      let keypair = StellarSdk.Keypair.fromSecret(secretKey);
+      return this.handlers.logIn(keypair, {
+        authType: 'secret',
+      });
+    },
+    logInWithPublicKey: async (accountId) => {
+      let keypair = StellarSdk.Keypair.fromPublicKey(accountId);
+      return this.handlers.logIn(keypair, {
+        authType: 'pubkey',
+      });
+    },
+    logInWithLedger: async (bip32Path) => {
+      try {
+        let connectionResult = await new StellarLedger.Api(new StellarLedger.comm(4)).getPublicKey_async(bip32Path)
+        this.setupLedgerError = null;
+        let keypair = StellarSdk.Keypair.fromPublicKey(connectionResult.publicKey);
+        return this.handlers.logIn(keypair, {
+          authType: 'ledger',
+          bip32Path,
+        });
+      } catch (error) {
+        this.setupLedgerError = error.message;
+        if (error && error.errorCode) {
+          let u2fErrorCodes = {
+              0: 'OK',
+              1: 'OTHER_ERROR',
+              2: 'BAD_REQUEST',
+              3: 'CONFIGURATION_UNSUPPORTED',
+              4: 'DEVICE_INELIGIBLE',
+              5: 'TIMEOUT (unable to communicate with device)',
+          };
+          this.setupLedgerError = u2fErrorCodes[error.errorCode];
+        }
+        this.event.trigger();
+      }
+    },
+    logIn: async (keypair, opts) => {
       this.setupError = false;
       if (this.state !== 'unfunded') {
         this.state = 'loading';
@@ -54,11 +104,11 @@ export default function Send(driver) {
       }
 
       try {
-        this.account = await MagicSpoon.Account(driver.Server, keypair, () => {
+        this.account = await MagicSpoon.Account(driver.Server, keypair, opts, () => {
           this.event.trigger();
         });
         this.state = 'in';
-        this.authType = 'secret';
+        this.authType = opts.authType;
 
         let inflationDoneDestinations = {
           'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW': true,
@@ -77,7 +127,7 @@ export default function Send(driver) {
             console.log('Checking to see if account has been created yet');
             if (this.state === 'unfunded') {
               // Avoid race conditions
-              this.handlers.logInWithSecret(secretKey);
+              this.handlers.logIn(keypair, opts);
             }
           }, 2000);
           this.event.trigger();
@@ -94,20 +144,32 @@ export default function Send(driver) {
     // If you use sign, you have to pay attention to sequence numbers because js-stellar-sdk's .build() updates it magically
     // The reason this doesn't take in a TransactionBuilder so we can call build() here is that there
     // are cases when we want to paste in a raw transaction and sign that
-    sign: (tx) => {
-      console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\nsequence: ' + tx.sequence, '\n\n' + tx.toEnvelope().toXDR('base64'))
+    sign: async (tx) => {
+      // console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\nsequence: ' + tx.sequence, '\n\n' + tx.toEnvelope().toXDR('base64'))
       if (this.authType === 'secret') {
-        this.account.sign(tx);
+        this.account.signWithSecret(tx);
         console.log('Signed tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
         return {
           status: 'finish',
           signedTx: tx
         };
+      } else if (this.authType === 'ledger') {
+        return driver.modal.handlers.activate('signWithLedger', tx)
+          .then(async (modalResult) => {
+            if (modalResult.status === 'finish') {
+              console.log('Signed tx with ledger\nhash:', modalResult.output.hash().toString('hex'),'\n\n' + modalResult.output.toEnvelope().toXDR('base64'))
+              return {
+                status: 'finish',
+                signedTx: modalResult.output
+              };
+            }
+            return modalResult
+          })
       } else {
         return driver.modal.handlers.activate('sign', tx)
-        .then((modalResult) => {
+        .then(async (modalResult) => {
           if (modalResult.status === 'finish') {
-            this.account.sign(tx);
+            await this.account.sign(tx);
             console.log('Signed tx\nhash:', tx.hash().toString('hex'),'\n\n' + tx.toEnvelope().toXDR('base64'))
             return {
               status: 'finish',

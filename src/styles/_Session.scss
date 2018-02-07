@@ -25,3 +25,17 @@
   right: 0;
   border-bottom: 1px dotted rgba(0,0,0,0.5);
 }
+
+.Session__AccountView__content {
+  padding: 16px 18px;
+  border-bottom: 1px solid #ddd;
+}
+
+.Sesssion__yourId__title {
+  margin-bottom: 0;
+}
+
+.Sesssion__yourId__accountId {
+  margin-bottom: 0;
+  font-size: $s-scale-1;
+}

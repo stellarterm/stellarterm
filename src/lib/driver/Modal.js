@@ -41,17 +41,18 @@ export default function Modal(driver) {
     },
     cancel: () => {
       this.active = false;
+      this.modalName = '';
       activeResolver({
         status: 'cancel',
       });
       this.event.trigger();
     },
-    finish: (modalData) => {
-      // modalData is what the modal gives us
+    finish: (output) => {
+      // output is what the modal gives us
       this.active = false;
       activeResolver({
         status: 'finish',
-        modalData: modalData,
+        output: output,
       });
       this.event.trigger();
     },

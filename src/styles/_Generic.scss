@@ -1,5 +1,11 @@
 .Generic__content {
-  padding: 0.75em 18px;
+  padding: 16px 18px;
+}
+.Generic__content h2 {
+  margin-bottom: 16px;
+}
+.Generic__content p:last-child {
+  margin-bottom: 0;
 }
 .Generic__lightTitle {
   font-weight: 400;

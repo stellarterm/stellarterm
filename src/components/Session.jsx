@@ -12,6 +12,7 @@ import Generic from './Generic.jsx';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import Loading from './Loading.jsx';
 import HistoryView from './Session/HistoryView.jsx';
+import clickToSelect from '../lib/clickToSelect';
 
 class Session extends React.Component {
   constructor(props) {
@@ -45,14 +46,11 @@ class Session extends React.Component {
     if (state === 'out') {
       return <LoginPage setupError={setupError} d={d}></LoginPage>
     } else if (state === 'unfunded') {
-      return <Generic title={'Account is unfunded'}><Loading darker={true}>
-        Send at least 1 lumens to this account to activate it.
-        <br />
-        <br />
-        This is required by the Stellar network. You can buy lumens from an exchange.
-        <br />
-        <br />
-        Account ID: {d.session.unfundedAccountId}
+      return <Generic title={'Activate your account'}><Loading darker={true} left>
+        <div className="s-alert s-alert--success">
+          Your Wallet Account ID: <strong>{d.session.unfundedAccountId}</strong>
+        </div>
+        To use your Stellar account, you must activate it by sending lumens to your account. You can buy lumens from an exchange and send them to your address.
       </Loading></Generic>
     } else if (state === 'loading') {
       return <Generic title="Loading account"><Loading>Contacting network and loading account</Loading></Generic>
@@ -86,41 +84,31 @@ class Session extends React.Component {
 
       if (part1 === undefined) {
         content = <ErrorBoundary>
-          <Generic title={`Your Wallet Account ID: ${this.props.d.session.account.accountId()}`}>
-            <h2>How to receive payments</h2>
-            <p>To receive a payment from someone else, you share with them your account ID which <strong>begins with a G</strong>. You are only able to send funds inside your account ID.</p>
-
-            <p>Your account ID is <strong>{this.props.d.session.account.accountId()}</strong></p>
-            <p><strong>WARNING</strong>: Make sure the account ID you share belongs to you. If you give someone else the wrong account ID, the funds will be sent to the wrong account.</p>
-
-            <div className="Generic__divider"></div>
+          <Generic>
+            <div className="s-alert s-alert--primary">
+              <p className="Sesssion__yourId__title">Your Wallet Account ID</p>
+              <strong className="clickToSelect Sesssion__yourId__accountId" onClick={clickToSelect}>{this.props.d.session.account.accountId()}</strong>
+            </div>
+            <p>To receive payments, share your account ID with them (begins with a G).</p>
+          </Generic>
+          <Generic noTopPadding>
             <h2>Where is the money stored?</h2>
-            <p>In the Stellar network, funds exist on the network and can only be moved by whoever has the secret key. This means that your secret key is extremely sensitive, and whoever has access to it can move the funds.</p>
+            <p>In the Stellar network, funds exist on the network and can only be moved by whoever has the secret key. This means that your secret key is extremely sensitive, and whoever has access to it can move the funds. However, money is <strong>NOT</strong> actually <em>"inside"</em> StellarTerm. StellarTerm is just a helpful tool that helps you use your secret key to make transactions.</p>
 
-            <p>However, money is <strong>NOT</strong> actually <em>"inside"</em> StellarTerm. StellarTerm is just a helpful tool that helps you use your secret key to make transactions.</p>
-
-            <p><strong>WARNING</strong>: Be extremely careful with your secret key and do not share it with anybody. Always check the url to make sure you are on the right website.</p>
-            <div className="Generic__divider"></div>
-            <h2>Accepting different kinds of assets</h2>
-            By default, your account is only configured to accept <strong>XLM</strong>. In order to receive other assets, you must <a href="#account/addTrust">accept</a> them using the <strong>Accept assets</strong> tool.
+            <p><strong>WARNING</strong>: Be extremely careful with your secret key and do not share it with anybody.</p>
           </Generic>
           <AccountView d={d}></AccountView>
         </ErrorBoundary>
       } else if (part1 === 'addTrust') {
         content = <ErrorBoundary>
-          <Generic title="Assets in the Stellar Network">
-            To receive assets on the Stellar network, you must first accept the asset.
-            <br /><br />
-            The Stellar network prevents spam by instituting a minimum balance that is similar to a refundable deposit. Each asset you accept increases your minimum balance.
-          </Generic>
-          <div className="so-back islandBack">
+          <div className="so-back islandBack islandBack--t">
             <ManageCurrentTrust d={d}></ManageCurrentTrust>
           </div>
           <div className="so-back islandBack">
-            <AddTrustFromFederation d={d}></AddTrustFromFederation>
+            <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
           </div>
           <div className="so-back islandBack">
-            <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
+            <AddTrustFromFederation d={d}></AddTrustFromFederation>
           </div>
           <div className="so-back islandBack">
             <ManuallyAddTrust d={d}></ManuallyAddTrust>
@@ -132,7 +120,7 @@ class Session extends React.Component {
             <Send d={d}></Send>
           </div>
         </ErrorBoundary>
-      } else if (part1 === 'inflation') {
+      } else if (part1 === 'settings') {
         content = <ErrorBoundary>
           <Inflation d={d}></Inflation>
         </ErrorBoundary>
@@ -149,11 +137,11 @@ class Session extends React.Component {
           <div className="so-back subNavBack">
             <div className="so-chunk subNav">
               <nav className="subNav__nav">
-                <a className="subNav__nav__item" href="#account">Balances</a>
-                <a className="subNav__nav__item" href="#account/send">Send</a>
-                <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
-                <a className="subNav__nav__item" href="#account/history">History</a>
-                <a className="subNav__nav__item" href="#account/inflation">Settings</a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account' ? ' is-current' : '')} href="#account"><span>Balances</span></a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account/send' ? ' is-current' : '')} href="#account/send"><span>Send</span></a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account/addTrust' ? ' is-current' : '')} href="#account/addTrust"><span>Accept assets</span></a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account/history' ? ' is-current' : '')} href="#account/history"><span>History</span></a>
+                <a className={'subNav__nav__item' + (window.location.hash === '#account/settings' ? ' is-current' : '')} href="#account/settings"><span>Settings</span></a>
                 {/*<a className="subNav__nav__item" href="#account/deposit">Deposit</a>*/}
               </nav>
             </div>

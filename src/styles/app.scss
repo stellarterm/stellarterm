@@ -20,8 +20,18 @@ body {
   position: relative;
 }
 
+.img--noSelect {
+  user-select: none;
+}
+
+.clickToSelect {
+  border-bottom: 1px dotted currentColor;
+  cursor: pointer;
+}
+
 @import 'island';
 @import 'lightenZeros';
+@import 'Ellipsis';
 
 @import 'Header';
 @import 'subNav';

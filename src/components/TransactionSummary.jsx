@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import AssetCard2 from './AssetCard2.jsx';
+import BigNumber from 'bignumber.js';
 
 // operationsMap is modified code from Stellar Laboratory licensed under Apache-2.0
 // Interesting trivia: This was written by Iris Li in 2015 while at SDF
@@ -73,7 +74,7 @@ const operationsMap = {
 };
 
 export default function TransactionSummary(props) {
-  let rows = [];
+  let ops = [];
   let tx = props.tx;
 
   for (let i = 0; i < tx.operations.length; i++) {
@@ -89,6 +90,12 @@ export default function TransactionSummary(props) {
       }
     }
 
+    if (op.type === 'manageOffer') {
+      if (op['amount'] === '0') {
+        label = 'Delete Offer';
+      }
+    }
+
     for (let attr in op) {
       let value = op[attr];
       if (attr === 'type') {
@@ -98,6 +105,7 @@ export default function TransactionSummary(props) {
       } else {
         if (value !== undefined) {
           let displayValue;
+          let hide = false;
           if (value.code !== undefined) {
             displayValue = <div className="TransactionSummary__row__content__inline__content__assetCard">
               <AssetCard2 code={value.code} issuer={value.issuer}></AssetCard2>
@@ -111,22 +119,39 @@ export default function TransactionSummary(props) {
           }
 
           let name;
-          if (attr === 'line') {
+          if (attr === 'line' || attr === 'asset') {
             // Don't show title for assets
           } else {
             name = attr;
           }
 
-          attributes.push({
-            key: attr,
-            name: name,
-            display: displayValue,
-          })
+          if (op.type === 'manageOffer' && op['amount'] === '0') {
+            if (attr === 'selling' || attr === 'buying' || attr === 'amount' || attr === 'price') {
+              hide = true;
+            }
+          }
+
+          if (!hide) {
+            if (attr === 'asset') {
+              // Push asset to the top
+              attributes.unshift({
+                key: attr,
+                name: name,
+                display: displayValue,
+              })
+            } else {
+              attributes.push({
+                key: attr,
+                name: name,
+                display: displayValue,
+              })
+            }
+          }
         }
       }
     }
 
-    rows.push(<div key={'table_op' + i} className="TransactionSummary__row">
+    ops.push(<div key={'table_op' + i} className="TransactionSummary__row">
       <div className="TransactionSummary__row__label">
         {label}
       </div>
@@ -140,6 +165,20 @@ export default function TransactionSummary(props) {
       </div>
     </div>);
   }
+
+  console.log(tx)
+
+
+  let memo;
+  if (tx.memo._type === 'none') {
+    memo = <em className="TransactionSummary__row__content__light">none</em>
+  } else {
+    memo = <article className="TransactionSummary__row__content__inline">
+      <p className="TransactionSummary__row__content__inline__title">{tx.memo._type}</p>
+      <div className="TransactionSummary__row__content__inline__content">{tx.memo._value}</div>
+    </article>
+  }
+
   return <div className="TransactionSummary">
     <div key="table_source" className="TransactionSummary__row TransactionSummary__row--first">
       <div className="TransactionSummary__row__label">
@@ -157,7 +196,23 @@ export default function TransactionSummary(props) {
         {tx.sequence}
       </div>
     </div>
-    {rows}
+    {ops}
+    <div key="table_fee" className="TransactionSummary__row">
+      <div className="TransactionSummary__row__label">
+        Fee
+      </div>
+      <div className="TransactionSummary__row__content">
+        {new BigNumber(tx.fee).dividedBy(10000000).toString()} XLM <strong>{tx.fee <= 100 ? '(~$0.00)' : ''}</strong>
+      </div>
+    </div>
+    <div key="table_memo" className="TransactionSummary__row">
+      <div className="TransactionSummary__row__label">
+        Memo
+      </div>
+      <div className="TransactionSummary__row__content">
+        {memo}
+      </div>
+    </div>
   </div>
 }
 

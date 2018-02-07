@@ -44,12 +44,10 @@ gulp.task('images', (cb) => {
   };
 
 
-
-  addImage('charts','png');
-  addImage('order','png');
-  addImage('send','png');
-  addImage('github','png');
-
+  addImage('ledger-app','png');
+  addImage('ledger-nano-picture','jpg');
+  addImage('ledger-nano-s-buttons','png');
+  addImage('ledger-logo','png');
 
 
   file += '};\nmodule.exports = images;';
@@ -139,7 +137,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe($.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower'];
+const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower', 'copyBrowserDeps'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {
@@ -147,6 +145,7 @@ gulp.task('watch', baseTasks, () => {
     notify: false,
     logPrefix: 'BS',
     server: ['dist'],
+    https: true
   });
   gulp.watch('./src/index.html', ['html-reload']);
   gulp.watch(['src/**/*.scss'], ['css-reload']);
@@ -161,6 +160,9 @@ gulp.task('css-reload', ['styles'], bsReload);
 
 gulp.task('copyBower', () => gulp.src('bower_components/**/*')
     .pipe(gulp.dest('dist/bower_components/')));
+
+gulp.task('copyBrowserDeps', () => gulp.src('src/browser_deps/**/*')
+    .pipe(gulp.dest('dist/browser_deps/')));
 
 // Build production site.
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
