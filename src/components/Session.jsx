@@ -105,10 +105,10 @@ class Session extends React.Component {
             <ManageCurrentTrust d={d}></ManageCurrentTrust>
           </div>
           <div className="so-back islandBack">
-            <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
+            <AddTrustFromFederation d={d}></AddTrustFromFederation>
           </div>
           <div className="so-back islandBack">
-            <AddTrustFromFederation d={d}></AddTrustFromFederation>
+            <AddTrustFromDirectory d={d}></AddTrustFromDirectory>
           </div>
           <div className="so-back islandBack">
             <ManuallyAddTrust d={d}></ManuallyAddTrust>

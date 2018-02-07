@@ -81,12 +81,12 @@ export default class ManuallyAddTrust extends React.Component {
 
         let createButton;
         if (found) {
-          createButton = <button disabled={true} className="s-button">Trust line for {this.state.trustCode} exists</button>
+          createButton = <button disabled={true} className="s-button">Already accepting {this.state.trustCode}</button>
         } else {
           if (this.state.status === 'working') {
-            createButton = <button  disabled={true} className="s-button" onClick={(e) => {this.handleSubmitTrust(e)}}>Adding trust line for {this.state.trustCode}...</button>
+            createButton = <button  disabled={true} className="s-button" onClick={(e) => {this.handleSubmitTrust(e)}}>Accepting asset {this.state.trustCode}...</button>
           } else {
-            createButton = <button className="s-button" onClick={(e) => {this.handleSubmitTrust(e)}}>Create trust line for {this.state.trustCode}</button>
+            createButton = <button className="s-button" onClick={(e) => {this.handleSubmitTrust(e)}}>Accept asset {this.state.trustCode}</button>
           }
         }
 
@@ -105,10 +105,10 @@ export default class ManuallyAddTrust extends React.Component {
 
     return <div className="island">
       <div className="island__header">
-        Manually add trust
+        Manually accept asset
       </div>
       <div className="island__paddedContent">
-        <p>You can add trust manually if you know the account ID and asset code</p>
+        <p>You can accept an asset if you know the issuer account ID and asset code.</p>
         <label className="s-inputGroup AddTrust__inputGroup">
           <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
             <span>Asset Code</span>
