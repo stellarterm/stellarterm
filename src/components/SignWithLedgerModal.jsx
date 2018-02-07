@@ -55,12 +55,11 @@ export default class GlobalModal extends React.Component {
         <TransactionSummary tx={d.modal.inputData}></TransactionSummary>
       </div>
       <div className="GlobalModal__content">
-        <strong>Confirm transaction</strong> on your ledger nano. ✔<br />
-        Hash: {d.modal.inputData.hash().toString('hex').substr(0,6).toUpperCase()}...
+        Action required: <strong>Confirm transaction</strong> on your ledger nano. ✔<br />
       </div>
       <div className="GlobalModal__navigation">
         <button className="s-button s-button--light" onClick={() => {d.modal.handlers.cancel()}}>Cancel</button>
-        <span>Waiting</span>
+        <span>Waiting for your confirmation</span>
       </div>
     </div>
   }

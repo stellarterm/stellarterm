@@ -112,17 +112,26 @@ export default function TransactionSummary(props) {
           }
 
           let name;
-          if (attr === 'line') {
+          if (attr === 'line' || attr === 'asset') {
             // Don't show title for assets
           } else {
             name = attr;
           }
 
-          attributes.push({
-            key: attr,
-            name: name,
-            display: displayValue,
-          })
+          if (attr === 'asset') {
+            // Push asset to the top
+            attributes.unshift({
+              key: attr,
+              name: name,
+              display: displayValue,
+            })
+          } else {
+            attributes.push({
+              key: attr,
+              name: name,
+              display: displayValue,
+            })
+          }
         }
       }
     }
