@@ -83,23 +83,18 @@ class Session extends React.Component {
 
       if (part1 === undefined) {
         content = <ErrorBoundary>
-          <Generic title={`Your Wallet Account ID: ${this.props.d.session.account.accountId()}`}>
+          <Generic>
             <h2>How to receive payments</h2>
-            <p>To receive a payment from someone else, you share with them your account ID which <strong>begins with a G</strong>. You are only able to send funds inside your account ID.</p>
-
-            <p>Your account ID is <strong>{this.props.d.session.account.accountId()}</strong></p>
-            <p><strong>WARNING</strong>: Make sure the account ID you share belongs to you. If you give someone else the wrong account ID, the funds will be sent to the wrong account.</p>
-
-            <div className="Generic__divider"></div>
+            <div className="s-alert s-alert--primary">
+              Your Wallet Account ID: <strong>{this.props.d.session.account.accountId()}</strong>
+            </div>
+            <p>To receive a payment from someone else, you share with them your account ID which <strong>begins with a G</strong>.</p>
+          </Generic>
+          <Generic noTopPadding>
             <h2>Where is the money stored?</h2>
-            <p>In the Stellar network, funds exist on the network and can only be moved by whoever has the secret key. This means that your secret key is extremely sensitive, and whoever has access to it can move the funds.</p>
+            <p>In the Stellar network, funds exist on the network and can only be moved by whoever has the secret key. This means that your secret key is extremely sensitive, and whoever has access to it can move the funds. However, money is <strong>NOT</strong> actually <em>"inside"</em> StellarTerm. StellarTerm is just a helpful tool that helps you use your secret key to make transactions.</p>
 
-            <p>However, money is <strong>NOT</strong> actually <em>"inside"</em> StellarTerm. StellarTerm is just a helpful tool that helps you use your secret key to make transactions.</p>
-
-            <p><strong>WARNING</strong>: Be extremely careful with your secret key and do not share it with anybody. Always check the url to make sure you are on the right website.</p>
-            <div className="Generic__divider"></div>
-            <h2>Accepting different kinds of assets</h2>
-            By default, your account is only configured to accept <strong>XLM</strong>. In order to receive other assets, you must <a href="#account/addTrust">accept</a> them using the <strong>Accept assets</strong> tool.
+            <p><strong>WARNING</strong>: Be extremely careful with your secret key and do not share it with anybody.</p>
           </Generic>
           <AccountView d={d}></AccountView>
         </ErrorBoundary>
@@ -129,7 +124,7 @@ class Session extends React.Component {
             <Send d={d}></Send>
           </div>
         </ErrorBoundary>
-      } else if (part1 === 'inflation') {
+      } else if (part1 === 'settings') {
         content = <ErrorBoundary>
           <Inflation d={d}></Inflation>
         </ErrorBoundary>
@@ -150,7 +145,7 @@ class Session extends React.Component {
                 <a className="subNav__nav__item" href="#account/send">Send</a>
                 <a className="subNav__nav__item" href="#account/addTrust">Accept assets</a>
                 <a className="subNav__nav__item" href="#account/history">History</a>
-                <a className="subNav__nav__item" href="#account/inflation">Settings</a>
+                <a className="subNav__nav__item" href="#account/settings">Settings</a>
                 {/*<a className="subNav__nav__item" href="#account/deposit">Deposit</a>*/}
               </nav>
             </div>

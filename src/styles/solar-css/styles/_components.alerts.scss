@@ -18,7 +18,11 @@
 }
 .s-alert--success {
   border: 1px solid $s-color-success;
-  background: whiten($s-color-success, 80%);
+  background: whiten($s-color-success, 85%);
+}
+.s-alert--primary {
+  border: 1px solid $s-color-primary5;
+  background: $s-color-primary9;
 }
 .s-alert__close {
   float: right;
