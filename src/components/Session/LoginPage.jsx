@@ -222,7 +222,7 @@ export default class LoginPage extends React.Component {
 
       body = <div className="LoginPage__body">
         <div className="LoginBox__ledgerNanoHeader">
-          <img src={images['ledger-logo']} className="img--noSelect" alt="Ledger Logo" width="300" height="78" />
+          <img src={images['ledger-logo']} className="img--noSelect" alt="Ledger Logo" width="300" height="80" />
           <img src={images['ledger-nano-s-buttons']} className="img--noSelect" alt="Ledger Nano S" width="382" height="100" />
         </div>
 
@@ -276,7 +276,7 @@ export default class LoginPage extends React.Component {
               Log in with key
             </a>
             <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'ledger' ? ' is-active' : '')} onClick={() => {this.setTab('ledger')}}>
-              <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger Logo" width="100" height="26" />
+              <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger Logo" width="75" height="20" />
             </a>
           </div>
           {body}

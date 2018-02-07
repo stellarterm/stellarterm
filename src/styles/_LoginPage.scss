@@ -11,14 +11,16 @@
   border-right: 1px solid $s-color-neutral7;
 }
 .LoginPage__sidebar__tab {
-  border-radius: 3px 0 0 3px;
-  background: #fff;
-  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  min-height: 50px;
   padding: 12px 18px;
-  display: block;
+  margin-bottom: 16px;
   border-top: 1px solid $s-color-neutral7;
   border-left: 1px solid $s-color-neutral7;
   border-bottom: 1px solid $s-color-neutral7;
+  border-radius: 3px 0 0 3px;
+  background: #fff;
   text-decoration: none;
 }
 .LoginPage__sidebar__tab img {
