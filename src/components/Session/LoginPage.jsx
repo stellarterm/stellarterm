@@ -32,9 +32,6 @@ export default class LoginPage extends React.Component {
       this.setState({secretInput: event.target.value});
     }
     this.handleBip32PathInput = (event) => {
-      if (event.target.value === '') {
-        return this.setState({bip32Path: ''});
-      }
       let value = parseInt(event.target.value);
       if (!Number.isInteger(value)) {
         value = 0;
@@ -57,11 +54,6 @@ export default class LoginPage extends React.Component {
       //     invalidBip32Path: true
       //   });
       // }
-      let path = 0;
-      if (this.state.bip32Path !== '') {
-        path = this.state.bip32Path;
-      }
-      console.log(path)
       this.props.d.session.handlers.logInWithLedger("44'/148'/" + this.state.bip32Path + "'")
     }
     this.toggleShow = (event) => {
@@ -184,10 +176,10 @@ export default class LoginPage extends React.Component {
         let customPath = <a className="LoginPage__activateCustomPath" onClick={this.enableAdvanced}>Advanced: Use custom BIP32 path</a>;
         if (this.state.ledgerAdvanced) {
           let inputWidthStyle = {
-            width: (this.state.bip32Path.length * 8 + 32) + 'px',
+            width: (this.state.bip32Path.length * 8 + 28) + 'px',
           };
           customPath = <label className="LoginPage__customPath">
-            <span className="LoginPage__customPath__surrounding">44'/148'/</span>
+            Path: <span className="LoginPage__customPath__surrounding">44'/148'/</span>
             <input style={inputWidthStyle} name="bip32Path" type="text" className="s-inputGroup__item LoginPage__customPath__input" value={this.state.bip32Path} onChange={this.handleBip32PathInput}
               onFocus={(e) => {
                 // Move the carat to the end
