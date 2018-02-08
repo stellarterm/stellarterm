@@ -9,6 +9,8 @@ export default function Ticker() {
   this.data = {};
 
   this.load();
+
+  setInterval(() => {this.load()}, 150*1000) // Refresh every 2.5 minutes
 }
 
 const MAX_ATTEMPTS = 5;
@@ -24,7 +26,7 @@ Ticker.prototype.load = function(attempt) {
     this.event.trigger();
   })
   .catch(e => {
-    console.log('Unable to load ticker');
+    console.log('Unable to load ticker', e);
     if (!attempt) {
       attempt = 0;
     }
