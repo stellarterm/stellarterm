@@ -250,6 +250,7 @@ const MagicSpoon = {
         }
       })
 
+    let firstFullFetchFinished = false;
     let fetchManyTrades = async () => {
       let records = [];
       let satisfied = false;
@@ -259,6 +260,8 @@ const MagicSpoon = {
       let prevCall;
       let startTime = Date.now();
       let fetchTimeout = 20000; // milliseconds before we stop fetching history
+
+      let result;
 
       while (!this.closed && !satisfied && depth < MAX_DEPTH && Date.now() - startTime < fetchTimeout) {
         depth += 1;
@@ -278,11 +281,12 @@ const MagicSpoon = {
         Array.prototype.push.apply(records, tradeResults.records);
 
         // Optimization: use this filter before saving it into the records array
-        this.trades = _.filter(
+        result = _.filter(
           _.map(records, (trade) => {
             return [new Date(trade.timestamp).getTime(), parseFloat(trade.avg)];
             // return [
             //   new Date(trade.timestamp).getTime(),
+            //   parseFloat(trade.avg),
             //   parseFloat(trade.open),
             //   parseFloat(trade.high),
             //   parseFloat(trade.low),
@@ -298,9 +302,12 @@ const MagicSpoon = {
 
         // Potential optimization: If we load the horizon results into the array in the correct order
         // then sorting will run at near optimal runtime
-        this.trades.sort((a,b) => {
+        result.sort((a,b) => {
           return a[0]-b[0];
         });
+        if (!firstFullFetchFinished) {
+          this.trades = result;
+        }
         if (depth > 1) {
           // Only show progressive updates when we already have 2 pages
           // 2 pages = 400 records
@@ -308,8 +315,15 @@ const MagicSpoon = {
           onUpdate();
         }
       }
+      firstFullFetchFinished = true;
+      this.trades = result;
       onUpdate();
 
+      setTimeout(() => {
+        if (!this.closed) {
+          fetchManyTrades();
+        }
+      }, 5*60*1000);
     }
 
     fetchManyTrades();
