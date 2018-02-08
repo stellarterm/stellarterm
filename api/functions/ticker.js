@@ -164,7 +164,8 @@ function phase3(ticker) {
             pair.volume24h_XLM = niceRound(_.sumBy(trades.records, record => Number(record.counter_volume)));
           } else {
             // TODO: Add num trades for other trade pairs too
-            throw new Error('Error: No support in StellarTerm ticker for pairs without XLM');
+            console.error('Error: No support in StellarTerm ticker for pairs without XLM. ' + pairSlug);
+            return;
           }
 
           pair.numTrades24h = _.sumBy(trades.records, record => record.trade_count);
@@ -277,7 +278,9 @@ function getBtcPrice() {
   return Promise.all([
     rp('https://api.coindesk.com/v1/bpi/currentprice.json')
       .then(data => {
-        return _.round(JSON.parse(data).bpi.USD.rate_float, 3);
+        let price = _.round(JSON.parse(data).bpi.USD.rate_float, 3);
+        console.log('Phase 1: Coindesk BTC price ', price)
+        return price;
       })
       .catch(() => {
         return null;
@@ -285,7 +288,9 @@ function getBtcPrice() {
     ,
     rp('https://api.bitfinex.com/v2/ticker/tBTCUSD')
       .then(data => {
-        return _.round(JSON.parse(data)[2], 3);
+        let price = _.round(JSON.parse(data)[2], 3);
+        console.log('Phase 1: Bitfinex BTC price ', price)
+        return price;
       })
       .catch(() => {
         return null;
@@ -293,7 +298,9 @@ function getBtcPrice() {
     ,
     rp('https://api.coinbase.com/v2/prices/spot?currency=USD')
       .then(data => {
-        return _.round(JSON.parse(data).data.amount, 3);
+        let price = _.round(JSON.parse(data).data.amount, 3);
+        console.log('Phase 1: Coinbase BTC price ', price)
+        return price;
       })
       .catch(() => {
         return null;
@@ -301,7 +308,9 @@ function getBtcPrice() {
     ,
     rp('https://api.kraken.com/0/public/Ticker?pair=XBTUSD')
       .then(data => {
-        return _.round(JSON.parse(data).result.XXBTZUSD.c[0], 3);
+        let price = _.round(JSON.parse(data).result.XXBTZUSD.c[0], 3);
+        console.log('Phase 1: Kraken   BTC price ', price)
+        return price;
       })
       .catch(() => {
         return null;
