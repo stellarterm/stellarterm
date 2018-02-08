@@ -33,6 +33,19 @@ directory.addAsset('smartlands.io', {
 });
 
 directory.addAnchor({
+  domain: 'stemchain.io',
+  website: 'https://stemchain.io',
+  logo: 'stemchain.io',
+  color: '#1db5da',
+  displayName: 'STEMchain',
+});
+directory.addAsset('stemchain.io', {
+  code: 'STEM',
+  issuer: 'GAFXX2VJE2EGLLY3EFA2BQXJADAZTNR7NC7IJ6LFYPSCLE7AI3AK3B3M',
+  instructions: 'https://stemchain.io',
+});
+
+directory.addAnchor({
   domain: 'irene.energy',
   website: 'https://irene.energy',
   logo: 'irene.energy',
@@ -440,6 +453,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['TELLUS', 'irene.energy'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['STEM', 'stemchain.io'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
