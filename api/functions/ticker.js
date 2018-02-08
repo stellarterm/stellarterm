@@ -138,62 +138,51 @@ function phase3(ticker) {
 
         // We get the min so that it can't be gamed by the issuer making a large sell wall
         pair.depth10Amount = _.round(Math.min(sum10PercentBidAmounts, sum10PercentAskAmounts));
+        return Server.tradeAggregation(baseBuying, counterSelling, Date.now() - 86400*1000, Date.now(), 900000).limit(200).order('desc').call()
+        .then(trades => {
+          let asset;
 
-        return tradeWalker.walkUntil(Server, pair.baseBuying, pair.counterSelling, 86400)
-          .then(tradesList => {
-            pair.numTrades24h = tradesList.length;
+          if (baseBuying.isNative()) {
+            asset = _.find(ticker.assets, {
+              code: pair.counterSelling.code,
+              issuer: pair.counterSelling.issuer,
+            });
 
-            if (baseBuying.isNative()) {
-              let asset = _.find(ticker.assets, {
-                code: pair.counterSelling.code,
-                issuer: pair.counterSelling.issuer,
-              });
-              // TODO: Add num trades for other trade pairs too
-              asset.numTrades24h = pair.numTrades24h;
-              asset.spread = pair.spread;
-              asset.price_XLM = niceRound(1/pair.price);
-              asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
-              pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'baseAmount'));
-              asset.volume24h_XLM = pair.volume24h_XLM;
-              asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
+            asset.price_XLM = niceRound(1/pair.price);
+            asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
+            pair.volume24h_XLM = niceRound(_.sumBy(trades.records, record => Number(record.base_volume)));
+          } else if (counterSelling.isNative()) {
+            asset = _.find(ticker.assets, {
+              code: pair.baseBuying.code,
+              issuer: pair.baseBuying.issuer,
+            });
 
-              lumenVolumeXLM += pair.volume24h_XLM;
-              lumenVolumeUSD += asset.volume24h_USD;
-              asset.topTradePairSlug = pairSlug;
+            asset.price_XLM = niceRound(pair.price);
+            asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
+            pair.volume24h_XLM = niceRound(_.sumBy(trades.records, record => Number(record.counter_volume)));
+          } else {
+            // TODO: Add num trades for other trade pairs too
+            throw new Error('Error: No support in StellarTerm ticker for pairs without XLM');
+          }
 
-              asset.depth10_XLM = niceRound(pair.depth10Amount);
-              asset.depth10_USD = niceRound(asset.depth10_XLM*ticker._meta.externalPrices.USD_XLM);
+          pair.numTrades24h = _.sumBy(trades.records, record => record.trade_count);
 
-              asset.numBids = res.bids.length;
-              asset.numAsks = res.asks.length;
-            } else if (counterSelling.isNative()) {
-              let asset = _.find(ticker.assets, {
-                code: pair.baseBuying.code,
-                issuer: pair.baseBuying.issuer,
-              });
-              // TODO: Add num trades for other trade pairs too
-              asset.numTrades24h = pair.numTrades24h;
-              asset.spread = pair.spread;
-              asset.price_XLM = niceRound(pair.price);
-              asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
-              pair.volume24h_XLM = niceRound(_.sumBy(tradesList, 'counterAmount'));
-              asset.volume24h_XLM = pair.volume24h_XLM;
-              asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
+          console.log('Phase 3: ', _.padEnd(pairSlug, 35), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), '$' + asset.price_USD)
 
-              lumenVolumeXLM += pair.volume24h_XLM;
-              lumenVolumeUSD += asset.volume24h_USD;
-              asset.topTradePairSlug = pairSlug;
+          asset.spread = pair.spread;
+          lumenVolumeXLM += pair.volume24h_XLM;
+          lumenVolumeUSD += asset.volume24h_USD;
+          asset.topTradePairSlug = pairSlug;
 
-              // TODO: Make this more accurate. This is inaccurate by up to 10% because
-              // when I flip it around here, I'm not accounting for the difference
-              // in price relative to XLM
-              asset.depth10_XLM = niceRound(pair.depth10Amount*pair.price);
-              asset.depth10_USD = niceRound(asset.depth10_XLM*ticker._meta.externalPrices.USD_XLM);
+          asset.volume24h_XLM = pair.volume24h_XLM;
+          asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
 
-              asset.numBids = res.bids.length;
-              asset.numAsks = res.asks.length;
-            }
-          })
+          asset.numBids = res.bids.length;
+          asset.numAsks = res.asks.length;
+
+          asset.depth10_XLM = niceRound(pair.depth10Amount);
+          asset.depth10_USD = niceRound(asset.depth10_XLM*ticker._meta.externalPrices.USD_XLM);
+        })
       })
   }))
   .then(() => {
