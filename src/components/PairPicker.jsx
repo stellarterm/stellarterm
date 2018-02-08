@@ -31,7 +31,7 @@ export default class PairPicker extends React.Component {
         let latestXLM = Format.niceRound(latestTrade[1]);
         let latestUSD = Format.niceRound(latestXLM * this.props.d.ticker.data._meta.externalPrices.USD_XLM);
 
-        dataRow = <p className="PairPicker__infoBar__ticker__data">{latestXLM} XLM<span className="PairPicker__infoBar__ticker__spacer"> </span>${latestUSD}</p>
+        dataRow = <p className="PairPicker__infoBar__ticker__data">{latestXLM} XLM<span className="PairPicker__infoBar__ticker__spacer">&nbsp;</span>${latestUSD}</p>
       }
 
       main = <div className="PairPicker__infoBar">
