@@ -7,8 +7,10 @@ import Ellipsis from './Ellipsis.jsx';
 export default class PairPicker extends React.Component {
   constructor(props) {
     super(props);
+    this.unsub = this.props.d.ticker.event.sub(() => {this.forceUpdate()});
   }
   componentWillUnmount() {
+    this.unsub();
   }
   render() {
     if (!this.props.d.orderbook.data.ready) {
