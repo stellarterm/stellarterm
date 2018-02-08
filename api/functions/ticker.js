@@ -50,6 +50,8 @@ function phase1(ticker) {
     ,
     getExternalPrices()
       .then(externalPrices => {
+        console.log('Phase 1: Finished external prices')
+        console.log(JSON.stringify(externalPrices, null, 2));
         ticker._meta.externalPrices = externalPrices;
       })
   ])
@@ -306,7 +308,9 @@ function getBtcPrice() {
       })
   ])
   .then(allPrices => {
-    return _.round(_.mean(_.filter(allPrices, price => price !== null)), 2);
+    let btcPrice = _.round(_.mean(_.filter(allPrices, price => price !== null)), 2);
+    console.log('Phase 1: BTC price = $' + btcPrice);
+    return btcPrice;
   })
 }
 
@@ -338,14 +342,18 @@ function getLumenPrice() {
       })
   ])
   .then(allPrices => {
-    return _.round(_.mean(_.filter(allPrices, price => price !== null)), 8);
+    let xlmPrice = _.round(_.mean(_.filter(allPrices, price => price !== null)), 8);
+    console.log('Phase 1: XLM price ' + xlmPrice + ' XLM/BTC');
+    return xlmPrice;
   })
 }
 
 function getHorizonMain() {
   return rp('https://horizon.stellar.org/')
-    .then(horizonMain => {
-      return JSON.parse(horizonMain);
+    .then(horizonMainJson => {
+      let horizonMain = JSON.parse(horizonMainJson);
+      console.log('Phase 1: Horizon at ledger #' + horizonMain.core_latest_ledger);
+      return horizonMain;
     })
 }
 
