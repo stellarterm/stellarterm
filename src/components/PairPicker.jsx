@@ -22,19 +22,24 @@ export default class PairPicker extends React.Component {
 
     let main;
 
-    if (counterSelling.isNative()) {
+    let baseNative = baseBuying.isNative();
+    let counterNative = counterSelling.isNative();
+
+    if (baseNative || counterNative) {
       let dataRow = <p className="PairPicker__infoBar__ticker__data">Loading<Ellipsis /></p>;
       if (this.props.d.orderbook.data.trades && this.props.d.ticker.ready) {
         let trades = this.props.d.orderbook.data.trades;
         if (trades.length === 0) {
           dataRow = <p className="PairPicker__infoBar__ticker__data">No data</p>
         } else {
-          let latestTrade = trades[trades.length - 1];
-
-          let latestXLM = Format.niceRound(latestTrade[1]);
-          let latestUSD = Format.niceRound(latestXLM * this.props.d.ticker.data._meta.externalPrices.USD_XLM);
-
-          dataRow = <p className="PairPicker__infoBar__ticker__data">{latestXLM} XLM<span className="PairPicker__infoBar__ticker__spacer">&nbsp;</span>${latestUSD}</p>
+          let latestPrice = trades[trades.length - 1][1];
+          if (baseNative) {
+            dataRow = <p className="PairPicker__infoBar__ticker__data">{Format.niceRound(latestPrice)} XLM/{counterSelling.getCode()}</p>
+          } else {
+            let latestXLM = Format.niceRound(latestPrice);
+            let latestUSD = Format.niceRound(latestXLM * this.props.d.ticker.data._meta.externalPrices.USD_XLM);
+            dataRow = <p className="PairPicker__infoBar__ticker__data">{latestXLM} XLM<span className="PairPicker__infoBar__ticker__spacer">&nbsp;</span>${latestUSD}</p>
+          }
         }
       }
 
