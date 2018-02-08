@@ -33,12 +33,21 @@ export default class ManageOffers extends React.Component {
       cancelLink = <span>Cancelling...</span>;
     }
     let orderbook = this.props.d.orderbook;
-    return <tr className="ManageOffers__table__row">
-      <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.price}</td>
-      <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.baseAmount}</td>
-      <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.counterAmount}</td>
-      <td className="ManageOffers__table__row__item">{cancelLink}</td>
-    </tr>
+    if (this.props.invert) {
+      return <tr className="ManageOffers__table__row">
+        <td className="ManageOffers__table__row__item">{cancelLink}</td>
+        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.counterAmount}</td>
+        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.baseAmount}</td>
+        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.price}</td>
+      </tr>
+    } else {
+      return <tr className="ManageOffers__table__row">
+        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.price}</td>
+        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.baseAmount}</td>
+        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.counterAmount}</td>
+        <td className="ManageOffers__table__row__item">{cancelLink}</td>
+      </tr>
+    }
   }
 };
 

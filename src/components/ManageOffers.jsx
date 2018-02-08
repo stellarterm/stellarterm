@@ -40,7 +40,7 @@ export default class ManageOffers extends React.Component {
     }, 'asc');
 
     let buyItems = _.map(sortedBuyOffers, rectifiedOffer => {
-      return <ManageOfferRow d={this.props.d} rectifiedOffer={rectifiedOffer} key={rectifiedOffer.id}></ManageOfferRow>;
+      return <ManageOfferRow invert d={this.props.d} rectifiedOffer={rectifiedOffer} key={rectifiedOffer.id}></ManageOfferRow>;
     });
     let sellItems = _.map(sortedSellOffers, rectifiedOffer => {
       return <ManageOfferRow d={this.props.d} rectifiedOffer={rectifiedOffer} key={rectifiedOffer.id}></ManageOfferRow>;
@@ -61,10 +61,10 @@ export default class ManageOffers extends React.Component {
             <table className="ManageOffers__table">
               <tbody>
                 <tr className="ManageOffers__table__header">
-                  <td className="ManageOffers__table__header__item">Price</td>
-                  <td className="ManageOffers__table__header__item">{orderbook.baseBuying.getCode()}</td>
-                  <td className="ManageOffers__table__header__item">{orderbook.counterSelling.getCode()}</td>
                   <td></td>
+                  <td className="ManageOffers__table__header__item">{orderbook.counterSelling.getCode()}</td>
+                  <td className="ManageOffers__table__header__item">{orderbook.baseBuying.getCode()}</td>
+                  <td className="ManageOffers__table__header__item">Price</td>
                 </tr>
                 {buyItems}
               </tbody>

@@ -52,7 +52,7 @@ export default function OfferTable(props) {
           }
 
 
-          let cellPrice = <div key={'price'} className="OfferTable__row__item OfferTable__cell--price"><div className="OfferTable__row__background"></div>{Printify.lightenZeros(offer.price, priceNumDecimals)}</div>
+          let cellPrice = <div key={'price'} className="OfferTable__row__item OfferTable__cell--price">{Printify.lightenZeros(offer.price, priceNumDecimals)}</div>
           let cellBase = <div key={'base'} className="OfferTable__row__item OfferTable__cell--amount">{Printify.lightenZeros(offer.base)}</div>
           let cellCounter = <div key={'counter'} className="OfferTable__row__item OfferTable__cell--amount">{Printify.lightenZeros(offer.counter)}</div>
           let cellDepth = <div key={'depth'} className="OfferTable__row__item OfferTable__cell--depth">{Printify.lightenZeros(offer.depth, depthNumDecimals)}</div>
