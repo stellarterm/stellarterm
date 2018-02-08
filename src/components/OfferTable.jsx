@@ -20,13 +20,25 @@ export default function OfferTable(props) {
       priceNumDecimals = Math.max(4, Format.niceNumDecimals(props.offers[0].price))
     }
   }
-  return <div className="OfferTable">
-    <div className="OfferTable__header">
+
+  let header;
+  if (props.side === 'buy') {
+    header = <div className="OfferTable__header">
+      <div className="OfferTable__header__item OfferTable__cell--depth">Sum {props.counterCurrency}</div>
+      <div className="OfferTable__header__item OfferTable__cell--amount">{props.counterCurrency}</div>
+      <div className="OfferTable__header__item OfferTable__cell--amount">{props.baseCurrency}</div>
+      <div className="OfferTable__header__item OfferTable__cell--price">Price</div>
+    </div>
+  } else {
+    header = <div className="OfferTable__header">
       <div className="OfferTable__header__item OfferTable__cell--price">Price</div>
       <div className="OfferTable__header__item OfferTable__cell--amount">{props.baseCurrency}</div>
       <div className="OfferTable__header__item OfferTable__cell--amount">{props.counterCurrency}</div>
-      <div className="OfferTable__header__item OfferTable__cell--depth">Depth {props.counterCurrency}</div>
+      <div className="OfferTable__header__item OfferTable__cell--depth">Sum {props.counterCurrency}</div>
     </div>
+  }
+  return <div className="OfferTable">
+    {header}
     <div className="OfferTable__table">
       {
         _.map(props.offers, (offer, index) => {
@@ -38,16 +50,36 @@ export default function OfferTable(props) {
           } else {
             rowStyle.background = `linear-gradient(to right, ${sellBackground} ${depthPercentage}%, ${altColor} ${depthPercentage}%)`;
           }
-          return <div
-            className="OfferTable__row"
-            key={offer.key}
-            style={rowStyle}
-            onClick={() => props.d.orderbook.handlers.pickPrice(offer.price)}>
-            <div className="OfferTable__row__item OfferTable__cell--price"><div className="OfferTable__row__background"></div>{Printify.lightenZeros(offer.price, priceNumDecimals)}</div>
-            <div className="OfferTable__row__item OfferTable__cell--amount">{Printify.lightenZeros(offer.base)}</div>
-            <div className="OfferTable__row__item OfferTable__cell--amount">{Printify.lightenZeros(offer.counter)}</div>
-            <div className="OfferTable__row__item OfferTable__cell--depth">{Printify.lightenZeros(offer.depth, depthNumDecimals)}</div>
-          </div>
+
+
+          let cellPrice = <div key={'price'} className="OfferTable__row__item OfferTable__cell--price"><div className="OfferTable__row__background"></div>{Printify.lightenZeros(offer.price, priceNumDecimals)}</div>
+          let cellBase = <div key={'base'} className="OfferTable__row__item OfferTable__cell--amount">{Printify.lightenZeros(offer.base)}</div>
+          let cellCounter = <div key={'counter'} className="OfferTable__row__item OfferTable__cell--amount">{Printify.lightenZeros(offer.counter)}</div>
+          let cellDepth = <div key={'depth'} className="OfferTable__row__item OfferTable__cell--depth">{Printify.lightenZeros(offer.depth, depthNumDecimals)}</div>
+
+          if (props.side === 'buy') {
+            return <div
+              className="OfferTable__row"
+              key={offer.key}
+              style={rowStyle}
+              onClick={() => props.d.orderbook.handlers.pickPrice(offer.price)}>
+              {cellDepth}
+              {cellCounter}
+              {cellBase}
+              {cellPrice}
+            </div>
+          } else {
+            return <div
+              className="OfferTable__row"
+              key={offer.key}
+              style={rowStyle}
+              onClick={() => props.d.orderbook.handlers.pickPrice(offer.price)}>
+              {cellPrice}
+              {cellBase}
+              {cellCounter}
+              {cellDepth}
+            </div>
+          }
         })
       }
     </div>
