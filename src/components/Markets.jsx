@@ -17,9 +17,6 @@ export default class Markets extends React.Component {
       <div>
         <div className="so-back islandBack islandBack--t">
           <div className="island">
-            <div className="island__header">
-              Stellar Asset Directory
-            </div>
             <AssetList d={this.props.d}></AssetList>
             <div className="AssetListFooter">
               StellarTerm does not endorse any of these issuers. They are here for informational purposes only.
