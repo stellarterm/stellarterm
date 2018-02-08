@@ -260,7 +260,7 @@ const MagicSpoon = {
       let startTime = Date.now();
       let fetchTimeout = 20000; // milliseconds before we stop fetching history
 
-      while (!satisfied && depth < MAX_DEPTH && Date.now() - startTime < fetchTimeout) {
+      while (!this.closed && !satisfied && depth < MAX_DEPTH && Date.now() - startTime < fetchTimeout) {
         depth += 1;
         let tradeResults;
         if (first) {
@@ -309,11 +309,15 @@ const MagicSpoon = {
         }
       }
       onUpdate();
+
     }
 
     fetchManyTrades();
 
-    this.close = streamingOrderbookClose;
+    this.close = () => {
+      this.closed = true;
+      streamingOrderbookClose;
+    }
     // TODO: Close
   },
 
