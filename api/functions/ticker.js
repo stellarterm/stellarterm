@@ -164,7 +164,9 @@ function phase3(ticker) {
             pair.volume24h_XLM = niceRound(_.sumBy(trades.records, record => Number(record.counter_volume)));
           } else {
             // TODO: Add num trades for other trade pairs too
+            console.error();
             console.error('Error: No support in StellarTerm ticker for pairs without XLM. ' + pairSlug);
+            console.error();
             return;
           }
 
@@ -173,13 +175,13 @@ function phase3(ticker) {
 
           console.log('Phase 3: ', _.padEnd(pairSlug, 40), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), '$' + asset.price_USD)
 
+          asset.volume24h_XLM = pair.volume24h_XLM;
+          asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
+
           asset.spread = pair.spread;
           lumenVolumeXLM += pair.volume24h_XLM;
           lumenVolumeUSD += asset.volume24h_USD;
           asset.topTradePairSlug = pairSlug;
-
-          asset.volume24h_XLM = pair.volume24h_XLM;
-          asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
 
           asset.numBids = res.bids.length;
           asset.numAsks = res.asks.length;
@@ -248,7 +250,7 @@ function phase4(ticker) {
     let spreadPenalty = Math.pow((1-asset.spread), 5); // range: [0,1]
 
     asset.activityScore = spreadPenalty * (numOffersScore + depth10Score + volumeScore + numTradesScore);
-    console.log('Phase 4: ', _.padEnd(asset.slug, 20), 'Score: ', asset.activityScore, 'Inputs: ', spreadPenalty, numOffersScore , depth10Score , volumeScore ,numTradesScore)
+    console.log('Phase 4: ', _.padEnd(asset.slug, 25), 'Score:', _.padStart(_.round(asset.activityScore, 3), 6), ' Inputs:', spreadPenalty.toFixed(3), numOffersScore , depth10Score , volumeScore ,numTradesScore)
   });
 
   ticker.assets.sort((a,b) => {
