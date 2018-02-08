@@ -13,7 +13,7 @@ export default function OfferTable(props) {
   let depthNumDecimals = 7;
   let priceNumDecimals = 7;
   if (props.offers.length > 0) {
-    depthNumDecimals = Math.max(3, Format.niceNumDecimals(props.offers[0].depth));
+    depthNumDecimals = Math.max(0, Format.niceNumDecimals(props.offers[props.offers.length - 1].depth));
     if (props.side === 'buy') {
       priceNumDecimals = Math.max(4, Format.niceNumDecimals(props.offers[props.offers.length - 1].price))
     } else {
