@@ -25,7 +25,7 @@ export default class LoginPage extends React.Component {
       newKeypair: null,
       bip32Path: '0',
       ledgerAdvanced: false,
-      currentTab: this.getDefaultTab(), // 'login', 'createAccount', 'ledger'
+      currentTab: 'login', // 'login', 'createAccount', 'ledger'
     }
 
 
@@ -90,19 +90,6 @@ export default class LoginPage extends React.Component {
   }
   componentWillUnmount() {
     this.mounted = false;
-  }
-
-  getDefaultTab() {
-    const { defaultTab } = this.props;
-    switch (defaultTab) {
-      case 'signup':
-        return 'createAccount';
-      case 'signupWithLedger':
-        return 'ledger';
-      case 'login':
-      default:
-        return 'login';
-    }
   }
 
   render() {
