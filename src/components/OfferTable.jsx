@@ -25,12 +25,12 @@ export default function OfferTable(props) {
       <div className="OfferTable__header__item OfferTable__cell--price">Price</div>
       <div className="OfferTable__header__item OfferTable__cell--amount">{props.baseCurrency}</div>
       <div className="OfferTable__header__item OfferTable__cell--amount">{props.counterCurrency}</div>
-      <div className="OfferTable__header__item OfferTable__cell--depth">Depth ({props.counterCurrency})</div>
+      <div className="OfferTable__header__item OfferTable__cell--depth">Depth {props.counterCurrency}</div>
     </div>
     <div className="OfferTable__table">
       {
         _.map(props.offers, (offer, index) => {
-          let altColor = index % 2 === 0 ? '#fff' : '#f4f4f5'; // #f4f4f5 is $s-color-neutral8
+          let altColor = index % 2 === 0 ? '#fff' : '#f9f9f9'; // #f4f4f5 is $s-color-neutral8
           let depthPercentage = Math.min(100, Number(offer.depth / props.maxDepth * 100).toFixed(1));
           let rowStyle = {};
           if (props.side === 'buy') {
