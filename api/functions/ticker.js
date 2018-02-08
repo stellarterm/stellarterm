@@ -166,8 +166,9 @@ function phase3(ticker) {
           }
 
           pair.numTrades24h = _.sumBy(trades.records, record => record.trade_count);
+          asset.numTrades24h = pair.numTrades24h;
 
-          console.log('Phase 3: ', _.padEnd(pairSlug, 35), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), '$' + asset.price_USD)
+          console.log('Phase 3: ', _.padEnd(pairSlug, 40), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), '$' + asset.price_USD)
 
           asset.spread = pair.spread;
           lumenVolumeXLM += pair.volume24h_XLM;
@@ -244,6 +245,7 @@ function phase4(ticker) {
     let spreadPenalty = Math.pow((1-asset.spread), 5); // range: [0,1]
 
     asset.activityScore = spreadPenalty * (numOffersScore + depth10Score + volumeScore + numTradesScore);
+    console.log('Phase 4: ', _.padEnd(asset.slug, 20), 'Score: ', asset.activityScore, 'Inputs: ', spreadPenalty, numOffersScore , depth10Score , volumeScore ,numTradesScore)
   });
 
   ticker.assets.sort((a,b) => {
