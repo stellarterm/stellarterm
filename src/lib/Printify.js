@@ -6,7 +6,8 @@ import _ from 'lodash';
 const Printify = {
   lightenZeros(number, numDecimals) {
     if (!_.isString(number)) {
-      throw new Error('lightenZeros only takes in strings');
+      console.error('lightenZeros only takes in strings. Got type: ' + typeof number);
+      return <span className="lightenZeros">{number}</span>;
     }
 
     if (numDecimals !== undefined) {
