@@ -60,7 +60,7 @@ export default class Exchange extends React.Component {
       </div>
       <PriceChart d={this.props.d}></PriceChart>
       <div className="so-back islandBack">
-        <div className="island island--pb">
+        <div className="island Exchange__orderbook">
           <div className="island__header">
             Orderbook
           </div>
