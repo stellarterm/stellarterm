@@ -154,7 +154,7 @@ export default class PriceChart extends React.Component {
       },
       series: [{
         name: pairName,
-        data: orderbook.trades,
+        data: orderbook.trades.slice(1),
         type: 'spline',
         dataGrouping: {
           groupPixelWidth: 8,
@@ -219,7 +219,7 @@ export default class PriceChart extends React.Component {
   }
   shouldComponentUpdate() {
     if (this.stockChart !== undefined) {
-      this.stockChart.series[0].setData(this.orderbook.trades)
+      this.stockChart.series[0].setData(this.orderbook.trades.slice(1))
     }
     return false;
   }
