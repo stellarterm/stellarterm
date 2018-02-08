@@ -68,6 +68,11 @@ class TermApp extends React.Component {
       })
     } , false);
   }
+
+  goto(url) {
+    window.location = url;
+  }
+
   render() {
     let url = this.state.url;
     let urlParts = url.split('/');
@@ -80,7 +85,21 @@ class TermApp extends React.Component {
           <div className="so-back">
             <div className="HomePage__lead">
               <h2 className="HomePage__lead__title">Trade on the <a href="https://www.stellar.org/developers/guides/concepts/exchange.html"  target="_blank" rel="nofollow noopener noreferrer">Stellar Distributed Exchange</a></h2>
-              <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm"  target="_blank" rel="nofollow noopener noreferrer">open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
+              <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm" target="_blank" rel="nofollow noopener noreferrer">open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
+              <div className="HomePage__lead__actions">
+                <button
+                  className="HomePage__lead__actions__sign-up-button s-button"
+                  onClick={() => this.goto('#account/signup')}
+                >
+                  Sign Up
+                </button>
+                <button
+                  className="s-button"
+                  onClick={() => this.goto('#account/login')}
+                >
+                  Login
+                </button>
+              </div>
             </div>
           </div>
         </div>
