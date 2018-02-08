@@ -18,6 +18,7 @@
     padding: 4px 8px 4px 2px;
   }
 .OfferTable__row {
+  display: flex;
   width: 100%;
 }
 .OfferTable__row:hover {
@@ -29,3 +30,16 @@
     padding: 4px 8px 4px 2px; // Additional padding on the right sie since things are right aligned
     text-align: right;
   }
+
+.OfferTable__cell--price {
+  width: 20%;
+}
+.OfferTable__cell--amount {
+  width: 30%;
+}
+.OfferTable__cell--amount {
+  width: 30%;
+}
+.OfferTable__cell--depth {
+  width: 20%;
+}

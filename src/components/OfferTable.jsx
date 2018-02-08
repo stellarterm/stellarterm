@@ -22,12 +22,12 @@ export default function OfferTable(props) {
   }
   return <div className="OfferTable">
     <div className="OfferTable__header">
-      <div className="OfferTable__header__item">Price</div>
-      <div className="OfferTable__header__item">{props.baseCurrency}</div>
-      <div className="OfferTable__header__item">{props.counterCurrency}</div>
-      <div className="OfferTable__header__item">Depth ({props.counterCurrency})</div>
+      <div className="OfferTable__header__item OfferTable__cell--price">Price</div>
+      <div className="OfferTable__header__item OfferTable__cell--amount">{props.baseCurrency}</div>
+      <div className="OfferTable__header__item OfferTable__cell--amount">{props.counterCurrency}</div>
+      <div className="OfferTable__header__item OfferTable__cell--depth">Depth ({props.counterCurrency})</div>
     </div>
-    <table className="OfferTable__table"><tbody>
+    <div className="OfferTable__table">
       {
         _.map(props.offers, (offer, index) => {
           let altColor = index % 2 === 0 ? '#fff' : '#f4f4f5'; // #f4f4f5 is $s-color-neutral8
@@ -38,19 +38,19 @@ export default function OfferTable(props) {
           } else {
             rowStyle.background = `linear-gradient(to right, ${sellBackground} ${depthPercentage}%, ${altColor} ${depthPercentage}%)`;
           }
-          return <tr
+          return <div
             className="OfferTable__row"
             key={offer.key}
             style={rowStyle}
             onClick={() => props.d.orderbook.handlers.pickPrice(offer.price)}>
-            <td className="OfferTable__row__item">{Printify.lightenZeros(offer.price, priceNumDecimals)}</td>
-            <td className="OfferTable__row__item">{Printify.lightenZeros(offer.base)}</td>
-            <td className="OfferTable__row__item">{Printify.lightenZeros(offer.counter)}</td>
-            <td className="OfferTable__row__item">{Printify.lightenZeros(offer.depth, depthNumDecimals)}</td>
-          </tr>
+            <div className="OfferTable__row__item OfferTable__cell--price"><div className="OfferTable__row__background"></div>{Printify.lightenZeros(offer.price, priceNumDecimals)}</div>
+            <div className="OfferTable__row__item OfferTable__cell--amount">{Printify.lightenZeros(offer.base)}</div>
+            <div className="OfferTable__row__item OfferTable__cell--amount">{Printify.lightenZeros(offer.counter)}</div>
+            <div className="OfferTable__row__item OfferTable__cell--depth">{Printify.lightenZeros(offer.depth, depthNumDecimals)}</div>
+          </div>
         })
       }
-    </tbody></table>
+    </div>
   </div>
 }
 OfferTable.propTypes = {
