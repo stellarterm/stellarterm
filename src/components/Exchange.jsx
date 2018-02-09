@@ -6,6 +6,7 @@ import ManageOffers from './ManageOffers.jsx';
 import PriceChart from './PriceChart.jsx';
 import Generic from './Generic.jsx';
 import Stellarify from '../lib/Stellarify';
+import Ellipsis from './Ellipsis.jsx';
 
 export default class Exchange extends React.Component {
   constructor(props) {
@@ -17,7 +18,7 @@ export default class Exchange extends React.Component {
   }
   render() {
     if (!this.props.d.orderbook.data.ready) {
-      return <Generic title="Loading orderbook">Loading orderbook data from Horizon</Generic>
+      return <Generic title="Loading orderbook">Loading orderbook data from Horizon<Ellipsis /></Generic>
     }
 
     let thinOrderbookWarning;

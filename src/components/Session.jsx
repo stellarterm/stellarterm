@@ -12,6 +12,7 @@ import Generic from './Generic.jsx';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import Loading from './Loading.jsx';
 import HistoryView from './Session/HistoryView.jsx';
+import Ellipsis from './Ellipsis.jsx';
 import clickToSelect from '../lib/clickToSelect';
 
 class Session extends React.Component {
@@ -23,7 +24,7 @@ class Session extends React.Component {
     // KLUDGE: The event listeners are kinda messed up
     // Uncomment if state changes aren't working. But with the new refactor, this dead code should be removed
     // For now, it's just extra insurance
-    this.checkLoginStatus = () => { 
+    this.checkLoginStatus = () => {
       if (this.mounted) {
         if (this.props.d.session.state === 'in' || this.props.d.session.state === 'unfunded' ) {
           this.forceUpdate();
@@ -53,7 +54,7 @@ class Session extends React.Component {
         To use your Stellar account, you must activate it by sending lumens to your account. You can buy lumens from an exchange and send them to your address.
       </Loading></Generic>
     } else if (state === 'loading') {
-      return <Generic title="Loading account"><Loading>Contacting network and loading account</Loading></Generic>
+      return <Generic title="Loading account"><Loading>Contacting network and loading account<Ellipsis /></Loading></Generic>
     } else if (state === 'in') {
       // Inflation helps fund development of StellarTerm to make it better
       if (!d.session.inflationDone) {

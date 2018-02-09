@@ -1,5 +1,6 @@
 const React = window.React = require('react');
 import _ from 'lodash';
+import Ellipsis from './Ellipsis.jsx';
 
 // Generate data for testing:
 // let data = [];
@@ -229,7 +230,7 @@ export default class PriceChart extends React.Component {
     return <div className="so-back islandBack">
       <div className="island PriceChartChunk">
         <div id="PriceChart">
-          <p className="PriceChart__message">Loading historical price data...</p>
+          <p className="PriceChart__message">Loading historical price data<Ellipsis /></p>
         </div>
       </div>
     </div>;
