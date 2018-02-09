@@ -24,7 +24,7 @@ export default class BalancesTable extends React.Component {
           issuer: balance.issuer,
         });
         if (tickerAsset) {
-          balanceUSD = '$' + Math.round(balance.balance * tickerAsset.price_USD, 2).toLocaleString('en-US', {minimumFractionDigits: 2});
+          balanceUSD = '$' + (balance.balance * tickerAsset.price_USD).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
           if (tickerAsset.slug !== 'XLM-native') {
             tradeLink = <a href={'#markets/' + tickerAsset.topTradePairSlug} className="BalancesTable__row__trade">trade</a>
           }
