@@ -102,7 +102,7 @@ export default class PriceChart extends React.Component {
     }
 
     this.highstockOptions = {
-      colors: ['#9291e0'], // Purple from background gradient
+      colors: ['#41c6ff'], // Saturated blue from background gradient
       chart: {
         style: {
           fontFamily: 'Source Sans Pro',
@@ -157,7 +157,7 @@ export default class PriceChart extends React.Component {
       series: [{
         name: pairName,
         data: orderbook.trades,
-        type: 'spline',
+        type: 'areaspline',
         dataGrouping: {
           groupPixelWidth: 8,
           dateTimeLabelFormats: dataGroupingDateTimeLabelFormats,
@@ -167,20 +167,31 @@ export default class PriceChart extends React.Component {
           valueDecimals: 7,
           pointFormat: '{series.name}: <b>{point.y}</b><br />', // Remove the bullet point
         },
-        lineWidth: 2,
+        fillColor: '#e3f7ff',
+        zIndex: -1,
+        lineWidth: 1,
         states: {
           hover: {
             enabled: false,
             // lineWidth: 2,
           },
         },
+        threshold: null,
       }],
       tooltip: {
         backgroundColor: '#f4f4f5',
         borderColor: '#f4f4f5',
         borderRadius: 3,
         borderWidth: 0,
-        crosshairs: [true, true],
+        crosshairs: [ {
+          width: 1,
+          color: 'rgba(0,0,0,0.2)',
+          zIndex: 10,
+        }, {
+          width: 1,
+          color: 'rgba(0,0,0,0.2)',
+          zIndex: 10,
+        }],
         shadow: {
           // Same as the island stuff in StellarTerm
           color: 'rgba(0,0,0,0.375)', // 0.3/0.8=0.375 to account for tooltip opacity
@@ -188,6 +199,7 @@ export default class PriceChart extends React.Component {
           offsetX: 0,
           offsetY: 1,
         },
+        zIndex: 2,
         useHTML: true,
         style: {
           opacity: '0.8',
@@ -202,18 +214,30 @@ export default class PriceChart extends React.Component {
         ordinal: false,
       },
       yAxis: {
-        gridLineColor: '#f1f1f1',
+        gridLineColor: 'rgba(0, 0, 0, 0.06)',
+        gridZIndex: 30,
+        tickPixelInterval: 30,
+        labels: {
+          formatter: function() {
+            return this.value
+          }
+        }
       },
       navigator: {
         maskFill: 'rgba(255, 255, 255, 0.45)',
         series: {
           // type: 'areaspline',
-          fillOpacity: 0.4,
+          fillOpacity: 0.7,
           lineWidth: 1,
-          lineColor: '#9291e0',
-          fillColor: 'rgba(146, 145, 224, 0.2)',
+          lineColor: '#74d5ff',
+          fillColor: 'rgba(192, 236, 255, 0.5)',
           shadow: false,
         },
+        outlineColor: '#9291e0',
+        outlineWidth: 1,
+      },
+      scrollbar: {
+        enabled: false,
       },
       credits: {
         enabled: false,
@@ -225,7 +249,7 @@ export default class PriceChart extends React.Component {
   shouldComponentUpdate() {
     if (this.stockChart !== undefined) {
       // slice(1) to remove potential outliers
-      this.stockChart.series[0].setData(this.orderbook.trades)
+      this.stockChart.series[0].setData(this.orderbook.trades);
     }
     return false;
   }
