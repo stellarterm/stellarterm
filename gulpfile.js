@@ -2,7 +2,13 @@
 const gulp = require('gulp');
 const del = require('del');
 const runSequence = require('run-sequence');
-const $ = require('gulp-load-plugins')();
+const $ = {
+  sass: require('gulp-sass'),
+  util: require('gulp-util'),
+  useref: require('gulp-useref'),
+  uglify: require('gulp-uglify'),
+  inlineSource: require('gulp-inline-source'),
+};
 const browserify = require('browserify');
 const watchify = require('watchify');
 const source = require('vinyl-source-stream');
@@ -132,9 +138,9 @@ gulp.task('html', () => gulp.src('./src/index.html')
     .pipe(gulp.dest('dist')));
 
 gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp.src('./app/*.html')
-    .pipe($.useref.assets())
-    .pipe($.useref.restore())
-    .pipe($.useref())
+    .pipe(gulp.useref.assets())
+    .pipe(gulp.useref.restore())
+    .pipe(gulp.useref())
     .pipe(gulp.dest('dist')));
 
 const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower'];
