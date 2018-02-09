@@ -260,7 +260,7 @@ function phase4(ticker) {
     // It's a flat improvement so that even those without market makers can improve their ranking
     let numOffersScore = (asset.numBids + asset.numAsks)/20; // [0,2]
 
-    // A bonus for having an average of up to 1 trade every 24 hours. Adds
+    // A bonus for having an average of up to 12 trade every 24 hours. Adds
     // more detail to the charts. However, we don't want to overemphasize taking
     // This is again to help assets with little activity
     let constantActivityBonus = Math.max(12, asset.numTrades24h)/24; // [0,0.5]
@@ -283,11 +283,11 @@ function phase4(ticker) {
 
     // Volume really helps! However, it's not as important as depth especially
     // since there are no pecentage fees on the Stellar network
-    let volumeScore = Math.log10(10 + asset.volume24h_USD) - 1; // [0, infinity]
+    let volumeScore = Math.log(4 + asset.volume24h_USD)/Math.log(4) - 1; // [0, infinity]
 
     // numTrades is helpful too. Especially the first few num trades are important!
     // But we want to encourage depth more than market taking
-    let numTradesScore = Math.log10(10 + asset.numTrades24h) - 1;
+    let numTradesScore = Math.log10(4 + asset.numTrades24h)/Math.log(4) - 1;
 
     // We want the score to be slightly more stable, so just a little spread can negatively influence
     // It's also a easy fix for issuers. With a big spread, the other stuff is kinda useless
