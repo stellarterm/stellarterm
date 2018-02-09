@@ -144,23 +144,41 @@ function phase3(ticker) {
         .then(trades => {
           let asset;
 
+
           if (baseBuying.isNative()) {
             asset = _.find(ticker.assets, {
               code: pair.counterSelling.code,
               issuer: pair.counterSelling.issuer,
             });
+            asset.change24h_XLM = null;
+
+            if (trades.records.length > 2) {
+              // Skip the 0th record to avoid fresh coin outliers
+              let open = 1/trades.records[1].avg;
+              let close = 1/trades.records[trades.records.length - 1].avg;
+              asset.change24h_XLM = _.round(close/open - 1, 2)
+            }
 
             asset.price_XLM = niceRound(1/pair.price);
             asset.price_USD = niceRound(1/pair.price * ticker._meta.externalPrices.USD_XLM);
+
             pair.volume24h_XLM = niceRound(_.sumBy(trades.records, record => Number(record.base_volume)));
           } else if (counterSelling.isNative()) {
             asset = _.find(ticker.assets, {
               code: pair.baseBuying.code,
               issuer: pair.baseBuying.issuer,
             });
+            asset.change24h_XLM = null;
 
             asset.price_XLM = niceRound(pair.price);
             asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
+
+            if (trades.records.length > 2) {
+              // Skip the 0th record to avoid fresh coin outliers
+              let open = trades.records[1].open;
+              let close = trades.records[trades.records.length - 1].close;
+              asset.change24h = _.round(close/open - 1, 2)
+            }
             pair.volume24h_XLM = niceRound(_.sumBy(trades.records, record => Number(record.counter_volume)));
           } else {
             // TODO: Add num trades for other trade pairs too
@@ -173,7 +191,7 @@ function phase3(ticker) {
           pair.numTrades24h = _.sumBy(trades.records, record => record.trade_count);
           asset.numTrades24h = pair.numTrades24h;
 
-          console.log('Phase 3: ', _.padEnd(pairSlug, 40), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), '$' + asset.price_USD)
+          console.log('Phase 3: ', _.padEnd(pairSlug, 40), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), '$' + asset.price_USD.toFixed(2), trades.records.length + ' records')
 
           asset.volume24h_XLM = pair.volume24h_XLM;
           asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
