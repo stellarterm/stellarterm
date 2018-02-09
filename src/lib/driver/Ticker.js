@@ -10,7 +10,7 @@ export default function Ticker() {
 
   this.load();
 
-  setInterval(() => {this.load()}, 150*1000) // Refresh every 2.5 minutes
+  setInterval(() => {this.load()}, 30*1000) // Refresh every 30 seconds
 }
 
 const MAX_ATTEMPTS = 5;
