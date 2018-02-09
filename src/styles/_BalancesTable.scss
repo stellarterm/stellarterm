@@ -14,6 +14,9 @@
 .BalancesTable__row {
   border-top: 1px solid $s-color-neutral7;
 }
+.BalancesTable__row__item--heading {
+  font-weight: bold;
+}
 .BalancesTable__row__item {
   padding: 16px;
 }
@@ -36,4 +39,10 @@
   font-size: $s-scale-6;
   color: $s-color-neutral5;
   padding: 12px;
+}
+
+.BalancesTable__row__trade {
+  text-decoration: none;
+  font-weight: 400;
+  border-bottom: 1px dotted $s-color-neutral5;
 }
