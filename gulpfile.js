@@ -4,7 +4,6 @@ const del = require('del');
 const runSequence = require('run-sequence');
 const $ = {
   sass: require('gulp-sass'),
-  util: require('gulp-util'),
   useref: require('gulp-useref'),
   uglify: require('gulp-uglify'),
   inlineSource: require('gulp-inline-source'),
@@ -124,14 +123,18 @@ const bundler = watchify(browserify({
 }));
 const rebundle = () => bundler.bundle()
     // log errors if they happen
-    .on('error', $.util.log.bind($.util, 'Browserify Error'))
+    .on('error', (e) => {
+      console.log(e.stack)
+    })
     .pipe(source('app.js'))
     .pipe(gulp.dest('./dist/scripts'))
     .on('end', () => {
       reload();
     });
 bundler.on('update', rebundle);
-bundler.on('log', $.util.log);
+bundler.on('log', (e) => {
+  console.log(e);
+});
 gulp.task('scripts', rebundle);
 
 gulp.task('html', () => gulp.src('./src/index.html')
