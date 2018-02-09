@@ -162,10 +162,6 @@ export default class PriceChart extends React.Component {
         name: pairName,
         data: orderbook.trades,
         type: 'areaspline',
-        dataGrouping: {
-          groupPixelWidth: 8,
-          dateTimeLabelFormats: dataGroupingDateTimeLabelFormats,
-        },
         tooltip: {
           dateTimeLabelFormats,
           valueDecimals: 7,
