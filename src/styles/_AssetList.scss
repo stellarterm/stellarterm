@@ -42,6 +42,12 @@
   display: table-cell;
   vertical-align: middle;
 }
+.AssetList__asset__changePositive {
+  color: $s-color-primary3;
+}
+.AssetList__asset__changeNegative {
+  color: darken($s-color-alert, 5%);
+}
 .AssetListFooter {
   font-size: $s-scale-6;
   text-align: center;

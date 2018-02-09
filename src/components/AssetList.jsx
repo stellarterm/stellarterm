@@ -37,11 +37,29 @@ export default class AssetList extends React.Component {
         tradeLink = <span className="AssetList__asset__amount__trade">trade</span>
       }
       let volume24h = asset.volume24h_USD ? '$' + asset.volume24h_USD.toFixed(0) : '$0';
+
+      let change24hPercentage;
+      if (asset.id === 'XLM-native') {
+        change24hPercentage = this.dTicker.data._meta.externalPrices.USD_XLM_change;
+      } else {
+        change24hPercentage = asset.change24h_USD;
+      }
+
+      let change24h;
+      if (change24hPercentage === null || change24hPercentage === undefined) {
+        change24h = '-';
+      } else if (change24hPercentage < 0) {
+        change24h = <span className="AssetList__asset__changeNegative">{change24hPercentage.toFixed(2)}%</span>;
+      } else {
+        change24h = <span className="AssetList__asset__changePositive">{change24hPercentage.toFixed(2)}%</span>;
+      }
+
       rows.push(<a href={'#exchange/' + asset.topTradePairSlug} key={'asset-' + asset.id} className="AssetList__asset">
         <div className="AssetList__asset__assetCard"><AssetCard2 code={asset.code} issuer={asset.issuer} boxy={false}></AssetCard2></div>
         <div className="AssetList__asset__amount">{priceXLM}{Printify.lighten(' XLM')}</div>
         <div className="AssetList__asset__amount">{priceUSD}</div>
         <div className="AssetList__asset__amount">{volume24h}</div>
+        <div className="AssetList__asset__amount">{change24h}</div>
         <div className="AssetList__asset__amount">{tradeLink}</div>
       </a>);
       // rows.push(<AssetPair key={index} row={true} baseBuying={market.baseBuying} counterSelling={market.counterSelling}></AssetPair>)
@@ -53,6 +71,7 @@ export default class AssetList extends React.Component {
           <div className="AssetList__head__cell AssetList__head__amount">Price (XLM)</div>
           <div className="AssetList__head__cell AssetList__head__amount">Price (USD)</div>
           <div className="AssetList__head__cell AssetList__head__amount">Volume (24h)</div>
+          <div className="AssetList__head__cell AssetList__head__amount">Change (24h)</div>
         </div>
         {rows}
       </div>
