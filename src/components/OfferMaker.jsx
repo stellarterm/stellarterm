@@ -318,21 +318,36 @@ export default class OfferMaker extends React.Component {
         <table className="OfferMaker__table">
           <tbody>
             <tr className="OfferMaker__table__row">
-              <td className="OfferMaker__table__label">Price per {baseAssetName}</td>
+              <td className="OfferMaker__table__label">Price</td>
               <td className="OfferMaker__table__input">
-                <input type="text" className="OfferMaker__table__input__input" value={this.state.price} onChange={(e) => this.updateState('price', e.target.value)} placeholder="" />
+                <label className="OfferMaker__table__input__group">
+                  <input type="text" className="OfferMaker__table__input__input" value={this.state.price} onChange={(e) => this.updateState('price', e.target.value)} placeholder="" />
+                  <div className="OfferMaker__table__input__group__tag">
+                    {counterAssetName}
+                  </div>
+                </label>
               </td>
             </tr>
             <tr className="OfferMaker__table__row">
-              <td className="OfferMaker__table__label">Amount {baseAssetName}</td>
+              <td className="OfferMaker__table__label">Amount</td>
               <td className="OfferMaker__table__input">
-                <input type="text" className="OfferMaker__table__input__input" value={this.state.amount} onChange={(e) => this.updateState('amount', e.target.value)} placeholder="" />
+                <label className="OfferMaker__table__input__group">
+                  <input type="text" className="OfferMaker__table__input__input" value={this.state.amount} onChange={(e) => this.updateState('amount', e.target.value)} placeholder="" />
+                  <div className="OfferMaker__table__input__group__tag">
+                    {baseAssetName}
+                  </div>
+                </label>
               </td>
             </tr>
             <tr className="OfferMaker__table__row">
-              <td className="OfferMaker__table__label">Total {counterAssetName}</td>
+              <td className="OfferMaker__table__label">Total</td>
               <td className="OfferMaker__table__input">
-                <input type="text" className="OfferMaker__table__input__input" value={this.state.total} onChange={(e) => this.updateState('total', e.target.value)} placeholder="" />
+                <label className="OfferMaker__table__input__group">
+                  <input type="text" className="OfferMaker__table__input__input" value={this.state.total} onChange={(e) => this.updateState('total', e.target.value)} placeholder="" />
+                  <div className="OfferMaker__table__input__group__tag">
+                    {counterAssetName}
+                  </div>
+                </label>
               </td>
             </tr>
           </tbody>

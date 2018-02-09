@@ -35,9 +35,29 @@
 }
 
 
+.OfferMaker__table__row {
+}
+.OfferMaker__table__label {
+  padding-right: 18px;
+}
+.OfferMaker__table__input__group {
+  display: flex;
+}
 .OfferMaker__table__input__input {
   width: 100%;
+  border-radius: 3px 0 0 3px;
+  // background: #f8f8f9;
+  border-right: 0;
+
 }
+.OfferMaker__table__input__group__tag {
+  padding: 0.3333em 1em 0.3333em 1em;
+  background: $s-color-neutral8;
+  font-weight: bold;
+  border-radius: 0 3px 3px 0;
+  border: 1px solid $s-color-neutral6;
+}
+
 
 .OfferMaker__overview {
   margin-top: 12px;
