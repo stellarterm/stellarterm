@@ -13,7 +13,6 @@ const watchify = require('watchify');
 const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
 const fs = require('fs');
-const mkdirp = require('mkdirp');
 const execSync = require('child_process').execSync;
 
 const reload = browserSync.reload;
@@ -89,7 +88,9 @@ gulp.task('customConfig', (cb) => {
   configFile += JSON.stringify(configObj, null, 2);
 
   configFile += ';\n';
-  mkdirp('./dist');
+  try {
+    fs.mkdirSync('./dist');
+  } catch (e) {}
   fs.writeFile('./dist/customConfig.js', configFile, cb);
 });
 
@@ -105,7 +106,9 @@ gulp.task('buildInfo', (cb) => {
 
   buildInfo += JSON.stringify(infoObj, null, 2);
   buildInfo += ';\n';
-  mkdirp('./dist');
+  try {
+    fs.mkdirSync('./dist');
+  } catch (e) {}
   fs.writeFile('./dist/buildInfo.js', buildInfo, cb);
 });
 
