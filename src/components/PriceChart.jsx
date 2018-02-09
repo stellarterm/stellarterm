@@ -187,15 +187,7 @@ export default class PriceChart extends React.Component {
         borderColor: '#f4f4f5',
         borderRadius: 3,
         borderWidth: 0,
-        crosshairs: [ {
-          width: 1,
-          color: 'rgba(0,0,0,0.2)',
-          zIndex: 10,
-        }, {
-          width: 1,
-          color: 'rgba(0,0,0,0.2)',
-          zIndex: 10,
-        }],
+        crosshairs: [null, null],
         shadow: {
           // Same as the island stuff in StellarTerm
           color: 'rgba(0,0,0,0.375)', // 0.3/0.8=0.375 to account for tooltip opacity
