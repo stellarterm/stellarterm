@@ -166,6 +166,7 @@ function phase3(ticker) {
               issuer: pair.counterSelling.issuer,
             });
             asset.change24h_XLM = null;
+            asset.change24h_USD = null;
 
             if (trades.records.length > 2) {
               // Skip the 0th record to avoid fresh coin outliers
@@ -187,6 +188,7 @@ function phase3(ticker) {
               issuer: pair.baseBuying.issuer,
             });
             asset.change24h_XLM = null;
+            asset.change24h_USD = null;
 
             asset.price_XLM = niceRound(pair.price);
             asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
