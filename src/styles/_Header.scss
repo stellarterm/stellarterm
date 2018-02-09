@@ -32,6 +32,7 @@
   height: 54px;
   display: flex;
   align-items: baseline;
+  position: relative;
 }
 .Header__nav__item {
   margin-right: 36px;
@@ -42,4 +43,15 @@
   font-weight: bold;
   color: $s-color-primary4;
   font-size: $s-scale-2;
+}
+.Header__nav__item--link {
+  padding: 4px 10px;
+  margin-right: 16px;
+  border-radius: 3px;
+}
+.Header__nav__item--link.is-current {
+  background: $s-color-neutral8;
+}
+.Header__nav__item.Header__nav__item--link:hover {
+  background: $s-color-primary8;
 }
