@@ -25,7 +25,6 @@ export default class LoginPage extends React.Component {
       newKeypair: null,
       bip32Path: '0',
       ledgerAdvanced: false,
-      currentTab: 'login', // 'login', 'createAccount', 'ledger'
     }
 
 
@@ -60,9 +59,6 @@ export default class LoginPage extends React.Component {
     this.toggleShow = (event) => {
       event.preventDefault();
       this.setState({show: !this.state.show});
-    }
-    this.setTab = (tabName) => {
-      this.setState({currentTab: tabName});
     }
     this.handleSubmit = (event) => {
       event.preventDefault();
@@ -114,7 +110,7 @@ export default class LoginPage extends React.Component {
 
     let body;
 
-    if (this.state.currentTab === 'login') {
+    if (this.props.urlParts[0] === 'account') {
       body = <div className="LoginPage__body">
         <div className="LoginPage__greenBox">
           <div className="LoginPage__form">
@@ -143,7 +139,7 @@ export default class LoginPage extends React.Component {
           </div>
         </div>
       </div>
-    } else if (this.state.currentTab === 'createAccount') {
+    } else if (this.props.urlParts[0] === 'signup') {
       body = <div className="LoginPage__body">
         <div className="LoginPage__greenBox">
           <div className="LoginPage__form">
@@ -162,7 +158,7 @@ export default class LoginPage extends React.Component {
           </div>
         </div>
       </div>
-    } else if (this.state.currentTab === 'ledger') {
+    } else if (this.props.urlParts[0] === 'ledger') {
       let loginForm;
       if (d.session.ledgerConnected) {
         let ledgerSetupErrorMessage;
@@ -271,13 +267,13 @@ export default class LoginPage extends React.Component {
         </div>
         <div className="LoginPage">
           <div className="LoginPage__sidebar">
-            <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'createAccount' ? ' is-active' : '')} onClick={() => {this.setTab('createAccount')}}>
+            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'signup' ? ' is-active' : '')} href="#signup">
               New account
             </a>
-            <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'login' ? ' is-active' : '')} onClick={() => {this.setTab('login')}}>
+            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'account' ? ' is-active' : '')} href="#account">
               Log in with key
             </a>
-            <a className={'LoginPage__sidebar__tab' + (this.state.currentTab === 'ledger' ? ' is-active' : '')} onClick={() => {this.setTab('ledger')}}>
+            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'ledger' ? ' is-active' : '')} href="#ledger">
               <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger" width="75" height="20" />
             </a>
           </div>

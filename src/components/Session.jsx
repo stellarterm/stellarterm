@@ -23,7 +23,7 @@ class Session extends React.Component {
     // KLUDGE: The event listeners are kinda messed up
     // Uncomment if state changes aren't working. But with the new refactor, this dead code should be removed
     // For now, it's just extra insurance
-    this.checkLoginStatus = () => {
+    this.checkLoginStatus = () => { 
       if (this.mounted) {
         if (this.props.d.session.state === 'in' || this.props.d.session.state === 'unfunded' ) {
           this.forceUpdate();
@@ -44,7 +44,7 @@ class Session extends React.Component {
     let state = d.session.state;
     let setupError = d.session.setupError;
     if (state === 'out') {
-      return <LoginPage setupError={setupError} d={d}></LoginPage>
+      return <LoginPage setupError={setupError} d={d} urlParts={this.props.urlParts}></LoginPage>
     } else if (state === 'unfunded') {
       return <Generic title={'Activate your account'}><Loading darker={true} left>
         <div className="s-alert s-alert--success">
