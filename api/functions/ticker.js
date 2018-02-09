@@ -138,7 +138,7 @@ function phase3(ticker) {
         pair.bid = _.round(res.bids[0].price, 7);
         pair.ask = _.round(res.asks[0].price, 7);
         pair.spread = _.round(1 - pair.bid/pair.ask, 4);
-        pair.price = _.round((parseFloat(pair.bid) + parseFloat(pair.ask))/2, 7);
+        pair.price = _.round(parseFloat(pair.ask), 7);
 
         // Depth of the market of both sides
         let sum10PercentBidAmounts = _.sumBy(res.bids, bid => {
