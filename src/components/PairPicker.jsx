@@ -27,12 +27,11 @@ export default class PairPicker extends React.Component {
 
     if (baseNative || counterNative) {
       let dataRow = <p className="PairPicker__infoBar__ticker__data">Loading<Ellipsis /></p>;
-      if (this.props.d.orderbook.data.trades && this.props.d.ticker.ready) {
-        let trades = this.props.d.orderbook.data.trades;
-        if (trades.length === 0) {
+      if (this.props.d.orderbook.data.ready && this.props.d.ticker.ready) {
+        if (this.props.d.orderbook.data.asks.length === 0 || this.props.d.orderbook.data.bids.length === 0) {
           dataRow = <p className="PairPicker__infoBar__ticker__data">No data</p>
         } else {
-          let latestPrice = trades[trades.length - 1][1];
+          let latestPrice = Number(this.props.d.orderbook.data.asks[0].price);
           if (baseNative) {
             dataRow = <p className="PairPicker__infoBar__ticker__data">{Format.niceRound(latestPrice)} XLM/{counterSelling.getCode()}</p>
           } else {
@@ -48,7 +47,7 @@ export default class PairPicker extends React.Component {
           <AssetPair baseBuying={baseBuying} counterSelling={counterSelling}></AssetPair>
         </div>
         <div className="PairPicker__infoBar__ticker">
-          <p className="PairPicker__infoBar__ticker__title">Last price for {baseBuying.getCode()}</p>
+          <p className="PairPicker__infoBar__ticker__title">Current price for {baseBuying.getCode()}</p>
           {dataRow}
         </div>
       </div>

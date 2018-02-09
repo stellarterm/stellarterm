@@ -6,7 +6,7 @@ import directory from '../../directory';
 import Validate from '../Validate';
 import Event from '../Event';
 
-export default function Send(driver) {
+export default function Orderbook(driver) {
   this.event = new Event();
 
   const init = () => {
