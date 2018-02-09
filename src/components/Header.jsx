@@ -18,7 +18,6 @@ export default class Header extends React.Component {
         </div>
       </div>
     }
-    console.log(this.props.urlParts[0])
     return <div className="HeaderBackBack">
       {networkBar}
       <div className="so-back HeaderBack">
