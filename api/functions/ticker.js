@@ -14,6 +14,10 @@ const directory = require('../directory.json');
 Server = new StellarSdk.Server('https://horizon.stellar.org');
 StellarSdk.Network.usePublicNetwork();
 
+function medianOf3(a,b,c) {
+  return [a,b,c].sort()[1];
+}
+
 function tickerGenerator() {
   let finish;
   let ticker = {
@@ -168,10 +172,10 @@ function phase3(ticker) {
             asset.change24h_XLM = null;
             asset.change24h_USD = null;
 
-            if (trades.records.length > 2) {
-              // Skip the 0th record to avoid fresh coin outliers
-              let openXLM = 1/trades.records[1].avg;
-              let closeXLM = 1/trades.records[trades.records.length - 1].avg;
+            if (trades.records.length > 6) {
+              let openXLM = 1/medianOf3(Number(trades.records[0].close), Number(trades.records[1].close), Number(trades.records[2].close));
+              let closeXLM = 1/medianOf3(Number(trades.records[trades.records.length - 1].close), Number(trades.records[trades.records.length - 2].close), Number(trades.records[trades.records.length - 3].close));
+
               let openUSD = openXLM * XLMOldPrice;
               let closeUSD = closeXLM * XLMNewPrice;
               asset.change24h_XLM = _.round(100*(closeXLM/openXLM - 1), 2);
@@ -193,10 +197,10 @@ function phase3(ticker) {
             asset.price_XLM = niceRound(pair.price);
             asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
 
-            if (trades.records.length > 2) {
-              // Skip the 0th record to avoid fresh coin outliers
-              let openXLM = trades.records[1].open;
-              let closeXLM = trades.records[trades.records.length - 1].close;
+            if (trades.records.length > 6) {
+              let openXLM = medianOf3(Number(trades.records[0].close), Number(trades.records[1].close), Number(trades.records[2].close));
+              let closeXLM = medianOf3(Number(trades.records[trades.records.length - 1].close), Number(trades.records[trades.records.length - 2].close), Number(trades.records[trades.records.length - 3].close));
+
               let openUSD = openXLM * XLMOldPrice;
               let closeUSD = closeXLM * XLMNewPrice;
               asset.change24h_XLM = _.round(100*(closeXLM/openXLM - 1), 2);
