@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "./test.sh",
-    "setup": "npm install",
+    "setup": "yarn install",
     "start": "./node_modules/.bin/gulp watch",
     "directory/": "npm run directory",
     "directory": "cd directory && ./checkBuild.sh;",
