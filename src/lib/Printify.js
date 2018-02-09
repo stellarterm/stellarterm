@@ -14,14 +14,18 @@ const Printify = {
       number = new BigNumber(number).toFixed(numDecimals);
     }
 
-    let emph = number.replace(/\.?0+$/, '');
-    let unemphMatch = number.match(/\.?0+$/);
+    let wholeAmount = number.replace(/\..*/,'');
+    let remaining = number.slice(wholeAmount.length);
+
+    let emph = remaining.replace(/\.?0+$/, '');
+
+    let unemphMatch = remaining.match(/\.?0+$/);
     let unemph;
     if (unemphMatch !== null) {
       unemph = <span className="lightenZeros__unemph">{unemphMatch[0]}</span>
     }
     // Formats a number into a react element with 0s unemphasized
-    return <span className="lightenZeros">{emph}{unemph}</span>;
+    return <span className="lightenZeros">{Number(wholeAmount).toLocaleString('en-US')}{emph}{unemph}</span>;
   },
   lighten(input) {
     if (!_.isString(input)) {
