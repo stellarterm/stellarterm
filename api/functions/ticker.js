@@ -174,7 +174,7 @@ function phase3(ticker) {
 
             if (trades.records.length > 6) {
               let openXLM = 1/medianOf3(Number(trades.records[0].close), Number(trades.records[1].close), Number(trades.records[2].close));
-              let closeXLM = 1/medianOf3(Number(trades.records[trades.records.length - 1].close), Number(trades.records[trades.records.length - 2].close), Number(trades.records[trades.records.length - 3].close));
+              let closeXLM = 1/pair.price;
 
               let openUSD = openXLM * XLMOldPrice;
               let closeUSD = closeXLM * XLMNewPrice;
@@ -199,7 +199,7 @@ function phase3(ticker) {
 
             if (trades.records.length > 6) {
               let openXLM = medianOf3(Number(trades.records[0].close), Number(trades.records[1].close), Number(trades.records[2].close));
-              let closeXLM = medianOf3(Number(trades.records[trades.records.length - 1].close), Number(trades.records[trades.records.length - 2].close), Number(trades.records[trades.records.length - 3].close));
+              let closeXLM = pair.price;
 
               let openUSD = openXLM * XLMOldPrice;
               let closeUSD = closeXLM * XLMNewPrice;
