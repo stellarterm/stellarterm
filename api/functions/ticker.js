@@ -53,6 +53,19 @@ function phase1(ticker) {
         console.log('Phase 1: Finished external prices')
         console.log(JSON.stringify(externalPrices, null, 2));
         ticker._meta.externalPrices = externalPrices;
+
+        // Just incase CMC is down
+        ticker._meta.externalPrices.USD_XLM_24hAgo = ticker._meta.externalPrices.USD_XLM;
+      })
+      .then(() => {
+        return rp('https://api.coinmarketcap.com/v1/ticker/stellar/')
+          .then(cmcTickerJson => {
+            let cmcStellar = JSON.parse(cmcTickerJson)[0];
+            let newPriceRatio = 1 + Number(cmcStellar.percent_change_24h)/100;
+            let oldPrice = (1/newPriceRatio) * ticker._meta.externalPrices.USD_XLM;
+            ticker._meta.externalPrices.USD_XLM_24hAgo = _.round(oldPrice,6);
+            ticker._meta.externalPrices.USD_XLM_change = _.round(cmcStellar.percent_change_24h,6);
+          })
       })
   ])
 }
@@ -144,6 +157,8 @@ function phase3(ticker) {
         .then(trades => {
           let asset;
 
+          const XLMOldPrice = ticker._meta.externalPrices.USD_XLM_24hAgo;
+          const XLMNewPrice = ticker._meta.externalPrices.USD_XLM;
 
           if (baseBuying.isNative()) {
             asset = _.find(ticker.assets, {
@@ -154,9 +169,12 @@ function phase3(ticker) {
 
             if (trades.records.length > 2) {
               // Skip the 0th record to avoid fresh coin outliers
-              let open = 1/trades.records[1].avg;
-              let close = 1/trades.records[trades.records.length - 1].avg;
-              asset.change24h_XLM = _.round(close/open - 1, 2)
+              let openXLM = 1/trades.records[1].avg;
+              let closeXLM = 1/trades.records[trades.records.length - 1].avg;
+              let openUSD = openXLM * XLMOldPrice;
+              let closeUSD = closeXLM * XLMNewPrice;
+              asset.change24h_XLM = _.round(100*(closeXLM/openXLM - 1), 2);
+              asset.change24h_USD = _.round(100*(closeUSD/openUSD - 1), 2);
             }
 
             asset.price_XLM = niceRound(1/pair.price);
@@ -175,9 +193,12 @@ function phase3(ticker) {
 
             if (trades.records.length > 2) {
               // Skip the 0th record to avoid fresh coin outliers
-              let open = trades.records[1].open;
-              let close = trades.records[trades.records.length - 1].close;
-              asset.change24h = _.round(close/open - 1, 2)
+              let openXLM = trades.records[1].open;
+              let closeXLM = trades.records[trades.records.length - 1].close;
+              let openUSD = openXLM * XLMOldPrice;
+              let closeUSD = closeXLM * XLMNewPrice;
+              asset.change24h_XLM = _.round(100*(closeXLM/openXLM - 1), 2);
+              asset.change24h_USD = _.round(100*(closeUSD/openUSD - 1), 2);
             }
             pair.volume24h_XLM = niceRound(_.sumBy(trades.records, record => Number(record.counter_volume)));
           } else {
@@ -191,7 +212,7 @@ function phase3(ticker) {
           pair.numTrades24h = _.sumBy(trades.records, record => record.trade_count);
           asset.numTrades24h = pair.numTrades24h;
 
-          console.log('Phase 3: ', _.padEnd(pairSlug, 40), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), '$' + asset.price_USD.toFixed(2), trades.records.length + ' records')
+          console.log('Phase 3: ', _.padEnd(pairSlug, 40), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), _.padStart('$' + asset.price_USD.toFixed(2), 9), 'Change XLM : ' + _.padStart(asset.change24h_XLM,6) + '%','Change USD : ' + _.padStart(asset.change24h_USD,6) + '%', _.padStart(trades.records.length, 4) + ' records')
 
           asset.volume24h_XLM = pair.volume24h_XLM;
           asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
