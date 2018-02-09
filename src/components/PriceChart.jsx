@@ -117,11 +117,12 @@ export default class PriceChart extends React.Component {
         width,
       },
       rangeSelector: {
-        inputPosition: {
-          y: 0,
-        },
-        inputDateFormat: dayFullDateFormat,
-        inputEditDateFormat: dayFullDateFormat,
+        // inputPosition: {
+        //   y: 0,
+        // },
+        inputEnabled: false,
+        // inputDateFormat: dayFullDateFormat,
+        // inputEditDateFormat: dayFullDateFormat,
         buttons: [
           {
             type: 'hour',
@@ -200,6 +201,9 @@ export default class PriceChart extends React.Component {
       xAxis: {
         dateTimeLabelFormats: axisDTLF,
         ordinal: false,
+      },
+      yAxis: {
+        gridLineColor: '#f1f1f1',
       },
       navigator: {
         maskFill: 'rgba(255, 255, 255, 0.45)',
