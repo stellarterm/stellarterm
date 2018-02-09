@@ -108,7 +108,7 @@ export default class PriceChart extends React.Component {
           fontFamily: 'Source Sans Pro',
         },
         spacingBottom: 18,
-        spacingTop: 18,
+        spacingTop: -12,
         spacingLeft: 18,
         spacingRight: 18,
         borderRadius: 4,
@@ -120,6 +120,10 @@ export default class PriceChart extends React.Component {
         // inputPosition: {
         //   y: 0,
         // },
+        buttonPosition: {
+          y: 25,
+        },
+        zIndex: 30,
         inputEnabled: false,
         // inputDateFormat: dayFullDateFormat,
         // inputEditDateFormat: dayFullDateFormat,
