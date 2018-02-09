@@ -68,6 +68,27 @@ class TermApp extends React.Component {
       })
     } , false);
   }
+
+  renderHomePageActions() {
+    const { d: { session: { state } } } = this.props;
+    return state === 'out' && (
+      <div className="HomePage__lead__actions">
+        <a
+          className="HomePage__lead__actions__sign-up-button HomePage__lead__actions__button s-button"
+          href="#signup"
+        >
+          Sign Up
+        </a>
+        <a
+          className="s-button HomePage__lead__actions__button"
+          href="#account"
+        >
+          Login
+        </a>
+      </div>
+    );
+  }
+
   render() {
     let url = this.state.url;
     let urlParts = url.split('/');
@@ -79,8 +100,9 @@ class TermApp extends React.Component {
         <div className="HomePage__black">
           <div className="so-back">
             <div className="HomePage__lead">
-              <h2 className="HomePage__lead__title">Trade on the <a href="#exchange">Stellar Distributed Exchange</a></h2>
-              <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm"  target="_blank" rel="nofollow noopener noreferrer">open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
+              <h2 className="HomePage__lead__title">Trade on the <a href="https://www.stellar.org/developers/guides/concepts/exchange.html"  target="_blank" rel="nofollow noopener noreferrer">Stellar Distributed Exchange</a></h2>
+              <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm" target="_blank" rel="nofollow noopener noreferrer">open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
+              {this.renderHomePageActions()}
             </div>
           </div>
         </div>
@@ -138,7 +160,7 @@ class TermApp extends React.Component {
           <li>The StellarTerm website might be compromised.</li>
         </ul>
       </Generic>
-    } else if (urlParts[0] === 'account') {
+    } else if (['account', 'signup', 'ledger'].indexOf(urlParts[0]) > -1) {
       body = <Session d={this.d} urlParts={urlParts}></Session>
     } else if (urlParts[0] === 'markets') {
       body = <Markets d={this.d}></Markets>
