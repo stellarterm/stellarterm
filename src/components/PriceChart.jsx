@@ -156,8 +156,7 @@ export default class PriceChart extends React.Component {
       },
       series: [{
         name: pairName,
-        // slice(1) to remove potential outliers
-        data: orderbook.trades.slice(1),
+        data: orderbook.trades,
         type: 'spline',
         dataGrouping: {
           groupPixelWidth: 8,
@@ -226,7 +225,7 @@ export default class PriceChart extends React.Component {
   shouldComponentUpdate() {
     if (this.stockChart !== undefined) {
       // slice(1) to remove potential outliers
-      this.stockChart.series[0].setData(this.orderbook.trades.slice(1))
+      this.stockChart.series[0].setData(this.orderbook.trades)
     }
     return false;
   }
