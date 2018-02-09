@@ -36,7 +36,7 @@ export default class AssetList extends React.Component {
       if (asset.topTradePairSlug) {
         tradeLink = <span className="AssetList__asset__amount__trade">trade</span>
       }
-      let volume24h = asset.volume24h_USD ? '$' + asset.volume24h_USD.toFixed(0) : '$0';
+      let volume24h = asset.volume24h_USD ? '$' + asset.volume24h_USD.toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0}) : '$0';
 
       let change24hPercentage;
       if (asset.id === 'XLM-native') {
