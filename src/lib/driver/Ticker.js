@@ -13,7 +13,7 @@ export default function Ticker() {
   setInterval(() => {this.load()}, 60*1000) // Refresh every 60 seconds
 }
 
-const MAX_ATTEMPTS = 5;
+const MAX_ATTEMPTS = 120;
 
 Ticker.prototype.load = function(attempt) {
   if (attempt >= MAX_ATTEMPTS) {
@@ -33,6 +33,6 @@ Ticker.prototype.load = function(attempt) {
     }
     setTimeout(() => {
       this.load(attempt + 1);
-    }, 100)
+    }, 1000)
   })
 }
