@@ -250,6 +250,35 @@ const MagicSpoon = {
         }
       })
 
+    // Simple algorithm to remove outliers without mutating
+    // Correctly removes outliers and correctly responds to real trends
+    //
+    // Sliding window outlier correction algorithm:
+    // if (current trade is more than 100% off than BOTH previous) {
+    //   return median(last 3 trades inclusive of current)
+    // } else {
+    //   return previous trade
+    // }
+    let smoothTrades = (trades) => {
+      let result = [];
+      for (let i = 2; i < trades.length; i++) {
+        let a = Number(trades[i-2][1]);
+        let b = Number(trades[i-1][1]);
+        let c = Number(trades[i  ][1]);
+
+        let ratioA = c/a;
+        let ratioB = c/b;
+        let geometricAbsoluteDiffA = ratioA > 1 ? ratioA - 1 : 1/ratioA - 1;
+        let geometricAbsoluteDiffB = ratioB > 1 ? ratioB - 1 : 1/ratioB - 1;
+        if (geometricAbsoluteDiffA > 1 && geometricAbsoluteDiffB > 1) {
+          result.push([trades[i][0], [a,b,c].sort()[1]]);
+        } else {
+          result.push(trades[i]);
+        }
+      }
+      return result
+    }
+
     let firstFullFetchFinished = false;
     let fetchManyTrades = async () => {
       let records = [];
@@ -283,7 +312,7 @@ const MagicSpoon = {
         // Optimization: use this filter before saving it into the records array
         result = _.filter(
           _.map(records, (trade) => {
-            return [new Date(trade.timestamp).getTime(), parseFloat(trade.avg)];
+            return [new Date(trade.timestamp).getTime(), parseFloat(trade.close)];
             // return [
             //   new Date(trade.timestamp).getTime(),
             //   parseFloat(trade.avg),
@@ -300,13 +329,14 @@ const MagicSpoon = {
           }
         );
 
+
         // Potential optimization: If we load the horizon results into the array in the correct order
         // then sorting will run at near optimal runtime
         result.sort((a,b) => {
           return a[0]-b[0];
         });
         if (!firstFullFetchFinished) {
-          this.trades = result;
+          this.trades = smoothTrades(result);
         }
         if (depth > 1) {
           // Only show progressive updates when we already have 2 pages
@@ -316,7 +346,7 @@ const MagicSpoon = {
         }
       }
       firstFullFetchFinished = true;
-      this.trades = result;
+      this.trades = smoothTrades(result);
       onUpdate();
 
       setTimeout(() => {
