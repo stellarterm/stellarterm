@@ -5,7 +5,7 @@
   z-index: 1;
 
   padding: $so-inputPadding;
-  border: 1px solid $s-color-primary3;
+  border: 1px solid #5eb464; // A mixture between primary3 and primary4
 
   box-shadow: 0 1px 3px rgba(0,0,0,0.2);
   background: $s-color-primary4;
@@ -37,7 +37,7 @@
 
 .s-button.is-disabled,
 .s-button:disabled {
-  border: 1px solid $s-color-neutral4;
+  border: 1px solid $s-color-neutral5;
   background: $s-color-neutral8;
   color: $s-color-neutral5;
   box-shadow: none;
