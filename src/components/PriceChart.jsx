@@ -209,6 +209,9 @@ export default class PriceChart extends React.Component {
         gridLineColor: 'rgba(0, 0, 0, 0.06)',
         gridZIndex: 30,
         tickPixelInterval: 30,
+        minPadding: 0.1,
+        maxPadding: 0.1,
+        minRange: orderbook.trades[orderbook.trades.length - 1][1]*0.5,
         labels: {
           formatter: function() {
             return this.value
