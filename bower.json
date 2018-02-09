@@ -1,8 +1,0 @@
-{
-  "name": "stellar-terminal",
-  "version": "0.0.1",
-  "dependencies": {
-    "stellar-sdk": "^0.8.0",
-    "highcharts": "^5.0.7"
-  }
-}

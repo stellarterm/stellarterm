@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "test": "./test.sh",
-    "setup": "npm install && ./node_modules/.bin/bower install",
+    "setup": "npm install",
     "start": "./node_modules/.bin/gulp watch",
     "directory/": "npm run directory",
     "directory": "cd directory && ./checkBuild.sh;",
@@ -39,7 +39,6 @@
     "eslint-plugin-react": "^6.10.3",
     "gulp": "^3.9.1",
     "gulp-autoprefixer": "^3.1.1",
-    "gulp-bower": "0.0.6",
     "gulp-inline-source": "^3.0.0",
     "gulp-uglify": "^2.0.0",
     "gulp-util": "~3.0.1",
