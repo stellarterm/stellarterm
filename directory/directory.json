@@ -228,6 +228,7 @@
       },
       "color": "#fbd364"
     },
+
 	"charnatoken.top": {
       "name": "charnatoken.top",
       "displayName": "CharnaToken",
@@ -237,6 +238,7 @@
         "CHRC": "CHRC-GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP"
       },
       "color": "#1c4664"
+
     }
   },
   "destinations": {
@@ -641,6 +643,7 @@
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
       "domain": "cryptomover.com"
     },
+
     "CHRC-GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP": {
       "code": "CHRC",
       "issuer": "GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP",
@@ -745,9 +748,12 @@
       "CM3x2": "CM3x2-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
       "HKDC": "HKDC-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3"
     },
+
     "GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP": {
       "CHRC": "CHRC-GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP"
-    }
+}
+
+    
   },
   "pairs": {
     "XLM-native/CNY-ripplefox.com": {
@@ -934,6 +940,16 @@
       "baseBuying": {
         "code": "TELLUS",
         "issuer": "GBBRMEXJMS3L7Y3DZZ2AHBD545GZ72OAEHHEFKGZAHHASHGWMHK5P6PL"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "TFC-thefutbolcoin.io/XLM-native": {
+      "baseBuying": {
+        "code": "TFC",
+        "issuer": "GDS3XDJAA4VY6MJYASIGSIMPHZ7AQNZ54RKLWT7MWCOU5YKYEVCNLVS3"
       },
       "counterSelling": {
         "code": "XLM",

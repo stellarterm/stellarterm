@@ -371,6 +371,18 @@ directory.addAsset('cryptomover.com', {
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
 });
 
+directory.addAnchor({
+  domain: 'thefutbolcoin.io',
+  website: 'https://thefutbolcoin.io/',
+  logo: 'thefutbolcoin.io',
+  color: '#4b914e',
+  displayName: 'TFC',
+});
+directory.addAsset('thefutbolcoin.io', {
+  code: 'TFC',
+  issuer: 'GDS3XDJAA4VY6MJYASIGSIMPHZ7AQNZ54RKLWT7MWCOU5YKYEVCNLVS3',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -453,6 +465,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['TELLUS', 'irene.energy'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['TFC', 'thefutbolcoin.io'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
@@ -650,5 +666,20 @@ directory.addDestination('GBTCBCWLE6YVTR5Y5RRZC36Z37OH22G773HECWEIZTZJSN4WTG3CSO
   name: 'NaoBTC',
   acceptedAssetsWhitelist: ['BTC-naobtc.com'],
 });
+
+// Assert that each asset has a trading pair
+let remainingAssets = Object.assign({}, directory.assets);
+for (let pairId in directory.pairs) {
+  let pair = directory.pairs[pairId];
+  if (pair.baseBuying.code === 'XLM' && pair.baseBuying.issuer === null) {
+    delete remainingAssets[pair.counterSelling.code + '-' + pair.counterSelling.issuer];
+  } else if (pair.counterSelling.code === 'XLM' && pair.counterSelling.issuer === null) {
+    delete remainingAssets[pair.baseBuying.code + '-' + pair.baseBuying.issuer];
+  }
+}
+let remainingAssetKeys = Object.keys(remainingAssets);
+if (remainingAssetKeys.length) {
+  throw new Error('Missing trading pair. Please use addPair() for asset: ' + remainingAssetKeys[0]);
+}
 
 module.exports = directory;
