@@ -119,7 +119,7 @@ class TermApp extends React.Component {
             <div className="island__sub">
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
-                  <p>StellarTerm is just a client that can be used to access the Stellar distributed exchange. Neither StellarTerm nor the developers of it are involved with operating the Stellar network.</p>
+                  <p>StellarTerm is just a client that can be used to access the Stellar Decentralized Exchange. Neither StellarTerm nor the developers of it are involved with operating the Stellar network.</p>
                   <p>StellarTerm is developed by <a href="https://iris.li/" target="_blank" rel="nofollow noopener noreferrer">Iris Li</a>, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
                 </div>
               </div>
