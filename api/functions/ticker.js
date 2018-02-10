@@ -293,15 +293,13 @@ function phase4(ticker) {
     let spreadPenalty = Math.pow((1-asset.spread), 3); // range: [0,1]
 
     asset.activityScore = spreadPenalty * (bonuses + depth10Score + volumeScore + numTradesScore);
-    // if (asset.activityScore > 10) {
-      console.log('Phase 4: ', _.padEnd(asset.slug, 25), 'Score:', _.padStart(_.round(asset.activityScore, 3), 6), ' Inputs:', spreadPenalty.toFixed(3) + ' * (',
-        _.padStart(bonuses.toFixed(3), 6), '+',
-        _.padStart(depth10Score.toFixed(3), 6), '+',
-        _.padStart(volumeScore.toFixed(3), 6), '+',
-        _.padStart(numTradesScore.toFixed(3), 6), '+',
-        ')',
-      );
-    // }
+    console.log('Phase 4: ', _.padEnd(asset.slug, 25), 'Score:', _.padStart(_.round(asset.activityScore, 3), 6), ' Inputs:', spreadPenalty.toFixed(3) + ' * (',
+      _.padStart(bonuses.toFixed(3), 6), '+',
+      _.padStart(depth10Score.toFixed(3), 6), '+',
+      _.padStart(volumeScore.toFixed(3), 6), '+',
+      _.padStart(numTradesScore.toFixed(3), 6), '+',
+      ')'
+    );
   });
 
   console.log('Phase 4 explanation: spreadPenalty * (bonuses + depth10Score + volumeScore + numTradesScore)');
