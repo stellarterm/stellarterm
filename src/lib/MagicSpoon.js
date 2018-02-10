@@ -274,7 +274,7 @@ const MagicSpoon = {
         let ratioB = c/b;
         let geometricAbsoluteDiffA = ratioA > 1 ? ratioA - 1 : 1/ratioA - 1;
         let geometricAbsoluteDiffB = ratioB > 1 ? ratioB - 1 : 1/ratioB - 1;
-        if (geometricAbsoluteDiffA > 0.5 && geometricAbsoluteDiffB > 0.5) {
+        if (geometricAbsoluteDiffA > 0.3 && geometricAbsoluteDiffB > 0.3) {
           result.push([trades[i][0], [a,b,c].sort()[1]]);
         } else {
           result.push(trades[i]);
