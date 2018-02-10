@@ -117,13 +117,13 @@ function phase3(ticker) {
 
     let asset;
     if (baseBuying.isNative()) {
-      let asset = _.find(ticker.assets, {
+      asset = _.find(ticker.assets, {
         code: pair.counterSelling.code,
         issuer: pair.counterSelling.issuer,
       });
       asset.topTradePairSlug = pairSlug;
     } else if (counterSelling.isNative()) {
-      let asset = _.find(ticker.assets, {
+      asset = _.find(ticker.assets, {
         code: pair.baseBuying.code,
         issuer: pair.baseBuying.issuer,
       });
@@ -159,16 +159,10 @@ function phase3(ticker) {
         pair.depth10Amount = _.round(Math.min(sum10PercentBidAmounts, sum10PercentAskAmounts));
         return Server.tradeAggregation(baseBuying, counterSelling, Date.now() - 86400*1000, Date.now(), 900000).limit(200).order('desc').call()
         .then(trades => {
-          let asset;
-
           const XLMOldPrice = ticker._meta.externalPrices.USD_XLM_24hAgo;
           const XLMNewPrice = ticker._meta.externalPrices.USD_XLM;
 
           if (baseBuying.isNative()) {
-            asset = _.find(ticker.assets, {
-              code: pair.counterSelling.code,
-              issuer: pair.counterSelling.issuer,
-            });
             asset.change24h_XLM = null;
             asset.change24h_USD = null;
 
@@ -187,10 +181,6 @@ function phase3(ticker) {
 
             pair.volume24h_XLM = niceRound(_.sumBy(trades.records, record => Number(record.base_volume)));
           } else if (counterSelling.isNative()) {
-            asset = _.find(ticker.assets, {
-              code: pair.baseBuying.code,
-              issuer: pair.baseBuying.issuer,
-            });
             asset.change24h_XLM = null;
             asset.change24h_USD = null;
 
@@ -217,8 +207,9 @@ function phase3(ticker) {
 
           pair.numTrades24h = _.sumBy(trades.records, record => record.trade_count);
           asset.numTrades24h = pair.numTrades24h;
+          asset._numTradeRecords24h = trades.records.length;
 
-          console.log('Phase 3: ', _.padEnd(pairSlug, 40), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 12), _.padStart('$' + asset.price_USD.toFixed(2), 9), 'Change XLM : ' + _.padStart(asset.change24h_XLM,6) + '%','Change USD : ' + _.padStart(asset.change24h_USD,6) + '%', _.padStart(trades.records.length, 4) + ' records')
+          console.log('Phase 3: ', _.padEnd(pairSlug, 40), _.padStart(pair.numTrades24h + ' trades', 12), _.padStart(asset.price_XLM + ' XLM', 14), _.padStart('$' + asset.price_USD.toFixed(2), 9), 'Change XLM : ' + _.padStart(asset.change24h_XLM,6) + '%','Change USD : ' + _.padStart(asset.change24h_USD,6) + '%', _.padStart(trades.records.length, 4) + ' records')
 
           asset.volume24h_XLM = pair.volume24h_XLM;
           asset.volume24h_USD = niceRound(pair.volume24h_XLM * ticker._meta.externalPrices.USD_XLM);
@@ -263,11 +254,13 @@ function phase4(ticker) {
     // A bonus for having an average of up to 12 trade every 24 hours. Adds
     // more detail to the charts. However, we don't want to overemphasize taking
     // This is again to help assets with little activity
-    let constantActivityBonus = Math.max(12, asset.numTrades24h)/24; // [0,0.5]
+    let constantActivityBonus = Math.min(12, asset._numTradeRecords24h)/24; // [0,0.5]
 
     // It's nice to at least show that there is something happening.
     // Just $100 volume gets the asset a nice bonus
-    let nonzeroVolumeBonus = Math.max(1, asset.volume24h_USD/100); // [0,1]
+    let nonzeroVolumeBonus = Math.min(1, asset.volume24h_USD/100); // [0,1]
+
+    let bonuses = numOffersScore + constantActivityBonus + nonzeroVolumeBonus;
 
     // For assets to do well, they don't need to have all the metrics so that
     // assets that dont do well in one category won't get punished.
@@ -287,16 +280,31 @@ function phase4(ticker) {
 
     // numTrades is helpful too. Especially the first few num trades are important!
     // But we want to encourage depth more than market taking
-    let numTradesScore = Math.log10(4 + asset.numTrades24h)/Math.log(4) - 1;
+    let numTradesScore = Math.log(4 + asset.numTrades24h)/Math.log(4) - 1; // log4(numTrades24h)
+
+    // But numTrades doesn't really give us a picture of how active it is.
+    // We want to look even more at how much percentage of the day there is activity
+    // Constant activity is best
+    numTradesScore += Math.min(7, asset._numTradeRecords24h / 8); // += [0,7]
 
     // We want the score to be slightly more stable, so just a little spread can negatively influence
     // It's also a easy fix for issuers. With a big spread, the other stuff is kinda useless
     // Helps distinguish between assets that only have offers and nothing much else
-    let spreadPenalty = Math.pow((1-asset.spread), 5); // range: [0,1]
+    let spreadPenalty = Math.pow((1-asset.spread), 3); // range: [0,1]
 
-    asset.activityScore = spreadPenalty * (numOffersScore + depth10Score + volumeScore + numTradesScore);
-    console.log('Phase 4: ', _.padEnd(asset.slug, 25), 'Score:', _.padStart(_.round(asset.activityScore, 3), 6), ' Inputs:', spreadPenalty.toFixed(3), numOffersScore , depth10Score , volumeScore ,numTradesScore)
+    asset.activityScore = spreadPenalty * (bonuses + depth10Score + volumeScore + numTradesScore);
+    // if (asset.activityScore > 10) {
+      console.log('Phase 4: ', _.padEnd(asset.slug, 25), 'Score:', _.padStart(_.round(asset.activityScore, 3), 6), ' Inputs:', spreadPenalty.toFixed(3) + ' * (',
+        _.padStart(bonuses.toFixed(3), 6), '+',
+        _.padStart(depth10Score.toFixed(3), 6), '+',
+        _.padStart(volumeScore.toFixed(3), 6), '+',
+        _.padStart(numTradesScore.toFixed(3), 6), '+',
+        ')',
+      );
+    // }
   });
+
+  console.log('Phase 4 explanation: spreadPenalty * (bonuses + depth10Score + volumeScore + numTradesScore)');
 
   ticker.assets.sort((a,b) => {
     return b.activityScore - a.activityScore;
