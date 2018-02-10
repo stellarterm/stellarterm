@@ -1,6 +1,7 @@
 const React = window.React = require('react');
 import AssetCard2 from './AssetCard2.jsx';
 import Loading from './Loading.jsx';
+import Ellipsis from './Ellipsis.jsx';
 import Printify from '../lib/Printify';
 import directory from '../directory.js';
 import Stellarify from '../lib/Stellarify';
@@ -19,7 +20,7 @@ export default class AssetList extends React.Component {
   }
   render() {
     if (!this.dTicker.ready) {
-      return <Loading size="large">Loading Stellar market data...</Loading>
+      return <Loading size="large">Loading Stellar market data<Ellipsis /></Loading>
     }
 
     let rows = [];
