@@ -561,20 +561,23 @@ directory.addPair({
 });
 
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
-    name: 'Superlumen Issuer',
-    requiredMemoType: 'MEMO_ID',
+  name: 'Superlumen Issuer',
+  requiredMemoType: 'MEMO_ID',
 });
 directory.addDestination('GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM', {
   name: 'Kraken',
   requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GCGNWKCJ3KHRLPM3TM6N7D3W5YKDJFL6A2YCXFXNMRTZ4Q66MEMZ6FI2', {
   name: 'Poloniex',
   requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GB6YPGW5JFMMP2QB2USQ33EUWTXVL4ZT5ITUNCY3YKVWOJPP57CANOF3', {
   name: 'Bittrex',
   requiredMemoType: 'MEMO_TEXT',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM', {
   name: 'BTC38',
@@ -599,30 +602,37 @@ directory.addDestination('GBQWA6DU6OXHH4AVTFCONQ76LHEWQVZAW7SFSW4PPCAI2NX4MJDZUY
 directory.addDestination('GBKTJSNUSR6OCXA5WDWGT33MNSCNQHOBQUBYC7TVS7BOXDKWFNHI4QNH', {
   name: 'Exrates',
   requiredMemoType: 'MEMO_TEXT',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GC4KAS6W2YCGJGLP633A6F6AKTCV4WSLMTMIQRSEQE5QRRVKSX7THV6S', {
   name: 'BitcoinIndonesia',
   requiredMemoType: 'MEMO_TEXT',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GCO2IP3MJNUOKS4PUDI4C7LGGMQDJGXG3COYX3WSB4HHNAHKYV5YL3VC', {
   name: 'Binance',
   requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GAHK7EEG2WWHVKDNT4CEQFZGKF2LGDSW2IVM4S5DP42RBW3K6BTODB4A', {
   name: 'Binance',
   requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GBOEEVARKVASOQSSXCAHNTGJTVALJE2QM3AQQ2K3VXACQ6JJREQRJZKB', {
   name: 'OKEX',
   requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIFQ2', {
   name: 'AEX',
   requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GCXDR4QZ4OTVX6433DPTXELCSEWQ4E5BIPVRRJMUR6M3NT4JCVIDALZO', {
   name: 'Exchange', // Gopax?
   requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH', {
   name: 'Mobius Issuer',
