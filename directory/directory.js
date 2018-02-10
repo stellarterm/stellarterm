@@ -370,17 +370,16 @@ directory.addAsset('cryptomover.com', {
   code: 'HKDC',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
 });
-
 directory.addAnchor({
-  domain: 'thefutbolcoin.io',
-  website: 'https://thefutbolcoin.io/',
-  logo: 'thefutbolcoin.io',
-  color: '#4b914e',
-  displayName: 'TFC',
+  domain: 'charnetoken.top',
+  website: 'http://charnatoken.top/',
+  logo: 'charnetoken.top',
+  color: '#1c4664',
+  displayName: 'CharnaToken',
 });
-directory.addAsset('thefutbolcoin.io', {
-  code: 'TFC',
-  issuer: 'GDS3XDJAA4VY6MJYASIGSIMPHZ7AQNZ54RKLWT7MWCOU5YKYEVCNLVS3',
+directory.addAsset('charnatoken.top', {
+  code: 'CHRC',
+  issuer: 'GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP',
 });
 
 // Pairs involving "fiat" assets
@@ -452,6 +451,10 @@ directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'golix.io'],
 });
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'charnatoken.top'],
+});
 
 // Pairs involving XLM
 // XLM should be counterSelling
@@ -465,10 +468,6 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['TELLUS', 'irene.energy'],
-  counterSelling: ['XLM', 'native'],
-});
-directory.addPair({
-  baseBuying: ['TFC', 'thefutbolcoin.io'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
@@ -575,6 +574,10 @@ directory.addPair({
   baseBuying: ['XLQ', 'liquido.i-server.org'],
   counterSelling: ['XLM', 'native'],
 });
+directory.addPair({
+  baseBuying: ['CHRC', 'charnatoken.top'],
+  counterSelling: ['XLM', 'native'],
+});
 
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
   name: 'Superlumen Issuer',
@@ -666,20 +669,10 @@ directory.addDestination('GBTCBCWLE6YVTR5Y5RRZC36Z37OH22G773HECWEIZTZJSN4WTG3CSO
   name: 'NaoBTC',
   acceptedAssetsWhitelist: ['BTC-naobtc.com'],
 });
-
-// Assert that each asset has a trading pair
-let remainingAssets = Object.assign({}, directory.assets);
-for (let pairId in directory.pairs) {
-  let pair = directory.pairs[pairId];
-  if (pair.baseBuying.code === 'XLM' && pair.baseBuying.issuer === null) {
-    delete remainingAssets[pair.counterSelling.code + '-' + pair.counterSelling.issuer];
-  } else if (pair.counterSelling.code === 'XLM' && pair.counterSelling.issuer === null) {
-    delete remainingAssets[pair.baseBuying.code + '-' + pair.baseBuying.issuer];
-  }
-}
-let remainingAssetKeys = Object.keys(remainingAssets);
-if (remainingAssetKeys.length) {
-  throw new Error('Missing trading pair. Please use addPair() for asset: ' + remainingAssetKeys[0]);
-}
+directory.addDestination('GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP', {
+  name: 'CharnaToken Issuer',
+  requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
+});
 
 module.exports = directory;
