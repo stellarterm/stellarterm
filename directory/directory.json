@@ -934,6 +934,16 @@
         "issuer": null
       }
     },
+    "TFC-thefutbolcoin.io/XLM-native": {
+      "baseBuying": {
+        "code": "TFC",
+        "issuer": "GDS3XDJAA4VY6MJYASIGSIMPHZ7AQNZ54RKLWT7MWCOU5YKYEVCNLVS3"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
     "STEM-stemchain.io/XLM-native": {
       "baseBuying": {
         "code": "STEM",

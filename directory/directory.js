@@ -468,6 +468,10 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
+  baseBuying: ['TFC', 'thefutbolcoin.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
   baseBuying: ['STEM', 'stemchain.io'],
   counterSelling: ['XLM', 'native'],
 });
