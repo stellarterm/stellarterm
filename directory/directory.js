@@ -627,6 +627,18 @@ directory.addDestination('GCXDR4QZ4OTVX6433DPTXELCSEWQ4E5BIPVRRJMUR6M3NT4JCVIDAL
 directory.addDestination('GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH', {
   name: 'Mobius Issuer',
   acceptedAssetsWhitelist: [],
-})
+});
+directory.addDestination('GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW', {
+  name: 'StellarTerm Inflation',
+  acceptedAssetsWhitelist: [],
+});
+directory.addDestination('GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT', {
+  name: 'Lumenaut Inflation',
+  acceptedAssetsWhitelist: [],
+});
+directory.addDestination('GBTCBCWLE6YVTR5Y5RRZC36Z37OH22G773HECWEIZTZJSN4WTG3CSOES', {
+  name: 'NaoBTC',
+  acceptedAssetsWhitelist: ['BTC-naobtc.com'],
+});
 
 module.exports = directory;
