@@ -29,17 +29,17 @@ html.EmbedV1HTML {
 }
 .EmbedV1__info__card {
   margin: 9px;
-  width: 320px;
+  width: 250px;
   height: 50px;
-  flex: 1 0 320px;
+  flex: 1 0 250px;
 }
 .EmbedV1__info__card .AssetCard2 {
   max-width: 500px;
 }
 
   .EmbedV1__info__ticker {
-    width: 320px;
-    flex: 1 0 320px;
+    width: 250px;
+    flex: 1 0 250px;
     margin: 9px;
     font-size: $s-scale-3;
   }
