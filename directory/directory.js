@@ -663,4 +663,19 @@ directory.addDestination('GBTCBCWLE6YVTR5Y5RRZC36Z37OH22G773HECWEIZTZJSN4WTG3CSO
   acceptedAssetsWhitelist: ['BTC-naobtc.com'],
 });
 
+// Assert that each asset has a trading pair
+let remainingAssets = Object.assign({}, directory.assets);
+for (let pairId in directory.pairs) {
+  let pair = directory.pairs[pairId];
+  if (pair.baseBuying.code === 'XLM' && pair.baseBuying.issuer === null) {
+    delete remainingAssets[pair.counterSelling.code + '-' + pair.counterSelling.issuer];
+  } else if (pair.counterSelling.code === 'XLM' && pair.counterSelling.issuer === null) {
+    delete remainingAssets[pair.baseBuying.code + '-' + pair.baseBuying.issuer];
+  }
+}
+let remainingAssetKeys = Object.keys(remainingAssets);
+if (remainingAssetKeys.length) {
+  throw new Error('Missing trading pair. Please use addPair() for asset: ' + remainingAssetKeys[0]);
+}
+
 module.exports = directory;
