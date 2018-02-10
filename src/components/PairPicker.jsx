@@ -31,7 +31,7 @@ export default class PairPicker extends React.Component {
         if (this.props.d.orderbook.data.asks.length === 0 || this.props.d.orderbook.data.bids.length === 0) {
           dataRow = <p className="PairPicker__infoBar__ticker__data">No data</p>
         } else {
-          let latestPrice = Number(this.props.d.orderbook.data.asks[0].price);
+          let latestPrice = (Number(this.props.d.orderbook.data.asks[0].price) + Number(this.props.d.orderbook.data.bids[0].price)) / 2;
           if (baseNative) {
             dataRow = <p className="PairPicker__infoBar__ticker__data">{Format.niceRound(latestPrice)} XLM/{counterSelling.getCode()}</p>
           } else {
