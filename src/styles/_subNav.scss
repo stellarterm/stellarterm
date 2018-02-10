@@ -11,12 +11,22 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.3);
   overflow:hidden;
 }
+.subNav {
+  display: flex;
+  justify-content: space-between;
+}
+.subNav:after {
+  display: none;
+}
 .subNav__nav {
   height: 48px;
   display: flex;
   align-items: center;
   padding-left: 9px;
   padding-right: 9px;
+}
+.subNav__nav :last-child {
+  margin-right: 0;
 }
 .subNav__nav__item {
   display: flex;

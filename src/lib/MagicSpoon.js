@@ -215,6 +215,10 @@ const MagicSpoon = {
       accountEventsClose();
     };
 
+    sdkAccount.clearKeypair = () => {
+      MagicSpoon.overwrite(keypair._secretKey)
+      MagicSpoon.overwrite(keypair._secretSeed)
+    }
 
     return sdkAccount;
   },
@@ -522,6 +526,20 @@ const MagicSpoon = {
 
 
     return history;
+  },
+  overwrite(buffer) {
+    if (buffer === undefined) {
+      // When logging in with Ledger, secret key is not stored
+      return;
+    }
+    // Overwrite a buffer with random numbers
+    // In JavaScript, nothing is guaranteed, but at least it's worth a try
+    // This probably doesn't do anything that helpful
+    for (let iteration = 0; iteration < 10; iteration++) {
+      for (let i = 0; i < buffer.length; i++) {
+        buffer[i] = Math.round(Math.random()*255);
+      }
+    }
   },
 };
 
