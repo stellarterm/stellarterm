@@ -371,6 +371,18 @@ directory.addAsset('cryptomover.com', {
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
 });
 
+directory.addAnchor({
+  domain: 'thefutbolcoin.io',
+  website: 'https://thefutbolcoin.io/',
+  logo: 'thefutbolcoin.io',
+  color: '#4b914e',
+  displayName: 'TFC',
+});
+directory.addAsset('thefutbolcoin.io', {
+  code: 'TFC',
+  issuer: 'GDS3XDJAA4VY6MJYASIGSIMPHZ7AQNZ54RKLWT7MWCOU5YKYEVCNLVS3',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
