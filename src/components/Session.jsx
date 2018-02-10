@@ -51,7 +51,7 @@ class Session extends React.Component {
         <div className="s-alert s-alert--success">
           Your Wallet Account ID: <strong>{d.session.unfundedAccountId}</strong>
         </div>
-        To use your Stellar account, you must activate it by sending lumens to your account. You can buy lumens from an exchange and send them to your address.
+        To use your Stellar account, you must activate it by sending at least 5 lumens (XLM) to your account. You can buy lumens (XLM) from an exchange and send them to your address.
       </Loading></Generic>
     } else if (state === 'loading') {
       return <Generic title="Loading account"><Loading>Contacting network and loading account<Ellipsis /></Loading></Generic>
