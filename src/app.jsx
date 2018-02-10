@@ -9,6 +9,7 @@ import Session from './components/Session.jsx';
 import Exchange from './components/Exchange.jsx';
 import Generic from './components/Generic.jsx';
 import Download from './components/Download.jsx';
+import EmbedV1 from './components/EmbedV1.jsx';
 import Loading from './components/Loading.jsx';
 import Stellarify from './lib/Stellarify';
 import url from 'url';
@@ -134,6 +135,10 @@ class TermApp extends React.Component {
           </div>
         </div>
       </div>
+    } else if (urlParts[0] === 'embed') {
+      if (urlParts[1] === 'v1') {
+        return <EmbedV1 urlParts={urlParts} d={this.props.d}/>
+      }
     } else if (urlParts[0] === 'download') {
       body = <Download />
     } else if (urlParts[0] === 'testnet') {

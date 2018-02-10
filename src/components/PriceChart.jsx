@@ -249,13 +249,19 @@ export default class PriceChart extends React.Component {
     return false;
   }
   render() {
-    return <div className="so-back islandBack">
-      <div className="island PriceChartChunk">
-        <div id="PriceChart">
-          <p className="PriceChart__message">Loading historical price data<Ellipsis /></p>
+    if (this.props.minimal) {
+      return <div id="PriceChart">
+        <p className="PriceChart__message">Loading historical price data<Ellipsis /></p>
+      </div>;
+    } else {
+      return <div className="so-back islandBack">
+        <div className="island PriceChartChunk">
+          <div id="PriceChart">
+            <p className="PriceChart__message">Loading historical price data<Ellipsis /></p>
+          </div>
         </div>
-      </div>
-    </div>;
+      </div>;
+    }
   }
 }
 

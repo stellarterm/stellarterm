@@ -1,11 +1,14 @@
 .PriceChartChunk {
   margin: 0 auto;
-  border-radius: 3px;
 }
 
-#PriceChart, .PriceChartChunk {
+.PriceChartChunk {
   width: 980px;
   height: 410px;
+}
+#PriceChart {
+  width: 100%;
+  height: 100%;
 }
 #PriceChart {
   display: flex;
