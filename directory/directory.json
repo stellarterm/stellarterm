@@ -1227,6 +1227,16 @@
         "code": "XLM",
         "issuer": null
       }
+    },
+	"CHRC-charnatoken.top/XLM-native": {
+      "baseBuying": {
+        "code": "CHRC",
+        "issuer": "GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
     }
   },
   "nativeAnchor": {
