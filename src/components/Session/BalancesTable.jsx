@@ -43,8 +43,8 @@ export default class BalancesTable extends React.Component {
         </td>
         <td className="BalancesTable__row__item BalancesTable__row__item--amount">{Printify.lightenZeros(balance.balance)}</td>
         <td className="BalancesTable__row__item BalancesTable__row__item--amount">{balanceUSD}</td>
-        <td className="BalancesTable__row__item BalancesTable__row__item--amount">{tradeLink}</td>
-        <td className="BalancesTable__row__item BalancesTable__row__item--left">{depositLink}</td>
+        <td className="BalancesTable__row__item BalancesTable__row__item--amount BalancesTable__row__item--min">{tradeLink}</td>
+        <td className="BalancesTable__row__item BalancesTable__row__item--left BalancesTable__row__item--min">{depositLink}</td>
       </tr>
     });
 
