@@ -30,6 +30,13 @@ export default class BalancesTable extends React.Component {
           }
         }
       }
+
+      let depositLink = <a className="BalancesTable__row__trade" onClick={() => {
+        this.props.d.session.handlers.displayDepositInstructions({
+          code: balance.code,
+          issuer: balance.issuer,
+        });
+      }}>deposit {balance.code}</a>
       return <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
         <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
           <AssetCard2 code={balance.code} issuer={balance.issuer}></AssetCard2>
@@ -37,6 +44,7 @@ export default class BalancesTable extends React.Component {
         <td className="BalancesTable__row__item BalancesTable__row__item--amount">{Printify.lightenZeros(balance.balance)}</td>
         <td className="BalancesTable__row__item BalancesTable__row__item--amount">{balanceUSD}</td>
         <td className="BalancesTable__row__item BalancesTable__row__item--amount">{tradeLink}</td>
+        <td className="BalancesTable__row__item BalancesTable__row__item--left">{depositLink}</td>
       </tr>
     });
 
@@ -46,6 +54,7 @@ export default class BalancesTable extends React.Component {
           <td className="BalancesTable__head__cell BalancesTable__row__item--heading BalancesTable__head__asset">Asset</td>
           <td className="BalancesTable__head__cell BalancesTable__row__item--heading BalancesTable__head__amount">Balance</td>
           <td className="BalancesTable__head__cell BalancesTable__row__item--heading BalancesTable__head__amount">Value (USD)</td>
+          <td className="BalancesTable__head__cell BalancesTable__row__item--heading BalancesTable__head__amount"></td>
           <td className="BalancesTable__head__cell BalancesTable__row__item--heading BalancesTable__head__amount"></td>
         </tr>
       </thead>

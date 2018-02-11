@@ -280,6 +280,9 @@ export default function Send(driver) {
       }
       return bssResult;
     },
+    displayDepositInstructions: (assetObj) => {
+      return driver.modal.handlers.activate('deposit', assetObj)
+    },
     logout: () => {
       try {
         this.account.clearKeypair();

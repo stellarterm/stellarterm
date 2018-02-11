@@ -3,7 +3,7 @@ import TransactionSummary from './TransactionSummary.jsx';
 import MagicSpoon from '../lib/MagicSpoon';
 const images = require('../images');
 
-export default class GlobalModal extends React.Component {
+export default class SignWithLedgerModal extends React.Component {
   constructor(props) {
     super(props);
     this.unsubModal = this.props.d.modal.event.sub(() => {this.forceUpdate()});

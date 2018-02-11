@@ -1,6 +1,7 @@
 const React = window.React = require('react');
 import TransactionSummary from './TransactionSummary.jsx';
 import SignWithLedgerModal from './SignWithLedgerModal.jsx';
+import DepositModal from './DepositModal.jsx';
 
 export default class GlobalModal extends React.Component {
   constructor(props) {
@@ -48,6 +49,8 @@ export default class GlobalModal extends React.Component {
       </div>
     } else if (modal.modalName === 'signWithLedger') {
       body = <SignWithLedgerModal d={d} />
+    } else if (modal.modalName === 'deposit') {
+      body = <DepositModal d={d} />
     } else {
       body = <div className="GlobalModal">
         <div className="GlobalModal__content">

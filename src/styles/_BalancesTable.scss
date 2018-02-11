@@ -34,6 +34,13 @@
   padding: 8px 16px;
   font-size: 16px;
 }
+.BalancesTable__row__item--left {
+  text-align: left;
+  padding: 8px 16px;
+  font-size: 16px;
+  white-space: nowrap; // Take up the minimum space necessary
+  width: 50px;
+}
 
 .BalancesTable__row__removeLink {
   font-size: $s-scale-6;
