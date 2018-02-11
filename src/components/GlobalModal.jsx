@@ -24,7 +24,14 @@ export default class GlobalModal extends React.Component {
     let modal = d.modal;
     let body;
 
+
     if (modal.modalName === 'sign') {
+      let laboratoryContent;
+      if (d.session.account.inflation_destination === 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW') {
+        laboratoryContent = <div className="GlobalModal__content">
+          <a href={'https://www.stellar.org/laboratory/#txsigner?xdr=' + encodeURI(modal.inputData.toEnvelope().toXDR('base64')) + '&network=public'} target="_blank" rel="nofollow noopener noreferrer">View in Stellar Laboratory</a>
+        </div>
+      }
       // To get tx xdr: modal.inputData.toEnvelope().toXDR('base64')
       body = <div className="GlobalModal">
         <div className="GlobalModal__header">
@@ -33,6 +40,7 @@ export default class GlobalModal extends React.Component {
         <div className="GlobalModal__content">
           <TransactionSummary tx={modal.inputData}></TransactionSummary>
         </div>
+        {laboratoryContent}
         <div className="GlobalModal__navigation">
           <button className="s-button s-button--light" onClick={() => {d.modal.handlers.cancel()}}>Cancel</button>
           <button className="s-button" onClick={() => {d.modal.handlers.finish()}}>Sign</button>
