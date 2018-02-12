@@ -25,7 +25,7 @@ exports.niceNumDecimals = function niceNumDecimals(input) {
 };
 
 exports.niceRound = function niceRound(input) {
-  _.round(input, exports.niceNumDecimals(input));
+  return _.round(input, exports.niceNumDecimals(input));
 };
 
 
