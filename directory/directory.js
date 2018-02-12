@@ -335,6 +335,18 @@ directory.addAsset('equid.co', {
 });
 
 directory.addAnchor({
+  domain: 'xirkle.com',
+  website: 'https://xirkle.com/',
+  logo: 'xirkle.com',
+  color: '#ff0000',
+  displayName: 'Xirkle',
+});
+directory.addAsset('xirkle.com', {
+  code: 'XIR',
+  issuer: 'GAO4DADCRAHA35GD6J3KUNOB5ELZE5D6CGPSJX2WBMEQV7R2M4PGKJL5',
+});
+
+directory.addAnchor({
   domain: 'golix.io',
   website: 'https://golix.io/',
   logo: 'golix.io',
@@ -543,6 +555,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SALT', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XIR', 'xirkle.com'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
