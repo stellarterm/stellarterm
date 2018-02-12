@@ -79,6 +79,7 @@ class TermApp extends React.Component {
         >
           Sign Up
         </a>
+        &nbsp;
         <a
           className="s-button HomePage__lead__actions__button"
           href="#account"
