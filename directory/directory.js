@@ -344,6 +344,7 @@ directory.addAnchor({
 directory.addAsset('xirkle.com', {
   code: 'XIR',
   issuer: 'GAO4DADCRAHA35GD6J3KUNOB5ELZE5D6CGPSJX2WBMEQV7R2M4PGKJL5',
+  type: 'token',
 });
 
 directory.addAnchor({
