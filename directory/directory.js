@@ -346,7 +346,18 @@ directory.addAsset('xirkle.com', {
   issuer: 'GAO4DADCRAHA35GD6J3KUNOB5ELZE5D6CGPSJX2WBMEQV7R2M4PGKJL5',
   type: 'token',
 });
-
+directory.addAnchor({
+  domain: 'charnetoken.top',
+  website: 'https://charnatoken.top/',
+  logo: 'charnetoken.top',
+  color: '#1c4664',
+  displayName: 'CHRC',
+});
+directory.addAsset('xirkle.com', {
+  code: 'CHRC',
+  issuer: 'GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP',
+  type: 'token',
+});
 directory.addAnchor({
   domain: 'golix.io',
   website: 'https://golix.io/',
@@ -560,6 +571,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XIR', 'xirkle.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['CHRC', 'charnatoken.top'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
