@@ -167,7 +167,7 @@ function phase3(ticker) {
             asset.change24h_USD = null;
 
             if (trades.records.length > 6) {
-              let openXLM = 1/medianOf3(Number(trades.records[0].close), Number(trades.records[1].close), Number(trades.records[2].close));
+              let openXLM = 1/medianOf3(Number(trades.records[trades.records.length - 1].close), Number(trades.records[trades.records.length - 2].close), Number(trades.records[trades.records.length - 3].close));
               let closeXLM = 1/pair.price;
 
               let openUSD = openXLM * XLMOldPrice;
@@ -188,7 +188,7 @@ function phase3(ticker) {
             asset.price_USD = niceRound(pair.price * ticker._meta.externalPrices.USD_XLM);
 
             if (trades.records.length > 6) {
-              let openXLM = medianOf3(Number(trades.records[0].close), Number(trades.records[1].close), Number(trades.records[2].close));
+              let openXLM = medianOf3(Number(trades.records[trades.records.length - 1].close), Number(trades.records[trades.records.length - 2].close), Number(trades.records[trades.records.length - 3].close));
               let closeXLM = pair.price;
 
               let openUSD = openXLM * XLMOldPrice;
