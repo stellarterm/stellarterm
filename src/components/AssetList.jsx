@@ -28,8 +28,8 @@ export default class AssetList extends React.Component {
       if (this.props.limit && index >= this.props.limit) {
         return;
       }
-      let priceXLM = asset.price_XLM ? Format.niceRound(asset.price_XLM): '-';
-      let priceUSD = asset.price_USD ? '$' + Format.niceRound(asset.price_USD) : '-';
+      let priceXLM = asset.price_XLM ? Printify.lightenZeros(asset.price_XLM.toString(), Format.niceNumDecimals(asset.price_XLM)): '-';
+      let priceUSD = asset.price_USD ? <span>${Printify.lightenZeros(asset.price_USD.toString(), Format.niceNumDecimals(asset.price_USD))}</span> : '-';
       if (asset.id == 'XLM-native') {
         priceXLM = Printify.lightenZeros('1.0000000');
       }
