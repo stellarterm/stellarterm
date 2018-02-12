@@ -114,7 +114,7 @@ DirectoryBuilder.prototype.addAsset = function(anchorDomain, details) {
   }
   if (details.type) {
     if (details.type in POSSIBLE_ASSET_TYPES) {
-      this.assets[slug],type = details.type;
+      this.assets[slug].type = details.type;
     } else {
       throw new Error('Invalid asset type "' + details.type + '" for token: ' + slug);
     }

@@ -397,25 +397,29 @@
     "SLM-GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI": {
       "code": "SLM",
       "issuer": "GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI",
-      "domain": "superlumen.org"
+      "domain": "superlumen.org",
+      "type": "token"
     },
     "SLT-GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP": {
       "code": "SLT",
       "issuer": "GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP",
       "domain": "smartlands.io",
-      "instructions": "https://smartlands.io"
+      "instructions": "https://smartlands.io",
+      "type": "token"
     },
     "STEM-GAFXX2VJE2EGLLY3EFA2BQXJADAZTNR7NC7IJ6LFYPSCLE7AI3AK3B3M": {
       "code": "STEM",
       "issuer": "GAFXX2VJE2EGLLY3EFA2BQXJADAZTNR7NC7IJ6LFYPSCLE7AI3AK3B3M",
       "domain": "stemchain.io",
-      "instructions": "https://stemchain.io"
+      "instructions": "https://stemchain.io",
+      "type": "token"
     },
     "TELLUS-GBBRMEXJMS3L7Y3DZZ2AHBD545GZ72OAEHHEFKGZAHHASHGWMHK5P6PL": {
       "code": "TELLUS",
       "issuer": "GBBRMEXJMS3L7Y3DZZ2AHBD545GZ72OAEHHEFKGZAHHASHGWMHK5P6PL",
       "domain": "irene.energy",
-      "instructions": "https://irene.energy"
+      "instructions": "https://irene.energy",
+      "type": "token"
     },
     "BTC-GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG": {
       "code": "BTC",
@@ -479,7 +483,8 @@
       "code": "RMT",
       "issuer": "GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN",
       "domain": "sureremit.co",
-      "instructions": "https://sureremit.co"
+      "instructions": "https://sureremit.co",
+      "type": "token"
     },
     "CNY-GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX": {
       "code": "CNY",
@@ -568,7 +573,8 @@
     "MOBI-GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH": {
       "code": "MOBI",
       "issuer": "GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH",
-      "domain": "mobius.network"
+      "domain": "mobius.network",
+      "type": "token"
     },
     "NGN-GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW": {
       "code": "NGN",

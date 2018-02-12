@@ -17,6 +17,7 @@ directory.addAnchor({
 directory.addAsset('superlumen.org', {
   code: 'SLM',
   issuer: 'GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI',
+  type: 'token',
 });
 
 directory.addAnchor({
@@ -30,6 +31,7 @@ directory.addAsset('smartlands.io', {
   code: 'SLT',
   issuer: 'GCKA6K5PCQ6PNF5RQBF7PQDJWRHO6UOGFMRLK3DYHDOI244V47XKQ4GP',
   instructions: 'https://smartlands.io',
+  type: 'token',
 });
 
 directory.addAnchor({
@@ -43,6 +45,7 @@ directory.addAsset('stemchain.io', {
   code: 'STEM',
   issuer: 'GAFXX2VJE2EGLLY3EFA2BQXJADAZTNR7NC7IJ6LFYPSCLE7AI3AK3B3M',
   instructions: 'https://stemchain.io',
+  type: 'token',
 });
 
 directory.addAnchor({
@@ -56,6 +59,7 @@ directory.addAsset('irene.energy', {
   code: 'TELLUS',
   issuer: 'GBBRMEXJMS3L7Y3DZZ2AHBD545GZ72OAEHHEFKGZAHHASHGWMHK5P6PL',
   instructions: 'https://irene.energy',
+  type: 'token',
 });
 
 directory.addAnchor({
@@ -158,6 +162,7 @@ directory.addAsset('sureremit.co', {
   code: 'RMT',
   issuer: 'GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN',
   instructions: 'https://sureremit.co',
+  type: 'token',
 });
 
 
@@ -257,6 +262,7 @@ directory.addAnchor({
 directory.addAsset('mobius.network', {
   code: 'MOBI',
   issuer: 'GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH',
+  type: 'token',
 });
 
 directory.addAnchor({
