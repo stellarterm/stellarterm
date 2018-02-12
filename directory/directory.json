@@ -368,8 +368,8 @@
       ]
     },
     "GCXDR4QZ4OTVX6433DPTXELCSEWQ4E5BIPVRRJMUR6M3NT4JCVIDALZO": {
-      "name": "Exchange",
-      "requiredMemoType": "MEMO_ID",
+      "name": "GOPAX",
+      "requiredMemoType": "MEMO_TEXT",
       "mergeOpAccepted": false,
       "pathPaymentAccepted": false,
       "acceptedAssetsWhitelist": [
