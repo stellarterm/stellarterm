@@ -13,12 +13,13 @@ Inclusion into the StellarTerm directory is not guaranteed.
 Explain on the website what the asset is for and what does it do.
 
 ### 2. Team and about the developers
-Display on your website who are the team members and who is running the project.
+Display on your website who are the team members and who is running the project. Authors of the asset must be known.
 
 ### 3. Website SSL
 For security, your website must:
 - Have working SSL https://
 - http:// must redirect to https://
+- Must say `Secure connection` when using Chrome. (No linking to insecure resources)
 
 ### 4. Stellar.toml hosted on your site
 Must have a stellar.toml correctly hosted. Information on how to do this is here: https://www.stellar.org/developers/guides/concepts/stellar-toml.html
