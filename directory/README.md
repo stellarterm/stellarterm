@@ -4,18 +4,34 @@ StellarTerm maintains a manually curated directory file with a listing of well k
 ## How to get listed
 Anchors and assets will only be added to the directory if they seem potentially legitimate (StellarTerm does not endorse any of these assets).
 
-Please gather the *3 things needed* first. To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request with changes implemented.
+Please gather the *7 things needed* first. To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request with changes implemented.
 
-## 3 things needed:
-### 1. Stellar.toml hosted on your site
+Inclusion into the StellarTerm directory is not guaranteed.
+
+## 7 things needed:
+### 1. Asset explanation
+Explain on the website what the asset is for and what does it do.
+
+### 2. Team and about the developers
+Display on your website who are the team members and who is running the project.
+
+### 3. Website SSL
+For security, your website must:
+- Have working SSL https://
+- http:// must redirect to https://
+
+### 4. Stellar.toml hosted on your site
 Must have a stellar.toml correctly hosted. Information on how to do this is here: https://www.stellar.org/developers/guides/concepts/stellar-toml.html
 
-Also, make sure to configure CORS correctly. Instructions are available in [the Stellar Developer docs](https://www.stellar.org/developers/guides/concepts/stellar-toml.html#enabling-cross-origin-resource-sharing-cors).
+### 5. CORS must be configured correctly
+CORS enables web clients to fetch the stellar.toml file. To test this out, go to https://stellarterm.com/#account/addTrust and use the `Accept asset via anchor domain` tool. If CORS is configured properly, your stellar.toml should work. You can use the [web developer console](https://developers.google.com/web/tools/chrome-devtools/) to see console output for debugging.
 
-### 2. Square logo that meets guidelines
+Instructions are available in [the Stellar Developer docs](https://www.stellar.org/developers/guides/concepts/stellar-toml.html#enabling-cross-origin-resource-sharing-cors).
+
+### 6. Square logo that meets guidelines
 Logo should be in the format as below. Alternatively, you may create a GitHub issue with a high resolution logo and the developers of StellarTerm will adjust it (the process will be slower).
 
-### 3. Brand color in #RRGGBB
+### 7. Brand color in #RRGGBB
 This color is used in the StellarToml asset "cards" for the border. The background of the asset "cards" are lightened.
 
 ## Directory logos
