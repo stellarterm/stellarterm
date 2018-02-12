@@ -78,6 +78,11 @@ DirectoryBuilder.prototype.addAnchor = function(details) {
   }
 }
 
+const POSSIBLE_ASSET_TYPES = {
+  'token': true, // Token means that the coin on Stellar is the coin itself
+  'iou': true, // IOU means that the issuer supposedly claims the tokens are backed by something outside of Stellar
+};
+
 DirectoryBuilder.prototype.addAsset = function(anchorDomain, details) {
   if (!this.anchors.hasOwnProperty(anchorDomain)) {
     throw new Error('Attempting to add asset to nonexistent anchor: ' + anchorDomain + ' slug: ' + slug);
@@ -105,7 +110,14 @@ DirectoryBuilder.prototype.addAsset = function(anchorDomain, details) {
     domain: anchorDomain,
   };
   if (details.instructions) {
-      this.assets[slug]['instructions'] = details.instructions;
+    this.assets[slug]['instructions'] = details.instructions;
+  }
+  if (details.type) {
+    if (details.type in POSSIBLE_ASSET_TYPES) {
+      this.assets[slug],type = details.type;
+    } else {
+      throw new Error('Invalid asset type "' + details.type + '" for token: ' + slug);
+    }
   }
 
   this.anchors[anchorDomain].assets[details.code] = slug;
