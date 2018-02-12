@@ -668,9 +668,8 @@ directory.addDestination('GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIF
   acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GCXDR4QZ4OTVX6433DPTXELCSEWQ4E5BIPVRRJMUR6M3NT4JCVIDALZO', {
-  name: 'Exchange', // Gopax?
-  requiredMemoType: 'MEMO_ID',
-  acceptedAssetsWhitelist: ['XLM-native'],
+  name: 'GOPAX',
+  requiredMemoType: 'MEMO_TEXT',
 });
 directory.addDestination('GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH', {
   name: 'Mobius Issuer',
