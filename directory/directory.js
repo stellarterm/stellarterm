@@ -338,7 +338,7 @@ directory.addAnchor({
   domain: 'xirkle.com',
   website: 'https://xirkle.com/',
   logo: 'xirkle.com',
-  color: '#ff0000',
+  color: '#ffbb00',
   displayName: 'Xirkle',
 });
 directory.addAsset('xirkle.com', {
