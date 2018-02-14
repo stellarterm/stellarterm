@@ -147,7 +147,7 @@ export default function Send(driver) {
     sign: async (tx) => {
       if (this.account.inflation_destination === 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW') {
         console.log('Signing tx\nhash:', tx.hash().toString('hex'),'\nsequence: ' + tx.sequence, '\n\n' + tx.toEnvelope().toXDR('base64'))
-        console.log('https://www.stellar.org/laboratory/#txsigner?xdr=' + encodeURI(tx.toEnvelope().toXDR('base64')) + '&network=public');
+        console.log('https://www.stellar.org/laboratory/#txsigner?xdr=' + encodeURIComponent(tx.toEnvelope().toXDR('base64')) + '&network=public');
       }
       if (this.authType === 'secret') {
         this.account.signWithSecret(tx);
