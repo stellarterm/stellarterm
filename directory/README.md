@@ -1,8 +1,10 @@
 # StellarTerm Directory
-StellarTerm maintains a manually curated directory file with a listing of well known anchors and assets on the Stellar network. StellarTerm currently does not fetch stellar.toml files to discover assets as a way to prevent phishing. The creators of this file does not endorse any of this information contained in the directory. There may be mistakes in this directory (and historically there have been).
+StellarTerm maintains a manually updated directory file with a listing of some assets on the Stellar network. StellarTerm currently does not fetch stellar.toml files to discover assets as a way to prevent phishing.
+
+The creators of this file does not endorse any of this information contained in the directory. There may be mistakes in this directory (and historically there have been).
 
 ## How to get listed
-Anchors and assets will only be added to the directory if they seem potentially legitimate (StellarTerm does not endorse any of these assets).
+Anchors and assets if they fulfill the requirements below (guidelines are not perfect; StellarTerm does not endorse any of these assets).
 
 Please gather the *7 things needed* first. To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request with changes implemented.
 
