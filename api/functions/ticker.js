@@ -52,6 +52,11 @@ function phase1(ticker) {
         }
       })
     ,
+    getStellarTermDotComVersion()
+      .then(version => {
+        ticker._meta.stellarTermVersion = version;
+      })
+    ,
     getExternalPrices()
       .then(externalPrices => {
         console.log('Phase 1: Finished external prices')
@@ -421,6 +426,24 @@ function getHorizonMain() {
       let horizonMain = JSON.parse(horizonMainJson);
       console.log('Phase 1: Horizon at ledger #' + horizonMain.core_latest_ledger);
       return horizonMain;
+    })
+}
+
+function getStellarTermDotComVersion() {
+  console.log('Phase 1: Fetching stellarterm.com')
+  return rp('https://stellarterm.com/')
+    .then(indexHtml => {
+      let search = indexHtml.match(/stBuildInfo=\{version:(\d+)/)
+      if (search.length === 2) {
+        console.log('Phase 1: https://stellarterm.com/ is at version ' + search[1]);
+        return search[1];
+      }
+      console.log('Phase 1: Unable to find version');
+      return -1; // Return 0 when couldn't find anything
+    })
+    .catch(err => {
+      console.error('Phase 1 StellarTerm.com version error: ' + err.message);
+      return -1;
     })
 }
 
