@@ -7,6 +7,19 @@ const DirectoryBuilder = require('./DirectoryBuilder');
 let directory = new DirectoryBuilder();
 directory.DirectoryBuilder = DirectoryBuilder;
 
+// Template:
+// directory.addAnchor({
+//   domain: 'DOMAINDOTCOM',
+//   website: 'https://DOMAINDOTCOM',
+//   logo: 'DOMAINDOTCOM',
+//   color: '#rrggbb',
+//   displayName: 'Domain dot com',
+// });
+// directory.addAsset('DOMAINDOTCOM', {
+//   code: 'ASSETCODE_ASSETCODE',
+//   issuer: 'Ga_issuer_account_id',
+// });
+
 directory.addAnchor({
   domain: 'superlumen.org',
   website: 'https://www.superlumen.org/',
@@ -46,6 +59,18 @@ directory.addAsset('stemchain.io', {
   issuer: 'GAFXX2VJE2EGLLY3EFA2BQXJADAZTNR7NC7IJ6LFYPSCLE7AI3AK3B3M',
   instructions: 'https://stemchain.io',
   type: 'token',
+});
+
+directory.addAnchor({
+  domain: 'charnatoken.top',
+  website: 'https://charnatoken.top',
+  logo: 'charnatoken.top',
+  color: '#1c4664',
+  displayName: 'Charna Token',
+});
+directory.addAsset('charnatoken.top', {
+  code: 'CHRC',
+  issuer: 'GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP',
 });
 
 directory.addAnchor({
@@ -508,6 +533,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['MOBI', 'mobius.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['CHRC', 'charnatoken.top'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
