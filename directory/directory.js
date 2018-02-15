@@ -427,6 +427,21 @@ directory.addAsset('thefutbolcoin.io', {
   issuer: 'GDS3XDJAA4VY6MJYASIGSIMPHZ7AQNZ54RKLWT7MWCOU5YKYEVCNLVS3',
 });
 
+directory.addAnchor({
+  domain: 'anclax.com',
+  website: 'https://anclax.com',
+  logo: 'anclax.com',
+  color: '#eeeeee',
+  displayName: 'AnclaX',
+});
+
+directory.addAsset('anclax.com', {
+  code: 'COP',
+  issuer: 'GAEDLNMCQZOSLY7Y4NW3DTEWQEVVCXYYMBDNGPPGBMQH4GFYECBI7YVK',
+  instructions: 'https://anclax.com',
+  type: 'iou',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -472,6 +487,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['USD', 'golix.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['COP', 'anclax.com'],
 });
 
 // Pairs involving "BTC"
