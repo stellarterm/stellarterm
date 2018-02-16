@@ -344,11 +344,18 @@ directory.addAnchor({
   domain: 'liquido.i-server.org',
   website: 'https://liquido.i-server.org/',
   logo: 'liquido.i-server.org',
+  color: '#1c4664',
   displayName: 'Liquido',
 });
 directory.addAsset('liquido.i-server.org', {
   code: 'XLQ',
   issuer: 'GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX',
+  instructions: 'https://liquido.i-server.org/liquido-direct-trade/',
+});
+directory.addAsset('liquido.i-server.org', {
+  code: 'USDT',
+  issuer: 'GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX',
+  instructions: 'https://liquido.i-server.org/tether-chain-anchor/',
 });
 
 directory.addAnchor({
@@ -682,6 +689,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLQ', 'liquido.i-server.org'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['USDT', 'liquido.i-server.org'],
   counterSelling: ['XLM', 'native'],
 });
 
