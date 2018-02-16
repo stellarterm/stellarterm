@@ -526,6 +526,10 @@ directory.addPair({
 // Pairs involving XLM
 // XLM should be counterSelling
 directory.addPair({
+  baseBuying: ['NEZ', 'nezly.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
   baseBuying: ['SLM', 'superlumen.org'],
   counterSelling: ['XLM', 'native'],
 });
