@@ -3,6 +3,14 @@ StellarTerm maintains a manually updated directory file with a listing of some a
 
 The creators of this file does not endorse any of this information contained in the directory. There may be mistakes in this directory (and historically there have been).
 
+## Instructions on how to make a PR
+1. Fork the repo to your own account
+2. Add an anchor+asset in the directory.js
+3. Add a trading pair in the correct section
+4. While inside the `directory` folder, run `./checkBuild.sh`
+5. Check in all the files. Commit with meaningful message
+6. Push to GitHub and create a PR.
+
 ## How to get listed
 Anchors and assets if they fulfill the requirements below (guidelines are not perfect; StellarTerm does not endorse any of these assets).
 
