@@ -21,6 +21,32 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'nezly.com',
+  website: 'https://nezly.com',
+  logo: 'nezly.com',
+  color: '#523b83',
+  displayName: 'Nezly',
+});
+
+directory.addAsset('nezly.com', {
+  code: 'NEZ',
+  issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
+  instructions: 'https://nezly.com',
+});
+
+directory.addAsset('nezly.com', {
+  code: 'ETH',
+  issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
+  instructions: 'https://nezly.com',
+});
+
+directory.addAsset('nezly.com', {
+  code: 'BTC',
+  issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
+  instructions: 'https://nezly.com',
+});
+
+directory.addAnchor({
   domain: 'superlumen.org',
   website: 'https://www.superlumen.org/',
   logo: 'superlumen.org',
@@ -497,6 +523,10 @@ directory.addPair({
 // "BTC" should be counterSelling
 directory.addPair({
   baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'nezly.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'stronghold.co'],
 });
 directory.addPair({
@@ -518,6 +548,14 @@ directory.addPair({
 
 // Pairs involving XLM
 // XLM should be counterSelling
+directory.addPair({
+  baseBuying: ['NEZ', 'nezly.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ETH', 'nezly.com'],
+  counterSelling: ['XLM', 'native'],
+});
 directory.addPair({
   baseBuying: ['SLM', 'superlumen.org'],
   counterSelling: ['XLM', 'native'],
