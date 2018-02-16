@@ -504,6 +504,10 @@ directory.addPair({
 // "BTC" should be counterSelling
 directory.addPair({
   baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'nezly.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'stronghold.co'],
 });
 directory.addPair({
@@ -527,6 +531,10 @@ directory.addPair({
 // XLM should be counterSelling
 directory.addPair({
   baseBuying: ['NEZ', 'nezly.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ETH', 'nezly.com'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
