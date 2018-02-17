@@ -1,4 +1,7 @@
+#!/usr/bin/env bash
 # NOTE: You must be in this directory to run this script
+
+set -o errexit
 
 ./buildLogos.js
 ./buildDirectory.js
