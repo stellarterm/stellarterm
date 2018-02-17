@@ -797,6 +797,10 @@ directory.addDestination('GBTCBCWLE6YVTR5Y5RRZC36Z37OH22G773HECWEIZTZJSN4WTG3CSO
   name: 'NaoBTC',
   acceptedAssetsWhitelist: ['BTC-naobtc.com'],
 });
+directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ7S', {
+  name: 'Gate.io',
+  requiredMemoType: 'MEMO_ID',
+});
 
 // Assert that each asset has a trading pair
 let remainingAssets = Object.assign({}, directory.assets);
