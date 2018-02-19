@@ -27,12 +27,14 @@ directory.addAnchor({
   color: '#2a8bc6',
   displayName: 'Pedity',
 });
-directory.addAsset('DOMAINDOTCOM', {
+
+directory.addAsset('pedity.com', {
   code: 'PEDI',
   issuer: 'GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY',
   instructions: 'https://pedity.com',
   type: 'token',
 });
+
 directory.addAnchor({
   domain: 'nezly.com',
   website: 'https://nezly.com',
@@ -774,6 +776,10 @@ directory.addDestination('GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIF
 directory.addDestination('GCXDR4QZ4OTVX6433DPTXELCSEWQ4E5BIPVRRJMUR6M3NT4JCVIDALZO', {
   name: 'GOPAX',
   requiredMemoType: 'MEMO_TEXT',
+});
+directory.addDestination('GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY', {
+  name: 'Pedity Issuer',
+  acceptedAssetsWhitelist: [],
 });
 directory.addDestination('GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH', {
   name: 'Mobius Issuer',
