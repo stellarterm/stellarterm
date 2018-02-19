@@ -21,6 +21,19 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'pedity.com',
+  website: 'https://pedity.com',
+  logo: 'pedity.com',
+  color: '#2a8bc6',
+  displayName: 'Pedity',
+});
+directory.addAsset('DOMAINDOTCOM', {
+  code: 'PEDI',
+  issuer: 'GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY',
+  instructions: 'https://pedity.com',
+  type: 'token',
+});
+directory.addAnchor({
   domain: 'nezly.com',
   website: 'https://nezly.com',
   logo: 'nezly.com',
@@ -548,6 +561,10 @@ directory.addPair({
 
 // Pairs involving XLM
 // XLM should be counterSelling
+directory.addPair({
+  baseBuying: ['PEDI', 'pedity.com'],
+  counterSelling: ['XLM', 'native'],
+});
 directory.addPair({
   baseBuying: ['NEZ', 'nezly.com'],
   counterSelling: ['XLM', 'native'],
