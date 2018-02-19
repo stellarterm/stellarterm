@@ -34,13 +34,15 @@ For security, your website must:
 ### 4. Stellar.toml hosted on your site
 Must have a stellar.toml correctly hosted. Information on how to do this is here: https://www.stellar.org/developers/guides/concepts/stellar-toml.html
 
-### 5. CORS must be configured correctly
+### 5. CORS must be configured correctly. The ["Accept asset via anchor domain" tool](https://stellarterm.com/#account/addTrust) should work with your domain.
 CORS enables web clients to fetch the stellar.toml file. To test this out, go to https://stellarterm.com/#account/addTrust and use the `Accept asset via anchor domain` tool. If CORS is configured properly, your stellar.toml should work. You can use the [web developer console](https://developers.google.com/web/tools/chrome-devtools/) to see console output for debugging.
 
 Instructions are available in [the Stellar Developer docs](https://www.stellar.org/developers/guides/concepts/stellar-toml.html#enabling-cross-origin-resource-sharing-cors).
 
 ### 6. Square logo that meets guidelines
 Logo should be in the format as below. Alternatively, you may create a GitHub issue with a high resolution logo and the developers of StellarTerm will adjust it (the process will be slower).
+
+Please use pngquant (https://pngquant.org/) to optimize the logo.
 
 ### 7. Brand color in #RRGGBB
 This color is used in the StellarToml asset "cards" for the border. The background of the asset "cards" are lightened.
