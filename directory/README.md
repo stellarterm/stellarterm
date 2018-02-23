@@ -19,12 +19,13 @@ Please gather the *8 things needed* first. To list your directory, please create
 Inclusion into the StellarTerm directory is not guaranteed.
 
 ## 8 things needed:
-### 1. Project tweeted by [@StellarOrg](https://twitter.com/StellarOrg)
-The project must have been tweeted by [Stellar Development Foundation](https://www.stellar.org/)'s twitter account @StellarOrg.
+### 1. 50+ points on Reddit [r/Stellar](https://www.reddit.com/r/Stellar/) or Project tweeted by [@StellarOrg](https://twitter.com/StellarOrg)
 
-Here is an example of a tweet that qualifies: https://twitter.com/StellarOrg/status/941284847695343616
+To qualify via [Reddit](https://www.reddit.com/r/Stellar/) post, a post on [r/Stellar](https://www.reddit.com/r/Stellar/) about the project must have more than 50 points. Vote manipulation is not allowed. Example of a post that qualifies: [https://www.reddit.com/r/Stellar/comments/7ym7vg/new_project_on_stellar_micropayments_for/](https://www.reddit.com/r/Stellar/comments/7ym7vg/new_project_on_stellar_micropayments_for/)
 
-Alternatively, the company must be listed on SDF's partner directory at [https://www.stellar.org/about/directory](https://www.stellar.org/about/directory)
+To qualify via tweet, it must have been tweeted or retweeted [Stellar Development Foundation](https://www.stellar.org/)'s twitter account @StellarOrg. Here is an example of a tweet that qualifies: https://twitter.com/StellarOrg/status/941284847695343616
+
+Alternatively, be listeded on SDF's partner directory at [https://www.stellar.org/about/directory](https://www.stellar.org/about/directory) also qualifies.
 
 ### 2. Asset explanation
 Explain on the website what the asset is for and what does it do.
