@@ -14,37 +14,44 @@ The creators of this file does not endorse any of this information contained in 
 ## How to get listed
 Anchors and assets if they fulfill the requirements below (guidelines are not perfect; StellarTerm does not endorse any of these assets).
 
-Please gather the *7 things needed* first. To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request with changes implemented.
+Please gather the *8 things needed* first. To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request with changes implemented.
 
 Inclusion into the StellarTerm directory is not guaranteed.
 
-## 7 things needed:
-### 1. Asset explanation
+## 8 things needed:
+### 1. Project tweeted by [@StellarOrg](https://twitter.com/StellarOrg)
+The project must have been tweeted by [Stellar Development Foundation](https://www.stellar.org/)'s twitter account @StellarOrg.
+
+Here is an example of a tweet that qualifies: https://twitter.com/StellarOrg/status/941284847695343616
+
+Alternatively, the company must be listed on SDF's partner directory at [https://www.stellar.org/about/directory](https://www.stellar.org/about/directory)
+
+### 2. Asset explanation
 Explain on the website what the asset is for and what does it do.
 
-### 2. Team and about the developers
+### 3. Team and about the developers
 Display on your website who are the team members and who is running the project. Authors of the asset must be known.
 
-### 3. Website SSL
+### 4. Website SSL
 For security, your website must:
 - Have working SSL https://
 - http:// must redirect to https://
 - Must say `Secure connection` when using Chrome. (No linking to insecure resources)
 
-### 4. Stellar.toml hosted on your site
+### 5. Stellar.toml hosted on your site
 Must have a stellar.toml correctly hosted. Information on how to do this is here: https://www.stellar.org/developers/guides/concepts/stellar-toml.html
 
-### 5. CORS must be configured correctly. The ["Accept asset via anchor domain" tool](https://stellarterm.com/#account/addTrust) should work with your domain.
+### 6. CORS must be configured correctly. The ["Accept asset via anchor domain" tool](https://stellarterm.com/#account/addTrust) should work with your domain.
 CORS enables web clients to fetch the stellar.toml file. To test this out, go to https://stellarterm.com/#account/addTrust and use the `Accept asset via anchor domain` tool. If CORS is configured properly, your stellar.toml should work. You can use the [web developer console](https://developers.google.com/web/tools/chrome-devtools/) to see console output for debugging.
 
 Instructions are available in [the Stellar Developer docs](https://www.stellar.org/developers/guides/concepts/stellar-toml.html#enabling-cross-origin-resource-sharing-cors).
 
-### 6. Square logo that meets guidelines
+### 7. Square logo that meets guidelines
 Logo should be in the format as below. Alternatively, you may create a GitHub issue with a high resolution logo and the developers of StellarTerm will adjust it (the process will be slower).
 
 Please use pngquant (https://pngquant.org/) to optimize the logo.
 
-### 7. Brand color in #RRGGBB
+### 8. Brand color in #RRGGBB
 This color is used in the StellarToml asset "cards" for the border. The background of the asset "cards" are lightened.
 
 ## Directory logos
