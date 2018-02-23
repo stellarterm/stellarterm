@@ -103,6 +103,18 @@ directory.addAsset('stemchain.io', {
 });
 
 directory.addAnchor({
+  domain: 'charnatoken.top',
+  website: 'https://charnatoken.top',
+  logo: 'charnatoken.top',
+  color: '#1c4664',
+  displayName: 'Charna Token',
+});
+directory.addAsset('charnatoken.top', {
+  code: 'CHRC',
+  issuer: 'GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP',
+});
+
+directory.addAnchor({
   domain: 'irene.energy',
   website: 'https://irene.energy',
   logo: 'irene.energy',
@@ -597,6 +609,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['MOBI', 'mobius.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['CHRC', 'charnatoken.top'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
