@@ -29,6 +29,12 @@ body {
   cursor: pointer;
 }
 
+ul.privacy__ul {
+  li {
+    list-style-position: inside;
+  }
+}
+
 @import 'island';
 @import 'lightenZeros';
 @import 'Ellipsis';
