@@ -145,6 +145,10 @@ function phase3(ticker) {
         pair.spread = _.round(1 - pair.bid/pair.ask, 4);
         pair.price = _.round((parseFloat(pair.bid) + parseFloat(pair.ask))/2, 7);
 
+        if (pair.spread > 0.4 && counterSelling.isNative()) {
+          pair.price = pair.bid;
+        }
+
         // Depth of the market of both sides
         let sum10PercentBidAmounts = _.sumBy(res.bids, bid => {
           if (parseFloat(bid.price)/pair.price >= 0.9) {
