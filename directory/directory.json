@@ -446,6 +446,12 @@
       "acceptedAssetsWhitelist": [
         "BTC-naobtc.com"
       ]
+    },
+    "GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ7S": {
+      "name": "Gate.io",
+      "requiredMemoType": "MEMO_ID",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false
     }
   },
   "assets": {
