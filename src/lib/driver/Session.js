@@ -6,7 +6,7 @@ import Stellarify from '../Stellarify';
 import directory from '../../directory';
 import Validate from '../Validate';
 import Event from '../Event';
-const StellarLedger = window.StellarLedger;
+const LedgerjsStellar = window.LedgerjsStellar;
 
 let DEVELOPMENT_TO_PROMPT = true;
 
@@ -41,21 +41,25 @@ export default function Send(driver) {
   // Ping the Ledger device to see if it is connected
   this.pingLedger = (loop = false) => {
     // console.log('Ledger wallet ping. Connection: ' + this.ledgerConnected)
-    new StellarLedger.Api(new StellarLedger.comm(4)).connect(success => {
-      if (this.ledgerConnected === false) {
-        this.ledgerConnected = true;
-        this.event.trigger();
-      }
-      // console.log('Ledger wallet pong. Connection: ' + this.ledgerConnected)
-      // setTimeout(() => {this.pingLedger(true)}, 15000);
-    }, error => {
-      if (this.ledgerConnected === true) {
-        this.ledgerConnected = false;
-        this.event.trigger();
-      }
-      setTimeout(() => {this.pingLedger(true)}, 1000);
-    })
-  }
+    const openTimeout = 60 * 1000;
+    LedgerjsStellar.Transport.create(openTimeout).then(transport => {
+      transport.setDebugMode(true);
+      new LedgerjsStellar.Api(transport).getAppConfiguration().then(result => {
+        if (this.ledgerConnected === false) {
+          this.ledgerConnected = true;
+          this.event.trigger();
+        }
+        // console.log('Ledger wallet pong. Connection: ' + this.ledgerConnected)
+        // setTimeout(() => {this.pingLedger(true)}, 15000);
+      }).catch(error => {
+        if (this.ledgerConnected === true) {
+          this.ledgerConnected = false;
+          this.event.trigger();
+        }
+        setTimeout(() => {this.pingLedger(true)}, 1000);
+      });
+    });
+  };
   this.pingLedger(true);
 
   this.handlers = {
@@ -73,7 +77,10 @@ export default function Send(driver) {
     },
     logInWithLedger: async (bip32Path) => {
       try {
-        let connectionResult = await new StellarLedger.Api(new StellarLedger.comm(4)).getPublicKey_async(bip32Path)
+        const openTimeout = 4 * 1000;
+        const transport = await LedgerjsStellar.Transport.create(openTimeout);
+        transport.setDebugMode(true);
+        let connectionResult = await new LedgerjsStellar.Api(transport).getPublicKey(bip32Path);
         this.setupLedgerError = null;
         let keypair = StellarSdk.Keypair.fromPublicKey(connectionResult.publicKey);
         return this.handlers.logIn(keypair, {
