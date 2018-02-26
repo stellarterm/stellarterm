@@ -19,6 +19,18 @@ directory.DirectoryBuilder = DirectoryBuilder;
 //   code: 'ASSETCODE_ASSETCODE',
 //   issuer: 'Ga_issuer_account_id',
 // });
+directory.addAnchor({
+   domain: 'frasindo.com',
+   website: 'https://frasindo.com/',
+   logo: 'frasindo.com',
+   color: '#be3785',
+   displayName: 'Frasindo',
+});
+
+directory.addAsset('frasindo.com', {
+  code: 'FRAS',
+  issuer: 'GC75WHUIMU7LV6WURMCA5GGF2S5FWFOK7K5VLR2WGRKWKZQAJQEBM53M',
+});
 
 directory.addAnchor({
   domain: 'pedity.com',
@@ -586,6 +598,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['TELLUS', 'irene.energy'],
   counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['FRAS', 'frasindo.com'],
 });
 directory.addPair({
   baseBuying: ['TFC', 'thefutbolcoin.io'],
