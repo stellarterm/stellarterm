@@ -193,6 +193,10 @@ function phase3(ticker) {
               asset.numAsks = res.asks.length;
             }
           })
+          .catch((e) => {
+            console.log('error')
+            // console.dir(e)
+          })
       })
   }))
   .then(() => {

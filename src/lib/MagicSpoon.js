@@ -124,7 +124,7 @@ const MagicSpoon = {
         depth += 1;
         let tradeResults;
         if (first) {
-          tradeResults = await Server.orderbook(baseBuying, counterSelling).trades().limit(200).order('desc').call()
+          tradeResults = await Server.tradeAggregation(baseBuying, counterSelling, 1514764800, Date.now() + 86400000, 900000).limit(200).order('desc').call()
           first = false;
         } else {
           tradeResults = await prevCall();
@@ -139,7 +139,7 @@ const MagicSpoon = {
       // Optimization: use this filter before saving it into the records array
       this.trades = _.filter(
         _.map(records, (trade, index) => {
-          return [new Date(trade.created_at).getTime(), new BigNumber(trade.bought_amount).dividedBy(trade.sold_amount).toNumber()];
+            return [new Date(trade.timestamp).getTime(), parseFloat(trade.close)];
         }),
         (entry) => {
           // Remote NaN elements that cause gaps in the chart.
