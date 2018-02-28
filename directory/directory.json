@@ -986,16 +986,6 @@
         "issuer": "GCYK67DDGBOANS6UODJ62QWGLEB2A7JQ3XUV25HCMLT7CI23PMMK3W6R"
       }
     },
-    "XLM-native/COP-anclax.com": {
-      "baseBuying": {
-        "code": "XLM",
-        "issuer": null
-      },
-      "counterSelling": {
-        "code": "COP",
-        "issuer": "GAEDLNMCQZOSLY7Y4NW3DTEWQEVVCXYYMBDNGPPGBMQH4GFYECBI7YVK"
-      }
-    },
     "XLM-native/BTC-nezly.com": {
       "baseBuying": {
         "code": "XLM",
@@ -1060,6 +1050,16 @@
       "baseBuying": {
         "code": "PEDI",
         "issuer": "GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "COP-anclax.com/XLM-native": {
+      "baseBuying": {
+        "code": "COP",
+        "issuer": "GAEDLNMCQZOSLY7Y4NW3DTEWQEVVCXYYMBDNGPPGBMQH4GFYECBI7YVK"
       },
       "counterSelling": {
         "code": "XLM",
