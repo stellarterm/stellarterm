@@ -112,6 +112,12 @@ DirectoryBuilder.prototype.addAsset = function(anchorDomain, details) {
   if (details.instructions) {
     this.assets[slug]['instructions'] = details.instructions;
   }
+  if (details.unlisted) {
+    if (details.unlisted !== true) {
+      throw new Error('Asset property unlisted must be unset or true: ' + slug);
+    }
+    this.assets[slug]['unlisted'] = true;
+  }
   if (details.type) {
     if (details.type in POSSIBLE_ASSET_TYPES) {
       this.assets[slug].type = details.type;

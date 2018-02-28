@@ -716,27 +716,32 @@
     "CM3-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM3",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "unlisted": true
     },
     "CM10-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM10",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "unlisted": true
     },
     "CME-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CME",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "unlisted": true
     },
     "CM3x2-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "CM3x2",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "unlisted": true
     },
     "HKDC-GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3": {
       "code": "HKDC",
       "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3",
-      "domain": "cryptomover.com"
+      "domain": "cryptomover.com",
+      "unlisted": true
     },
     "TFC-GDS3XDJAA4VY6MJYASIGSIMPHZ7AQNZ54RKLWT7MWCOU5YKYEVCNLVS3": {
       "code": "TFC",

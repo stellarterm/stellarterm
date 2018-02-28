@@ -28,6 +28,11 @@ export default class AssetList extends React.Component {
       if (this.props.limit && index >= this.props.limit) {
         return;
       }
+      if (directory.getAssetByAccountId(asset.code, asset.issuer).unlisted) {
+        // Don't show unlisted assets
+        return;
+      }
+
       let priceXLM = asset.price_XLM ? Printify.lightenZeros(asset.price_XLM.toString(), Format.niceNumDecimals(asset.price_XLM)): '-';
       let priceUSD = asset.price_USD ? <span>${Printify.lightenZeros(asset.price_USD.toString(), Format.niceNumDecimals(asset.price_USD))}</span> : '-';
       if (asset.id == 'XLM-native') {

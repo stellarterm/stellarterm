@@ -438,22 +438,27 @@ directory.addAnchor({
 directory.addAsset('cryptomover.com', {
   code: 'CM3',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
+  unlisted: true,
 });
 directory.addAsset('cryptomover.com', {
   code: 'CM10',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
+  unlisted: true,
 });
 directory.addAsset('cryptomover.com', {
   code: 'CME',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
+  unlisted: true,
 });
 directory.addAsset('cryptomover.com', {
   code: 'CM3x2',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
+  unlisted: true,
 });
 directory.addAsset('cryptomover.com', {
   code: 'HKDC',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
+  unlisted: true,
 });
 
 directory.addAnchor({
