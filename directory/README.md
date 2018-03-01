@@ -3,13 +3,6 @@ StellarTerm maintains a manually updated directory file with a listing of some a
 
 The creators of this file does not endorse any of this information contained in the directory. There may be mistakes in this directory (and historically there have been).
 
-## Instructions on how to make a PR
-1. Fork the repo to your own account
-2. Add an anchor+asset in the directory.js
-3. Add a trading pair in the correct section
-4. While inside the `directory` folder, run `./checkBuild.sh`
-5. Check in all the files. Commit with meaningful message
-6. Push to GitHub and create a PR.
 
 ## How to get listed
 Anchors and assets if they fulfill the requirements below (guidelines are not perfect; StellarTerm does not endorse any of these assets).
@@ -18,7 +11,7 @@ Please gather the *8 things needed* first. To list your directory, please create
 
 Inclusion into the StellarTerm directory is not guaranteed.
 
-## 8 things needed:
+## First, show that you have 8 things needed:
 ### 1. 100+ points on Reddit [r/Stellar](https://www.reddit.com/r/Stellar/) or Project tweeted by [@StellarOrg](https://twitter.com/StellarOrg)
 
 To qualify via [Reddit](https://www.reddit.com/r/Stellar/) post, a post on [r/Stellar](https://www.reddit.com/r/Stellar/) about the project must have more than 100 points. Vote manipulation is not allowed. Example of a post that qualifies: [https://www.reddit.com/r/Stellar/comments/7ym7vg/new_project_on_stellar_micropayments_for/](https://www.reddit.com/r/Stellar/comments/7ym7vg/new_project_on_stellar_micropayments_for/)
@@ -54,6 +47,28 @@ Please use pngquant (https://pngquant.org/) to optimize the logo.
 
 ### 8. Brand color in #RRGGBB
 This color is used in the StellarToml asset "cards" for the border. The background of the asset "cards" are lightened.
+
+## Second: Create a pull request
+1. Fork the repo to your own account
+2. Add an anchor+asset in the directory.js
+3. Add a trading pair in the correct section
+4. While inside the `directory` folder, run `./checkBuild.sh`
+5. Check in all the files. Commit with meaningful message
+6. Push to GitHub and create a PR.
+7. In your pull request, please show that all the requirements have been met. You can use this template:
+
+```
+1. URL: https://link.to.reddit.or.twitter
+2.
+3.
+4.
+5. URL: https://your.domain/.well-known/stellar.toml
+6.
+7.
+8.
+```
+
+------------------------
 
 ## Directory logos
 StellarTerm displays logos of Stellar anchors to make it easier for end users to recognize them and protect themselves against phishing attacks. When a unknown issuer of invalid asset pair is used, an image indicating that the asset is unknown will be shown.
