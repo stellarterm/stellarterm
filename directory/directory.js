@@ -488,6 +488,19 @@ directory.addAsset('anclax.com', {
   type: 'iou',
 });
 
+directory.addAnchor({
+  domain: 'astral9.io',
+  website: 'https://astral9.io',
+  logo: 'astral9.io',
+  color: '#000000',
+  displayName: 'XA9',
+});
+
+directory.addAsset('astral9.io', {
+  code: 'XA9',
+  issuer: 'GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -706,6 +719,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLQ', 'liquido.i-server.org'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XA9', 'astral9.io'],
   counterSelling: ['XLM', 'native'],
 });
 
