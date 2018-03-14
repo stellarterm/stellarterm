@@ -944,6 +944,16 @@
         "issuer": "GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3"
       }
     },
+    "XLM-native/COP-anclax.com": {
+      "baseBuying": {
+        "code": "XLM",
+        "issuer": null
+      },
+      "counterSelling": {
+        "code": "COP",
+        "issuer": "GAEDLNMCQZOSLY7Y4NW3DTEWQEVVCXYYMBDNGPPGBMQH4GFYECBI7YVK"
+      }
+    },
     "EURT-tempo.eu.com/PHP-coins.asia": {
       "baseBuying": {
         "code": "EURT",
@@ -1068,16 +1078,6 @@
       "baseBuying": {
         "code": "PEDI",
         "issuer": "GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY"
-      },
-      "counterSelling": {
-        "code": "XLM",
-        "issuer": null
-      }
-    },
-    "COP-anclax.com/XLM-native": {
-      "baseBuying": {
-        "code": "COP",
-        "issuer": "GAEDLNMCQZOSLY7Y4NW3DTEWQEVVCXYYMBDNGPPGBMQH4GFYECBI7YVK"
       },
       "counterSelling": {
         "code": "XLM",

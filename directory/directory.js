@@ -524,6 +524,10 @@ directory.addPair({
   counterSelling: ['HKDC', 'cryptomover.com'],
 });
 directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['COP', 'anclax.com'],
+});
+directory.addPair({
   baseBuying: ['EURT', 'tempo.eu.com'],
   counterSelling: ['PHP', 'coins.asia'],
 });
@@ -579,10 +583,6 @@ directory.addPair({
 // XLM should be counterSelling
 directory.addPair({
   baseBuying: ['PEDI', 'pedity.com'],
-  counterSelling: ['XLM', 'native'],
-});
-directory.addPair({
-  baseBuying: ['COP', 'anclax.com'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
