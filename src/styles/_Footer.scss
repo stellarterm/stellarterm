@@ -1,0 +1,30 @@
+.Footer {
+}
+.Footer__chunk {
+  padding: 16px 18px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+  background: #fff;
+  display: flex;
+  border-radius: 3px 3px 0 0;
+}
+
+.Footer__disclaimer {
+  font-size: 12px;
+}
+
+.Footer__list {
+  width: 30%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+.Footer__list__item {
+  width: 100%;
+  font-size: $s-scale-5;
+  line-height: 1;
+  margin-bottom: 0;
+  text-align: right;
+}
+.Footer__list__item:first-child {
+  margin-bottom: 6px;
+}

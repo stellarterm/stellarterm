@@ -8,10 +8,10 @@ export default class TermsOfUse extends React.Component {
         <h2 className="Session__welcomeTitle">Terms of use</h2>
         <div>
           <h3>1. Cryptocurrency risks</h3>
-          Cryptocurrency assets are subject to high market risks and volatility. <strong>Past performance is not indicative of future results</strong>. Investments in blockchain assets may result in loss of part or all of your investment. Please due your own research and use caution. You are solely responsible for your actions on the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. StellarTerm is not responsible for your investment losses.
+          Cryptocurrency assets are subject to high market risks and volatility. <strong>Past performance is not indicative of future results</strong>. Investments in blockchain assets may result in loss of part or all of your investment. Please do your own research and use caution. You are solely responsible for your actions on the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. StellarTerm is not responsible for your investment losses.
           <br />
           <br />
-          Cryptocurrency assets and the Stellar "decentralized exchange" are <strong>unregulated</strong> and does not have governmental oversight. The SEC has recently issued a <a href="https://www.sec.gov/news/public-statement/statement-clayton-2017-12-11" target="_blank" rel="nofollow noopener noreferrer">statement on cryptocurrencies and initial coin offerings</a> that may be of interest to you.
+          Cryptocurrency assets and the Stellar "decentralized exchange" are <strong>unregulated</strong> and does not have governmental oversight. The SEC has recently issued a "<a href="https://www.sec.gov/news/public-statement/statement-clayton-2017-12-11" target="_blank" rel="nofollow noopener noreferrer">Statement on Cryptocurrencies and Initial Coin Offerings</a>" that may be of interest to you.
           <br />
           <br />
           <h3>2. The Stellar network (separate from StellarTerm)</h3>

@@ -13,6 +13,8 @@ import Loading from './components/Loading.jsx';
 import Stellarify from './lib/Stellarify';
 import url from 'url';
 import Header from './components/Header.jsx';
+import Footer from './components/Footer.jsx';
+import TermsOfUse from './components/TermsOfUse.jsx';
 import Driver from './lib/Driver';
 
 let network = {
@@ -121,14 +123,13 @@ class TermApp extends React.Component {
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
                   <p>StellarTerm is just a client that can be used to access the Stellar Decentralized Exchange. Neither StellarTerm nor the developers of it are involved with operating the Stellar network.</p>
-                  <p>StellarTerm is developed by <a href="https://iris.li/" target="_blank" rel="nofollow noopener noreferrer">Iris Li</a>, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
+                  <p>StellarTerm is developed by Iris Li, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
                 </div>
               </div>
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
                   <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm" target="_blank" rel="nofollow noopener noreferrer">star the project on GitHub</a>.</p>
                   <p>The project is released under the Apache-2.0 license and is released as is without warranty.</p>
-                  <p><a href="#privacy">Privacy Policy</a></p>
                 </div>
               </div>
             </div>
@@ -164,6 +165,8 @@ class TermApp extends React.Component {
           <li>The StellarTerm website might be compromised.</li>
         </ul>
       </Generic>
+    } else if (urlParts[0] === 'terms-of-use') {
+      body = <TermsOfUse />
     } else if (['account', 'signup', 'ledger'].indexOf(urlParts[0]) > -1) {
       body = <Session d={this.d} urlParts={urlParts}></Session>
     } else if (urlParts[0] === 'markets') {
@@ -209,11 +212,14 @@ class TermApp extends React.Component {
       body = <NotFound></NotFound>
     }
 
-    return <div>
+    return <div className="AppStretch">
       <GlobalModal d={this.props.d}></GlobalModal>
-      <div>
-        <Header d={this.props.d} urlParts={urlParts} network={network}></Header>
-        {body}
+      <div className="AppStretch AppContainer">
+        <div>
+          <Header d={this.props.d} urlParts={urlParts} network={network}></Header>
+          {body}
+        </div>
+        <Footer />
       </div>
     </div>;
 

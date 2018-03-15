@@ -18,6 +18,7 @@ body {
 }
 #app {
   position: relative;
+  min-height: 100vh;
 }
 
 .img--noSelect {
@@ -35,6 +36,15 @@ ul.privacy__ul {
   }
 }
 
+.AppStretch {
+  min-height: 100vh;
+}
+.AppContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 @import 'island';
 @import 'lightenZeros';
 @import 'Ellipsis';
@@ -43,6 +53,7 @@ ul.privacy__ul {
 @import 'subNav';
 @import 'HomePage';
 @import 'row';
+@import 'Footer';
 
 @import 'Generic';
 @import 'Loading';
