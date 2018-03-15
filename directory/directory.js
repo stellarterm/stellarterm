@@ -47,18 +47,21 @@ directory.addAsset('nezly.com', {
   code: 'NEZ',
   issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
   instructions: 'https://nezly.com',
+  unlisted: true,
 });
 
 directory.addAsset('nezly.com', {
   code: 'ETH',
   issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
   instructions: 'https://nezly.com',
+  unlisted: true,
 });
 
 directory.addAsset('nezly.com', {
   code: 'BTC',
   issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
   instructions: 'https://nezly.com',
+  unlisted: true,
 });
 
 directory.addAnchor({

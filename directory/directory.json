@@ -486,19 +486,22 @@
       "code": "NEZ",
       "issuer": "GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ",
       "domain": "nezly.com",
-      "instructions": "https://nezly.com"
+      "instructions": "https://nezly.com",
+      "unlisted": true
     },
     "ETH-GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ": {
       "code": "ETH",
       "issuer": "GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ",
       "domain": "nezly.com",
-      "instructions": "https://nezly.com"
+      "instructions": "https://nezly.com",
+      "unlisted": true
     },
     "BTC-GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ": {
       "code": "BTC",
       "issuer": "GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ",
       "domain": "nezly.com",
-      "instructions": "https://nezly.com"
+      "instructions": "https://nezly.com",
+      "unlisted": true
     },
     "SLM-GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI": {
       "code": "SLM",
