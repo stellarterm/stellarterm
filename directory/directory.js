@@ -771,7 +771,7 @@ directory.addDestination('GBKTJSNUSR6OCXA5WDWGT33MNSCNQHOBQUBYC7TVS7BOXDKWFNHI4Q
   acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GC4KAS6W2YCGJGLP633A6F6AKTCV4WSLMTMIQRSEQE5QRRVKSX7THV6S', {
-  name: 'BitcoinIndonesia',
+  name: 'Indodax',
   requiredMemoType: 'MEMO_TEXT',
   acceptedAssetsWhitelist: ['XLM-native'],
 });
