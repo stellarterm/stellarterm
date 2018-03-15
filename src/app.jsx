@@ -151,7 +151,8 @@ class TermApp extends React.Component {
       }
     } else if (urlParts[0] === 'privacy') {
       body = <Generic title="Privacy Policy">
-        <p>StellarTerm does not track you.</p>
+        <p>This policy may be updated or revised without notice. It is the responsibility of the user to stay informed about privacy policy changes.</p>
+        <p>StellarTerm does track your actions on this client.</p>
         <p>StellarTerm does not store cookies and the website does not contain any analytics scripts.</p>
         <p>StellarTerm developers never see your private keys.</p>
         <p>However, StellarTerm.com is hosted on GitHub, AWS, and Cloudflare infrastructure. They may and do have their own tracking systems on their servers. Those services have their own privacy policies and they are not covered by this privacy policy.</p>

@@ -13,6 +13,7 @@ import ErrorBoundary from './ErrorBoundary.jsx';
 import Loading from './Loading.jsx';
 import HistoryView from './Session/HistoryView.jsx';
 import Ellipsis from './Ellipsis.jsx';
+import TermsOfUse from './TermsOfUse.jsx';
 import clickToSelect from '../lib/clickToSelect';
 
 class Session extends React.Component {
@@ -57,7 +58,9 @@ class Session extends React.Component {
       return <Generic title="Loading account"><Loading>Contacting network and loading account<Ellipsis /></Loading></Generic>
     } else if (state === 'in') {
       // Inflation helps fund development of StellarTerm to make it better
-      if (!d.session.inflationDone) {
+      if (!d.session.termsDone) {
+        return <TermsOfUse accept={d.session.handlers.acceptTerms}></TermsOfUse>
+      } else if (!d.session.inflationDone) {
         let currentVoteNote = '';
         if (d.session.account.inflation_destination) {
           currentVoteNote = ' This will overwrite your current inflation destination vote.'
@@ -71,9 +74,9 @@ class Session extends React.Component {
               StellarTerm is free open source software. StellarTerm does not ask for donations, but instead, asks for inflation votes. The Stellar network rewards accounts that receive many votes through an "<a href="https://www.stellar.org/developers/guides/concepts/inflation.html" target="_blank" rel="nofollow noopener noreferrer">inflation system</a>". It is free to vote for StellarTerm and only requires a vote transaction (0.00001 XLM). Note: other wallets may do this without your permission, so if you use another wallet and they tamper with your account, this message may show up again.
               <br />
               <br />
-              By pressing "continue", your account will vote for the StellarTerm inflation account. Thank you for your support!{currentVoteNote}
+              By pressing "Accept and Continue", your account will vote for the StellarTerm inflation account. Thank you for your support!{currentVoteNote}
               <div className="Session__inflation__next">
-                <button className="s-button" onClick={d.session.handlers.voteContinue}>Continue</button>
+                <button className="s-button" onClick={d.session.handlers.voteContinue}>Accept and Continue</button>
                 <a className="Session__inflation__next__noThanks" onClick={d.session.handlers.noThanks}>No thanks</a>
               </div>
             </div>
