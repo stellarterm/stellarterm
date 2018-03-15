@@ -6,17 +6,24 @@ import ManageOffers from './ManageOffers.jsx';
 import PriceChart from './PriceChart.jsx';
 import Generic from './Generic.jsx';
 import Stellarify from '../lib/Stellarify';
+import TermsOfUse from './TermsOfUse.jsx';
 import Ellipsis from './Ellipsis.jsx';
 
 export default class Exchange extends React.Component {
   constructor(props) {
     super(props);
     this.unsub = this.props.d.orderbook.event.sub(() => {this.forceUpdate()});
+    this.unsubSession = this.props.d.session.event.sub(() => {this.forceUpdate()});
   }
   componentWillUnmount() {
     this.unsub();
+    this.unsubSession();
   }
   render() {
+    if (this.props.d.session.state === 'in' && !this.props.d.session.termsDone) {
+      return <TermsOfUse accept={this.props.d.session.handlers.acceptTerms}></TermsOfUse>
+    }
+
     if (!this.props.d.orderbook.data.ready) {
       return <Generic title="Loading orderbook">Loading orderbook data from Horizon<Ellipsis /></Generic>
     }

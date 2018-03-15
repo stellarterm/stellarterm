@@ -57,7 +57,6 @@ class Session extends React.Component {
     } else if (state === 'loading') {
       return <Generic title="Loading account"><Loading>Contacting network and loading account<Ellipsis /></Loading></Generic>
     } else if (state === 'in') {
-      // Inflation helps fund development of StellarTerm to make it better
       if (!d.session.termsDone) {
         return <TermsOfUse accept={d.session.handlers.acceptTerms}></TermsOfUse>
       } else if (!d.session.inflationDone) {
