@@ -89,6 +89,20 @@ directory.addAsset('smartlands.io', {
 });
 
 directory.addAnchor({
+  domain: 'repocoin.io',
+  website: 'https://repocoin.io',
+  logo: 'repocoin.io',
+  color: '#192854',
+  displayName: 'Repocoin',
+});
+directory.addAsset('repocoin.io', {
+  code: 'REPO',
+  issuer: 'GDPB3BGHJAHAKVIWUNLST7N6OGZ73W6AUAI7QDZJW26LEWL46VDAKBH6',
+  instructions: 'https://repocoin.io',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'stemchain.io',
   website: 'https://stemchain.io',
   logo: 'stemchain.io',
@@ -687,6 +701,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SLT', 'smartlands.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['REPO', 'repocoin.io'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
