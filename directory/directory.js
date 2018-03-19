@@ -312,6 +312,7 @@ directory.addAnchor({
   color: '#fbd364',
   displayName: 'Cryptomover',
 });
+
 directory.addAsset('cryptomover.com', {
   code: 'CM3',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
@@ -332,6 +333,29 @@ directory.addAsset('cryptomover.com', {
   code: 'HKDC',
   issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
 });
+
+
+directory.addAnchor({
+  domain: 'interstellar.exchange',
+  website: 'https://interstellar.exchange/',
+  logo: 'interstellar.exchange',
+  color: '#E1F5FE',
+  displayName: 'Interstellar',
+});
+directory.addAsset('interstellar.exchange', {
+  code: 'BTC',
+  issuer: 'GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P',
+});
+directory.addAsset('interstellar.exchange', {
+  code: 'ETH',
+  issuer: 'GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P',
+});
+directory.addAsset('interstellar.exchange', {
+  code: 'LTC',
+  issuer: 'GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P',
+});
+
+
 
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
@@ -389,6 +413,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'vcbear.net'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'interstellar.exchange'],
 });
 
 // Pairs involving XLM
@@ -491,6 +519,14 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLQ', 'liquido.i-server.org'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ETH', 'interstellar.exchange'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['LTC', 'interstellar.exchange'],
   counterSelling: ['XLM', 'native'],
 });
 
