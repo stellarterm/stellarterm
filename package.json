@@ -7,18 +7,17 @@
   "scripts": {
     "test": "./test.sh",
     "setup": "yarn install",
-    "start": "gulp watch",
+    "start": "./node_modules/.bin/gulp watch",
     "directory/": "npm run directory",
     "directory": "cd directory && ./checkBuild.sh;",
-    "lint": "eslint .",
-    "lint-fix": "eslint . --fix",
+    "lint": "./node_modules/.bin/eslint .",
+    "lint-fix": "./node_modules/.bin/eslint . --fix",
     "hash": "cd dist; openssl dgst -sha256 index.html; openssl dgst -sha256 ../directory/directory.json",
     "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
   },
   "dependencies": {
     "babelify": "7.3.0",
     "bignumber.js": "4.1.0",
-    "gulp-cli": "^2.0.1",
     "gulp-sass": "3.1.0",
     "gulp-useref": "3.1.4",
     "lodash": "4.17.5",
@@ -89,18 +88,5 @@
       "new-cap": "warn",
       "no-underscore-dangle": "off"
     }
-  },
-  "description": "[![Travis CI status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm)",
-  "main": "gulpfile.js",
-  "directories": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/ssalve/stellarterm.git"
-  },
-  "bugs": {
-    "url": "https://github.com/ssalve/stellarterm/issues"
-  },
-  "homepage": "https://github.com/ssalve/stellarterm#readme"
+  }
 }
