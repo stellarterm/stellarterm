@@ -23,7 +23,7 @@ directory.DirectoryBuilder = DirectoryBuilder;
  directory.addAnchor({
    domain: 'tontinetrust.com',
    website: 'https://tontinetrust.com',
-   logo: 'https://tontinetrust.com/images/stellar-logo.jpg',
+   logo: 'tontinetrust.com',
    color: '#2975bf',
    displayName: 'TON Money',
  });
