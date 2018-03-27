@@ -30,6 +30,7 @@ directory.DirectoryBuilder = DirectoryBuilder;
  directory.addAsset('tontinetrust.com', {
    code: 'TON',
    issuer: 'GDRRFZUQWKNA6IWCCQJ3D5Y7XJQGLWQSKFB5GANYJGG7F457LQ54NWKG',
+   type: 'token',
  });
 
 directory.addAnchor({
@@ -537,8 +538,8 @@ directory.addPair({
   counterSelling: ['CNY', 'ripplefox.com'],
 });
 directory.addPair({
-  baseBuying: ['XLM', 'native'],
-  counterSelling: ['TON', 'tontinetrust.com'],
+  baseBuying: ['TON', 'tontinetrust.com'],
+  counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
@@ -766,6 +767,10 @@ directory.addPair({
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
   name: 'Superlumen Issuer',
   requiredMemoType: 'MEMO_ID',
+});
+directory.addDestination('GDRRFZUQWKNA6IWCCQJ3D5Y7XJQGLWQSKFB5GANYJGG7F457LQ54NWKG', {
+  name: 'TON Money Issuer',
+  acceptedAssetsWhitelist: [],
 });
 directory.addDestination('GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM', {
   name: 'Kraken',
