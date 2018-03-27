@@ -20,6 +20,18 @@ directory.DirectoryBuilder = DirectoryBuilder;
 //   issuer: 'Ga_issuer_account_id',
 // });
 
+ directory.addAnchor({
+   domain: 'tontinetrust.com',
+   website: 'https://tontinetrust.com',
+   logo: 'https://tontinetrust.com/images/stellar-logo.jpg',
+   color: '#2975bf',
+   displayName: 'TON Money',
+ });
+ directory.addAsset('tontinetrust.com', {
+   code: 'TON',
+   issuer: 'GDRRFZUQWKNA6IWCCQJ3D5Y7XJQGLWQSKFB5GANYJGG7F457LQ54NWKG',
+ });
+
 directory.addAnchor({
   domain: 'pedity.com',
   website: 'https://pedity.com',
