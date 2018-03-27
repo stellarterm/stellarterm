@@ -538,6 +538,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
+  counterSelling: ['TON', 'tontinetrust.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
   counterSelling: ['JPY', 'vcbear.net'],
 });
 directory.addPair({
