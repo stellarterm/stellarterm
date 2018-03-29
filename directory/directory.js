@@ -532,6 +532,19 @@ directory.addAsset('astral9.io', {
   issuer: 'GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC',
 });
 
+directory.addAnchor({
+  domain: 'cryptotari.io',
+  website: 'https://cryptotari.io',
+  logo: 'cryptotari.io',
+  color: '#E31E24',
+  displayName: 'TARI',
+});
+
+directory.addAsset('cryptotari.io', {
+  code: 'TARI',
+  issuer: 'GD7UVDDJHJYKUXB4SJFIC6VJDQ4YADQCMRN3KLHJFV4H6NIUAEREVCO7',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -762,6 +775,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XA9', 'astral9.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['TARI', 'cryptotari.io'],
   counterSelling: ['XLM', 'native'],
 });
 
