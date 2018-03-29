@@ -92,6 +92,20 @@ directory.addAsset('smartlands.io', {
 });
 
 directory.addAnchor({
+  domain: 'old.repocoin.io',
+  website: 'https://old.repocoin.io',
+  logo: 'old.repocoin.io',
+  color: '#192854',
+  displayName: 'Repocoin',
+});
+directory.addAsset('old.repocoin.io', {
+  code: 'REPO',
+  issuer: 'GDPB3BGHJAHAKVIWUNLST7N6OGZ73W6AUAI7QDZJW26LEWL46VDAKBH6',
+  instructions: 'https://old.repocoin.io',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'repocoin.io',
   website: 'https://repocoin.io',
   logo: 'repocoin.io',
@@ -100,7 +114,7 @@ directory.addAnchor({
 });
 directory.addAsset('repocoin.io', {
   code: 'REPO',
-  issuer: 'GDPB3BGHJAHAKVIWUNLST7N6OGZ73W6AUAI7QDZJW26LEWL46VDAKBH6',
+  issuer: 'GCZNF24HPMYTV6NOEHI7Q5RJFFUI23JKUKY3H3XTQAFBQIBOHD5OXG3B',
   instructions: 'https://repocoin.io',
   type: 'token',
 });
@@ -708,6 +722,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['REPO', 'repocoin.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['REPO', 'old.repocoin.io'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
