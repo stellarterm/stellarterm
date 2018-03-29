@@ -52,6 +52,14 @@
 .LoginPage__paddedBox {
   padding: 16px 18px;
 }
+.LoginBox__divider {
+  border-top: 1px solid $s-color-neutral7;
+  width: 100%;
+}
+.LoginBox__spacer {
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
 
 .LoginPage__form {
   padding: 20px;
@@ -59,8 +67,12 @@
 .LoginPage__form p:last-child {
   margin-bottom: 0;
 }
+.LoginPage__form__list {
+  padding-bottom: 10px;
+}
 .LoginPage__form--title {
   font-size: $s-scale-1;
+  margin-bottom: 16px;
 }
 .LoginPage__inputGroup {
   margin-bottom: 9px;
@@ -87,7 +99,6 @@
 }
 
 .LoginPage__generate {
-  margin-top: 1em;
 }
 
 .LoginPage__generatedNote {
@@ -96,6 +107,29 @@
 .LoginPage__error {
   margin-top: 1em;
   margin-bottom: 0;
+}
+
+.LoginPage__accept {
+  display: flex;
+  align-items: center;
+  padding: 8px 12px;
+  border: 1px solid $s-color-primary7;
+  // background: rgba(0,0,0,0.05);
+  background: $s-color-primary7;
+  border-radius: 3px;
+  margin-bottom: 10px;
+}
+.LoginPage__accept__link {
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+}
+.LoginPage__accept__link:hover {
+  border-bottom: 1px solid currentColor;
+}
+
+.LoginPage__accept__checkbox {
+  margin-right: 12px;
+  cursor: pointer;
 }
 
 .LoginBox__ledgerNanoHeader {

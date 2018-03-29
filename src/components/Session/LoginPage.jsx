@@ -25,6 +25,7 @@ export default class LoginPage extends React.Component {
       newKeypair: null,
       bip32Path: '0',
       ledgerAdvanced: false,
+      termsAccepted: false,
     }
 
 
@@ -108,6 +109,11 @@ export default class LoginPage extends React.Component {
 
     let inputType = this.state.show ? 'text' : 'password';
 
+    let acceptTerms = <label className="s-inputGroup LoginPage__accept">
+        <input className="LoginPage__accept__checkbox" type="checkbox" checked={this.state.termsAccepted} onClick={() => this.setState({termsAccepted: !this.state.termsAccepted})} />
+        <span>I accept the <a href="#terms-of-use" className="LoginPage__accept__link">Terms of Use</a> and understand the risks associated with cryptocurrencies.</span>
+      </label>
+
     let body;
 
     if (this.props.urlParts[0] === 'account') {
@@ -123,8 +129,9 @@ export default class LoginPage extends React.Component {
                 </div>
               </label>
               {errorMessage}
+              {acceptTerms}
               <div>
-                <input type="submit" className="LoginPage__submit s-button" value="Log in"></input>
+                <input type="submit" className="LoginPage__submit s-button" value="Log in" disabled={!this.state.termsAccepted}></input>
               </div>
             </form>
           </div>
@@ -144,12 +151,13 @@ export default class LoginPage extends React.Component {
         <div className="LoginPage__greenBox">
           <div className="LoginPage__form">
             <h3>Create Account Keypair</h3>
-            <p>To get started on using the Stellar network, you must first create a keypair. The keypair consists of two parts:</p>
-            <ul>
+            <p>To get started on using the Stellar network, you must first create a keypair (unless you have a Ledger Nano). The keypair consists of two parts:</p>
+            <ul className="LoginPage__form__list">
               <li><strong>Public key</strong>: The public key is used to identify the account. It is also known as an account. This public key is used for receiving funds.</li>
               <li><strong>Secret key</strong>: The secret key is used to access your account and make transactions. Keep this code safe and secure. Anyone with the code will have full access to the account and funds. If you lose the key, you will no longer be able to access the funds and there is no recovery mechanism.</li>
             </ul>
-            <input type="submit" className="LoginPage__generate s-button" onClick={this.handleGenerate} value="Generate keypair"></input>
+            {acceptTerms}
+            <input type="submit" className="LoginPage__generate s-button" onClick={this.handleGenerate} value="Generate keypair" disabled={!this.state.termsAccepted}></input>
             {newKeypairDetails}
           </div>
           <div className="LoginPage__notes">
@@ -192,10 +200,11 @@ export default class LoginPage extends React.Component {
         loginForm = <div className="LoginPage__form">
           <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
           <form onSubmit={this.proceedWithLedger}>
+            {acceptTerms}
 
             {ledgerErrorMessage}
             <div className="s-inputGroup LoginPage__inputGroup">
-              <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Sign in with Ledger"/>
+              <input type="submit" className="LoginPage__submit inputGroup__item s-button" value="Sign in with Ledger" disabled={!this.state.termsAccepted}/>
               {customPath}
             </div>
             {ledgerSetupErrorMessage}
@@ -227,6 +236,9 @@ export default class LoginPage extends React.Component {
 
         <div className="LoginPage__greenBox">
           {loginForm}
+        </div>
+        <div className="LoginBox__spacer">
+          <div className="LoginBox__divider"></div>
         </div>
         <div className="LoginPage__paddedBox">
           <h3>Setup instructions</h3>
