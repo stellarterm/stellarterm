@@ -21,6 +21,20 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+    domain: 'pedianow.com',
+    website: 'https://pedianow.com',
+    logo: 'pedianow.com',
+    color: '#00aeef',
+    displayName: 'Doc Token',
+});
+
+directory.addAsset('pedianow.com', {
+    code: 'DOC',
+    issuer: 'GBI6DL6WY427XQ75FVWLHXX3KQ7TGRJQPBWIQNWXRY6A2DXAODWOIOOA',
+    instructions: 'https://pedianow.com',
+});
+
+directory.addAnchor({
   domain: 'pedity.com',
   website: 'https://pedity.com',
   logo: 'pedity.com',
@@ -612,6 +626,10 @@ directory.addPair({
 
 // Pairs involving XLM
 // XLM should be counterSelling
+directory.addPair({
+    baseBuying: ['DOC', 'pedianow.com'],
+    counterSelling: ['XLM', 'native'],
+});
 directory.addPair({
   baseBuying: ['PEDI', 'pedity.com'],
   counterSelling: ['XLM', 'native'],
