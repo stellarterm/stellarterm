@@ -370,8 +370,8 @@
     "GBR3RS2Z277FER476OFHFXQJRKYSQX4Z7XNWO65AN3QPRUANUASANG3L": {
       "name": "PapayaBot",
       "requiredMemoType": "MEMO_TEXT",
-      "mergeOpAccepted": false,
-      "pathPaymentAccepted": false
+      "mergeOpAccepted": true,
+      "pathPaymentAccepted": true
     },
     "GBGVRE5DH6HGNYNLWQITKRQYGR4PWQEH6MOE5ELPY3I4XJPTZ7CVT4YW": {
       "name": "PapayaSwap",
@@ -482,7 +482,15 @@
       "requiredMemoType": "MEMO_ID",
       "mergeOpAccepted": false,
       "pathPaymentAccepted": false
-    }
+    },
+    "GBTBVILDGCOIK26EPEHYCMKM7J5MTQ4FD5DO37GVTTBP45TVGRAROQHP": {
+      "name": "KOINEX",
+      "requiredMemoType": "MEMO_ID",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false,
+      "acceptedAssetsWhitelist": [
+        "XLM-native"
+      ]
   },
   "assets": {
     "PEDI-GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY": {
