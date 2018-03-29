@@ -7,14 +7,14 @@ The creators of this file does not endorse any of this information contained in 
 ## How to get listed
 Anchors and assets if they fulfill the requirements below (guidelines are not perfect; StellarTerm does not endorse any of these assets).
 
-Please gather the *8 things needed* first. To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request with changes implemented.
+Please gather the *9 things needed* first. To list your directory, please create a GitHub issue. To expedite inclusion into the directory, please open a pull request with changes implemented.
 
 Inclusion into the StellarTerm directory is not guaranteed.
 
-## First, show that you have 8 things needed:
+## First, show that you have 9 things needed:
 ### 1. 100+ points on Reddit [r/Stellar](https://www.reddit.com/r/Stellar/) or Project tweeted by [@StellarOrg](https://twitter.com/StellarOrg)
 
-To qualify via [Reddit](https://www.reddit.com/r/Stellar/) post, a post on [r/Stellar](https://www.reddit.com/r/Stellar/) about the project must have more than 100 points. Vote manipulation is not allowed. Example of a post that qualifies: [https://www.reddit.com/r/Stellar/comments/7ym7vg/new_project_on_stellar_micropayments_for/](https://www.reddit.com/r/Stellar/comments/7ym7vg/new_project_on_stellar_micropayments_for/)
+To qualify via [Reddit](https://www.reddit.com/r/Stellar/) post, a post on [r/Stellar](https://www.reddit.com/r/Stellar/) about the project must have more than 50 points. Vote manipulation is not allowed. In the event a r/Stellar moderator tries to delete your post, StellarTerm developers are unable to help with this Reddit issue. Example of a post that qualifies: [https://www.reddit.com/r/Stellar/comments/7ym7vg/new_project_on_stellar_micropayments_for/](https://www.reddit.com/r/Stellar/comments/7ym7vg/new_project_on_stellar_micropayments_for/)
 
 To qualify via tweet, it must have been tweeted or retweeted [Stellar Development Foundation](https://www.stellar.org/)'s twitter account @StellarOrg. Here is an example of a tweet that qualifies: https://twitter.com/StellarOrg/status/941284847695343616
 
@@ -47,6 +47,11 @@ Please use pngquant (https://pngquant.org/) to optimize the logo.
 
 ### 8. Brand color in #RRGGBB
 This color is used in the StellarToml asset "cards" for the border. The background of the asset "cards" are lightened.
+
+### 9. Homedomain correctly set in your Stellar asset
+Homedomain is necessary for your domain name to show up in other interfaces to the Stellar Decentralized Exchange.
+
+Please read more in the Stellar developer docs: https://www.stellar.org/developers/guides/concepts/accounts.html#home-domain
 
 ## Second: Create a pull request
 1. Fork the repo to your own account
