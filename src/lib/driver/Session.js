@@ -21,7 +21,6 @@ export default function Send(driver) {
     this.ledgerConnected = false;
 
     this.unfundedAccountId = '';
-    this.termsDone = false; // Terms of Use
     this.inflationDone = false;
     this.account = null; // MagicSpoon.Account instance
     this.authType = ''; // '', 'secret', 'ledger', 'pubkey'
@@ -235,10 +234,6 @@ export default function Send(driver) {
         this.inflationDone = true;
         this.event.trigger();
       }
-    },
-    acceptTerms: async () => {
-      this.termsDone = true;
-      this.event.trigger();
     },
     noThanks: () => {
       this.inflationDone = true;

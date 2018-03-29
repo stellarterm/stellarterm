@@ -20,9 +20,6 @@ export default class Exchange extends React.Component {
     this.unsubSession();
   }
   render() {
-    if (this.props.d.session.state === 'in' && !this.props.d.session.termsDone) {
-      return <TermsOfUse accept={this.props.d.session.handlers.acceptTerms}></TermsOfUse>
-    }
 
     if (!this.props.d.orderbook.data.ready) {
       return <Generic title="Loading orderbook">Loading orderbook data from Horizon<Ellipsis /></Generic>

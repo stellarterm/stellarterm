@@ -57,9 +57,7 @@ class Session extends React.Component {
     } else if (state === 'loading') {
       return <Generic title="Loading account"><Loading>Contacting network and loading account<Ellipsis /></Loading></Generic>
     } else if (state === 'in') {
-      if (!d.session.termsDone) {
-        return <TermsOfUse accept={d.session.handlers.acceptTerms}></TermsOfUse>
-      } else if (!d.session.inflationDone) {
+      if (!d.session.inflationDone) {
         let currentVoteNote = '';
         if (d.session.account.inflation_destination) {
           currentVoteNote = ' This will overwrite your current inflation destination vote.'
