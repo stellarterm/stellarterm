@@ -532,6 +532,26 @@ directory.addAsset('astral9.io', {
   issuer: 'GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC',
 });
 
+directory.addAnchor({
+  domain: 'interstellar.exchange',
+  website: 'https://interstellar.exchange/',
+  logo: 'interstellar.exchange',
+  color: '#E1F5FE',
+  displayName: 'Interstellar',
+});
+directory.addAsset('interstellar.exchange', {
+  code: 'BTC',
+  issuer: 'GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P',
+});
+directory.addAsset('interstellar.exchange', {
+  code: 'ETH',
+  issuer: 'GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P',
+});
+directory.addAsset('interstellar.exchange', {
+  code: 'LTC',
+  issuer: 'GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -608,6 +628,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'golix.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['BTC', 'interstellar.exchange'],
 });
 
 // Pairs involving XLM
@@ -762,6 +786,14 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XA9', 'astral9.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ETH', 'interstellar.exchange'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['LTC', 'interstellar.exchange'],
   counterSelling: ['XLM', 'native'],
 });
 
