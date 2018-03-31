@@ -583,7 +583,7 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['NGNT', 'cowrie.exchange'],
-});
+}); 
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['NGN', 'flutterwave.com'],
