@@ -532,6 +532,19 @@ directory.addAsset('astral9.io', {
   issuer: 'GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC',
 });
 
+directory.addAnchor({
+  domain: 'winsome.gift',
+  website: 'https://winsome.gift',
+  logo: 'winsome.gift',
+  color: '#4671c4',
+  displayName: 'WIN',
+});
+
+directory.addAsset('winsome.gift', {
+  code: 'WIN',
+  issuer: 'GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -762,6 +775,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XA9', 'astral9.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['WIN', 'winsome.gift'],
   counterSelling: ['XLM', 'native'],
 });
 

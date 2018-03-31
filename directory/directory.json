@@ -319,6 +319,16 @@
         "XA9": "XA9-GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC"
       },
       "color": "#000000"
+    },
+    "winsome.gift": {
+      "name": "winsome.gift",
+      "displayName": "WIN",
+      "website": "https://winsome.gift",
+      "logo": "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAA+VBMVEX///+5ur3e3t9dYGdvcXgwNEDS09QNFCaeoKP09PVIS1WQkZaAgofp6erGx8msrbD+/f79/P78+v329/f+/f/KxdL//v9QUmPb2uDz7/apprQ1OUo2OkseJDa3tsD38/r49/t4eIhZWmwTGiz49voRFym2s8BARFX9+v6bmqc0OErm4+rq6e3v6vP49fvy7fS1scD8+/1naHm2ssH59Pz49PwiJzn48/z+/P64tMI5PU/p5e8UGy3l4emZl6dbXW4lKjxFSFktMkTw7/NlZnc2OkwuM0Xw7PPx8PRdXnD7+/y+uMf48fv//f/29fgsMEKtqrdOUGHw7fNahSAKAAAD2klEQVRo3u2Y55KkIBCAURBBUXf3NuecL+ecc773f5hzRlFU4qxe1VXJnxFk+pOmu2kahP+ggREyQkbI/wp5fePL7vpWa/DuAnjaJ+Q5yNvHTXFoY2cy1ifk2kQgePu+Hnn5CAwDAatv+MC7uenA/AAQsH1Q9FcWi/71PiE/SgjYm3YfLJTdF31C/nDI6fmku1b25ns14V8cAo7z3hLvLPUK+b3M5V6ehPv8ee5Zr5CfF1zw8tnRIX++1a/HH51VS7n4yp8O+45dJ5dc9Pc5/rTfe4A85qK/2ez6jJDzU2625e/aEKF+r5D9sGTcfjUE5GB7KvxewVhcGebQ+rBaa2vxzlAn45NPlRd+Hu743bxZMHY2hjzjt9Z374OFx+IQIh7G2IuDwRIJ6FGuQUquBEEIql6lQGieBgJxrJZPsPwzeSMihagh+dcgqQBW66ItoG6xAKFKSDB5C/WEvCWhBYWpIKyrjiBOmwRt7pMplgu6c5Ks0BlkmQ8kLVVCAirfehGCgbYlmUQTqs3HM0ESVn6nrzHx6EoQGodBqTuocyTfCPGUDBJUb4nWW1MjhCkQXlTbp68PCURqHQ17xEpECIGFsgSI0oQrtQvbTaLiTWKjLCtIPkl0PT+DLV0noS2EaaMwIiTDGSEEBd3dQtYQ5BzquSenoTUkcIaUyqKRcWYmDaI2EAbsdl2wz9QVwpWVBOa5vvnQkjceCGKbvERqIWYIAla+3pgLXBMJ39Z8BePCjpBY/j+9ZokbpDrsbBYSJvLJYBYFoCzPFDOkPLOoW3InW0jADw2MFF/kuUEkCxFCNQ3kNsKcINVCmJQB7bRlgJBuKBJyq9hSWwYI7YhjmvwrURkisPGRWvf8hJRsSOXuidslyO+sn6iVpfJEA4QnD3X2EFF12h1JzysjJOuERk+zEOW26yG0vf4IqHeksnboBGGd9XvKC5syAJsgXvtvkeqSI3dbK0hHW2KuHJjd1gaC2rYlLsRXmRZyg5B2JBIXkimyeexYkWhnN5H6Cl3bSOQIactrpPxIvuvEsbYCW/KKLZIfxqnh8g2M+x4JcQynMggBhssLMKbOYpdhiTcwU6nCFgJLdeCuPEiN2Z8ZEtSCSAWpBSKqimYuEFIJysV4bfMiqgPfDQKwkKrXMqeUOFGHfifrakR3KEQWjCmwYmicsVMdImKy0GrxjIXOdn3C79bnLBk2UbixsQGVFF7g7CVbT/qx3dqIb7yvaiCN+kQsLQJaXld1iUSVvk8qUYKL+53Ky5Uq3Gha46RtSawsTGJig7C4zkXyenOEkB2g1zL6CBkhI2SEFO0vAxbyWyoJME4AAAAASUVORK5CYII=",
+      "assets": {
+        "WIN": "WIN-GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN"
+      },
+      "color": "#0d1426"
     }
   },
   "destinations": {
@@ -482,7 +492,13 @@
       "requiredMemoType": "MEMO_ID",
       "mergeOpAccepted": false,
       "pathPaymentAccepted": false
-    }
+    },
+    "GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN": {
+      "name": "Winsome Issuer",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false,
+      "acceptedAssetsWhitelist": []
+    },
   },
   "assets": {
     "PEDI-GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY": {
@@ -806,6 +822,12 @@
       "code": "XA9",
       "issuer": "GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC",
       "domain": "astral9.io"
+    },
+    "WIN-GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN": {
+      "code": "WIN",
+      "issuer": "GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN",
+      "domain": "winsome.gift",
+      "type": "token"
     }
   },
   "issuers": {
@@ -934,6 +956,9 @@
     },
     "GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC": {
       "XA9": "XA9-GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC"
+    },
+    "GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN": {
+      "WIN": "WIN-GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN"
     }
   },
   "pairs": {
@@ -1491,6 +1516,16 @@
       "baseBuying": {
         "code": "XA9",
         "issuer": "GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "WIN-winsome.gift/XLM-native": {
+      "baseBuying": {
+        "code": "WIN",
+        "issuer": "GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN"
       },
       "counterSelling": {
         "code": "XLM",
