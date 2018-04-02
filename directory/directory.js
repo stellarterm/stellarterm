@@ -20,6 +20,19 @@ directory.DirectoryBuilder = DirectoryBuilder;
 //   issuer: 'Ga_issuer_account_id',
 // });
 
+ directory.addAnchor({
+   domain: 'tontinetrust.com',
+   website: 'https://tontinetrust.com',
+   logo: 'tontinetrust.com',
+   color: '#2975bf',
+   displayName: 'TON Money',
+ });
+ directory.addAsset('tontinetrust.com', {
+   code: 'TON',
+   issuer: 'GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON',
+   type: 'token',
+ });
+
 directory.addAnchor({
   domain: 'pedity.com',
   website: 'https://pedity.com',
@@ -539,6 +552,10 @@ directory.addPair({
   counterSelling: ['CNY', 'ripplefox.com'],
 });
 directory.addPair({
+  baseBuying: ['TON', 'tontinetrust.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['JPY', 'vcbear.net'],
 });
@@ -768,6 +785,10 @@ directory.addPair({
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
   name: 'Superlumen Issuer',
   requiredMemoType: 'MEMO_ID',
+});
+directory.addDestination('GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON', {
+  name: 'TON Money Issuer',
+  acceptedAssetsWhitelist: [],
 });
 directory.addDestination('GA5XIGA5C7QTPTWXQHY6MCJRMTRZDOSHR6EFIBNDQTCQHG262N4GGKTM', {
   name: 'Kraken',
