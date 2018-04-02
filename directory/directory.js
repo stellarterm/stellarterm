@@ -29,7 +29,7 @@ directory.DirectoryBuilder = DirectoryBuilder;
  });
  directory.addAsset('tontinetrust.com', {
    code: 'TON',
-   issuer: 'GDRRFZUQWKNA6IWCCQJ3D5Y7XJQGLWQSKFB5GANYJGG7F457LQ54NWKG',
+   issuer: 'GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON',
    type: 'token',
  });
 
@@ -768,7 +768,7 @@ directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPE
   name: 'Superlumen Issuer',
   requiredMemoType: 'MEMO_ID',
 });
-directory.addDestination('GDRRFZUQWKNA6IWCCQJ3D5Y7XJQGLWQSKFB5GANYJGG7F457LQ54NWKG', {
+directory.addDestination('GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON', {
   name: 'TON Money Issuer',
   acceptedAssetsWhitelist: [],
 });
