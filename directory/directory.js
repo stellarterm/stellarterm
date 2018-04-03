@@ -542,7 +542,7 @@ directory.addAnchor({
 
 directory.addAsset('winsome.gift', {
   code: 'WIN',
-  issuer: 'GAKBMC2GOEKC24HQLGCYXMEVFLHP522UHUO6ALCHYTFEDV5YW2ZCOWIN',
+  issuer: 'GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN',
 });
 
 // Pairs involving "fiat" assets
