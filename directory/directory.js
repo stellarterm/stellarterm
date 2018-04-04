@@ -21,6 +21,21 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'ximcoin.com',
+  website: 'https://ximcoin.com',
+  logo: 'ximcoin.com',
+  color: '#000000',
+  displayName: 'XIM',
+});
+
+directory.addAsset('ximcoin.com', {
+  code: 'XIM',
+  issuer: 'GBZ35ZJRIKJGYH5PBKLKOZ5L6EXCNTO7BKIL7DAVVDFQ2ODJEEHHJXIM',
+  instructions: 'https://ximcoin.com',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'pedity.com',
   website: 'https://pedity.com',
   logo: 'pedity.com',
