@@ -886,6 +886,13 @@ directory.addDestination('GBV4ZDEPNQ2FKSPKGJP2YKDAIZWQ2XKRQD4V4ACH3TCTFY6KPY3OAV
 directory.addDestination('GBR3RS2Z277FER476OFHFXQJRKYSQX4Z7XNWO65AN3QPRUANUASANG3L', {
   name: 'PapayaBot',
   requiredMemoType: 'MEMO_TEXT',
+  pathPaymentAccepted: true,
+  mergeOpAccepted: true,
+});
+directory.addDestination('GBTBVILDGCOIK26EPEHYCMKM7J5MTQ4FD5DO37GVTTBP45TVGRAROQHP', {
+  name: 'KOINEX',
+  requiredMemoType: 'MEMO_ID',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GBGVRE5DH6HGNYNLWQITKRQYGR4PWQEH6MOE5ELPY3I4XJPTZ7CVT4YW', {
   name: 'PapayaSwap',
