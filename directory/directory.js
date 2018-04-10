@@ -50,6 +50,20 @@ directory.addAsset('tontinetrust.com', {
 });
 
 directory.addAnchor({
+  domain: 'cryptotari.io',
+  website: 'https://cryptotari.io',
+  logo: 'cryptotari.io',
+  color: '#E31E24',
+  displayName: 'TARI',
+});
+
+directory.addAsset('cryptotari.io', {
+  code: 'TARI',
+  issuer: 'GD7UVDDJHJYKUXB4SJFIC6VJDQ4YADQCMRN3KLHJFV4H6NIUAEREVCO7',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'pedity.com',
   website: 'https://pedity.com',
   logo: 'pedity.com',
@@ -612,7 +626,7 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['NGNT', 'cowrie.exchange'],
-}); 
+});
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['NGN', 'flutterwave.com'],
@@ -665,6 +679,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['TON', 'tontinetrust.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['TARI', 'cryptotari.io'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
