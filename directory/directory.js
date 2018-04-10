@@ -21,6 +21,21 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'ximcoin.com',
+  website: 'https://ximcoin.com',
+  logo: 'ximcoin.com',
+  color: '#000000',
+  displayName: 'XIM',
+});
+
+directory.addAsset('ximcoin.com', {
+  code: 'XIM',
+  issuer: 'GBZ35ZJRIKJGYH5PBKLKOZ5L6EXCNTO7BKIL7DAVVDFQ2ODJEEHHJXIM',
+  instructions: 'https://ximcoin.com',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'pedity.com',
   website: 'https://pedity.com',
   logo: 'pedity.com',
@@ -613,6 +628,10 @@ directory.addPair({
 // Pairs involving XLM
 // XLM should be counterSelling
 directory.addPair({
+  baseBuying: ['XIM', 'ximcoin.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
   baseBuying: ['PEDI', 'pedity.com'],
   counterSelling: ['XLM', 'native'],
 });
@@ -837,6 +856,10 @@ directory.addDestination('GDZCEWJ5TVXUTFH6V5CVDQDE43KRXYUFRHKI7X64EWMVOVYYZJFWIF
 directory.addDestination('GCXDR4QZ4OTVX6433DPTXELCSEWQ4E5BIPVRRJMUR6M3NT4JCVIDALZO', {
   name: 'GOPAX',
   requiredMemoType: 'MEMO_TEXT',
+});
+directory.addDestination('GBZ35ZJRIKJGYH5PBKLKOZ5L6EXCNTO7BKIL7DAVVDFQ2ODJEEHHJXIM', {
+  name: 'XIM',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 directory.addDestination('GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY', {
   name: 'Pedity Issuer',
