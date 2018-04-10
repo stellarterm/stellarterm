@@ -111,7 +111,7 @@ export default class LoginPage extends React.Component {
 
     let acceptTerms = <label className="s-inputGroup LoginPage__accept">
         <input className="LoginPage__accept__checkbox" type="checkbox" checked={this.state.termsAccepted} onClick={() => this.setState({termsAccepted: !this.state.termsAccepted})} />
-        <span>I accept the <a href="#terms-of-use" className="LoginPage__accept__link">Terms of Use</a> and understand the risks associated with cryptocurrencies.</span>
+        <span className="LoginPage__accept__label">I accept the <a href="#terms-of-use" className="LoginPage__accept__link">Terms of Use</a>, understand the risks associated with cryptocurrencies, and know that StellarTerm does not issue or endorse any asset on the Stellar network.</span>
       </label>
 
     let body;

@@ -111,6 +111,7 @@
 
 .LoginPage__accept {
   display: flex;
+  flex-wrap: nowrap;
   align-items: center;
   padding: 8px 12px;
   border: 1px solid $s-color-primary7;
@@ -130,6 +131,9 @@
 .LoginPage__accept__checkbox {
   margin-right: 12px;
   cursor: pointer;
+}
+.LoginPage__accept__label {
+  font-size: $s-scale-5;
 }
 
 .LoginBox__ledgerNanoHeader {
