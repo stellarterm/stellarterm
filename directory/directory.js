@@ -36,6 +36,20 @@ directory.addAsset('ximcoin.com', {
 });
 
 directory.addAnchor({
+  domain: 'tontinetrust.com',
+  website: 'https://tontinetrust.com',
+  logo: 'tontinetrust.com',
+  color: '#2975bf',
+  displayName: 'TON Money',
+});
+
+directory.addAsset('tontinetrust.com', {
+  code: 'TON',
+  issuer: 'GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'pedity.com',
   website: 'https://pedity.com',
   logo: 'pedity.com',
@@ -629,6 +643,10 @@ directory.addPair({
 // XLM should be counterSelling
 directory.addPair({
   baseBuying: ['XIM', 'ximcoin.com'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['TON', 'tontinetrust.com'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
