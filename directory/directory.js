@@ -603,6 +603,19 @@ directory.addAsset('astral9.io', {
    type: 'token',
  });
 
+directory.addAnchor({
+  domain: 'pr.network',
+  website: 'https://pr.network',
+  logo: 'pr.network',
+  color: '#35c982',
+  displayName: 'XPR',
+});
+directory.addAsset('pr.network', {
+  code: 'XPR',
+  issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
+  type: 'token',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -853,6 +866,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XA9', 'astral9.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XPR', 'pr.network'],
   counterSelling: ['XLM', 'native'],
 });
 
