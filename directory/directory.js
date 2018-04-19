@@ -609,11 +609,15 @@ directory.addAnchor({
   logo: 'pr.network',
   color: '#35c982',
   displayName: 'XPR',
+  wildcardIssuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 directory.addAsset('pr.network', {
   code: 'XPR',
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
   type: 'token',
+});
+directory.addWildcard('pr.network', {
+  issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
 // Pairs involving "fiat" assets
@@ -984,6 +988,7 @@ directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ
 
 // Assert that each asset has a trading pair
 let remainingAssets = Object.assign({}, directory.assets);
+
 for (let pairId in directory.pairs) {
   let pair = directory.pairs[pairId];
   if (pair.baseBuying.code === 'XLM' && pair.baseBuying.issuer === null) {

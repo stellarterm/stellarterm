@@ -1069,6 +1069,12 @@
       "XPR": "XPR-GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5"
     }
   },
+  "wildcardIssuers": {
+    "GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5": "pr.network"
+  },
+  "wildcardDomains": {
+    "pr.network": "GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5"
+  },
   "pairs": {
     "XLM-native/CNY-ripplefox.com": {
       "baseBuying": {
