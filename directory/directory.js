@@ -603,6 +603,23 @@ directory.addAsset('astral9.io', {
    type: 'token',
  });
 
+directory.addAnchor({
+  domain: 'pr.network',
+  website: 'https://pr.network',
+  logo: 'pr.network',
+  color: '#35c982',
+  displayName: 'XPR',
+  wildcardIssuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
+});
+directory.addAsset('pr.network', {
+  code: 'XPR',
+  issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
+  type: 'token',
+});
+directory.addWildcard('pr.network', {
+  issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -855,6 +872,10 @@ directory.addPair({
   baseBuying: ['XA9', 'astral9.io'],
   counterSelling: ['XLM', 'native'],
 });
+directory.addPair({
+  baseBuying: ['XPR', 'pr.network'],
+  counterSelling: ['XLM', 'native'],
+});
 
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
   name: 'Superlumen Issuer',
@@ -967,6 +988,7 @@ directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ
 
 // Assert that each asset has a trading pair
 let remainingAssets = Object.assign({}, directory.assets);
+
 for (let pairId in directory.pairs) {
   let pair = directory.pairs[pairId];
   if (pair.baseBuying.code === 'XLM' && pair.baseBuying.issuer === null) {
