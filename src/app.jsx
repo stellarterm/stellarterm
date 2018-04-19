@@ -104,7 +104,7 @@ class TermApp extends React.Component {
           <div className="so-back">
             <div className="HomePage__lead">
               <h2 className="HomePage__lead__title">Trade on the <a href="#exchange">Stellar Decentralized Exchange</a></h2>
-              <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/irisli/stellarterm" target="_blank" rel="nofollow noopener noreferrer">open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
+              <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
               {this.renderHomePageActions()}
             </div>
           </div>
@@ -128,7 +128,7 @@ class TermApp extends React.Component {
               </div>
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
-                  <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/irisli/stellarterm" target="_blank" rel="nofollow noopener noreferrer">star the project on GitHub</a>.</p>
+                  <p>StellarTerm is open source software. To support the project, please <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">star the project on GitHub</a>.</p>
                   <p>The project is released under the Apache-2.0 license and is released as is without warranty.</p>
                 </div>
               </div>
