@@ -587,6 +587,22 @@ directory.addAnchor({
 directory.addAsset('astral9.io', {
   code: 'XA9',
   issuer: 'GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC',
+  type: 'token',
+});
+
+
+directory.addAnchor({
+  domain: 'winsome.gift',
+  website: 'https://winsome.gift',
+  logo: 'winsome.gift',
+  color: '#4671c4',
+  displayName: 'WIN',
+});
+
+directory.addAsset('winsome.gift', {
+  code: 'WIN',
+  issuer: 'GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN',
+  type: 'token',
 });
 
  directory.addAnchor({
@@ -870,6 +886,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XA9', 'astral9.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['WIN', 'winsome.gift'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({

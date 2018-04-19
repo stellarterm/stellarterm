@@ -360,6 +360,16 @@
       },
       "color": "#000000"
     },
+    "winsome.gift": {
+      "name": "winsome.gift",
+      "displayName": "WIN",
+      "website": "https://winsome.gift",
+      "logo": "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAD5UExURUZxxMPO6eLn9HiU0Yae1Vl9yNjf8P///6y84fb3+2mJzJSo2aCy3ezv+M7W7LjF5f38/v79/mSGzf79/9XW8P/+//j6/fj1/FN6yPn5/fz7/niU0+Pm9fz6/sfQ7GWGzbvF6PXx+peq3X+Z1fn3/Et0xW2M0P36/u/w+UlzxcbN7LK/5evs+Orp9/Tx+l6Cy/j0/MbL6/n0/LC75e3r+MXK64Kb1lZ8yWWHzvjz/Iif2IGa1vL0+vj6/MfM7PLw+oqg2Vh+yl+CzPn3/fP0+/z9/kt1xv78/vHu+nCO0WeIzvLy+svP7b/I6v/9/3eT012By/j4/fjx+6gdCQkAAAOWSURBVGje7VjVoqUgFDWQMOfW3O6O6c473f3/HzOeoyhKiIhv7pcj6NkL1k5wnEkmmWQSuXx9/3F9b601eW8bPbQJcgvlcr3LTi2uzuZsgryaKUQvn9YzLz4j2yA35xrR1h068XxhPnFjBBC0c1yMN5eK8RebIH9LEHQwHz7ZLocPbIJ8pyCni7Phfjmyypbzk4Kgi3y0TAfLVkF+r1C9ZyfOIX1e+GQV5M8VVbxyeX5Enx/Zjfjzy2orVz/o05HtvHJyRlX/WqBPh9az1wVV/W8cqxep6pS6bfm7P0YiPih0PysxNt6OAXK8M1d+v8BY2hynprzbqtlaejNW5fr2oYrCx+PVx93bBcbq4phVeG1v/S7aeM1OAexCCN04GA3UdwllkOBBmgDwZa9SxIirWg2M5foxVC8TsyiKveSrAcIXUc2FXEHMgBApRjB766sRckkcDZRI9lHE0xHEaRNB2ftkGnyV3yRZwZkfZR4SSCqngnSbHiKlJFkHE6zxoRFIEpXr9BTuGQ4CIbETlNz5qkDyOkFcKQYOqrfqaE47QSIJhBvW/umpUwLu9g4ohXB8pEEWAyLfcMC5bILD4k2iQ5YWSP4RG3pe5re4ThxdkEidaDHOYIYxBgFvLaANAnpneBrJqaMN0r9wlWSRsPPLDGnyKnVtjYIHke6eJWQlGhR4+usRJ4JY41tTuwOkFeuNb3sft70ei8NdmaujpsI+zGIzq+uxnJiZREgAyPJOMQPSmkWGbySgRQMCyYrcwRthUjUJxD4SmW0kEmL4VtjCfCpieqvYDluEUxcp+i8z34o57mmFFBikCvfELNhdUese24lE2jzU3UNI5G13aFavMi41uoqNDDQ75rtQ3iKVt/tGBbHev6s4sBkmYLf9t1BxyBGErRlbbK8cdIdtn4pYkcxuxJO5lmGSJ6KNZJJuvm9JbHc3oeIIXflI2BOkra/R8gOx1ft2Qn5LX2EicTFOTftG0GJgnsdgKgLByCgO2X+ywwgKoiFCpm1jC8Qv6YC8Pp/06P5Uh4BSEa5AaoWAyLJZHxBcKcrVuG33wrKC3w8EQaZVr3XOUeJEnvp7eVcju/tMZoGQoGEYdX5sRnkiPuobYnD3Ex5/PzcYo81XadiACC5efMdYXOFi+bsRLzTHaN5PxMJLQLM4b6KkzE0UE+Ied/My7B54fsdJ2pqi8mIS4uEQRa0S3zeHAFgCmGSSSSbpL/8BQtVLInAoQ6kAAAAASUVORK5CYII=",
+      "assets": {
+        "WIN": "WIN-GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN"
+      },
+      "color": "#4671c4"
+    },
     "cowrie.exchange": {
       "name": "cowrie.exchange",
       "displayName": "Cowrie Exchange",
@@ -907,7 +917,14 @@
     "XA9-GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC": {
       "code": "XA9",
       "issuer": "GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC",
-      "domain": "astral9.io"
+      "domain": "astral9.io",
+      "type": "token"
+    },
+    "WIN-GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN": {
+      "code": "WIN",
+      "issuer": "GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN",
+      "domain": "winsome.gift",
+      "type": "token"
     },
     "NGNT-GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD": {
       "code": "NGNT",
@@ -1061,6 +1078,9 @@
     },
     "GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC": {
       "XA9": "XA9-GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC"
+    },
+    "GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN": {
+      "WIN": "WIN-GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN"
     },
     "GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD": {
       "NGNT": "NGNT-GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD"
@@ -1680,6 +1700,16 @@
       "baseBuying": {
         "code": "XA9",
         "issuer": "GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "WIN-winsome.gift/XLM-native": {
+      "baseBuying": {
+        "code": "WIN",
+        "issuer": "GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN"
       },
       "counterSelling": {
         "code": "XLM",
