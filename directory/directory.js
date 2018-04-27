@@ -636,6 +636,18 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+    domain: 'pinnacle-brilliance.com',
+    website: 'https://pinnacle-brilliance.com/',
+    logo: 'pinnacle-brilliance.com',
+    color: '#111a29',
+    displayName: 'BRIL',
+});
+directory.addAsset('pinnacle-brilliance.com', {
+    code: 'BRIL',
+    issuer: 'GAMY6QEOIJL2AO3HUHGGZOWQ2AX6PJC64NXK2P7ID2T45OUYYSNLPDTB',
+    type: 'token'
+});
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -895,6 +907,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XPR', 'pr.network'],
   counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+    baseBuying: ['BRIL', 'pinnacle-brilliance.com'],
+    counterSelling: ['XLM', 'native']
 });
 
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
