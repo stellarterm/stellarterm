@@ -679,6 +679,20 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+  domain: 'acudeen.io',
+  website: 'https://acudeen.io',
+  logo: 'acudeen.io',
+  color: '#2c5f99',
+  displayName: 'acudeen.io',
+});
+
+directory.addAsset('acudeen.io', {
+  code: 'ACU',
+  issuer: 'GCXEGWRBTNC7ZVMM7SHQDBA75XPLBU4WPN6PGTD3YTUQHU7RU4W4MYBC',
+  type: 'token',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -953,6 +967,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['ACU', 'acudeen.io'],
   counterSelling: ['XLM', 'native'],
 });
 
