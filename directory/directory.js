@@ -636,6 +636,19 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+  domain: 'www.veritascrypto.co',
+  website: 'https://www.veritascrypto.co/beta/usdx',
+  logo: 'veritascrypto.co',
+  color: '#273963',
+  displayName: 'Veritas',
+})
+directory.addAsset('www.veritascrypto.co', {
+  code: 'USDX',
+  issuer: 'GBSKV7IVRI5C6LSTHWS6HWYENUOMNJWFZYACTKVMKZEBCULKFPZLVUHW',
+  type: 'token',
+})
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -689,6 +702,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['USD', 'golix.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['USDX', 'www.veritascrypto.co'],
 });
 
 // Pairs involving "BTC"
