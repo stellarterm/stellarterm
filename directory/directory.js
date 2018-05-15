@@ -636,6 +636,21 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+  domain: 'vntvault.com',
+  website: 'https://vntvault.com',
+  logo: 'vntvault.com',
+  color: '#2758a7',
+  displayName: 'VNT',
+});
+
+directory.addAsset('vntvault.com', {
+  code: 'VNT',
+  issuer: 'GCAAZR6MTUD72STVH26NQVUBMSZGPSJQBKQL7IVQHTNAYMMMT6BHIVVW',
+  type: 'token',
+});
+
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -896,7 +911,10 @@ directory.addPair({
   baseBuying: ['XPR', 'pr.network'],
   counterSelling: ['XLM', 'native'],
 });
-
+directory.addPair({
+  baseBuying: ['VNT', 'vntvault.com'],
+  counterSelling: ['XLM', 'native'],
+});
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
   name: 'Superlumen Issuer',
   requiredMemoType: 'MEMO_ID',
