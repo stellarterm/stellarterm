@@ -525,28 +525,28 @@ directory.addAnchor({
 });
 directory.addAsset('cryptomover.com', {
   code: 'CM3',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  issuer: 'GDU2FEL6THGGOFDHHP4I5FHNWY4S2SXYUBCEDB5ZREMD6UFRT4SYWSW2',
+  unlisted: false,
 });
 directory.addAsset('cryptomover.com', {
   code: 'CM10',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  issuer: 'GDBCHKTHJUKDGSIQSTBUXFWVP3QVART5LED6KRZQ5X4Z5WLT4BGYXWCI',
+  unlisted: false,
 });
 directory.addAsset('cryptomover.com', {
-  code: 'CME',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  code: 'CMA',
+  issuer: 'GBWZHAVWY23QKKDJW7TXLSIHY5EX4NIB37O4NMRKN2SKNWOSE5TEPCY3',
+  unlisted: false,
 });
 directory.addAsset('cryptomover.com', {
-  code: 'CM3x2',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  code: 'CMS',
+  issuer: 'GCVBUIXKKLH2DYHZRSLZUIZSVJUL74RTW6FVCCEYB2OE3RH7RVDBPCFG',
+  unlisted: false,
 });
 directory.addAsset('cryptomover.com', {
-  code: 'HKDC',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  code: 'HKDT',
+  issuer: 'GABSZVZBYEO5F4V5LZKV7GR4SAJ5IKJGGOF43BIN42FNDUG7QPH6IMRQ',
+  unlisted: false,
 });
 
 directory.addAnchor({
