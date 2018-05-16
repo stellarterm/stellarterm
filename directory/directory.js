@@ -234,9 +234,9 @@ directory.addAsset('stronghold.co', {
   instructions: 'https://stronghold.co/send-receive-ethereum.html',
 });
 directory.addAsset('stronghold.co', {
-  code: 'XLM',
+  code: 'USD',
   issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
-  instructions: 'https://stronghold.co/send-receive-lumens.html',
+  instructions: 'https://stronghold.co',
 });
 
 directory.addAnchor({
@@ -773,7 +773,7 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['XLM', 'stronghold.co'],
+  baseBuying: ['USD', 'stronghold.co'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
