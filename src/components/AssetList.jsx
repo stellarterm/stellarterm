@@ -28,7 +28,8 @@ export default class AssetList extends React.Component {
       if (this.props.limit && index >= this.props.limit) {
         return;
       }
-      if (directory.getAssetByAccountId(asset.code, asset.issuer).unlisted) {
+      let directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
+      if (directoryAsset === null || directoryAsset.unlisted) {
         // Don't show unlisted assets
         return;
       }

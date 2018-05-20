@@ -11,7 +11,7 @@ before_script:
 script:
   - npm run production
   - npm run test
-  - cd dist; echo "./fetchTravisBuild.sh stellarterm-build-output/irisli/stellarterm/${TRAVIS_BUILD_NUMBER}/${TRAVIS_JOB_NUMBER}/dist/index.html $(openssl dgst -sha256 index.html | sed 's/^.* //')"
+  - cd dist; echo "./fetchTravisBuild.sh stellarterm-build-output/stellarterm/stellarterm/${TRAVIS_BUILD_NUMBER}/${TRAVIS_JOB_NUMBER}/dist/index.html $(openssl dgst -sha256 index.html | sed 's/^.* //')"
   - npm run hash
 
 addons:
@@ -22,4 +22,4 @@ addons:
     key:
       secure: C4xjYYkzvHRuy+0KiDL21/J4T39rClfZFFLYPI+i21TeL1pclkNSFZSyqLFk8ToMfp3tgVv8D9hbUu/Glxg0kyUSkrUAGYRahGMlZC8+cfP+WFiFUR5gAfCkQAr/sx+y8kRgMlMwzD3SwRqoDH42riGFvCv0f9MScPZVxTeQIkLri7yPoXcv1ZiEPt7nCL3B/mJmm7iPebuFzcYMNiITIggoOnOHq+V5lq8BMWB1Y1pK9d/RoVDFJVKgExJpLdUZyg5agq8h4OByXCFN6zWk4f0ombch0wt1liGDrrKK59J8rbS8L7aXrp5jJyy4/sHIhf7bziSmmA8k5nFJmyNtaVqWMv8osMwwYtVnAavOushKbabzxImAc9kaKbNb3R3sUiwqecKDoC2DDyYihyEZeKgrb5+37xTpYgcSLqZWm/aZHkgeM7pjmP58sAQ9VgCWzoGSnn12A9rBCD+sLRQ0Wqtfh5HmheiIELx4TN4a6TZpt4wDV5debza1nzV46DO6zuDYbQ3vO62LKS8xa5elpy+662QmuVyfuPe56eQnYI7r/hUTINspnfbbur4qRrzO+ZXgsc15vAf5P+Sop95C43ZcQo9lk2V8T+nsr4a7GWlM6zY+TZ8y9NIKJ4P4poXryCEdAcc6WQJdnzStoFyPGcTCIq8urhX9KFciyAroOLA=
     paths:
-      - /home/travis/build/irisli/stellarterm/dist/index.html
+      - /home/travis/build/stellarterm/stellarterm/dist/index.html
