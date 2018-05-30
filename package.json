@@ -18,6 +18,7 @@
   "dependencies": {
     "babelify": "7.3.0",
     "bignumber.js": "4.1.0",
+    "guage": "^0.0.0",
     "gulp-sass": "3.1.0",
     "gulp-useref": "3.1.4",
     "lodash": "4.17.5",
