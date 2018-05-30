@@ -21,6 +21,17 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'ternio.io',
+  website: 'https://ternio.io',
+  logo: 'https://ternio.io/toml/tern.png',
+  color: '#1D344F',
+  displayName: 'Ternio.io',
+  issuer: 'GDGQDVO6XPFSY4NMX75A7AOVYCF5JYGW2SHCJJNWCQWIDGOZB53DGP6C',
+  type: 'token',
+  code: 'TERN'
+});
+
+directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
