@@ -23,12 +23,15 @@ directory.DirectoryBuilder = DirectoryBuilder;
 directory.addAnchor({
   domain: 'ternio.io',
   website: 'https://ternio.io',
-  logo: 'https://ternio.io/toml/tern.png',
+  logo: 'ternio.io',
   color: '#1D344F',
-  displayName: 'Ternio.io',
+  displayName: 'TERN',
+});
+
+directory.addAsset('ternio.io', {
+  code: 'TERN',
   issuer: 'GDGQDVO6XPFSY4NMX75A7AOVYCF5JYGW2SHCJJNWCQWIDGOZB53DGP6C',
-  type: 'token',
-  code: 'TERN'
+  type: 'token'
 });
 
 directory.addAnchor({
@@ -906,6 +909,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XPR', 'pr.network'],
   counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+    baseBuying: ['TERN', 'ternio.io'],
+    counterSelling: ['XLM', 'native'],
 });
 
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
