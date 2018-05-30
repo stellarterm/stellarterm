@@ -25,7 +25,7 @@ directory.addAnchor({
   website: 'https://ternio.io',
   logo: 'ternio.io',
   color: '#1D344F',
-  displayName: 'TERN',
+  displayName: 'TERN'
 });
 
 directory.addAsset('ternio.io', {
