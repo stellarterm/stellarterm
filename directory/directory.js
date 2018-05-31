@@ -439,6 +439,26 @@ directory.addAsset('apay.io', {
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
   instructions: 'https://apay.io/',
 });
+directory.addAsset('apay.io', {
+  code: 'AEDT',
+  issuer: 'GCTGGQIRX6JQI2I3ALL6OFGH6EMALDSL52RLRV7E2Y5OAZQJNI5IKBYA',
+  instructions: 'https://apay.io/',
+});
+directory.addAsset('apay.io', {
+  code: 'AUDT',
+  issuer: 'GC4BOCOA27V6YKZOMNOPC5R2WNWTJ5GPBYFCUIXM5BSDRQM43IMU6J7L',
+  instructions: 'https://apay.io/',
+});
+directory.addAsset('apay.io', {
+  code: 'RUBT',
+  issuer: 'GCTJA6MM3K6MRQE2C4GM3EJDXF57X6NZTGPUZ77AB3WJ2FX6GXOWD4NX',
+  instructions: 'https://apay.io/',
+});
+directory.addAsset('apay.io', {
+  code: 'USDT',
+  issuer: 'GCQTGZQQ5G4PTM2GL7CDIFKUBIPEC52BROAQIAPW53XBRJVN6ZJVTG6V',
+  instructions: 'https://apay.io/',
+});
 
 directory.addAnchor({
   domain: 'mobius.network',
@@ -867,6 +887,22 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SALT', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['AEDT', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['AUDT', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['RUBT', 'apay.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['USDT', 'apay.io'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
