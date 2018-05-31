@@ -36,6 +36,34 @@ directory.addAsset('ximcoin.com', {
 });
 
 directory.addAnchor({
+  domain: 'ternio.io',
+  website: 'https://ternio.io',
+  logo: 'ternio.io',
+  color: '#1D344F',
+  displayName: 'TERN'
+});
+
+directory.addAsset('ternio.io', {
+  code: 'TERN',
+  issuer: 'GDGQDVO6XPFSY4NMX75A7AOVYCF5JYGW2SHCJJNWCQWIDGOZB53DGP6C',
+  type: 'token'
+});
+
+directory.addAnchor({
+  domain: 'six.network',
+  website: 'https://six.network',
+  logo: 'six.network',
+  color: '#454ca4',
+  displayName: 'SIX',
+});
+
+directory.addAsset('six.network', {
+  code: 'SIX',
+  issuer: 'GDASACOFD3QBFQ23LTVANHIQQAEMO6BFQRFSRLHRD27ZM7MZK4K6GDZN',
+  type: 'token'
+});
+
+directory.addAnchor({
   domain: 'tontinetrust.com',
   website: 'https://tontinetrust.com',
   logo: 'tontinetrust.com',
@@ -237,6 +265,12 @@ directory.addAsset('stronghold.co', {
   code: 'XLM',
   issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
   instructions: 'https://stronghold.co/send-receive-lumens.html',
+  unlisted: true,
+});
+directory.addAsset('stronghold.co', {
+  code: 'USD',
+  issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
+  instructions: 'https://stronghold.co',
 });
 
 directory.addAnchor({
@@ -525,28 +559,23 @@ directory.addAnchor({
 });
 directory.addAsset('cryptomover.com', {
   code: 'CM3',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  issuer: 'GDU2FEL6THGGOFDHHP4I5FHNWY4S2SXYUBCEDB5ZREMD6UFRT4SYWSW2',
 });
 directory.addAsset('cryptomover.com', {
   code: 'CM10',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  issuer: 'GDBCHKTHJUKDGSIQSTBUXFWVP3QVART5LED6KRZQ5X4Z5WLT4BGYXWCI',
 });
 directory.addAsset('cryptomover.com', {
-  code: 'CME',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  code: 'CMA',
+  issuer: 'GBWZHAVWY23QKKDJW7TXLSIHY5EX4NIB37O4NMRKN2SKNWOSE5TEPCY3',
 });
 directory.addAsset('cryptomover.com', {
-  code: 'CM3x2',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  code: 'CMS',
+  issuer: 'GCVBUIXKKLH2DYHZRSLZUIZSVJUL74RTW6FVCCEYB2OE3RH7RVDBPCFG',
 });
 directory.addAsset('cryptomover.com', {
-  code: 'HKDC',
-  issuer: 'GA4BYMUO5D7OLGVJWZ2D5FCWU7SB63FNZ4QUU574SMNA6ELK5TZD3SO3',
-  unlisted: true,
+  code: 'HKDT',
+  issuer: 'GABSZVZBYEO5F4V5LZKV7GR4SAJ5IKJGGOF43BIN42FNDUG7QPH6IMRQ',
 });
 
 directory.addAnchor({
@@ -656,7 +685,7 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
-  counterSelling: ['HKDC', 'cryptomover.com'],
+  counterSelling: ['HKDT', 'cryptomover.com'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
@@ -689,6 +718,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['USD', 'golix.io'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['USD', 'stronghold.co'],
 });
 
 // Pairs involving "BTC"
@@ -873,11 +906,11 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['CME', 'cryptomover.com'],
+  baseBuying: ['CMA', 'cryptomover.com'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['CM3x2', 'cryptomover.com'],
+  baseBuying: ['CMS', 'cryptomover.com'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
@@ -894,6 +927,14 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XPR', 'pr.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+    baseBuying: ['TERN', 'ternio.io'],
+    counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['SIX', 'six.network'],
   counterSelling: ['XLM', 'native'],
 });
 
