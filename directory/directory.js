@@ -21,6 +21,20 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'six.network',
+  website: 'https://six.network',
+  logo: 'six.network',
+  color: '#000000',
+  displayName: 'SIX',
+});
+
+directory.addAsset('six.network', {
+  code: 'SIX',
+  issuer: 'GDMS6EECOH6MBMCP3FYRYEVRBIV3TQGLOFQIPVAITBRJUMTI6V7A2X6Z',
+  type: 'token'
+});
+
+directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
@@ -46,20 +60,6 @@ directory.addAnchor({
 directory.addAsset('ternio.io', {
   code: 'TERN',
   issuer: 'GDGQDVO6XPFSY4NMX75A7AOVYCF5JYGW2SHCJJNWCQWIDGOZB53DGP6C',
-  type: 'token'
-});
-
-directory.addAnchor({
-  domain: 'six.network',
-  website: 'https://six.network',
-  logo: 'six.network',
-  color: '#454ca4',
-  displayName: 'SIX',
-});
-
-directory.addAsset('six.network', {
-  code: 'SIX',
-  issuer: 'GDASACOFD3QBFQ23LTVANHIQQAEMO6BFQRFSRLHRD27ZM7MZK4K6GDZN',
   type: 'token'
 });
 
@@ -754,6 +754,10 @@ directory.addPair({
 // Pairs involving XLM
 // XLM should be counterSelling
 directory.addPair({
+  baseBuying: ['SIX', 'six.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
   baseBuying: ['XIM', 'ximcoin.com'],
   counterSelling: ['XLM', 'native'],
 });
@@ -932,10 +936,6 @@ directory.addPair({
 directory.addPair({
     baseBuying: ['TERN', 'ternio.io'],
     counterSelling: ['XLM', 'native'],
-});
-directory.addPair({
-  baseBuying: ['SIX', 'six.network'],
-  counterSelling: ['XLM', 'native'],
 });
 
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
