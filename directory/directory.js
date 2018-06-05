@@ -23,7 +23,7 @@ directory.DirectoryBuilder = DirectoryBuilder;
 directory.addAnchor({
   domain: 'apiscapitalfunds.com',
   website: 'https://apiscapitalfunds.com',
-  logo: 'apiscapitalfunds.com/apispng.png',
+  logo: 'apiscapitalfunds.com',
   color: '#000000',
   displayName: 'APIS',
 });
