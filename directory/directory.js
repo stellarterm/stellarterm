@@ -23,7 +23,7 @@ directory.DirectoryBuilder = DirectoryBuilder;
 directory.addAnchor({
   domain: 'apiscapitalfunds.com',
   website: 'https://apiscapitalfunds.com',
-  logo: 'https://apiscapitalfunds.com/apispng.png',
+  logo: 'apiscapitalfunds.com/apispng.png',
   color: '#000000',
   displayName: 'APIS',
 });
@@ -740,6 +740,10 @@ directory.addPair({
 
 // Pairs involving "BTC"
 // "BTC" should be counterSelling
+directory.addPair({
+  baseBuying: ['APIS', 'apiscapitalfunds.com'],
+  counterSelling: ['XLM', 'native'],
+});
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'nezly.com'],
