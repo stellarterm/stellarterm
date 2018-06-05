@@ -21,6 +21,20 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'apiscapitalfunds.com',
+  website: 'https://apiscapitalfunds.com',
+  logo: 'https://apiscapitalfunds.com/apispng.png',
+  color: '#000000',
+  displayName: 'APIS',
+});
+
+directory.addAsset('apiscapitalfunds.com', {
+  code: 'APIS',
+  issuer: 'GCYKQ2627BPKMSUZJK64GPYVKD4TRNACP45X6B754PR6TCYJXCHGUTWB',
+  type: 'token'
+});
+
+directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
