@@ -59,7 +59,7 @@ directory.addAnchor({
 
 directory.addAsset('six.network', {
   code: 'SIX',
-  issuer: 'GDASACOFD3QBFQ23LTVANHIQQAEMO6BFQRFSRLHRD27ZM7MZK4K6GDZN',
+  issuer: 'GDMS6EECOH6MBMCP3FYRYEVRBIV3TQGLOFQIPVAITBRJUMTI6V7A2X6Z',
   type: 'token'
 });
 
@@ -343,13 +343,27 @@ directory.addAnchor({
   domain: 'sureremit.co',
   website: 'https://sureremit.co',
   logo: 'sureremit.co',
-  color: '#dc5126',
+  color: '#363187',
   displayName: 'SureRemit',
 });
 directory.addAsset('sureremit.co', {
   code: 'RMT',
-  issuer: 'GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN',
+  issuer: 'GDEGOXPCHXWFYY234D2YZSPEJ24BX42ESJNVHY5H7TWWQSYRN5ZKZE3N',
   instructions: 'https://sureremit.co',
+  type: 'token',
+});
+
+
+directory.addAnchor({
+  domain: 'old.sureremit.co',
+  website: 'https://old.sureremit.co',
+  logo: 'old.sureremit.co',
+  color: '#dc5126',
+  displayName: 'SureRemit OLD',
+});
+directory.addAsset('old.sureremit.co', {
+  code: 'RMT',
+  issuer: 'GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN',
   type: 'token',
 });
 
@@ -895,6 +909,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['RMT', 'sureremit.co'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['RMT', 'old.sureremit.co'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
