@@ -59,7 +59,7 @@ directory.addAnchor({
 
 directory.addAsset('six.network', {
   code: 'SIX',
-  issuer: 'GDASACOFD3QBFQ23LTVANHIQQAEMO6BFQRFSRLHRD27ZM7MZK4K6GDZN',
+  issuer: 'GDMS6EECOH6MBMCP3FYRYEVRBIV3TQGLOFQIPVAITBRJUMTI6V7A2X6Z',
   type: 'token'
 });
 
