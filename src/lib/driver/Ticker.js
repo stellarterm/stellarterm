@@ -23,7 +23,7 @@ Ticker.prototype.load = function(attempt) {
     this.data = tickerData;
     console.log('Loaded ticker. Data generated ' + Math.round((new Date() - this.data._meta.start * 1000)/1000) + ' seconds ago.')
     this.event.trigger();
-    setTimeout(() => {this.load()}, 60*1000) // Refresh every 60 seconds
+    setTimeout(() => {this.load()}, 61*5*1000) // Refresh every 5 minutes
   })
   .catch(e => {
     console.log('Unable to load ticker', e);
