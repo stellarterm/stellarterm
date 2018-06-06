@@ -35,7 +35,7 @@ function tickerGenerator() {
     .then(() => phase4(ticker))
     .then(() => {
       return {
-        'v1/ticker.json': JSON.stringify(ticker, null, 2)
+        'v1/ticker.json': JSON.stringify(ticker)
       };
     })
 
