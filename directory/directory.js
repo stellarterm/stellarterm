@@ -619,6 +619,19 @@ directory.addAsset('astral9.io', {
   type: 'token',
 });
 
+directory.addAnchor({
+  domain: 'dev.wi.th',
+  website: 'https://dev.wi.th',
+  logo: 'dev.wi.th',
+  color: '#03a9f4',
+  displayName: 'DEV',
+});
+
+directory.addAsset('dev.wi.th', {
+  code: 'DEV',
+  issuer: 'GB354ZDARVTGN3N54RJRBEAH6N3AJCPP5PXRNNIXHONKGIF54XKIITAY',
+  type: 'token',
+});
 
 directory.addAnchor({
   domain: 'winsome.gift',
@@ -935,6 +948,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['DEV', 'dev.wi.th'],
   counterSelling: ['XLM', 'native'],
 });
 

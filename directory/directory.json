@@ -381,6 +381,16 @@
       },
       "color": "#000000"
     },
+    "dev.wi.th": {
+      "name": "dev.wi.th",
+      "displayName": "DEV",
+      "website": "https://dev.wi.th",
+      "logo": "data:image/png;base64, iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAMAAABHPGVmAAAABGdBTUEAALGPC/xhBQAAAAFzUkdCAK7OHOkAAAA5UExURUdwTACn9wCm9QCn9wCm9gCn9wCn9wCn9wCf7wCn9wCn9wCm9gCl9QCk9ACm9gCm9gCn9////8Dp/aXiIz8AAAAQdFJOUwCAcCDwYKDAEOBAkFAwsNAgTGp7AAABCElEQVRo3u3ZC5KEIAxFUT8goE73m9n/Yqc34AdN37KovA2cAkVJ0nUej8fjeUTykqrS93OuRt6qT5liHaSLea0A8lnPkL+PSKEHkM9qZgCRlgwgKj8AohABRIoEoolANBDIwY4ZIZoJJGQAUSKQvYdvh+xsmB2yc1oMEY0EMhHI5lJMkYVAAoFoJZCJQAqBbLxfxkgkkJ5AEoEUApEjjjjyjMOYmvlAxlZ+WqWZi8TayuXu8Jr697sRywu3AXJcOhggI4CcKOduI2cK09vImRL7LpJaaXvMjbSiiKYa0R4EGp1Ey5ZoPgNtdGAgEIYnDWnCRaJq3BSvrKF2cNatwAjQ4/F4PHj+Ack3QmTHNU7QAAAAAElFTkSuQmCC",
+      "assets": {
+        "DEV": "DEV-GB354ZDARVTGN3N54RJRBEAH6N3AJCPP5PXRNNIXHONKGIF54XKIITAY"
+      },
+      "color": "#03a9f4"
+    },
     "winsome.gift": {
       "name": "winsome.gift",
       "displayName": "WIN",
@@ -955,6 +965,12 @@
       "domain": "astral9.io",
       "type": "token"
     },
+    "DEV-GB354ZDARVTGN3N54RJRBEAH6N3AJCPP5PXRNNIXHONKGIF54XKIITAY": {
+      "code": "DEV",
+      "issuer": "GB354ZDARVTGN3N54RJRBEAH6N3AJCPP5PXRNNIXHONKGIF54XKIITAY",
+      "domain": "dev.wi.th",
+      "type": "token"
+    },
     "WIN-GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN": {
       "code": "WIN",
       "issuer": "GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN",
@@ -1128,6 +1144,9 @@
     },
     "GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC": {
       "XA9": "XA9-GAUWES2POH347NNJGRI4OBM34LMOCMWSTZ3RAOZMOBH4PFVBWFMHLNTC"
+    },
+    "GB354ZDARVTGN3N54RJRBEAH6N3AJCPP5PXRNNIXHONKGIF54XKIITAY": {
+      "DEV": "DEV-GB354ZDARVTGN3N54RJRBEAH6N3AJCPP5PXRNNIXHONKGIF54XKIITAY"
     },
     "GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN": {
       "WIN": "WIN-GCNHYZLBCSVZHSQJ2DOIBHYBF4J24DJYGS5QKURX4AGSLBK6SDJOYWIN"
@@ -1800,6 +1819,16 @@
       "baseBuying": {
         "code": "SIX",
         "issuer": "GDASACOFD3QBFQ23LTVANHIQQAEMO6BFQRFSRLHRD27ZM7MZK4K6GDZN"
+      },
+      "counterSelling": {
+        "code": "XLM",
+        "issuer": null
+      }
+    },
+    "DEV-dev.wi.th/XLM-native": {
+      "baseBuying": {
+        "code": "DEV",
+        "issuer": "GB354ZDARVTGN3N54RJRBEAH6N3AJCPP5PXRNNIXHONKGIF54XKIITAY"
       },
       "counterSelling": {
         "code": "XLM",
