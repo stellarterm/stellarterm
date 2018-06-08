@@ -623,7 +623,7 @@ directory.addAnchor({
   domain: 'dev.wi.th',
   website: 'https://dev.wi.th',
   logo: 'dev.wi.th',
-  color: '#03a9f4',
+  color: '#00a7f7',
   displayName: 'DEV',
 });
 
