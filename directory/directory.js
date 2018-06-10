@@ -203,6 +203,19 @@ directory.addAsset('repocoin.io', {
   instructions: 'https://repocoin.io',
   type: 'token',
 });
+directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org',
+  logo: 'kultcoin.org',
+  color: '#192854',
+  displayName: 'KultCoin',
+});
+directory.addAsset('repocoin.io', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+  instructions: 'https://kultcoin.org',
+  type: 'token',
+});
 
 directory.addAnchor({
   domain: 'stemchain.io',
@@ -336,6 +349,10 @@ directory.addAnchor({
 });
 directory.addAsset('tempo.eu.com', {
   code: 'EURT',
+  issuer: 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S',
+});
+directory.addAsset('tempo.eu.com', {
+  code: 'LKR',
   issuer: 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S',
 });
 
@@ -478,7 +495,15 @@ directory.addAsset('flutterwave.com', {
   code: 'NGN',
   issuer: 'GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW',
 });
-
+});
+directory.addAsset('flutterwave.com', {
+  code: 'GHS',
+  issuer: 'GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW',
+});
+directory.addAsset('flutterwave.com', {
+  code: 'KES',
+  issuer: 'GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW',
+});
 directory.addAnchor({
   domain: 'collective21.org',
   website: 'https://collective21.org/',
