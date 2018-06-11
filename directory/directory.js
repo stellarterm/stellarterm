@@ -42,7 +42,7 @@ directory.addAnchor({
   displayName: 'WSD',
 });
 
-directory.addAsset('thewallet.com', {
+directory.addAsset('thewwallet.com', {
   code: 'WSD',
   issuer: 'GDSVWEA7XV6M5XNLODVTPCGMAJTNBLZBXOFNQD3BNPNYALEYBNT6CE2V',
   type: 'token'
