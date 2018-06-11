@@ -35,7 +35,7 @@ directory.addAsset('apiscapitalfunds.com', {
 });
 
 directory.addAnchor({
-  domain: 'thewwwallet.com',
+  domain: 'thewwallet.com',
   website: 'https://thewwallet.com',
   logo: 'thewwallet.com',
   color: '#000000',
