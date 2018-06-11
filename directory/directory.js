@@ -338,6 +338,10 @@ directory.addAsset('tempo.eu.com', {
   code: 'EURT',
   issuer: 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S',
 });
+directory.addAsset('tempo.eu.com', {
+  code: 'LKR',
+  issuer: 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S',
+});
 
 directory.addAnchor({
   domain: 'sureremit.co',
@@ -367,6 +371,18 @@ directory.addAsset('old.sureremit.co', {
   type: 'token',
 });
 
+directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org/',
+  logo: 'kultcoin.org',
+  color: '#b5e9ff',
+  displayName: 'KultCoin',
+});
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+  type: 'token',
+});
 
 directory.addAnchor({
   domain: 'ripplefox.com',
@@ -478,7 +494,14 @@ directory.addAsset('flutterwave.com', {
   code: 'NGN',
   issuer: 'GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW',
 });
-
+directory.addAsset('flutterwave.com', {
+  code: 'KES',
+  issuer: 'GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW',
+});
+directory.addAsset('flutterwave.com', {
+  code: 'GHS',
+  issuer: 'GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW',
+});
 directory.addAnchor({
   domain: 'collective21.org',
   website: 'https://collective21.org/',
@@ -710,6 +733,10 @@ directory.addPair({
   counterSelling: ['PHP', 'coins.asia'],
 });
 directory.addPair({
+  baseBuying: ['XLM', ''],
+  counterSelling: ['LKR', 'tempo.eu.com'],
+});
+directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['PHP', 'coins.asia'],
 });
@@ -720,6 +747,18 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['NGN', 'flutterwave.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['KES', 'flutterwave.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['GHS', 'flutterwave.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['KULT', 'kultcoin.org'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
@@ -751,6 +790,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'naobtc.com'],
+});
+directory.addPair({
+  baseBuying: ['BTC', 'naobtc.com'],
+  counterSelling: ['EURT', 'tempo.eu.com'],
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
