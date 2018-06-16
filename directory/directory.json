@@ -563,6 +563,14 @@
         "XLM-native"
       ]
     },
+    "GCZYLNGU4CA5NAWBAVTHMZH4JXWKP2OUJ6OK3I7XXZCNA5622WUJVLTG": {
+      "name": "RMT swap",
+      "mergeOpAccepted": false,
+      "pathPaymentAccepted": false,
+      "acceptedAssetsWhitelist": [
+        "RMT-old.sureremit.co"
+      ]
+    },
     "GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY": {
       "name": "Pedity Issuer",
       "mergeOpAccepted": false,
@@ -790,6 +798,7 @@
       "code": "RMT",
       "issuer": "GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN",
       "domain": "old.sureremit.co",
+      "warning": "ACTION REQUIRED: SureRemit.co has issued a token swap. For more information, visit https://swap.sureremit.co/ or visit official SureRemit communications. The old RMT will be delisted soon.",
       "type": "token"
     },
     "CNY-GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX": {
