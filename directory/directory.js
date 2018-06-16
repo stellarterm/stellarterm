@@ -364,6 +364,7 @@ directory.addAnchor({
 directory.addAsset('old.sureremit.co', {
   code: 'RMT',
   issuer: 'GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN',
+  warning: 'ACTION REQUIRED: SureRemit.co has issued a token swap. For more information, visit https://swap.sureremit.co/ or visit official SureRemit communications. The old RMT will be delisted soon.',
   type: 'token',
 });
 
@@ -1039,6 +1040,10 @@ directory.addDestination('GCXDR4QZ4OTVX6433DPTXELCSEWQ4E5BIPVRRJMUR6M3NT4JCVIDAL
 directory.addDestination('GBZ35ZJRIKJGYH5PBKLKOZ5L6EXCNTO7BKIL7DAVVDFQ2ODJEEHHJXIM', {
   name: 'XIM',
   acceptedAssetsWhitelist: ['XLM-native'],
+});
+directory.addDestination('GCZYLNGU4CA5NAWBAVTHMZH4JXWKP2OUJ6OK3I7XXZCNA5622WUJVLTG', {
+  name: 'RMT swap',
+  acceptedAssetsWhitelist: ['RMT-old.sureremit.co'],
 });
 directory.addDestination('GBVUDZLMHTLMZANLZB6P4S4RYF52MVWTYVYXTQ2EJBPBX4DZI2SDOLLY', {
   name: 'Pedity Issuer',

@@ -7,6 +7,7 @@ import _ from 'lodash';
 import directory from '../../directory';
 
 
+
 export default class BalancesTable extends React.Component {
   constructor(props) {
     super(props);
@@ -32,9 +33,17 @@ export default class BalancesTable extends React.Component {
           tradeLink = <a href={'#exchange/' + balance.code + '-' + balance.issuer + '/XLM-native'} className="BalancesTable__row__trade">trade</a>
         }
       }
+      let warning;
+      let directoryAsset = directory.getAssetByAccountId(balance.code, balance.issuer);
+      if (directoryAsset !== null && directoryAsset.warning !== undefined) {
+        warning = <div className="s-alert s-alert--warning BalancesTable__row__item__warning">
+          {directoryAsset.warning}
+        </div>;
+      }
       return <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
         <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
           <AssetCard2 code={balance.code} issuer={balance.issuer}></AssetCard2>
+          {warning}
         </td>
         <td className="BalancesTable__row__item BalancesTable__row__item--amount">{Printify.lightenZeros(balance.balance)}</td>
         <td className="BalancesTable__row__item BalancesTable__row__item--amount">{balanceUSD}</td>
