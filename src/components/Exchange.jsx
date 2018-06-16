@@ -8,6 +8,7 @@ import Generic from './Generic.jsx';
 import Stellarify from '../lib/Stellarify';
 import TermsOfUse from './TermsOfUse.jsx';
 import Ellipsis from './Ellipsis.jsx';
+import directory from '../../directory';
 
 export default class Exchange extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ export default class Exchange extends React.Component {
     let thinOrderbookWarning;
     let data = this.props.d.orderbook.data;
     let ticker = this.props.d.ticker;
+    let warningWarning;
 
     if (ticker.ready) {
       let baseSlug = Stellarify.assetToSlug(data.baseBuying);
@@ -57,6 +59,15 @@ export default class Exchange extends React.Component {
           </div>
         </div>
       }
+
+      let directoryAsset = directory.getAssetByAccountId(data.baseBuying.code, data.baseBuying.issuer);
+      if (directoryAsset !== null && directoryAsset.warning !== undefined) {
+        warningWarning = <div className="Exchange__warning">
+          <div className="s-alert s-alert--warning">
+            {directoryAsset.warning}
+          </div>
+        </div>
+      }
     }
 
     return <div>
@@ -70,6 +81,7 @@ export default class Exchange extends React.Component {
             Orderbook
           </div>
           {thinOrderbookWarning}
+          {warningWarning}
           <OfferMakers d={this.props.d}></OfferMakers>
           <div className="island__separator"></div>
           <OfferTables d={this.props.d}></OfferTables>
