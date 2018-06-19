@@ -634,6 +634,20 @@ directory.addAsset('astral9.io', {
   type: 'token',
 });
 
+directory.addAnchor({
+  domain: 'collegecoin.org',
+  website: 'https://collegecoin.org',
+  logo: 'collegecoin.org',
+  color: '#f89e31',
+  displayName: 'COLL',
+});
+
+directory.addAsset('collegecoin.org', {
+  code: 'COLL',
+  issuer: 'GABCMFJDVQVKTKWBEYDEYIBVQ7JKEMPQ5DM4UT2H4SUYCNG2SCNZWI55',
+  type: 'token',
+});
+
 
 directory.addAnchor({
   domain: 'winsome.gift',
@@ -938,6 +952,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XA9', 'astral9.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['COLL', 'collegecoin.org'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
