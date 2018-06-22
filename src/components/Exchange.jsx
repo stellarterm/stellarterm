@@ -60,14 +60,25 @@ export default class Exchange extends React.Component {
         </div>
       }
 
-      let directoryAsset = directory.getAssetByAccountId(data.baseBuying.code, data.baseBuying.issuer);
-      if (directoryAsset !== null && directoryAsset.warning !== undefined) {
-        warningWarning = <div className="Exchange__warning">
-          <div className="s-alert s-alert--warning">
-            {directoryAsset.warning}
-          </div>
+
+    }
+
+    let directoryAsset = directory.getAssetByAccountId(data.baseBuying.code, data.baseBuying.issuer);
+    if (directoryAsset !== null && directoryAsset.warning !== undefined) {
+      warningWarning = <div className="Exchange__warning">
+        <div className="s-alert s-alert--warning">
+          {directoryAsset.warning}
         </div>
-      }
+      </div>
+    }
+
+    let offermakers;
+    if (directoryAsset !== null && directoryAsset.disabled !== undefined) {
+      offermakers = <div className="Exchange__orderbookDisabled">
+        Offer making has been disabled for this pair. You may still cancel your existing offers below.
+      </div>
+    } else {
+      offermakers = <OfferMakers d={this.props.d}></OfferMakers>
     }
 
     return <div>
@@ -82,9 +93,11 @@ export default class Exchange extends React.Component {
           </div>
           {thinOrderbookWarning}
           {warningWarning}
-          <OfferMakers d={this.props.d}></OfferMakers>
-          <div className="island__separator"></div>
-          <OfferTables d={this.props.d}></OfferTables>
+          <div>
+            {offermakers}
+            <div className="island__separator"></div>
+            <OfferTables d={this.props.d}></OfferTables>
+          </div>
         </div>
       </div>
       <div className="so-back islandBack">

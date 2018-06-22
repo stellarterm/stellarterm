@@ -799,7 +799,7 @@
       "issuer": "GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN",
       "domain": "old.sureremit.co",
       "warning": "ACTION REQUIRED: SureRemit.co has issued a token swap. For more information, visit https://swap.sureremit.co/ or visit official SureRemit communications. The old RMT will be delisted soon.",
-      "type": "token"
+      "disabled": true
     },
     "CNY-GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX": {
       "code": "CNY",

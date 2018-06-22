@@ -365,7 +365,7 @@ directory.addAsset('old.sureremit.co', {
   code: 'RMT',
   issuer: 'GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN',
   warning: 'ACTION REQUIRED: SureRemit.co has issued a token swap. For more information, visit https://swap.sureremit.co/ or visit official SureRemit communications. The old RMT will be delisted soon.',
-  type: 'token',
+  disabled: true,
 });
 
 
