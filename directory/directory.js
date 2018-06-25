@@ -680,6 +680,20 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+   domain: 'chynge.net',
+   website: 'https://chynge.net',
+   logo: 'chynge.net',
+   color: '#2e41bb',
+   displayName: 'Chynge',
+ });
+directory.addAsset('chynge.net', {
+   code: 'XCLP',
+   issuer: 'GCGPROUME4EFN6CRARPLIR67JV65JWKQ5Y6KYWTDNHSE7SV64CWJQQXQ',
+   instructions: 'https://chynge.net',
+   type: 'token',
+ });
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -954,6 +968,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XCLP', 'chynge.net'],
   counterSelling: ['XLM', 'native'],
 });
 
