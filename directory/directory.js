@@ -339,6 +339,20 @@ directory.addAsset('tempo.eu.com', {
   issuer: 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S',
 });
 
+
+directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org/',
+  logo: 'kultcoin.org',
+  color: '#b5e9ff',
+  displayName: 'KultCoin',
+});
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+  type: 'token',
+});
+
 directory.addAnchor({
   domain: 'sureremit.co',
   website: 'https://sureremit.co',
@@ -686,6 +700,12 @@ directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['CNY', 'ripplefox.com'],
 });
+
+directory.addPair({
+  baseBuying: ['KULT', 'kultcoin.org'],
+  counterSelling: ['XLM', 'native'],
+});
+
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['JPY', 'vcbear.net'],
@@ -1068,6 +1088,10 @@ directory.addDestination('GBTCBCWLE6YVTR5Y5RRZC36Z37OH22G773HECWEIZTZJSN4WTG3CSO
 directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ7S', {
   name: 'Gate.io',
   requiredMemoType: 'MEMO_ID',
+});
+directory.addDestination('GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT', {
+  name: 'KultCoin.org',
+  acceptedAssetsWhitelist: ['XLM-native'],
 });
 
 // Assert that each asset has a trading pair
