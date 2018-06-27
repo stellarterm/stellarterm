@@ -340,6 +340,19 @@ directory.addAsset('tempo.eu.com', {
 });
 
 directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org/',
+  logo: 'kultcoin.org',
+  color: '#b5e9ff',
+  displayName: 'KultCoin',
+});
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'sureremit.co',
   website: 'https://sureremit.co',
   logo: 'sureremit.co',
