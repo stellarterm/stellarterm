@@ -702,7 +702,7 @@ directory.addPair({
 });
 
 directory.addPair({
-  baseBuying: ['KLT', 'kultcoin.org'],
+  baseBuying: ['KULT', 'kultcoin.org'],
   counterSelling: ['XLM', 'native'],
 });
 
