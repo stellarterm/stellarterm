@@ -245,6 +245,18 @@ directory.addAsset('irene.energy', {
 });
 
 directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org',
+  logo: 'kultcoin.org',
+  color: '#e7f9fd',
+  displayName: 'KultCoin',
+});
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+});
+
+directory.addAnchor({
   domain: 'stronghold.co',
   website: 'https://stronghold.co',
   logo: 'stronghold.co',
