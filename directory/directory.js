@@ -350,7 +350,6 @@ directory.addAnchor({
 directory.addAsset('kultcoin.org', {
   code: 'KULT',
   issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
-  type: 'token',
 });
 
 directory.addAnchor({
