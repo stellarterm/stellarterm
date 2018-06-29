@@ -21,6 +21,18 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org/',
+  logo: 'stellar',
+  color: '#e7f9fd',
+  displayName: 'KULT',
+});
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+});
+
+directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
@@ -682,6 +694,10 @@ directory.addWildcard('pr.network', {
 
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['KULT', 'kultcoin.org'],
+});
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['CNY', 'ripplefox.com'],
