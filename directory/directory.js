@@ -27,6 +27,7 @@ directory.addAnchor({
   color: '#e7f9fd',
   displayName: 'KULT',
 });
+
 directory.addAsset('ximcoin.com', {
   code: 'KULT',
   issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
