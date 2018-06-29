@@ -680,8 +680,25 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org',
+  logo: 'kultcoin.org',
+  color: '#E7F9FD',
+  displayName: 'KULT',
+});
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+  type: 'token',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['KULT', 'kultcoin.org'],
+});
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['CNY', 'ripplefox.com'],
