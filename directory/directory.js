@@ -21,18 +21,6 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
-  domain: 'kultcoin.org',
-  website: 'https://kultcoin.org/',
-  logo: 'stellar',
-  color: '#e7f9fd',
-  displayName: 'KULT',
-});
-directory.addAsset('kultcoin.org', {
-  code: 'KULT',
-  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
-});
-
-directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
@@ -690,6 +678,18 @@ directory.addAsset('pr.network', {
 });
 directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
+});
+
+directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org',
+  logo: 'kultcoin.org',
+  color: '#e7f9fd',
+  displayName: 'KULT',
+});
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
 });
 
 // Pairs involving "fiat" assets
