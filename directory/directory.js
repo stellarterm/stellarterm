@@ -109,6 +109,17 @@ directory.addAsset('tempo.eu.com', {
   issuer: 'GAP5LETOV6YIE62YAM56STDANPRDO7ZFDBGSNHJQIYGGKSMOZAHOOS2S',
 });
 
+directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org/',
+  logo: 'tempo.eu.com',
+  color: '#e7f9fd',
+  displayName: 'KULT',
+});
+directory.addAsset('KultCoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+});
 
 directory.addAnchor({
   domain: 'ripplefox.com',
