@@ -7,7 +7,7 @@ const DirectoryBuilder = require('./DirectoryBuilder');
 let directory = new DirectoryBuilder();
 directory.DirectoryBuilder = DirectoryBuilder;
 
-// Template:
+// Template :
 // directory.addAnchor({
 //   domain: 'DOMAINDOTCOM',
 //   website: 'https://DOMAINDOTCOM',
