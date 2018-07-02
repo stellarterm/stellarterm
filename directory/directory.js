@@ -7,7 +7,7 @@ const DirectoryBuilder = require('./DirectoryBuilder');
 let directory = new DirectoryBuilder();
 directory.DirectoryBuilder = DirectoryBuilder;
 
-// Template:
+// Template :
 // directory.addAnchor({
 //   domain: 'DOMAINDOTCOM',
 //   website: 'https://DOMAINDOTCOM',
@@ -19,6 +19,21 @@ directory.DirectoryBuilder = DirectoryBuilder;
 //   code: 'ASSETCODE_ASSETCODE',
 //   issuer: 'Ga_issuer_account_id',
 // });
+
+directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org',
+  logo: 'kultcoin.org',
+  color: '#e7f9fd',
+  displayName: 'KULT',
+});
+
+directory.addAsset('ximcoin.com', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+  instructions: 'https://kultcoin.org',
+  type: 'token',
+});
 
 directory.addAnchor({
   domain: 'ximcoin.com',
@@ -682,6 +697,10 @@ directory.addWildcard('pr.network', {
 
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['KULT', 'kultcoin.org'],
+});
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['CNY', 'ripplefox.com'],
