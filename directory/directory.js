@@ -324,6 +324,19 @@ directory.addAnchor({
 directory.addAsset('coins.asia', {
   code: 'PHP',
   issuer: 'GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP',
+});eu
+
+directory.addAnchor({
+domain: 'kultcoin.org',
+website: 'https://kultcoin.org',
+logo: 'kultcoin.org',
+color: '#e51f24',
+displayName: 'KULT',
+});
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+  type: 'token'
 });
 
 
@@ -454,7 +467,6 @@ directory.addAsset('apay.io', {
   issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
   instructions: 'https://apay.io/',
 });
-
 directory.addAnchor({
   domain: 'mobius.network',
   website: 'https://mobius.network/',
