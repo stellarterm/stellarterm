@@ -269,7 +269,7 @@ directory.addAsset('stronghold.co', {
 });
 directory.addAsset('stronghold.co', {
   code: 'USD',
-  issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
+  issuer: 'GBSTRUSD7IRX73RQZBL3RQUH6KS3O4NYFY3QCALDLZD77XMZOPWAVTUK',
   instructions: 'https://stronghold.co',
 });
 
