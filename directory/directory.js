@@ -680,6 +680,20 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+  domain: 'reel.cash',
+  website: 'https://reel.cash/',
+  logo: 'reel.cash',
+  color: '#f2dd41',
+  displayName: 'ReelCash',
+});
+directory.addAsset('reel.cash', {
+  code: 'REEL',
+  issuer: 'GDCYCVE35Z773RLMJKEHIHNHBLYDTTRT7ED74TV634TAPWEHKX4LXL5O',
+  type: 'token',
+  instructions: 'https://reel.cash/',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -954,6 +968,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['REEL', 'reel.cash'],
   counterSelling: ['XLM', 'native'],
 });
 
