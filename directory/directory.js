@@ -681,17 +681,17 @@ directory.addWildcard('pr.network', {
 });
 
 directory.addAnchor({
-  domain: 'reel.cash',
-  website: 'https://reel.cash/',
-  logo: 'reel.cash',
+  domain: 'reelcash.io',
+  website: 'https://reelcash.io/',
+  logo: 'reelcash.io',
   color: '#f2dd41',
   displayName: 'ReelCash',
 });
-directory.addAsset('reel.cash', {
+directory.addAsset('reelcash.io', {
   code: 'REEL',
   issuer: 'GDCYCVE35Z773RLMJKEHIHNHBLYDTTRT7ED74TV634TAPWEHKX4LXL5O',
   type: 'token',
-  instructions: 'https://reel.cash/',
+  instructions: 'https://reelcash.io/',
 });
 
 // Pairs involving "fiat" assets
@@ -971,7 +971,7 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['REEL', 'reel.cash'],
+  baseBuying: ['REEL', 'reelcash.io'],
   counterSelling: ['XLM', 'native'],
 });
 
