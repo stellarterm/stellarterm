@@ -687,10 +687,9 @@ directory.addAnchor({
   color: '#245773',
   displayName: 'WOOLF',
 });
-directory.addAsset('GBRH4SJER4R7MXH5GYSE3WXKPMS53CQ22TVA7X64SDDWKABOPRN6JMP4', {
+directory.addAsset('woolf.university', {
   code: 'WOOLF',
   issuer: 'GBRH4SJER4R7MXH5GYSE3WXKPMS53CQ22TVA7X64SDDWKABOPRN6JMP4',
-  type: 'token',
 });
 
 
