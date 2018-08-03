@@ -680,6 +680,9 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+
+
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -1068,10 +1071,6 @@ directory.addDestination('GBTCBCWLE6YVTR5Y5RRZC36Z37OH22G773HECWEIZTZJSN4WTG3CSO
 directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ7S', {
   name: 'Gate.io',
   requiredMemoType: 'MEMO_ID',
-});
-directory.addDestination('GBRH4SJER4R7MXH5GYSE3WXKPMS53CQ22TVA7X64SDDWKABOPRN6JMP4', {
-  name: 'Woolf University',
-  counterSelling: ['WOOLF', 'woolf.university']
 });
 
 // Assert that each asset has a trading pair
