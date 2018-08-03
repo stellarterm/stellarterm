@@ -1069,6 +1069,10 @@ directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ
   name: 'Gate.io',
   requiredMemoType: 'MEMO_ID',
 });
+directory.addDestination('GBRH4SJER4R7MXH5GYSE3WXKPMS53CQ22TVA7X64SDDWKABOPRN6JMP4', {
+  name: 'Woolf University',
+  counterSelling: ['WOOLF', 'woolf.university']
+});
 
 // Assert that each asset has a trading pair
 let remainingAssets = Object.assign({}, directory.assets);
