@@ -269,8 +269,8 @@ export default function Send(driver) {
       }
       return bssResult;
     },
-    removeOffer: async (offerId) => {
-      let tx = MagicSpoon.buildTxRemoveOffer(driver.Server, this.account, offerId);
+    removeOffer: async (offer) => {
+      let tx = MagicSpoon.buildTxRemoveOffer(driver.Server, this.account, offer);
       let bssResult = await this.handlers.buildSignSubmit(tx);
       if (bssResult.status === 'finish') {
         bssResult.serverResult.then(res => {
