@@ -626,15 +626,20 @@ const MagicSpoon = {
       .addOperation(StellarSdk.Operation.changeTrust(operationOpts));
       // DONT call .build()
     },
-    buildTxRemoveOffer(Server, spoonAccount, offerId) {
+    buildTxRemoveOffer(Server, spoonAccount, offer) {
+        function parseAsset(asset) {
+            return asset.asset_type === 'native' ?
+                StellarSdk.Asset.native() : new StellarSdk.Asset(asset.asset_code, asset.asset_issuer);
+        }
+
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-      .addOperation(StellarSdk.Operation.manageOffer({
-          buying: StellarSdk.Asset.native(),
-          selling: new StellarSdk.Asset('REMOVE', spoonAccount.accountId()),
-          amount: '0',
-          price: '1',
-          offerId,
-      }));
+          .addOperation(StellarSdk.Operation.manageOffer({
+              buying: parseAsset(offer.buying),
+              selling: parseAsset(offer.selling),
+              amount: '0',
+              price: '1',
+              offerId: offer.id,
+          }));
       // DONT call .build()
     },
     async History(Server, publicKey, onUpdate) {
