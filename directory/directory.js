@@ -40,13 +40,13 @@ directory.addAnchor({
   website: 'https://ternio.io',
   logo: 'ternio.io',
   color: '#1D344F',
-  displayName: 'TERN'
+  displayName: 'TERN',
 });
 
 directory.addAsset('ternio.io', {
   code: 'TERN',
   issuer: 'GDGQDVO6XPFSY4NMX75A7AOVYCF5JYGW2SHCJJNWCQWIDGOZB53DGP6C',
-  type: 'token'
+  type: 'token',
 });
 
 directory.addAnchor({
@@ -60,7 +60,7 @@ directory.addAnchor({
 directory.addAsset('six.network', {
   code: 'SIX',
   issuer: 'GDMS6EECOH6MBMCP3FYRYEVRBIV3TQGLOFQIPVAITBRJUMTI6V7A2X6Z',
-  type: 'token'
+  type: 'token',
 });
 
 directory.addAnchor({
@@ -326,7 +326,6 @@ directory.addAsset('coins.asia', {
   issuer: 'GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP',
 });
 
-
 directory.addAnchor({
   domain: 'tempo.eu.com',
   website: 'https://tempo.eu.com/',
@@ -353,7 +352,6 @@ directory.addAsset('sureremit.co', {
   type: 'token',
 });
 
-
 directory.addAnchor({
   domain: 'old.sureremit.co',
   website: 'https://old.sureremit.co',
@@ -364,10 +362,10 @@ directory.addAnchor({
 directory.addAsset('old.sureremit.co', {
   code: 'RMT',
   issuer: 'GCVWTTPADC5YB5AYDKJCTUYSCJ7RKPGE4HT75NIZOUM4L7VRTS5EKLFN',
-  warning: 'ACTION REQUIRED: SureRemit.co has issued a token swap. For more information, visit https://swap.sureremit.co/ or visit official SureRemit communications. The old RMT will be delisted soon.',
+  warning:
+    'ACTION REQUIRED: SureRemit.co has issued a token swap. For more information, visit https://swap.sureremit.co/ or visit official SureRemit communications. The old RMT will be delisted soon.',
   disabled: true,
 });
-
 
 directory.addAnchor({
   domain: 'ripplefox.com',
@@ -379,7 +377,8 @@ directory.addAnchor({
 directory.addAsset('ripplefox.com', {
   code: 'CNY',
   issuer: 'GAREELUB43IRHWEASCFBLKHURCGMHE5IF6XSE7EXDLACYHGRHM43RFOX',
-  instructions: 'Leave your address in the message to seller when you order the item: https://shop109149722.taobao.com',
+  instructions:
+    'Leave your address in the message to seller when you order the item: https://shop109149722.taobao.com',
 });
 
 directory.addAnchor({
@@ -634,7 +633,6 @@ directory.addAsset('astral9.io', {
   type: 'token',
 });
 
-
 directory.addAnchor({
   domain: 'winsome.gift',
   website: 'https://winsome.gift',
@@ -649,19 +647,19 @@ directory.addAsset('winsome.gift', {
   type: 'token',
 });
 
- directory.addAnchor({
-   domain: 'cowrie.exchange',
-   website: 'https://cowrie.exchange',
-   logo: 'cowrie.exchange',
-   color: '#2a1c4a',
-   displayName: 'Cowrie Exchange',
- });
- directory.addAsset('cowrie.exchange', {
-   code: 'NGNT',
-   issuer: 'GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD',
-   instructions: 'https://cowrie.exchange',
-   type: 'token',
- });
+directory.addAnchor({
+  domain: 'cowrie.exchange',
+  website: 'https://cowrie.exchange',
+  logo: 'cowrie.exchange',
+  color: '#2a1c4a',
+  displayName: 'Cowrie Exchange',
+});
+directory.addAsset('cowrie.exchange', {
+  code: 'NGNT',
+  issuer: 'GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD',
+  instructions: 'https://cowrie.exchange',
+  type: 'token',
+});
 
 directory.addAnchor({
   domain: 'pr.network',
@@ -681,18 +679,18 @@ directory.addWildcard('pr.network', {
 });
 
 directory.addAnchor({
-   domain: 'chynge.net',
-   website: 'https://chynge.net',
-   logo: 'chynge.net',
-   color: '#2e41bb',
-   displayName: 'Chynge',
- });
+  domain: 'chynge.net',
+  website: 'https://chynge.net',
+  logo: 'chynge.net',
+  color: '#2e41bb',
+  displayName: 'Chynge',
+});
 directory.addAsset('chynge.net', {
-   code: 'XCLP',
-   issuer: 'GCGPROUME4EFN6CRARPLIR67JV65JWKQ5Y6KYWTDNHSE7SV64CWJQQXQ',
-   instructions: 'https://chynge.net',
-   type: 'token',
- });
+  code: 'CLPX',
+  issuer: 'GCGPROUME4EFN6CRARPLIR67JV65JWKQ5Y6KYWTDNHSE7SV64CWJQQXQ',
+  instructions: 'https://chynge.net',
+  type: 'token',
+});
 
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
@@ -963,15 +961,15 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-    baseBuying: ['TERN', 'ternio.io'],
-    counterSelling: ['XLM', 'native'],
+  baseBuying: ['TERN', 'ternio.io'],
+  counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['XCLP', 'chynge.net'],
+  baseBuying: ['CLPX', 'chynge.net'],
   counterSelling: ['XLM', 'native'],
 });
 
