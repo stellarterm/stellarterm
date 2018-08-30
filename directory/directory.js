@@ -64,14 +64,14 @@ directory.addAsset('six.network', {
 });
 
 directory.addAnchor({
-  domain: 'tontinetrust.com',
-  website: 'https://tontinetrust.com',
-  logo: 'tontinetrust.com',
+  domain: 'TON.Money',
+  website: 'https://TON.Money',
+  logo: 'TON.Money',
   color: '#2975bf',
   displayName: 'TON Money',
 });
 
-directory.addAsset('tontinetrust.com', {
+directory.addAsset('TON.Money', {
   code: 'TON',
   issuer: 'GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON',
   type: 'token',
@@ -773,7 +773,7 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['TON', 'tontinetrust.com'],
+  baseBuying: ['TON', 'TON.Money'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({

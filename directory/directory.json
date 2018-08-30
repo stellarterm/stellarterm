@@ -633,7 +633,7 @@
     "TON-GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON": {
       "code": "TON",
       "issuer": "GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON",
-      "domain": "tontinetrust.com",
+      "domain": "TON.Money",
       "type": "token"
     },
     "TARI-GD7UVDDJHJYKUXB4SJFIC6VJDQ4YADQCMRN3KLHJFV4H6NIUAEREVCO7": {
@@ -1386,7 +1386,7 @@
         "issuer": null
       }
     },
-    "TON-tontinetrust.com/XLM-native": {
+    "TON-TON.Money/XLM-native": {
       "baseBuying": {
         "code": "TON",
         "issuer": "GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON"
