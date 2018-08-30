@@ -66,7 +66,7 @@ directory.addAsset('six.network', {
 directory.addAnchor({
   domain: 'TON.Money',
   website: 'https://TON.Money',
-  logo: 'TON.Money',
+  logo: 'tontinetrust.com',
   color: '#2975bf',
   displayName: 'TON Money',
 });
