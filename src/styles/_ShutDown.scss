@@ -1,0 +1,25 @@
+.ShutDown {
+  margin: 0 auto;
+  padding: 16px 18px;
+  max-width: 900px;
+}
+
+.ShutDown__title {
+  font-size: $s-scale-2;
+  font-weight: normal;
+}
+
+.ShutDown p:last-child {
+  margin-bottom: 0;
+}
+
+.ShutDown__inside {
+  padding: 32px;
+
+}
+.ShutDown--top {
+  padding-top: 48px;
+}
+.ShutDown--bottom {
+  padding-bottom: 0;
+}
