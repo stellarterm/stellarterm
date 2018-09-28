@@ -10,7 +10,7 @@ import Exchange from './components/Exchange.jsx';
 import Generic from './components/Generic.jsx';
 import Download from './components/Download.jsx';
 import Loading from './components/Loading.jsx';
-import ShutDown from './components/ShutDown.jsx';
+import OpenUp from './components/OpenUp.jsx';
 import Stellarify from './lib/Stellarify';
 import url from 'url';
 import Header from './components/Header.jsx';
@@ -103,7 +103,7 @@ class TermApp extends React.Component {
       body = <div>
         <div className="HomePage__black">
           <div className="so-back">
-            <ShutDown />
+            <OpenUp />
             <div className="HomePage__lead">
               <h2 className="HomePage__lead__title">Trade on the <a href="#exchange">Stellar Decentralized Exchange</a></h2>
               <p className="HomePage__lead__summary">StellarTerm is an <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>. <br />Send, receive, and <a href="#exchange">trade</a> assets on the Stellar network easily with StellarTerm.</p>
@@ -125,7 +125,7 @@ class TermApp extends React.Component {
               <div className="island__sub__division">
                 <div className="HomePage__sideBlurb">
                   <p>StellarTerm is just a client that can be used to access the Stellar Decentralized Exchange. Neither StellarTerm nor the developers of it are involved with operating the Stellar network.</p>
-                  <p>StellarTerm is developed by Iris Li, a former employee of the Stellar Development Foundation. The project is independent of the Stellar Development Foundation.</p>
+                  <p>StellarTerm is developed by Ultra Stellar, LLC, the same company that developed the LOBSTR wallet. The project is independent of the Stellar Development Foundation.</p>
                 </div>
               </div>
               <div className="island__sub__division">

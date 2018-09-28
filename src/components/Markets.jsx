@@ -6,7 +6,6 @@ import CustomMarketPicker from './CustomMarketPicker.jsx';
 import Stellarify from '../lib/Stellarify';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import _ from 'lodash';
-import ShutDown from './ShutDown.jsx';
 
 
 export default class Markets extends React.Component {
@@ -16,7 +15,6 @@ export default class Markets extends React.Component {
   render() {
     return (
       <div>
-    <ShutDown className="ShutDown--top" />
         <div className="so-back islandBack islandBack--t">
           <div className="island">
             <AssetList d={this.props.d}></AssetList>

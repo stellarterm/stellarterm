@@ -9,7 +9,6 @@ import Stellarify from '../lib/Stellarify';
 import TermsOfUse from './TermsOfUse.jsx';
 import Ellipsis from './Ellipsis.jsx';
 import directory from '../../directory';
-import ShutDown from './ShutDown.jsx';
 
 export default class Exchange extends React.Component {
   constructor(props) {
@@ -83,8 +82,6 @@ export default class Exchange extends React.Component {
     }
 
     return <div>
-    <ShutDown className="ShutDown--top" />
-
       <div className="so-back islandBack islandBack--t">
         <PairPicker d={this.props.d}></PairPicker>
       </div>

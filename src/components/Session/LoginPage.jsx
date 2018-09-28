@@ -2,7 +2,6 @@ const React = window.React = require('react');
 const images = require('../../images');
 import Ellipsis from '../Ellipsis.jsx';
 import clickToSelect from '../../lib/clickToSelect';
-import ShutDown from '../ShutDown.jsx';
 
 
 // TODO: Move this into Validator
@@ -122,7 +121,6 @@ export default class LoginPage extends React.Component {
 
     if (this.props.urlParts[0] === 'account') {
       body = <div className="LoginPage__body">
-        <ShutDown className="ShutDown--bottom" />
         <div className="LoginPage__greenBox">
           <div className="LoginPage__form">
             <p className="LoginPage__intro">Log in with your secret key to manage your account.</p>
@@ -153,7 +151,6 @@ export default class LoginPage extends React.Component {
       </div>
     } else if (this.props.urlParts[0] === 'signup') {
       body = <div className="LoginPage__body">
-        <ShutDown className="ShutDown--bottom" />
 
         <div className="LoginPage__greenBox">
           <div className="LoginPage__form">
@@ -236,7 +233,6 @@ export default class LoginPage extends React.Component {
       }
 
       body = <div className="LoginPage__body">
-        <ShutDown className="ShutDown--bottom" />
 
         <div className="LoginBox__ledgerNanoHeader">
           <img src={images['ledger-logo']} className="img--noSelect" alt="Ledger Logo" width="300" height="80" />

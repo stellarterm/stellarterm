@@ -1,0 +1,20 @@
+.OpenUp {
+  margin: 0 auto 0 auto;
+  max-width: 870px;
+}
+
+.OpenUp__title {
+  font-size: $s-scale-2;
+  font-weight: normal;
+}
+
+.OpenUp p:last-child {
+  margin-bottom: 0;
+}
+
+.OpenUp__inside {
+  padding: 32px 36px;
+  border: 1px solid $s-color-primary3;
+  background: $s-color-primary8;
+  border-radius: 6px;
+}
