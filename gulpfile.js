@@ -182,11 +182,15 @@ gulp.task('inlinesource', () => gulp.src('./dist/index.html')
     .pipe($.inlineSource())
     .pipe(gulp.dest('./dist/')));
 
+gulp.task('copy-fav', () => gulp.src('./favicon*')
+    .pipe(gulp.dest('./dist/')));
+
 gulp.task('production', () => {
   process.env.NODE_ENV = 'production';
   runSequence(
     'clean',
     baseTasks,
+    'copy-fav',
     'uglify-js',
     'inlinesource'
     , () => {
