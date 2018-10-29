@@ -21,6 +21,21 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'inbot.io',
+  website: 'https://inbot.io',
+  logo: 'inbot.io',
+  color: '#ff004e',
+  displayName: 'InToken',
+});
+
+directory.addAsset('inbot.io', {
+  code: 'IN',
+  issuer: 'GACVHHIZVSNTE6TVHPUZ2QG5PNLVLFAHFUAD5ZUWZYX2BQEVGBDWJIYA',
+  instructions: 'https://inbot.io',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
@@ -649,19 +664,19 @@ directory.addAsset('winsome.gift', {
   type: 'token',
 });
 
- directory.addAnchor({
-   domain: 'cowrie.exchange',
-   website: 'https://cowrie.exchange',
-   logo: 'cowrie.exchange',
-   color: '#2a1c4a',
-   displayName: 'Cowrie Exchange',
- });
- directory.addAsset('cowrie.exchange', {
-   code: 'NGNT',
-   issuer: 'GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD',
-   instructions: 'https://cowrie.exchange',
-   type: 'token',
- });
+directory.addAnchor({
+  domain: 'cowrie.exchange',
+  website: 'https://cowrie.exchange',
+  logo: 'cowrie.exchange',
+  color: '#2a1c4a',
+  displayName: 'Cowrie Exchange',
+});
+directory.addAsset('cowrie.exchange', {
+  code: 'NGNT',
+  issuer: 'GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD',
+  instructions: 'https://cowrie.exchange',
+  type: 'token',
+});
 
 directory.addAnchor({
   domain: 'pr.network',
@@ -682,6 +697,10 @@ directory.addWildcard('pr.network', {
 
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['IN', 'inbot.io'],
+});
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['CNY', 'ripplefox.com'],
@@ -949,8 +968,8 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-    baseBuying: ['TERN', 'ternio.io'],
-    counterSelling: ['XLM', 'native'],
+  baseBuying: ['TERN', 'ternio.io'],
+  counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
