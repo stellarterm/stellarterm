@@ -205,6 +205,19 @@ directory.addAsset('repocoin.io', {
 });
 
 directory.addAnchor({
+  domain: 'kava.world',
+  website: 'https://kava.world',
+  logo: 'kava.world',
+  color: '#6f39fc',
+  displayName: 'KAVA',
+});
+directory.addAsset('kava.world', {
+  code: 'KAVA',
+  issuer: 'GD4T35DMXYDE7BJWYPUWK43VFJO5IBUQYG2YGMICPTWP4JTNWQELKAVA',
+  type: 'token'
+});
+
+directory.addAnchor({
   domain: 'stemchain.io',
   website: 'https://stemchain.io',
   logo: 'stemchain.io',
@@ -898,6 +911,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['REPO', 'old.repocoin.io'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['KAVA', 'kava.world'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
