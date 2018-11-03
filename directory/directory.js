@@ -21,6 +21,34 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'apiscapitalfunds.com',
+  website: 'https://apiscapitalfunds.com',
+  logo: 'apiscapitalfunds.com',
+  color: '#000000',
+  displayName: 'APIS',
+});
+
+directory.addAsset('apiscapitalfunds.com', {
+  code: 'APIS',
+  issuer: 'GCYKQ2627BPKMSUZJK64GPYVKD4TRNACP45X6B754PR6TCYJXCHGUTWB',
+  type: 'token'
+});
+
+directory.addAnchor({
+  domain: 'thewwallet.com',
+  website: 'https://thewwallet.com',
+  logo: 'thewwallet.com',
+  color: '#000000',
+  displayName: 'WSD',
+});
+
+directory.addAsset('thewwallet.com', {
+  code: 'WSD',
+  issuer: 'GDSVWEA7XV6M5XNLODVTPCGMAJTNBLZBXOFNQD3BNPNYALEYBNT6CE2V',
+  type: 'token'
+});
+
+directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
@@ -688,6 +716,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['XLM', 'native'],
+  counterSelling: ['WSD', 'thewwallet.com'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
   counterSelling: ['JPY', 'vcbear.net'],
 });
 directory.addPair({
@@ -739,8 +771,20 @@ directory.addPair({
   counterSelling: ['USD', 'stronghold.co'],
 });
 
+
+
+// Pairs involving "WSD" (USD Backed Stablecoin)
+// "WSD" should be counterSelling
+
+directory.addPair({
+  baseBuying: ['APIS', 'apiscapitalfunds.com'],
+  counterSelling: ['WSD', 'thewwallet.com'],
+});
+
+
 // Pairs involving "BTC"
 // "BTC" should be counterSelling
+
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['BTC', 'nezly.com'],
@@ -768,6 +812,10 @@ directory.addPair({
 
 // Pairs involving XLM
 // XLM should be counterSelling
+directory.addPair({
+  baseBuying: ['APIS', 'apiscapitalfunds.com'],
+  counterSelling: ['XLM', 'native'],
+});
 directory.addPair({
   baseBuying: ['XIM', 'ximcoin.com'],
   counterSelling: ['XLM', 'native'],
