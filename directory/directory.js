@@ -680,6 +680,19 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+  domain: 'glitzkoin.com',
+  website: 'https://glitzkoin.com/',
+  logo: 'glitzkoin.com',
+  color: '#08b5f5',
+  displayName: 'GTN',
+});
+directory.addAsset('glitzkoin.com', {
+  code: 'GTN',
+  issuer: 'GARFMAHQM4JDI55SK2FGEPLOZU7BTEODS3Y5QNT3VMQQIU3WV2HTBA46',
+  type: 'token',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -954,6 +967,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['GTN', 'glitzkoin.com'],
   counterSelling: ['XLM', 'native'],
 });
 
