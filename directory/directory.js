@@ -680,6 +680,19 @@ directory.addWildcard('pr.network', {
   issuer: 'GAZPKDTEZ5UM3BF4E7FL7EMXRMLH76F2TNVXRLOF6SCVXOFWSPCEWFI5',
 });
 
+directory.addAnchor({
+  domain: 'woolf.university',
+  website: 'https://woolf.university',
+  logo: 'woolf.university',
+  color: '#245773',
+  displayName: 'WOOLF',
+});
+directory.addAsset('woolf.university', {
+  code: 'WOOLF',
+  issuer: 'GBRH4SJER4R7MXH5GYSE3WXKPMS53CQ22TVA7X64SDDWKABOPRN6JMP4',
+});
+
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -954,6 +967,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['WOOLF', 'woolf.university'],
   counterSelling: ['XLM', 'native'],
 });
 
