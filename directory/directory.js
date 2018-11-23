@@ -493,12 +493,12 @@ directory.addAsset('collective21.org', {
 });
 
 directory.addAnchor({
-  domain: 'liquido.i-server.org',
-  website: 'https://liquido.i-server.org/',
-  logo: 'liquido.i-server.org',
+  domain: 'liquido.cc',
+  website: 'https://liquido.cc/',
+  logo: 'liquido.cc',
   displayName: 'Liquido',
 });
-directory.addAsset('liquido.i-server.org', {
+directory.addAsset('liquido.cc', {
   code: 'XLQ',
   issuer: 'GD2RRX6BKVTORZ6RIMBLWFVUOAYOLTS2QFJQUQPXLI3PBHR3TMLQNGZX',
 });
