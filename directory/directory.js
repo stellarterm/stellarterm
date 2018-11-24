@@ -933,7 +933,7 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-  baseBuying: ['XLQ', 'liquido.i-server.org'],
+  baseBuying: ['XLQ', 'liquido.cc'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
