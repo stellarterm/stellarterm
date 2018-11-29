@@ -21,6 +21,21 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'kultcoin.org',
+  website: 'https://kultcoin.org',
+  logo: 'kultcoin.org',
+  color: '#74d2fa',
+  displayName: 'KULT',
+});
+
+directory.addAsset('kultcoin.org', {
+  code: 'KULT',
+  issuer: 'GAFM4W6SHP47PD63LVIK47B5NZMTS4XAPTBGCNA3XAER3VNWGI5FSVUT',
+  instructions: 'https://kultcoin.org',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
@@ -955,6 +970,10 @@ directory.addPair({
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
   counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['KULT', 'kultcoin.org'],
 });
 
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
