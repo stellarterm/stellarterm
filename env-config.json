@@ -1,0 +1,8 @@
+{
+  "staging": {
+    "API_URL": "https://api-staging.stellarterm.com/v1/ticker.json"
+  },
+  "production": {
+    "API_URL": "https://api.stellarterm.com/v1/ticker.json"
+  }
+}

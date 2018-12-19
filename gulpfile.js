@@ -14,11 +14,13 @@ const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
 const fs = require('fs');
 const execSync = require('child_process').execSync;
+const argv = require('yargs').argv;
+const config = require('./env-config.json');
 
 const reload = browserSync.reload;
 
 // Default task
-gulp.task('default', ['clean', 'watch']);
+gulp.task('default', ['clean', 'configEnv', 'watch']);
 
 // Clean
 gulp.task('clean', (cb) => {
@@ -92,6 +94,21 @@ gulp.task('customConfig', (cb) => {
     fs.mkdirSync('./dist');
   } catch (e) {}
   fs.writeFile('./dist/customConfig.js', configFile, cb);
+});
+
+gulp.task('configEnv', (cb) => {
+  let deployEnv;
+  if (process.env.CONTEXT === 'production') {
+    deployEnv = '';
+  } else if (process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging') {
+    deployEnv = 'staging';
+  }
+  const ENV = deployEnv || argv.env || 'production';
+  const envData = config[ENV];
+  const envConfig = Object
+    .entries(envData)
+    .reduce((resultConfig, pair) => `${resultConfig}export const ${pair[0]} = ${JSON.stringify(pair[1])};\n`, '');
+  fs.writeFile('./src/env-consts.js', envConfig, cb);
 });
 
 // Build time information
@@ -189,6 +206,7 @@ gulp.task('production', () => {
   process.env.NODE_ENV = 'production';
   runSequence(
     'clean',
+    'configEnv',
     baseTasks,
     'copy-fav',
     'uglify-js',
