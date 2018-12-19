@@ -98,6 +98,8 @@ gulp.task('customConfig', (cb) => {
 
 gulp.task('configEnv', (cb) => {
   let deployEnv;
+  console.log(process.env.CONTEXT);
+  console.log(process.env.BRANCH);
   if (process.env.CONTEXT === 'production') {
     deployEnv = '';
   } else if (process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging') {
