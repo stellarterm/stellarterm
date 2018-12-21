@@ -368,6 +368,19 @@ directory.addAsset('old.sureremit.co', {
   disabled: true,
 });
 
+directory.addAnchor({
+  domain: 'everlife.ai',
+  website: 'https://everlife.ai/',
+  logo: 'everlife.ai',
+  color: '#375CFB',
+  displayName: 'EverLife.AI',
+});
+directory.addAsset('everlife.ai', {
+  code: 'EVER',
+  issuer: 'GDRCJ5OJTTIL4VUQZ52PCZYAUINEH2CUSP5NC2R6D6WQ47JBLG6DF5TE',
+  type: 'token',
+});
+
 
 directory.addAnchor({
   domain: 'ripplefox.com',
@@ -830,6 +843,10 @@ directory.addPair({
 });
 directory.addPair({
   baseBuying: ['MOBI', 'mobius.network'],
+  counterSelling: ['XLM', 'native'],
+});
+directory.addPair({
+  baseBuying: ['EVER', 'everlife.ai'],
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
