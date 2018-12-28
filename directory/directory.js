@@ -21,6 +21,21 @@ directory.DirectoryBuilder = DirectoryBuilder;
 // });
 
 directory.addAnchor({
+  domain: 'gohelpfund.com',
+  website: 'https://gohelpfund.com',
+  logo: 'gohelpfund.com',
+  color: '#80C342',
+  displayName: 'HELP',
+});
+
+directory.addAsset('gohelpfund.com', {
+  code: 'HELP',
+  issuer: 'GACZYSOFKGYDTIMZXSJBGYHTSMLBV7GM27J6VNSN4FGR2R5RTASFWXXK',
+  instructions: 'https://gohelpfund.com',
+  type: 'token',
+});
+
+directory.addAnchor({
   domain: 'ximcoin.com',
   website: 'https://ximcoin.com',
   logo: 'ximcoin.com',
@@ -649,19 +664,19 @@ directory.addAsset('winsome.gift', {
   type: 'token',
 });
 
- directory.addAnchor({
-   domain: 'cowrie.exchange',
-   website: 'https://cowrie.exchange',
-   logo: 'cowrie.exchange',
-   color: '#2a1c4a',
-   displayName: 'Cowrie Exchange',
- });
- directory.addAsset('cowrie.exchange', {
-   code: 'NGNT',
-   issuer: 'GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD',
-   instructions: 'https://cowrie.exchange',
-   type: 'token',
- });
+directory.addAnchor({
+  domain: 'cowrie.exchange',
+  website: 'https://cowrie.exchange',
+  logo: 'cowrie.exchange',
+  color: '#2a1c4a',
+  displayName: 'Cowrie Exchange',
+});
+directory.addAsset('cowrie.exchange', {
+  code: 'NGNT',
+  issuer: 'GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD',
+  instructions: 'https://cowrie.exchange',
+  type: 'token',
+});
 
 directory.addAnchor({
   domain: 'pr.network',
@@ -682,6 +697,10 @@ directory.addWildcard('pr.network', {
 
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
+directory.addPair({
+  baseBuying: ['XLM', 'native'],
+  counterSelling: ['HELP', 'gohelpfund.com'],
+});
 directory.addPair({
   baseBuying: ['XLM', 'native'],
   counterSelling: ['CNY', 'ripplefox.com'],
@@ -768,6 +787,10 @@ directory.addPair({
 
 // Pairs involving XLM
 // XLM should be counterSelling
+directory.addPair({
+  baseBuying: ['HELP', 'gohelpfund.com'],
+  counterSelling: ['XLM', 'native'],
+});
 directory.addPair({
   baseBuying: ['XIM', 'ximcoin.com'],
   counterSelling: ['XLM', 'native'],
@@ -949,8 +972,8 @@ directory.addPair({
   counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
-    baseBuying: ['TERN', 'ternio.io'],
-    counterSelling: ['XLM', 'native'],
+  baseBuying: ['TERN', 'ternio.io'],
+  counterSelling: ['XLM', 'native'],
 });
 directory.addPair({
   baseBuying: ['SIX', 'six.network'],
