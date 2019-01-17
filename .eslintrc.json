@@ -1,0 +1,12 @@
+{
+  "extends": "airbnb",
+  "globals": {
+    "StellarSdk": true,
+    "window": true,
+    "document": true
+  },
+  "rules": {
+    "new-cap": "warn",
+    "no-underscore-dangle": "off"
+  }
+}
