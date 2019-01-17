@@ -1,5 +1,4 @@
 const React = window.React = require('react');
-import Generic from './Generic.jsx';
 
 export default class Footer extends React.Component {
   render() {
