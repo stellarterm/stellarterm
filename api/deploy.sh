@@ -9,7 +9,7 @@ if [ -z "$STELLARTERM_AWS_PROFILE" ]; then
     exit 1
 fi
 
-BRANCH="$(git branch | grep \* | cut -d ' ' -f2)"
+export BRANCH="$(git branch | grep \* | cut -d ' ' -f2)"
 
 if [ $BRANCH != "master" ] && [ $BRANCH != "staging" ]
 then
