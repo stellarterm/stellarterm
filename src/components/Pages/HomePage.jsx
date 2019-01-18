@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../lib/Driver';
-import AssetList from '../AssetList';
+import AssetList from '../AssetList.jsx';
 
 export default class HomePage extends React.Component {
 
