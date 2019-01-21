@@ -6,11 +6,15 @@
     "document": true
   },
   "rules": {
-    "max-len": ["error", 120],
+    "max-len": ["error", {
+      "code": 120,
+      "ignoreStrings": true,
+      "ignoreTemplateLiterals": true,
+      "ignoreUrls": true
+    }],
     "react/require-default-props": 0,
     "react/jsx-indent": 0,
     "indent": ["error", 4],
-    "import/extensions": 0,
     "new-cap": "warn",
     "no-underscore-dangle": "off"
   }

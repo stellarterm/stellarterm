@@ -1,5 +1,5 @@
 import React from 'react';
-import Generic from '../Generic.jsx';
+import Generic from '../Generic';
 
 export default () => (
     <Generic title="Privacy Policy">

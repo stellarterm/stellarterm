@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../lib/Driver';
-import AssetList from '../AssetList.jsx';
+import AssetList from '../AssetList';
 
 export default class HomePage extends React.Component {
 
@@ -32,13 +32,12 @@ export default class HomePage extends React.Component {
                             </h2>
 
                             <p className="HomePage__lead__summary">
-                                StellarTerm is an
-                                <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">open source</a>
-                                client for the
-                                <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">Stellar network</a>.
+                                StellarTerm is an <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">
+                                open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">
+                                Stellar network</a>.
                                 <br />
-                                Send, receive, and <a href="#exchange">trade</a>
-                                assets on the Stellar network easily with StellarTerm.
+                                Send, receive, and <a href="#exchange">trade</a> assets on the Stellar
+                                network easily with StellarTerm.
                              </p>
                             {this.renderHomePageActions()}
                         </div>
@@ -78,8 +77,7 @@ export default class HomePage extends React.Component {
                                 <div className="HomePage__sideBlurb">
                                     <p>
                                         StellarTerm is open source software.
-                                        To support the project, please
-                                        <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">
+                                        To support the project, please <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">
                                             star the project on GitHub
                                         </a>.
                                     </p>

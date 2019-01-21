@@ -20,7 +20,7 @@ export default function Generic(props) {
 }
 
 Generic.propTypes = {
-    title: PropTypes.string(),
-    noTopPadding: PropTypes.bool(),
+    title: PropTypes.string,
+    noTopPadding: PropTypes.bool,
     children: PropTypes.node,
 };

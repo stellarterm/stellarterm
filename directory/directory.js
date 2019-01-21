@@ -138,19 +138,6 @@ directory.addAsset('repocoin.io', {
 });
 
 directory.addAnchor({
-    domain: 'charnatoken.top',
-    website: 'https://charnatoken.top',
-    logo: 'charnatoken.top',
-    color: '#1c4664',
-    displayName: 'Charna Token',
-});
-
-directory.addAsset('charnatoken.top', {
-    code: 'CHRC',
-    issuer: 'GBRPTWEZTUKYM6VJXLHXBFI23M2GSY3TCVIQSZKFQLMOJXH7VPDGKBDP',
-});
-
-directory.addAnchor({
     domain: 'stronghold.co',
     website: 'https://stronghold.co',
     logo: 'stronghold.co',
@@ -419,11 +406,6 @@ directory.addPair({
 });
 
 directory.addPair({
-    baseBuying: ['CHRC', 'charnatoken.top'],
-    counterSelling: ['XLM', 'native'],
-});
-
-directory.addPair({
     baseBuying: ['LTC', 'apay.io'],
     counterSelling: ['XLM', 'native'],
 });
@@ -618,14 +600,16 @@ directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ
 // Assert that each asset has a trading pair
 const remainingAssets = Object.assign({}, directory.assets);
 
-for (const pairId in directory.pairs) {
+const pairIds = Object.keys(directory.pairs);
+pairIds.forEach((pairId) => {
     const pair = directory.pairs[pairId];
     if (pair.baseBuying.code === 'XLM' && pair.baseBuying.issuer === null) {
         delete remainingAssets[`${pair.counterSelling.code}-${pair.counterSelling.issuer}`];
     } else if (pair.counterSelling.code === 'XLM' && pair.counterSelling.issuer === null) {
         delete remainingAssets[`${pair.baseBuying.code}-${pair.baseBuying.issuer}`];
     }
-}
+});
+
 const remainingAssetKeys = Object.keys(remainingAssets);
 if (remainingAssetKeys.length) {
     throw new Error(`Missing trading pair. Please use addPair() for asset: ${remainingAssetKeys[0]}`);
