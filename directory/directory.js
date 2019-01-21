@@ -258,6 +258,30 @@ directory.addAsset('apay.io', {
     instructions: 'https://apay.io/',
 });
 
+directory.addAsset('apay.io', {
+    code: 'LINK',
+    issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+    instructions: 'https://apay.io/',
+});
+
+directory.addAsset('apay.io', {
+    code: 'ZRX',
+    issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+    instructions: 'https://apay.io/',
+});
+
+directory.addAsset('apay.io', {
+    code: 'BAT',
+    issuer: 'GBDEVU63Y6NTHJQQZIKVTC23NWLQVP3WJ2RI2OTSJTNYOIGICST6DUXR',
+    instructions: 'https://apay.io/',
+});
+
+directory.addAsset('apay.io', {
+    code: 'BCH',
+    issuer: 'GAEGOS7I6TYZSVHPSN76RSPIVL3SELATXZWLFO4DIAFYJF7MPAHFE7H4',
+    instructions: 'https://apay.io/',
+});
+
 directory.addAnchor({
     domain: 'mobius.network',
     website: 'https://mobius.network/',
@@ -314,6 +338,52 @@ directory.addAsset('cryptomover.com', {
     issuer: 'GABSZVZBYEO5F4V5LZKV7GR4SAJ5IKJGGOF43BIN42FNDUG7QPH6IMRQ',
 });
 
+directory.addAsset('cryptomover.com', {
+    code: 'CMS',
+    issuer: 'GCVBUIXKKLH2DYHZRSLZUIZSVJUL74RTW6FVCCEYB2OE3RH7RVDBPCFG',
+});
+
+directory.addAnchor({
+    domain: 'flutterwave.com',
+    website: 'https://flutterwave.com/',
+    logo: 'flutterwave.com',
+    color: '#febe12',
+    displayName: 'Flutterwave',
+});
+
+directory.addAsset('flutterwave.com', {
+    code: 'NGN',
+    issuer: 'GCC4YLCR7DDWFCIPTROQM7EB2QMFD35XRWEQVIQYJQHVW6VE5MJZXIGW',
+});
+
+directory.addAnchor({
+    domain: 'cowrie.exchange',
+    website: 'https://cowrie.exchange',
+    logo: 'cowrie.exchange',
+    color: '#2a1c4a',
+    displayName: 'Cowrie Exchange',
+});
+
+directory.addAsset('cowrie.exchange', {
+    code: 'NGNT',
+    issuer: 'GAWODAROMJ33V5YDFY3NPYTHVYQG7MJXVJ2ND3AOGIHYRWINES6ACCPD',
+    instructions: 'https://cowrie.exchange',
+    type: 'token',
+});
+
+directory.addAnchor({
+    domain: 'coins.asia',
+    website: 'https://coins.asia/',
+    logo: 'coins.asia',
+    color: '#04bcfc',
+    displayName: 'coins.asia',
+});
+
+directory.addAsset('coins.asia', {
+    code: 'PHP',
+    issuer: 'GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -339,6 +409,26 @@ directory.addPair({
 directory.addPair({
     baseBuying: ['XLM', 'native'],
     counterSelling: ['USD', 'stronghold.co'],
+});
+
+directory.addPair({
+    baseBuying: ['XLM', 'native'],
+    counterSelling: ['NGN', 'flutterwave.com'],
+});
+
+directory.addPair({
+    baseBuying: ['XLM', 'native'],
+    counterSelling: ['NGNT', 'cowrie.exchange'],
+});
+
+directory.addPair({
+    baseBuying: ['EURT', 'tempo.eu.com'],
+    counterSelling: ['PHP', 'coins.asia'],
+});
+
+directory.addPair({
+    baseBuying: ['XLM', 'native'],
+    counterSelling: ['PHP', 'coins.asia'],
 });
 
 // Pairs involving "BTC"
@@ -421,6 +511,26 @@ directory.addPair({
 });
 
 directory.addPair({
+    baseBuying: ['BAT', 'apay.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['ZRX', 'apay.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['LINK', 'apay.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['BCH', 'apay.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
     baseBuying: ['XIR', 'xirkle.com'],
     counterSelling: ['XLM', 'native'],
 });
@@ -452,6 +562,11 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['CMA', 'cryptomover.com'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['CMS', 'cryptomover.com'],
     counterSelling: ['XLM', 'native'],
 });
 
