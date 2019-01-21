@@ -21,7 +21,9 @@
     "gulp-sass": "3.1.0",
     "gulp-useref": "3.1.4",
     "lodash": "4.17.5",
-    "prop-types": "15.6.0"
+    "prop-types": "15.6.0",
+    "react": "16.2.0",
+    "react-dom": "16.2.0"
   },
   "devDependencies": {
     "babel-plugin-transform-runtime": "6.23.0",
@@ -39,8 +41,6 @@
     "gulp-autoprefixer": "3.1.1",
     "gulp-inline-source": "3.1.0",
     "gulp-uglify": "2.1.2",
-    "react": "16.2.0",
-    "react-dom": "16.2.0",
     "run-sequence": "1.2.2",
     "vinyl-source-stream": "1.1.2",
     "watchify": "3.10.0"
@@ -78,15 +78,5 @@
       ]
     ]
   },
-  "browser": {},
-  "eslintConfig": {
-    "extends": "airbnb",
-    "globals": {
-      "StellarSdk": true
-    },
-    "rules": {
-      "new-cap": "warn",
-      "no-underscore-dangle": "off"
-    }
-  }
+  "browser": {}
 }
