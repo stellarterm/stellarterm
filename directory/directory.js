@@ -406,7 +406,7 @@ directory.addAnchor({
     domain: 'interstellar.exchange',
     website: 'https://interstellar.exchange/',
     logo: 'interstellar',
-    color: '#62376e',
+    color: '#62a9e3',
     displayName: 'Interstellar',
 });
 
@@ -432,7 +432,7 @@ directory.addAnchor({
     domain: 'fchain.io',
     website: 'https://fchain.io/',
     logo: 'fchain',
-    color: '#069bee',
+    color: '#1fc785',
     displayName: 'Firefly',
 });
 
