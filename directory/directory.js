@@ -384,6 +384,122 @@ directory.addAsset('coins.asia', {
     issuer: 'GBUQWP3BOUZX34TOND2QV7QQ7K7VJTG6VSE7WMLBTMDJLLAW7YKGU6EP',
 });
 
+directory.addAnchor({
+    domain: 'stellarport.io',
+    website: 'https://stellarport.io/',
+    logo: 'stellarport',
+    color: '#00a5ed',
+    displayName: 'Stellarport',
+});
+
+directory.addAsset('stellarport.io', {
+    code: 'BTC',
+    issuer: 'GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5',
+});
+
+directory.addAsset('stellarport.io', {
+    code: 'XRP',
+    issuer: 'GBVOL67TMUQBGL4TZYNMY3ZQ5WGQYFPFD5VJRWXR72VA33VFNL225PL5',
+});
+
+directory.addAnchor({
+    domain: 'interstellar.exchange',
+    website: 'https://interstellar.exchange/',
+    logo: 'interstellar',
+    color: '#62376e',
+    displayName: 'Interstellar',
+});
+
+directory.addAsset('interstellar.exchange', {
+    code: 'ETH',
+    issuer: 'GCNSGHUCG5VMGLT5RIYYZSO7VQULQKAJ62QA33DBC5PPBSO57LFWVV6P',
+});
+
+directory.addAnchor({
+    domain: 'x.token.io',
+    website: 'https://x.token.io/',
+    logo: 'x.token',
+    color: '#069bee',
+    displayName: 'Token X',
+});
+
+directory.addAsset('x.token.io', {
+    code: 'USD',
+    issuer: 'GDSRCV5VTM3U7Y3L6DFRP3PEGBNQMGOWSRTGSBWX6Z3H6C7JHRI4XFJP',
+});
+
+directory.addAnchor({
+    domain: 'fchain.io',
+    website: 'https://fchain.io/',
+    logo: 'fchain',
+    color: '#069bee',
+    displayName: 'Firefly',
+});
+
+directory.addAsset('fchain.io', {
+    code: 'ETH',
+    issuer: 'GBETHKBL5TCUTQ3JPDIYOZ5RDARTMHMEKIO2QZQ7IOZ4YC5XV3C2IKYU',
+});
+
+directory.addAsset('fchain.io', {
+    code: 'XCN',
+    issuer: 'GCNY5OXYSY4FKHOPT2SPOQZAOEIGXB5LBYW3HVU3OWSTQITS65M5RCNY',
+});
+
+directory.addAnchor({
+    domain: 'gratz.io',
+    website: 'https://gratz.io/',
+    logo: 'gratz',
+    color: '#f4e73f',
+    displayName: 'Gratzio',
+});
+
+directory.addAsset('gratz.io', {
+    code: 'GRAT',
+    issuer: 'GAJ7V3EMD3FRWAPBEJAP7EC4223XI5EACDZ46RFMY5DYOMCIMWEFR5II',
+});
+
+directory.addAnchor({
+    domain: 'inbot.io',
+    website: 'https://inbot.io/',
+    logo: 'inbot',
+    color: '#ff0045',
+    displayName: 'Inbot Ambassador',
+});
+
+directory.addAsset('inbot.io', {
+    code: 'IN',
+    issuer: 'GACVHHIZVSNTE6TVHPUZ2QG5PNLVLFAHFUAD5ZUWZYX2BQEVGBDWJIYA',
+});
+
+directory.addAnchor({
+    domain: 'blockeq.com',
+    website: 'https://blockeq.com/',
+    logo: 'blockeq',
+    color: '#0084ff',
+    displayName: 'BlockEQ',
+});
+
+directory.addAsset('blockeq.com', {
+    code: 'PTS',
+    issuer: 'GBPG7KRYC3PTKHBXQGRD3GMZ5DB4C3D553ZN2ZLH57LBAQIULVY46Z5F',
+});
+
+directory.addAnchor({
+    domain: 'ximcoin.com',
+    website: 'https://ximcoin.com/',
+    logo: 'ximcoin.com',
+    color: '#000000',
+    displayName: 'XIM',
+});
+
+directory.addAsset('ximcoin.com', {
+    code: 'XIM',
+    issuer: 'GBZ35ZJRIKJGYH5PBKLKOZ5L6EXCNTO7BKIL7DAVVDFQ2ODJEEHHJXIM',
+    instructions: 'https://ximcoin.com',
+    type: 'token',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -409,6 +525,11 @@ directory.addPair({
 directory.addPair({
     baseBuying: ['XLM', 'native'],
     counterSelling: ['USD', 'stronghold.co'],
+});
+
+directory.addPair({
+    baseBuying: ['XLM', 'native'],
+    counterSelling: ['USD', 'x.token.io'],
 });
 
 directory.addPair({
@@ -453,8 +574,18 @@ directory.addPair({
     counterSelling: ['BTC', 'apay.io'],
 });
 
+directory.addPair({
+    baseBuying: ['XLM', 'native'],
+    counterSelling: ['BTC', 'stellarport.io'],
+});
+
 // Pairs involving XLM
 // XLM should be counterSelling
+directory.addPair({
+    baseBuying: ['XIM', 'ximcoin.com'],
+    counterSelling: ['XLM', 'native'],
+});
+
 directory.addPair({
     baseBuying: ['TARI', 'cryptotari.io'],
     counterSelling: ['XLM', 'native'],
@@ -486,12 +617,47 @@ directory.addPair({
 });
 
 directory.addPair({
+    baseBuying: ['ETH', 'interstellar.exchange'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['ETH', 'fchain.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
     baseBuying: ['XLM', 'stronghold.co'],
     counterSelling: ['XLM', 'native'],
 });
 
 directory.addPair({
     baseBuying: ['MOBI', 'mobius.network'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['XRP', 'stellarport.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['XCN', 'fchain.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['GRAT', 'gratz.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['IN', 'inbot.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['PTS', 'blockeq.com'],
     counterSelling: ['XLM', 'native'],
 });
 
