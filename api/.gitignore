@@ -5,6 +5,7 @@ package-lock.json
 
 
 setEnvironment.sh
+setStagingEnvironment.sh
 
 # Serverless directories
 .serverless

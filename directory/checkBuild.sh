@@ -3,19 +3,14 @@
 
 set -o errexit
 
+if git diff --name-only directory.js | grep directory;
+then
+  printf "\033[1;31mERROR: \033[0;31mdirectory.js changes needs to be checked in\033[0m\n";
+  exit 1
+fi;
+
 ./buildLogos.js
 ./buildDirectory.js
 
-if git diff --name-only logos.json | grep logos;
-then
-  echo 'ERROR: logos.json changes needs to be checked in';
-  exit 1
-fi;
-if git diff --name-only directory.json | grep directory;
-then
-  echo 'ERROR: directory.json changes needs to be checked in';
-  exit 1
-fi;
 
-
-openssl dgst -sha256 directory.json
+openssl dgst -sha256 directory.js
