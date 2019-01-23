@@ -170,6 +170,11 @@ directory.addAsset('stronghold.co', {
     instructions: 'https://stronghold.co',
 });
 
+directory.addAsset('stronghold.co', {
+    code: 'SHX',
+    issuer: 'GDSTRSHXHGJ7ZIVRBXEYE5Q74XUVCUSEKEBR7UCHEUUEK72N7I7KJ6JH',
+});
+
 directory.addAnchor({
     domain: 'naobtc.com',
     website: 'https://naobtc.com/',
@@ -628,6 +633,12 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['XLM', 'stronghold.co'],
+    counterSelling: ['XLM', 'native'],
+});
+
+
+directory.addPair({
+    baseBuying: ['SHX', 'stronghold.co'],
     counterSelling: ['XLM', 'native'],
 });
 
