@@ -15,11 +15,13 @@ const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
 const fs = require('fs');
 const execSync = require('child_process').execSync;
+const argv = require('yargs').argv;
+const config = require('./env-config.json');
 
 const reload = browserSync.reload;
 
 // Default task
-gulp.task('default', ['clean', 'watch']);
+gulp.task('default', ['clean', 'configEnv', 'developApi', 'watch']);
 
 // Clean
 gulp.task('clean', (cb) => {
@@ -93,6 +95,25 @@ gulp.task('customConfig', (cb) => {
     fs.writeFile('./dist/customConfig.js', configFile, cb);
 });
 
+function getEnvironment() {
+    let deployEnv;
+    if (process.env.CONTEXT === 'production') {
+        deployEnv = 'production';
+    } else if (process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging') {
+        deployEnv = 'staging';
+    }
+    return deployEnv || argv.env || 'local';
+}
+
+gulp.task('configEnv', (cb) => {
+    const ENV = getEnvironment();
+    const envData = config[ENV];
+    const envConfig = Object
+        .entries(envData)
+        .reduce((resultConfig, pair) => `${resultConfig}export const ${pair[0]} = ${JSON.stringify(pair[1])};\n`, '');
+    fs.writeFile('./src/env-consts.js', envConfig, cb);
+});
+
 // Build time information
 gulp.task('buildInfo', (cb) => {
     let buildInfo = '\n// This file generated during the gulp build process.\n';
@@ -163,12 +184,30 @@ gulp.task('watch', baseTasks, () => {
     });
     gulp.watch('./src/index.html', ['html-reload']);
     gulp.watch(['src/**/*.scss'], ['css-reload']);
+    gulp.watch(['src/directory.js', 'directory/logos/**/*'], ['developApi']);
 });
 
 const bsReload = (done) => {
     browserSync.reload();
     done();
 };
+
+gulp.task('developApi', (cb) => {
+    const env = getEnvironment();
+
+    if (env !== 'local') {
+        cb();
+        return;
+    }
+
+    execSync('(cd ./directory/ && ./buildLogos.js && ./buildDirectory.js)');
+    execSync('(cd ./api/ && ./testTicker.sh)');
+    gulp
+        .src('./api/output/**/*.json')
+        .pipe(gulp.dest('dist/api'))
+        .on('end', cb);
+});
+
 gulp.task('html-reload', ['html'], bsReload);
 gulp.task('css-reload', ['styles'], bsReload);
 
@@ -191,6 +230,7 @@ gulp.task('production', () => {
     process.env.NODE_ENV = 'production';
     runSequence(
         'clean',
+        'configEnv',
         baseTasks,
         'copy-fav',
         'uglify-js',

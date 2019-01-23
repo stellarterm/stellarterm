@@ -1,5 +1,6 @@
 import req from '../req.js';
 import Event from '../Event';
+import * as EnvConsts from '../../env-consts.js';
 
 
 export default function Ticker() {
@@ -17,7 +18,7 @@ Ticker.prototype.load = function(attempt) {
   if (attempt >= MAX_ATTEMPTS) {
     return;
   }
-  req.getJson('https://api.stellarterm.com/v1/ticker.json')
+  req.getJson(EnvConsts.API_URL)
   .then(tickerData => {
     this.ready = true;
     this.data = tickerData;

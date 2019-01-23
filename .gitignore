@@ -2,9 +2,11 @@ node_modules/
 dist/
 .sass-cache/
 src/images.js
+src/env-consts.js
 
 npm-debug.log
 package-lock.json
+api/package-lock.json
 
 # OSX
 *.DS_Store
