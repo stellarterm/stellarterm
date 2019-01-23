@@ -184,7 +184,7 @@ gulp.task('watch', baseTasks, () => {
     });
     gulp.watch('./src/index.html', ['html-reload']);
     gulp.watch(['src/**/*.scss'], ['css-reload']);
-    gulp.watch(['src/directory.js'], ['developApi']);
+    gulp.watch(['src/directory.js', 'directory/logos/**/*'], ['developApi']);
 });
 
 const bsReload = (done) => {
