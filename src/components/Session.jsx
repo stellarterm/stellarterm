@@ -1,5 +1,5 @@
 const React = window.React = require('react');
-import LoginPage from './Session/LoginPage.jsx';
+import LoginPage from './Session/LoginPage/LoginPage.jsx';
 import AccountView from './Session/AccountView.jsx';
 import ManageCurrentTrust from './Session/ManageCurrentTrust.jsx';
 import ManuallyAddTrust from './Session/ManuallyAddTrust.jsx';

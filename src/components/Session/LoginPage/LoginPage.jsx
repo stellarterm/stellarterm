@@ -1,7 +1,9 @@
+import SecurityPhrase from './SecurityPhrase';
+
 const React = window.React = require('react');
-const images = require('../../images');
-import Ellipsis from '../Ellipsis.jsx';
-import clickToSelect from '../../lib/clickToSelect';
+const images = require('../../../images');
+import Ellipsis from '../../Ellipsis.jsx';
+import clickToSelect from '../../../lib/clickToSelect';
 
 
 // TODO: Move this into Validator
@@ -277,26 +279,31 @@ export default class LoginPage extends React.Component {
       </div>
     }
 
-    return <div className="so-back islandBack islandBack--t">
-      <div className="island">
-        <div className="island__header">
-          Access your account
-        </div>
-        <div className="LoginPage">
-          <div className="LoginPage__sidebar">
-            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'signup' ? ' is-active' : '')} href="#signup">
-              New account
-            </a>
-            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'account' ? ' is-active' : '')} href="#account">
-              Log in with key
-            </a>
-            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'ledger' ? ' is-active' : '')} href="#ledger">
-              <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger" width="75" height="20" />
-            </a>
+    return (
+        <div>
+          <SecurityPhrase />
+          <div className="so-back islandBack islandBack--t">
+            <div className="island">
+              <div className="island__header">
+                Access your account
+              </div>
+              <div className="LoginPage">
+                <div className="LoginPage__sidebar">
+                  <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'signup' ? ' is-active' : '')} href="#signup">
+                    New account
+                  </a>
+                  <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'account' ? ' is-active' : '')} href="#account">
+                    Log in with key
+                  </a>
+                  <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'ledger' ? ' is-active' : '')} href="#ledger">
+                    <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger" width="75" height="20" />
+                  </a>
+                </div>
+                {body}
+              </div>
+            </div>
           </div>
-          {body}
         </div>
-      </div>
-    </div>
+        );
   }
 }

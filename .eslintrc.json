@@ -3,7 +3,8 @@
   "globals": {
     "StellarSdk": true,
     "window": true,
-    "document": true
+    "document": true,
+    "localStorage": true
   },
   "rules": {
     "max-len": ["error", {
@@ -14,8 +15,12 @@
     }],
     "react/require-default-props": 0,
     "react/jsx-indent": 0,
+    "react/jsx-indent-props": ["error", 4],
+    "react/jsx-closing-bracket-location": ["error", "after-props"],
+    "jsx-a11y/no-static-element-interactions": 0,
     "indent": ["error", 4],
     "new-cap": "warn",
-    "no-underscore-dangle": "off"
+    "no-underscore-dangle": "off",
+    "semi": "error"
   }
 }
