@@ -1,7 +1,9 @@
+import SecurityPhrase from './SecurityPhrase';
+
 const React = window.React = require('react');
-const images = require('../../images');
-import Ellipsis from '../Ellipsis.jsx';
-import clickToSelect from '../../lib/clickToSelect';
+const images = require('../../../images');
+import Ellipsis from '../../Ellipsis.jsx';
+import clickToSelect from '../../../lib/clickToSelect';
 
 
 // TODO: Move this into Validator
@@ -142,7 +144,7 @@ export default class LoginPage extends React.Component {
             <h3>Security notes</h3>
             <ul>
               <li>Check the url to make sure you are on the correct website.</li>
-              <li>Stellarterm does not save your secret key. It is stored on your browser and will be deleted once the page is refreshed or exited.</li>
+              <li>StellarTerm does not save your secret key. It is stored on your browser and will be deleted once the page is refreshed or exited.</li>
               <li>For extra security, you can <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">build from source</a> or <a href="https://github.com/stellarterm/stellarterm.github.io/" target="_blank" rel="nofollow noopener noreferrer">download from GitHub</a> and verify the hash.</li>
               <li>StellarTerm is released under the Apache 2.0. It is provided "AS IS" without warranty. The developer is not responsible for any losses and activities caused by the application.</li>
             </ul>
@@ -277,26 +279,31 @@ export default class LoginPage extends React.Component {
       </div>
     }
 
-    return <div className="so-back islandBack islandBack--t">
-      <div className="island">
-        <div className="island__header">
-          Access your account
-        </div>
-        <div className="LoginPage">
-          <div className="LoginPage__sidebar">
-            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'signup' ? ' is-active' : '')} href="#signup">
-              New account
-            </a>
-            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'account' ? ' is-active' : '')} href="#account">
-              Log in with key
-            </a>
-            <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'ledger' ? ' is-active' : '')} href="#ledger">
-              <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger" width="75" height="20" />
-            </a>
+    return (
+        <div>
+          <SecurityPhrase />
+          <div className="so-back islandBack islandBack--t">
+            <div className="island">
+              <div className="island__header">
+                Access your account
+              </div>
+              <div className="LoginPage">
+                <div className="LoginPage__sidebar">
+                  <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'signup' ? ' is-active' : '')} href="#signup">
+                    New account
+                  </a>
+                  <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'account' ? ' is-active' : '')} href="#account">
+                    Log in with key
+                  </a>
+                  <a className={'LoginPage__sidebar__tab' + (this.props.urlParts[0] === 'ledger' ? ' is-active' : '')} href="#ledger">
+                    <img className="LoginPage__sidebar__tab__img--invertible img--noSelect" src={images['ledger-logo']} alt="Ledger" width="75" height="20" />
+                  </a>
+                </div>
+                {body}
+              </div>
+            </div>
           </div>
-          {body}
         </div>
-      </div>
-    </div>
+        );
   }
 }

@@ -36,7 +36,8 @@
 }
 
 .s-button.is-disabled,
-.s-button:disabled {
+.s-button:disabled,
+.s-button[disabled] {
   border: 1px solid $s-color-neutral5;
   background: $s-color-neutral8;
   color: $s-color-neutral5;
