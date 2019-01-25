@@ -40,11 +40,13 @@
             .bold { font-weight: 600; }
 
             &.success-text .bold { margin-right: 10px; }
+
+            .description { margin-bottom: 8px; }
         }
 
         .SecurityPhrase__form {
             position: relative;
-            height: 98px;
+            height: 207px;
             padding: 10px 0 5px;
             overflow: hidden;
             opacity: 1;
@@ -54,6 +56,14 @@
                 height: 0;
                 padding: 0;
                 opacity: 0;
+            }
+
+            .generate-ps-button {
+                padding: 0.3333em 3em 0.3333em 3em;
+            }
+
+            .save-ps-button {
+                padding: 0.3333em 2em 0.3333em 2em;
             }
         }
 

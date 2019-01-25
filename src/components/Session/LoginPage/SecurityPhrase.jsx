@@ -54,18 +54,30 @@ export default class SecurityPhrase extends React.Component {
                     <div
                         className="LoginPage__accept__link create_sp"
                         onClick={() => this.toggleForm()}>
-                        { showSecurityPhraseForm ? 'Hide form' : 'Create Security Phrase' }
+                        { showSecurityPhraseForm ? 'Hide' : 'Learn More' }
                     </div>
 
                     <div className="security-phrase-text warning-text">
-                        <span className="bold">Your Security Phrase is missing!</span> It can be possible if you enter
-                        this site with a new device. If you don‘t, please check the url to make sure you
-                        are on the correct website.
+                        <div className="bold">Secret Phrase not found!</div> A Secret Phrase can help you
+                        verify that you are using authentic StellarTerm website and save you from phishing attacks.
                     </div>
                 </div>
 
 
                 <div className={`SecurityPhrase__form ${showSecurityPhraseForm ? '' : 'closed'}`}>
+
+                    <div className="security-phrase-text">
+                        <p className="description">Have you configured your Secret Phrase?
+                            If you did, be careful, as it should always be present on this page.</p>
+
+                        <p className="description">Your Secret Phrase could be missing if you access StellarTerm from
+                            a new device or a new browser. Check the URL to make sure you are on the correct
+                            website.</p>
+
+                        <p className="description">If you haven’t selected a Secret Phrase yet, we highly recommend you
+                            to do it now.</p>
+                    </div>
+
                     <label className="s-inputGroup LoginPage__inputGroup" htmlFor="sp_phrase">
                         <input
                             id="sp_phrase"
@@ -77,13 +89,13 @@ export default class SecurityPhrase extends React.Component {
 
                         <div>
                             <div
-                                className="LoginPage__show s-button s-button--light save-ps-button"
+                                className="LoginPage__show s-button generate-ps-button"
                                 onClick={() => this.generatePhrase()}>Generate</div>
                         </div>
                     </label>
 
                     <div
-                        className="LoginPage__submit s-button"
+                        className="LoginPage__submit s-button save-ps-button"
                         disabled={!securityPhrase || securityPhrase.length < 5}
                         onClick={() => this.saveSecurityPhrase()}>Save</div>
                 </div>
@@ -95,7 +107,7 @@ export default class SecurityPhrase extends React.Component {
         const { securityPhrase } = this.state;
         return (
             <div className="security-phrase-text success-text">
-                <span className="bold">Your Security Phrase:</span> {securityPhrase}
+                <span className="bold">Your Secret Phrase:</span> {securityPhrase}
             </div>
         );
     }
