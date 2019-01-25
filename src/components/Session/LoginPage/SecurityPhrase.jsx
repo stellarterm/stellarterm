@@ -71,8 +71,8 @@ export default class SecurityPhrase extends React.Component {
                             If you did, be careful, as it should always be present on this page.</p>
 
                         <p className="description">Your Secret Phrase could be missing if you access StellarTerm from
-                            a new device or a new browser. Check the URL to make sure you are on the correct
-                            website.</p>
+                            a new device or a new browser. <br/>
+                            Check the URL to make sure you are on the correct website.</p>
 
                         <p className="description">If you haven’t selected a Secret Phrase yet, we highly recommend you
                             to do it now.</p>
