@@ -7,7 +7,7 @@
   "scripts": {
     "test": "./test.sh",
     "setup": "yarn install",
-    "start": "./node_modules/.bin/gulp watch",
+    "start": "./node_modules/.bin/gulp",
     "directory/": "npm run directory",
     "directory": "cd directory && ./checkBuild.sh;",
     "lint": "./node_modules/.bin/eslint .",
