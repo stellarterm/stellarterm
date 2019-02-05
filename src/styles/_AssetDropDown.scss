@@ -1,0 +1,27 @@
+.AssetDropDown__card{
+  height: 52px;
+  text-align: center;
+  align-items: center;
+  line-height: 52px;
+  font-weight: 400;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.AssetDropDown__left{
+  margin: 0 0 0 9px;
+}
+
+.AssetDropDown__right{
+  margin: 0 9px 0 0;
+}
+
+.AssetDropDown__empty{
+  display: flex;
+  justify-content: space-between;
+  padding: 0 16px;
+  border: 1px solid rgb(189, 191, 192);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+}
