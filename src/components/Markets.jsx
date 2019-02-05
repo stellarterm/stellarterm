@@ -6,6 +6,7 @@ import CustomMarketPicker from './CustomMarketPicker.jsx';
 import Stellarify from '../lib/Stellarify';
 import ErrorBoundary from './ErrorBoundary.jsx';
 import _ from 'lodash';
+import CustomPairMenu from './CustomPairMenu';
 
 
 export default class Markets extends React.Component {
@@ -26,6 +27,9 @@ export default class Markets extends React.Component {
           </div>
         </div>
         <ErrorBoundary>
+          <div className="so-back islandBack">
+            <CustomPairMenu d={this.props.d} />
+          </div>
           <div className="so-back islandBack">
             <CustomMarketPicker row={true}></CustomMarketPicker>
           </div>
