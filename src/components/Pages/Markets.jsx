@@ -4,6 +4,7 @@ import Driver from '../../lib/Driver';
 import AssetList from '../AssetList';
 import CustomMarketPicker from '../CustomMarketPicker';
 import ErrorBoundary from '../ErrorBoundary';
+import CustomPairMenu from '../CustomPairMenu';
 
 export default function Markets(props) {
     return (
@@ -27,6 +28,9 @@ export default function Markets(props) {
                 </div>
             </div>
             <ErrorBoundary>
+                <div className="so-back islandBack">
+                    <CustomPairMenu d={props.d} />
+                </div>
                 <div className="so-back islandBack">
                     <CustomMarketPicker row />
                 </div>

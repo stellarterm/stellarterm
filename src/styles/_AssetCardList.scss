@@ -1,0 +1,22 @@
+.AssetCardList{
+  width: 100%;
+  max-height: 230px;
+  overflow-y: scroll;
+  position: absolute;
+  border: 1px solid rgb(189, 191, 192);
+  border-top: none;
+  border-radius: 0 0 2px 2px;
+  z-index: 2;
+  background-color: #fff;
+  cursor: pointer;
+  padding-bottom: 5px;
+}
+
+.AssetCardList_card{
+  margin: 1px 5px;
+}
+
+
+
+
+

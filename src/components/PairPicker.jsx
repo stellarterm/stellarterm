@@ -47,7 +47,7 @@ export default class PairPicker extends React.Component {
 
       main = <div className="PairPicker__infoBar">
         <div className="PairPicker__infoBar__pair">
-          <AssetPair baseBuying={baseBuying} counterSelling={counterSelling}></AssetPair>
+          <AssetPair baseBuying={baseBuying} counterSelling={counterSelling} d={this.props.d} swap dropdown></AssetPair>
         </div>
         <div className="PairPicker__infoBar__ticker">
           <p className="PairPicker__infoBar__ticker__title">Current price for {baseBuying.getCode()}</p>
@@ -57,7 +57,7 @@ export default class PairPicker extends React.Component {
     } else {
       // Just show basic pair
       main = <div className="PairPicker__pair">
-        <AssetPair baseBuying={baseBuying} counterSelling={counterSelling}></AssetPair>
+        <AssetPair baseBuying={baseBuying} counterSelling={counterSelling} d={this.props.d} swap dropdown></AssetPair>
       </div>
     }
 

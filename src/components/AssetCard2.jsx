@@ -43,7 +43,7 @@ export default function AssetCard2(props) {
     }
 
     const anchor = directory.getAnchor(asset.domain);
-    const borderStyle = {};
+    let borderStyle = {};
     const backgroundStyle = {};
 
     if (anchor.color) {
@@ -57,6 +57,10 @@ export default function AssetCard2(props) {
             : `${asset.issuer.substr(0, 12)}.........${asset.issuer.substr(-12, 12)}`;
 
     const assetCardClass = `AssetCard2 AssetCard2--container ${props.boxy ? 'AssetCard2--boxy' : ''}`;
+
+    if (props.noborder) {
+        borderStyle = { border: 'none' };
+    }
 
     return (
         <div className={assetCardClass} style={borderStyle}>
@@ -82,4 +86,5 @@ AssetCard2.propTypes = {
     issuer: PropTypes.string,
     domain: PropTypes.string,
     children: PropTypes.element,
+    noborder: PropTypes.bool,
 };
