@@ -36,6 +36,21 @@ directory.addAsset('ternio.io', {
 });
 
 directory.addAnchor({
+domain: 'ton.money',
+website: 'https://ton.money',
+logo: 'ton.money',
+color: '#2975bf',
+displayName: 'TON.Money',
+});
+
+directory.addAsset('ton.money', {
+code: 'TON',
+issuer: 'GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON',
+instructions: 'https://TON.Money',
+type: 'token',
+});
+
+directory.addAnchor({
     domain: 'cryptotari.io',
     website: 'https://cryptotari.io',
     logo: 'cryptotari.io',
@@ -530,6 +545,11 @@ directory.addPair({
 directory.addPair({
     baseBuying: ['XLM', 'native'],
     counterSelling: ['USD', 'stronghold.co'],
+});
+
+directory.addPair({
+    baseBuying: ['TON', 'ton.money'],
+    counterSelling: ['XLM', 'native'],
 });
 
 directory.addPair({
