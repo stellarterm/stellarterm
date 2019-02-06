@@ -102,7 +102,7 @@ function getEnvironment() {
     } else if (process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging') {
         deployEnv = 'staging';
     }
-    return deployEnv || argv.env || 'local';
+    return deployEnv || process.env.NODE_ENV || argv.env || 'local';
 }
 
 gulp.task('configEnv', (cb) => {
