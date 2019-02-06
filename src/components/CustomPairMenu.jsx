@@ -36,7 +36,7 @@ export default class CustomPairMenu extends React.Component {
         return (
             <div className="island">
                 <div className="island__header">
-                  Custom exchange pair
+                  Exchange pair
                 </div>
                 <div className="island__sub CustomPairMenu__title">
                     <div className="island__sub__division">
