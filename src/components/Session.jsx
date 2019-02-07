@@ -44,9 +44,8 @@ class Session extends React.Component {
   render() {
     let d = this.props.d;
     let state = d.session.state;
-    let setupError = d.session.setupError;
     if (state === 'out') {
-      return <LoginPage setupError={setupError} d={d} urlParts={this.props.urlParts}></LoginPage>
+      return <LoginPage d={d} urlParts={this.props.urlParts}></LoginPage>
     } else if (state === 'unfunded') {
       return <Generic title={'Activate your account'}><Loading darker={true} left>
         <div className="s-alert s-alert--success">
