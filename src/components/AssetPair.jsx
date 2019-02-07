@@ -1,46 +1,66 @@
-const React = window.React = require('react');
-import AssetCard2 from './AssetCard2.jsx';
-import AssetPickerNarrow from './AssetPickerNarrow.jsx';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Stellarify from '../lib/Stellarify';
-import _ from 'lodash';
+import AssetCard2 from './AssetCard2';
+
+const images = require('./../images');
+
 
 export default class AssetPair extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    let baseCard;
-    let counterCard;
-    if (this.props.baseBuying !== null) {
-      baseCard = <AssetCard2 code={this.props.baseBuying.getCode()} issuer={this.props.baseBuying.getIssuer()}></AssetCard2>
-    }
-    if (this.props.counterSelling !== null) {
-      counterCard = <AssetCard2 code={this.props.counterSelling.getCode()} issuer={this.props.counterSelling.getIssuer()}></AssetCard2>
-    }
-    let content = <div className="AssetPair">
-      <div className="AssetPair__card">
-        {baseCard}
-      </div>
-      <div className="AssetPair__separator"></div>
-      <div className="AssetPair__card">
-        {counterCard}
-      </div>
-    </div>;
 
-    if (this.props.row) {
-      if (this.props.baseBuying && this.props.counterSelling) {
-        let url = '#' + Stellarify.pairToExchangeUrl(this.props.baseBuying, this.props.counterSelling);
-        // In the future, this can be split into AssetPairRow and AssetPair if the row is not needed
-        return <a href={url} key={url} className="AssetPairRow">
-          {content}
-        </a>
-      } else {
-        return <div className="AssetPairRow">
-          {content}
-        </div>
-      }
+    swap() {
+        window.location = `#${Stellarify.pairToExchangeUrl(this.props.counterSelling, this.props.baseBuying)}`;
     }
 
-    return content;
-  }
+    render() {
+        const { baseBuying, counterSelling, row } = this.props || {};
+
+        let baseCard;
+        if (baseBuying) {
+            baseCard = (<AssetCard2 code={baseBuying.getCode()} issuer={baseBuying.getIssuer()} />);
+        }
+
+        let counterCard;
+        if (counterSelling) {
+            counterCard = (<AssetCard2 code={counterSelling.getCode()} issuer={counterSelling.getIssuer()} />);
+        }
+
+        const content = (
+            <div className="AssetPair">
+                <div className="AssetPair__card">
+                    {baseCard}
+                </div>
+
+                <div className="AssetPair__separator">
+                    <div className="AssetPair__swap" onClick={() => this.swap()}>
+                        <img src={images.swap} alt="swap" width="25" height="25" />
+                    </div>
+                </div>
+
+                <div className="AssetPair__card">
+                  {counterCard}
+                </div>
+            </div>
+        );
+
+        if (!row) {
+            return content;
+        }
+
+        if (baseBuying && counterSelling) {
+            const url = `#${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`;
+            // In the future, this can be split into AssetPairRow and AssetPair if the row is not needed
+            return (
+               <a href={url} key={url} className="AssetPairRow">{content}</a>
+            );
+        }
+        return (
+            <div className="AssetPairRow">{content}</div>
+        );
+    }
+}
+AssetPair.propTypes = {
+    baseBuying: PropTypes.objectOf(PropTypes.string).isRequired,
+    counterSelling: PropTypes.objectOf(PropTypes.string).isRequired,
+    row: PropTypes.bool,
 };

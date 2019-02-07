@@ -12,12 +12,12 @@
   text-decoration: none;
 }
 .AssetPair__separator {
-  width: 18px;
-  height: 18px;
+  width: 30px;
+  height: 32px;
   border-top: 1px solid $s-color-neutral7;
   border-bottom: 1px solid $s-color-neutral7;
-  flex: 0 0 18px;
 }
+
 .AssetPair__card {
   flex: 1 0;
 }
@@ -25,5 +25,20 @@
 a.AssetPairRow:hover .AssetPair__separator {
   border-top: 1px solid $s-color-primary4;
   border-bottom: 1px solid $s-color-primary4;
+}
+
+.AssetPair__swap{
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.8;
+  transition: 0.15s;
+}
+
+.AssetPair__swap:hover{
+  opacity: 1;
 }
 
