@@ -11,39 +11,41 @@ export default class TrustButton extends React.Component {
             status: 'ready', // ready, error, or pending
             errorType: '', // 'unknown' | 'lowReserve'
         };
+    }
 
-        this.handleSubmitTrust = (event) => {
-            event.preventDefault();
+    handleSubmitTrust(event) {
+        event.preventDefault();
 
-            this.props.d.session.handlers
-                .addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
-                .then((bssResult) => {
-                    if (bssResult.status !== 'finish') {
-                        return null;
-                    }
-                    this.setState({ status: 'pending' });
-                    return bssResult.serverResult
-                        .then(() => {
-                            this.setState({ status: 'ready' });
-                        })
-                        .catch((error) => {
-                            let errorType = 'unknown';
-                            if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
-                                errorType = 'lowReserve';
-                            }
+        this.props.d.session.handlers
+            .addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
+            .then((bssResult) => {
+                if (bssResult.status !== 'finish') {
+                    return null;
+                }
 
-                            this.setState({
-                                status: 'error',
-                                errorType,
-                            });
+                this.setState({ status: 'pending' });
+
+                return bssResult.serverResult
+                    .then(() => {
+                        this.setState({ status: 'ready' });
+                    })
+                    .catch((error) => {
+                        let errorType = 'unknown';
+                        if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
+                            errorType = 'lowReserve';
+                        }
+
+                        this.setState({
+                            status: 'error',
+                            errorType,
                         });
-                });
-        };
+                    });
+            });
     }
 
     renderPendingButton() {
         return (
-            <button className="s-button" disabled onClick={this.handleSubmitTrust}>
+            <button className="s-button" disabled onClick={event => this.handleSubmitTrust(event)}>
                 Accepting asset {this.props.asset.getCode()}...
             </button>
         );
@@ -51,16 +53,8 @@ export default class TrustButton extends React.Component {
 
     renderAcceptButton() {
         return (
-            <button className="s-button" onClick={this.handleSubmitTrust}>
+            <button className="s-button" onClick={event => this.handleSubmitTrust(event)}>
                 {this.props.trustMessage}
-            </button>
-        );
-    }
-
-    renderNotEnoughXlmButton() {
-        return (
-            <button className="s-button" onClick={this.handleSubmitTrust}>
-                Error: Not enough lumens. See the <a href="#account">minimum balance section</a> for more info
             </button>
         );
     }
@@ -68,13 +62,13 @@ export default class TrustButton extends React.Component {
     renderErrorButton() {
         if (this.state.errorType === 'lowReserve') {
             return (
-                <button className="s-button" onClick={this.handleSubmitTrust}>
+                <button className="s-button" onClick={event => this.handleSubmitTrust(event)}>
                     Error: Not enough lumens. See the <a href="#account">minimum balance section</a> for more info
                 </button>
             );
         }
         return (
-            <button className="s-button" onClick={this.handleSubmitTrust}>
+            <button className="s-button" onClick={event => this.handleSubmitTrust(event)}>
                 Error accepting asset {this.props.asset.getCode()}
             </button>
         );
@@ -93,15 +87,12 @@ export default class TrustButton extends React.Component {
 
     render() {
         let button;
-        let found = false;
-        _.each(this.props.d.session.account.balances, (balance) => {
-            if (
+        const found = _.some(
+            this.props.d.session.account.balances,
+            balance =>
                 balance.asset_code === this.props.asset.getCode() &&
-                balance.asset_issuer === this.props.asset.getIssuer()
-            ) {
-                found = true;
-            }
-        });
+                balance.asset_issuer === this.props.asset.getIssuer(),
+        );
 
         if (this.state.status === 'pending') {
             button = this.renderPendingButton();
