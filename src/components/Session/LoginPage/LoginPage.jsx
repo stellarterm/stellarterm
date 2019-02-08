@@ -89,8 +89,42 @@ export default class LoginPage extends React.Component {
         this.mounted = true;
         setTimeout(this.tickLedger, 1);
     }
+
     componentWillUnmount() {
         this.mounted = false;
+    }
+
+    browserIsNotGoogleChrome() {
+        return !(!!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime));
+    }
+
+    isHttpConnectionUsed() {
+        return window.location.protocol !== 'https:';
+    }
+
+    renderUseHTTPSForLedgerAlert() {
+        return (
+            <div className="LoginPage__form LoginPage__form--simpleMessage">
+                <p className="LoginPage__form--title">
+                    Ledger only works on a https site.
+                    <br />
+                    Please use{' '}
+                    <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
+                        https://stellarterm.com/
+                    </a>
+                </p>
+            </div>
+        );
+    }
+
+    renderUseGoogleChromeAlert() {
+        return (
+            <div className="LoginPage__form LoginPage__form--simpleMessage">
+                <p className="LoginPage__form--title">
+                    Ledger is not supported on your browser. Please use Google Chrome.
+                </p>
+            </div>
+        );
     }
 
     render() {
@@ -343,27 +377,10 @@ export default class LoginPage extends React.Component {
                         </form>
                     </div>
                 );
-            } else if (!(typeof chrome !== 'undefined')) {
-                loginForm = (
-                    <div className="LoginPage__form LoginPage__form--simpleMessage">
-                        <p className="LoginPage__form--title">
-                            Ledger is not supported on your browser. Please use Google Chrome.
-                        </p>
-                    </div>
-                );
-            } else if (window.location.protocol !== 'https:') {
-                loginForm = (
-                    <div className="LoginPage__form LoginPage__form--simpleMessage">
-                        <p className="LoginPage__form--title">
-                            Ledger only works on a https site.
-                            <br />
-                            Please use{' '}
-                            <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
-                                https://stellarterm.com/
-                            </a>
-                        </p>
-                    </div>
-                );
+            } else if (this.browserIsNotGoogleChrome()) {
+                loginForm = this.renderUseGoogleChromeAlert();
+            } else if (this.isHttpConnectionUsed()) {
+                loginForm = this.renderUseHTTPSForLedgerAlert();
             } else if (!d.session.ledgerConnected) {
                 loginForm = (
                     <div className="LoginPage__form LoginPage__form--simpleMessage">
