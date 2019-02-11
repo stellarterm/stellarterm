@@ -43,6 +43,15 @@ export default class TrustButton extends React.Component {
             });
     }
 
+    checkAssetForAccept() {
+        return _.some(
+            this.props.d.session.account.balances,
+            balance =>
+                balance.asset_code === this.props.asset.getCode() &&
+                balance.asset_issuer === this.props.asset.getIssuer(),
+        );
+    }
+
     renderPendingButton() {
         return (
             <button className="s-button" disabled onClick={event => this.handleSubmitTrust(event)}>
@@ -87,18 +96,13 @@ export default class TrustButton extends React.Component {
 
     render() {
         let button;
-        const found = _.some(
-            this.props.d.session.account.balances,
-            balance =>
-                balance.asset_code === this.props.asset.getCode() &&
-                balance.asset_issuer === this.props.asset.getIssuer(),
-        );
+        const assetAccepted = this.checkAssetForAccept();
 
         if (this.state.status === 'pending') {
             button = this.renderPendingButton();
         } else if (this.state.status === 'error') {
             button = this.renderErrorButton();
-        } else if (found) {
+        } else if (assetAccepted) {
             button = this.renderUrlButton();
         } else {
             button = this.renderAcceptButton();
