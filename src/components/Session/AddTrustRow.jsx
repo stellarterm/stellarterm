@@ -1,24 +1,26 @@
-const React = window.React = require('react');
-import AssetCard2 from '../AssetCard2.jsx';
-import TrustButton from './TrustButton.jsx';
-import _ from 'lodash';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-export default class AddTrustRow extends React.Component {
-  constructor(props) {
-    super(props);
-  }
+import Driver from '../../lib/Driver';
+import AssetCard2 from '../AssetCard2';
+import TrustButton from './TrustButton';
 
-  render() {
-    return <div className="AddTrustRow row">
-      <div className="row__assetCard2">
-        <AssetCard2 code={this.props.asset.getCode()} issuer={this.props.asset.getIssuer()} />
-      </div>
-      <TrustButton
-        d={this.props.d}
-        asset={this.props.asset}
-        message={this.props.asset.getCode() + " accepted"}
-        trustMessage={"Accept " + this.props.asset.getCode()}
-        />
-    </div>
-  }
+export default function AddTrustRow(props) {
+    return (
+        <div className="AddTrustRow row">
+            <div className="row__assetCard2">
+                <AssetCard2 code={props.asset.getCode()} issuer={props.asset.getIssuer()} />
+            </div>
+            <TrustButton
+                d={props.d}
+                asset={props.asset}
+                message={`${props.asset.getCode()} accepted`}
+                trustMessage={`Accept ${props.asset.getCode()}`} />
+        </div>
+    );
 }
+
+AddTrustRow.propTypes = {
+    d: PropTypes.instanceOf(Driver).isRequired,
+    asset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
+};
