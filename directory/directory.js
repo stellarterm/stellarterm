@@ -40,13 +40,13 @@ domain: 'ton.money',
 website: 'https://ton.money',
 logo: 'ton.money',
 color: '#2975bf',
-displayName: 'TON.Money',
+displayName: 'ton.money',
 });
 
 directory.addAsset('ton.money', {
 code: 'TON',
 issuer: 'GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON',
-instructions: 'https://TON.Money',
+instructions: 'https://ton.money',
 type: 'token',
 });
 
@@ -548,11 +548,6 @@ directory.addPair({
 });
 
 directory.addPair({
-    baseBuying: ['TON', 'ton.money'],
-    counterSelling: ['XLM', 'native'],
-});
-
-directory.addPair({
     baseBuying: ['XLM', 'native'],
     counterSelling: ['USD', 'x.token.io'],
 });
@@ -606,6 +601,12 @@ directory.addPair({
 
 // Pairs involving XLM
 // XLM should be counterSelling
+
+directory.addPair({
+    baseBuying: ['TON', 'ton.money'],
+    counterSelling: ['XLM', 'native'],
+});
+
 directory.addPair({
     baseBuying: ['XIM', 'ximcoin.com'],
     counterSelling: ['XLM', 'native'],
