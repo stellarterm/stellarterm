@@ -5,42 +5,32 @@ const TOTAL_DOTS = 3;
 export default class Ellipsis extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            visibleDots: 0, // 0 indexed
-        };
-
-        this.tick = () => {
-            if (this.mounted) {
-                this.setState({
-                    visibleDots: (this.state.visibleDots + 1) % (TOTAL_DOTS + 1),
-                });
-                setTimeout(this.tick, 300);
-            }
-        };
+        this.state = { visibleDots: 0 };
     }
 
     componentDidMount() {
-        this.mounted = true;
-        setTimeout(this.tick, 300);
+        this.timeout = setTimeout(() => this.tick(), 300);
     }
 
     componentWillUnmount() {
-        this.mounted = false;
+        clearTimeout(this.timeout);
+    }
+
+    tick() {
+        const visibleDots = (this.state.visibleDots + 1) % (TOTAL_DOTS + 1);
+        this.setState({ visibleDots });
+        this.timeout = setTimeout(() => this.tick(), 300);
     }
 
     createDots() {
-        const dots = [];
-        let dotsNum = 0;
-
-        while (dotsNum < TOTAL_DOTS) {
-            dots.push(
-                <span key={dotsNum} className={`Ellipsis__dot${dotsNum >= this.state.visibleDots ? ' is-hidden' : ''}`}>
+        return new Array(TOTAL_DOTS)
+            .fill('Ellipsis__dot')
+            .fill('Ellipsis__dot is-hidden', this.state.visibleDots)
+            .map((className, index) => (
+                <span key={index.toString()} className={className}>
                     .
-                </span>,
-            );
-            dotsNum += 1;
-        }
-        return dots;
+                </span>
+            ));
     }
 
     render() {
