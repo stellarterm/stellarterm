@@ -1,7 +1,7 @@
 const React = window.React = require('react');
 import OfferTables from './OfferTables.jsx';
 import PairPicker from './PairPicker.jsx';
-import OfferMakers from './OfferMakers.jsx';
+import OfferMakers from './OfferMakers/OfferMakers.jsx';
 import ManageOffers from './ManageOffers.jsx';
 import PriceChart from './PriceChart.jsx';
 import Generic from './Generic.jsx';
