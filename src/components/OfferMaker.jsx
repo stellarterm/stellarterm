@@ -290,15 +290,17 @@ export default class OfferMaker extends React.Component {
     if (this.props.d.session.state === 'in' && !hasAllTrust) {
       overview = <div>
         <p className="OfferMaker__enable">To trade, activate these assets on your account:</p>
-        {trustNeededAssets.map((asset, index) => {
-          return <TrustButton
-            key={asset.getCode() + '-' + asset.getIssuer()}
-            d={this.props.d}
-            asset={asset}
-            message={asset.getCode() + " accepted"}
-            trustMessage={"Accept " + asset.getCode()}
-            />
-        })}
+        <div className="row__multipleButtons">
+          {trustNeededAssets.map((asset, index) => {
+            return <TrustButton
+              key={asset.getCode() + '-' + asset.getIssuer()}
+              d={this.props.d}
+              asset={asset}
+              message={asset.getCode() + " accepted"}
+              trustMessage={"Accept " + asset.getCode()}
+              />
+          })}
+        </div>
       </div>
     } else {
       overview = <div className="OfferMaker__overview">
