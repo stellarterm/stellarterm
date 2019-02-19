@@ -13,7 +13,7 @@ import ErrorBoundary from './ErrorBoundary.jsx';
 import Loading from './Loading.jsx';
 import HistoryView from './Session/HistoryView.jsx';
 import Ellipsis from './Ellipsis.jsx';
-import TermsOfUse from './TermsOfUse.jsx';
+import TermsOfUse from './Pages/TermsOfUse.jsx';
 import clickToSelect from '../lib/clickToSelect';
 
 class Session extends React.Component {
