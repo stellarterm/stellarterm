@@ -13,33 +13,40 @@
   font-weight: bold;
   text-align: center;
 }
-  .OfferTable__header__item {
-    width: 25%;
-    padding: 4px 0;
+
+.OfferTable__header__item {
+  width: 30%;
+  padding: 4px 0;
+  &:first-child, &:last-child{
+    width: 20%;
   }
+}
+
+.OfferTable__row_background{
+  background: #fff;
+
+  &:nth-child(2n){
+    background: #f9f9f9;
+  }
+}
+
 .OfferTable__row {
   display: flex;
   width: 100%;
 }
+
 .OfferTable__row:hover {
   background: #fdfdc8 !important;
   cursor: pointer;
 }
-  .OfferTable__row__item {
-    width: 25%;
-    padding: 4px 8px 4px 2px; // Additional padding on the right sie since things are right aligned
-    text-align: right;
-  }
 
-.OfferTable__cell--price {
-  width: 20%;
-}
-.OfferTable__cell--amount {
+.OfferTable__row__item {
   width: 30%;
+  padding: 4px 8px 4px 2px; // Additional padding on the right sie since things are right aligned
+  text-align: right;
+  &:first-child, &:last-child{
+    width: 20%;
+  }
 }
-.OfferTable__cell--amount {
-  width: 30%;
-}
-.OfferTable__cell--depth {
-  width: 20%;
-}
+
+

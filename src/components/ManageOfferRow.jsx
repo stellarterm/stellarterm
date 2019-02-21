@@ -1,53 +1,68 @@
-const React = window.React = require('react');
-import Stellarify from '../lib/Stellarify';
-import _ from 'lodash';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class ManageOffers extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      ready: true,
-    };
-    this.handleCancel = e => {
-      e.preventDefault();
-      this.props.d.session.handlers.removeOffer(this.props.rectifiedOffer.id)
-      .then(bssResult => {
-        if (bssResult.status === 'finish') {
-          this.setState({ready: false})
-          return bssResult.serverResult
-          .catch(err => {
-            console.log('Errored when cancelling offer', err);
-            this.setState({
-              ready: 'true',
-            })
-          })
+    constructor(props) {
+        super(props);
+        this.state = {
+            ready: true,
+        };
+    }
+
+    getRowItems() {
+        const { ready } = this.state;
+        const { price, baseAmount, counterAmount } = this.props.rectifiedOffer;
+
+        const cancelLink = ready ?
+            <a onClick={e => this.handleCancel(e)}>Cancel offer</a> :
+            <span>Cancelling...</span>;
+
+        const rowItems = [price, baseAmount, counterAmount, cancelLink];
+        if (this.props.invert) {
+            rowItems.reverse();
         }
-      })
+
+        return (
+            rowItems.map(item => (
+                <td className="ManageOffers__table__row__item" key={item}>{item}</td>
+            ))
+        );
     }
-  }
-  render() {
-    let cancelLink;
-    if (this.state.ready) {
-      cancelLink = <a onClick={this.handleCancel}>Cancel offer</a>;
-    } else {
-      cancelLink = <span>Cancelling...</span>;
+
+    async handleCancel(event) {
+        event.preventDefault();
+
+        const { handlers } = this.props.d.session;
+        const { rectifiedOffer } = this.props;
+
+        const signAndSubmit = await handlers.removeOffer(rectifiedOffer.id);
+
+        if (signAndSubmit.status !== 'finish') { return; }
+
+        this.setState({ ready: false });
+
+        try {
+            await signAndSubmit.serverResult;
+        } catch (error) {
+            console.error('Errored when cancelling offer', error);
+            this.setState({ ready: 'true' });
+        }
     }
-    let orderbook = this.props.d.orderbook;
-    if (this.props.invert) {
-      return <tr className="ManageOffers__table__row">
-        <td className="ManageOffers__table__row__item">{cancelLink}</td>
-        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.counterAmount}</td>
-        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.baseAmount}</td>
-        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.price}</td>
-      </tr>
-    } else {
-      return <tr className="ManageOffers__table__row">
-        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.price}</td>
-        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.baseAmount}</td>
-        <td className="ManageOffers__table__row__item">{this.props.rectifiedOffer.counterAmount}</td>
-        <td className="ManageOffers__table__row__item">{cancelLink}</td>
-      </tr>
+
+    render() {
+        return (
+            <tr className="ManageOffers__table__row">
+                {this.getRowItems()}
+            </tr>
+        );
     }
-  }
+}
+ManageOffers.propTypes = {
+    invert: PropTypes.bool,
+    rectifiedOffer: PropTypes.shape({
+        price: PropTypes.string,
+        baseAmount: PropTypes.string,
+        counterAmount: PropTypes.string,
+    }),
 };
 
