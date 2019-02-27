@@ -1,35 +1,39 @@
-const React = window.React = require('react');
+import React from 'react';
 
 const TOTAL_DOTS = 3;
+
 export default class Ellipsis extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      visibleDots: 0, // 0 indexed
+    constructor(props) {
+        super(props);
+        this.state = { visibleDots: 0 };
     }
 
-    this.tick = () => {
-      if (this.mounted) {
-        this.setState({
-          visibleDots: (this.state.visibleDots + 1) % (TOTAL_DOTS + 1),
-        });
-        setTimeout(this.tick, 300);
-      }
+    componentDidMount() {
+        this.timeout = setTimeout(() => this.tick(), 300);
     }
-  }
-  componentDidMount() {
-    this.mounted = true;
-    setTimeout(this.tick, 300);
-  }
-  componentWillUnmount() {
-    this.mounted = false;
-  }
-  render() {
-    let dots = [];
-    for (let i = 0; i < TOTAL_DOTS; i++) {
-      dots.push(<span key={i} className={'Ellipsis__dot' + (i >= this.state.visibleDots ? ' is-hidden' : '')}>.</span>)
+
+    componentWillUnmount() {
+        clearTimeout(this.timeout);
     }
-    return <span className="Ellipsis">{dots}</span>
-  }
+
+    tick() {
+        const visibleDots = (this.state.visibleDots + 1) % (TOTAL_DOTS + 1);
+        this.setState({ visibleDots });
+        this.timeout = setTimeout(() => this.tick(), 300);
+    }
+
+    createDots() {
+        return new Array(TOTAL_DOTS)
+            .fill('Ellipsis__dot')
+            .fill('Ellipsis__dot is-hidden', this.state.visibleDots)
+            .map((className, index) => (
+                <span key={index.toString()} className={className}>
+                    .
+                </span>
+            ));
+    }
+
+    render() {
+        return <span className="Ellipsis">{this.createDots()}</span>;
+    }
 }
-
