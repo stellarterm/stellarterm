@@ -13,7 +13,7 @@ import TermsOfUse from './components/Pages/TermsOfUse';
 import PrivacyPolicy from './components/Pages/PrivacyPolicy';
 import TestNetwork from './components/Pages/TestNetwork';
 import ReloadToTestnet from './components/Pages/ReloadToTestnet';
-import Session from './components/Session';
+import Session from './components/Session/Session';
 import Generic from './components/Generic';
 import Header from './components/Header';
 
