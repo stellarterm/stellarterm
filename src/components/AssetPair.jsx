@@ -19,7 +19,7 @@ export default class AssetPair extends React.Component {
 
     getAssetCard(dropdown, d, assetType) {
         if (!this.props[assetType]) {
-            return null;
+            return (<div className="AssetPair__card" />);
         }
 
         const isBase = (assetType === 'baseBuying');
