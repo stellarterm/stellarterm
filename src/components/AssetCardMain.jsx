@@ -26,6 +26,6 @@ AssetCardMain.propTypes = {
     logo: PropTypes.string,
     name: PropTypes.string,
     backgroundStyle: PropTypes.shape({
-        background: PropTypes.string.isRequired,
+        background: PropTypes.string,
     }),
 };

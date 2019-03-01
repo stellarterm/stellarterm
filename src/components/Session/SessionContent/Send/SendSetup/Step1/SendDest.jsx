@@ -14,32 +14,33 @@ export default class SendDest extends React.Component {
 
         if (stepIsPassed) {
             return this.stepPassedContent();
-        } else if (isCurrentStep) {
-            let memoReady = true;
-            let memoValidationMessage;
-
-            if (memoType !== 'none') {
-                const memoV = Validate.memo(memoContent, memoType);
-                memoReady = memoV.ready;
-                memoValidationMessage = memoV.message ? <p>{memoV.message}</p> : null;
-            }
-
-            return (
-                <div className="Send__content">
-                    <SendDestInput d={d} />
-                    <SendDestMemoDropdown d={d} />
-                    {memoType !== 'none' ? <SendDestMemoInput d={d} /> : null}
-                    {memoValidationMessage}
-
-                    <div className="Send__panel__next">
-                        <button className="s-button" disabled={!accountId || !memoReady} onClick={handlers.step1Next}>
-                            Save and continue
-                        </button>
-                    </div>
-                </div>
-            );
+        } else if (!isCurrentStep) {
+            return null;
         }
-        return null;
+
+        let memoReady = true;
+        let memoValidationMessage;
+
+        if (memoType !== 'none') {
+            const memoV = Validate.memo(memoContent, memoType);
+            memoReady = memoV.ready;
+            memoValidationMessage = memoV.message ? <p>{memoV.message}</p> : null;
+        }
+
+        return (
+            <div className="Send__content">
+                <SendDestInput d={d} />
+                <SendDestMemoDropdown d={d} />
+                {memoType !== 'none' ? <SendDestMemoInput d={d} /> : null}
+                {memoValidationMessage}
+
+                <div className="Send__panel__next">
+                    <button className="s-button" disabled={!accountId || !memoReady} onClick={handlers.step1Next}>
+                        Save and continue
+                    </button>
+                </div>
+            </div>
+        );
     }
 
     stepPassedContent() {
@@ -68,6 +69,7 @@ export default class SendDest extends React.Component {
 
     render() {
         const { d, isCurrentStep, stepIsPassed } = this.props;
+        // todo: ?
         const { step1Edit } = d.send.handlers;
         const stepContent = this.getStepContent();
 

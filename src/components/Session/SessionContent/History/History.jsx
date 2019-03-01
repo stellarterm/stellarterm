@@ -1,9 +1,3 @@
-/*
-  This file contains the Effects History Component.
-  This component is the parent of the Effects History
-  Table Component: HistoryTable.jsx. It has checkboxes
-  used to filter effects.
-*/
 import React from 'react';
 import PropTypes from 'prop-types';
 import HistoryTable from './HistoryTable/HistoryTable';
@@ -41,14 +35,16 @@ export default class History extends React.Component {
         );
     }
 
-    createFilterButton(filterType, text) {
-        const filterIsActive = filterType ? ' is-active' : '';
+    createFilterButton(filterState, filterName) {
+        const filterIsActive = filterState ? ' is-active' : '';
 
         return (
             <button
                 className={`s-button s-button--light text__capitalize${filterIsActive}`}
-                onClick={() => { this.updateFilter(`${text}`); }}>
-                {text}
+                onClick={() => {
+                    this.updateFilter(`${filterName}`);
+                }}>
+                {filterName}
             </button>
         );
     }

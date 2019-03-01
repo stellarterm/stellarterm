@@ -15,29 +15,25 @@ export default class RemoveTrustLink extends React.Component {
         e.preventDefault();
         const { code, issuer } = this.props.balance;
 
-        this.props.d.session.handlers.removeTrust(code, issuer).then((bssResult) => {
-            const { status, serverResult } = bssResult;
+        this.props.d.session.handlers
+            .removeTrust(code, issuer)
+            .then(({ status, serverResult }) => {
+                if (status !== 'finish') { return null; }
 
-            if (status !== 'finish') { return null; }
-
-            this.setState({ status: 'pending' });
-            return serverResult
-                .then((res) => {
-                    console.log('Successfully removed trust', res);
-                })
-                .catch((err) => {
-                    console.log('Errored when removing trust', err);
-                    this.setState({
-                        status: 'error',
+                this.setState({ status: 'pending' });
+                return serverResult
+                    .then(res => console.log('Successfully removed trust', res))
+                    .catch((err) => {
+                        console.log('Errored when removing trust', err);
+                        this.setState({ status: 'error' });
                     });
-                });
-        });
+            });
     }
 
     render() {
-        const { balance } = this.props;
+        const { balance } = this.props.balance;
         const { status } = this.state;
-        const balanceIsZero = balance.balance === '0.0000000';
+        const balanceIsZero = balance === '0.0000000';
 
         if (!balanceIsZero) {
             return <span className="BalancesTable__row__removeLink"> Asset can be removed when balance is 0</span>;

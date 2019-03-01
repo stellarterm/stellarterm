@@ -12,46 +12,47 @@ export default class SendAmount extends React.Component {
 
         if (stepIsPassed) {
             return this.stepPassedContent();
-        } else if (isCurrentStep) {
-            const { asset } = d.send.step2.availability;
-            const { account } = d.session;
-            const maxLumenSpend = account.maxLumenSpend();
-
-            const isXlmNative = asset.code === 'XLM' && asset.issuer === undefined;
-            const notEnoughBalance = Number(amount) > Number(account.maxLumenSpend());
-            let amountValid = Validate.amount(amount);
-            let validationMessage;
-            let userBalance;
-
-            if (amountValid === false) {
-                validationMessage = <p>Amount is invalid</p>;
-            } else if (asset !== null) {
-                const targetBalance = account.getBalance(new StellarSdk.Asset(asset.code, asset.issuer));
-                const targetBalanceIsNotNull = targetBalance !== null;
-
-                userBalance = targetBalanceIsNotNull ? (<p>You have {targetBalance} {asset.code}.</p>) : null;
-
-                if (isXlmNative && notEnoughBalance) {
-                    amountValid = false;
-                    validationMessage = (
-                        <p>
-                            You may only send up to <strong>{maxLumenSpend} lumens</strong> due to the minimum balance
-                            requirements. For more information, see the <a href="#account">minimum balance tool</a>.
-                        </p>
-                    );
-                }
-            }
-
-            return (
-                <SendAmountInput
-                    d={d}
-                    amount={amount}
-                    isValid={amountValid}
-                    userBalance={userBalance}
-                    validationMessage={validationMessage} />
-            );
+        } else if (!isCurrentStep) {
+            return null;
         }
-        return null;
+
+        const { asset } = d.send.step2.availability;
+        const { account } = d.session;
+        const maxLumenSpend = account.maxLumenSpend();
+
+        const isXlmNative = asset.code === 'XLM' && asset.issuer === undefined;
+        const notEnoughBalance = Number(amount) > Number(account.maxLumenSpend());
+        let amountValid = Validate.amount(amount);
+        let validationMessage;
+        let userBalance;
+
+        if (amountValid === false) {
+            validationMessage = <p>Amount is invalid</p>;
+        } else if (asset !== null) {
+            const targetBalance = account.getBalance(new StellarSdk.Asset(asset.code, asset.issuer));
+            const targetBalanceIsNotNull = targetBalance !== null;
+
+            userBalance = targetBalanceIsNotNull ? (<p>You have {targetBalance} {asset.code}.</p>) : null;
+
+            if (isXlmNative && notEnoughBalance) {
+                amountValid = false;
+                validationMessage = (
+                    <p>
+                        You may only send up to <strong>{maxLumenSpend} lumens</strong> due to the minimum balance
+                        requirements. For more information, see the <a href="#account">minimum balance tool</a>.
+                    </p>
+                );
+            }
+        }
+
+        return (
+            <SendAmountInput
+                d={d}
+                amount={amount}
+                isValid={amountValid}
+                userBalance={userBalance}
+                validationMessage={validationMessage} />
+        );
     }
 
     stepPassedContent() {

@@ -13,6 +13,6 @@ export default function MessageRow(props) {
 }
 
 MessageRow.propTypes = {
-    children: PropTypes.arrayOf(PropTypes.element).isRequired,
+    children: PropTypes.oneOfType([PropTypes.element, PropTypes.arrayOf(PropTypes.element)]).isRequired,
     isError: PropTypes.bool,
 };

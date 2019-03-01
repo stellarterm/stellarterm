@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
 import MinBalanceDescription from './MinBalanceDescription/MinBalanceDescription';
@@ -7,17 +6,13 @@ import MinBalanceDescription from './MinBalanceDescription/MinBalanceDescription
 export default function MinBalance(props) {
     const explanation = props.d.session.account.explainReserve();
 
-    const minBalanceRows = _.map(explanation.items, (item) => {
-        const { entryType, amount, XLM } = item;
-
-        return (
-            <tr key={entryType}>
-                <td className="MinBalance__table__type">{entryType}</td>
-                <td>{amount}</td>
-                <td className="MinBalance__table__lumens">{XLM}</td>
-            </tr>
-        );
-    });
+    const minBalanceRows = explanation.items.map(({ entryType, amount, XLM }) => (
+        <tr key={entryType}>
+            <td className="MinBalance__table__type">{entryType}</td>
+            <td>{amount}</td>
+            <td className="MinBalance__table__lumens">{XLM}</td>
+        </tr>
+    ));
 
     return (
         <div>

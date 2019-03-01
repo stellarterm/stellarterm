@@ -62,8 +62,9 @@ export default class AddTrustFromFederation extends React.Component {
     }
 
     render() {
-        let assetResults;
         const { resolveState, anchorDomain, allCurrencies } = this.state;
+        let assetResults;
+        let assetsAmount;
 
         switch (resolveState) {
         case 'notfound':
@@ -83,14 +84,31 @@ export default class AddTrustFromFederation extends React.Component {
             break;
         case 'found':
             assetResults = allCurrencies.map((currency) => {
+                const assetIsUndefined = currency.code === undefined || currency.issuer === undefined;
+
+                if (assetIsUndefined) {
+                    return null;
+                }
+
                 const asset = Stellarify.assetToml(currency);
                 const key = currency.code + currency.issuer;
                 return <AddTrustRow key={key} d={this.props.d} asset={asset} />;
             });
+            assetsAmount = assetResults.filter(asset => asset !== null).length;
+
             break;
         default:
             break;
         }
+
+        const noAssetsForDomain = assetsAmount !== undefined && assetsAmount === 0;
+        assetResults = noAssetsForDomain ? (
+            <MessageRow isError>
+                <span>Unable to find currencies for {anchorDomain}</span>
+            </MessageRow>
+        ) : (
+            assetResults
+        );
 
         return (
             <div className="island">
