@@ -191,7 +191,7 @@ const MagicSpoon = {
     // Will always be less than or equal to the current balance
         sdkAccount.calculatePaddedReserve = () => {
             const networkReserve = (2 + sdkAccount.subentry_count) * 0.5;
-            const extra = 1;
+            const extra = 0.5;
             return networkReserve + extra;
         };
 
