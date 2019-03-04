@@ -53,6 +53,8 @@ gulp.task('images', (cb) => {
     addImage('ledger-nano-picture', 'jpg');
     addImage('ledger-nano-s-buttons', 'png');
     addImage('ledger-logo', 'png');
+    addImage('switch', 'png');
+    addImage('dropdown', 'png');
 
 
     file += '};\nmodule.exports = images;';
