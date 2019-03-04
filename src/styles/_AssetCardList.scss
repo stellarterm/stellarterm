@@ -10,10 +10,17 @@
   background-color: #fff;
   cursor: pointer;
   padding-bottom: 5px;
+  text-align: left;
+  line-height: 35px;
 }
 
 .AssetCardList_card{
   margin: 1px 5px;
+}
+
+.AssetCardList_empty{
+  font-size: 14px;
+  margin-left: 20px;
 }
 
 

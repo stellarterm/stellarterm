@@ -11,6 +11,7 @@ export default class AssetDropDown extends React.Component {
         super(props);
         this.state = {
             isOpenList: false,
+            isFocused: false,
             code: '',
             termAsset: null,
         };
@@ -20,9 +21,11 @@ export default class AssetDropDown extends React.Component {
             }
             if (this.state.termAsset) {
                 this.onUpdate(this.state.termAsset);
+                this.setState({ code: '' });
             }
             this.setState({
                 isOpenList: false,
+                isFocused: false,
             });
         };
     }
@@ -40,6 +43,7 @@ export default class AssetDropDown extends React.Component {
         this.setState({
             isOpenList: false,
             termAsset: null,
+            isFocused: false,
         });
     }
     openList() {
@@ -49,16 +53,21 @@ export default class AssetDropDown extends React.Component {
         }
         if (this.state.termAsset && this.state.isOpenList) {
             this.onUpdate(this.state.termAsset);
+            this.setState({ code: '' });
         }
         this.setState({
             isOpenList: !this.state.isOpenList,
-            code: '',
+            isFocused: !this.state.isOpenList,
+        });
+    }
+    openListByFocus() {
+        this.setState({
+            isOpenList: true,
         });
     }
     handleInput(e) {
         e.preventDefault();
         this.setState({
-            isOpenList: true,
             code: e.target.value,
         });
     }
@@ -74,11 +83,16 @@ export default class AssetDropDown extends React.Component {
                 ref={(node) => { this.node = node; }}>
                 <div>
                     {this.props.asset ?
+                        <div className="AssetDropDown__full" onClick={() => this.openList()}>
                         <AssetCard2
                             code={this.props.asset.code}
-                            issuer={this.props.asset.issuer} /> :
+                            issuer={this.props.asset.issuer} />
+                        </div> :
                         <div className={`AssetDropDown__empty ${assetDropDownClassName}`}>
                             <input
+                                autoFocus={this.state.isFocused}
+                                key={this.state.isFocused}
+                                onFocus={() => this.openListByFocus()}
                                 className="AssetDropDown__search"
                                 type="text"
                                 onChange={e => this.handleInput(e)}

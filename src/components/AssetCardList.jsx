@@ -23,13 +23,17 @@ export default class AssetCardList extends React.Component {
     render() {
         const { assets } = this.dTicker.data;
         const { code, issuer } = this.props.exception || '';
+        const isExceptionNative = this.props.exception && this.props.exception.isNative();
 
         const rows = assets
             .filter((asset) => {
                 const { unlisted } = directory.getAssetByAccountId(asset.code, asset.issuer) || {};
+                const isAssetNative = new StellarSdk.Asset(asset.code, asset.issuer).isNative();
                 return (
-                  !unlisted && ((asset.code !== code) || (asset.issuer !== issuer)) &&
-                  (asset.code.indexOf(this.props.code.toUpperCase()) > -1)
+                    !unlisted && ((asset.code !== code) || (asset.issuer !== issuer)) &&
+                    !(isExceptionNative && isAssetNative) &&
+                    ((asset.code.indexOf(this.props.code.toUpperCase()) > -1) ||
+                      (asset.domain.indexOf(this.props.code.toLowerCase()) > -1))
                 );
             })
             .map(asset => (
@@ -40,7 +44,10 @@ export default class AssetCardList extends React.Component {
 
         return (
             <div className="AssetCardList">
-                {rows}
+                {rows.length ?
+                    rows :
+                    <span className="AssetCardList_empty">Asset not found. Use custom pairs selector.</span>
+                }
             </div>
         );
     }
