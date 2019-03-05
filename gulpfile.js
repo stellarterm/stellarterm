@@ -19,7 +19,6 @@ const argv = require('yargs').argv;
 const config = require('./env-config.json');
 
 const reload = browserSync.reload;
-
 // Default task
 gulp.task('default', ['clean', 'configEnv', 'developApi', 'watch']);
 
@@ -225,8 +224,8 @@ gulp.task('inlinesource', () => gulp.src('./dist/index.html')
     .pipe($.inlineSource())
     .pipe(gulp.dest('./dist/')));
 
-gulp.task('copy-fav', () => gulp.src('./favicon*')
-    .pipe(gulp.dest('./dist/')));
+gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
+    .pipe(gulp.dest('dist/')));
 
 gulp.task('production', () => {
     process.env.NODE_ENV = 'production';
@@ -234,7 +233,7 @@ gulp.task('production', () => {
         'clean',
         'configEnv',
         baseTasks,
-        'copy-fav',
+        'copyStaticFiles',
         'uglify-js',
         'inlinesource'
         , () => {

@@ -1,0 +1,4 @@
+# A path:
+/.well-known/stellar.toml
+   # Headers for that file:
+   Access-Control-Allow-Origin: *
