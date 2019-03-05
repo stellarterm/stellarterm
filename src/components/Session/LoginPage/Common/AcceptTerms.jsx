@@ -14,6 +14,7 @@ export default class AcceptTerms extends React.Component {
             <React.Fragment>
                 <label className="s-inputGroup LoginPage__accept" htmlFor="inputAcceptCheckbox">
                     <input
+                        id="inputAcceptCheckbox"
                         name="inputAcceptCheckbox"
                         className="LoginPage__accept__checkbox"
                         type="checkbox"
