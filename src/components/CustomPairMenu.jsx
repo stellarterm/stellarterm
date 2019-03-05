@@ -13,7 +13,7 @@ export default class CustomPairMenu extends React.Component {
         super(props);
         this.state = {
             baseBuying: null,
-            counterSelling: null,
+            counterSelling: StellarSdk.Asset.native(),
         };
     }
 
