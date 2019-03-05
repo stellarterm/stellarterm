@@ -13,7 +13,7 @@ export default function AssetCardMain(props) {
                     <span className="AssetCard2__header__domain">{name}</span>
                 </div>
                 <p className="AssetCard2__issuerAccountId">
-                    Issuer (<strong>not you</strong>): {issuerAccountId}
+                    Issuer: {issuerAccountId}
                 </p>
             </div>
         </div>
