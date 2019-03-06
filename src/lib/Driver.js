@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 
-import Ticker from './driver/Ticker';
+import Ticker from './api/Ticker';
 import Send from './driver/Send';
 import History from './driver/History';
 import Session from './driver/Session';
