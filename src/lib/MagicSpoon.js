@@ -108,11 +108,13 @@ const MagicSpoon = {
                 let updated = false;
                 if (!_.isEqual(sdkAccount.balances, res.balances)) {
                     sdkAccount.balances = res.balances;
+                    sdkAccount.subentry_count = res.subentry_count;
+                    sdkAccount.updateOffers();
                     updated = true;
                 }
 
-        // We shouldn't pull latest sequence number.
-        // It'll only go out of sync if user is using the account in two places
+                // We shouldn't pull latest sequence number.
+                // It'll only go out of sync if user is using the account in two places
 
                 if (updated) {
                     onUpdate();
