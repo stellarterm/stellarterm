@@ -36,6 +36,21 @@ directory.addAsset('ternio.io', {
 });
 
 directory.addAnchor({
+domain: 'ton.money',
+website: 'https://ton.money',
+logo: 'ton.money',
+color: '#2975bf',
+displayName: 'ton.money',
+});
+
+directory.addAsset('ton.money', {
+code: 'TON',
+issuer: 'GBFJGO46OV6E2QS2ZUMCF256ZL4BFOZWFHULRNLPSPW47HH5HFAKJTON',
+instructions: 'https://ton.money',
+type: 'token',
+});
+
+directory.addAnchor({
     domain: 'cryptotari.io',
     website: 'https://cryptotari.io',
     logo: 'cryptotari.io',
@@ -586,6 +601,12 @@ directory.addPair({
 
 // Pairs involving XLM
 // XLM should be counterSelling
+
+directory.addPair({
+    baseBuying: ['TON', 'ton.money'],
+    counterSelling: ['XLM', 'native'],
+});
+
 directory.addPair({
     baseBuying: ['XIM', 'ximcoin.com'],
     counterSelling: ['XLM', 'native'],
