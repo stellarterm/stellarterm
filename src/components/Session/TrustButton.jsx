@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-
+import Ellipsis from '../Ellipsis';
 import Driver from '../../lib/Driver';
 
 export default class TrustButton extends React.Component {
@@ -55,7 +55,8 @@ export default class TrustButton extends React.Component {
     renderPendingButton() {
         return (
             <button className="s-button" disabled onClick={event => this.handleSubmitTrust(event)}>
-                Accepting asset {this.props.asset.getCode()}...
+                Accepting asset {this.props.asset.getCode()}
+                <Ellipsis />
             </button>
         );
     }
@@ -84,14 +85,23 @@ export default class TrustButton extends React.Component {
     }
 
     renderUrlButton() {
-        if (this.props.message.startsWith('https://')) {
+        const { message, isManualTrust, asset } = this.props;
+
+        if (message.startsWith('https://')) {
             return (
-                <button className="s-button" onClick={() => window.open(this.props.message, '_blank')}>
-                    {this.props.message}
+                <button className="s-button" onClick={() => window.open(message, '_blank')}>
+                    {message}
                 </button>
             );
         }
-        return <span className="AddTrustRow__exists">{this.props.message}</span>;
+
+        return isManualTrust ? (
+            <button className="s-button" disabled>
+                {`Already accepted ${asset.getCode()}`}
+            </button>
+        ) : (
+            <span className="AddTrustRow__exists">{message}</span>
+        );
     }
 
     render() {
@@ -108,7 +118,7 @@ export default class TrustButton extends React.Component {
             button = this.renderAcceptButton();
         }
 
-        return <div className="row__shareOption">{button}</div>;
+        return this.props.isManualTrust ? button : <div className="row__shareOption">{button}</div>;
     }
 }
 
@@ -117,4 +127,5 @@ TrustButton.propTypes = {
     asset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
     message: PropTypes.string.isRequired,
     trustMessage: PropTypes.string.isRequired,
+    isManualTrust: PropTypes.bool,
 };

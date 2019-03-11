@@ -21,6 +21,7 @@
     "indent": ["error", 4],
     "new-cap": "warn",
     "no-underscore-dangle": "off",
-    "semi": "error"
+    "semi": "error",
+    "curly": ["error", "all"]
   }
 }

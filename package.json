@@ -16,6 +16,7 @@
     "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
   },
   "dependencies": {
+    "awesome-debounce-promise": "2.1.0",
     "babelify": "7.3.0",
     "bignumber.js": "4.1.0",
     "gulp-sass": "3.1.0",

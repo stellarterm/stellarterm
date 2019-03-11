@@ -7,8 +7,8 @@
 // usage: <Element className="clickToSelect" onClick={clickToSelect} />
 // The class is optional
 export default function clickToSelect(event) {
-  var range = document.createRange();
-  range.selectNodeContents(event.target);
-  window.getSelection().removeAllRanges();
-  window.getSelection().addRange(range);
-};
+    const range = document.createRange();
+    range.selectNodeContents(event.target);
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+}
