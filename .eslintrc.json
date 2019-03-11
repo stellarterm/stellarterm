@@ -4,7 +4,8 @@
     "StellarSdk": true,
     "window": true,
     "document": true,
-    "localStorage": true
+    "localStorage": true,
+    "fetch": true
   },
   "rules": {
     "max-len": ["error", {

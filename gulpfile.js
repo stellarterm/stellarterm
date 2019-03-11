@@ -54,6 +54,10 @@ gulp.task('images', (cb) => {
     addImage('ledger-logo', 'png');
     addImage('switch', 'png');
     addImage('dropdown', 'png');
+    addImage('sign-vault', 'png');
+    addImage('sign-stellarguard', 'png');
+    addImage('sign-unknown', 'png');
+    addImage('icon-copy', 'png');
 
 
     file += '};\nmodule.exports = images;';
