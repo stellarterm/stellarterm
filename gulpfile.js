@@ -20,7 +20,7 @@ const config = require('./env-config.json');
 
 const reload = browserSync.reload;
 // Default task
-gulp.task('default', ['clean', 'configEnv', 'developApi', 'watch']);
+gulp.task('default', ['clean', 'configEnv', 'buildDirectory', 'developApi', 'watch']);
 
 // Clean
 gulp.task('clean', (cb) => {
@@ -189,7 +189,7 @@ gulp.task('watch', baseTasks, () => {
     });
     gulp.watch('./src/index.html', ['html-reload']);
     gulp.watch(['src/**/*.scss'], ['css-reload']);
-    gulp.watch(['src/directory.js', 'directory/logos/**/*'], ['developApi']);
+    gulp.watch(['src/directory.js', 'directory/logos/**/*'], ['buildDirectory', 'developApi']);
 });
 
 const bsReload = (done) => {
@@ -205,12 +205,16 @@ gulp.task('developApi', (cb) => {
         return;
     }
 
-    execSync('(cd ./directory/ && ./buildLogos.js && ./buildDirectory.js)');
     execSync('(cd ./api/ && ./testTicker.sh)');
     gulp
         .src('./api/output/**/*.json')
         .pipe(gulp.dest('dist/api'))
         .on('end', cb);
+});
+
+gulp.task('buildDirectory', (cb) => {
+    execSync('(cd ./directory/ && ./buildLogos.js && ./buildDirectory.js)');
+    cb();
 });
 
 gulp.task('html-reload', ['html'], bsReload);
@@ -236,6 +240,7 @@ gulp.task('production', () => {
     runSequence(
         'clean',
         'configEnv',
+        'buildDirectory',
         baseTasks,
         'copyStaticFiles',
         'uglify-js',
