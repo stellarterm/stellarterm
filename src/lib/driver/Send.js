@@ -267,6 +267,7 @@ export default function Send(driver) {
       this.step = 1;
       resetStep2();
       resetStep3();
+      loadTargetAccountDetails();
       this.event.trigger();
     },
     step1Next: () => {
