@@ -16,15 +16,18 @@
     "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
   },
   "dependencies": {
+    "awesome-debounce-promise": "2.1.0",
     "babelify": "7.3.0",
     "bignumber.js": "4.1.0",
     "gulp-sass": "3.1.0",
     "gulp-useref": "3.1.4",
     "lodash": "4.17.5",
+    "moment": "^2.24.0",
     "prop-types": "15.6.0",
-    "yargs": "^12.0.5",
     "react": "16.2.0",
-    "react-dom": "16.2.0"
+    "react-dom": "16.2.0",
+    "whatwg-fetch": "^3.0.0",
+    "yargs": "^12.0.5"
   },
   "devDependencies": {
     "babel-plugin-transform-runtime": "6.23.0",

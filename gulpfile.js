@@ -19,9 +19,8 @@ const argv = require('yargs').argv;
 const config = require('./env-config.json');
 
 const reload = browserSync.reload;
-
 // Default task
-gulp.task('default', ['clean', 'configEnv', 'developApi', 'watch']);
+gulp.task('default', ['clean', 'configEnv', 'buildDirectory', 'developApi', 'watch']);
 
 // Clean
 gulp.task('clean', (cb) => {
@@ -53,6 +52,12 @@ gulp.task('images', (cb) => {
     addImage('ledger-nano-picture', 'jpg');
     addImage('ledger-nano-s-buttons', 'png');
     addImage('ledger-logo', 'png');
+    addImage('switch', 'png');
+    addImage('dropdown', 'png');
+    addImage('sign-vault', 'png');
+    addImage('sign-stellarguard', 'png');
+    addImage('sign-unknown', 'png');
+    addImage('icon-copy', 'png');
 
 
     file += '};\nmodule.exports = images;';
@@ -102,7 +107,7 @@ function getEnvironment() {
     } else if (process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging') {
         deployEnv = 'staging';
     }
-    return deployEnv || argv.env || 'local';
+    return deployEnv || process.env.NODE_ENV || argv.env || 'local';
 }
 
 gulp.task('configEnv', (cb) => {
@@ -184,7 +189,7 @@ gulp.task('watch', baseTasks, () => {
     });
     gulp.watch('./src/index.html', ['html-reload']);
     gulp.watch(['src/**/*.scss'], ['css-reload']);
-    gulp.watch(['src/directory.js', 'directory/logos/**/*'], ['developApi']);
+    gulp.watch(['src/directory.js', 'directory/logos/**/*'], ['buildDirectory', 'developApi']);
 });
 
 const bsReload = (done) => {
@@ -200,12 +205,16 @@ gulp.task('developApi', (cb) => {
         return;
     }
 
-    execSync('(cd ./directory/ && ./buildLogos.js && ./buildDirectory.js)');
     execSync('(cd ./api/ && ./testTicker.sh)');
     gulp
         .src('./api/output/**/*.json')
         .pipe(gulp.dest('dist/api'))
         .on('end', cb);
+});
+
+gulp.task('buildDirectory', (cb) => {
+    execSync('(cd ./directory/ && ./buildLogos.js && ./buildDirectory.js)');
+    cb();
 });
 
 gulp.task('html-reload', ['html'], bsReload);
@@ -223,16 +232,17 @@ gulp.task('inlinesource', () => gulp.src('./dist/index.html')
     .pipe($.inlineSource())
     .pipe(gulp.dest('./dist/')));
 
-gulp.task('copy-fav', () => gulp.src('./favicon*')
-    .pipe(gulp.dest('./dist/')));
+gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
+    .pipe(gulp.dest('dist/')));
 
 gulp.task('production', () => {
     process.env.NODE_ENV = 'production';
     runSequence(
         'clean',
         'configEnv',
+        'buildDirectory',
         baseTasks,
-        'copy-fav',
+        'copyStaticFiles',
         'uglify-js',
         'inlinesource'
         , () => {

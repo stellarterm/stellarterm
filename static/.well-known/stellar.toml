@@ -1,0 +1,16 @@
+# StellarTerm - open source client for Stellar Decentralized Exchange <stellarterm.com>
+
+# FEDERATION_SERVER="https://fed.stellarterm.com/federation/"
+
+
+DESIRED_BASE_FEE=1000
+
+[DOCUMENTATION]
+ORG_URL="https://stellarterm.com"
+ORG_DBA="StellarTerm"
+ORG_NAME="ULTRA STELLAR, LLC"
+ORG_OFFICIAL_EMAIL="hi@stellarterm.com"
+ORG_TWITTER="stellarterm"
+ORG_GITHUB="stellarterm"
+ORG_LOGO="https://stellarterm.com/favicon-196.png"
+ORG_DESCRIPTION="Advanced web based trading client for the Stellar network."

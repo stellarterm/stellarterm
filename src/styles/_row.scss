@@ -26,7 +26,15 @@
   justify-content: center;
   flex: 1;
 }
-
+.row__multipleButtons {
+  display: flex;
+  text-align: center;
+  align-items: center;
+  justify-content: space-evenly;
+  margin: auto;
+  width: 80%;
+  flex: 1;
+}
 .row__full_width {
   width: 100%;
 }

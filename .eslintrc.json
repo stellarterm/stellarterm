@@ -4,7 +4,8 @@
     "StellarSdk": true,
     "window": true,
     "document": true,
-    "localStorage": true
+    "localStorage": true,
+    "fetch": true
   },
   "rules": {
     "max-len": ["error", {
@@ -21,6 +22,7 @@
     "indent": ["error", 4],
     "new-cap": "warn",
     "no-underscore-dangle": "off",
-    "semi": "error"
+    "semi": "error",
+    "curly": ["error", "all"]
   }
 }

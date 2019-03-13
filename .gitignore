@@ -15,3 +15,9 @@ api/package-lock.json
 ._*
 
 .idea
+
+directory/logos.json
+directory/directory.json
+
+api/setEnvironment.sh
+api/setStagingEnvironment.sh

@@ -36,6 +36,34 @@ directory.addAsset('ternio.io', {
 });
 
 directory.addAnchor({
+    domain: 'thewwallet.com',
+    website: 'https://thewwallet.com',
+    logo: 'thewwallet.com',
+    color: '#b59a63',
+    displayName: 'WhiteWallet',
+});
+
+directory.addAsset('thewwallet.com', {
+    code: 'WSD',
+    issuer: 'GDSVWEA7XV6M5XNLODVTPCGMAJTNBLZBXOFNQD3BNPNYALEYBNT6CE2V',
+    type: 'token',
+});
+
+directory.addAnchor({
+    domain: 'anchorusd.com',
+    website: 'https://anchorusd.com',
+    logo: 'anchorusd.com',
+    color: '#00b4ce',
+    displayName: 'AnchorUSD',
+});
+
+directory.addAsset('anchorusd.com', {
+    code: 'USD',
+    issuer: 'GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX',
+    type: 'token',
+});
+
+directory.addAnchor({
     domain: 'cryptotari.io',
     website: 'https://cryptotari.io',
     logo: 'cryptotari.io',
@@ -534,6 +562,11 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['XLM', 'native'],
+    counterSelling: ['USD', 'anchorusd.com'],
+});
+
+directory.addPair({
+    baseBuying: ['XLM', 'native'],
     counterSelling: ['USD', 'x.token.io'],
 });
 
@@ -586,6 +619,11 @@ directory.addPair({
 
 // Pairs involving XLM
 // XLM should be counterSelling
+directory.addPair({
+    baseBuying: ['WSD', 'thewwallet.com'],
+    counterSelling: ['XLM', 'native'],
+});
+
 directory.addPair({
     baseBuying: ['XIM', 'ximcoin.com'],
     counterSelling: ['XLM', 'native'],

@@ -4,19 +4,20 @@ import url from 'url';
 import PropTypes from 'prop-types';
 import Stellarify from './lib/Stellarify';
 import GlobalModal from './components/GlobalModal';
-import NotFound from './components/NotFound';
+import NotFound from './components/Pages/NotFound';
+import Markets from './components/Pages/Markets';
+import Download from './components/Pages/Download';
+import Exchange from './components/Pages/Exchange';
+import HomePage from './components/Pages/HomePage';
+import TermsOfUse from './components/Pages/TermsOfUse';
 import PrivacyPolicy from './components/Pages/PrivacyPolicy';
 import TestNetwork from './components/Pages/TestNetwork';
 import ReloadToTestnet from './components/Pages/ReloadToTestnet';
-import Markets from './components/Markets';
-import Session from './components/Session';
-import Exchange from './components/Exchange';
+import Session from './components/Session/Session';
 import Generic from './components/Generic';
-import Download from './components/Download';
 import Header from './components/Header';
-import HomePage from './components/Pages/HomePage';
+
 import Footer from './components/Footer';
-import TermsOfUse from './components/TermsOfUse';
 import Driver from './lib/Driver';
 
 window.React = React;
