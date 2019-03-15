@@ -28,7 +28,7 @@ function DirectoryBuilder() {
     name: 'Stellar Network',
     website: 'https://www.stellar.org/lumens/',
     logo: logos['stellar'],
-    color: '#08b5e5',
+    color: '#000000',
   };
   this.nativeAsset = {
     code: 'XLM',
