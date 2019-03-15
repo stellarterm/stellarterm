@@ -69,6 +69,15 @@ const MagicSpoon = {
             return asset ? parseFloat(asset.selling_liabilities).toFixed(7) : null;
         };
 
+        sdkAccount.isOrderExists = (targetAsset) => {
+            const asset = sdkAccount.balances.find(
+                item => item.asset_code === targetAsset.getCode() && item.asset_issuer === targetAsset.getIssuer(),
+            );
+            return asset
+                ? asset.selling_liabilities !== '0.0000000' || asset.buying_liabilities !== '0.0000000'
+                : false;
+        };
+
     // Should always return at least one item (which is lumens)
         sdkAccount.getSortedBalances = (options) => {
             const sortOptions = options || {};
