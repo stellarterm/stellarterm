@@ -6,6 +6,20 @@ import SendAmountInput from './SendAmountInput/SendAmountInput';
 import SendEditLink from '../Common/SendEditLink';
 
 export default class SendAmount extends React.Component {
+    getAsset() {
+        const { asset } = this.props.d.send.step2.availability;
+        return new StellarSdk.Asset(asset.code, asset.issuer);
+    }
+
+    getMaxAssetSpend(assetBalance) {
+        const { account } = this.props.d.session;
+        const openOrdersSum = account.getReservedBalance(this.getAsset());
+        const maxLumenSpend = account.maxLumenSpend();
+
+        const targetCurrency = assetBalance || maxLumenSpend;
+        return parseFloat(targetCurrency) > parseFloat(openOrdersSum) ? (targetCurrency - openOrdersSum).toFixed(7) : 0;
+    }
+
     getStepContent() {
         const { d, isCurrentStep, stepIsPassed } = this.props;
         const { amount } = this.props.d.send.step3;
@@ -16,12 +30,13 @@ export default class SendAmount extends React.Component {
             return null;
         }
 
-        const { asset } = d.send.step2.availability;
         const { account } = d.session;
-        const maxLumenSpend = account.maxLumenSpend();
+        const { asset } = d.send.step2.availability;
 
+        const maxLumenSpend = this.getMaxAssetSpend();
         const isXlmNative = asset.code === 'XLM' && asset.issuer === undefined;
-        const notEnoughBalance = Number(amount) > Number(account.maxLumenSpend());
+        const notEnoughBalance = Number(amount) > Number(maxLumenSpend);
+
         let amountValid = Validate.amount(amount);
         let validationMessage;
         let userBalance;
@@ -29,8 +44,10 @@ export default class SendAmount extends React.Component {
         if (amountValid === false) {
             validationMessage = <p>Amount is invalid</p>;
         } else if (asset !== null) {
-            const targetBalance = account.getBalance(new StellarSdk.Asset(asset.code, asset.issuer));
+            const targetBalance = account.getBalance(this.getAsset());
             const targetBalanceIsNotNull = targetBalance !== null;
+            const maxAssetSpend = this.getMaxAssetSpend(targetBalance);
+            const notEnoughAsset = Number(amount) > Number(maxAssetSpend);
 
             userBalance = targetBalanceIsNotNull ? (<p>You have {targetBalance} {asset.code}.</p>) : null;
 
@@ -39,8 +56,14 @@ export default class SendAmount extends React.Component {
                 validationMessage = (
                     <p>
                         You may only send up to <strong>{maxLumenSpend} lumens</strong> due to the minimum balance
-                        requirements. For more information, see the <a href="#account">minimum balance tool</a>.
+                        requirements and open orders.<br />
+                        For more information, see the <a href="#account">minimum balance tool</a>.
                     </p>
+                );
+            } else if (notEnoughAsset) {
+                amountValid = false;
+                validationMessage = (
+                    <p>You may only send up to <strong>{maxAssetSpend} {asset.code}</strong> due to open orders.</p>
                 );
             }
         }
