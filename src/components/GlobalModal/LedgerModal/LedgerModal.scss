@@ -1,0 +1,80 @@
+.LedgerPopup {
+    width: 610px;
+
+    .LedgerPopup_header {
+        display: inline-block;
+        width: 100%;
+        text-align: center;
+
+        img {
+            width: 150px;
+            height: auto;
+            margin-top: 40px;
+        }
+
+        p {
+            font-size: 18px;
+            font-weight: normal;
+            margin-top: 10px;
+        }
+    }
+
+    .LedgerPopup_footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 33px 40px;
+
+        .Footer_transaction {
+            vertical-align: middle;
+            line-height: 50px;
+
+            img,
+            span {
+                height: 24px;
+                line-height: 50px;
+                vertical-align: middle;
+            }
+            img {
+                margin-right: 0.75em;
+            }
+        }
+
+        .Action_buttons {
+            button {
+                width: 120px;
+                height: 50px;
+                outline: none;
+                border-radius: 2px;
+                font-weight: normal;
+
+                span {
+                    img {
+                        height: 15px;
+                        position: relative;
+                        top: 2px;
+                    }
+                }
+            }
+
+            .btn_cancel {
+                font-weight: lighter;
+                background-color: #ffffff;
+                border: solid 1px #dfe0e1;
+                color: #505558;
+                outline: none;
+
+                &:hover {
+                    border: solid 1px #b9b9b9;
+                }
+
+                &:active {
+                    border: solid 1px #9a9a9a;
+                }
+            }
+
+            button:not(:only-child):first-child {
+                margin-right: 20px;
+            }
+        }
+    }
+}

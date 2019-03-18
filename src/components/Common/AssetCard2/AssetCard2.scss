@@ -1,69 +1,69 @@
 .AssetCard2 {
-  border: 1px solid $s-color-neutral7;
-  border-radius: $s-var-radius;
-  overflow:hidden;
-  width: 100%;
-  background: #fff;
+    border: 1px solid $s-color-neutral7;
+    border-radius: $s-var-radius;
+    overflow: hidden;
+    width: 100%;
+    background: #fff;
 }
 .AssetCard2--boxy {
-  border-radius: 0;
+    border-radius: 0;
 }
 
 .AssetCard2__addon {
-  border-top: 1px solid $s-color-neutral7;
+    border-top: 1px solid $s-color-neutral7;
 }
 .AssetCard2__main {
-  background: $s-color-neutral8;
-  display: flex;
-  align-items: center;
-  position: relative;
-  color: #000; // #000 which will then have opacity applied
+    background: $s-color-neutral8;
+    display: flex;
+    align-items: center;
+    position: relative;
+    color: #000; // #000 which will then have opacity applied
 }
-  .AssetCard2__logo {
+.AssetCard2__logo {
     width: 50px;
     height: 50px;
     margin-right: 8px;
-  }
-  .AssetCard2_logo_with_padding{
+}
+.AssetCard2_logo_with_padding {
     padding: 5px;
-  }
+}
 
-  .AssetCard2__content {
+.AssetCard2__content {
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
     overflow: hidden;
     height: 40px;
     padding-bottom: 2px;
-  }
-  .AssetCard2__header {
+}
+.AssetCard2__header {
     display: flex;
     align-items: baseline;
-  }
-  .AssetCard2__header {
-     color: #000;
-     opacity: 0.85;
-     height: 21px;
-     margin-bottom: 4px;
-  }
-  .AssetCard2__spacer {
+}
+.AssetCard2__header {
+    color: #000;
+    opacity: 0.85;
+    height: 21px;
+    margin-bottom: 4px;
+}
+.AssetCard2__spacer {
     width: 100px;
-  }
-  .AssetCard2__header__code {
+}
+.AssetCard2__header__code {
     font-weight: 400;
     font-size: $s-scale-1;
     line-height: 20px;
     margin-right: 4px;
-  }
-  .AssetCard2__header__domain {
+}
+.AssetCard2__header__domain {
     text-decoration: none;
     font-size: $s-scale-4;
     line-height: 20px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-  .AssetCard2__issuerAccountId {
+}
+.AssetCard2__issuerAccountId {
     margin: 0;
     font-size: 8px;
     font-weight: 400;
@@ -75,4 +75,19 @@
     height: 8px;
     line-height: 1;
     text-align: left;
-  }
+}
+
+.AssetRow {
+    display: inline-block;
+
+    .Row_logo {
+        height: 20px;
+        margin-right: 0.5em;
+    }
+
+    .Row_logo,
+    span {
+        line-height: 20px;
+        vertical-align: middle;
+    }
+}

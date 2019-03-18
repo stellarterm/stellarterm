@@ -55,7 +55,9 @@ export default function Send(driver) {
                 }
 
                 const notSupported = error && error.id === 'U2FNotSupported';
-                if (notSupported) { return; }
+                if (notSupported) {
+                    return;
+                }
                 // Could not connect to ledger, retry...
                 this.pingLedger();
             });
@@ -231,13 +233,18 @@ export default function Send(driver) {
                         .then((transactionResult) => {
                             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'));
                             this.account.refresh();
+                            if (this.authType === 'ledger') {
+                                driver.modal.handlers.ledgerFinish(true);
+                            }
                             return transactionResult;
                         })
                         .catch((error) => {
+                            if (this.authType === 'ledger') {
+                                driver.modal.handlers.ledgerFinish('error');
+                            }
                             console.log('Failed tx\nhash:', tx.hash().toString('hex'));
                             throw error;
                         });
-
                     result = {
                         status: 'finish',
                         serverResult,
@@ -405,8 +412,12 @@ export default function Send(driver) {
                 return this.handlers.buildSignSubmit(tx);
             }
             if (signers.length === 3) {
-                const hasVaultMarker = signers.find(signer => signer.key === this.handlers.getSignerMarker('lobstrVault'));
-                const hasGuardMarker = signers.find(signer => signer.key === this.handlers.getSignerMarker('stellarGuard'));
+                const hasVaultMarker = signers.find(
+                    signer => signer.key === this.handlers.getSignerMarker('lobstrVault'),
+                );
+                const hasGuardMarker = signers.find(
+                    signer => signer.key === this.handlers.getSignerMarker('stellarGuard'),
+                );
 
                 if (!hasVaultMarker && !hasGuardMarker) {
                     const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
@@ -496,7 +507,9 @@ export default function Send(driver) {
 
         setHomeDomain: async () => {
             const homeDomainExists = this.account.home_domain === 'stellarterm.com';
-            if (homeDomainExists) { return; }
+            if (homeDomainExists) {
+                return;
+            }
 
             const homeDomain = {
                 homeDomain: 'stellarterm.com',

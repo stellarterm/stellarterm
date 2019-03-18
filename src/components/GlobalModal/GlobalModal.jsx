@@ -13,7 +13,7 @@ import MultisigSetRequiredSigners
     from './../Session/SessionContent/Multisig/MultisigEnabled/MultisigSetRequiredSigners/MultisigSetRequiredSigners';
 import Driver from '../../lib/Driver';
 import SignWithLedgerModal from './LedgerModal/LedgerModal';
-import TransactionSummary from './TransactionSummary/TransactionSummary';
+import TransactionDetails from './TransactionDetails/TransactionDetails';
 import MultisigSubmitModal from './MultisigSubmitModal/MultisigSubmitModal';
 import MultisigUnknownSubmitModal from './MultisigUnknownSubmitModal/MultisigUnknownSubmitModal';
 
@@ -61,7 +61,7 @@ export default class GlobalModal extends React.Component {
                 <div className="GlobalModal">
                     <div className="GlobalModal__header">Sign transaction</div>
                     <div className="GlobalModal__content">
-                        <TransactionSummary tx={modal.inputData} />
+                        <TransactionDetails tx={modal.inputData} />
                     </div>
                     {laboratoryContent}
                     <div className="GlobalModal__navigation">
