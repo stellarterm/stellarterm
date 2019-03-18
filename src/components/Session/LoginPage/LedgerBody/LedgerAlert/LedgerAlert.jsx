@@ -8,8 +8,8 @@ export default function LedgerAlert(props) {
     switch (props.alertType) {
     case 'useChrome':
         ledgerAlert = (
-                <p className="LoginPage__form--title">
-                    Ledger is not supported on your browser. Please use Google Chrome.
+                <p className="LoginPage__form--title browser-support">
+                    Ledger is not supported on your browser. Please use Google Chrome or Opera.
                 </p>
             );
         break;
