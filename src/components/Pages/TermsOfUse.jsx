@@ -48,7 +48,8 @@ export default function TermsOfUse(props) {
                 <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">
                     Stellar network
                 </a>{' '}
-                are <strong>irreversible</strong>.
+                are <strong>irreversible</strong>. StellarTerm is not a custodian of your assets. 
+                We do not store any tokens, cryptoassets or private keys on your behalf.
             </p>
 
             <h3>3. Privacy</h3>
