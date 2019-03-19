@@ -31,7 +31,7 @@ export default class TrustButton extends React.Component {
                     })
                     .catch((error) => {
                         let errorType = 'unknown';
-                        if (error.extras && error.extras.result_codes.operations[0] === 'op_low_reserve') {
+                        if (error.data.extras && error.data.extras.result_codes.operations[0] === 'op_low_reserve') {
                             errorType = 'lowReserve';
                         }
 
