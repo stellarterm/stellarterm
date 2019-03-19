@@ -20,9 +20,9 @@ export default () => (
         </p>
         <p>
             <strong>To decrease your minimum balance</strong>, you can remove an existing offer or{' '}
-            <a href="#account/addTrust">unaccept an asset</a>.<br/>
-            If you would like to close your Stellar account and withdraw assets somewhere else you can use 
-            <a href="https://merge.lobstr.co/" target="_blank">Account Merge tool</a>.
+            <a href="#account/addTrust">unaccept an asset</a>.<br />
+            If you would like to close your Stellar account and withdraw assets somewhere else you can use{' '}
+            <a href="https://merge.lobstr.co/" target="_blank" rel="noopener noreferrer">Account Merge tool</a>.
         </p>
     </div>
 );
