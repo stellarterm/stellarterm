@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import QRCode from 'qrcode.react';
 
 import Generic from '../../../Generic';
 import ErrorBoundary from '../../../ErrorBoundary';
@@ -17,7 +18,10 @@ export default function SessionAccount(props) {
                         {props.d.session.account.accountId()}
                     </strong>
                 </div>
-                <p>To receive payments, share your account ID with them (begins with a G).</p>
+                <div className="LoginPage_qrcode">
+                    <QRCode value={props.d.session.account.accountId()} renderAs="svg" />
+                </div>
+                <p>To receive payments, share your account ID with them (begins with a G) or scan QR-code.</p>
             </Generic>
             <Generic noTopPadding>
                 <h2>Where is the money stored?</h2>
