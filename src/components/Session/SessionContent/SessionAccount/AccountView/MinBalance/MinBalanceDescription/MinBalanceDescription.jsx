@@ -15,12 +15,14 @@ export default () => (
         </p>
         <p>
             Each entry (asset accepted, offer, signer) increases your minimum balance by 0.5 XLM. Additionally,
-            StellarTerm enforces a 0.1 XLM of extra minimum balance in an attempt to make sure your account can still
+            StellarTerm enforces a 0.5 XLM of extra minimum balance in an attempt to make sure your account can still
             make transactions without going below the network minimum balance requirements.
         </p>
         <p>
             <strong>To decrease your minimum balance</strong>, you can remove an existing offer or{' '}
-            <a href="#account/addTrust">unaccept an asset</a>.
+            <a href="#account/addTrust">unaccept an asset</a>.<br/>
+            If you would like to close your Stellar account and withdraw assets somewhere else you can use
+            <a href="https://merge.lobstr.co/" target="_blank">Account Merge tool</a>.
         </p>
     </div>
 );
