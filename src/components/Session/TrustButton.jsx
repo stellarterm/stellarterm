@@ -5,6 +5,11 @@ import Ellipsis from '../Ellipsis';
 import Driver from '../../lib/Driver';
 
 export default class TrustButton extends React.Component {
+    static goToLink(e) {
+        e.stopPropagation();
+        window.location = '#account';
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -73,7 +78,9 @@ export default class TrustButton extends React.Component {
         if (this.state.errorType === 'lowReserve') {
             return (
                 <button className="s-button" onClick={event => this.handleSubmitTrust(event)}>
-                    Error: Not enough lumens. See the <a href="#account">minimum balance section</a> for more info
+                    Error: Not enough lumens. See the <a onClick={e => this.constructor.goToLink(e)}>
+                        minimum balance section
+                    </a> for more info
                 </button>
             );
         }
