@@ -62,12 +62,25 @@ export default function AssetCard2(props) {
         borderStyle = { border: 'none' };
     }
 
+    let { logo, name } = anchor;
+    let logoPadding = false;
+
+    if (name === 'unknown' && props.currency) {
+        const { image, host } = props.currency;
+
+        const domain = host && host.split('//')[1];
+        name = domain || props.host;
+        logo = image || logo;
+        logoPadding = !!image;
+    }
+
     return (
         <div className={assetCardClass} style={borderStyle}>
             <AssetCardMain
                 backgroundStyle={backgroundStyle}
-                logo={anchor.logo}
-                name={anchor.name}
+                logo={logo}
+                logoWithPadding={logoPadding}
+                name={name}
                 assetCode={asset.code}
                 issuerAccountId={issuerAccountId} />
 
@@ -87,4 +100,9 @@ AssetCard2.propTypes = {
     domain: PropTypes.string,
     children: PropTypes.element,
     noborder: PropTypes.bool,
+    host: PropTypes.string,
+    currency: PropTypes.shape({
+        image: PropTypes.string,
+        host: PropTypes.string,
+    }),
 };
