@@ -123,6 +123,16 @@ export default class OfferMaker extends React.Component {
         const handlers = this.props.d.session.handlers;
         const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total });
 
+        if (signAndSubmit.status === 'await_signers') {
+            this.setState({
+                amount: '',
+                total: '',
+                valid: false,
+                buttonState: 'ready',
+                successMessage: 'Offer successfully created and signed by your key! Await signers!',
+            });
+        }
+
         if (signAndSubmit.status !== 'finish') { return; }
 
         this.setState({

@@ -28,6 +28,8 @@ export default class Send extends React.Component {
             return <SendPending />;
         } else if (state === 'success') {
             return <SendSuccess d={d} />;
+        } else if (state === 'success_signers') {
+            return <SendSuccess d={d} awaitSiners />;
         }
         return <SendError d={d} />;
     }
