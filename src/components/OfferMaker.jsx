@@ -10,7 +10,7 @@ export default class OfferMaker extends React.Component {
         if (!error.data) {
             return `clientError - ${error.message}`;
         }
-        if (!error.data.extras || !error.data.exras.result_codes) {
+        if (!error.data.extras || !error.data.extras.result_codes) {
             return `unknownResponse - ${error.message}`;
         }
         if (!error.data.extras.result_codes.operations) {
