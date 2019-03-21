@@ -34,6 +34,7 @@ export default class TrustButton extends React.Component {
                 return bssResult.serverResult
                     .then(() => {
                         this.setState({ status: 'ready' });
+                        this.addDataToLocalStorage();
                     })
                     .catch((error) => {
                         let errorType = 'unknown';
@@ -47,6 +48,22 @@ export default class TrustButton extends React.Component {
                         });
                     });
             });
+    }
+
+    addDataToLocalStorage() {
+        const { asset, host, currency, color } = this.props;
+        if (asset.domain === undefined && currency && host) {
+            const unknownAsset = {
+                code: asset.code,
+                issuer: asset.issuer,
+                host,
+                currency,
+                color,
+                time: new Date(),
+            };
+            const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
+            localStorage.setItem('unknownAssetsData', JSON.stringify([...unknownAssetsData, unknownAsset]));
+        }
     }
 
     checkAssetForAccept() {
@@ -136,4 +153,10 @@ TrustButton.propTypes = {
     message: PropTypes.string.isRequired,
     trustMessage: PropTypes.string.isRequired,
     isManualTrust: PropTypes.bool,
+    host: PropTypes.string,
+    color: PropTypes.string,
+    currency: PropTypes.shape({
+        image: PropTypes.string,
+        host: PropTypes.string,
+    }),
 };

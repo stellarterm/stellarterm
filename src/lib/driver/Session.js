@@ -123,6 +123,9 @@ export default function Send(driver) {
                 if (inflationDoneDestinations[this.account.inflation_destination]) {
                     this.inflationDone = true;
                 }
+
+                this.account.addUnknownAssetData();
+
                 this.event.trigger();
             } catch (e) {
                 if (e.data) {
@@ -144,6 +147,7 @@ export default function Send(driver) {
                 this.event.trigger();
             }
         },
+
 
     // Using buildSignSubmit is the preferred way to go. It handles sequence numbers correctly.
     // If you use sign, you have to pay attention to sequence numbers because js-stellar-sdk's .build() updates it magically

@@ -11,12 +11,25 @@ export default class ManuallyAddTrust extends React.Component {
         this.state = {
             trustCode: '',
             trustIssuer: '',
+            unknownAssetData: '',
+            isDataUpdate: false,
         };
+    }
+
+    async loadUnknownData(asset) {
+        if (!this.state.isDataUpdate) {
+            const unknownAssetData = await this.props.d.session.account.loadUnknownAssetData(asset);
+            this.setState({
+                unknownAssetData,
+                isDataUpdate: true,
+            });
+        }
     }
 
     handleInput(event, trustType) {
         this.setState({
             [trustType]: event.target.value.toUpperCase(),
+            isDataUpdate: false,
         });
     }
 
@@ -52,19 +65,27 @@ export default class ManuallyAddTrust extends React.Component {
         }
 
         const asset = new StellarSdk.Asset(trustCode, trustIssuer);
+        this.loadUnknownData(asset);
 
         return (
             <React.Fragment>
                 <div className="island__separator" />
                 <div className="AddTrust__confirmation">
                     <div className="AddTrust__confirmation__assetCard">
-                        <AssetCard asset={asset} fixed />
+                        <AssetCard
+                            asset={asset}
+                            fixed
+                            currency={this.state.unknownAssetData.currency}
+                            host={this.state.unknownAssetData.host} />
                     </div>
                     <TrustButton
                         isManualTrust
                         d={this.props.d}
                         asset={asset}
                         message={`${asset.getCode()} accepted`}
+                        color={this.state.unknownAssetData.color}
+                        currency={this.state.unknownAssetData.currency}
+                        host={this.state.unknownAssetData.host}
                         trustMessage={`Accept asset ${asset.getCode()}`} />
                 </div>
             </React.Fragment>
