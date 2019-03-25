@@ -45,7 +45,7 @@ export default class OfferMakerOverview extends React.Component {
         const invalidPrecision = (amount < minValue) || (total < minValue);
         const errorPrecisionMessage = invalidPrecision ?
             (<p className="OfferMaker__insufficientBalance">
-                Error: Minimal amount for trading of assets is {this.constructor.capDigits(minValue)}
+                Error: Minimal amount of assets for trading is {this.constructor.capDigits(minValue)}
             </p>) : null;
 
         return (
