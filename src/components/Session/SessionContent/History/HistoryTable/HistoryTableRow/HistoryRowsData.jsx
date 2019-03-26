@@ -103,7 +103,7 @@ const HISTORY_DATA_GENERATORS = {
         let toFromRow = {};
         let title;
 
-        if (data.to === data.from && data.category === 'account_debited') {
+        if (data.to && data.from && data.to === data.from && data.category === 'account_debited') {
             return {
                 title: 'Sent to self',
                 attributes: [
@@ -124,6 +124,31 @@ const HISTORY_DATA_GENERATORS = {
                     {
                         header: 'FROM:  ',
                         value: `${data.from} (self)`,
+                    },
+                ],
+            };
+        }
+
+        if (data.funder && data.starting_balance && data.category === 'account_debited') {
+            const envelopeResult = StellarSdk.xdr.TransactionEnvelope.fromXDR(data.envelope_xdr.toString(), 'base64');
+            const publicKeyUint8Array = envelopeResult._attributes.tx._attributes.operations[0]
+                        ._attributes.body._value._attributes.destination._value;
+            const publicKey = StellarSdk.StrKey.encodeEd25519PublicKey(publicKeyUint8Array);
+
+            return {
+                title: 'Account Created',
+                attributes: [
+                    {
+                        header: 'STARTING BALANCE: ',
+                        value: Printify.lightenZeros(data.starting_balance),
+                        isAsset: true,
+                        asset_code: 'XLM',
+                        asset_issuer: null,
+                        domain: 'native',
+                    },
+                    {
+                        header: 'FUNDED TO: ',
+                        value: publicKey,
                     },
                 ],
             };
