@@ -29,6 +29,7 @@ function tickerGenerator() {
   };
 
   let tickerPromise = Promise.resolve()
+    .then(() => fetchFeeData(ticker))
     .then(() => phase1(ticker))
     .then(() => loadAssets(ticker))
     .then(() => phase3(ticker))
@@ -431,6 +432,29 @@ function getHorizonMain() {
       console.log('Phase 1: Horizon at ledger #' + horizonMain.core_latest_ledger);
       return horizonMain;
     })
+}
+
+function fetchFeeData(ticker) {
+    console.log('Starting to load fee stats');
+    return rp('https://horizon.stellar.org/fee_stats')
+        .then((response) => {
+            const feeStats = JSON.parse(response);
+            const {
+                ledger_capacity_usage: ledgerCapacityUsage,
+                min_accepted_fee: minAcceptedFee,
+            } = feeStats;
+
+            if (ledgerCapacityUsage >= 0.8) {
+                const feeValue = minAcceptedFee * 1.5;
+                ticker.FEE_VALUE = Math.min(feeValue, 10000);
+            } else {
+                ticker.FEE_VALUE = 100;
+            }
+            console.log('Fee stats loaded');
+        })
+        .catch(() => {
+            console.log('Unable to load fee stats!');
+        });
 }
 
 function getStellarTermDotComVersion() {
