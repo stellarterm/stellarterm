@@ -30,6 +30,8 @@ export default function Send(driver) {
     };
     init();
 
+    driver.ticker.event.subscribeOn('fee-changed', feeValue => MagicSpoon.updateFeeValue(feeValue));
+
   // TODO: This kludge was added a year ago. It might be fixed
   // Due to a bug in horizon where it doesn't update offers for accounts, we have to manually check
   // It shouldn't cause too much of an overhead
