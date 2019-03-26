@@ -27,16 +27,18 @@ function tickerGenerator() {
       apiLicense: 'Apache-2.0',
     },
   };
+  const feeData = {};
 
   let tickerPromise = Promise.resolve()
-    .then(() => fetchFeeData(ticker))
+    .then(() => fetchFeeData(feeData))
     .then(() => phase1(ticker))
     .then(() => loadAssets(ticker))
     .then(() => phase3(ticker))
     .then(() => phase4(ticker))
     .then(() => {
       return {
-        'v1/ticker.json': JSON.stringify(ticker)
+        'v1/ticker.json': JSON.stringify(ticker),
+        'v1/feeData.json': JSON.stringify(feeData),
       };
     })
 
@@ -434,7 +436,7 @@ function getHorizonMain() {
     })
 }
 
-function fetchFeeData(ticker) {
+function fetchFeeData(feeData) {
     console.log('Starting to load fee stats');
     return rp('https://horizon.stellar.org/fee_stats')
         .then((response) => {
@@ -442,13 +444,14 @@ function fetchFeeData(ticker) {
             const {
                 ledger_capacity_usage: ledgerCapacityUsage,
                 min_accepted_fee: minAcceptedFee,
+                p10_accepted_fee: p10AcceptedFee,
             } = feeStats;
 
             if (ledgerCapacityUsage >= 0.8) {
-                const feeValue = minAcceptedFee * 1.5;
-                ticker.FEE_VALUE = Math.min(feeValue, 10000);
+                const feeValue = Math.max(minAcceptedFee * 1.5, p10AcceptedFee);
+                feeData.fee_value = Math.min(feeValue, 10000);
             } else {
-                ticker.FEE_VALUE = 100;
+                feeData.fee_value = 100;
             }
             console.log('Fee stats loaded');
         })
