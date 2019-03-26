@@ -86,7 +86,7 @@ export default function TermsOfUse(props) {
                     rel="nofollow noopener noreferrer">
                     Apache-2.0 license
                 </a>
-                . It is provided fre of charge and on an{' '}
+                . It is provided free of charge and on an{' '}
                 <strong>{'"AS IS"'} BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND</strong>.
                 <br />
                 <br />

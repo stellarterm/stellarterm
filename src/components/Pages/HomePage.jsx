@@ -77,7 +77,7 @@ export default class HomePage extends React.Component {
                                 <div className="HomePage__sideBlurb">
                                     <p>
                                         StellarTerm is open source software.
-                                        To support the project, please 
+                                        To support the project, please{' '}
                                         <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">
                                             star the project on GitHub
                                         </a>.
@@ -88,10 +88,10 @@ export default class HomePage extends React.Component {
                                         without warranty.
                                     </p>
                                     <p>
-                                        StellarTerm is not a custodian of your assets. 
+                                        StellarTerm is not a custodian of your assets.{' '}
                                         We do not store any tokens, cryptoassets
                                         or private keys on your behalf.
-                                    </p>                                    
+                                    </p>
                                 </div>
                             </div>
 
