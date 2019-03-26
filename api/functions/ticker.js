@@ -9,9 +9,11 @@ const PQueue = require('p-queue');
 const queue = new PQueue({concurrency: 20});
 const run = queue.add;
 
+const { HORIZON_SERVER } = require('./horizon-server.constant');
+
 const directory = require('../directory.json');
 
-Server = new StellarSdk.Server('https://horizon.stellar.org');
+Server = new StellarSdk.Server(HORIZON_SERVER);
 StellarSdk.Network.usePublicNetwork();
 
 function medianOf3(a,b,c) {
@@ -425,7 +427,7 @@ function getLumenPrice() {
 }
 
 function getHorizonMain() {
-  return rp('https://horizon.stellar.org/')
+  return rp(HORIZON_SERVER)
     .then(horizonMainJson => {
       let horizonMain = JSON.parse(horizonMainJson);
       console.log('Phase 1: Horizon at ledger #' + horizonMain.core_latest_ledger);
