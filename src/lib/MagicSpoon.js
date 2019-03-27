@@ -119,6 +119,7 @@ const MagicSpoon = {
                     sdkAccount.balances = res.balances;
                     sdkAccount.subentry_count = res.subentry_count;
                     sdkAccount.updateOffers();
+                    sdkAccount.signers = res.signers;
                     updated = true;
                 }
 
