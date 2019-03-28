@@ -53,8 +53,8 @@ export default class SendDestInput extends React.Component {
                         type="text"
                         value={step1.destInput}
                         onChange={handlers.updateDestination}
-                        placeholder="example: username*getstargazer.com or
-                GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R" />
+                        placeholder="example: username*lobstr.co or
+                GC4DJYM...Z3WYI7R" />
                 </label>
                 {inputNotice}
             </React.Fragment>
