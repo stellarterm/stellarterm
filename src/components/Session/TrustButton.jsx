@@ -7,6 +7,7 @@ import Driver from '../../lib/Driver';
 export default class TrustButton extends React.Component {
     static goToLink(e) {
         e.stopPropagation();
+        e.preventDefault();
         window.location = '#account';
     }
 
