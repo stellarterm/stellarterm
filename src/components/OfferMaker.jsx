@@ -129,7 +129,7 @@ export default class OfferMaker extends React.Component {
                 total: '',
                 valid: false,
                 buttonState: 'ready',
-                successMessage: 'Offer successfully created and signed by your key! Await signers!',
+                successMessage: 'Offer was signed with your key. Add additional signatures and submit to the network.',
             });
         }
 
