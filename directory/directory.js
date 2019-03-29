@@ -927,6 +927,12 @@ directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ
     requiredMemoType: 'MEMO_ID',
 });
 
+directory.addDestination('GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37', {
+    name: 'Coinbase Deposits',
+    requiredMemoType: 'MEMO_TEXT',
+    acceptedAssetsWhitelist: ['XLM-native'],
+});
+
 // Assert that each asset has a trading pair
 const remainingAssets = Object.assign({}, directory.assets);
 
