@@ -45,7 +45,7 @@ export default class OfferMakerOverview extends React.Component {
         const invalidPrecision = (amount < minValue) || (total < minValue);
         const errorPrecisionMessage = invalidPrecision ?
             (<p className="OfferMaker__insufficientBalance">
-                Error: Minimal amount of assets for trading is {this.constructor.capDigits(minValue)}
+                Error: Minimal amount of any asset for trading is {this.constructor.capDigits(minValue)}
             </p>) : null;
 
         return (
@@ -146,7 +146,8 @@ export default class OfferMakerOverview extends React.Component {
             );
         }
 
-        // A “stroop” is the smallest amount unit. It is one ten-millionth: 1/10000000 or 0.0000001.
+        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
+        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
 
         const minValue = 0.0000001;
 
