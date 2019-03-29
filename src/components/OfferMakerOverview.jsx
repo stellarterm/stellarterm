@@ -36,30 +36,40 @@ export default class OfferMakerOverview extends React.Component {
             </div>
         );
     }
-    getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling) {
+    getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling, minValue) {
         const { valid, amount, total } = this.props.offerState;
         if (!valid) {
             return null;
         }
 
+        const invalidPrecision = (amount < minValue) || (total < minValue);
+        const errorPrecisionMessage = invalidPrecision ?
+            (<p className="OfferMaker__insufficientBalance">
+                Error: Minimal amount of any asset for trading is {this.constructor.capDigits(minValue)}
+            </p>) : null;
+
         return (
-            <div className="s-alert s-alert--info">
-                {capitalizedSide} {this.constructor.capDigits(amount)} {baseBuying.getCode()} for{' '}
-                {this.constructor.capDigits(total)} {counterSelling.getCode()}
+            <div>
+                {errorPrecisionMessage}
+                <div className="s-alert s-alert--info">
+                    {capitalizedSide} {this.constructor.capDigits(amount)} {baseBuying.getCode()} for{' '}
+                    {this.constructor.capDigits(total)} {counterSelling.getCode()}
+                </div>
             </div>
         );
     }
 
-    getSubmitButton(capitalizedSide, baseBuying) {
-        const { valid, buttonState } = this.props.offerState;
+    getSubmitButton(capitalizedSide, baseBuying, minValue) {
+        const { valid, buttonState, amount, total } = this.props.offerState;
         const isButtonReady = buttonState === 'ready';
+        const invalidPrecision = (amount < minValue) || (total < minValue);
 
         return (
             <input
                 type="submit"
                 className="s-button"
                 value={isButtonReady ? `${capitalizedSide} ${baseBuying.getCode()}` : 'Creating offer...'}
-                disabled={!valid || this.isInsufficientBalance() || !isButtonReady} />
+                disabled={!valid || this.isInsufficientBalance() || !isButtonReady || invalidPrecision} />
         );
     }
 
@@ -136,12 +146,17 @@ export default class OfferMakerOverview extends React.Component {
             );
         }
 
+        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
+        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
+
+        const minValue = 0.0000001;
+
         return (
             <div className="OfferMaker__overview">
                 {this.getBalance()}
-                {this.getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling)}
+                {this.getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling, minValue)}
                 <OfferMakerResultMessage offerState={this.props.offerState} />
-                {this.getSubmitButton(capitalizedSide, baseBuying)}
+                {this.getSubmitButton(capitalizedSide, baseBuying, minValue)}
             </div>
         );
     }
