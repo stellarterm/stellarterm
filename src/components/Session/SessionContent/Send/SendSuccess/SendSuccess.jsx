@@ -16,7 +16,7 @@ export default function SendSuccess(props) {
             Keep the transaction ID as proof of payment.
         </p>) :
         (<p>
-            Transaction successfully created and signed by your key! Await signers!
+            Transaction was signed with your key. Add additional signatures and submit to the network.
         </p>);
 
     return (
