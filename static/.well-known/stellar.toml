@@ -1,6 +1,6 @@
 # StellarTerm - open source client for Stellar Decentralized Exchange <stellarterm.com>
 
-# FEDERATION_SERVER="https://fed.stellarterm.com/federation/"
+FEDERATION_SERVER="https://fed.stellarterm.com/federation/"
 
 
 DESIRED_BASE_FEE=1000
