@@ -9,7 +9,7 @@ export default function SendError(props) {
         <div className="island">
             <div className="island__header">Send Payment</div>
             <h3 className="Send__resultTitle">Error</h3>
-            <pre className="Send__errorPre">{errorDetails}</pre>
+            <p className="Send_errorText">{errorDetails}</p>
             <button className="s-button Send__startOver" onClick={handlers.reset}>
                 Start over
             </button>

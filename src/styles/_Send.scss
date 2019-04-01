@@ -68,8 +68,10 @@
   color: $s-color-neutral4;
   line-height: 1;
 }
-.Send__errorPre {
-  padding-left: 18px;
+.Send_errorText {
+  padding: 18px 18px 0px 18px;
+  font-weight: bolder;
+  font-size: 1.25em;
 }
 .Send__startOver {
   margin: 1em;
