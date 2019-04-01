@@ -320,9 +320,7 @@ export default function Send(driver) {
             const body = JSON.stringify({ name: fedName });
             const reqType = this.userFederation === '' ? request.post : request.patch;
 
-            if (reqType === request.post) {
-                this.handlers.setHomeDomain();
-            }
+            await this.handlers.setHomeDomain();
 
             const response = await reqType(getEndpoint('setFederation'), { headers, body });
             this.userFederation = response.name.split('*')[0];
@@ -331,10 +329,15 @@ export default function Send(driver) {
         },
 
         setHomeDomain: async () => {
-            const homeDomainNotExists = this.account.home_domain === undefined || this.account.home_domain === '';
-            if (homeDomainNotExists) {
+            const homeDomainExists = this.account.home_domain === 'stellarterm.com';
+            if (homeDomainExists) { return; }
+
+            try {
+                // Setting homeDomain for user
                 const tx = MagicSpoon.buildTxSetHomeDomain(this.account);
                 await this.handlers.buildSignSubmit(tx);
+            } catch (error) {
+                console.log(error);
             }
         },
 
