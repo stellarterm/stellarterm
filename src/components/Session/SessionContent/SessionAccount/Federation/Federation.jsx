@@ -23,9 +23,12 @@ export default class Federation extends React.Component {
     }
 
     onKeyPressed(keyCode) {
+        const isNewAddress = this.state.address !== this.props.d.session.userFederation;
         switch (keyCode) {
         case CODE_ENTER:
-            this.handleBtnSave();
+            if (isNewAddress) {
+                this.handleBtnSave();
+            }
             break;
         case CODE_ESC:
             this.handleEditToggle();
