@@ -21,6 +21,11 @@ export default class Exchange extends React.Component {
             this.forceUpdate();
         });
     }
+
+    componentWillMount() {
+        window.scrollTo(0, 0);
+    }
+
     componentWillUnmount() {
         this.unsub();
         this.unsubSession();

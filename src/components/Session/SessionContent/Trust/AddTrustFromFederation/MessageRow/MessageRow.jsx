@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 export default function MessageRow(props) {
     const { isError, children } = props;
-    const rowClassName = `row__message${isError ? ' row__message--error' : ''}`;
+    const rowClassName = `Row_msg${isError ? ' error_inRow' : ''}`;
 
     return (
         <div className="row">

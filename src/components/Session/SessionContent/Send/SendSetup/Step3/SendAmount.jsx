@@ -63,7 +63,10 @@ export default class SendAmount extends React.Component {
             } else if (notEnoughAsset) {
                 amountValid = false;
                 validationMessage = (
-                    <p>You may only send up to <strong>{maxAssetSpend} {asset.code}</strong> due to open orders.</p>
+                    <p>
+                        You may only send up to <strong>{maxAssetSpend} {asset.code}</strong> due to the
+                         minimum balance or open offers.
+                    </p>
                 );
             }
         }
