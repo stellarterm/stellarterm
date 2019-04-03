@@ -138,7 +138,7 @@ const bundler = watchify(browserify({
     },
 }));
 const rebundle = () => bundler.bundle()
-// log errors if they happen
+    // log errors if they happen
     .on('error', (e) => {
         console.log(e.stack);
     })
