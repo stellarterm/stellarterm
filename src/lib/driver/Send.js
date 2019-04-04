@@ -9,7 +9,7 @@ import Event from '../Event';
 export default function Send(driver) {
     this.event = new Event();
 
-  // Constraint: Each step is allowed to safely assume that the previous steps are finished
+    // Constraint: Each step is allowed to safely assume that the previous steps are finished
     this.step2 = {};
     this.step3 = {};
     this.accountId = '';
@@ -23,8 +23,7 @@ export default function Send(driver) {
         this.step = 1; // Starts at 1. Natural indexing corresponds to the step numbers
     };
 
-
-  // Step state is initialized by the reset functions
+    // Step state is initialized by the reset functions
     const resetStep1 = () => {
         this.accountId = ''; // After step 1, this will be valid
         this.address = ''; // After step 1, this may or may not be filled in
@@ -60,7 +59,7 @@ export default function Send(driver) {
     resetAll();
 
     const calculateAvailableAssets = () => {
-    // Calculate the assets that you can send to the destination
+        // Calculate the assets that you can send to the destination
         this.availableAssets = {};
         this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = {
             asset: new StellarSdk.Asset.native(),
@@ -79,8 +78,8 @@ export default function Send(driver) {
                 return;
             }
             if (asset.issuer === this.targetAccount.accountId()) {
-        // Edgecase: Receiver is the issuer of the asset
-        // Note: Accounts cant extend trust to themselves, so no further edgecases on this situation
+                // Edgecase: Receiver is the issuer of the asset
+                // Note: Accounts cant extend trust to themselves, so no further edgecases on this situation
                 this.availableAssets[slug] = {
                     asset,
                     sendable: true,
@@ -97,7 +96,7 @@ export default function Send(driver) {
             if (asset.isNative()) {
                 return;
             }
-      // We don't really care about the usecase of sending to issuer.
+            // We don't really care about the usecase of sending to issuer.
             receiverTrusts[slug] = true;
         });
 
@@ -110,17 +109,17 @@ export default function Send(driver) {
                     sendable: true,
                 };
             } else if (asset.getIssuer() === driver.session.account.accountId()) {
-        // Edgecase: Sender is the issuer of the asset
+                // Edgecase: Sender is the issuer of the asset
                 sendableAssets[slug] = {
                     asset,
                     sendable: true,
                 };
             } else {
-        // Asset can't be sent.
+                // Asset can't be sent.
             }
         });
 
-    // Show stuff the recipient doesn't trust
+        // Show stuff the recipient doesn't trust
         _.each(driver.session.account.balances, (balance) => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
@@ -128,8 +127,10 @@ export default function Send(driver) {
                 return;
             }
 
-            if (!Object.prototype.hasOwnProperty.call(sendableAssets, slug) &&
-                !Object.prototype.hasOwnProperty.call(receiverTrusts, slug)) {
+            if (
+                !Object.prototype.hasOwnProperty.call(sendableAssets, slug) &&
+                !Object.prototype.hasOwnProperty.call(receiverTrusts, slug)
+            ) {
                 unSendableAssets[slug] = {
                     asset,
                     sendable: false,
@@ -179,7 +180,7 @@ export default function Send(driver) {
         updateDestination: (e) => {
             this.step1.destInput = e.target.value;
 
-      // Reset the defaults
+            // Reset the defaults
             this.accountId = '';
             this.address = '';
             this.memoRequired = false;
@@ -189,7 +190,7 @@ export default function Send(driver) {
             if (Validate.publicKey(this.step1.destInput).ready) {
                 this.accountId = this.step1.destInput;
 
-        // Check for memo requirements in the destination
+                // Check for memo requirements in the destination
                 if (Object.prototype.hasOwnProperty.call(directory.destinations, this.accountId)) {
                     const destination = directory.destinations[this.accountId];
                     if (destination.requiredMemoType) {
@@ -198,61 +199,61 @@ export default function Send(driver) {
                     }
                 }
 
-        // Async loading of target account
+                // Async loading of target account
                 loadTargetAccountDetails();
             } else if (Validate.address(this.step1.destInput).ready) {
-        // Prevent race race conditions
+                // Prevent race race conditions
                 const destInput = this.step1.destInput;
 
                 StellarSdk.FederationServer.resolve(this.step1.destInput)
-        .then((federationRecord) => {
-            if (destInput !== this.step1.destInput) {
-                return;
-            }
-            this.address = this.step1.destInput;
-            if (!Validate.publicKey(federationRecord.account_id).ready) {
-                throw new Error('Invalid account_id from federation response');
-            }
-            this.accountId = federationRecord.account_id;
+                    .then((federationRecord) => {
+                        if (destInput !== this.step1.destInput) {
+                            return;
+                        }
+                        this.address = this.step1.destInput;
+                        if (!Validate.publicKey(federationRecord.account_id).ready) {
+                            throw new Error('Invalid account_id from federation response');
+                        }
+                        this.accountId = federationRecord.account_id;
 
-            if (federationRecord.memo_type) {
-                switch (federationRecord.memo_type) {
-                case 'id':
-                    this.memoType = 'MEMO_ID';
-                    break;
-                case 'text':
-                    this.memoType = 'MEMO_TEXT';
-                    break;
-                case 'hash':
-                    this.memoType = 'MEMO_HASH';
-                    break;
-                case 'return':
-                    this.memoType = 'MEMO_RETURN';
-                    break;
-                default:
-                    throw new Error('Invalid memo_type from federation response');
-                }
+                        if (federationRecord.memo_type) {
+                            switch (federationRecord.memo_type) {
+                            case 'id':
+                                this.memoType = 'MEMO_ID';
+                                break;
+                            case 'text':
+                                this.memoType = 'MEMO_TEXT';
+                                break;
+                            case 'hash':
+                                this.memoType = 'MEMO_HASH';
+                                break;
+                            case 'return':
+                                this.memoType = 'MEMO_RETURN';
+                                break;
+                            default:
+                                throw new Error('Invalid memo_type from federation response');
+                            }
 
-                this.memoRequired = true;
-            }
+                            this.memoRequired = true;
+                        }
 
-            if (federationRecord.memo) {
-                this.memoContent = federationRecord.memo;
-                this.memoContentLocked = true;
-            }
+                        if (federationRecord.memo) {
+                            this.memoContent = federationRecord.memo;
+                            this.memoContentLocked = true;
+                        }
 
-            this.event.trigger();
-            loadTargetAccountDetails();
-        })
-        .catch((err) => {
-            if (destInput !== this.step1.destInput) {
-                return;
-            }
+                        this.event.trigger();
+                        loadTargetAccountDetails();
+                    })
+                    .catch((err) => {
+                        if (destInput !== this.step1.destInput) {
+                            return;
+                        }
 
-            console.error(err);
-            this.addressNotFound = true;
-            this.event.trigger();
-        });
+                        console.error(err);
+                        this.addressNotFound = true;
+                        this.event.trigger();
+                    });
             }
 
             this.event.trigger();
@@ -283,7 +284,7 @@ export default function Send(driver) {
             this.event.trigger();
         },
         step2PickAsset: (slug) => {
-      // Step 2 doesn't have a next button because this acts as the next button
+            // Step 2 doesn't have a next button because this acts as the next button
             this.step2.availability = this.availableAssets[slug];
             this.step = 3;
             this.event.trigger();
@@ -303,10 +304,13 @@ export default function Send(driver) {
         },
         submit: async () => {
             try {
-                const sendMemo = (this.memoType === 'none') ? undefined : {
-                    type: this.memoType,
-                    content: this.memoContent,
-                };
+                const sendMemo =
+                    this.memoType === 'none'
+                        ? undefined
+                        : {
+                            type: this.memoType,
+                            content: this.memoContent,
+                        };
 
                 const tx = await MagicSpoon.buildTxSendPayment(driver.Server, driver.session.account, {
                     destination: this.accountId,
@@ -330,11 +334,22 @@ export default function Send(driver) {
                 }
             } catch (err) {
                 this.state = 'error';
-                if (err instanceof Error) {
-                    this.errorDetails = err.message;
+                if (_.has(err.data, 'extras')) {
+                    const errExtra = err.data.extras.result_codes.operations.toString();
+                    switch (errExtra) {
+                    case 'op_no_trust':
+                        this.errorDetails = 'Destination does not have a trust line';
+                        break;
+                    case 'op_low_reserve':
+                        this.errorDetails = 'New account has to have at least 1 XLM';
+                        break;
+                    default:
+                        this.errorDetails = JSON.stringify(err, null, 2);
+                    }
                 } else {
-                    this.errorDetails = JSON.stringify(err, null, 2);
+                    this.errorDetails = err.message;
                 }
+
                 this.event.trigger();
             }
         },
@@ -344,4 +359,3 @@ export default function Send(driver) {
         },
     };
 }
-
