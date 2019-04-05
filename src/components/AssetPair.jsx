@@ -110,7 +110,7 @@ export default class AssetPair extends React.Component {
             <div>
                 <a onClick={() => this.showErrorMessage()} className="AssetPairRow">{content}</a>
                 {this.state.showError &&
-                <p className="AssetPair_error">Impossible to make pair with the same assets!</p>}
+                <p className="AssetPair_error">Please select different assets</p>}
             </div>
         );
     }
