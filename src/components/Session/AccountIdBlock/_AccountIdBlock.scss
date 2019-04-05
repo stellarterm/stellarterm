@@ -1,0 +1,39 @@
+.AccountIdBlock{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    border: solid 1px #7ed085;
+    border-radius: 4px;
+    background: $s-color-primary9;
+    line-height: normal;
+    margin-bottom: 15px;
+
+    .AccountIdBlock_qrcode{
+        padding: 15px;
+        background: #fff;
+        border-right: solid 1px #7ed085;
+        border-radius: 4px 0 0 4px;
+    }
+
+    .AccountIdBlock_main {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .AccountIdBlock_content {
+            max-width: 465px;
+            padding: 22px 15px;
+            word-wrap: break-word;
+
+            p {
+                font-size: $s-scale-4;
+                margin-bottom: 8px;
+            }
+            strong {
+                font-size: $s-scale-1;
+                cursor: pointer;
+            }
+        }
+    }
+}
