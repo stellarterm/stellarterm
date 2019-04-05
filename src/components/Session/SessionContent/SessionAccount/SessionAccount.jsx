@@ -15,7 +15,7 @@ export default function SessionAccount(props) {
             <Generic>
                 <AccountIdBlock accountID={accountID} />
                 <p className="AccountView_text">
-                    To receive payments, share your account ID with them (begins with a G) or scan QR-code.
+                    To receive payments, share your account ID with them (begins with a G) or scan QR code.
                 </p>
 
                 <Federation d={props.d} />
