@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import Stellarify from '../lib/Stellarify';
 import AssetDropDown from './AssetDropDown';
 import AssetCard2 from './AssetCard2';
@@ -14,6 +15,7 @@ export default class AssetPair extends React.Component {
         this.state = {
             baseBuying: this.props.baseBuying,
             counterSelling: this.props.counterSelling,
+            showError: false,
         };
     }
 
@@ -70,6 +72,11 @@ export default class AssetPair extends React.Component {
         window.location = `#${Stellarify.pairToExchangeUrl(this.props.counterSelling, this.props.baseBuying)}`;
     }
 
+    showErrorMessage() {
+        this.setState({ showError: true });
+        setTimeout(() => this.setState({ showError: false }), 5000);
+    }
+
     render() {
         const { row, d, baseBuying, counterSelling, dropdown, swap } = this.props;
 
@@ -85,15 +92,26 @@ export default class AssetPair extends React.Component {
             return content;
         }
 
-        if (baseBuying && counterSelling) {
+        if (!baseBuying || !counterSelling) {
+            return (
+                <div className="AssetPairRow">{content}</div>
+            );
+        }
+
+        if (!_.isEqual(baseBuying, counterSelling)) {
             const url = `#${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`;
             // In the future, this can be split into AssetPairRow and AssetPair if the row is not needed
             return (
                <a href={url} key={url} className="AssetPairRow">{content}</a>
             );
         }
+
         return (
-            <div className="AssetPairRow">{content}</div>
+            <div>
+                <a onClick={() => this.showErrorMessage()} className="AssetPairRow">{content}</a>
+                {this.state.showError &&
+                <p className="AssetPair_error">Please select different assets</p>}
+            </div>
         );
     }
 }
