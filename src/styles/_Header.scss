@@ -1,60 +1,70 @@
-.HeaderBackBack {
-  position: relative;
-  z-index: 10;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
-}
+.Header_main {
+    position: relative;
+    z-index: 10;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 
-.HeaderNetworkBarBack {
-  background: $s-color-primary7;
-  padding: 8px 0;
-}
-.HeaderNetworkBar {
-  display: flex;
-  justify-content: space-between;
-}
-.HeaderBack {
-  background: #fff;
-  position: relative;
-}
-.Header {
-  display: flex;
-  padding-top: 18px;
-  padding-left: 18px;
-  padding-right: 18px;
-  align-items: baseline;
-  justify-content: space-between;
-}
-.Header:after {
-  display: none;
-}
-.Header__version {
-  opacity: 0.5;
-}
-.Header__nav {
-  height: 54px;
-  display: flex;
-  align-items: baseline;
-  position: relative;
-}
-.Header__nav__item {
-  margin-right: 36px;
-  text-decoration: none;
-}
-.Header__nav__item--logo {
-  margin-right: 36px;
-  font-weight: bold;
-  color: $s-color-primary4;
-  font-size: $s-scale-2;
-}
-.Header__nav__item--link {
-  padding: 4px 10px;
-  margin-right: 16px;
-  border-radius: 3px;
-}
-.Header__nav__item--link.is-current {
-  background: $s-color-neutral8;
-}
-.Header__nav__item.Header__nav__item--link:hover {
-  background: $s-color-primary4;
-  color: #fff;
+    .Header_network {
+        background: $s-color-primary7;
+        padding: 8px 0;
+
+        .Network_bar {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+
+    .Header_background {
+        background: #fff;
+        position: relative;
+
+        .Header {
+            display: flex;
+            padding-top: 18px;
+            padding-left: 18px;
+            padding-right: 18px;
+            align-items: baseline;
+            justify-content: space-between;
+
+            &:after {
+                display: none;
+            }
+
+            .Header_nav {
+                height: 54px;
+                display: flex;
+                align-items: baseline;
+                position: relative;
+
+                a {
+                    margin-right: 36px;
+                    text-decoration: none;
+                }
+
+                .Nav_logo {
+                    font-weight: bold;
+                    color: $s-color-primary4;
+                    font-size: $s-scale-2;
+                }
+
+                .Nav_link {
+                    padding: 4px 10px;
+                    margin-right: 16px;
+                    border-radius: 3px;
+                }
+
+                .Nav_link.is-current {
+                    background: $s-color-neutral8;
+                }
+
+                .Nav_link:hover {
+                    background: $s-color-primary4;
+                    color: #fff;
+                }
+            }
+
+            .Header_version {
+                opacity: 0.5;
+            }
+        }
+    }
 }
