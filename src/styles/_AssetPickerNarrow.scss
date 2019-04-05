@@ -1,19 +1,18 @@
-.AssetPickerNarrow__inputGroup {
-  // margin-bottom: 9px;
-}
-.AssetPickerNarrow__tag {
-  padding: 0.35em 1em 0.3166em 1em;
-  border: 1px solid $s-color-neutral6;
-  border-bottom: 0;
-  border-radius: $s-var-radius $s-var-radius 0 0;
-}
-.AssetPickerNarrow__tag + .AssetPickerNarrow__input {
-  border-radius: 0 0 $s-var-radius $s-var-radius;
+.AssetPickerNarrow {
+    margin-bottom: 0.75em;
+
+    .AssetPickerNarrow_tag {
+        padding: 0.35em 1em 0.3166em 1em;
+        border: 1px solid $s-color-neutral6;
+        border-bottom: 0;
+        border-radius: $s-var-radius $s-var-radius 0 0;
+    }
+
+    .AssetPickerNarrow_tag + input {
+        border-radius: 0 0 $s-var-radius $s-var-radius;
+    }
 }
 
-.AssetPickerNarrow__code {
-  margin-bottom: 0.75em;
-}
-.AssetPickerNarrow__issuer {
-  margin-bottom: 0;
+.AssetPickerNarrow:last-child {
+    margin-bottom: 0;
 }

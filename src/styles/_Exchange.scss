@@ -4,3 +4,9 @@
 .Exchange__orderbook {
   padding-bottom: 18px;
 }
+
+.Exchange__orderbookDisabled {
+  font-size: $s-scale-1;
+  text-align: center;
+  margin-bottom: $s-scale-2;
+}

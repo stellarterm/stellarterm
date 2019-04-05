@@ -73,6 +73,7 @@
 .LoginPage__form--title {
   font-size: $s-scale-1;
   margin-bottom: 16px;
+  &.browser-support { font-size: 21px; }
 }
 .LoginPage__inputGroup {
   margin-bottom: 9px;

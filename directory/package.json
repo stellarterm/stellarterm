@@ -10,10 +10,10 @@
     "stellar",
     "stellarterm"
   ],
-  "author": "Iris Li",
+  "author": "Ultra Stellar, LLC",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/irisli/stellarterm/issues"
+    "url": "https://github.com/stellarterm/stellarterm/issues"
   },
-  "homepage": "https://github.com/irisli/stellarterm/tree/master/directory#readme"
+  "homepage": "https://github.com/stellarterm/stellarterm/tree/master/directory#readme"
 }

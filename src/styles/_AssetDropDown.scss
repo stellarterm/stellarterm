@@ -1,0 +1,58 @@
+.AssetDropDown__card{
+  width: 100%;
+  height: 52px;
+  margin: 0;
+  text-align: center;
+  align-items: center;
+  line-height: 52px;
+  border-top: none;
+  position: relative;
+}
+.AssetDropDown__full{
+  cursor: pointer;
+}
+
+.AssetDropDown__empty{
+  height: 52px;
+  text-align: left;
+  padding: 0 16px;
+
+  border: 1px solid rgb(189, 191, 192);
+  -webkit-border-radius: 3px;
+  -moz-border-radius: 3px;
+  border-radius: 3px;
+  font-weight: 300;
+  font-size: 16px;
+}
+
+.AssetDropDown_isOpen{
+  border-bottom: none;
+  border-radius: 2px 2px 0 0;
+}
+
+.AssetDropDown__search{
+    border: none;
+    padding-left: 4px;
+    outline:none;
+}
+
+.AssetDropDown__arrowDown{
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 5px;
+  top: 15px;
+  transition: 0.15s;
+}
+
+.AssetDropDown__arrowUp{
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  right: 5px;
+  top: 15px;
+  transform: rotate(180deg);
+  transition: 0.15s;
+}

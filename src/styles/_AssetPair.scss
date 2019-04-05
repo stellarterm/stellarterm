@@ -16,8 +16,8 @@
   height: 18px;
   border-top: 1px solid $s-color-neutral7;
   border-bottom: 1px solid $s-color-neutral7;
-  flex: 0 0 18px;
 }
+
 .AssetPair__card {
   flex: 1 0;
 }
@@ -25,5 +25,20 @@
 a.AssetPairRow:hover .AssetPair__separator {
   border-top: 1px solid $s-color-primary4;
   border-bottom: 1px solid $s-color-primary4;
+}
+
+.AssetPair__swap{
+  width: 20px;
+  height: 24px;
+  cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.8;
+  transition: 0.15s;
+}
+
+.AssetPair__swap:hover{
+  opacity: 1;
 }
 

@@ -17,7 +17,7 @@ module.exports.ticker = (event, context, callback) => {
           Body: contents,
           ContentType: 'application/json',
           ACL: 'public-read',
-          CacheControl: 'public, max-age=5',
+          CacheControl: 'public, max-age=50',
         }).promise()
       }))
     })
