@@ -6,18 +6,29 @@ import ErrorBoundary from '../../../ErrorBoundary';
 import AccountView from './AccountView/AccountView';
 import clickToSelect from '../../../../lib/clickToSelect';
 import Driver from '../../../../lib/Driver';
+import Federation from './Federation/Federation';
+import CopyButton from '../../../CopyButton';
 
 export default function SessionAccount(props) {
+    const accountID = props.d.session.account.accountId();
+
     return (
         <ErrorBoundary>
             <Generic>
-                <div className="s-alert s-alert--primary">
-                    <p className="Sesssion__yourId__title">Your Wallet Account ID</p>
-                    <strong className="clickToSelect Sesssion__yourId__accountId" onClick={clickToSelect}>
-                        {props.d.session.account.accountId()}
-                    </strong>
+                <div className="Account_alert">
+                    <div className="Account_alert_left">
+                        <p>Your Wallet Account ID</p>
+                        <strong onClick={clickToSelect}>{accountID}</strong>
+                    </div>
+                    <div className="Account_alert_right">
+                        <CopyButton text={accountID} />
+                    </div>
                 </div>
-                <p>To receive payments, share your account ID with them (begins with a G).</p>
+                <p className="AccountView_text">
+                    To receive payments, share your account ID with them (begins with a G).
+                </p>
+
+                <Federation d={props.d} />
             </Generic>
             <Generic noTopPadding>
                 <h2>Where is the money stored?</h2>

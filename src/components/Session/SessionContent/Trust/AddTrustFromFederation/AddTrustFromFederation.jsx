@@ -7,8 +7,8 @@ import Ellipsis from '../../../../Ellipsis';
 import AddTrustRow from '../Common/AddTrustRow';
 import MessageRow from './MessageRow/MessageRow';
 
-const DEBOUNCE_TYME = 700;
-const resolveAncor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TYME);
+const DEBOUNCE_TIME = 700;
+const resolveAncor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
 
 export default class AddTrustFromFederation extends React.Component {
     constructor(props) {

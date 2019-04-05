@@ -1,8 +1,8 @@
-@import './solar-css/lib/index';
-@import './solar-stellarterm/lib/index';
+@import "./solar-css/lib/index";
+@import "./solar-stellarterm/lib/index";
 
-@import './solar-css/styles/index';
-@import './solar-stellarterm/styles/index';
+@import "./solar-css/styles/index";
+@import "./solar-stellarterm/styles/index";
 
 // @import 'node_modules/react-select/dist/react-select.min';
 
@@ -11,7 +11,7 @@ html {
   background: #fff;
 }
 body {
-  background: linear-gradient(0deg,#ced0ff,#c0ecff);
+  background: linear-gradient(0deg, #ced0ff, #c0ecff);
   color: $s-color-neutral3;
   font-size: $s-scale-4;
   min-width: 1052px;
@@ -45,48 +45,50 @@ ul.privacy__ul {
   justify-content: space-between;
 }
 
-@import 'island';
-@import 'lightenZeros';
-@import 'Ellipsis';
+@import "island";
+@import "lightenZeros";
+@import "Ellipsis";
 
-@import 'Header';
-@import 'subNav';
-@import 'HomePage';
-@import 'row';
-@import 'Footer';
+@import "Header";
+@import "subNav";
+@import "HomePage";
+@import "row";
+@import "Footer";
 
-@import 'Generic';
-@import 'Loading';
+@import "Generic";
+@import "Loading";
 
-@import 'Exchange';
-@import 'OfferTables';
-  @import 'OfferTable';
-@import 'PriceChart';
+@import "Exchange";
+@import "OfferTables";
+@import "OfferTable";
+@import "PriceChart";
 
-@import 'OfferMakers';
-  @import 'OfferMaker';
+@import "OfferMakers";
+@import "OfferMaker";
 
-@import 'ManageOffers';
+@import "ManageOffers";
 
+@import "Markets";
+@import "TermsOfUse";
+@import "PairPicker";
 
-@import 'Markets';
-@import 'TermsOfUse';
-@import 'PairPicker';
+@import "AssetCard"; // Deprecated
+@import "AssetCard2";
 
-@import 'AssetCard'; // Deprecated
-@import 'AssetCard2';
+@import "AssetPair";
 
-@import 'AssetPair';
+@import "AssetPickerNarrow";
+@import "CustomMarketPicker";
+@import "CustomPairMenu";
 
-@import 'AssetPickerNarrow';
-@import 'CustomMarketPicker';
-@import 'CustomPairMenu';
+@import "AssetList";
+@import "AssetDropDown";
+@import "AssetCardList";
 
-@import 'AssetList';
-@import 'AssetDropDown';
-@import 'AssetCardList';
+@import "DateCard";
 
-@import 'DateCard';
+@import "GlobalModal";
+@import "TransactionSummary";
 
 @import 'GlobalModal';
 @import 'MultisigSubmitModal';
@@ -96,17 +98,20 @@ ul.privacy__ul {
 
 @import 'LoginPage';
 @import "SecurityPhrase";
-@import 'Session';
-@import 'AccountView';
-@import 'HistoryView';
-@import 'MinBalance';
-@import 'BalancesTable';
-@import 'HistoryTable';
-@import 'ManageCurrentTrust';
-@import 'Send';
-@import 'Inflation';
-@import 'AddTrust';
-@import 'AddTrustRow';
-@import 'Deposit';
-@import 'OpenUp';
+@import "Session";
+@import "AccountView";
+@import "HistoryView";
+@import "MinBalance";
+@import "BalancesTable";
+@import "HistoryTable";
+@import "ManageCurrentTrust";
+@import "Send";
+@import "Inflation";
+@import "AddTrust";
+@import "AddTrustRow";
+@import "Deposit";
+@import "OpenUp";
 @import 'ErrorBoundary';
+
+@import "CopyButton";
+@import "../components/Components";
