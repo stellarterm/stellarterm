@@ -25,7 +25,7 @@ export default class FederationInpit extends React.Component {
                 <AutosizeInput
                     type="text"
                     name="inputPriceAsset"
-                    placeholder="Username"
+                    placeholder="username"
                     maxLength="32"
                     autoFocus
                     value={inputValue}
