@@ -1,73 +1,106 @@
-const React = window.React = require('react');
-import AssetCard from './AssetCard.jsx';
-import AssetPair from './AssetPair.jsx';
-const Format = require('../lib/Format');
-import Ellipsis from './Ellipsis.jsx';
+import React from 'react';
+import PropTypes from 'prop-types';
+import Ellipsis from './Ellipsis';
+import AssetPair from './AssetPair';
+import Format from '../lib/Format';
+import Driver from '../lib/Driver';
 
 export default class PairPicker extends React.Component {
-  constructor(props) {
-    super(props);
-    this.unsub = this.props.d.ticker.event.sub(() => {this.forceUpdate()});
-  }
-  componentWillUnmount() {
-    this.unsub();
-  }
-  render() {
-    if (!this.props.d.orderbook.data.ready) {
-      return <div>loading</div>
+    componentWillUnmount() {
+        this.props.d.ticker.event.sub(() => {
+            this.forceUpdate();
+        });
     }
 
-    let baseBuying = this.props.d.orderbook.data.baseBuying;
-    let counterSelling = this.props.d.orderbook.data.counterSelling;
+    getPriceBlock() {
+        const { data } = this.props.d.orderbook;
+        const { baseBuying, counterSelling } = data;
+        const { d } = this.props;
 
-    let main;
-
-    let baseNative = baseBuying.isNative();
-    let counterNative = counterSelling.isNative();
-
-    if (baseNative || counterNative) {
-      let dataRow = <p className="PairPicker__infoBar__ticker__data">Loading<Ellipsis /></p>;
-      if (this.props.d.orderbook.data.ready && this.props.d.ticker.ready) {
-        if (this.props.d.orderbook.data.asks.length === 0 || this.props.d.orderbook.data.bids.length === 0) {
-          dataRow = <p className="PairPicker__infoBar__ticker__data">No data</p>
-        } else {
-          let latestPrice = (Number(this.props.d.orderbook.data.asks[0].price) + Number(this.props.d.orderbook.data.bids[0].price)) / 2;
-          if (baseNative) {
-            dataRow = <p className="PairPicker__infoBar__ticker__data">{Format.niceRound(latestPrice)} XLM/{counterSelling.getCode()}</p>
-          } else {
-            let latestXLM = Format.niceRound(latestPrice);
-            if (1 - this.props.d.orderbook.data.bids[0].price/this.props.d.orderbook.data.asks[0].price > 0.4) {
-              latestXLM = Format.niceRound(this.props.d.orderbook.data.bids[0].price);
-            }
-            let latestUSD = Format.niceRound(latestXLM * this.props.d.ticker.data._meta.externalPrices.USD_XLM);
-            dataRow = <p className="PairPicker__infoBar__ticker__data">{latestXLM} XLM<span className="PairPicker__infoBar__ticker__spacer">&nbsp;</span>${latestUSD}</p>
-          }
+        const dataIsReady = data.ready && d.ticker.ready;
+        if (!dataIsReady) {
+            return (<p className="Ticker_data">Loading<Ellipsis /></p>);
         }
-      }
 
-      main = <div className="PairPicker__infoBar">
-        <div className="PairPicker__infoBar__pair">
-          <AssetPair baseBuying={baseBuying} counterSelling={counterSelling} d={this.props.d} swap dropdown></AssetPair>
-        </div>
-        <div className="PairPicker__infoBar__ticker">
-          <p className="PairPicker__infoBar__ticker__title">Current price for {baseBuying.getCode()}</p>
-          {dataRow}
-        </div>
-      </div>
-    } else {
-      // Just show basic pair
-      main = <div className="PairPicker__pair">
-        <AssetPair baseBuying={baseBuying} counterSelling={counterSelling} d={this.props.d} swap dropdown></AssetPair>
-      </div>
+        const noPriceData = data.asks.length === 0 || data.bids.length === 0;
+        if (noPriceData) { return (<p className="Ticker_data">No data</p>); }
+
+        const latestPrice = (Number(data.asks[0].price) + Number(data.bids[0].price)) / 2;
+        const isBaseNative = baseBuying.isNative();
+        if (isBaseNative) {
+            return (
+                <p className="Ticker_data">
+                    {Format.niceRound(latestPrice)} XLM/{counterSelling.getCode()}
+                </p>
+            );
+        }
+
+        let latestXLM = Format.niceRound(latestPrice);
+        if ((1 - data.bids[0].price) / data.asks[0].price > 0.4) {
+            latestXLM = Format.niceRound(data.bids[0].price);
+        }
+
+        const latestUSD = Format.niceRound(latestXLM * d.ticker.data._meta.externalPrices.USD_XLM);
+        return (
+            <p className="Ticker_data">
+                <span className="Ticker_course">{latestXLM} XLM</span>
+                <span className="Ticker_course">${latestUSD}</span>
+            </p>
+        );
     }
 
-    return (
-      <div className="island">
-        {main}
-        <a href="#markets" className="PairPicker__auxInfo">
-          <span>See other trading pairs</span>
-        </a>
-      </div>
-    );
-  }
+    getPairPickerBlock() {
+        const { data } = this.props.d.orderbook;
+        const { baseBuying, counterSelling } = data;
+        const { d } = this.props;
+
+        const isBaseNative = baseBuying.isNative();
+        const isCounterNative = counterSelling.isNative();
+
+        if (isBaseNative || isCounterNative) {
+            const priceBlock = this.getPriceBlock();
+            return (
+                <div className="PairPicker_infoBar">
+                    <div className="InfoBar_pair">
+                        <AssetPair baseBuying={baseBuying} counterSelling={counterSelling} d={d} swap dropdown />
+                    </div>
+
+                    <div className="Infobar_ticker">
+                        <p className="Ticker_title">Current price for {baseBuying.getCode()}</p>
+                        {priceBlock}
+                    </div>
+                </div>
+            );
+        }
+
+        return (
+            <div className="PairPicker_assetPair">
+                <AssetPair baseBuying={baseBuying} counterSelling={counterSelling} d={d} swap dropdown />
+            </div>
+        );
+    }
+
+    render() {
+        const { ready } = this.props.d.orderbook.data;
+
+        if (!ready) {
+            return (<div>Loading<Ellipsis /></div>);
+        }
+
+        const pairPickerBlock = this.getPairPickerBlock();
+
+        return (
+            <div className="island">
+                {pairPickerBlock}
+
+                <a href="#markets" className="PairPicker_seeOthers">
+                    <span>See other trading pairs</span>
+                </a>
+            </div>
+        );
+    }
+}
+
+PairPicker.propTypes = {
+    d: PropTypes.instanceOf(Driver).isRequired,
 };
