@@ -86,7 +86,7 @@ export default class Federation extends React.Component {
             content = (
                 <div className={alertClass}>
                     <div className="Account_alert_left">
-                        <p>Your StellarTerm federation address</p>
+                        <p>Your federation address</p>
                         <strong onClick={() => this.handleEditToggle()}>{`${address}*stellarterm.com`}</strong>
                     </div>
 
@@ -165,7 +165,7 @@ export default class Federation extends React.Component {
             })
             .catch((e) => {
                 this.setState({
-                    fedError: e.data !== undefined ? e.data.name : 'Federations error occured! Please try later.',
+                    fedError: e.data !== undefined ? e.data.name : 'Federation error occured! Please try later.',
                     reqIsResolved: true,
                 });
             });
@@ -182,9 +182,8 @@ export default class Federation extends React.Component {
                 {errorBlock}
 
                 <p className="AccountView_text">
-                    You can set an alias for your StellarTerm account. We’ll use this in our trollbox, and it will
-                    become your payment alias, so people can send you money more easily. You can use this alias,
-                    including name*stellarterm.com, instead of your public key to receive payments on Stellar.
+                    You can set an alias for your StellarTerm account and use it instead of your public key
+                    to receive payments on Stellar. Share this address with people so they can send you tokens.
                 </p>
             </div>
         );
