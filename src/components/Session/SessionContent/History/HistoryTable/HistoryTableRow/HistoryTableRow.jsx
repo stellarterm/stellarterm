@@ -5,10 +5,25 @@ import HistoryRowExternal from './HistoryRowExternal/HistoryRowExternal';
 import { getHistoryRowsData, checkDataType } from './HistoryRowsData';
 
 export default class HistoryTableRow extends React.Component {
+    static getDomainForUnknownAsset(code, issuer) {
+        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
+        const assetData = unknownAssetsData.find(assetLocalItem => (
+            assetLocalItem.code === code && assetLocalItem.issuer === issuer
+        ));
+
+        if (!assetData) {
+            return 'unknown';
+        }
+
+        return (assetData.currency && assetData.currency.host) || assetData.host;
+    }
+
     static getHistoryRowAssetCard(code, issuer, domain) {
+        const isUnknown = domain === 'unknown';
+        const viewDomain = isUnknown ? this.getDomainForUnknownAsset(code, issuer) : domain;
         return (
             <span className="HistoryView__asset">
-                {code}-{domain}
+                {code}-{viewDomain}
                 <div className="HistoryView__asset__card">
                     <AssetCard2 code={code} issuer={issuer} />
                 </div>
