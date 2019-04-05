@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Generic from '../../../Generic';
 import ErrorBoundary from '../../../ErrorBoundary';
 import AccountView from './AccountView/AccountView';
-import clickToSelect from '../../../../lib/clickToSelect';
 import Driver from '../../../../lib/Driver';
 import Federation from './Federation/Federation';
-import CopyButton from '../../../CopyButton';
+import AccountIdBlock from '../../AccountIdBlock/AccountIdBlock';
 
 export default function SessionAccount(props) {
     const accountID = props.d.session.account.accountId();
@@ -15,17 +13,9 @@ export default function SessionAccount(props) {
     return (
         <ErrorBoundary>
             <Generic>
-                <div className="Account_alert">
-                    <div className="Account_alert_left">
-                        <p>Your Wallet Account ID</p>
-                        <strong onClick={clickToSelect}>{accountID}</strong>
-                    </div>
-                    <div className="Account_alert_right">
-                        <CopyButton text={accountID} />
-                    </div>
-                </div>
+                <AccountIdBlock accountID={accountID} />
                 <p className="AccountView_text">
-                    To receive payments, share your account ID with them (begins with a G).
+                    To receive payments, share your account ID with them (begins with a G) or scan QR code.
                 </p>
 
                 <Federation d={props.d} />
