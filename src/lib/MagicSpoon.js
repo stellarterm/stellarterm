@@ -9,6 +9,10 @@ const StellarLedger = window.StellarLedger;
 // Simplifies the objects to what is necessary. Listens to updates automagically.
 // It's in the same file as the driver because the driver is the only one that
 // should ever use the spoon.
+const MIN_FEE = 100;
+const MAX_FEE = 10000;
+let fee = MIN_FEE;
+
 const MagicSpoon = {
     async Account(Server, keypair, opts, onUpdate) {
         const sdkAccount = await Server.loadAccount(keypair.publicKey());
@@ -119,6 +123,7 @@ const MagicSpoon = {
                     sdkAccount.balances = res.balances;
                     sdkAccount.subentry_count = res.subentry_count;
                     sdkAccount.updateOffers();
+                    sdkAccount.signers = res.signers;
                     updated = true;
                 }
 
@@ -425,7 +430,7 @@ const MagicSpoon = {
             price: String(sdkPrice),
             offerId: 0, // 0 for new offer
         };
-        const transaction = new StellarSdk.TransactionBuilder(spoonAccount)
+        const transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee })
       .addOperation(StellarSdk.Operation.manageOffer(operationOpts));
       // DONT call .build()
 
@@ -434,7 +439,7 @@ const MagicSpoon = {
     async buildTxSendPayment(Server, spoonAccount, opts) {
     // sendPayment will detect if the account is a new account. If so, then it will
     // be a createAccount operation
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount);
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
         try {
             const destAccount = await Server.loadAccount(opts.destination);
             transaction = transaction.addOperation(StellarSdk.Operation.payment({
@@ -459,11 +464,20 @@ const MagicSpoon = {
         return transaction;
     },
     buildTxSetInflation(spoonAccount, inflationDest) {
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount);
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
         transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
             inflationDest,
         }));
     // DONT call .build()
+
+        return transaction;
+    },
+    buildTxSetHomeDomain(spoonAccount) {
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
+        transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
+            homeDomain: 'stellarterm.com',
+        }));
+        // DONT call .build()
 
         return transaction;
     },
@@ -479,12 +493,12 @@ const MagicSpoon = {
             asset: opts.asset,
             limit: sdkLimit,
         };
-        return new StellarSdk.TransactionBuilder(spoonAccount)
+        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
       .addOperation(StellarSdk.Operation.changeTrust(operationOpts));
       // DONT call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, offerId) {
-        return new StellarSdk.TransactionBuilder(spoonAccount)
+        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
       .addOperation(StellarSdk.Operation.manageOffer({
           buying: StellarSdk.Asset.native(),
           selling: new StellarSdk.Asset('REMOVE', spoonAccount.accountId()),
@@ -560,6 +574,13 @@ const MagicSpoon = {
                 buffer[i] = Math.round(Math.random() * 255);
             }
         }
+    },
+
+    updateFeeValue(feeValue) {
+        if (!feeValue) { return; }
+        // Base fee shouldn't be less than MIN_FEE and more than MAX_FEE
+        const value = Math.min(MAX_FEE, feeValue);
+        fee = Math.max(MIN_FEE, value);
     },
 };
 

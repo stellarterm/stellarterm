@@ -5,7 +5,7 @@ import Generic from '../Generic';
 export default function TermsOfUse(props) {
     return (
         <Generic>
-            <h2 className="Session__welcomeTitle">Terms of use</h2>
+            <h2 className="WelcomeTitle">Terms of use</h2>
 
             <h3>1. Cryptocurrency risks</h3>
             <p className="termsOfUse__Paragraph">
@@ -48,7 +48,8 @@ export default function TermsOfUse(props) {
                 <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">
                     Stellar network
                 </a>{' '}
-                are <strong>irreversible</strong>.
+                are <strong>irreversible</strong>. StellarTerm is not a custodian of your assets. 
+                We do not store any tokens, cryptoassets or private keys on your behalf.
             </p>
 
             <h3>3. Privacy</h3>
@@ -85,7 +86,7 @@ export default function TermsOfUse(props) {
                     rel="nofollow noopener noreferrer">
                     Apache-2.0 license
                 </a>
-                . It is provided fre of charge and on an{' '}
+                . It is provided free of charge and on an{' '}
                 <strong>{'"AS IS"'} BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND</strong>.
                 <br />
                 <br />
@@ -94,7 +95,7 @@ export default function TermsOfUse(props) {
                 <div>
                     By pressing {'<strong>Accept and Continue</strong>'}, you acknowledge that you have read this
                     document and agree to these terms of use.
-                    <div className="Session__tos__next">
+                    <div className="AcceptTerms_block">
                         <button className="s-button" onClick={props.accept}>
                             Accept and Continue
                         </button>

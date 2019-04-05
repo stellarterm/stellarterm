@@ -23,8 +23,11 @@ import Driver from './lib/Driver';
 window.React = React;
 const mountNode = document.getElementById('app');
 
+// const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.org';
+const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.lobstr.co';
+
 const network = {
-    horizonUrl: 'https://horizon.stellar.org',
+    horizonUrl: DEFAULT_HORIZON_SERVER,
     networkPassphrase: StellarSdk.Networks.PUBLIC,
     isDefault: true, // If it's default, then we don't show a notice bar at the top
     isTestnet: false,

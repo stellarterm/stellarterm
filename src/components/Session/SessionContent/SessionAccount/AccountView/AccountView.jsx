@@ -11,7 +11,7 @@ export default function AccountView(props) {
             <div className="so-back islandBack">
                 <div className="island">
                     <div className="island__header">Balances</div>
-                    <div className="Session__AccountView__content">
+                    <div className="AccountView_content">
                         By default, your account is only configured to accept <strong>XLM</strong>. In order to receive
                         other assets, you must <a href="#account/addTrust">accept</a> them using the{' '}
                         <strong>Accept assets</strong> tool.

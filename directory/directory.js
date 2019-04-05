@@ -810,7 +810,7 @@ directory.addDestination('GCGNWKCJ3KHRLPM3TM6N7D3W5YKDJFL6A2YCXFXNMRTZ4Q66MEMZ6F
 directory.addDestination('GB6YPGW5JFMMP2QB2USQ33EUWTXVL4ZT5ITUNCY3YKVWOJPP57CANOF3', {
     name: 'Bittrex',
     requiredMemoType: 'MEMO_TEXT',
-    acceptedAssetsWhitelist: ['XLM-native'],
+    acceptedAssetsWhitelist: ['XLM-native', 'SLT-smartlands.io', 'MOBI-mobius.network'],
 });
 
 directory.addDestination('GB7GRJ5DTE3AA2TCVHQS2LAD3D7NFG7YLTOEWEBVRNUUI2Q3TJ5UQIFM', {
@@ -925,6 +925,12 @@ directory.addDestination('GBTCBCWLE6YVTR5Y5RRZC36Z37OH22G773HECWEIZTZJSN4WTG3CSO
 directory.addDestination('GDRSWSKJCIB6Z65UA7W5RG62A7M5K3A5IHMED6DYHLPLWLVQCOOGDQ7S', {
     name: 'Gate.io',
     requiredMemoType: 'MEMO_ID',
+});
+
+directory.addDestination('GDQP2KPQGKIHYJGXNUIYOMHARUARCA7DJT5FO2FFOOKY3B2WSQHG4W37', {
+    name: 'Coinbase Deposits',
+    requiredMemoType: 'MEMO_TEXT',
+    acceptedAssetsWhitelist: ['XLM-native'],
 });
 
 // Assert that each asset has a trading pair

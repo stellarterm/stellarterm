@@ -12,46 +12,75 @@
 */
 
 export default function Event() {
-  // This will break at approximately 9007199254740992+1 listens :P
-  let nextIndex = 0;
-  let listeners = []; // stores callbacks
+    // This will break at approximately 9007199254740992+1 listens :P
+    let nextIndex = 0;
+    const listeners = []; // stores callbacks
+    const specialListeners = {};
 
-  // returns a event id reference that can be used to unlisten
-  // DEPRECATED: Use sub() instead since it's much easier
-  this.listen = cb => {
-    const listenerId = nextIndex;
-    listeners[listenerId] = cb;
-    nextIndex += 1;
-    return listenerId;
-  };
+    // returns a event id reference that can be used to unlisten
+    // DEPRECATED: Use sub() instead since it's much easier
+    this.listen = (cb) => {
+        const listenerId = nextIndex;
+        listeners[listenerId] = cb;
+        nextIndex += 1;
+        return listenerId;
+    };
 
-  // TODO: REFACTOR: Use this sub pattern more often
-  this.sub = cb => {
-    const listenerId = nextIndex;
-    listeners[listenerId] = cb;
-    nextIndex += 1;
-    return () => {
-      this.unlisten(listenerId)
-    }
-  };
+    // TODO: REFACTOR: Use this sub pattern more often
+    this.sub = (cb) => {
+        const listenerId = nextIndex;
+        listeners[listenerId] = cb;
+        nextIndex += 1;
+        return () => {
+            this.unlisten(listenerId);
+        };
+    };
 
+    this.subscribeOn = (action, cb) => {
+        if (!action || typeof action !== 'string') {
+            throw new Error(`Expect action to be string. Recived: ${action}`);
+        }
 
-  this.unlisten = listenerId => {
-    if (!isFinite(listenerId)) {
-      throw new Error('Listener ID must be a number');
-    }
-    if (listenerId > nextIndex) {
-      throw new Error('Listener ID out of range');
-    }
-    listeners[listenerId] = null;
-  };
+        if (!specialListeners[action]) {
+            specialListeners[action] = [];
+        }
+        specialListeners[action].push(cb);
+        return () => this.off(action, cb);
+    };
 
-  // Trigger can be called with an object that is passed to the listener
-  this.trigger = (data) => {
-    listeners.forEach(cb => {
-      if (cb) {
-        cb(data);
-      }
-    })
-  };
+    this.off = (action, cb) => {
+        if (!action || !specialListeners[action]) { return; }
+        const index = specialListeners[action].findIndex(cb);
+
+        if (index === -1) { return; }
+        specialListeners[action].splice(index, 1);
+    };
+
+    this.triggerSpecial = (action, data) => {
+        if (!action || typeof action !== 'string') {
+            throw new Error(`Expect action to be string. Recived: ${action}`);
+        }
+
+        if (!specialListeners[action]) { return; }
+        specialListeners[action].forEach(cb => cb(data));
+    };
+
+    this.unlisten = (listenerId) => {
+        if (!isFinite(listenerId)) {
+            throw new Error('Listener ID must be a number');
+        }
+        if (listenerId > nextIndex) {
+            throw new Error('Listener ID out of range');
+        }
+        listeners[listenerId] = null;
+    };
+
+    // Trigger can be called with an object that is passed to the listener
+    this.trigger = (data) => {
+        listeners.forEach((cb) => {
+            if (cb) {
+                cb(data);
+            }
+        });
+    };
 }

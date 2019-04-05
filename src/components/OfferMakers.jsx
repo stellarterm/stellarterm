@@ -1,25 +1,28 @@
-const React = window.React = require('react');
-import OfferMaker from './OfferMaker.jsx';
+import React from 'react';
+import PropTypes from 'prop-types';
+import OfferMaker from './OfferMaker';
+import Driver from '../lib/Driver';
 
-export default class OfferMakers extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  componentWillUnmount() {
-  }
-  render() {
-    if (!this.props.d.orderbook.data.ready) {
-      console.log(this.props.d.orderbook.data.ready)
-      return <div>Loading</div>;
+export default function OfferMakers(props) {
+    if (!props.d.orderbook.data.ready) {
+        console.log(props.d.orderbook.data.ready);
+
+        return (
+            <div>Loading</div>
+        );
     }
 
-    return <div className="OfferMakers island__sub">
-      <div className="OfferMakers_maker island__sub__division">
-        <OfferMaker d={this.props.d} side="buy"></OfferMaker>
-      </div>
-      <div className="OfferMakers_maker island__sub__division">
-        <OfferMaker d={this.props.d} side="sell"></OfferMaker>
-      </div>
-    </div>
-  }
+    return (
+        <div className="OfferMakers island__sub">
+            <div className="OfferMakers_maker island__sub__division">
+                <OfferMaker d={props.d} side="buy" />
+            </div>
+            <div className="OfferMakers_maker island__sub__division">
+                <OfferMaker d={props.d} side="sell" />
+            </div>
+        </div>
+    );
+}
+OfferMakers.propTypes = {
+    d: PropTypes.instanceOf(Driver).isRequired,
 };
