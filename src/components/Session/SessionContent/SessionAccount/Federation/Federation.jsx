@@ -183,7 +183,7 @@ export default class Federation extends React.Component {
 
                 <p className="AccountView_text">
                     You can set an alias for your StellarTerm account and use it instead of your public key
-                    to receive payments on Stellar. Share this address with people so they can send you tokens.
+                    to receive payments on Stellar.<br />Share this address with people so they can send you tokens.
                 </p>
             </div>
         );
