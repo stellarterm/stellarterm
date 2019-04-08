@@ -65,7 +65,7 @@ export default class AssetPickerNarrow extends React.Component {
         const { name, value } = target;
 
         if (name === 'inputCode') {
-            newState.inputCode = value.toUpperCase();
+            newState.inputCode = value;
         } else {
             newState.inputIssuer = value;
         }
