@@ -141,6 +141,11 @@ const MagicSpoon = {
                 if (assetData && ((new Date() - new Date(assetData.time)) < periodUpdate)) {
                     return chain;
                 }
+
+                if (assetData) {
+                    unknownAssetsData.splice(unknownAssetsData.indexOf(assetData), 1);
+                }
+
                 return chain.then(newArray =>
                     sdkAccount.loadUnknownAssetData(asset).then(res => [...newArray, res]),
                 );
