@@ -1,0 +1,56 @@
+@import "./TransactionSummary/TransactionSummary";
+@import "./MultisigSubmitModal/MultisigSubmitModal";
+@import "./MultisigUnknownSubmitModal/MultisigUnknownSubmitModal";
+
+.GlobalModalBackdrop {
+  // This div fills up the whole screen, relative to where the user is scrolled to
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 100;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+
+  transition: all 0.4s;
+  background: rgba(160,160,160,0.4);
+  // For the future: (right now, it's behind a browser feature flag that is off by default)
+  // backdrop-filter: blur(2px);
+  // -webkit-backdrop-filter: blur(2px);
+}
+.GlobalModalBackdrop.is-hidden {
+  pointer-events: none;
+  opacity: 0;
+}
+.GlobalModal {
+  max-width: 90vw;
+
+  border-radius: 3px;
+  background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.GlobalModalBackdrop.is-hidden .GlobalModal {
+  display: none;
+}
+.GlobalModal__header {
+  background-color: $s-color-neutral8;
+  border-bottom: 1px solid $s-color-neutral7;
+  border-radius: 3px 3px 0 0;
+
+  padding: 11px 18px 9px 18px;
+  font-size: $s-scale-3;
+}
+
+.GlobalModal__content {
+  min-width: 400px;
+  padding: 16px 18px 0 18px;
+}
+.GlobalModal__navigation {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px 18px;
+}

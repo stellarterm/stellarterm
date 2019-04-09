@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
-import CopyButton from '../../CopyButton';
 import clickToSelect from '../../../lib/clickToSelect';
-
+import CopyButton from '../../Common/CopyButton/CopyButton';
 
 export default function AccountIdBlock(props) {
     const { accountID } = props;

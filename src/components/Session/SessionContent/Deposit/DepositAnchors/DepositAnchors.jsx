@@ -1,8 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 import directory from '../../../../../directory';
-import AssetCard2 from '../../../../AssetCard2';
-import TrustButton from '../../../TrustButton';
+import AssetCard2 from '../../../../Common/AssetCard2/AssetCard2';
+import TrustButton from '../../../../Common/AddTrustRow/TrustButton/TrustButton';
 
 export default function DepositAnchors(props) {
     const anchorRows = [];

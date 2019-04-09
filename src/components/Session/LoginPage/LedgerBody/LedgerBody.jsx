@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LedgerSetupInstructions from './LedgerSetupInstructions/LedgerSetupInstructions';
-import LedgerSetupNotes from './LedgerSetupNotes/LedgerSetupNotes';
-import LedgerLogo from './LedgerLogo/LedgerLogo';
-import LedgerAlert from './LedgerAlert/LedgerAlert';
-import LedgerForm from './LedgerForm/LedgerForm';
 import Driver from '../../../../lib/Driver';
+import LedgerLogo from './LedgerLogo/LedgerLogo';
+import LedgerForm from './LedgerForm/LedgerForm';
+import LedgerAlert from './LedgerAlert/LedgerAlert';
+import LedgerSetupNotes from './LedgerSetupNotes/LedgerSetupNotes';
+import LedgerSetupInstructions from './LedgerSetupInstructions/LedgerSetupInstructions';
 
 export default class LedgerBody extends React.Component {
     static browserIsGoogleChrome() {

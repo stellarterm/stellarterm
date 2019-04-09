@@ -1,9 +1,9 @@
 // TODO: Refactor and improve this component
 import React from 'react';
 import PropTypes from 'prop-types';
-import Validate from '../../../../lib/Validate';
 import Driver from '../../../../lib/Driver';
-import Generic from '../../../Generic';
+import Validate from '../../../../lib/Validate';
+import Generic from '../../../Common/Generic/Generic';
 
 export default class Inflation extends React.Component {
     constructor(props) {

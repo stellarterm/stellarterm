@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Driver from '../../../../../../lib/Driver';
-import Printify from '../../../../../../lib/Printify';
-import AssetCard2 from '../../../../../AssetCard2';
 import directory from '../../../../../../directory';
+import Printify from '../../../../../../lib/Printify';
+import AssetCard2 from '../../../../../Common/AssetCard2/AssetCard2';
 
 export default function BalancesTable(props) {
     const account = props.d.session.account;

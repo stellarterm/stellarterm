@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../lib/Driver';
-
-import BalancesTable from './BalancesTable/BalancesTable';
 import MinBalance from './MinBalance/MinBalance';
+import BalancesTable from './BalancesTable/BalancesTable';
 
 export default function AccountView(props) {
     return (

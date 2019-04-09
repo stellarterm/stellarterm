@@ -1,5 +1,5 @@
 import React from 'react';
-import Ellipsis from '../../../../Ellipsis';
+import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
 
 export default () => (
     <div className="island">

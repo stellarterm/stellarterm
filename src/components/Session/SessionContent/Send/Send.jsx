@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../lib/Driver';
 import SendSetup from './SendSetup/SendSetup';
-import SendPending from './SendPending/SendPending';
 import SendError from './SendError/SendError';
+import SendPending from './SendPending/SendPending';
 import SendSuccess from './SendSuccess/SendSuccess';
 
 export default class Send extends React.Component {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
-import Ellipsis from '../../../../../Ellipsis';
+import Ellipsis from '../../../../../Common/Ellipsis/Ellipsis';
 
 export default class RemoveTrustLink extends React.Component {
     constructor(props) {

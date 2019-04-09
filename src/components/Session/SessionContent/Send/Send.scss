@@ -1,0 +1,87 @@
+.Send__panel {
+  padding: 16px 18px;
+}
+.Send__panel.is-future {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.Send__title {
+  font-size: $s-scale-2;
+  display: flex;
+  color: $s-color-neutral3;
+  align-items: flex-end;
+  background: $s-color-neutral8;
+  border-radius: $s-var-radius;
+  padding: 0.5em 1em;
+}
+.Send__title.is-active {
+  background: $s-color-neutral7;
+}
+.Send__content {
+  padding-top: 12px;
+}
+.Send__title--inactive {
+  background: $s-color-neutral8;
+}
+.Send__title__edit {
+  font-size: $s-scale-5;
+  color: $s-color-neutral5;
+  margin-left: 1em;
+}
+.Send__title__edit:hover {
+  color: $s-color-neutral2;
+}
+
+.Send__assetContainer {
+  width: 300px;
+}
+
+
+.Send__separator {
+  width: 100%;
+  border-top: 1px solid $s-color-neutral7;
+}
+
+.Send__assetChoice {
+  text-decoration: none;
+}
+
+.Send__input {
+  padding-bottom: 0.5em;
+}
+
+.Send__overviewLine {
+  margin-bottom: 0;
+}
+.Send__memoNotice {
+  font-size: $s-scale-5;
+  color: $s-color-neutral4;
+  padding-left: 16px;
+}
+.Send__federationNotice {
+  font-size: $s-scale-5;
+  color: $s-color-neutral4;
+  line-height: 1;
+}
+.Send_errorText {
+  padding: 18px 18px 0px 18px;
+  font-weight: bolder;
+  font-size: 1.25em;
+}
+.Send__startOver {
+  margin: 1em;
+}
+.Send__resultTitle {
+  font-size: $s-scale-2;
+  margin-top: 18px;
+  margin-left: 18px;
+}
+.Send__resultContent {
+  margin-top: 18px;
+  margin-left: 18px;
+}
+.Send__submitting {
+  padding: 2em;
+  text-align: center;
+  font-size: $s-scale-2;
+}

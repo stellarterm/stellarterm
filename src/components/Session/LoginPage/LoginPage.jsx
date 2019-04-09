@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Driver from '../../../lib/Driver';
-import SecurityPhrase from './SecurityPhrase/SecurityPhrase';
-import LoginPageBody from './LoginPageBody/LoginPageBody';
 import SignUpBody from './SignUpBody/SignUpBody';
 import LedgerBody from './LedgerBody/LedgerBody';
+import LoginPageBody from './LoginPageBody/LoginPageBody';
 import LoginPageTabs from './LoginPageTabs/LoginPageTabs';
+import SecurityPhrase from './SecurityPhrase/SecurityPhrase';
 
 export default function LoginPage(props) {
     const rootAddress = props.urlParts[0];

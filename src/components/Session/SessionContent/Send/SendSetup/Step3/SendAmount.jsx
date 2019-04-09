@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
 import Validate from '../../../../../../lib/Validate';
-import SendAmountInput from './SendAmountInput/SendAmountInput';
 import SendEditLink from '../Common/SendEditLink';
+import SendAmountInput from './SendAmountInput/SendAmountInput';
 
 export default class SendAmount extends React.Component {
     getAsset() {

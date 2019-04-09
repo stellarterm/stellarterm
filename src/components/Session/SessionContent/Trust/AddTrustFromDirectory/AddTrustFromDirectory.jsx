@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import directory from '../../../../../directory';
 import Driver from '../../../../../lib/Driver';
-import AddTrustRow from '../Common/AddTrustRow';
+import directory from '../../../../../directory';
+import AddTrustRow from '../../../../Common/AddTrustRow/AddTrustRow';
 
 export default function AddTrustFromDirectory(props) {
     const assetRows = [];
