@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../../images';
-import FederationInpit from './FederationInput/FederationInput';
-import CopyButton from '../../../../CopyButton';
 import Driver from '../../../../../lib/Driver';
-import Ellipsis from '../../../../Ellipsis';
+import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
+import CopyButton from '../../../../Common/CopyButton/CopyButton';
+import FederationInpit from './FederationInput/FederationInput';
 
 export const MIN_FED_LENGTH = 4;
 export const CODE_ENTER = 13;
@@ -182,8 +182,10 @@ export default class Federation extends React.Component {
                 {errorBlock}
 
                 <p className="AccountView_text">
-                    You can set an alias for your StellarTerm account and use it instead of your public key
-                    to receive payments on Stellar.<br />Share this address with people so they can send you tokens.
+                    You can set an alias for your StellarTerm account and use it instead of your public key to receive
+                    payments on Stellar.
+                    <br />
+                    Share this address with people so they can send you tokens.
                 </p>
             </div>
         );

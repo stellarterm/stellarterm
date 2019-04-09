@@ -28,7 +28,7 @@ gulp.task('clean', (cb) => {
 });
 
 // Styles
-gulp.task('styles', () => gulp.src('./src/styles/**/*.scss')
+gulp.task('styles', () => gulp.src('./src/components/App.scss')
         .pipe($.sass().on('error', $.sass.logError))
         .pipe(gulp.dest('./dist/css')));
 
@@ -124,7 +124,7 @@ gulp.task('buildInfo', (cb) => {
 
 // browserify
 const bundler = watchify(browserify({
-    entries: ['./src/app.jsx'],
+    entries: ['./src/components/App.jsx'],
     extensions: ['.jsx'],
     debug: true,
     insertGlobals: true,

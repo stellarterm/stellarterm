@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import HistoryTable from './HistoryTable/HistoryTable';
 import Driver from '../../../../lib/Driver';
+import HistoryTable from './HistoryTable/HistoryTable';
 
 export default class History extends React.Component {
     constructor(props) {

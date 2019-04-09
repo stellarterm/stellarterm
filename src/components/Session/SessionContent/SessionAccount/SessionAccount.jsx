@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Generic from '../../../Generic';
-import ErrorBoundary from '../../../ErrorBoundary';
-import AccountView from './AccountView/AccountView';
 import Driver from '../../../../lib/Driver';
 import Federation from './Federation/Federation';
+import AccountView from './AccountView/AccountView';
+import Generic from '../../../Common/Generic/Generic';
+import ErrorBoundary from '../../../Common/ErrorBoundary/ErrorBoundary';
 import AccountIdBlock from '../../AccountIdBlock/AccountIdBlock';
 
 export default function SessionAccount(props) {

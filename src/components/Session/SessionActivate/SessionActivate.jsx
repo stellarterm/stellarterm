@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Generic from '../../Generic';
-import Loading from '../../Loading';
+import Generic from '../../Common/Generic/Generic';
+import Loading from '../../Common/Loading/Loading';
 import AccountIdBlock from '../AccountIdBlock/AccountIdBlock';
-
 
 export default function SessionActivate(props) {
     return (

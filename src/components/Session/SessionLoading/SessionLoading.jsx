@@ -1,7 +1,7 @@
 import React from 'react';
-import Generic from '../../Generic';
-import Loading from '../../Loading';
-import Ellipsis from '../../Ellipsis';
+import Generic from '../../Common/Generic/Generic';
+import Loading from '../../Common/Loading/Loading';
+import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 
 export default function SessionLoading() {
     return (

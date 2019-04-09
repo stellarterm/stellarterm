@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../lib/Driver';
-import ErrorBoundary from '../../ErrorBoundary';
 import Inflation from './Inflation/Inflation';
 import Deposit from './Deposit/Deposit';
 import History from './History/History';
 import Trust from './Trust/Trust';
 import Send from './Send/Send';
-import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
 import SessionAccount from './SessionAccount/SessionAccount';
+import ErrorBoundary from '../../Common/ErrorBoundary/ErrorBoundary';
+import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
 
 export default function SessionContent(props) {
     const routePath = props.route;

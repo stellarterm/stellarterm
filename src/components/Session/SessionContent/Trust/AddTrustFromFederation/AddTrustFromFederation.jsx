@@ -1,11 +1,11 @@
-import Debounce from 'awesome-debounce-promise';
 import React from 'react';
 import PropTypes from 'prop-types';
+import Debounce from 'awesome-debounce-promise';
 import Stellarify from '../../../../../lib/Stellarify';
 import Driver from '../../../../../lib/Driver';
-import Ellipsis from '../../../../Ellipsis';
-import AddTrustRow from '../Common/AddTrustRow';
 import MessageRow from './MessageRow/MessageRow';
+import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
+import AddTrustRow from '../../../../Common/AddTrustRow/AddTrustRow';
 
 const DEBOUNCE_TIME = 700;
 const resolveAncor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);

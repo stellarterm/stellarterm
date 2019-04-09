@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
 import Validate from '../../../../../../lib/Validate';
-import SendEditLink from '../Common/SendEditLink';
+import SendDestInput from './SendDestInput';
 import SendDestMemoInput from './SendDestMemoInput';
 import SendDestMemoDropdown from './SendDestMemoDropdown';
-import SendDestInput from './SendDestInput';
+import SendEditLink from '../Common/SendEditLink';
 
 export default class SendDest extends React.Component {
     getStepContent() {

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../lib/Driver';
-import DepositCurrency from './DepositCurrency/DepositCurrency';
 import DepositAnchors from './DepositAnchors/DepositAnchors';
+import DepositCurrency from './DepositCurrency/DepositCurrency';
 
 export default class Deposit extends React.Component {
     static getNoTrustLines() {
