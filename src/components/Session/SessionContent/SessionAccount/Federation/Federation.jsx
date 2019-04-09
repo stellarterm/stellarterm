@@ -103,7 +103,9 @@ export default class Federation extends React.Component {
             content = (
                 <div className={alertClass}>
                     <div className="Account_alert_left">
-                        <p className="no_federation_text">StellarTerm federation address</p>
+                        <p className="no_federation_text">
+                            Setup a short memorable payment alias under a stellarterm.com domain
+                        </p>
                     </div>
 
                     <div className="Account_alert_right">
@@ -157,6 +159,7 @@ export default class Federation extends React.Component {
             .setFederation(this.state.address)
             .then(() => {
                 const { userFederation } = this.props.d.session;
+
                 this.setState({
                     isEditing: this.state.fedError !== null,
                     address: userFederation,
@@ -182,8 +185,10 @@ export default class Federation extends React.Component {
                 {errorBlock}
 
                 <p className="AccountView_text">
-                    You can set an alias for your StellarTerm account and use it instead of your public key
-                    to receive payments on Stellar.<br />Share this address with people so they can send you tokens.
+                    You can set an alias for your StellarTerm account and use it instead of your public key to receive
+                    payments on Stellar.
+                    <br />
+                    Share this address with people so they can send you tokens.
                 </p>
             </div>
         );
