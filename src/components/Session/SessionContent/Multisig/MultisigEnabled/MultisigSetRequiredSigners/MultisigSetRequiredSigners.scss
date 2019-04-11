@@ -1,0 +1,66 @@
+.MultisigSetRequiredSigners{
+    width: 612px;
+    margin: 0 auto;
+    background: #fff;
+
+
+    .MultisigSetRequiredSigners_content{
+        padding: 30px 37px 20px 34px;
+        font-size: 18px;
+        font-weight: 400;
+
+        .MultisigSetRequiredSigners_title{
+            padding-bottom: 24px;
+            border-bottom: 1px solid #dfe0e1;
+        }
+
+        .MultisigSetRequiredSigners_setup{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 26px 0;
+
+            .MultisigSetRequiredSigners_setup-info{
+                display: flex;
+                flex-direction: column;
+
+                span:last-child{
+                    font-weight: 300;
+                }
+            }
+        }
+        .MultisigSetRequiredSigners_setup-handler{
+            display: flex;
+            flex-direction: row;
+            border: 1px solid #bdbfc0;
+
+            div{
+                height: 50px;
+                width: 50px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                &:nth-child(2){
+                    width: 58px;
+                    height: 100%;
+                    border-right:1px solid #bdbfc0;
+                    border-left:1px solid #bdbfc0;
+                }
+
+                &:last-child, &:first-child{
+                    border: none;
+                    background: rgba(229,230,231,0.1);
+                    height: 100%;
+                    cursor: pointer;
+
+                    &:hover{
+                        background: rgba(229,230,231,0.3);
+                    }
+                }
+            }
+        }
+    }
+
+
+}

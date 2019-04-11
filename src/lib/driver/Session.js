@@ -1,9 +1,7 @@
 import _ from 'lodash';
-
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
-import * as EnvConsts from '../../env-consts';
 import { getEndpoint } from '../api/endpoints';
 
 const StellarLedger = window.StellarLedger;
@@ -256,20 +254,26 @@ export default function Send(driver) {
             return result; // bssResult
         },
 
+        getSignerMarker: (key) => {
+            const markers = {
+                lobstrVault: 'GA2T6GR7VXXXBETTERSAFETHANSORRYXXXPROTECTEDBYLOBSTRVAULT',
+                stellarGuard: 'GCVHEKSRASJBD6O2Z532LWH4N2ZLCBVDLLTLKSYCSMBLOYTNMEEGUARD',
+            };
+
+            return markers[key];
+        },
+
         sendToSigner: (signResult) => {
             const signedTx = signResult.signedTx.toEnvelope().toXDR('base64');
 
-            const lobstrVaultMarker = 'GA2T6GR7VXXXBETTERSAFETHANSORRYXXXPROTECTEDBYLOBSTRVAULT';
-            const stellarGuardMarker = 'GCVHEKSRASJBD6O2Z532LWH4N2ZLCBVDLLTLKSYCSMBLOYTNMEEGUARD';
-
             const knownSigners = {
-                [lobstrVaultMarker]: {
-                    apiUrl: EnvConsts.LOBSTR_VAULT_URL,
+                [this.handlers.getSignerMarker('lobstrVault')]: {
+                    apiUrl: getEndpoint('sendTransactionToVault'),
                     title: 'Lobstr Vault',
                     logo: 'sign-vault',
                 },
-                [stellarGuardMarker]: {
-                    apiUrl: 'https://stellarguard.me/api/transactions',
+                [this.handlers.getSignerMarker('stellarGuard')]: {
+                    apiUrl: getEndpoint('sendTransactionToGuard'),
                     title: 'StellarGuard',
                     logo: 'sign-stellarguard',
                 },
@@ -291,6 +295,168 @@ export default function Send(driver) {
             return {
                 status: 'await_signers',
             };
+        },
+
+        isLobstrVaultKey: (key) => {
+            const headers = { 'Content-Type': 'application/json' };
+            const body = JSON.stringify({ address: key });
+            return request
+                .post(getEndpoint('isVaultSigner'), { headers, body })
+                .then(res => res)
+                .catch(e => console.error(e));
+        },
+
+        isInvalidWeigth: () => {
+            const vaultMarker = this.handlers.getSignerMarker('lobstrVault');
+            const guardMarker = this.handlers.getSignerMarker('stellarGuard');
+            let hasCustomWeigth = false;
+            let markerMiss = true;
+            this.account.signers.forEach((signer) => {
+                if (signer.key === vaultMarker || signer.key === guardMarker) {
+                    markerMiss = false;
+                }
+                if (signer.key === vaultMarker && signer.weight !== 1) {
+                    hasCustomWeigth = true;
+                }
+                if (signer.key === guardMarker && signer.weight !== 1) {
+                    hasCustomWeigth = true;
+                }
+                if (signer.key !== vaultMarker && signer.key !== guardMarker && signer.weight !== 10) {
+                    hasCustomWeigth = true;
+                }
+            });
+
+            return hasCustomWeigth || markerMiss;
+        },
+
+        // provider is 'lobstrVault' or 'stellarGuard'
+        addSigner: (key, provider) => {
+            const { signers } = this.account;
+            if (signers.length > 1) {
+                if (signers.find(signer => signer.key === key)) {
+                    return Promise.reject('This key is already used');
+                }
+                if (this.handlers.isInvalidWeigth()) {
+                    return Promise.reject('Custom signers weigth');
+                }
+                const newThreshold = signers.length * 10;
+                const signerData = {
+                    signer: {
+                        ed25519PublicKey: key,
+                        weight: 10,
+                    },
+                    lowThreshold: newThreshold,
+                    medThreshold: newThreshold,
+                    highThreshold: newThreshold,
+                };
+                const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
+                return this.handlers.buildSignSubmit(tx);
+            }
+            const signerData = {
+                signer: {
+                    ed25519PublicKey: key,
+                    weight: 10,
+                },
+                masterWeight: 10,
+                lowThreshold: 20,
+                medThreshold: 20,
+                highThreshold: 20,
+            };
+
+            if (provider) {
+                const markerData = {
+                    signer: {
+                        ed25519PublicKey: this.handlers.getSignerMarker(provider),
+                        weight: 1,
+                    },
+                };
+
+                const txMarker = MagicSpoon.buildTxSetOptions(this.account, [signerData, markerData]);
+                return this.handlers.buildSignSubmit(txMarker);
+            }
+
+            const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
+            return this.handlers.buildSignSubmit(tx);
+        },
+
+        activateGuardSigner: () => {
+            const guardUrl = getEndpoint('activateGuardSigner') + this.account.account_id.toString();
+            request
+                .post(guardUrl)
+                .then(() => {})
+                .catch(e => console.error(e));
+        },
+
+        removeSigner: (key) => {
+            const { signers } = this.account;
+
+            const signerData = {
+                signer: {
+                    ed25519PublicKey: key,
+                    weight: 0,
+                },
+                masterWeight: 1,
+                lowThreshold: 0,
+                medThreshold: 0,
+                highThreshold: 0,
+            };
+            if (signers.length === 2) {
+                const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
+                return this.handlers.buildSignSubmit(tx);
+            }
+            if (signers.length === 3) {
+                const hasVaultMarker = signers.find(signer => signer.key === this.handlers.getSignerMarker('lobstrVault'));
+                const hasGuardMarker = signers.find(signer => signer.key === this.handlers.getSignerMarker('stellarGuard'));
+
+                if (!hasVaultMarker && !hasGuardMarker) {
+                    const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
+                    return this.handlers.buildSignSubmit(tx);
+                }
+
+                if (this.handlers.isInvalidWeigth()) {
+                    return Promise.reject('Custom signers weigth');
+                }
+
+                const markerKey = (hasVaultMarker && hasVaultMarker.key) || (hasGuardMarker && hasGuardMarker.key);
+                const markerData = {
+                    signer: {
+                        ed25519PublicKey: markerKey,
+                        weight: 0,
+                    },
+                };
+                const txMarker = MagicSpoon.buildTxSetOptions(this.account, [signerData, markerData]);
+                return this.handlers.buildSignSubmit(txMarker);
+            }
+            if (signers.length >= 4) {
+                if (this.handlers.isInvalidWeigth()) {
+                    return Promise.reject('Custom signers weigth');
+                }
+                const newThreshold = (signers.length - 2) * 10;
+                const newSignerData = {
+                    signer: {
+                        ed25519PublicKey: key,
+                        weight: 0,
+                    },
+                    lowThreshold: newThreshold,
+                    medThreshold: newThreshold,
+                    highThreshold: newThreshold,
+                };
+                const txMarker = MagicSpoon.buildTxSetOptions(this.account, [newSignerData]);
+                return this.handlers.buildSignSubmit(txMarker);
+            }
+
+            return Promise.reject();
+        },
+
+        setRequiredSigners: (qty) => {
+            const newThreshold = qty * 10;
+            const options = {
+                lowThreshold: newThreshold,
+                medThreshold: newThreshold,
+                highThreshold: newThreshold,
+            };
+            const txMarker = MagicSpoon.buildTxSetOptions(this.account, [options]);
+            return this.handlers.buildSignSubmit(txMarker);
         },
 
         getJwtToken: () => {
@@ -332,13 +498,17 @@ export default function Send(driver) {
             const homeDomainExists = this.account.home_domain === 'stellarterm.com';
             if (homeDomainExists) { return; }
 
+            const homeDomain = {
+                homeDomain: 'stellarterm.com',
+            };
+
             if (this.account.signers.length > 1) {
                 this.account.refresh();
             }
 
             try {
                 // Setting homeDomain for user
-                const tx = MagicSpoon.buildTxSetHomeDomain(this.account);
+                const tx = MagicSpoon.buildTxSetOptions(this.account, homeDomain);
                 await this.handlers.buildSignSubmit(tx);
             } catch (error) {
                 console.log(error);
@@ -357,7 +527,10 @@ export default function Send(driver) {
         },
 
         setInflation: async (destination) => {
-            const txBuilder = MagicSpoon.buildTxSetInflation(this.account, destination);
+            const inflationDestination = {
+                destination,
+            };
+            const txBuilder = MagicSpoon.buildTxSetOptions(this.account, inflationDestination);
             return await this.handlers.buildSignSubmit(txBuilder);
         },
         voteContinue: async () => {

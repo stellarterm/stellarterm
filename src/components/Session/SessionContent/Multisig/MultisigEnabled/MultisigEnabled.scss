@@ -1,0 +1,113 @@
+@import 'SignerDataRow/SignerDataRow';
+@import 'MultisigDisableModal/MultisigDisableModal';
+@import 'MultisigSetRequiredSigners/MultisigSetRequiredSigners';
+
+.MultisigEnabled{
+    width: 980px;
+    margin: 0 auto;
+
+    .MultisigEnabled-header{
+        width: 100%;
+        background: #fff;
+        margin-top: 21px;
+        margin-bottom: 23px;
+        padding: 21px 18px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+        .MultisigEnabled-header-wrap{
+            border-radius: 4px;
+            border: solid 1px #7ed085;
+            background-color: #f0faf1;
+            padding: 16px;
+            display: flex;
+            flex-direction: row;
+            justify-content: flex-start;
+            align-items: center;
+            position: relative;
+
+            .MultisigEnabled-header-wrap-info{
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                cursor: pointer;
+
+                img{
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .MultisigEnabled-header-content {
+                display: flex;
+                flex-direction: row;
+                
+                .MultisigEnabled-header-logo {
+                    margin-right: 19px;
+
+                    img {
+                        width: 84px;
+                        height: auto;
+                    }
+                }
+
+                .MultisigEnabled-header-text {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+
+                    h1{
+                        margin-bottom: 5px;
+                    }
+                }
+            }
+
+        }
+        .MultisigEnabled-header-required-signers{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 21px;
+            padding-left: 5px;
+            padding-right: 16px;
+            font-size: 18px;
+
+            img{
+                height: 24px;
+                width: 24px;
+            }
+        }
+    }
+
+    .MultisigEnabled-signers-block{
+        width: 100%;
+        background: #fff;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+
+        .MultisigEnabled-signers-header{
+            width: 100%;
+            height: 48px;
+            border-radius: 4px;
+            background-color: #f4f4f5;
+            display: flex;
+            align-items: center;
+            padding: 0 22px;
+            span:first-child{
+                width: 180px;
+            }
+            span:nth-child(2){
+                width: 360px;
+            }
+        }
+
+        button{
+            margin: 20px 30px;
+            width: 127px;
+        }
+    }
+}

@@ -217,8 +217,15 @@ const MagicSpoon = {
                     sdkAccount.balances = res.balances;
                     sdkAccount.subentry_count = res.subentry_count;
                     sdkAccount.updateOffers();
-                    sdkAccount.signers = res.signers;
+
                     updated = true;
+                }
+
+                if (!_.isEqual(sdkAccount.signers, res.signers)) {
+                    sdkAccount.signers = res.signers;
+                }
+                if (!_.isEqual(sdkAccount.thresholds, res.thresholds)) {
+                    sdkAccount.thresholds = res.thresholds;
                 }
 
                 // We shouldn't pull latest sequence number.
@@ -242,6 +249,31 @@ const MagicSpoon = {
             sdkAccount.inflation_destination = newAccount.inflation_destination;
             sdkAccount.subentry_count = newAccount.subentry_count;
             sdkAccount.home_domain = newAccount.home_domain;
+            sdkAccount.applyNewSigners(newAccount.signers);
+            sdkAccount.applyNewThresholds(newAccount.thresholds);
+        };
+
+        sdkAccount.applyNewSigners = (newSigners) => {
+            let updated = false;
+            if (!_.isEqual(sdkAccount.signers, newSigners)) {
+                sdkAccount.balances = newSigners;
+                updated = true;
+            }
+            if (updated) {
+                onUpdate();
+            }
+        };
+
+        sdkAccount.applyNewThresholds = (newThresholds) => {
+            let updated = false;
+            if (!_.isEqual(sdkAccount.thresholds, newThresholds)) {
+                sdkAccount.thresholds = newThresholds;
+                updated = true;
+            }
+            if (updated) {
+                onUpdate();
+            }
+
         };
 
         sdkAccount.applyNewBalances = (newBalances) => {
@@ -262,7 +294,8 @@ const MagicSpoon = {
 
             const entriesTrustlines = sdkAccount.balances.length - 1;
             const entriesOffers = Object.keys(sdkAccount.offers).length;
-            const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers;
+            const entriesSigners = sdkAccount.signers.length - 1;
+            const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers -entriesSigners;
 
             items.push({
                 entryType: 'Base reserve',
@@ -280,6 +313,11 @@ const MagicSpoon = {
                 entryType: 'Offers',
                 amount: entriesOffers,
                 XLM: entriesOffers * 0.5,
+            });
+            items.push({
+                entryType: 'Signers',
+                amount: entriesSigners,
+                XLM: entriesSigners * 0.5,
             });
             items.push({
                 entryType: 'Others',
@@ -558,20 +596,13 @@ const MagicSpoon = {
 
         return transaction;
     },
-    buildTxSetInflation(spoonAccount, inflationDest) {
+    buildTxSetOptions(spoonAccount, opts) {
+        const options = Array.isArray(opts) ? opts : [opts];
         let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
-        transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
-            inflationDest,
-        }));
-    // DONT call .build()
 
-        return transaction;
-    },
-    buildTxSetHomeDomain(spoonAccount) {
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
-        transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
-            homeDomain: 'stellarterm.com',
-        }));
+        options.forEach((option) => {
+            transaction = transaction.addOperation(StellarSdk.Operation.setOptions(option));
+        });
         // DONT call .build()
 
         return transaction;

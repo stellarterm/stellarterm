@@ -1,0 +1,40 @@
+@import 'MultisigDisabled/MultisigDisabled';
+@import 'MultisigEnabled/MultisigEnabled';
+
+.Modal_header{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background: #f4f4f5;
+    font-size: 18px;
+    padding: 12px 12px 12px 34px;
+
+    img{
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+    }
+}
+.Modal_button-block{
+    margin-bottom: 30px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-right: 34px;
+
+    button{
+        width: 120px;
+        height: 52px;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        border-radius: 2px;
+        margin-left: 15px;
+    }
+}
+.cancel-button{
+    border: solid 1px #dfe0e1;
+    background-color: #ffffff;
+    color: #505558;
+}

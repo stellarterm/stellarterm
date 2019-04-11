@@ -7,6 +7,7 @@ import History from './History/History';
 import Trust from './Trust/Trust';
 import Send from './Send/Send';
 import SessionAccount from './SessionAccount/SessionAccount';
+import Multisig from './Multisig/Multisig';
 import ErrorBoundary from '../../Common/ErrorBoundary/ErrorBoundary';
 import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
 
@@ -35,6 +36,13 @@ export default function SessionContent(props) {
         content = (
                 <ErrorBoundary>
                     <Inflation d={d} />
+                </ErrorBoundary>
+            );
+        break;
+    case 'multisig':
+        content = (
+                <ErrorBoundary>
+                    <Multisig d={d} />
                 </ErrorBoundary>
             );
         break;
