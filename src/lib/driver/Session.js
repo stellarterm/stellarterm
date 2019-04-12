@@ -331,6 +331,10 @@ export default function Send(driver) {
             const homeDomainExists = this.account.home_domain === 'stellarterm.com';
             if (homeDomainExists) { return; }
 
+            if (this.account.signers.length > 1) {
+                this.account.refresh();
+            }
+
             try {
                 // Setting homeDomain for user
                 const tx = MagicSpoon.buildTxSetHomeDomain(this.account);
