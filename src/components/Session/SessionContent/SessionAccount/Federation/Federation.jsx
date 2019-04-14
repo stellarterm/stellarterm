@@ -103,7 +103,10 @@ export default class Federation extends React.Component {
             content = (
                 <div className={alertClass}>
                     <div className="Account_alert_left">
-                        <p className="no_federation_text">StellarTerm federation address</p>
+                        <p className="no_federation_text">
+                            Get a short memorable payment address for your wallet
+                            with StellarTerm federation
+                        </p>
                     </div>
 
                     <div className="Account_alert_right">
