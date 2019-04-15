@@ -1,38 +1,44 @@
-const React = window.React = require('react');
+import React from 'react';
 import BigNumber from 'bignumber.js';
 import _ from 'lodash';
 
-// For pretty printing in the UI
 const Printify = {
-  lightenZeros(number, numDecimals) {
-    if (!_.isString(number)) {
-      console.error('lightenZeros only takes in strings. Got type: ' + typeof number);
-      return <span className="lightenZeros">{number}</span>;
-    }
+    lightenZeros(number, numDecimals) {
+        if (!_.isString(number)) {
+            console.error(`lightenZeros only takes in strings. Got type: ${typeof number}`);
+            return <span className="lightenZeros">{number}</span>;
+        }
 
-    if (numDecimals !== undefined) {
-      number = new BigNumber(number).toFixed(numDecimals);
-    }
+        const rawNum = numDecimals !== undefined ? new BigNumber(number).toFixed(numDecimals) : number;
 
-    let wholeAmount = number.replace(/\..*/,'');
-    let remaining = number.slice(wholeAmount.length);
+        const wholeAmount = rawNum.replace(/\..*/, '');
+        const remaining = rawNum.slice(wholeAmount.length);
+        const emph = remaining.replace(/\.?0+$/, '');
+        const unemphMatch = remaining.match(/\.?0+$/);
 
-    let emph = remaining.replace(/\.?0+$/, '');
+        const localedAmountSpan = Number(wholeAmount).toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+        const unemphSpan = unemphMatch !== null ? <span className="lightenZeros__unemph">{unemphMatch[0]}</span> : null;
 
-    let unemphMatch = remaining.match(/\.?0+$/);
-    let unemph;
-    if (unemphMatch !== null) {
-      unemph = <span className="lightenZeros__unemph">{unemphMatch[0]}</span>
-    }
-    // Formats a number into a react element with 0s unemphasized
-    return <span className="lightenZeros">{Number(wholeAmount).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}{emph}{unemph}</span>;
-  },
-  lighten(input) {
-    if (!_.isString(input)) {
-      throw new Error('lighten only takes in strings');
-    }
-    return <span className="lightenZeros"><span className="lightenZeros__unemph">{input}</span></span>;
-  },
+        // Formats a number into a react element with 0s unemphasized
+        return (
+            <span className="lightenZeros">
+                {localedAmountSpan}
+                {emph}
+                {unemphSpan}
+            </span>
+        );
+    },
+    lighten(input) {
+        if (!_.isString(input)) {
+            throw new Error('lighten only takes in strings');
+        }
+
+        return (
+            <span className="lightenZeros">
+                <span className="lightenZeros__unemph">{input}</span>
+            </span>
+        );
+    },
 };
 
 export default Printify;
