@@ -104,7 +104,8 @@ export default class Federation extends React.Component {
                 <div className={alertClass}>
                     <div className="Account_alert_left">
                         <p className="no_federation_text">
-                            Setup a short memorable payment alias under a stellarterm.com domain
+                            Get a short memorable payment address for your wallet
+                            with StellarTerm federation
                         </p>
                     </div>
 
