@@ -1,51 +1,52 @@
-.PairPicker {
-  padding: 20px;
-  display: flex;
-  flex-flow: row wrap;
-}
-  .PairPicker__pair {
+.PairPicker_assetPair {
     padding: 16px 18px;
-    // border-top: 1px solid $s-color-neutral7;
     border-bottom: 1px solid $s-color-neutral7;
-  }
-  .PairPicker__infoBar {
+}
+
+.PairPicker_infoBar {
     display: flex;
     align-items: center;
     padding: 16px 18px;
     border-bottom: 1px solid $s-color-neutral7;
-  }
-  .PairPicker__infoBar__ticker {
-    width: 300px;
-    margin-left: 16px;
-    font-size: $s-scale-3;
-  }
-  .PairPicker__infoBar__ticker__title {
-    font-size: $s-scale-5;
-    color: $s-color-neutral4;
-    margin-bottom: 0;
-  }
-  .PairPicker__infoBar__ticker__data {
-    font-size: $s-scale-2;
-    line-height: 1;
-    margin-bottom: 0;
-    font-weight: bold;
-  }
-  .PairPicker__infoBar__ticker__spacer {
-    display: inline-block;
-    width: 16px;
-  }
-  .PairPicker__infoBar__pair {
-    flex: 1;
-  }
-  .PairPicker__auxInfo {
+
+    .InfoBar_pair {
+        flex: 1;
+    }
+
+    .Infobar_ticker {
+        width: 300px;
+        margin-left: 16px;
+        font-size: $s-scale-3;
+
+        .Ticker_title {
+            font-size: $s-scale-5;
+            color: $s-color-neutral4;
+            margin-bottom: 0;
+        }
+
+        .Ticker_data {
+            font-size: $s-scale-2;
+            line-height: 1;
+            margin-bottom: 0;
+            font-weight: bold;
+
+            .Ticker_course:first-child {
+                margin-right: 20px;
+            }
+        }
+    }
+}
+
+.PairPicker_seeOthers {
     display: flex;
     font-size: $s-scale-6;
     justify-content: center;
     padding: 12px 18px;
     color: $s-color-neutral5;
     border-radius: 0 0 3px 3px;
-  }
-  .PairPicker__auxInfo:hover {
-    color: $s-color-neutral4;
-    background: #fbfbfc;
-  }
+
+    &:hover {
+        color: $s-color-neutral4;
+        background: #fbfbfc;
+    }
+}

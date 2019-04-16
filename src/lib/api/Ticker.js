@@ -1,4 +1,4 @@
-import req from '../req';
+import req from './req';
 import Event from '../Event';
 import * as EnvConsts from '../../env-consts';
 

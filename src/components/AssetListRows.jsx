@@ -4,7 +4,7 @@ import AssetCard2 from './AssetCard2';
 import Printify from '../lib/Printify';
 import directory from '../directory';
 import Format from '../lib/Format';
-import Ticker from '../lib/driver/Ticker';
+import Ticker from '../lib/api/Ticker';
 
 export default class AssetListRows extends React.Component {
     static getPriceXLM(isXLMNative, asset) {

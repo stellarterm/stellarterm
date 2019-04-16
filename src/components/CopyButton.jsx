@@ -23,10 +23,7 @@ export default class CopyButton extends React.Component {
         const copyPopupClassName = this.state.copyPopup ? '' : 'noDisplay';
         return (
             <div className="CopyButton" onClick={() => this.copyTx(this.props.text)}>
-                <div
-                    className={`CopyButton__popup ${copyPopupClassName}`}>
-                    Copied to clipboard
-                </div>
+                <div className={`CopyButton__popup ${copyPopupClassName}`}>Copied to clipboard</div>
                 <img src={images['icon-copy']} alt="copy" width="24" height="24" />
                 <span>COPY</span>
             </div>

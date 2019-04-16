@@ -150,20 +150,21 @@ export default function TransactionSummary(props) {
         }
       }
     }
-
-    ops.push(<div key={'table_op' + i} className="TransactionSummary__row">
-      <div className="TransactionSummary__row__label">
-        {label}
-      </div>
-      <div className="TransactionSummary__row__content">
-        {attributes.map(attribute => {
-          return <article key={attribute.key} className="TransactionSummary__row__content__inline">
-            {attribute.name ? <p className="TransactionSummary__row__content__inline__title">{attribute.name}</p> : null}
-            <div className="TransactionSummary__row__content__inline__content">{attribute.display}</div>
-          </article>
-        })}
-      </div>
-    </div>);
+    // Kostylb for federations, will be fixed in ledger-new-popup branch
+    if (label !== 'Manage Data') {
+      ops.push(<div key={'table_op' + i} className="TransactionSummary__row">
+        <div className="TransactionSummary__row__label">
+          {label}
+        </div>
+        <div className="TransactionSummary__row__content">
+          {attributes.map(attribute => {
+            return <article key={attribute.key} className="TransactionSummary__row__content__inline">
+              {attribute.name ? <p className="TransactionSummary__row__content__inline__title">{attribute.name}</p> : null}
+              <div className="TransactionSummary__row__content__inline__content">{attribute.display}</div>
+            </article>
+          })}
+        </div>
+      </div>)}
   }
 
 

@@ -1,23 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Generic from '../../../Generic';
 import ErrorBoundary from '../../../ErrorBoundary';
 import AccountView from './AccountView/AccountView';
-import clickToSelect from '../../../../lib/clickToSelect';
 import Driver from '../../../../lib/Driver';
+import Federation from './Federation/Federation';
+import AccountIdBlock from '../../AccountIdBlock/AccountIdBlock';
 
 export default function SessionAccount(props) {
+    const accountID = props.d.session.account.accountId();
+
     return (
         <ErrorBoundary>
             <Generic>
-                <div className="s-alert s-alert--primary">
-                    <p className="Sesssion__yourId__title">Your Wallet Account ID</p>
-                    <strong className="clickToSelect Sesssion__yourId__accountId" onClick={clickToSelect}>
-                        {props.d.session.account.accountId()}
-                    </strong>
-                </div>
-                <p>To receive payments, share your account ID with them (begins with a G).</p>
+                <AccountIdBlock accountID={accountID} />
+                <p className="AccountView_text">
+                    To receive payments, share your account ID with them (begins with a G) or scan QR code.
+                </p>
+
+                <Federation d={props.d} />
             </Generic>
             <Generic noTopPadding>
                 <h2>Where is the money stored?</h2>

@@ -12,7 +12,7 @@ export default function SessionWelcome(props) {
     }
     return (
         <Generic>
-            <h2 className="Session__welcomeTitle">Welcome to StellarTerm!</h2>
+            <h2 className="WelcomeTitle">Welcome to StellarTerm!</h2>
             <p>
                 Please make sure you have keys securely backed up. Never share your secret key or recovery phrase with
                 anyone.
@@ -34,8 +34,8 @@ export default function SessionWelcome(props) {
                 <br />
                 By pressing {'"Accept and Continue"'}, your account will vote for the StellarTerm inflation account.
                 Thank you for your support!{currentVoteNote}
-                <div className="Session__inflation__next">
-                    <a className="Session__inflation__next__noThanks" onClick={d.session.handlers.noThanks}>
+                <div className="Inflation_next_block">
+                    <a className="Inflation_noThanks" onClick={d.session.handlers.noThanks}>
                         No thanks
                     </a>
                     <button className="s-button" onClick={d.session.handlers.voteContinue}>
