@@ -5,9 +5,13 @@ function checkStatus(response) {
         return response;
     }
 
-    const error = new Error(response.statusText);
+    const { status, statusText } = response;
+    const error = new Error(`${status}: ${statusText}`);
     error.response = response;
-    throw error;
+    return response.json().then((errorData) => {
+        error.data = errorData;
+        throw error;
+    });
 }
 
 function request(method, url, options) {

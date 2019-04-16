@@ -42,3 +42,10 @@ a.AssetPairRow:hover .AssetPair__separator {
   opacity: 1;
 }
 
+.AssetPair_error{
+    color: $s-color-alert;
+    font-size: $s-scale-4;
+    padding: 15px 0 20px;
+    text-align: center;
+}
+

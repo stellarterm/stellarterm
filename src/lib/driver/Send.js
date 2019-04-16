@@ -5,6 +5,7 @@ import Stellarify from '../Stellarify';
 import directory from '../../directory';
 import Validate from '../Validate';
 import Event from '../Event';
+import * as EnvConsts from '../../env-consts';
 
 export default function Send(driver) {
     this.event = new Event();
@@ -204,8 +205,11 @@ export default function Send(driver) {
             } else if (Validate.address(this.step1.destInput).ready) {
                 // Prevent race race conditions
                 const destInput = this.step1.destInput;
+                const targetDomain = destInput.split('*')[1];
+                const federationDomain = targetDomain === 'stellarterm.com' ? EnvConsts.HOME_DOMAIN : targetDomain;
 
-                StellarSdk.FederationServer.resolve(this.step1.destInput)
+                StellarSdk.FederationServer.createForDomain(federationDomain)
+                    .then(federationServer => federationServer.resolveAddress(this.step1.destInput))
                     .then((federationRecord) => {
                         if (destInput !== this.step1.destInput) {
                             return;
@@ -233,7 +237,7 @@ export default function Send(driver) {
                             default:
                                 throw new Error('Invalid memo_type from federation response');
                             }
-
+                            console.log(federationRecord);
                             this.memoRequired = true;
                         }
 
@@ -241,16 +245,15 @@ export default function Send(driver) {
                             this.memoContent = federationRecord.memo;
                             this.memoContentLocked = true;
                         }
-
                         this.event.trigger();
                         loadTargetAccountDetails();
                     })
-                    .catch((err) => {
+                    .catch((error) => {
+                        // stellar.toml does not exist or it does not contain information about federation server.
                         if (destInput !== this.step1.destInput) {
                             return;
                         }
-
-                        console.error(err);
+                        console.error(error);
                         this.addressNotFound = true;
                         this.event.trigger();
                     });

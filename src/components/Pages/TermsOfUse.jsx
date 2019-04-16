@@ -5,7 +5,7 @@ import Generic from '../Generic';
 export default function TermsOfUse(props) {
     return (
         <Generic>
-            <h2 className="Session__welcomeTitle">Terms of use</h2>
+            <h2 className="WelcomeTitle">Terms of use</h2>
 
             <h3>1. Cryptocurrency risks</h3>
             <p className="termsOfUse__Paragraph">
@@ -95,7 +95,7 @@ export default function TermsOfUse(props) {
                 <div>
                     By pressing {'<strong>Accept and Continue</strong>'}, you acknowledge that you have read this
                     document and agree to these terms of use.
-                    <div className="Session__tos__next">
+                    <div className="AcceptTerms_block">
                         <button className="s-button" onClick={props.accept}>
                             Accept and Continue
                         </button>

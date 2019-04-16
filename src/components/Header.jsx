@@ -1,38 +1,69 @@
-const React = window.React = require('react');
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export default class Header extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-  componentWillUnmount() {
-  }
-  render() {
-    let networkBar;
-    if (!this.props.network.isDefault) {
-      networkBar = <div className="so-back HeaderNetworkBarBack">
-        <div className="so-chunk">
-          <div className="HeaderNetworkBar">
-            <span>Horizon url: <strong>{this.props.network.horizonUrl}</strong></span>
-            <span>Network passphrase: <strong>{this.props.network.networkPassphrase}</strong></span>
-          </div>
-        </div>
-      </div>
+    getNetworkBar() {
+        const { isDefault, horizonUrl, networkPassphrase } = this.props.network;
+
+        return !isDefault ? (
+            <div className="so-back Header_network">
+                <div className="so-chunk">
+                    <div className="Network_bar">
+                        <span>
+                            Horizon url: <strong>{horizonUrl}</strong>
+                        </span>
+                        <span>
+                            Network passphrase: <strong>{networkPassphrase}</strong>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        ) : null;
     }
-    return <div className="HeaderBackBack">
-      {networkBar}
-      <div className="so-back HeaderBack">
-        <div className="so-chunk Header">
-          <nav className="Header__nav">
-            <a className="Header__nav__item Header__nav__item--logo" href="#">StellarTerm</a>
-            <a className={'Header__nav__item Header__nav__item--link' + (this.props.urlParts[0] === 'exchange' ? ' is-current' : '')} href="#exchange">Exchange</a>
-            <a className={'Header__nav__item Header__nav__item--link' + (this.props.urlParts[0] === 'markets' ? ' is-current' : '')} href="#markets">Markets</a>
-            <a className={'Header__nav__item Header__nav__item--link' + (this.props.urlParts[0] === 'account' ? ' is-current' : '')} href="#account">Account</a>
-            <a className={'Header__nav__item Header__nav__item--link' + (this.props.urlParts[0] === 'download' ? ' is-current' : '')} href="#download">Download</a>
-          </nav>
-          <span className="Header__version">v{window.stBuildInfo.version}</span>
-        </div>
-      </div>
-    </div>
-  }
+
+    createHeaderTab(url, text) {
+        const { rootAddress } = this.props;
+        const isCurrentTab = rootAddress === url ? ' is-current' : '';
+
+        return (
+            <a className={`Nav_link${isCurrentTab}`} href={`#${url}`}>
+                <span>{text}</span>
+            </a>
+        );
+    }
+
+    render() {
+        return (
+            <div className="Header_main">
+                {this.getNetworkBar()}
+
+                <div className="so-back Header_background">
+                    <div className="so-chunk Header">
+
+                        <nav className="Header_nav">
+                            <a className="Nav_logo" href="/#">StellarTerm</a>
+                            {this.createHeaderTab('exchange', 'Exchange')}
+                            {this.createHeaderTab('markets', 'Markets')}
+                            {this.createHeaderTab('account', 'Account')}
+                            {this.createHeaderTab('download', 'Download')}
+                        </nav>
+
+                        <span className="Header_version">v{window.stBuildInfo.version}</span>
+
+                    </div>
+                </div>
+            </div>
+        );
+    }
 }
 
+Header.propTypes = {
+    network: PropTypes.shape({
+        horizonUrl: PropTypes.string,
+        isCustom: PropTypes.bool,
+        isDefault: PropTypes.bool,
+        isTestnet: PropTypes.bool,
+        networkPassphrase: PropTypes.string,
+    }).isRequired,
+    rootAddress: PropTypes.string.isRequired,
+};

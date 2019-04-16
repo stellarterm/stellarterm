@@ -472,6 +472,15 @@ const MagicSpoon = {
 
         return transaction;
     },
+    buildTxSetHomeDomain(spoonAccount) {
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
+        transaction = transaction.addOperation(StellarSdk.Operation.setOptions({
+            homeDomain: 'stellarterm.com',
+        }));
+        // DONT call .build()
+
+        return transaction;
+    },
     buildTxChangeTrust(Server, spoonAccount, opts) {
         let sdkLimit;
         if (typeof opts.limit === 'string' || opts.limit instanceof String) {

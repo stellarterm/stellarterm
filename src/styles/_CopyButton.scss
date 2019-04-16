@@ -6,6 +6,7 @@
   position: relative;
   align-items: center;
   cursor: pointer;
+  margin-right: 1em;
   img{
     margin-right: 5px;
   }
@@ -24,8 +25,8 @@
     left:-60px;
     opacity: 1;
     transition: opacity 0.4s;
-
-    &::after{
+    
+     &::after{
       content: '';
       position: absolute;
       left: 76px;
@@ -36,5 +37,6 @@
   }
   .noDisplay{
     opacity: 0;
+    visibility: hidden;
   }
 }

@@ -146,7 +146,7 @@ class TermApp extends React.Component {
                 <GlobalModal d={this.props.d} />
                 <div className="AppStretch AppContainer">
                     <div>
-                        <Header d={this.props.d} urlParts={urlParts} network={network} />
+                        <Header d={this.props.d} rootAddress={urlParts[0]} network={network} />
                         {body}
                     </div>
                     <Footer />
