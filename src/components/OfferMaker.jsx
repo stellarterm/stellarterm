@@ -170,6 +170,7 @@ export default class OfferMaker extends React.Component {
                             type="text"
                             name={inputType}
                             className="OfferMaker__table__input__input"
+                            maxLength="20"
                             value={this.state[inputType]}
                             onChange={e => this.updateState(inputType, e.target.value)}
                             placeholder="" />
