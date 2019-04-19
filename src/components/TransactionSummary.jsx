@@ -150,7 +150,7 @@ export default function TransactionSummary(props) {
         }
       }
     }
-    // Kostylb for federations, will be fixed in ledger-new-popup branch
+    // Temporary solution for federations, will be fixed in ledger-new-popup branch
     if (label !== 'Manage Data') {
       ops.push(<div key={'table_op' + i} className="TransactionSummary__row">
         <div className="TransactionSummary__row__label">
