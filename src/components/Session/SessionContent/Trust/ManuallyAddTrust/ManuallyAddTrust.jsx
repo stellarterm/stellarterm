@@ -28,7 +28,7 @@ export default class ManuallyAddTrust extends React.Component {
 
     handleInput(event, trustType) {
         this.setState({
-            [trustType]: event.target.value.toUpperCase(),
+            [trustType]: event.target.value,
             isDataUpdate: false,
         });
     }
@@ -51,9 +51,9 @@ export default class ManuallyAddTrust extends React.Component {
             return (
                 <React.Fragment>
                     <div className="island__separator" />
-                    <div className="AddTrust__confirmation">
+                    <div className="AddTrust_confirmation">
                         <div className="s-alert s-alert--alert">
-                            <ul className="AddTrust__errorList">
+                            <ul className="AddTrust_errorList">
                                 {_.map(inputErrors, (errorMessage, index) => (
                                     <li key={index}>{errorMessage}</li>
                                 ))}
@@ -66,12 +66,11 @@ export default class ManuallyAddTrust extends React.Component {
 
         const asset = new StellarSdk.Asset(trustCode, trustIssuer);
         this.loadUnknownData(asset);
-
         return (
             <React.Fragment>
                 <div className="island__separator" />
                 <div className="AddTrust__confirmation">
-                    <div className="AddTrust__confirmation__assetCard">
+                    <div className="confirm_AssetCard">
                         <AssetCard
                             asset={asset}
                             fixed
@@ -102,7 +101,7 @@ export default class ManuallyAddTrust extends React.Component {
 
                 <div className="island__paddedContent">
                     <p>You can accept an asset if you know the issuer account ID and asset code.</p>
-                    <label className="s-inputGroup AddTrust__inputGroup" htmlFor="inputManuallyAssetCode">
+                    <label className="s-inputGroup AddTrust_inputGroup" htmlFor="inputManuallyAssetCode">
                         <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
                             <span>Asset Code</span>
                         </span>
@@ -116,7 +115,7 @@ export default class ManuallyAddTrust extends React.Component {
                             placeholder="Asset code (example: BTC)" />
                     </label>
 
-                    <label className="s-inputGroup AddTrust__inputGroup" htmlFor="inputManuallyIssuer">
+                    <label className="s-inputGroup AddTrust_inputGroup" htmlFor="inputManuallyIssuer">
                         <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
                             <span>Issuer Account ID</span>
                         </span>

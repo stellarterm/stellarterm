@@ -245,7 +245,6 @@ export default function Send(driver) {
                             this.memoContent = federationRecord.memo;
                             this.memoContentLocked = true;
                         }
-
                         this.event.trigger();
                         loadTargetAccountDetails();
                     })
@@ -338,11 +337,22 @@ export default function Send(driver) {
                 }
             } catch (err) {
                 this.state = 'error';
-                if (err instanceof Error) {
-                    this.errorDetails = err.message;
+                if (_.has(err.data, 'extras')) {
+                    const errExtra = err.data.extras.result_codes.operations.toString();
+                    switch (errExtra) {
+                    case 'op_no_trust':
+                        this.errorDetails = 'Destination does not have a trust line';
+                        break;
+                    case 'op_low_reserve':
+                        this.errorDetails = 'New account has to have at least 1 XLM';
+                        break;
+                    default:
+                        this.errorDetails = JSON.stringify(err, null, 2);
+                    }
                 } else {
-                    this.errorDetails = JSON.stringify(err, null, 2);
+                    this.errorDetails = err.message;
                 }
+
                 this.event.trigger();
             }
         },

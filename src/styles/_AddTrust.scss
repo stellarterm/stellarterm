@@ -1,19 +1,18 @@
-.AddTrust {
-
-}
-.AddTrust__inputGroup {
-  margin-bottom: 8px;
+.AddTrust_inputGroup {
+    margin-bottom: 8px;
 }
 
-.AddTrust__errorList {
-  margin-left: 2em;
+.AddTrust_errorList {
+    margin-left: 2em;
 }
-.AddTrust__confirmation {
-  margin-top: 1em;
-  padding-bottom: 1em;
-  padding-left: 20px;
-  padding-right: 20px;
-}
-.AddTrust__confirmation__assetCard {
-  margin-bottom: 1em;
+
+.AddTrust_confirmation {
+    margin-top: 1em;
+    padding-bottom: 1em;
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .confirm_AssetCard {
+        margin-bottom: 1em;
+    }
 }

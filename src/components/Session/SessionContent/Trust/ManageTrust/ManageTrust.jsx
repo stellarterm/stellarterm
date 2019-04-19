@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import _ from 'lodash';
 import AssetCard2 from '../../../../AssetCard2';
 import Driver from '../../../../../lib/Driver';
 import RemoveTrustLink from './RemoveTrustLink/RemoveTrustLink';
@@ -7,8 +8,9 @@ import RemoveTrustLink from './RemoveTrustLink/RemoveTrustLink';
 export default function ManageTrust(props) {
     const account = props.d.session.account;
     const allBalances = account.getSortedBalances({ hideNative: true }); // From MagicSpoon.Account
+    const sortedBalances = _.orderBy(allBalances, ['code'], ['asc']);
 
-    const assetRows = allBalances.map(balance => (
+    const assetRows = sortedBalances.map(balance => (
         <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
             <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
                 <AssetCard2 code={balance.code} issuer={balance.issuer} />

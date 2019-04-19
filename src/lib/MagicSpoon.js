@@ -241,6 +241,7 @@ const MagicSpoon = {
             sdkAccount.applyNewBalances(newAccount.balances);
             sdkAccount.inflation_destination = newAccount.inflation_destination;
             sdkAccount.subentry_count = newAccount.subentry_count;
+            sdkAccount.home_domain = newAccount.home_domain;
         };
 
         sdkAccount.applyNewBalances = (newBalances) => {

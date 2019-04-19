@@ -115,6 +115,9 @@ export default function Send(driver) {
                 this.account = await MagicSpoon.Account(driver.Server, keypair, opts, () => {
                     this.event.trigger();
                 });
+                // Search for user federation
+                await this.handlers.searchFederation(this.account.accountId());
+
                 this.state = 'in';
                 this.authType = opts.authType;
 
@@ -128,9 +131,6 @@ export default function Send(driver) {
                 }
 
                 this.account.addUnknownAssetData();
-
-                // Search for user federation
-                await this.handlers.searchFederation(this.account.accountId());
                 this.event.trigger();
             } catch (e) {
                 if (e.data) {
@@ -322,17 +322,19 @@ export default function Send(driver) {
             const body = JSON.stringify({ name: fedName });
             const reqType = this.userFederation === '' ? request.post : request.patch;
 
-            await this.handlers.setHomeDomain();
-
             const response = await reqType(getEndpoint('setFederation'), { headers, body });
             this.userFederation = response.name.split('*')[0];
-
+            await this.handlers.setHomeDomain();
             return response;
         },
 
         setHomeDomain: async () => {
             const homeDomainExists = this.account.home_domain === 'stellarterm.com';
             if (homeDomainExists) { return; }
+
+            if (this.account.signers.length > 1) {
+                this.account.refresh();
+            }
 
             try {
                 // Setting homeDomain for user
