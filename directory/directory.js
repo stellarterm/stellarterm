@@ -174,28 +174,10 @@ directory.addAnchor({
 });
 
 directory.addAsset('stronghold.co', {
-    code: 'BTC',
-    issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
-    instructions: 'https://stronghold.co/send-receive-bitcoin.html',
-});
-
-directory.addAsset('stronghold.co', {
-    code: 'ETH',
-    issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
-    instructions: 'https://stronghold.co/send-receive-ethereum.html',
-});
-
-directory.addAsset('stronghold.co', {
     code: 'XLM',
     issuer: 'GBSTRH4QOTWNSVA6E4HFERETX4ZLSR3CIUBLK7AXYII277PFJC4BBYOG',
     instructions: 'https://stronghold.co/send-receive-lumens.html',
     unlisted: true,
-});
-
-directory.addAsset('stronghold.co', {
-    code: 'USD',
-    issuer: 'GBSTRUSD7IRX73RQZBL3RQUH6KS3O4NYFY3QCALDLZD77XMZOPWAVTUK',
-    instructions: 'https://stronghold.co',
 });
 
 directory.addAsset('stronghold.co', {
@@ -557,11 +539,6 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['XLM', 'native'],
-    counterSelling: ['USD', 'stronghold.co'],
-});
-
-directory.addPair({
-    baseBuying: ['XLM', 'native'],
     counterSelling: ['USD', 'anchorusd.com'],
 });
 
@@ -595,11 +572,6 @@ directory.addPair({
 directory.addPair({
     baseBuying: ['XLM', 'native'],
     counterSelling: ['BTC', 'nezly.com'],
-});
-
-directory.addPair({
-    baseBuying: ['XLM', 'native'],
-    counterSelling: ['BTC', 'stronghold.co'],
 });
 
 directory.addPair({
@@ -651,11 +623,6 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['ETH', 'nezly.com'],
-    counterSelling: ['XLM', 'native'],
-});
-
-directory.addPair({
-    baseBuying: ['ETH', 'stronghold.co'],
     counterSelling: ['XLM', 'native'],
 });
 
