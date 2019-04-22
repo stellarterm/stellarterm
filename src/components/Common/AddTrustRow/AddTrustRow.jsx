@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
-import AssetCard2 from '../../../../AssetCard2';
-import TrustButton from '../../../TrustButton';
+import Driver from '../../../lib/Driver';
+import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
+import TrustButton from '../../Common/AddTrustRow/TrustButton/TrustButton';
 
 export default class AddTrustRow extends React.Component {
     constructor(props) {
