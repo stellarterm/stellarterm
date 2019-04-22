@@ -15,6 +15,14 @@ const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
 
 
 export default class AssetDropDown extends React.Component {
+    static getDomainForUnknownAsset(asset) {
+        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
+        const assetData = unknownAssetsData.find(assetLocalItem => (
+            assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
+        ));
+
+        return (assetData.currency && assetData.currency.host) || assetData.host;
+    }
     constructor(props) {
         super(props);
 
@@ -96,6 +104,9 @@ export default class AssetDropDown extends React.Component {
 
     getFilterAssets() {
         const { assets } = this.dTicker.data;
+        const { account } = this.props.d.session;
+        const unknownAssets = (account && account.getSortedBalances({ onlyUnknown: true })) || [];
+
         const { code, issuer } = this.props.exception || '';
         const isExceptionNative = this.props.exception && this.props.exception.isNative();
 
@@ -109,7 +120,14 @@ export default class AssetDropDown extends React.Component {
                     ((asset.code.indexOf(this.state.code.toUpperCase()) > -1) ||
                         (asset.domain.indexOf(this.state.code.toLowerCase()) > -1))
                 );
-            });
+            })
+            .concat(unknownAssets
+                .filter(asset => (
+                    (asset.code.indexOf(this.state.code.toUpperCase()) > -1) ||
+                    (asset.code.indexOf(this.state.code) > -1) ||
+                    (this.constructor.getDomainForUnknownAsset(asset).indexOf(this.state.code.toLowerCase()) > -1)
+                )),
+            );
     }
 
     openListByFocus() {

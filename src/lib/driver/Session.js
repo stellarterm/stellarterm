@@ -130,6 +130,7 @@ export default function Send(driver) {
                     this.inflationDone = true;
                 }
 
+                this.account.addUnknownAssetData();
                 this.event.trigger();
             } catch (e) {
                 if (e.data) {

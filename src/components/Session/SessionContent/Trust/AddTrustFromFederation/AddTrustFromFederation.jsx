@@ -23,7 +23,6 @@ export default class AddTrustFromFederation extends React.Component {
     async getAssetsFromUrl(domain) {
         try {
             const resolvedAncor = await resolveAncor(domain);
-
             const { anchorDomain } = this.state;
             if (domain !== anchorDomain) {
                 return;
@@ -91,8 +90,16 @@ export default class AddTrustFromFederation extends React.Component {
                 }
 
                 const asset = Stellarify.assetToml(currency);
+
                 const key = currency.code + currency.issuer;
-                return <AddTrustRow key={key} d={this.props.d} asset={asset} />;
+                return (
+                    <AddTrustRow
+                        key={key}
+                        d={this.props.d}
+                        asset={asset}
+                        currency={currency}
+                        host={anchorDomain} />
+                );
             });
             assetsAmount = assetResults.filter(asset => asset !== null).length;
 

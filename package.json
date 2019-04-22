@@ -19,6 +19,7 @@
     "awesome-debounce-promise": "2.1.0",
     "babelify": "7.3.0",
     "bignumber.js": "4.1.0",
+    "fast-average-color": "^4.3.0",
     "gulp-sass": "3.1.0",
     "gulp-useref": "3.1.4",
     "lodash": "4.17.5",

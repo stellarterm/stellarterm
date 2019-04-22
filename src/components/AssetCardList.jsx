@@ -26,7 +26,7 @@ export default class AssetCardList extends React.Component {
         const rows = assetsList.map((asset, index) => (
             <div
                 className="AssetCardList_card"
-                key={asset.id}
+                key={asset.code + asset.issuer}
                 ref={index === activeCardIndex ? (node) => { this.activeRef = node; } : null}
                 onClick={() => this.handleChoose(asset)}>
                 <AssetCard2 code={asset.code} issuer={asset.issuer} boxy noborder={index !== activeCardIndex} />

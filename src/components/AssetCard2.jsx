@@ -43,13 +43,6 @@ export default function AssetCard2(props) {
     }
 
     const anchor = directory.getAnchor(asset.domain);
-    let borderStyle = {};
-    const backgroundStyle = {};
-
-    if (anchor.color) {
-        backgroundStyle.background = hexToRGBA(anchor.color, 0.08);
-        borderStyle.borderColor = anchor.color;
-    }
 
     const issuerAccountId =
         asset.issuer === null
@@ -57,6 +50,42 @@ export default function AssetCard2(props) {
             : `${asset.issuer.substr(0, 12)}.........${asset.issuer.substr(-12, 12)}`;
 
     const assetCardClass = `AssetCard2 AssetCard2--container ${props.boxy ? 'AssetCard2--boxy' : ''}`;
+
+    let currency;
+    let hostName;
+    let { color } = anchor;
+    let { logo, name } = anchor;
+    let logoPadding = false;
+    const isUnknown = name === 'unknown';
+
+    if (isUnknown) {
+        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
+        const assetData = unknownAssetsData.find(assetLocalItem => (
+            assetLocalItem.code === props.code && assetLocalItem.issuer === props.issuer
+        )) || {};
+
+        currency = props.currency || assetData.currency;
+        hostName = props.host || assetData.host;
+        color = props.color || assetData.color || anchor.color;
+    }
+
+    name = hostName || name;
+
+    if (currency) {
+        const { image, host } = currency;
+        const domain = host && host.split('//')[1];
+        name = domain || name;
+        logo = image || logo;
+        logoPadding = !!image;
+    }
+
+    let borderStyle = {};
+    const backgroundStyle = {};
+
+    if (color) {
+        backgroundStyle.background = hexToRGBA(color, 0.08);
+        borderStyle.borderColor = color;
+    }
 
     if (props.noborder) {
         borderStyle = { border: 'none' };
@@ -66,8 +95,9 @@ export default function AssetCard2(props) {
         <div className={assetCardClass} style={borderStyle}>
             <AssetCardMain
                 backgroundStyle={backgroundStyle}
-                logo={anchor.logo}
-                name={anchor.name}
+                logo={logo}
+                logoWithPadding={logoPadding}
+                name={name}
                 assetCode={asset.code}
                 issuerAccountId={issuerAccountId} />
 
@@ -87,4 +117,10 @@ AssetCard2.propTypes = {
     domain: PropTypes.string,
     children: PropTypes.element,
     noborder: PropTypes.bool,
+    host: PropTypes.string,
+    color: PropTypes.string,
+    currency: PropTypes.shape({
+        image: PropTypes.string,
+        host: PropTypes.string,
+    }),
 };
