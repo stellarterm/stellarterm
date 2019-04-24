@@ -20,7 +20,8 @@ export default class HistoryTableRow extends React.Component {
 
     static getHistoryRowAssetCard(code, issuer, domain) {
         const isUnknown = domain === 'unknown';
-        const viewDomain = isUnknown ? this.getDomainForUnknownAsset(code, issuer) : domain;
+        const loadedDomain = isUnknown && this.getDomainForUnknownAsset(code, issuer);
+        const viewDomain = (isUnknown && loadedDomain) ? loadedDomain : domain;
         return (
             <span className="HistoryView__asset">
                 {code}-{viewDomain}
