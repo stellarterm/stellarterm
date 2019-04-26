@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AssetCard2 from '../../../../../AssetCard2';
+import AssetCard2 from '../../../../../Common/AssetCard2/AssetCard2';
 import HistoryRowExternal from './HistoryRowExternal/HistoryRowExternal';
 import { getHistoryRowsData, checkDataType } from './HistoryRowsData';
 

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Ellipsis from '../../../../Ellipsis';
+import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
 
 export default function LedgerAlert(props) {
     let ledgerAlert;

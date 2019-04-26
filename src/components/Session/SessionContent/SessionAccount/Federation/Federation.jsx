@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../../images';
-import FederationInpit from './FederationInput/FederationInput';
-import CopyButton from '../../../../CopyButton';
 import Driver from '../../../../../lib/Driver';
-import Ellipsis from '../../../../Ellipsis';
+import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
+import CopyButton from '../../../../Common/CopyButton/CopyButton';
+import FederationInpit from './FederationInput/FederationInput';
 
 export const MIN_FED_LENGTH = 4;
 export const CODE_ENTER = 13;

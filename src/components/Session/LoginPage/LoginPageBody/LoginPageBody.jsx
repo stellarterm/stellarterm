@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AcceptTerms from '../Common/AcceptTerms';
 import Driver from '../../../../lib/Driver';
+import AcceptTerms from '../Common/AcceptTerms';
 import LoginSecurityNotes from './LoginSecurityNotes/LoginSecurityNotes';
 
 export default class LoginPageBody extends React.Component {

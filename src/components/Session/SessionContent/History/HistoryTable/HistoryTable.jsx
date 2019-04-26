@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../lib/Driver';
 import { niceDate } from '../../../../../lib/Format';
-import Ellipsis from '../../../../Ellipsis';
-import Loading from '../../../../Loading';
 import HistoryTableRow from './HistoryTableRow/HistoryTableRow';
+import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
+import Loading from '../../../../Common/Loading/Loading';
 
 export default class HistoryTable extends React.Component {
     getHistoryRows() {

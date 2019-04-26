@@ -1,8 +1,8 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import AcceptTerms from '../../Common/AcceptTerms';
 import Driver from '../../../../../lib/Driver';
+import AcceptTerms from '../../Common/AcceptTerms';
 
 export default class LedgerForm extends React.Component {
     constructor(props) {

@@ -1,8 +1,8 @@
 import React from 'react';
 import AcceptTerms from '../Common/AcceptTerms';
 import clickToSelect from '../../../../lib/clickToSelect';
-import SignUpSecurityNotes from './SignUpSecurityNotes/SignUpSecurityNotes';
 import SignUpDescription from './SignUpDescription/SignUpDescription';
+import SignUpSecurityNotes from './SignUpSecurityNotes/SignUpSecurityNotes';
 
 export default class SignUpBody extends React.Component {
     constructor(props) {

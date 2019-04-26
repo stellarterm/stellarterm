@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import images from '../../../../images';
 
 export default function LoginPageTabs(props) {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Generic from '../../Generic';
 import Driver from '../../../lib/Driver';
+import Generic from '../../Common/Generic/Generic';
 
 export default function SessionWelcome(props) {
     const d = props.d;
