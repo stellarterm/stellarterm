@@ -332,10 +332,10 @@ export default function Send(driver) {
         // provider is 'lobstrVault' or 'stellarGuard'
         addSigner: (key, provider) => {
             const { signers } = this.account;
+            if (signers.find(signer => signer.key === key)) {
+                return Promise.reject('This key is already used');
+            }
             if (signers.length > 1) {
-                if (signers.find(signer => signer.key === key)) {
-                    return Promise.reject('This key is already used');
-                }
                 if (this.handlers.isInvalidWeigth()) {
                     return Promise.reject('Custom signers weigth');
                 }
@@ -528,7 +528,7 @@ export default function Send(driver) {
 
         setInflation: async (destination) => {
             const inflationDestination = {
-                destination,
+                inflationDest: destination,
             };
             const txBuilder = MagicSpoon.buildTxSetOptions(this.account, inflationDestination);
             return await this.handlers.buildSignSubmit(txBuilder);

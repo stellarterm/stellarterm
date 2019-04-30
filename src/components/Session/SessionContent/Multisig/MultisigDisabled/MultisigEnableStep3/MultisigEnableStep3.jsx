@@ -30,10 +30,16 @@ export default class MultisigEnableStep3 extends React.Component {
             }
             result.serverResult
                 .then(() => this.props.submit.cancel())
-                .catch(e => console.log(e));
+                .catch(() => {
+                    this.setState({
+                        addingError: 'unknown error',
+                        pending: false,
+                    });
+                });
         } catch (error) {
+            // TODO: error handler
             this.setState({
-                addingError: error,
+                addingError: typeof error === 'string' ? error : 'unknown error',
                 pending: false,
             });
         }
@@ -67,7 +73,7 @@ export default class MultisigEnableStep3 extends React.Component {
                         Continue
                     </button>
                 </div>
-                {addingError && <span>{addingError}</span>}
+                {addingError && <span className="MultisigEnableStep3_error">{addingError}</span>}
             </div>
         );
     }
