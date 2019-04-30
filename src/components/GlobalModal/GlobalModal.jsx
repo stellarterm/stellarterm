@@ -1,5 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import MultisigEnableStep1
+    from './../Session/SessionContent/Multisig/MultisigDisabled/MultisigEnableStep1/MultisigEnableStep1';
+import MultisigEnableStep2
+    from './../Session/SessionContent/Multisig/MultisigDisabled/MultisigEnableStep2/MultisigEnableStep2';
+import MultisigEnableStep3
+    from './../Session/SessionContent/Multisig/MultisigDisabled/MultisigEnableStep3/MultisigEnableStep3';
+
+import MultisigDisableModal
+    from './../Session/SessionContent/Multisig/MultisigEnabled/MultisigDisableModal/MultisigDisableModal';
+import MultisigSetRequiredSigners
+    from './../Session/SessionContent/Multisig/MultisigEnabled/MultisigSetRequiredSigners/MultisigSetRequiredSigners';
 import Driver from '../../lib/Driver';
 import SignWithLedgerModal from './LedgerModal/LedgerModal';
 import TransactionSummary from './TransactionSummary/TransactionSummary';
@@ -77,6 +88,16 @@ export default class GlobalModal extends React.Component {
             body = <MultisigSubmitModal signer={modal.inputData} submit={d.modal.handlers} />;
         } else if (modal.modalName === 'multisigUnknown') {
             body = <MultisigUnknownSubmitModal tx={modal.inputData} submit={d.modal.handlers} />;
+        } else if (modal.modalName === 'multisigEnableStep1') {
+            body = <MultisigEnableStep1 submit={d.modal.handlers} d={modal.inputData} />;
+        } else if (modal.modalName === 'multisigEnableStep2') {
+            body = <MultisigEnableStep2 submit={d.modal.handlers} d={modal.inputData} />;
+        } else if (modal.modalName === 'multisigEnableStep3') {
+            body = <MultisigEnableStep3 submit={d.modal.handlers} signerData={modal.inputData} d={d} />;
+        } else if (modal.modalName === 'multisigDisableModal') {
+            body = <MultisigDisableModal submit={d.modal.handlers} signerKey={modal.inputData} d={d} />;
+        } else if (modal.modalName === 'multisigSetRequiredSigners') {
+            body = <MultisigSetRequiredSigners submit={d.modal.handlers} d={d} />;
         } else {
             body = (
                 <div className="GlobalModal">

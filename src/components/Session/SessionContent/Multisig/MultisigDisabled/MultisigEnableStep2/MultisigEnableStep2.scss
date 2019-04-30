@@ -1,0 +1,131 @@
+.MultisigEnableStep2{
+    width: 612px;
+    background: #fff;
+
+    .MultisigEnableStep2_content{
+        margin: 30px 34px 35px;
+        display: flex;
+        flex-direction: column;
+        border-radius: 4px;
+
+        .MultisigEnableStep2_content-description{
+            font-size: 18px;
+            color: #505558;
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 36px;
+        }
+
+        .MultisigEnableStep2_input{
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            label{
+                font-size: 18px;
+                color: #505558;
+                margin-bottom: 12px;
+            }
+            input{
+                height: 52px;
+                border-radius: 2px;
+                border: solid 1px #bdbfc0;
+                color: #505558;
+                &::placeholder{
+                    opacity: 0.5;
+                }
+                &.invalid{
+                    border: solid 1px #e33c4c;
+                }
+            }
+            span{
+               position: absolute;
+                right: 0;
+                bottom: -25px;
+            }
+            .MultisigEnableStep2_vault{
+                color: #69c76f;
+            }
+            .MultisigEnableStep2_error{
+                color: #e33c4c;
+            }
+        }
+        .MultisigEnableStep2_select-label{
+            display: block;
+            margin-top: 35px;
+            margin-bottom: 12px;
+        }
+        .MultisigEnableStep2_select-wrap{
+            display: flex;
+            flex-direction: column;
+            border-radius: 2px;
+            border: solid 1px #bdbfc0;
+            position: relative;
+
+            .MultisigEnableStep2_select{
+                width: 100%;
+                height: 52px;
+                display: flex;
+                flex-direction: row;
+                padding-right: 10px;
+                justify-content: space-between;
+                align-items: center;
+                color: #505558;
+                cursor: pointer;
+
+                span{
+                    margin-left: 17px;
+                }
+
+                img{
+                    width: 24px;
+                    height: 24px;
+                    transition: all 0.3s;
+
+                    &.isOpen{
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+
+            .MultisigEnableStep2_select-options{
+                position: absolute;
+                background: #fff;
+                left: -1px;
+                top: 52px;
+                width: calc(100% + 2px);
+                border: solid 1px #bdbfc0;
+                border-top: none;
+                z-index: 2;
+            }
+
+            .MultisigEnableStep2_select-row{
+                height: 52px;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                cursor: pointer;
+                
+                &:hover{
+                    background: #eee;
+                }
+
+                img{
+                    width: 21px;
+                    height: auto;
+                    margin-left: 17px;
+                }
+                span{
+                    margin-left: 17px;
+                }
+            }
+            .MultisigEnableStep2_error{
+                color: #e33c4c;
+                position: absolute;
+                right: 0;
+                bottom: -25px;
+            }
+
+        }
+    }
+}
+
