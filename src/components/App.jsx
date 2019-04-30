@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import url from 'url';
 import PropTypes from 'prop-types';
 import GlobalModal from './GlobalModal/GlobalModal';
+import PopupAlert from './PopupAlert/PopupAlert';
 import NotFound from './NotFound/NotFound';
 import Markets from './Markets/Markets';
 import Download from './Download/Download';
@@ -152,6 +153,7 @@ class TermApp extends React.Component {
                     <div>
                         <Header d={this.props.d} rootAddress={urlParts[0]} network={network} />
                         {body}
+                        <PopupAlert d={this.props.d}/>
                     </div>
                     <Footer />
                 </div>
