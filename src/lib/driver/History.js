@@ -1,32 +1,87 @@
-import _ from 'lodash';
-
-import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 
 export default function History(driver) {
-  this.event = new Event();
+    this.event = new Event();
+    this.history = { records: [], details: {}, moreRecords: null };
+    this.loadMore = false;
+    this.isLoading = false;
+    this.allLoaded = false;
+    this.loadLimit = 10;
 
-  let active = false;
-  this.spoonHistory = null;
+    this.handlers = {
+        loadHistory: async (loadMore) => {
+            this.loadMore = loadMore;
+            if (this.loadMore && !this.isLoading && !this.allLoaded) {
+                await this.handlers.loadRecordsWithLimit(driver.Server, driver.session.account.account_id);
+            }
+        },
+        loadRecordsWithLimit: async (Server, publicKey) => {
+            if (this.history.moreRecords === null) {
+                // First init loading
+                this.history.moreRecords = await this.handlers.getOperations(this.loadLimit);
+            } else if (this.loadMore && !this.isLoading && !this.allLoaded) {
+                this.history.moreRecords = await this.history.moreRecords.next();
+            }
 
-  // The way this history thing is that once the user touches the history tab,
-  // they have permanently initiated history loading mode (and this is when
-  // we start to eat through all the horizon history).
+            if (this.history.moreRecords.records.length !== 0 && !this.isLoading) {
+                this.isLoading = true;
+                this.history.records = this.history.records.concat(this.history.moreRecords.records);
+                this.handlers.loadRecordsWithLimit(Server, publicKey);
+                this.handlers.getOperationDetails();
+            } else if (this.history.moreRecords.records.length === 0) {
+                this.allLoaded = true;
+                this.event.trigger();
+            }
+        },
+        getOperationDetails: async () => {
+            let fetchTarget = null;
+            for (let i = 0; i < this.history.records.length; i++) {
+                const record = this.history.records[i];
+                if (fetchTarget === null && this.history.details[record.id] === undefined) {
+                    fetchTarget = i;
+                }
+            }
 
-  // It's simple and reliable. this.handlers.touch is idempotent so it's fine
-  // if it gets called many times
-
-  this.handlers = {
-    touch: (e) => {
-      if (active == false) {
-        active = true;
-        setTimeout(async () => {
-          this.spoonHistory = await MagicSpoon.History(driver.Server, driver.session.account.account_id, () => {
+            if (fetchTarget !== null) {
+                this.isLoading = true;
+                const record = this.history.records[fetchTarget];
+                const operation = await record.operation();
+                const transaction = await operation.transaction();
+                record.category = record.type;
+                this.history.details[record.id] = Object.assign(operation, transaction, record);
+                this.handlers.getOperationDetails();
+            } else {
+                this.isLoading = false;
+                this.loadMore = false;
+                if (this.loadMore && !this.isLoading) {
+                    this.handlers.loadHistory(true);
+                }
+            }
             this.event.trigger();
-          });
-        }, 10);
-      }
-    },
-  };
-}
+        },
+        listenNewTransactions: async (Server, publicKey) => {
+            Server.operations()
+                .forAccount(publicKey)
+                .cursor('now')
+                .stream({
+                    onmessage: this.handlers.newOperationCallback,
+                });
+        },
+        newOperationCallback: async () => {
+            const lastOperation = await this.handlers.getOperations(1);
 
+            if (lastOperation.records.length !== 0) {
+                this.history.records = lastOperation.records.concat(this.history.records);
+                this.handlers.getOperationDetails();
+            }
+        },
+        getOperations: async (opLimit) => {
+            const opsResult = await driver.Server.effects()
+                .forAccount(driver.session.account.account_id)
+                .limit(opLimit)
+                .order('desc')
+                .call();
+            return opsResult;
+        },
+    };
+}
