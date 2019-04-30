@@ -28,9 +28,10 @@ export default class MultisigEnabled extends React.Component {
     getSignerData() {
         const { signers } = this.props.d.session.account;
         const guardKey = this.props.d.session.handlers.getSignerMarker('stellarGuard');
+        const vaultKey = this.props.d.session.handlers.getSignerMarker('lobstrVault');
         let image = 'sign-unknown';
         let provider = 'unknown signer';
-        if (this.state.onlyVaultSigners) {
+        if (signers.find(signer => signer.key === vaultKey)) {
             image = 'sign-vault';
             provider = 'LOBSTR Vault';
         }
