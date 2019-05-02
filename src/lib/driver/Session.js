@@ -223,7 +223,12 @@ export default function Send(driver) {
             try {
                 const signResult = await this.handlers.sign(tx);
                 if (signResult.status === 'finish') {
-                    if (driver.session.account.signers.length > 1) {
+                    const threshold = this.handlers.getTransactionThreshold(tx);
+                    const thresholdValue = this.account.thresholds[threshold];
+                    const masterWeight = this.account.signers
+                        .find(signer => signer.key === this.account.account_id).weight;
+
+                    if ((driver.session.account.signers.length > 1) && (masterWeight < thresholdValue)) {
                         return this.handlers.sendToSigner(signResult);
                     }
                     console.log('Submitting tx\nhash:', tx.hash().toString('hex'));
@@ -261,6 +266,48 @@ export default function Send(driver) {
             };
 
             return markers[key];
+        },
+
+        getTransactionThreshold: (tx) => {
+            const { operations } = tx;
+
+            const THRESHOLDS = {
+                low_threshold: ['allowTrust', 'inflation', 'bumpSequence'],
+                med_threshold: ['createAccount', 'payment', 'pathPayment', 'manageOffer', 'createPassiveOffer',
+                    'changeTrust', 'manageData'],
+                high_threshold: ['accountMerge'],
+                setOptions: ['setOptions'], // med or high
+            };
+
+            return operations.reduce((acc, operation) => {
+                const { type } = operation;
+
+                let usedThreshold = Object.keys(THRESHOLDS).reduce((used, key) => {
+                    if (THRESHOLDS[key].includes(type)) {
+                        return key;
+                    }
+                    return used;
+                }, 'unknown');
+
+                if (usedThreshold === 'unknown') {
+                    throw new Error('unknown operation');
+                }
+
+                if (usedThreshold === 'setOptions') {
+                    const { masterWeight, lowThreshold, medThreshold, highThreshold, signer } = operation;
+                    usedThreshold = (masterWeight || lowThreshold || medThreshold || highThreshold || signer) ?
+                        'high_threshold' : 'med_threshold';
+                }
+
+                if (usedThreshold === 'low_threshold') {
+                    return acc;
+                }
+                if (usedThreshold === 'med_threshold') {
+                    return acc === 'high_threshold' ? acc : usedThreshold;
+                }
+
+                return usedThreshold;
+            }, 'low_threshold');
         },
 
         sendToSigner: (signResult) => {

@@ -36,7 +36,8 @@ export default class MultisigSetRequiredSigners extends React.Component {
     render() {
         const { submit, d } = this.props;
         const { signers } = d.session.account;
-        const noChanges = this.state.requiredSigners === (d.session.account.thresholds.low_threshold / 10);
+        const { requiredSigners } = this.state;
+        const noChanges = requiredSigners === (d.session.account.thresholds.low_threshold / 10);
 
         return (
             <div className="MultisigSetRequiredSigners">
@@ -55,14 +56,18 @@ export default class MultisigSetRequiredSigners extends React.Component {
                                 Signatures required for transactions
                             </span>
                             <span>
-                                {this.state.requiredSigners} of {signers.length - 1}{' '}
-                                 will required. (You account + {this.state.requiredSigners - 1} co-signers)
+                                {requiredSigners} of {signers.length - 1}{' '}
+                                 will required. (You account + {requiredSigners - 1} co-signers)
                             </span>
                         </div>
                         <div className="MultisigSetRequiredSigners_setup-handler">
-                            <div onClick={() => this.handleChoose('remove')}>-</div>
-                            <div>{this.state.requiredSigners}</div>
-                            <div onClick={() => this.handleChoose('add')}>+</div>
+                            <div
+                                className={requiredSigners === 2 ? 'disabled' : ''}
+                                onClick={() => this.handleChoose('remove')}>-</div>
+                            <div>{requiredSigners}</div>
+                            <div
+                                className={requiredSigners === signers.length - 1 ? 'disabled' : ''}
+                                onClick={() => this.handleChoose('add')}>+</div>
                         </div>
                     </div>
                 </div>
