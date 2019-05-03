@@ -1,3 +1,4 @@
+import 'babel-polyfill';
 import BigNumber from 'bignumber.js';
 
 import Ticker from './api/Ticker';

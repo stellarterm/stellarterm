@@ -1,11 +1,10 @@
 import _ from 'lodash';
+import Transport from '@ledgerhq/hw-transport-u2f';
+import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import FastAverageColor from 'fast-average-color';
 import Stellarify from '../lib/Stellarify';
 import directory from '../directory';
-
-
-const StellarLedger = window.StellarLedger;
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
@@ -22,16 +21,20 @@ const MagicSpoon = {
 
         sdkAccount.signWithLedger = (transaction) => {
             console.log('Sending to Ledger to sign');
-            return new StellarLedger.Api(new StellarLedger.comm(Number.MAX_VALUE))
-                .signTx_async(this.bip32Path, transaction)
+            return Transport.create()
+                .then(transport => new AppStellar(transport))
+                .then(app => app.signTransaction(this.bip32Path, transaction.signatureBase()))
                 .then((result) => {
                     const signature = result.signature;
                     const hint = keypair.signatureHint();
                     const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
                     transaction.signatures.push(decorated);
                     return transaction;
-                },
-            );
+                })
+                .catch((error) => {
+                    console.error(error);
+                    return Promise.reject(error);
+                });
         };
 
         sdkAccount.signWithSecret = (transaction) => {

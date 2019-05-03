@@ -35,10 +35,6 @@ export default class LedgerForm extends React.Component {
         const { setupLedgerError, setupError } = this.props.d.session;
 
         if (setupLedgerError) {
-            // This usually doesn't happen. To simulate this, find the line:
-            // new StellarLedger.Api(new StellarLedger.comm(NUMBER))
-            // and change the number to something low so it has a timeout.
-            // Or, put in a invalid bip path manually.
             return (
                 <div className="s-alert s-alert--alert">
                     Connected to Ledger but returned an error: <br />
