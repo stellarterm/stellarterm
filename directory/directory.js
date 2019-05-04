@@ -515,6 +515,21 @@ directory.addAsset('ximcoin.com', {
     type: 'token',
 });
 
+directory.addAnchor({
+    domain: 'envoychain.io',
+    website: 'https://envoychain.io/',
+    logo: 'envoychain.io',
+    color: '#1C6C97',
+    displayName: 'NVOY',
+});
+
+directory.addAsset('envoychain.io', {
+    code: 'NVOY',
+    issuer: 'GBZ35ZJRIKJGYH5PBKLKOZ5L6EXCNTO7BKIL7DAVVDFQ2ODJEEHHJXIM',
+    instructions: 'https://ximcoin.com',
+    type: 'token',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -756,6 +771,12 @@ directory.addPair({
     baseBuying: ['TERN', 'ternio.io'],
     counterSelling: ['XLM', 'native'],
 });
+
+directory.addPair({
+    baseBuying: ['NVOY', 'envoychain.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
 
 directory.addDestination('GCEGERI7COJYNNID6CYSKS5DPPLGCCLPTOSCDD2LG5SJIVWM5ISUPERI', {
     name: 'Superlumen Issuer',
