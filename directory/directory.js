@@ -78,6 +78,20 @@ directory.addAsset('cryptotari.io', {
 });
 
 directory.addAnchor({
+    domain: 'martialartscoin.io',
+    website: 'https://martialartscoin.io',
+    logo: 'martialartscoin.io',
+    color: '#FFFFFF',
+    displayName: 'MXRT',
+});
+
+directory.addAsset('martialartscoin.io', {
+    code: 'MXRT',
+    issuer: 'GD2YURFWC5LIRLM4CCVZZHCFV6WXO46VOSBBPTJG6MPQN6ANYZZOLQJL',
+    type: 'token',
+});
+
+directory.addAnchor({
     domain: 'frasindo.com',
     website: 'https://frasindo.com',
     logo: 'frasindo.com',
@@ -603,6 +617,11 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['TARI', 'cryptotari.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['MXRT', 'martialartscoin.io'],
     counterSelling: ['XLM', 'native'],
 });
 
