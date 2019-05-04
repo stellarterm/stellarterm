@@ -1,10 +1,10 @@
 import _ from 'lodash';
+import Transport from '@ledgerhq/hw-transport-u2f';
+import AppStellar from '@ledgerhq/hw-app-str';
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
-
-const StellarLedger = window.StellarLedger;
 
 export default function Send(driver) {
     this.event = new Event();
@@ -38,27 +38,27 @@ export default function Send(driver) {
     };
 
     // Ping the Ledger device to see if it is connected
-    this.pingLedger = (loop = false) => {
-        // console.log('Ledger wallet ping. Connection: ' + this.ledgerConnected)
-        new StellarLedger.Api(new StellarLedger.comm(4)).connect(
-            (success) => {
-                if (this.ledgerConnected === false) {
+    this.pingLedger = () => {
+        Transport.create()
+            .then(transport => new AppStellar(transport))
+            .then(app => app.getAppConfiguration())
+            .then(() => {
+                if (!this.ledgerConnected) {
                     this.ledgerConnected = true;
                     this.event.trigger();
                 }
-                // console.log('Ledger wallet pong. Connection: ' + this.ledgerConnected)
-                // setTimeout(() => {this.pingLedger(true)}, 15000);
-            },
-            (error) => {
-                if (this.ledgerConnected === true) {
+            })
+            .catch((error) => {
+                if (this.ledgerConnected) {
                     this.ledgerConnected = false;
                     this.event.trigger();
                 }
-                setTimeout(() => {
-                    this.pingLedger(true);
-                }, 1000);
-            },
-        );
+
+                const notSupported = error && error.id === 'U2FNotSupported';
+                if (notSupported) { return; }
+                // Could not connect to ledger, retry...
+                this.pingLedger();
+            });
     };
     this.pingLedger(true);
 
@@ -77,9 +77,9 @@ export default function Send(driver) {
         },
         logInWithLedger: async (bip32Path) => {
             try {
-                const connectionResult = await new StellarLedger.Api(new StellarLedger.comm(4)).getPublicKey_async(
-                    bip32Path,
-                );
+                const transport = await Transport.create();
+                const ledgerApp = new AppStellar(transport);
+                const connectionResult = await ledgerApp.getPublicKey(bip32Path);
                 this.setupLedgerError = null;
                 const keypair = StellarSdk.Keypair.fromPublicKey(connectionResult.publicKey);
                 return this.handlers.logIn(keypair, {

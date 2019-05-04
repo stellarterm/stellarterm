@@ -9,7 +9,8 @@ export default function LedgerAlert(props) {
     case 'useChrome':
         ledgerAlert = (
                 <p className="LoginPage__form--title browser-support">
-                    Ledger is not supported on your browser. Please use Google Chrome or Opera.
+                    Ledger is not supported on your browser.<br /> Please use Google Chrome,
+                    Opera or Firefox with U2F extension.
                 </p>
             );
         break;
