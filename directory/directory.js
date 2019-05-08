@@ -514,12 +514,29 @@ directory.addAsset('ximcoin.com', {
     instructions: 'https://ximcoin.com',
     type: 'token',
 });
+directory.addAnchor({
+    domain: 'levelg.net',
+    website: 'https://levelg.net/',
+    logo: 'levelg.net',
+    color: '#000000',
+    displayName: 'LEVELG',
+});
 
+directory.addAsset('levelg.net', {
+    code: 'LEVELG',
+    issuer: 'GC3L2FLR2QMUSOJ6QMQHKIWUKEXGOXSIN2KY72SDUHPC2KO6HOSQIXIF',
+    instructions: 'https://levelg.net',
+    type: 'token',
+});
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
     baseBuying: ['XLM', 'native'],
     counterSelling: ['CNY', 'ripplefox.com'],
+});
+directory.addPair({
+    baseBuying: ['XLM', 'native'],
+    counterSelling: ['LEVELG', 'levelg.net'],
 });
 
 directory.addPair({
