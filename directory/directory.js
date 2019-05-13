@@ -515,6 +515,38 @@ directory.addAsset('ximcoin.com', {
     type: 'token',
 });
 
+directory.addAnchor({
+    domain: 'mintx.co',
+    website: 'https://mintx.co/',
+    logo: 'mintx.co',
+    color: '#ffdb2b',
+    displayName: 'MINTX',
+});
+
+directory.addAsset('mintx.co', {
+    code: 'GOLD',
+    issuer: 'GBC5ZGK6MQU3XG5Y72SXPA7P5R5NHYT2475SNEJB2U3EQ6J56QLVGOLD',
+    instructions: 'https://mintx.co/',
+});
+
+directory.addAsset('mintx.co', {
+    code: 'SLVR',
+    issuer: 'GBZVELEQD3WBN3R3VAG64HVBDOZ76ZL6QPLSFGKWPFED33Q3234NSLVR',
+    instructions: 'https://mintx.co/',
+});
+
+directory.addAsset('mintx.co', {
+    code: 'PLAT',
+    issuer: 'GBIMVJJJOTAKJYWJIY5YEXDZ4QIWQZLRJ4BXVHKH6EXWQ3WAEYBTPLAT',
+    instructions: 'https://mintx.co/',
+});
+
+directory.addAsset('mintx.co', {
+    code: 'PALL',
+    issuer: 'GCQ5ZYECTNYW6BZ47AZN6M5BXKV7ZZ24XPNHPSYZVUDVK7CIITOMPALL',
+    instructions: 'https://mintx.co/',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -598,6 +630,26 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['XIM', 'ximcoin.com'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['GOLD', 'mintx.co'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['SLVR', 'mintx.co'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['PLAT', 'mintx.co'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['PALL', 'mintx.co'],
     counterSelling: ['XLM', 'native'],
 });
 
