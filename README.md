@@ -1,6 +1,6 @@
-[![Travis CI status](https://travis-ci.org/irisli/stellarterm.svg?branch=master)](https://travis-ci.org/irisli/stellarterm)
+[![Travis CI status](https://travis-ci.org/stellarterm/stellarterm.svg?branch=master)](https://travis-ci.org/stellarterm/stellarterm)
 
-# StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/irisli/stellarterm/tree/master/api) | [directory](https://github.com/irisli/stellarterm/blob/master/directory/)
+# StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/stellarterm/stellarterm/tree/master/api) | [directory](https://github.com/stellarterm/stellarterm/blob/master/directory/)
 This StellarTerm monorepo consists of multiple projects built for the [Stellar network](https://www.stellar.org/) including a [trading client](https://stellarterm.com/). The projects are in this monorepo to enable faster development speed.
 
 ## Web Client
@@ -13,8 +13,8 @@ The API uses the [Serverless framework](https://serverless.com/) for deployment 
 
 It is currently under active development and is not yet finished. See it in action here: [https://api.stellarterm.com/](https://api.stellarterm.com/)
 
-## [Directory](https://github.com/irisli/stellarterm/blob/master/directory/README.md)
-StellarTerm maintains a manually curated directory file with a listing of well known anchors and assets on the Stellar network. For more information, see the [directory README](https://github.com/irisli/stellarterm/blob/master/directory/README.md).
+## [Directory](https://github.com/stellarterm/stellarterm/blob/master/directory/README.md)
+StellarTerm maintains a manually curated directory file with a listing of well known anchors and assets on the Stellar network. For more information, see the [directory README](https://github.com/stellarterm/stellarterm/blob/master/directory/README.md).
 
 -------------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@ node --version
 ### Environment Setup
 ```sh
 # Clone the project
-git clone https://github.com/irisli/stellarterm.git
+git clone https://github.com/stellarterm/stellarterm.git
 cd stellarterm
 
 # Install the npm and bower dependencies
@@ -71,7 +71,7 @@ npm run production
 ```
 
 ## License
-Products in the StellarTerm ecosystem is open source software and is licensed under the [Apache-2.0 license](https://github.com/irisli/stellarterm/blob/master/LICENSE-2.0.txt). Please understand the license carefully before using StellarTerm.
+Products in the StellarTerm ecosystem is open source software and is licensed under the [Apache-2.0 license](https://github.com/stellarterm/stellarterm/blob/master/LICENSE-2.0.txt). Please understand the license carefully before using StellarTerm.
 
 ## Credits
 - Started the project using the super helpful [react-gulp-browserify yeoman generator](https://github.com/randylien/generator-react-gulp-browserify)

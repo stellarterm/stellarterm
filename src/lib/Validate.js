@@ -30,6 +30,9 @@ const Validate = {
     if (input === '') {
       return null;
     }
+    if (parseFloat(input) === 0) {
+      return false
+    }
     let inputIsPositive = !!input.charAt(0) !== '-';
     let inputValidNumber = !!input.match(/^[0-9]*(\.[0-9]+){0,1}$/g);
     let inputPrecisionLessThan7 = !input.match(/\.([0-9]){8,}$/g);
@@ -55,7 +58,11 @@ const Validate = {
       }
       break;
     case 'MEMO_TEXT':
-      let memoTextBytes = Buffer.byteLength(input, 'utf8');
+        let memoTextBytes = Buffer.byteLength(input, 'utf8');
+        if (/^\s+$/.test(input)) {
+          // Memo contains only whitespace
+          return resultError("MEMO_TEXT can't be just from whitespaces.");
+        }
       if (memoTextBytes > 28) {
         return resultError(`MEMO_TEXT accepts a string of up to 28 bytes. ${memoTextBytes} bytes entered.`);
       }

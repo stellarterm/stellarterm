@@ -19,6 +19,8 @@ function DirectoryBuilder() {
   this.destinations = {};
   this.assets = {};
   this.issuers = {};
+  this.wildcardIssuers = {};
+  this.wildcardDomains = {};
   this.pairs = {};
 
   // Special anchors aren't really anchors at all!
@@ -26,7 +28,7 @@ function DirectoryBuilder() {
     name: 'Stellar Network',
     website: 'https://www.stellar.org/lumens/',
     logo: logos['stellar'],
-    color: '#08b5e5',
+    color: '#000000',
   };
   this.nativeAsset = {
     code: 'XLM',
@@ -112,6 +114,12 @@ DirectoryBuilder.prototype.addAsset = function(anchorDomain, details) {
   if (details.instructions) {
     this.assets[slug]['instructions'] = details.instructions;
   }
+  if (details.warning) {
+    this.assets[slug]['warning'] = details.warning;
+  }
+  if (details.disabled) {
+    this.assets[slug]['disabled'] = true;
+  }
   if (details.unlisted) {
     if (details.unlisted !== true) {
       throw new Error('Asset property unlisted must be unset or true: ' + slug);
@@ -129,6 +137,27 @@ DirectoryBuilder.prototype.addAsset = function(anchorDomain, details) {
   this.anchors[anchorDomain].assets[details.code] = slug;
   this.issuers[details.issuer][details.code] = slug;
 }
+
+// Wildcards are a 1-to-1 mapping to a domain
+DirectoryBuilder.prototype.addWildcard = function(anchorDomain, details) {
+  if (!this.anchors.hasOwnProperty(anchorDomain)) {
+    throw new Error('Attempting to add wildcard asset to nonexistent anchor: ' + anchorDomain);
+  }
+  if (details.issuer === undefined) {
+    throw new Error('Missing issuer when trying to add wildcard');
+  }
+
+  if (this.wildcardIssuers.hasOwnProperty(details.issuer)) {
+    throw new Error('Duplicate issuer in wildcards: ' + details.issuer);
+  }
+  if (this.wildcardDomains.hasOwnProperty(anchorDomain)) {
+    throw new Error('Duplicate domain in wildcards: ' + details.issuer);
+  }
+
+  this.wildcardIssuers[details.issuer] = anchorDomain;
+  this.wildcardDomains[anchorDomain] = details.issuer;
+}
+
 
 DirectoryBuilder.prototype.addDestination = function(accountId, opts) {
   if (!opts.name) {
@@ -223,6 +252,7 @@ DirectoryBuilder.prototype.getAnchor = function(domain) {
   if (this.anchors.hasOwnProperty(domain)) {
     return this.anchors[domain];
   }
+
   return this.unknownAnchor;
 }
 
@@ -260,6 +290,16 @@ DirectoryBuilder.prototype.getAssetByDomain = function(code, domain) {
       domain: domain,
     };
   }
+
+  if (this.wildcardDomains.hasOwnProperty(domain)) {
+    return {
+      code: code,
+      issuer: this.wildcardDomains[domain],
+      domain: domain,
+    }
+  }
+
+  return null;
 }
 
 // Returns unknown if asset is not found
@@ -270,6 +310,14 @@ DirectoryBuilder.prototype.getAssetByAccountId = function(code, issuer) {
 
   let slug = code + '-' + issuer;
   if (!this.assets.hasOwnProperty(slug)) {
+    if (this.wildcardIssuers.hasOwnProperty(issuer)) {
+      return {
+        code: code,
+        issuer: issuer,
+        domain: this.wildcardIssuers[issuer],
+      }
+    }
+
     return null;
   }
   return this.assets[slug];

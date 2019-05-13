@@ -8,7 +8,7 @@ custom:
 provider:
   name: aws
   runtime: nodejs6.10
-  stage: dev
+  stage: ${env:BRANCH}
   region: us-west-2
   timeout: 180
   memorySize: 256

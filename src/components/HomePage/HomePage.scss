@@ -1,0 +1,102 @@
+.HomePage__lead {
+  margin: 0 auto;
+  width: 800px;
+  color: #000; // bold color
+  text-shadow: 0 1px 3px rgba(255,255,255,0.1);
+  padding-top: 60px;
+  padding-bottom: 90px;
+  font-weight: 400;
+}
+
+.HomePage__lead__actions__sign-up-button {
+  margin-right: 8px;
+}
+
+.HomePage__lead__actions__button {
+  &:after {
+    border-bottom: none !important;
+  }
+}
+
+.HomePage__lead__title {
+  font-size: $s-scale-c;
+  font-weight: 300;
+  font-size: 42px;
+  margin-bottom: 27px;
+}
+.HomePage__lead__summary {
+  font-size: 20px;
+  font-weight: 300;
+  line-height: 30px;
+}
+.HomePage__lead a {
+  position: relative;
+  text-decoration: none;
+}
+.HomePage__lead a:after {
+  content: '';
+  display: block;
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 2px;
+  text-decoration: none;
+  border-bottom: 1px dotted currentColor;
+  opacity: 0;
+  transition: 0.1s opacity;
+}
+.HomePage__lead__title a:after {
+  bottom: 8px;
+}
+.HomePage__black:hover a:after {
+  opacity: 1;
+}
+.HomePage__buttonContainer {
+  text-align: center;
+}
+.HomePage__black {
+  // background: $s-color-primary4;
+  background: linear-gradient(180deg, rgba(255,255,255,1) 40%, rgba(255,255,255,0.0));
+  padding-bottom: 300px;
+}
+
+.HomePage__assetList {
+  margin-top: -300px;
+}
+
+.HomePage__screenshot {
+  width: 450px;
+  margin-bottom: 0;
+  display: block;
+}
+.HomePage__introImage {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+.HomePage__sideBlurb {
+  padding-top: 20px;
+}
+.HomePage__sectionTitle {
+  text-align: center;
+  font-weight: normal;
+  padding-top: 30px;
+  padding-bottom: 20px;
+  font-size: $s-scale-2;
+}
+
+.HomePage__forSaleContainer {
+  padding-top: 20px;
+  text-align: center;
+}
+
+.HomePage__forSale {
+  background: #ffffdd;
+  margin: 0 auto;
+  border: 1px solid #dddd00;
+  padding: 12px 24px;
+  border-radius: 4px;
+  // width: 500px;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: left;
+}

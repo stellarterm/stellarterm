@@ -2,8 +2,9 @@ const _ = require('lodash');
 const StellarSdk = require('stellar-sdk');
 const directory = require('../../directory.json');
 const tradeWalker = require('./tradeWalker');
+const { HORIZON_SERVER } = require('../horizon-server.constant');
 
-Server = new StellarSdk.Server('https://horizon.stellar.org');
+Server = new StellarSdk.Server(HORIZON_SERVER);
 StellarSdk.Network.usePublicNetwork();
 
 

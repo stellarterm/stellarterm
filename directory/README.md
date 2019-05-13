@@ -130,4 +130,4 @@ directory.addPair(opts);
 ```
 
 ### Manually using the JSON
-This step is arguably safer as you can verify the data yourself. Simply download the `directory.json` file from the [StellarTerm GitHub repo](https://github.com/irisli/stellarterm/tree/master/directory/) and paste it into your application. Repeat again when updates are desired.
+This step is arguably safer as you can verify the data yourself. Simply download the `directory.json` file from the [StellarTerm GitHub repo](https://github.com/stellarterm/stellarterm/tree/master/directory/) and paste it into your application. Repeat again when updates are desired.

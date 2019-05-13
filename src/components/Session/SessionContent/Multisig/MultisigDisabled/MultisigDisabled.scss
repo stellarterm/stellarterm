@@ -1,0 +1,50 @@
+@import "MultisigEnableStep1/MultisigEnableStep1";
+@import "MultisigEnableStep2/MultisigEnableStep2";
+@import "MultisigEnableStep3/MultisigEnableStep3";
+
+.MultisigDisabled{
+    background: #fff;
+    width: 980px;
+    margin: 28px auto;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+
+    .MultisigDisabled_wrapper{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: 4px;
+        border: solid 1px #7ed085;
+        background-color: #f0faf1;
+        padding: 14px 17px 19px;
+
+        .MultisigDisabled_content{
+            display: flex;
+            flex-direction: column;
+
+            span{
+                color: #505558;
+                margin-top: 4px;
+                margin-bottom: 10px;
+            }
+            a{
+                color: #69c76f;
+                text-decoration: none;
+            }
+        }
+
+        button{
+            width: 108px;
+            height: 40px;
+        }
+
+    }
+
+}

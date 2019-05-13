@@ -1,0 +1,50 @@
+.SignerDataRow{
+    width: 100%;
+    height: 72px;
+    padding-left: 22px;
+    padding-right: 37px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border: 1px solid #dfe0e1;
+
+    .SignerDataRow_type{
+        min-width: 180px;
+    }
+
+    .SignerDataRow_key{
+        min-width: 360px;
+    }
+    .SignerDataRow_weight{
+        min-width: 50px;
+    }
+
+    .SignerDataRow_buttons{
+        width: 300px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-left: 80px;
+
+        .SignerDataRow_buttons-remove{
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            cursor: pointer;
+            img{
+                width: 24px;
+                height: 24px;
+                margin-right: 5px;
+            }
+            span{
+                color: #86d38c;
+                text-transform: uppercase;
+                font-weight: 600;
+            }
+        }
+    }
+
+}
+
+
+

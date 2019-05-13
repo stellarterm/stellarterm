@@ -1,0 +1,29 @@
+.MultisigEnableStep3{
+    width: 612px;
+    background: #fff;
+    position: relative;
+
+    .MultisigEnableStep3_content{
+        font-size: 18px;
+        color: #505558;
+        padding: 30px 45px 40px 34px;
+        display: flex;
+        flex-direction: column;
+
+        span{
+            margin-bottom: 12px;
+        }
+
+        .MultisigEnableStep3_content-alert{
+            color: #e33c4c;
+        }
+    }
+    .MultisigEnableStep3_error{
+        position: absolute;
+        right: 33px;
+        bottom: 3px;
+        color: #e33c4c;
+    }
+
+
+}
