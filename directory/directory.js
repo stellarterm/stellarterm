@@ -107,35 +107,6 @@ directory.addAsset('pedity.com', {
 });
 
 directory.addAnchor({
-    domain: 'nezly.com',
-    website: 'https://nezly.com',
-    logo: 'nezly.com',
-    color: '#523b83',
-    displayName: 'Nezly',
-});
-
-directory.addAsset('nezly.com', {
-    code: 'NEZ',
-    issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
-    instructions: 'https://nezly.com',
-    unlisted: true,
-});
-
-directory.addAsset('nezly.com', {
-    code: 'ETH',
-    issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
-    instructions: 'https://nezly.com',
-    unlisted: true,
-});
-
-directory.addAsset('nezly.com', {
-    code: 'BTC',
-    issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
-    instructions: 'https://nezly.com',
-    unlisted: true,
-});
-
-directory.addAnchor({
     domain: 'smartlands.io',
     website: 'https://smartlands.io',
     logo: 'smartlands.io',
@@ -601,10 +572,6 @@ directory.addPair({
 
 // Pairs involving "BTC"
 // "BTC" should be counterSelling
-directory.addPair({
-    baseBuying: ['XLM', 'native'],
-    counterSelling: ['BTC', 'nezly.com'],
-});
 
 directory.addPair({
     baseBuying: ['XLM', 'native'],
@@ -665,16 +632,6 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['PEDI', 'pedity.com'],
-    counterSelling: ['XLM', 'native'],
-});
-
-directory.addPair({
-    baseBuying: ['NEZ', 'nezly.com'],
-    counterSelling: ['XLM', 'native'],
-});
-
-directory.addPair({
-    baseBuying: ['ETH', 'nezly.com'],
     counterSelling: ['XLM', 'native'],
 });
 
