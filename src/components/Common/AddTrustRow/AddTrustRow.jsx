@@ -20,7 +20,7 @@ export default class AddTrustRow extends React.Component {
     }
 
     async getColor({ image }) {
-        const result = await this.props.d.session.account.getAverageColor(image);
+        const result = await this.props.d.session.handlers.getAverageColor(image);
         if (result.error === null) {
             this.setState({ color: result.hex });
         }

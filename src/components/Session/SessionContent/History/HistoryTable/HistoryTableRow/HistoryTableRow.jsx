@@ -3,37 +3,63 @@ import PropTypes from 'prop-types';
 import AssetCard2 from '../../../../../Common/AssetCard2/AssetCard2';
 import HistoryRowExternal from './HistoryRowExternal/HistoryRowExternal';
 import { getHistoryRowsData, checkDataType } from './HistoryRowsData';
+import Driver from '../../../../../../lib/Driver';
 
 export default class HistoryTableRow extends React.Component {
-    static getDomainForUnknownAsset(code, issuer) {
+    constructor(props) {
+        super(props);
+        this.state = {
+            loadedDomain: undefined,
+        };
+    }
+
+    componentDidMount() {
+        this._mounted = true;
+    }
+
+    componentWillUnmount() {
+        this._mounted = false;
+    }
+
+    getDomainByLocalStorage(code, issuer) {
         const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
         const assetData = unknownAssetsData.find(assetLocalItem => (
             assetLocalItem.code === code && assetLocalItem.issuer === issuer
         ));
 
         if (!assetData) {
-            return 'unknown';
+            this.getDomainByToml(issuer);
+            return null;
         }
 
         return (assetData.currency && assetData.currency.host) || assetData.host;
     }
 
-    static getHistoryRowAssetCard(code, issuer, domain) {
+    getHistoryRowAssetCard(code, issuer, domain, d) {
         const isUnknown = domain === 'unknown';
-        const loadedDomain = isUnknown && this.getDomainForUnknownAsset(code, issuer);
+        const loadedDomain = isUnknown && (this.getDomainByLocalStorage(code, issuer) || this.state.loadedDomain);
         const viewDomain = (isUnknown && loadedDomain) ? loadedDomain : domain;
         return (
             <span className="HistoryView__asset">
                 {code}-{viewDomain}
                 <div className="HistoryView__asset__card">
-                    <AssetCard2 code={code} issuer={issuer} />
+                    <AssetCard2 code={code} issuer={issuer} d={d} />
                 </div>
             </span>
         );
     }
 
+    async getDomainByToml(issuer) {
+        const loadedDomain = await this.props.d.session.handlers.getDomainByIssuer(issuer);
+        if (this._mounted) {
+            this.setState({
+                loadedDomain,
+            });
+        }
+    }
+
     render() {
-        const { data, type } = this.props;
+        const { data, type, d } = this.props;
         const { category } = data;
         const dataType = checkDataType(type, category);
         const historyRows = dataType ? getHistoryRowsData(dataType, data) : [];
@@ -48,7 +74,7 @@ export default class HistoryTableRow extends React.Component {
                 domain,
             } = row;
 
-            const assetCard = isAsset ? HistoryTableRow.getHistoryRowAssetCard(code, issuer, domain) : null;
+            const assetCard = isAsset ? this.getHistoryRowAssetCard(code, issuer, domain, d) : null;
             return (
                 <div key={`${header}${value}`} className="HistoryView__card__line">
                     <span className="HistoryView__card__container__header">{header} </span> {value}
@@ -73,4 +99,5 @@ export default class HistoryTableRow extends React.Component {
 HistoryTableRow.propTypes = {
     data: PropTypes.instanceOf(Object).isRequired,
     type: PropTypes.string.isRequired,
+    d: PropTypes.instanceOf(Driver).isRequired,
 };

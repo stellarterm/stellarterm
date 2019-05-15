@@ -1,6 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AssetPair from '../../Common/AssetPair/AssetPair';
 import AssetPickerNarrow from './AssetPickerNarrow/AssetPickerNarrow';
+import Driver from '../../../lib/Driver';
+
 
 export default class CustomMarketPicker extends React.Component {
     constructor(props) {
@@ -23,7 +26,7 @@ export default class CustomMarketPicker extends React.Component {
 
         const pickedAsset =
             baseBuying || counterSelling ? (
-                <AssetPair row baseBuying={baseBuying} counterSelling={counterSelling} />
+                <AssetPair row baseBuying={baseBuying} counterSelling={counterSelling} d={this.props.d} />
             ) : null;
 
         return (
@@ -52,3 +55,6 @@ export default class CustomMarketPicker extends React.Component {
         );
     }
 }
+CustomMarketPicker.propTypes = {
+    d: PropTypes.instanceOf(Driver).isRequired,
+};

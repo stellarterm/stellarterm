@@ -13,7 +13,7 @@ export default function ManageTrust(props) {
     const assetRows = sortedBalances.map(balance => (
         <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
             <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
-                <AssetCard2 code={balance.code} issuer={balance.issuer} />
+                <AssetCard2 code={balance.code} issuer={balance.issuer} d={props.d} />
             </td>
             <td className="ManageCurrentTrust__row__item">
                 <RemoveTrustLink balance={balance} d={props.d} />

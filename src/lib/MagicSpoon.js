@@ -2,7 +2,6 @@ import _ from 'lodash';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
-import FastAverageColor from 'fast-average-color';
 import Stellarify from '../lib/Stellarify';
 import directory from '../directory';
 
@@ -124,94 +123,6 @@ const MagicSpoon = {
 
             return nativeBalances.concat(knownBalances, unknownBalances);
         };
-
-        sdkAccount.addUnknownAssetData = () => {
-            const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
-
-            // period = days x hours x min x sec x ms
-            const periodUpdate = 14 * 24 * 60 * 60 * 1000;
-
-            const chainPromise = sdkAccount.balances.reduce((chain, sdkBalance) => {
-                const asset = directory.resolveAssetByAccountId(sdkBalance.asset_code, sdkBalance.asset_issuer);
-                if (asset.domain !== 'unknown' || asset.code === undefined) {
-                    return chain;
-                }
-
-                const assetData = unknownAssetsData.find(assetLocalItem => (
-                    assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
-                ));
-
-                if (assetData && ((new Date() - new Date(assetData.time)) < periodUpdate)) {
-                    return chain;
-                }
-
-                if (assetData) {
-                    unknownAssetsData.splice(unknownAssetsData.indexOf(assetData), 1);
-                }
-
-                return chain.then(newArray =>
-                    sdkAccount.loadUnknownAssetData(asset).then(res => [...newArray, res]),
-                );
-            }, Promise.resolve([]));
-
-            chainPromise.then((arr) => {
-                localStorage.setItem('unknownAssetsData', JSON.stringify([...unknownAssetsData, ...arr]));
-                onUpdate();
-            });
-        };
-
-        sdkAccount.loadUnknownAssetData = async (asset) => {
-            try {
-                const account = await Server.loadAccount(asset.issuer);
-
-                if (!account.home_domain) {
-                    throw new Error();
-                }
-                const toml = await StellarSdk.StellarTomlResolver.resolve(account.home_domain);
-
-                const currency = toml.CURRENCIES.find(cur => cur.code.toUpperCase() === asset.code.toUpperCase());
-
-                const image = currency && currency.image;
-                const colorResult = image && await sdkAccount.getAverageColor(image);
-
-                const noError = colorResult && colorResult.error === null;
-                const color = noError ? colorResult.hex : '';
-
-                return {
-                    code: asset.code,
-                    issuer: asset.issuer,
-                    host: account.home_domain,
-                    currency,
-                    color,
-                    time: new Date(),
-                };
-            } catch (e) {
-                return {
-                    code: asset.code,
-                    issuer: asset.issuer,
-                    host: '',
-                    currency: {},
-                    color: '',
-                    time: new Date(),
-                };
-            }
-        };
-
-        sdkAccount.getAverageColor = imageUrl => new Promise((resolve) => {
-            const fac = new FastAverageColor();
-            const img = document.createElement('img');
-            img.src = imageUrl;
-            img.height = 50;
-            img.width = 50;
-            // img.setAttribute('crossOrigin', '');
-            img.crossOrigin = 'Anonymous';
-
-            fac.getColorAsync(img, (col) => {
-                resolve(col);
-            });
-            img.remove();
-            fac.destroy();
-        });
 
         const accountEventsClose = Server.accounts().accountId(keypair.publicKey()).stream({
             onmessage: (res) => {

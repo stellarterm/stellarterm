@@ -18,7 +18,7 @@ export default class ManuallyAddTrust extends React.Component {
 
     async loadUnknownData(asset) {
         if (!this.state.isDataUpdate) {
-            const unknownAssetData = await this.props.d.session.account.loadUnknownAssetData(asset);
+            const unknownAssetData = await this.props.d.session.handlers.loadUnknownAssetData(asset);
             this.setState({
                 unknownAssetData,
                 isDataUpdate: true,

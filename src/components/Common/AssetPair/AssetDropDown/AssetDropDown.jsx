@@ -174,6 +174,7 @@ export default class AssetDropDown extends React.Component {
                     {this.props.asset ?
                         <div className="AssetDropDown__full" onClick={() => this.openList()}>
                         <AssetCard2
+                            d={this.props.d}
                             code={this.props.asset.code}
                             issuer={this.props.asset.issuer} />
                         </div> :
@@ -194,6 +195,7 @@ export default class AssetDropDown extends React.Component {
                 </div>
                 {this.state.isOpenList ?
                     <AssetCardList
+                        d={this.props.d}
                         onUpdate={(asset) => { this.onUpdate(asset); }}
                         assetsList={this.getFilterAssets()}
                         activeCardIndex={this.state.activeCardIndex} /> :

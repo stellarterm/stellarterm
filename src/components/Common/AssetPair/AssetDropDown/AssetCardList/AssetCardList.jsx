@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AssetCard2 from '../../../AssetCard2/AssetCard2';
+import Driver from '../../../../../lib/Driver';
 
 export default class AssetCardList extends React.Component {
     componentDidUpdate() {
@@ -18,7 +19,7 @@ export default class AssetCardList extends React.Component {
     }
 
     render() {
-        const { assetsList, activeCardIndex } = this.props;
+        const { assetsList, activeCardIndex, d } = this.props;
 
         const rows = assetsList.map((asset, index) => (
             <div
@@ -26,7 +27,12 @@ export default class AssetCardList extends React.Component {
                 key={asset.code + asset.issuer}
                 ref={index === activeCardIndex ? (node) => { this.activeRef = node; } : null}
                 onClick={() => this.handleChoose(asset)}>
-                <AssetCard2 code={asset.code} issuer={asset.issuer} boxy noborder={index !== activeCardIndex} />
+                <AssetCard2
+                    d={d}
+                    code={asset.code}
+                    issuer={asset.issuer}
+                    boxy
+                    noborder={index !== activeCardIndex} />
             </div>
         ));
 
@@ -41,6 +47,7 @@ export default class AssetCardList extends React.Component {
     }
 }
 AssetCardList.propTypes = {
+    d: PropTypes.instanceOf(Driver).isRequired,
     onUpdate: PropTypes.func,
     activeCardIndex: PropTypes.number,
     assetsList: PropTypes.arrayOf(PropTypes.object),

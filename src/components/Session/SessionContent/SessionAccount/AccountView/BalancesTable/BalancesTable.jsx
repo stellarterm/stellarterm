@@ -55,7 +55,7 @@ export default function BalancesTable(props) {
         return (
             <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
                 <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
-                    <AssetCard2 code={balance.code} issuer={balance.issuer} />
+                    <AssetCard2 code={balance.code} issuer={balance.issuer} d={props.d} />
                     {warning}
                 </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
