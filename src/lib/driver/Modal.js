@@ -52,7 +52,7 @@ export default function Modal() {
         ledgerFinish: (result) => {
             this.txStatus = result;
             switch (result) {
-            case 'clickOK':
+            case 'close':
                 this.active = false;
                 this.modalName = '';
                 clearTimeout(this.timeoutClose);

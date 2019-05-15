@@ -50,7 +50,7 @@ export default class GlobalModal extends React.Component {
                             <button
                                 className="s-button"
                                 onClick={() => {
-                                    d.modal.handlers.ledgerFinish('clickOK');
+                                    d.modal.handlers.ledgerFinish('close');
                                 }}>
                                 <span>OK</span>
                             </button>
@@ -88,16 +88,6 @@ export default class GlobalModal extends React.Component {
                                     Cancel
                                 </button>
                             ) : null}
-
-                            {isAnyError ? (
-                                <React.Fragment>
-                                    <button className="s-button" onClick={this.sendTransactionToLedger}>
-                                        <span>
-                                            <img src={images['icon-circle-retry']} alt="preloader" /> Retry
-                                        </span>
-                                    </button>
-                                </React.Fragment>
-                            ) : null}
                         </div>
                     </React.Fragment>
                 )}
@@ -108,7 +98,6 @@ export default class GlobalModal extends React.Component {
     sendTransactionToLedger() {
         const d = this.props.d;
         this.setState({ errorMsg: null, result: null });
-        d.modal.txStatus = false;
 
         d.session.account
             .signWithLedger(d.modal.inputData)

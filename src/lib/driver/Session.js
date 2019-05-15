@@ -487,6 +487,9 @@ export default function Send(driver) {
                 })
                 .then((res) => {
                     this.jwtToken = res.token;
+                    if (this.authType === 'ledger') {
+                        driver.modal.handlers.ledgerFinish('close');
+                    }
                 });
         },
 
