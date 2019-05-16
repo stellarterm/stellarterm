@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import images from '../../../images';
 import Driver from '../../../lib/Driver';
 import TransactionDetails from '../TransactionDetails/TransactionDetails';
-import { isatty } from 'tty';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
