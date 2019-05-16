@@ -16,7 +16,10 @@
     "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
   },
   "dependencies": {
+    "@ledgerhq/hw-app-str": "^4.55.0",
+    "@ledgerhq/hw-transport-u2f": "^4.55.0",
     "awesome-debounce-promise": "2.1.0",
+    "babel-polyfill": "^6.26.0",
     "babelify": "7.3.0",
     "bignumber.js": "4.1.0",
     "fast-average-color": "^4.3.0",
@@ -28,8 +31,8 @@
     "qrcode.react": "^0.9.3",
     "react": "16.2.0",
     "react-dom": "16.2.0",
-    "whatwg-fetch": "^3.0.0",
     "react-input-autosize": "^2.2.1",
+    "whatwg-fetch": "^3.0.0",
     "yargs": "^12.0.5"
   },
   "devDependencies": {

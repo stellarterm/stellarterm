@@ -107,35 +107,6 @@ directory.addAsset('pedity.com', {
 });
 
 directory.addAnchor({
-    domain: 'nezly.com',
-    website: 'https://nezly.com',
-    logo: 'nezly.com',
-    color: '#523b83',
-    displayName: 'Nezly',
-});
-
-directory.addAsset('nezly.com', {
-    code: 'NEZ',
-    issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
-    instructions: 'https://nezly.com',
-    unlisted: true,
-});
-
-directory.addAsset('nezly.com', {
-    code: 'ETH',
-    issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
-    instructions: 'https://nezly.com',
-    unlisted: true,
-});
-
-directory.addAsset('nezly.com', {
-    code: 'BTC',
-    issuer: 'GDGKBRCPW4C3ENNC5C64PE6U33MG52GBKFXOK5P3OSWF74DAOXRXV6OJ',
-    instructions: 'https://nezly.com',
-    unlisted: true,
-});
-
-directory.addAnchor({
     domain: 'smartlands.io',
     website: 'https://smartlands.io',
     logo: 'smartlands.io',
@@ -515,6 +486,38 @@ directory.addAsset('ximcoin.com', {
     type: 'token',
 });
 
+directory.addAnchor({
+    domain: 'mintx.co',
+    website: 'https://mintx.co/',
+    logo: 'mintx.co',
+    color: '#ffdb2b',
+    displayName: 'MINTX',
+});
+
+directory.addAsset('mintx.co', {
+    code: 'GOLD',
+    issuer: 'GBC5ZGK6MQU3XG5Y72SXPA7P5R5NHYT2475SNEJB2U3EQ6J56QLVGOLD',
+    instructions: 'https://mintx.co/',
+});
+
+directory.addAsset('mintx.co', {
+    code: 'SLVR',
+    issuer: 'GBZVELEQD3WBN3R3VAG64HVBDOZ76ZL6QPLSFGKWPFED33Q3234NSLVR',
+    instructions: 'https://mintx.co/',
+});
+
+directory.addAsset('mintx.co', {
+    code: 'PLAT',
+    issuer: 'GBIMVJJJOTAKJYWJIY5YEXDZ4QIWQZLRJ4BXVHKH6EXWQ3WAEYBTPLAT',
+    instructions: 'https://mintx.co/',
+});
+
+directory.addAsset('mintx.co', {
+    code: 'PALL',
+    issuer: 'GCQ5ZYECTNYW6BZ47AZN6M5BXKV7ZZ24XPNHPSYZVUDVK7CIITOMPALL',
+    instructions: 'https://mintx.co/',
+});
+
 // Pairs involving "fiat" assets
 // "Fiat" asset should be counterSelling
 directory.addPair({
@@ -569,10 +572,6 @@ directory.addPair({
 
 // Pairs involving "BTC"
 // "BTC" should be counterSelling
-directory.addPair({
-    baseBuying: ['XLM', 'native'],
-    counterSelling: ['BTC', 'nezly.com'],
-});
 
 directory.addPair({
     baseBuying: ['XLM', 'native'],
@@ -602,6 +601,26 @@ directory.addPair({
 });
 
 directory.addPair({
+    baseBuying: ['GOLD', 'mintx.co'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['SLVR', 'mintx.co'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['PLAT', 'mintx.co'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['PALL', 'mintx.co'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
     baseBuying: ['TARI', 'cryptotari.io'],
     counterSelling: ['XLM', 'native'],
 });
@@ -613,16 +632,6 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['PEDI', 'pedity.com'],
-    counterSelling: ['XLM', 'native'],
-});
-
-directory.addPair({
-    baseBuying: ['NEZ', 'nezly.com'],
-    counterSelling: ['XLM', 'native'],
-});
-
-directory.addPair({
-    baseBuying: ['ETH', 'nezly.com'],
     counterSelling: ['XLM', 'native'],
 });
 

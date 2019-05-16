@@ -9,8 +9,13 @@ import LedgerSetupInstructions from './LedgerSetupInstructions/LedgerSetupInstru
 
 export default class LedgerBody extends React.Component {
     static browserIsGoogleChrome() {
-        // Checking for Google Chrome 1-71+
+        // Checking for Google Chrome 1-71+ or Opera
         return !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
+    }
+
+    static browserU2FSupport() {
+        // Checking for u2f support (for Firefox)
+        return !!window.u2f;
     }
 
     static isHttpConnectionUsed() {
@@ -20,11 +25,12 @@ export default class LedgerBody extends React.Component {
     render() {
         const d = this.props.d;
         const ledgerConnected = d.session.ledgerConnected;
+        const isSupported = this.constructor.browserU2FSupport();
         const isNotChrome = !this.constructor.browserIsGoogleChrome();
         const isHttp = this.constructor.isHttpConnectionUsed();
         let loginForm;
 
-        if (isNotChrome) {
+        if (isNotChrome && !isSupported) {
             loginForm = <LedgerAlert alertType={'useChrome'} />;
         } else if (isHttp) {
             loginForm = <LedgerAlert alertType={'useHttps'} />;
