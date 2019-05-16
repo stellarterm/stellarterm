@@ -24,6 +24,12 @@ export default class MultisigEnabled extends React.Component {
         this.getSignersData();
     }
 
+    componentDidUpdate() {
+        if (this.state.signersData && (this.props.d.session.account.signers.length !== this.state.signersData.length)) {
+            this.getSignersData();
+        }
+    }
+
     getSigners() {
         const { signersData } = this.state;
 
