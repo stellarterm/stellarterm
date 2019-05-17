@@ -1,3 +1,5 @@
+@import "./SendSetup/SendSetup";
+
 .Send__panel {
   padding: 16px 18px;
 }
@@ -34,12 +36,6 @@
 
 .Send__assetContainer {
   width: 300px;
-}
-
-
-.Send__separator {
-  width: 100%;
-  border-top: 1px solid $s-color-neutral7;
 }
 
 .Send__assetChoice {
