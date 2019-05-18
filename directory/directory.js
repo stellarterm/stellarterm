@@ -36,6 +36,20 @@ directory.addAsset('ternio.io', {
 });
 
 directory.addAnchor({
+    domain: 'honeypod.org',
+    website: 'https://honeypod.org',
+    logo: 'honeypod.org',
+    color: '#F0A524',
+    displayName: 'HNY',
+});
+
+directory.addAsset('honeypod.org', {
+    code: 'HNY',
+    issuer: 'GCI7GKW3MKTYDYKHTKYDLFNXSCJH5V73XGQPOGNVUOSHHG2JUQG2DVWI',
+    type: 'token',
+});
+
+directory.addAnchor({
     domain: 'thewwallet.com',
     website: 'https://thewwallet.com',
     logo: 'thewwallet.com',
@@ -763,6 +777,11 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['TERN', 'ternio.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['HNY', 'honeypod.org'],
     counterSelling: ['XLM', 'native'],
 });
 
