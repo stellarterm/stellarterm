@@ -20,6 +20,18 @@ directory.DirectoryBuilder = DirectoryBuilder;
 //   code: 'ASSETCODE_ASSETCODE',
 //   issuer: 'Ga_issuer_account_id',
 // });
+directory.addAnchor({
+    domain: 'citron.cash',
+    website: 'https://citron.cash',
+    logo: 'citron.cash',
+    color: '#faba1b',
+    displayName: 'Citron',
+    });
+  
+    directory.addAsset('citron.cash', {
+        code: 'XCT',
+        issuer: 'GBOAYBE3NJKS4WPIVM2H5DVFIDYLAHHD2DAWYL5LLUVYF77M3JIVGCTR',
+        });
 
 directory.addAnchor({
     domain: 'ternio.io',
@@ -763,6 +775,11 @@ directory.addPair({
 
 directory.addPair({
     baseBuying: ['TERN', 'ternio.io'],
+    counterSelling: ['XLM', 'native'],
+});
+
+directory.addPair({
+    baseBuying: ['XCT', 'citron.cash'],
     counterSelling: ['XLM', 'native'],
 });
 
