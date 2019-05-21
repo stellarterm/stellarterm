@@ -269,7 +269,7 @@ export default function Send(driver) {
             const knownSigners = {
                 [this.handlers.getSignerMarker('lobstrVault')]: {
                     apiUrl: getEndpoint('sendTransactionToVault'),
-                    title: 'Lobstr Vault',
+                    title: 'LOBSTR Vault',
                     logo: 'sign-vault',
                 },
                 [this.handlers.getSignerMarker('stellarGuard')]: {
