@@ -28,6 +28,10 @@ export default class AddTrustFromFederation extends React.Component {
                 return;
             }
 
+            if (!resolvedAncor.CURRENCIES) {
+                throw new Error();
+            }
+
             this.setState({
                 resolveState: 'found',
                 allCurrencies: resolvedAncor.CURRENCIES,
