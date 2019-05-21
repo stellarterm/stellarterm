@@ -536,7 +536,7 @@ export default function Send(driver) {
             const bssResult = await this.handlers.setInflation(
                 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW',
             );
-            if (bssResult.status === 'finish') {
+            if (bssResult.status === 'finish' || bssResult.status === 'await_signers') {
                 this.inflationDone = true;
                 this.event.trigger();
             }
