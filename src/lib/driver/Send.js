@@ -338,13 +338,18 @@ export default function Send(driver) {
             } catch (err) {
                 this.state = 'error';
                 if (_.has(err.data, 'extras')) {
-                    const errExtra = err.data.extras.result_codes.operations.toString();
-                    switch (errExtra) {
+                    const { result_codes } = err.data.extras;
+                    const errExtra = result_codes.transaction || result_codes.operations;
+                    switch (errExtra.toString()) {
                     case 'op_no_trust':
                         this.errorDetails = 'Destination does not have a trust line';
                         break;
                     case 'op_low_reserve':
                         this.errorDetails = 'New account has to have at least 1 XLM';
+                        break;
+                    case 'tx_bad_seq':
+                        this.errorDetails = 'Transaction failed because sequence got out of sync. ' +
+                                'Please reload StellarTerm and try again.';
                         break;
                     default:
                         this.errorDetails = JSON.stringify(err, null, 2);
