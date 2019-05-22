@@ -108,6 +108,10 @@
                 &:hover{
                     background: #eee;
                 }
+                
+                &.no-hover:hover{
+                    background: none;
+                }
 
                 img{
                     width: 21px;

@@ -57,6 +57,9 @@
                     &:hover{
                         background: rgba(229,230,231,0.3);
                     }
+                    &.disabled {
+                        cursor: not-allowed;
+                    }
                 }
             }
         }

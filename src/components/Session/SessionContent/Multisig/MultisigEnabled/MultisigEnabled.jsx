@@ -2,52 +2,150 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import SignerDataRow from './SignerDataRow/SignerDataRow';
 import Driver from '../../../../../lib/Driver';
+import Ellipsis from './../../../../Common/Ellipsis/Ellipsis';
 
 const images = require('../../../../../images');
 
 
 export default class MultisigEnabled extends React.Component {
+    static getShortKey(key) {
+        return `${key.substr(0, 18)}...${key.substr(38, 18)}`;
+    }
+
     constructor(props) {
         super(props);
         this.state = {
-            onlyVaultSigners: true,
+            signersData: undefined,
+            onlyVaultSigners: undefined,
         };
     }
 
+    componentDidMount() {
+        this.getSignersData();
+    }
+
+    componentDidUpdate() {
+        if (this.state.signersData && (this.props.d.session.account.signers.length !== this.state.signersData.length)) {
+            this.getSignersData();
+        }
+    }
+
     getSigners() {
-        const { signers } = this.props.d.session.account;
-        return signers.sort((a, b) => a.key.localeCompare(b.key)).map(signer => (
+        const { signersData } = this.state;
+
+        if (signersData === undefined) {
+            return (
+                <div className="SignerDataRow">
+                    <span>LOADING<Ellipsis /></span>
+                </div>
+            );
+        }
+
+        return signersData.map(signer => (
             <SignerDataRow
                 key={signer.key}
                 signer={signer}
-                d={this.props.d}
-                noVault={() => this.checkNoVaultSigner()} />
+                d={this.props.d} />
         ));
     }
 
-    getSignerData() {
+    getKnownKeyData(key) {
+        const { session } = this.props.d;
+        const knownKeys = {
+            [session.handlers.getSignerMarker('lobstrVault')]: {
+                type: 'LOBSTR Vault marker key',
+                noVault: false,
+                canRemove: false,
+                imageName: 'sign-vault',
+                title: 'LOBSTR Vault',
+            },
+            [session.handlers.getSignerMarker('stellarGuard')]: {
+                type: 'StellarGuard marker key',
+                noVault: true,
+                canRemove: false,
+                imageName: 'sign-stellarguard',
+                title: 'StellarGuard',
+            },
+            [session.account.account_id]: {
+                type: 'Your account key',
+                noVault: false,
+                canRemove: false,
+            },
+        };
+        if (!knownKeys[key]) {
+            return null;
+        }
+
+        return knownKeys[key];
+    }
+
+    getSignersData() {
         const { signers } = this.props.d.session.account;
-        const guardKey = this.props.d.session.handlers.getSignerMarker('stellarGuard');
-        const vaultKey = this.props.d.session.handlers.getSignerMarker('lobstrVault');
-        let image = 'sign-unknown';
-        let provider = 'unknown signer';
-        if (signers.find(signer => signer.key === vaultKey)) {
-            image = 'sign-vault';
-            provider = 'LOBSTR Vault';
-        }
-        if (signers.find(signer => signer.key === guardKey)) {
-            image = 'sign-stellarguard';
-            provider = 'StellarGuard';
-        }
+        const { handlers } = this.props.d.session;
+
+        const promises = signers
+            .sort((a, b) => a.key.localeCompare(b.key))
+            .map(({ key, weight }) => {
+                const shortKey = this.constructor.getShortKey(key);
+                const signerData = { key, weight, shortKey };
+
+                const knownKey = this.getKnownKeyData(key);
+
+                if (knownKey) {
+                    return Promise.resolve(Object.assign(signerData, knownKey));
+                }
+
+                return handlers.isLobstrVaultKey(key)
+                    .then(([res]) => {
+                        const noVault = !res.exists;
+                        const signerCheckedData = {
+                            noVault,
+                            type: !noVault ? 'LOBSTR Vault signer key' : 'Signer key',
+                            canRemove: true,
+                        };
+
+                        return Object.assign(signerData, signerCheckedData);
+                    })
+                    .catch(() => {
+                        const signerDefaultData = {
+                            type: 'Signer key',
+                            canRemove: true,
+                            noVault: true,
+                        };
+
+                        return Object.assign(signerData, signerDefaultData);
+                    });
+            });
+
+        Promise.all(promises).then((signersData) => {
+            const onlyVaultSigners = signersData.every(signer => !signer.noVault);
+            this.setState({ signersData, onlyVaultSigners });
+        });
+    }
+
+    getMultisigData() {
+        const { signers } = this.props.d.session.account;
+
+        let imageName = 'sign-unknown';
+        let title = 'unknown signer';
+
+        signers.forEach((signer) => {
+            const knownData = this.getKnownKeyData(signer.key);
+            if (knownData && knownData.type !== 'Your account key') {
+                imageName = knownData.imageName;
+                title = knownData.title;
+            }
+        });
+
         return (
             <div className="MultisigEnabled-header-content">
                 <div className="MultisigEnabled-header-logo">
-                    <img src={images[image]} alt={provider} />
+                    <img src={images[imageName]} alt={title} />
                 </div>
                 <div className="MultisigEnabled-header-text">
                     <h1>Multisignature enabled</h1>
                     <span>
-                        Account protected by {provider}.
+                        Account protected by {title}.
                     </span>
                 </div>
             </div>
@@ -78,10 +176,6 @@ export default class MultisigEnabled extends React.Component {
         );
     }
 
-    checkNoVaultSigner() {
-        this.setState({ onlyVaultSigners: false });
-    }
-
     addNewSigner() {
         this.props.d.modal.handlers.activate('multisigEnableStep2', this.props.d);
     }
@@ -91,10 +185,11 @@ export default class MultisigEnabled extends React.Component {
             <div className="MultisigEnabled">
                 <div className="MultisigEnabled-header">
                     <div className="MultisigEnabled-header-wrap">
-                        {this.getSignerData()}
+                        {this.getMultisigData()}
                         <a
                             className="MultisigEnabled-header-wrap-info"
                             href="https://lobstr.zendesk.com/hc/en-us/categories/360001534333-LOBSTR-Vault"
+                            rel="noopener noreferrer"
                             target="_blank">
                             <img src={images['icon-info']} alt="i" />
                         </a>

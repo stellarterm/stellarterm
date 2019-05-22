@@ -1,11 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
+import Ellipsis from './../../../../../Common/Ellipsis/Ellipsis';
 
 const images = require('../../../../../../images');
 
 
 export default class MultisigEnableStep3 extends React.Component {
+    static getErrorType(error) {
+        if (typeof error === 'string') {
+            return error;
+        }
+        if (!error.data) {
+            return `clientError - ${error.message}`;
+        }
+        if (!error.data.extras || !error.data.extras.result_codes) {
+            return `unknownResponse - ${error.message}`;
+        }
+        if (!error.data.extras.result_codes.operations) {
+            return error.data.extras.result_codes.transaction;
+        }
+
+        return error.data.extras.result_codes.operations[0];
+    }
+
+    static getErrorMessage(errorType) {
+        switch (errorType) {
+        case 'tx_bad_seq':
+            return 'Transaction failed because sequence got out of sync. Please reload StellarTerm and try again.';
+        case 'op_low_reserve':
+            return 'Your account does not have enough XLM to meet the minimun balance.';
+        case 'op_underfunded':
+            return 'Transaction failed due to a lack of funds.';
+
+        default:
+            return `Error code: ${errorType}`;
+        }
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -16,7 +48,10 @@ export default class MultisigEnableStep3 extends React.Component {
 
     async addSigner(signerData, d) {
         const { publicKey, signerProvider } = signerData;
-        this.setState({ pending: true });
+        this.setState({
+            pending: true,
+            addingError: '',
+        });
         try {
             const result = await d.session.handlers.addSigner(publicKey, signerProvider);
             if (result.status === 'finish' && signerProvider === 'stellarGuard') {
@@ -28,18 +63,13 @@ export default class MultisigEnableStep3 extends React.Component {
                 this.props.submit.cancel();
                 return;
             }
-            result.serverResult
-                .then(() => this.props.submit.cancel())
-                .catch(() => {
-                    this.setState({
-                        addingError: 'unknown error',
-                        pending: false,
-                    });
-                });
+            await result.serverResult;
+            this.props.submit.cancel();
         } catch (error) {
-            // TODO: error handler
+            const errorType = this.constructor.getErrorType(error);
+            const errorMessage = this.constructor.getErrorMessage(errorType);
             this.setState({
-                addingError: typeof error === 'string' ? error : 'unknown error',
+                addingError: errorMessage,
                 pending: false,
             });
         }
@@ -47,7 +77,7 @@ export default class MultisigEnableStep3 extends React.Component {
 
     render() {
         const { submit, signerData, d } = this.props;
-        const { addingError } = this.state;
+        const { addingError, pending } = this.state;
         return (
             <div className="MultisigEnableStep3">
                 <div className="Modal_header">
@@ -65,12 +95,17 @@ export default class MultisigEnableStep3 extends React.Component {
                     </span>
                 </div>
                 <div className="Modal_button-block">
-                    <button className="cancel-button" onClick={() => submit.cancel()}>Cancel</button>
+                    <button
+                        className="cancel-button"
+                        disabled={pending}
+                        onClick={() => submit.cancel()}>
+                            Cancel
+                    </button>
                     <button
                         className="s-button"
-                        disabled={this.state.pending}
+                        disabled={pending}
                         onClick={() => this.addSigner(signerData, d)}>
-                        Continue
+                            Continue{pending && <Ellipsis />}
                     </button>
                 </div>
                 {addingError && <span className="MultisigEnableStep3_error">{addingError}</span>}

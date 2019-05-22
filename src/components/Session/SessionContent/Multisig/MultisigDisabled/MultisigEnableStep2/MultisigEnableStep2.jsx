@@ -10,7 +10,7 @@ export default class MultisigEnableStep2 extends React.Component {
         this.state = {
             publicKey: '',
             valid: false,
-            isVaultKey: false,
+            isVaultKey: undefined,
             isGuardKey: 'noChoosed',
             inputError: '',
             selectError: '',
@@ -29,7 +29,7 @@ export default class MultisigEnableStep2 extends React.Component {
         const { isGuardKey } = this.state;
         if (isGuardKey === 'isGuard') {
             return (
-                <div className="MultisigEnableStep2_select-row">
+                <div className="MultisigEnableStep2_select-row no-hover">
                     <img src={images['sign-stellarguard']} alt="guard" />
                     <span>StellarGuard</span>
                 </div>
@@ -38,7 +38,7 @@ export default class MultisigEnableStep2 extends React.Component {
         if (isGuardKey === 'other') {
             return (
                 <div
-                    className="MultisigEnableStep2_select-row">
+                    className="MultisigEnableStep2_select-row no-hover">
                     <img src={images['sign-unknown']} alt="unknown-signer" />
                     <span>Other</span>
                 </div>
@@ -63,13 +63,18 @@ export default class MultisigEnableStep2 extends React.Component {
             publicKey: e.target.value,
             valid: StellarSdk.StrKey.isValidEd25519PublicKey(e.target.value),
             inputError: '',
+            selectError: '',
             isUpdated: false,
-            isVaultKey: false,
+            isVaultKey: undefined,
+            isGuardKey: 'noChoosed',
         });
     }
 
     openSelect() {
-        this.setState({ isOpenSelect: !this.state.isOpenSelect });
+        this.setState({
+            isOpenSelect: !this.state.isOpenSelect,
+            isGuardKey: 'noChoosed',
+        });
     }
 
     goBack() {
@@ -201,7 +206,10 @@ export default class MultisigEnableStep2 extends React.Component {
                         onClick={() => this.goBack()}>
                         Back
                     </button>
-                    <button className="s-button" onClick={() => this.addSigner()}>Add signer</button>
+                    <button
+                        disabled={valid && isVaultKey === undefined}
+                        className="s-button"
+                        onClick={() => this.addSigner()}>Add signer</button>
                 </div>
             </div>
         );
