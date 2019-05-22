@@ -53,14 +53,14 @@ export default class MultisigEnabled extends React.Component {
         const { session } = this.props.d;
         const knownKeys = {
             [session.handlers.getSignerMarker('lobstrVault')]: {
-                type: 'Stellar Vault marker key',
+                type: 'LOBSTR Vault marker key',
                 noVault: false,
                 canRemove: false,
                 imageName: 'sign-vault',
                 title: 'LOBSTR Vault',
             },
             [session.handlers.getSignerMarker('stellarGuard')]: {
-                type: 'Stellar Guard marker key',
+                type: 'StellarGuard marker key',
                 noVault: true,
                 canRemove: false,
                 imageName: 'sign-stellarguard',
@@ -100,7 +100,7 @@ export default class MultisigEnabled extends React.Component {
                         const noVault = !res.exists;
                         const signerCheckedData = {
                             noVault,
-                            type: !noVault ? 'Stellar Vault signer key' : 'Signer key',
+                            type: !noVault ? 'LOBSTR Vault signer key' : 'Signer key',
                             canRemove: true,
                         };
 
