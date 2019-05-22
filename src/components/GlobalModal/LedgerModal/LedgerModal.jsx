@@ -136,7 +136,7 @@ export default class GlobalModal extends React.Component {
                         <img src={images['ledger-logo']} className="img--noSelect" alt="Ledger Logo" />
                         <p>Confirm transaction on your Ledger device</p>
                     </div>
-                    <TransactionDetails tx={d.modal.inputData} />
+                    <TransactionDetails tx={d.modal.inputData} d={d} />
 
                     {transactionStatus}
                 </div>

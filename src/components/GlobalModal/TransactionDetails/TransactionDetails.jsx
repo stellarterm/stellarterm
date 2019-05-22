@@ -4,6 +4,7 @@ import BigNumber from 'bignumber.js';
 import OperationsMap from './OperationsMap';
 import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
 import Printify from '../../../lib/Printify';
+import Driver from '../../../lib/Driver';
 
 export default class TransactionDetails extends React.Component {
     static generateTableRow(label, content) {
@@ -15,7 +16,7 @@ export default class TransactionDetails extends React.Component {
         );
     }
 
-    static getOperationAttr(op) {
+    static getOperationAttr(op, d) {
         return Object.keys(op)
             .map((attr) => {
                 const value = op[attr];
@@ -30,7 +31,7 @@ export default class TransactionDetails extends React.Component {
                 }
 
                 if (value.code !== undefined) {
-                    AttrObj.display = <AssetCard2 code={value.code} issuer={value.issuer} inRow />;
+                    AttrObj.display = <AssetCard2 code={value.code} issuer={value.issuer} d={d} inRow />;
                 } else if (typeof value === 'string') {
                     AttrObj.display = value;
                 } else {
@@ -67,9 +68,9 @@ export default class TransactionDetails extends React.Component {
     }
 
     getOperations() {
-        const { tx } = this.props;
+        const { tx, d } = this.props;
         return tx.operations.map((op) => {
-            const attributes = this.constructor.getOperationAttr(op);
+            const attributes = this.constructor.getOperationAttr(op, d);
             const label = this.constructor.getOperationLabel(op);
             const attributesUi = attributes.map(attribute => (
                 <div className="Inline_content" key={attribute.key}>
@@ -118,5 +119,6 @@ export default class TransactionDetails extends React.Component {
 
 TransactionDetails.propTypes = {
     // TODO: Valid proptype
+    d: PropTypes.instanceOf(Driver),
     tx: PropTypes.string.isRequired,
 };

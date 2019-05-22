@@ -4,6 +4,9 @@ import directory from '../../../directory';
 import hexToRGBA from '../../../lib/hexToRgba';
 import AssetCardMain from './AssetCardMain/AssetCardMain';
 import Driver from '../../../lib/Driver';
+import Ellipsis from '../Ellipsis/Ellipsis';
+
+const images = require('../../../images');
 
 // This is AssetCard2, the preferred way of displaying an asset in stellarterm.
 // The parent container should be 340px or wider
@@ -94,6 +97,8 @@ export default class AssetCard2 extends React.Component {
         const isUnknown = name === 'unknown';
 
         if (isUnknown) {
+            name = 'load';
+            logo = 'load';
             const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
             const assetData = unknownAssetsData.find(assetLocalItem => (
                 assetLocalItem.code === this.props.code && assetLocalItem.issuer === this.props.issuer
@@ -118,14 +123,16 @@ export default class AssetCard2 extends React.Component {
             logoPadding = !!image;
         }
 
-        if (name === 'unknown' && this.state.loadedAssetData) {
-            name = this.state.loadedAssetData.host || name;
+        if (name === 'load' && this.state.loadedAssetData) {
+            name = this.state.loadedAssetData.host || anchor.name;
             if (this.state.loadedAssetData.currency) {
                 const { image, host } = this.state.loadedAssetData.currency;
                 name = (host && host.split('//')[1]) || name;
-                logo = image;
+                logo = image || anchor.logo;
                 logoPadding = !!image;
                 color = this.state.loadedAssetData.color;
+            } else {
+                logo = anchor.logo;
             }
         }
 
@@ -143,8 +150,13 @@ export default class AssetCard2 extends React.Component {
 
         return this.props.inRow ? (
              <span className="AssetRow">
-                 <img className="Row_logo" src={anchor.logo} alt={anchor.name} />
-                 <span>{`${asset.code} — ${asset.domain}`}</span>
+                 <img
+                     className="Row_logo"
+                     src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
+                     alt={anchor.name} />
+                 {name === 'load' ?
+                     <span>{asset.code} - <Ellipsis /></span> :
+                     <span>{`${asset.code} — ${name}`}</span>}
              </span>
              ) : (
              <div className={assetCardClass} style={borderStyle}>
