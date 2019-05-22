@@ -62,7 +62,7 @@ export default class GlobalModal extends React.Component {
                                 <React.Fragment>
                                     <img src={images['icon-circle-preloader-gif']} alt="preloader" />{' '}
                                     {waitingForHorizon ? (
-                                        <span>Waiting for Horizon answer.</span>
+                                        <span>Submitting transaction...</span>
                                     ) : (
                                         <span>Please confirm transaction on your Ledger</span>
                                     )}
