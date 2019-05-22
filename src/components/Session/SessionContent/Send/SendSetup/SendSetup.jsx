@@ -24,13 +24,20 @@ export default class SendSetup extends React.Component {
 
         return (
             <div className="island">
-                <div className="island__header">Send payment</div>
+                <div className="island__header">
+                    <div className="Setup_title">
+                        <span>Send payment</span>
+                        <button className="ClearBtn" onClick={() => d.send.handlers.reset()}>
+                            Clear Form
+                        </button>
+                    </div>
+                </div>
                 <SendDest d={d} isCurrentStep={step === 1} stepIsPassed={step > 1} />
-                <div className="Send__separator" />
+                <div className="Send_separator" />
                 <SendAsset d={d} isCurrentStep={step === 2} stepIsPassed={step > 2} />
-                <div className="Send__separator" />
+                <div className="Send_separator" />
                 <SendAmount d={d} isCurrentStep={step === 3} stepIsPassed={step > 3} />
-                <div className="Send__separator" />
+                <div className="Send_separator" />
                 <SendReview d={d} isCurrentStep={step === 4} />
             </div>
         );
