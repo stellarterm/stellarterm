@@ -38,7 +38,11 @@ export default class LedgerForm extends React.Component {
             return (
                 <div className="s-alert s-alert--alert">
                     Connected to Ledger but returned an error: <br />
-                    <strong>{setupLedgerError}</strong>
+                    <strong>
+                        {setupLedgerError === 'Ledger device: UNKNOWN_ERROR (0x6804)'
+                            ? 'Ledger locked after idle timeout. Please unlock your device.'
+                            : setupLedgerError}
+                    </strong>
                 </div>
             );
         }

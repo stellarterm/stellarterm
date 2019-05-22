@@ -1,0 +1,65 @@
+.TransactionDetails {
+    width: auto;
+    color: #505558;
+    background-color: rgba(244, 244, 245, 0.2);
+    border: solid 1px rgba(244, 244, 245, 1);
+    border-radius: 2px;
+    margin: 0 40px;
+
+    .Details_row {
+        display: flex;
+        font-size: $s-scale-4;
+        margin: 15px 18px;
+
+        .Details_row_label {
+            width: 30%;
+            font-size: 18px;
+            font-weight: normal;
+            align-items: center;
+            display: flex;
+        }
+
+        .Details_row_content {
+            display: inline-block;
+            width: 70%;
+            text-align: right;
+            overflow-wrap: break-word;
+
+            .Content_light {
+                color: $s-color-neutral5;
+            }
+
+            .Inline_title {
+                display: inline-block;
+                font-size: $s-scale-5;
+                color: $s-color-neutral5;
+            }
+
+            .Inline_content {
+                margin-bottom: 0;
+
+                .Inline_value {
+                    display: inline-block;
+                    width: 250px;
+                    overflow-wrap: break-word;
+                }
+
+                .Inline_attr {
+                    display: inline-block;
+                    width: 70px;
+                    font-size: $s-scale-5;
+                    color: $s-color-neutral5;
+                }
+
+                pre {
+                    margin: 0;
+                    font-size: $s-scale-5;
+                }
+            }
+        }
+
+        .Details_row:first-child .Details_row_content {
+            margin-top: 23px;
+        }
+    }
+}
