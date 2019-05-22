@@ -40,7 +40,7 @@ export default class LedgerForm extends React.Component {
                     Connected to Ledger but returned an error: <br />
                     <strong>
                         {setupLedgerError === 'Ledger device: UNKNOWN_ERROR (0x6804)'
-                            ? 'Ledger locked after idle timeout!'
+                            ? 'Ledger locked after idle timeout. Please unlock your device.'
                             : setupLedgerError}
                     </strong>
                 </div>
