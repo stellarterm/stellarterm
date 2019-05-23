@@ -14,9 +14,10 @@ export default class AssetList extends React.Component {
             this.forceUpdate();
         });
 
+        // Default sorting by 24h volume
         this.state = {
-            sortBy: null,
-            sortType: null,
+            sortBy: 'volume24h',
+            sortType: false, // false: 'desc', true 'asc'
         };
     }
 
