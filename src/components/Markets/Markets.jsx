@@ -5,6 +5,7 @@ import AssetList from '../Common/AssetList/AssetList';
 import ErrorBoundary from '../Common/ErrorBoundary/ErrorBoundary';
 import CustomPairMenu from './CustomPairMenu/CustomPairMenu';
 import CustomMarketPicker from './CustomMarketPicker/CustomMarketPicker';
+import AddTrustFromFederation from '../Session/SessionContent/Trust/AddTrustFromFederation/AddTrustFromFederation';
 
 export default function Markets(props) {
     return (
@@ -27,7 +28,11 @@ export default function Markets(props) {
                     </div>
                 </div>
             </div>
+
             <ErrorBoundary>
+                <div className="so-back islandBack">
+                    <AddTrustFromFederation d={props.d} tradeLink />
+                </div>
                 <div className="so-back islandBack">
                     <CustomPairMenu d={props.d} />
                 </div>

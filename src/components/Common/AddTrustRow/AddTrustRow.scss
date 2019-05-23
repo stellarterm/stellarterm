@@ -1,5 +1,17 @@
 .AddTrustRow {
-  padding: 8px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+
+    .tradeLink{
+        border-bottom: 1px dotted $s-color-neutral5;
+        line-height: 24px;
+        height: 24px;
+        text-align: right;
+        margin: 0 auto;
+        cursor: pointer;
+    }
+
 }
 .AddTrustRow__exists {
   color: $s-color-neutral5;

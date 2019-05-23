@@ -102,6 +102,7 @@ export default class AddTrustFromFederation extends React.Component {
                     <AddTrustRow
                         key={key}
                         d={this.props.d}
+                        tradeLink={this.props.tradeLink}
                         asset={asset}
                         currency={currency}
                         host={anchorDomain} />
@@ -125,9 +126,11 @@ export default class AddTrustFromFederation extends React.Component {
 
         return (
             <div className="island">
-                <div className="island__header">Accept asset via anchor domain</div>
+                <div className="island__header">{this.props.tradeLink ? 'Explore' : 'Accept asset'} via anchor domain</div>
                 <div className="island__paddedContent">
-                    <p>You can accept an asset by entering the domain name of the issuer.</p>
+                    {this.props.tradeLink ?
+                        <p>You can create exchange pair by entering the domain name of the issuer.</p> :
+                        <p>You can accept an asset by entering the domain name of the issuer.</p>}
 
                     <label className="s-inputGroup AddTrust_inputGroup" htmlFor="anchorDomainInput">
                         <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
@@ -151,4 +154,5 @@ export default class AddTrustFromFederation extends React.Component {
 
 AddTrustFromFederation.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    tradeLink: PropTypes.bool,
 };
