@@ -87,9 +87,11 @@ export default class AddTrustFromFederation extends React.Component {
             break;
         case 'found':
             assetResults = allCurrencies.map((currency) => {
-                const assetIsUndefined = currency.code === undefined || currency.issuer === undefined;
+                const { code, issuer } = currency;
+                const assetIsUndefined = code === undefined || issuer === undefined;
+                const issuerInvalid = !StellarSdk.StrKey.isValidEd25519PublicKey(issuer);
 
-                if (assetIsUndefined) {
+                if (assetIsUndefined || issuerInvalid) {
                     return null;
                 }
 
