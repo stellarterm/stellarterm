@@ -352,7 +352,7 @@ export default function Send(driver) {
                                 'Please reload StellarTerm and try again.';
                         break;
                     default:
-                        this.errorDetails = JSON.stringify(err, null, 2);
+                        this.errorDetails = errExtra.toString();
                     }
                 } else {
                     this.errorDetails = err.message;
