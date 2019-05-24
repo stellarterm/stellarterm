@@ -125,15 +125,11 @@ export default class AssetCard2 extends React.Component {
 
         if (name === 'load' && this.state.loadedAssetData) {
             name = this.state.loadedAssetData.host || anchor.name;
-            if (this.state.loadedAssetData.currency) {
-                const { image, host } = this.state.loadedAssetData.currency;
-                name = (host && host.split('//')[1]) || name;
-                logo = image || anchor.logo;
-                logoPadding = !!image;
-                color = this.state.loadedAssetData.color;
-            } else {
-                logo = anchor.logo;
-            }
+            const { image, host } = this.state.loadedAssetData.currency || '';
+            name = (host && host.split('//')[1]) || name;
+            logo = image || anchor.logo;
+            logoPadding = !!image;
+            color = this.state.loadedAssetData.color;
         }
 
         let borderStyle = {};
@@ -148,32 +144,36 @@ export default class AssetCard2 extends React.Component {
             borderStyle = { border: 'none' };
         }
 
-        return this.props.inRow ? (
-             <span className="AssetRow">
-                 <img
-                     className="Row_logo"
-                     src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
-                     alt={anchor.name} />
-                 {name === 'load' ?
-                     <span>{asset.code} - <Ellipsis /></span> :
-                     <span>{`${asset.code} — ${name}`}</span>}
-             </span>
-             ) : (
-             <div className={assetCardClass} style={borderStyle}>
-                 <AssetCardMain
-                     backgroundStyle={backgroundStyle}
-                     logo={logo}
-                     logoWithPadding={logoPadding}
-                     name={name}
-                     assetCode={asset.code}
-                     issuerAccountId={issuerAccountId} />
+        if (this.props.inRow) {
+            return (
+                <span className="AssetRow">
+                     <img
+                         className="Row_logo"
+                         src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
+                         alt={anchor.name} />
+                     {name === 'load' ?
+                         <span>{asset.code} - <Ellipsis /></span> :
+                         <span>{`${asset.code} — ${name}`}</span>}
+                 </span>
+            );
+        }
+        return (
+            <div className={assetCardClass} style={borderStyle}>
+                <AssetCardMain
+                    backgroundStyle={backgroundStyle}
+                    logo={logo}
+                    logoWithPadding={logoPadding}
+                    name={name}
+                    assetCode={asset.code}
+                    issuerAccountId={issuerAccountId} />
 
-                     {this.props.children ? (
-                         <div className="AssetCard2__addon" style={Object.assign({}, borderStyle, backgroundStyle)}>
-                             {this.props.children}
-                         </div>
-                     ) : null}
-             </div>);
+                {this.props.children ? (
+                    <div className="AssetCard2__addon" style={Object.assign({}, borderStyle, backgroundStyle)}>
+                        {this.props.children}
+                    </div>
+                ) : null}
+            </div>
+        );
     }
 }
 

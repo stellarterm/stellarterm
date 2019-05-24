@@ -7,14 +7,20 @@ const images = require('../../../../images');
 
 export default function AssetCardMain(props) {
     const { backgroundStyle, logo, logoWithPadding, name, assetCode, issuerAccountId } = props;
-    const logoClassName = logoWithPadding ? 'AssetCard2_logo_with_padding' : null;
-    const logoLoadClass = logo === 'load' ? 'AssetCard2_logo_load' : null;
+    const logoClassName = logoWithPadding ? 'AssetCard2_logo_with_padding' : '';
+
     return (
         <div className="AssetCard2__main" style={backgroundStyle}>
-            <img
-                className={`AssetCard2__logo ${logoClassName} ${logoLoadClass}`}
-                src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
-                alt={assetCode} />
+            {logo === 'load' ?
+                <div className="AssetCard2_logo_load">
+                    <img
+                        src={images['icon-circle-preloader-gif']}
+                        alt={assetCode} />
+                </div> :
+                <img
+                    className={`AssetCard2__logo ${logoClassName}`}
+                    src={logo}
+                    alt={assetCode} />}
             <div className="AssetCard2__content">
                 <div className="AssetCard2__header">
                     <span className="AssetCard2__header__code">{assetCode}</span>

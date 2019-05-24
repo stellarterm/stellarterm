@@ -752,15 +752,10 @@ export default function Send(driver) {
         getAverageColor: imageUrl => new Promise((resolve) => {
             const fac = new FastAverageColor();
             const img = document.createElement('img');
-            img.src = imageUrl;
-            img.height = 50;
-            img.width = 50;
-            // img.setAttribute('crossOrigin', '');
+            img.src = `${imageUrl}?rnd${Math.random()}`;
             img.crossOrigin = 'Anonymous';
 
             fac.getColorAsync(img, (col) => {
-                img.remove();
-                fac.destroy();
                 resolve(col);
             });
         }),
