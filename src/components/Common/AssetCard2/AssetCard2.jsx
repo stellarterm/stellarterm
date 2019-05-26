@@ -119,7 +119,7 @@ export default class AssetCard2 extends React.Component {
             const { image, host } = currency;
             const domain = host && host.split('//')[1];
             name = domain || name;
-            logo = image || logo;
+            logo = image || anchor.logo;
             logoPadding = !!image;
         }
 
