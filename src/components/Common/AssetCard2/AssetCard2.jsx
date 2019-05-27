@@ -39,6 +39,35 @@ export default class AssetCard2 extends React.Component {
         this._mounted = false;
     }
 
+    getDataFromLocalStorage(asset, anchor) {
+        let name = 'load';
+        let logo = 'load';
+        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
+        const assetData = unknownAssetsData.find(assetLocalItem => (
+            assetLocalItem.code === this.props.code && assetLocalItem.issuer === this.props.issuer
+        )) || {};
+
+        if (!assetData.time && !this.state.loadedAssetData) {
+            this.loadAssetData(asset);
+        }
+
+        const currency = this.props.currency || assetData.currency;
+        const { image, host } = currency || '';
+        const domain = host && host.split('//')[1];
+
+        name = this.props.host || assetData.host || domain || name;
+        const color = this.props.color || assetData.color || anchor.color;
+        logo = image || (currency ? anchor.logo : logo);
+        const logoPadding = !!image;
+
+        return {
+            name,
+            logo,
+            logoPadding,
+            color,
+        };
+    }
+
     async loadAssetData(asset) {
         if (!this.props.d) {
             return;
@@ -89,39 +118,10 @@ export default class AssetCard2 extends React.Component {
 
         const assetCardClass = `AssetCard2 AssetCard2--container ${this.props.boxy ? 'AssetCard2--boxy' : ''}`;
 
-        let currency;
-        let hostName;
-        let { color } = anchor;
-        let { logo, name } = anchor;
-        let logoPadding = false;
-        const isUnknown = name === 'unknown';
+        const isUnknown = anchor.name === 'unknown';
 
-        if (isUnknown) {
-            name = 'load';
-            logo = 'load';
-            const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
-            const assetData = unknownAssetsData.find(assetLocalItem => (
-                assetLocalItem.code === this.props.code && assetLocalItem.issuer === this.props.issuer
-            )) || {};
-
-            if (!assetData.time && !this.state.loadedAssetData) {
-                this.loadAssetData(asset);
-            }
-
-            currency = this.props.currency || assetData.currency;
-            hostName = this.props.host || assetData.host;
-            color = this.props.color || assetData.color || anchor.color;
-        }
-
-        name = hostName || name;
-
-        if (currency) {
-            const { image, host } = currency;
-            const domain = host && host.split('//')[1];
-            name = domain || name;
-            logo = image || anchor.logo;
-            logoPadding = !!image;
-        }
+        let { logo, name, color } = isUnknown ? this.getDataFromLocalStorage(asset, anchor) : anchor;
+        let { logoPadding } = isUnknown ? this.getDataFromLocalStorage(asset, anchor) : false;
 
         if (name === 'load' && this.state.loadedAssetData) {
             name = this.state.loadedAssetData.host || anchor.name;
