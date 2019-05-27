@@ -5,7 +5,7 @@ import AssetList from '../Common/AssetList/AssetList';
 import ErrorBoundary from '../Common/ErrorBoundary/ErrorBoundary';
 import CustomPairMenu from './CustomPairMenu/CustomPairMenu';
 import CustomMarketPicker from './CustomMarketPicker/CustomMarketPicker';
-import AddTrustFromFederation from '../Session/SessionContent/Trust/AddTrustFromFederation/AddTrustFromFederation';
+import SearchByAnchor from '../Common/SearchByAnchor/SearchByAnchor';
 
 export default function Markets(props) {
     return (
@@ -31,7 +31,7 @@ export default function Markets(props) {
 
             <ErrorBoundary>
                 <div className="so-back islandBack">
-                    <AddTrustFromFederation d={props.d} tradeLink />
+                    <SearchByAnchor d={props.d} tradeLink />
                 </div>
                 <div className="so-back islandBack">
                     <CustomPairMenu d={props.d} />

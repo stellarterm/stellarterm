@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import Driver from '../../../../../lib/Driver';
-import TrustButton from '../../../../Common/AddTrustRow/TrustButton/TrustButton';
+import TrustButton from '../../../../Common/AssetRow/TrustButton/TrustButton';
 import OfferMakerResultMessage from './OfferMakerResultMessage/OfferMakerResultMessage';
 
 export default class OfferMakerOverview extends React.Component {

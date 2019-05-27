@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Debounce from 'awesome-debounce-promise';
-import Stellarify from '../../../../../lib/Stellarify';
-import Driver from '../../../../../lib/Driver';
+import Debounce from 'awesome-debounce-promise/dist/index';
+import Stellarify from '../../../lib/Stellarify';
+import Driver from '../../../lib/Driver';
 import MessageRow from './MessageRow/MessageRow';
-import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
-import AddTrustRow from '../../../../Common/AddTrustRow/AddTrustRow';
+import Ellipsis from '../Ellipsis/Ellipsis';
+import AssetRow from '../AssetRow/AssetRow';
 
 const DEBOUNCE_TIME = 700;
 const resolveAncor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
 
-export default class AddTrustFromFederation extends React.Component {
+export default class SearchByAnchor extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -99,7 +99,7 @@ export default class AddTrustFromFederation extends React.Component {
 
                 const key = currency.code + currency.issuer;
                 return (
-                    <AddTrustRow
+                    <AssetRow
                         key={key}
                         d={this.props.d}
                         tradeLink={this.props.tradeLink}
@@ -124,14 +124,19 @@ export default class AddTrustFromFederation extends React.Component {
             assetResults
         );
 
+        const headerTitle = this.props.tradeLink ?
+            'Explore via anchor domain' :
+            'Accept asset via anchor domain';
+
+        const description = this.props.tradeLink ?
+            'You can create exchange pair by entering the domain name of the issuer' :
+            'You can accept an asset by entering the domain name of the issuer.';
+
         return (
             <div className="island">
-                <div className="island__header">{this.props.tradeLink ? 'Explore' : 'Accept asset'} via anchor domain</div>
+                <div className="island__header">{headerTitle}</div>
                 <div className="island__paddedContent">
-                    {this.props.tradeLink ?
-                        <p>You can create exchange pair by entering the domain name of the issuer.</p> :
-                        <p>You can accept an asset by entering the domain name of the issuer.</p>}
-
+                    <p>{description}</p>
                     <label className="s-inputGroup AddTrust_inputGroup" htmlFor="anchorDomainInput">
                         <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
                             <span>Anchor Domain</span>
@@ -152,7 +157,7 @@ export default class AddTrustFromFederation extends React.Component {
     }
 }
 
-AddTrustFromFederation.propTypes = {
+SearchByAnchor.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     tradeLink: PropTypes.bool,
 };

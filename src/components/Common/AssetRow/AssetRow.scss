@@ -1,4 +1,4 @@
-.AddTrustRow {
+.AssetRow{
     padding: 8px;
     display: flex;
     align-items: center;
@@ -13,6 +13,6 @@
     }
 
 }
-.AddTrustRow__exists {
+.AssetRow__exists {
   color: $s-color-neutral5;
 }
