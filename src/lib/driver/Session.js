@@ -130,7 +130,10 @@ export default function Send(driver) {
                     this.inflationDone = true;
                 }
 
+                // Functions of session after sign in
                 this.account.addUnknownAssetData();
+                driver.history.handlers.loadHistory(true);
+                driver.history.handlers.listenNewTransactions(driver.Server, this.account.account_id);
                 this.event.trigger();
             } catch (e) {
                 if (e.data) {

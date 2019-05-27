@@ -20,6 +20,10 @@
 .HistoryView__header__right__buttonGroup {
   display: inline-block;
   font-size: 14px;
+
+  button{
+    outline: none;
+  }
 }
 .HistoryView__asset {
   text-decoration-style: dotted;

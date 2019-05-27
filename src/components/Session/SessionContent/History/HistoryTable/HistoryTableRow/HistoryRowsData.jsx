@@ -20,8 +20,14 @@ import directory from '../../../../../../../directory';
 */
 const DATA_TYPES = ['account', 'signer', 'trade', 'trustline'];
 const ACCOUNT_CATEGORIES = [
-    'account_created', 'account_inflation_destination_updated', 'account_home_domain_updated',
-    'account_flags_updated', 'account_thresholds_updated', 'transaction_history'];
+    'account_created',
+    'account_removed',
+    'account_inflation_destination_updated',
+    'account_home_domain_updated',
+    'account_flags_updated',
+    'account_thresholds_updated',
+    'transaction_history',
+];
 
 const HISTORY_DATA_GENERATORS = {
     account_created: data => ({
@@ -40,6 +46,11 @@ const HISTORY_DATA_GENERATORS = {
                 value: data.funder,
             },
         ],
+    }),
+
+    account_removed: () => ({
+        title: 'Account Removed',
+        attributes: [],
     }),
 
     account_inflation_destination_updated: data => ({
@@ -63,12 +74,8 @@ const HISTORY_DATA_GENERATORS = {
     }),
 
     account_flags_updated: ({ set_flags_s: setFlagsStrings, clear_flags_s: clearFlagsStrings }) => {
-        const setFlags = setFlagsStrings ?
-            setFlagsStrings.map(flag => `set_flag_${flag}`).join(', ') :
-            '';
-        const clearFlags = clearFlagsStrings ?
-            clearFlagsStrings.map(flag => `clear_flag_${flag}`).join(', ') :
-            '';
+        const setFlags = setFlagsStrings ? setFlagsStrings.map(flag => `set_flag_${flag}`).join(', ') : '';
+        const clearFlags = clearFlagsStrings ? clearFlagsStrings.map(flag => `clear_flag_${flag}`).join(', ') : '';
 
         return {
             title: 'Flags updated',
@@ -131,8 +138,9 @@ const HISTORY_DATA_GENERATORS = {
 
         if (data.funder && data.starting_balance && data.category === 'account_debited') {
             const envelopeResult = StellarSdk.xdr.TransactionEnvelope.fromXDR(data.envelope_xdr.toString(), 'base64');
-            const publicKeyUint8Array = envelopeResult._attributes.tx._attributes.operations[0]
-                        ._attributes.body._value._attributes.destination._value;
+            const publicKeyUint8Array =
+                envelopeResult._attributes.tx._attributes.operations[0]._attributes.body._value._attributes.destination
+                    ._value;
             const publicKey = StellarSdk.StrKey.encodeEd25519PublicKey(publicKeyUint8Array);
 
             return {
@@ -238,6 +246,11 @@ const HISTORY_DATA_GENERATORS = {
                 domain: data.bought_asset_code
                     ? directory.resolveAssetByAccountId(data.bought_asset_code, data.bought_asset_issuer).domain
                     : 'native',
+            },
+            {
+                header: 'PRICE: ',
+                value: Printify.lightenZeros((data.sold_amount / data.bought_amount).toFixed(7).toString()),
+                isAsset: false,
             },
         ],
     }),
