@@ -21,9 +21,10 @@ export default class TrustButton extends React.Component {
 
     handleSubmitTrust(event) {
         event.preventDefault();
+        const assetsToTrust = [{ code: this.props.asset.getCode(), issuer: this.props.asset.getIssuer() }];
 
         this.props.d.session.handlers
-            .addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
+            .addTrust(assetsToTrust)
             .then((bssResult) => {
                 if (bssResult.status !== 'finish') {
                     return null;

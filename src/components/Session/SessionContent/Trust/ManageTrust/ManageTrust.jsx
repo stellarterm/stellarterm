@@ -4,51 +4,64 @@ import _ from 'lodash';
 import Driver from '../../../../../lib/Driver';
 import AssetCard2 from '../../../../Common/AssetCard2/AssetCard2';
 import RemoveTrustLink from './RemoveTrustLink/RemoveTrustLink';
+import RemoveAllTrusts from './RemoveAllTrusts/RemoveAllTrusts';
 
-export default function ManageTrust(props) {
-    const account = props.d.session.account;
-    const allBalances = account.getSortedBalances({ hideNative: true }); // From MagicSpoon.Account
-    const sortedBalances = _.orderBy(allBalances, ['code'], ['asc']);
+export default class ManageTrust extends React.Component {
+    getAcceptedAssets() {
+        const account = this.props.d.session.account;
+        const allBalances = account.getSortedBalances({ hideNative: true }); // From MagicSpoon.Account
+        const sortedBalances = _.orderBy(allBalances, ['code'], ['asc']);
 
-    const assetRows = sortedBalances.map(balance => (
-        <tr className="BalancesTable__row" key={balance.code + balance.issuer}>
-            <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
-                <AssetCard2 code={balance.code} issuer={balance.issuer} />
-            </td>
-            <td className="ManageCurrentTrust__row__item">
-                <RemoveTrustLink balance={balance} d={props.d} />
-            </td>
-        </tr>
-    ));
+        return sortedBalances.map((asset) => {
+            const { code, issuer } = asset;
 
-    const nothingAccepted = assetRows.length === 0;
+            return (
+                <tr className="BalancesTable__row" key={code + issuer}>
+                    <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
+                        <AssetCard2 code={code} issuer={issuer} />
+                    </td>
+                    <td className="BalancesTable__row__item">
+                        <RemoveTrustLink asset={asset} d={this.props.d} />
+                    </td>
+                </tr>
+            );
+        });
+    }
 
-    return (
-        <div className="island">
-            <div className="island__header">Assets you accept</div>
-            <div className="island__paddedContent">
-                To receive assets on the Stellar network, you must first {'"accept"'} the asset.
-            </div>
-            <div className="island__separator" />
-            <table className="ManageCurrentTrust">
-                <thead>
-                    <tr className="ManageCurrentTrust__head">
-                        <td className="ManageCurrentTrust__head__asset">Asset</td>
-                        <td className="ManageCurrentTrust__head__cell">Manage</td>
-                    </tr>
-                </thead>
-                <tbody>
-                    {nothingAccepted ? (
-                        <tr className="BalancesTable__row">
-                            <td className="BalancesTable__row__none" colSpan="2">
-                                You currently don{"'"}t accept any assets.
-                            </td>
+    render() {
+        const assetRows = this.getAcceptedAssets();
+        const nothingAccepted = assetRows.length === 0;
+
+        return (
+            <div className="island">
+                <div className="island__header">Assets you accept</div>
+                <div className="island__paddedContent">
+                    To receive assets on the Stellar network, you must first {'"accept"'} the asset.
+                </div>
+                <div className="island__separator" />
+                <table className="ManageTrust_table">
+                    <thead>
+                        <tr>
+                            <td className="table_head_asset">Asset</td>
+                            <td className="table_head_cell">Manage</td>
                         </tr>
-                    ) : (assetRows)}
-                </tbody>
-            </table>
-        </div>
-    );
+                    </thead>
+                    <tbody>
+                        {nothingAccepted ? (
+                            <tr className="BalancesTable__row">
+                                <td className="BalancesTable__row__none" colSpan="2">
+                                    You currently don{"'"}t accept any assets.
+                                </td>
+                            </tr>
+                        ) : (
+                            assetRows
+                        )}
+                    </tbody>
+                </table>
+                <RemoveAllTrusts d={this.props.d} />
+            </div>
+        );
+    }
 }
 
 ManageTrust.propTypes = {

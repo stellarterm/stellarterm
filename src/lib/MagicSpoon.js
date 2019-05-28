@@ -610,21 +610,24 @@ const MagicSpoon = {
 
         return transaction;
     },
-    buildTxChangeTrust(Server, spoonAccount, opts) {
-        let sdkLimit;
-        if (typeof opts.limit === 'string' || opts.limit instanceof String) {
-            sdkLimit = opts.limit;
-        } else if (opts.limit !== undefined) {
-            throw new Error('changeTrust opts.limit must be a string');
-        }
+    buildTxChangeTrust(spoonAccount, assetOps) {
+        const transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
 
-        const operationOpts = {
-            asset: opts.asset,
-            limit: sdkLimit,
-        };
-        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-      .addOperation(StellarSdk.Operation.changeTrust(operationOpts));
-      // DONT call .build()
+        return assetOps.reduce((resultTransaction, op) => {
+            let sdkLimit;
+
+            if (typeof op.limit === 'string' || op.limit instanceof String) {
+                sdkLimit = op.limit;
+            } else if (op.limit !== undefined) {
+                throw new Error('changeTrust opts.limit must be a string');
+            }
+            const operationOptions = {
+                asset: op.asset,
+                limit: sdkLimit,
+            };
+
+            return resultTransaction.addOperation(StellarSdk.Operation.changeTrust(operationOptions));
+        }, transaction);
     },
     buildTxRemoveOffer(Server, spoonAccount, offer) {
         function parseAsset(asset) {

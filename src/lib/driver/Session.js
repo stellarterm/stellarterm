@@ -611,20 +611,24 @@ export default function Send(driver) {
             this.inflationDone = true;
             this.event.trigger();
         },
-        addTrust: async (code, issuer) => {
+        generateTrustOps: (assets, trustType) => assets.map((a) => {
+            const op = { asset: new StellarSdk.Asset(a.code, a.issuer) };
+            if (trustType === 'remove') {
+                op.limit = '0';
+            }
+            return op;
+        }),
+        addTrust: async (assets) => {
             // We only add max trust line
             // Having a "limit" is a design mistake in Stellar that was carried over from the Ripple codebase
-            const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
-                asset: new StellarSdk.Asset(code, issuer),
-            });
+            const assetsToAdd = this.handlers.generateTrustOps(assets, 'add');
+            const tx = MagicSpoon.buildTxChangeTrust(this.account, assetsToAdd);
             return await this.handlers.buildSignSubmit(tx);
         },
-        removeTrust: async (code, issuer) => {
-            // Trust lines are removed by setting limit to 0
-            const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
-                asset: new StellarSdk.Asset(code, issuer),
-                limit: '0',
-            });
+        removeTrust: async (assets) => {
+            // Trustlines are removed by setting limit to 0
+            const assetsToRemove = this.handlers.generateTrustOps(assets, 'remove');
+            const tx = MagicSpoon.buildTxChangeTrust(this.account, assetsToRemove);
             return await this.handlers.buildSignSubmit(tx);
         },
         createOffer: async (side, opts) => {

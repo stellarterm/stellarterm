@@ -13,9 +13,9 @@ export default class RemoveTrustLink extends React.Component {
 
     handleRemoveTrust(e) {
         e.preventDefault();
-        const { code, issuer } = this.props.balance;
+        const assetsToRemove = [this.props.asset];
 
-        this.props.d.session.handlers.removeTrust(code, issuer).then(({ status, serverResult }) => {
+        this.props.d.session.handlers.removeTrust(assetsToRemove).then(({ status, serverResult }) => {
             if (status !== 'finish') {
                 return null;
             }
@@ -33,7 +33,7 @@ export default class RemoveTrustLink extends React.Component {
     render() {
         const { status } = this.state;
         const { account } = this.props.d.session;
-        const { balance, code, issuer } = this.props.balance;
+        const { balance, code, issuer } = this.props.asset;
         const balanceIsZero = balance === '0.0000000';
         const orderExists = account.isOrderExists(new StellarSdk.Asset(code, issuer));
 
@@ -67,7 +67,5 @@ export default class RemoveTrustLink extends React.Component {
 
 RemoveTrustLink.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    balance: PropTypes.objectOf(PropTypes.string).isRequired,
-    code: PropTypes.string,
-    issuer: PropTypes.string,
+    asset: PropTypes.objectOf(PropTypes.string).isRequired,
 };
