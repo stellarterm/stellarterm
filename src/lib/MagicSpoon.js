@@ -10,9 +10,8 @@ import directory from '../directory';
 // Simplifies the objects to what is necessary. Listens to updates automagically.
 // It's in the same file as the driver because the driver is the only one that
 // should ever use the spoon.
-const MIN_FEE = 100;
-const MAX_FEE = 10000;
-let fee = MIN_FEE;
+
+const fee = 10000;
 
 const MagicSpoon = {
     async Account(Server, keypair, opts, onUpdate) {
@@ -642,7 +641,7 @@ const MagicSpoon = {
           }));
       // DONT call .build()
     },
-    
+
     overwrite(buffer) {
         if (buffer === undefined) {
       // When logging in with Ledger, secret key is not stored
@@ -656,13 +655,6 @@ const MagicSpoon = {
                 buffer[i] = Math.round(Math.random() * 255);
             }
         }
-    },
-
-    updateFeeValue(feeValue) {
-        if (!feeValue) { return; }
-        // Base fee shouldn't be less than MIN_FEE and more than MAX_FEE
-        const value = Math.min(MAX_FEE, feeValue);
-        fee = Math.max(MIN_FEE, value);
     },
 };
 
