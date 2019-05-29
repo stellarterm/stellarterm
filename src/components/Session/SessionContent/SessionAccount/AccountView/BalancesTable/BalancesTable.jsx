@@ -10,24 +10,26 @@ export default function BalancesTable(props) {
     const account = props.d.session.account;
     // getSortedBalances from MagicSpoon.Account
     // Then generating USD balance and trade-link
-    const allBalances = account.getSortedBalances().map((balance) => {
-        if (props.d.ticker.ready) {
+    const unlistedAssets = [];
+    const listedAssets = account
+        .getSortedBalances()
+        .map((balance) => {
             const tickerAsset = _.find(props.d.ticker.data.assets, {
                 code: balance.code,
                 issuer: balance.issuer,
             });
-
             let tradeLink;
-            if (tickerAsset) {
+
+            if (props.d.ticker.ready && tickerAsset) {
+                if (tickerAsset.price_USD === undefined) {
+                    tickerAsset.price_USD = 0;
+                }
+
                 const balanceUSD = (balance.balance * tickerAsset.price_USD).toLocaleString('en-US', {
                     minimumFractionDigits: 2,
                     maximumFractionDigits: 2,
                 });
                 Object.assign(balance, { balanceUSD });
-
-                if (tickerAsset.price_USD === undefined) {
-                    tickerAsset.price_USD = 0;
-                }
 
                 if (tickerAsset.slug !== 'XLM-native') {
                     tradeLink = (
@@ -36,7 +38,9 @@ export default function BalancesTable(props) {
                         </a>
                     );
                 }
-            } else {
+                Object.assign(balance, { tradeLink });
+            } else if (props.d.ticker.ready && !tickerAsset) {
+                unlistedAssets.push(balance);
                 tradeLink = (
                     <a
                         href={`#exchange/${balance.code}-${balance.issuer}/XLM-native`}
@@ -44,16 +48,20 @@ export default function BalancesTable(props) {
                         trade
                     </a>
                 );
+                Object.assign(balance, { tradeLink });
+                return null;
             }
-            Object.assign(balance, { tradeLink });
-        }
-        return balance;
-    });
+            return balance;
+        })
+        .filter(asset => asset !== null);
 
-    const sortedByUSD = _.orderBy(allBalances, ['balanceUSD'], ['desc']);
-    const balanceRows = sortedByUSD.map((asset) => {
+    const sortedByUSD = _.sortBy(listedAssets, o => parseFloat(o.balanceUSD));
+    const sortedByBalance = _.sortBy(unlistedAssets, o => parseFloat(o.balance));
+    const allBalances = sortedByBalance.concat(sortedByUSD).reverse();
+
+    const balanceRows = allBalances.map((asset) => {
         const { code, issuer, balance, tradeLink } = asset;
-        const balanceUSD = `$${asset.balanceUSD}`;
+        const balanceUSD = asset.balanceUSD !== undefined ? `$${asset.balanceUSD}` : null;
         const directoryAsset = directory.getAssetByAccountId(balance.code, balance.issuer);
 
         let warning;
