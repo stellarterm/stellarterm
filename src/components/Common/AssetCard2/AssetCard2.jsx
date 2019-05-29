@@ -55,7 +55,7 @@ export default class AssetCard2 extends React.Component {
         const { image, host } = currency || '';
         const domain = host && host.split('//')[1];
 
-        name = this.props.host || assetData.host || domain || name;
+        name = this.props.host || assetData.host || domain || (assetData.time ? anchor.name : name);
         const color = this.props.color || assetData.color || anchor.color;
         logo = image || (currency ? anchor.logo : logo);
         const logoPadding = !!image;
