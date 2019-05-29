@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import _ from 'lodash';
 import Driver from '../../../../../../lib/Driver';
 import Ellipsis from '../../../../../Common/Ellipsis/Ellipsis';
 
@@ -62,10 +61,10 @@ export default class RemoveAllTrusts extends React.Component {
         let removeAssetsLink;
 
         if (status === 'ready') {
-            removeAssetsLink = <button onClick={e => this.clickRemoveAll(e)}>Remove all zero balance assets</button>;
+            removeAssetsLink = <a onClick={e => this.clickRemoveAll(e)}>Remove all zero balance assets</a>;
         } else if (status === 'error') {
             removeAssetsLink = (
-                <button onClick={e => this.clickRemoveAll(e)}>Errored when removing zero balance assets</button>
+                <a onClick={e => this.clickRemoveAll(e)}>Errored when removing zero balance assets</a>
             );
         } else if (status === 'pending') {
             removeAssetsLink = (

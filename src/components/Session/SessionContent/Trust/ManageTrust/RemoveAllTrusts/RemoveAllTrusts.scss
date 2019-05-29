@@ -5,12 +5,7 @@
     color: $s-color-neutral5;
     border-top: 1px solid $s-color-neutral8;
 
-    button {
-        outline: none;
-        border: none;
-        padding: 0;
-        text-decoration: underline;
-
+    a {
         &:hover {
             color: $s-color-neutral3;
         }
