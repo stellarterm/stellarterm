@@ -1,5 +1,7 @@
 .TransactionDetails {
     width: auto;
+    max-height: 350px;
+    overflow-y: auto;
     color: #505558;
     background-color: rgba(244, 244, 245, 0.2);
     border: solid 1px rgba(244, 244, 245, 1);
