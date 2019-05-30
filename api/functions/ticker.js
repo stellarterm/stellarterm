@@ -168,7 +168,7 @@ function phase3(ticker) {
 
         // We get the min so that it can't be gamed by the issuer making a large sell wall
         pair.depth10Amount = _.round(Math.min(sum10PercentBidAmounts, sum10PercentAskAmounts));
-        return Server.tradeAggregation(baseBuying, counterSelling, Date.now() - 86400*1000, Date.now(), 900000).limit(200).order('desc').call()
+        return Server.tradeAggregation(baseBuying, counterSelling, Date.now() - 86400*1000, Date.now(), 900000, 0).limit(200).order('desc').call()
         .then(trades => {
           const XLMOldPrice = ticker._meta.externalPrices.USD_XLM_24hAgo;
           const XLMNewPrice = ticker._meta.externalPrices.USD_XLM;
