@@ -46,9 +46,15 @@ export default class TransactionDetails extends React.Component {
                 }
 
                 if (
-                    op.type === 'manageOffer' && op.amount === '0' &&
+                    (op.type === 'manageOffer' || op.type === 'manageSellOffer') && op.amount === '0' &&
                     (attr === 'selling' || attr === 'buying' || attr === 'amount' || attr === 'price')
                 ) { AttrObj = null; }
+
+                if (
+                    op.type === 'manageBuyOffer' && op.buyAmount === '0' &&
+                    (attr === 'selling' || attr === 'buying' || attr === 'buyAmount' || attr === 'price')
+                ) { AttrObj = null; }
+
                 return AttrObj;
             })
             .filter(attr => attr !== null);
@@ -59,6 +65,10 @@ export default class TransactionDetails extends React.Component {
         case 'changeTrust':
             return op.limit === '0' ? 'Remove Asset' : 'Accept Asset';
         case 'manageOffer':
+            return op.amount === '0' ? 'Delete Offer' : 'Manage Offer';
+        case 'manageBuyOffer':
+            return op.buyAmount === '0' ? 'Delete Offer' : 'Manage Offer';
+        case 'manageSellOffer':
             return op.amount === '0' ? 'Delete Offer' : 'Manage Offer';
         default:
             break;

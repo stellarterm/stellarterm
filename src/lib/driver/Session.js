@@ -281,8 +281,8 @@ export default function Send(driver) {
 
             const THRESHOLDS = {
                 low_threshold: ['allowTrust', 'inflation', 'bumpSequence'],
-                med_threshold: ['createAccount', 'payment', 'pathPayment', 'manageOffer', 'createPassiveOffer',
-                    'changeTrust', 'manageData'],
+                med_threshold: ['createAccount', 'payment', 'pathPayment', 'createPassiveSellOffer',
+                    'changeTrust', 'manageData', 'manageBuyOffer', 'manageSellOffer'],
                 high_threshold: ['accountMerge'],
                 setOptions: ['setOptions'], // med or high
             };
@@ -626,15 +626,19 @@ export default function Send(driver) {
             return await this.handlers.buildSignSubmit(tx);
         },
         createOffer: async (side, opts) => {
-            const tx = MagicSpoon.buildTxCreateOffer(
-                driver.Server,
-                this.account,
-                side,
-                _.assign(opts, {
-                    baseBuying: driver.orderbook.data.baseBuying,
-                    counterSelling: driver.orderbook.data.counterSelling,
-                }),
-            );
+            const options = _.assign(opts, {
+                baseBuying: driver.orderbook.data.baseBuying,
+                counterSelling: driver.orderbook.data.counterSelling,
+            });
+            let tx;
+            if (side === 'buy') {
+                tx = MagicSpoon.buildTxCreateBuyOffer(driver.Server, this.account, options);
+            } else if (side === 'sell') {
+                tx = MagicSpoon.buildTxCreateSellOffer(driver.Server, this.account, options);
+            } else {
+                throw new Error(`Invalid side ${side}`);
+            }
+
             const bssResult = await this.handlers.buildSignSubmit(tx);
             if (bssResult.status === 'finish') {
                 bssResult.serverResult.then((res) => {

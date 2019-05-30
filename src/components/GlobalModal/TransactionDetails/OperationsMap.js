@@ -24,11 +24,29 @@ export default {
         helpNote: 'Creates, updates, or deletes an offer.',
         docsUrl: 'https://www.stellar.org/developers/learn/concepts/list-of-operations.html#manage-offer',
     },
+    manageBuyOffer: {
+        name: 'manageBuyOffer',
+        label: 'Manage Buy Offer',
+        helpNote: 'Creates, updates, or deletes an offer.',
+        docsUrl: 'https://www.stellar.org/developers/guides/concepts/list-of-operations.html#manage-buy-offer',
+    },
+    manageSellOffer: {
+        name: 'manageSellOffer',
+        label: 'Manage Sell Offer',
+        helpNote: 'Creates, updates, or deletes an offer.',
+        docsUrl: 'https://www.stellar.org/developers/guides/concepts/list-of-operations.html#manage-sell-offer',
+    },
     createPassiveOffer: {
         name: 'createPassiveOffer',
         label: 'Create Passive Offer',
         helpNote: 'Creates an offer that does not take another offer of equal price when created.',
         docsUrl: 'https://www.stellar.org/developers/learn/concepts/list-of-operations.html#create-passive-offer',
+    },
+    createPassiveSellOffer: {
+        name: 'createPassiveSellOffer',
+        label: 'Create Passive Sell Offer',
+        helpNote: 'Creates an offer that does not take another offer of equal price when created.',
+        docsUrl: 'https://www.stellar.org/developers/guides/concepts/list-of-operations.html#create-passive-sell-offer',
     },
     setOptions: {
         name: 'setOptions',

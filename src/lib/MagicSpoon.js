@@ -275,7 +275,6 @@ const MagicSpoon = {
             if (updated) {
                 onUpdate();
             }
-
         };
 
         sdkAccount.applyNewBalances = (newBalances) => {
@@ -297,7 +296,7 @@ const MagicSpoon = {
             const entriesTrustlines = sdkAccount.balances.length - 1;
             const entriesOffers = Object.keys(sdkAccount.offers).length;
             const entriesSigners = sdkAccount.signers.length - 1;
-            const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers -entriesSigners;
+            const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers - entriesSigners;
 
             items.push({
                 entryType: 'Base reserve',
@@ -464,7 +463,7 @@ const MagicSpoon = {
                 depth += 1;
                 let tradeResults;
                 if (first) {
-                    tradeResults = await Server.tradeAggregation(baseBuying, counterSelling, 1514764800, Date.now() + 86400000, 900000).limit(200).order('desc').call();
+                    tradeResults = await Server.tradeAggregation(baseBuying, counterSelling, 1514764800, Date.now() + 86400000, 900000, 0).limit(200).order('desc').call();
         // tradeResults = await Server.trades().forAssetPair(baseBuying, counterSelling).limit(200).order('desc').call()
                     first = false;
                 } else {
@@ -534,29 +533,39 @@ const MagicSpoon = {
   // opts.price -- Exchange ratio selling/buying
   // opts.amount -- Here, it's relative to the base (JS-sdk does: Total amount selling)
   // opts.type -- String of either 'buy' or 'sell' (relative to base currency)
-    buildTxCreateOffer(Server, spoonAccount, side, opts) {
-        let sdkBuying;
-        let sdkSelling;
-        let sdkPrice;
-        let sdkAmount;
-
+    buildTxCreateBuyOffer(Server, spoonAccount, opts) {
         const bigOptsPrice = new BigNumber(opts.price).toPrecision(15);
         const bigOptsAmount = new BigNumber(opts.amount).toPrecision(15);
 
-        console.log(`Creating *${side}* offer at price ${opts.price}`);
-        if (side === 'buy') {
-            sdkBuying = opts.baseBuying; // ex: lumens
-            sdkSelling = opts.counterSelling; // ex: USD
-            sdkPrice = new BigNumber(1).dividedBy(bigOptsPrice);
-            sdkAmount = new BigNumber(bigOptsAmount).times(bigOptsPrice).toFixed(7);
-        } else if (side === 'sell') {
-            sdkBuying = opts.counterSelling; // ex: USD
-            sdkSelling = opts.baseBuying; // ex: lumens
-            sdkPrice = new BigNumber(bigOptsPrice);
-            sdkAmount = new BigNumber(bigOptsAmount).toFixed(7);
-        } else {
-            throw new Error(`Invalid side ${side}`);
-        }
+        console.log(`Creating *BUY* offer at price ${opts.price}`);
+
+        const sdkBuying = opts.baseBuying; // ex: lumens
+        const sdkSelling = opts.counterSelling; // ex: USD
+        const sdkPrice = new BigNumber(bigOptsPrice);
+        const sdkAmount = new BigNumber(bigOptsAmount);
+
+        const operationOpts = {
+            buying: sdkBuying,
+            selling: sdkSelling,
+            buyAmount: String(sdkAmount),
+            price: String(sdkPrice),
+            offerId: 0, // 0 for new offer
+        };
+        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
+                .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
+                .setTimeout(30);
+    },
+
+    buildTxCreateSellOffer(Server, spoonAccount, opts) {
+        const bigOptsPrice = new BigNumber(opts.price).toPrecision(15);
+        const bigOptsAmount = new BigNumber(opts.amount).toPrecision(15);
+
+        console.log(`Creating *SELL* offer at price ${opts.price}`);
+
+        const sdkBuying = opts.counterSelling; // ex: USD
+        const sdkSelling = opts.baseBuying; // ex: lumens
+        const sdkPrice = new BigNumber(bigOptsPrice);
+        const sdkAmount = new BigNumber(bigOptsAmount);
 
         const operationOpts = {
             buying: sdkBuying,
@@ -565,12 +574,11 @@ const MagicSpoon = {
             price: String(sdkPrice),
             offerId: 0, // 0 for new offer
         };
-        const transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-      .addOperation(StellarSdk.Operation.manageOffer(operationOpts));
-      // DONT call .build()
-
-        return transaction;
+        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
+            .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
+            .setTimeout(30);
     },
+
     async buildTxSendPayment(Server, spoonAccount, opts) {
     // sendPayment will detect if the account is a new account. If so, then it will
     // be a createAccount operation
@@ -581,7 +589,7 @@ const MagicSpoon = {
                 destination: opts.destination,
                 asset: opts.asset,
                 amount: opts.amount,
-            }));
+            })).setTimeout(30);
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error('Destination account does not exist. To create it, you must send a minimum of 1 lumens to create it');
@@ -589,7 +597,7 @@ const MagicSpoon = {
             transaction = transaction.addOperation(StellarSdk.Operation.createAccount({
                 destination: opts.destination,
                 startingBalance: opts.amount,
-            }));
+            })).setTimeout(30);
         }
 
         if (opts.memo) {
@@ -607,7 +615,7 @@ const MagicSpoon = {
         });
         // DONT call .build()
 
-        return transaction;
+        return transaction.setTimeout(30);
     },
     buildTxChangeTrust(Server, spoonAccount, opts) {
         let sdkLimit;
@@ -622,7 +630,7 @@ const MagicSpoon = {
             limit: sdkLimit,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-      .addOperation(StellarSdk.Operation.changeTrust(operationOpts));
+      .addOperation(StellarSdk.Operation.changeTrust(operationOpts)).setTimeout(30);
       // DONT call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, offer) {
@@ -632,13 +640,13 @@ const MagicSpoon = {
         }
 
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-          .addOperation(StellarSdk.Operation.manageOffer({
-              buying: parseAsset(offer.buying),
-              selling: parseAsset(offer.selling),
-              amount: '0',
-              price: '1',
-              offerId: offer.id,
-          }));
+            .addOperation(StellarSdk.Operation.manageSellOffer({
+                buying: parseAsset(offer.buying),
+                selling: parseAsset(offer.selling),
+                amount: '0',
+                price: '1',
+                offerId: offer.id,
+            })).setTimeout(30);
       // DONT call .build()
     },
 
