@@ -52,6 +52,9 @@ export default class MultisigEnableStep3 extends React.Component {
             pending: true,
             addingError: '',
         });
+        if (d.session.authType === 'ledger') {
+            this.props.submit.cancel();
+        }
         try {
             const result = await d.session.handlers.addSigner(publicKey, signerProvider);
             if (result.status === 'finish' && signerProvider === 'stellarGuard') {

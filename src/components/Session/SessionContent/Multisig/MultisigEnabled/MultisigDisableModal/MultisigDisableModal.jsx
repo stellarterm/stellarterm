@@ -23,8 +23,8 @@ export default function MultisigDisableModal(props) {
                 <button
                     className="s-button"
                     onClick={() => {
-                        d.session.handlers.removeSigner(signerKey);
                         submit.cancel();
+                        d.session.handlers.removeSigner(signerKey);
                     }} >
                     Remove
                 </button>

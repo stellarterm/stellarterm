@@ -118,5 +118,5 @@ export default class TransactionDetails extends React.Component {
 
 TransactionDetails.propTypes = {
     // TODO: Valid proptype
-    tx: PropTypes.string.isRequired,
+    tx: PropTypes.objectOf(PropTypes.any).isRequired,
 };
