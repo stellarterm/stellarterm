@@ -1,5 +1,7 @@
 .TransactionDetails {
     width: auto;
+    max-height: 350px;
+    overflow-y: auto;
     color: #505558;
     background-color: rgba(244, 244, 245, 0.2);
     border: solid 1px rgba(244, 244, 245, 1);
@@ -9,7 +11,12 @@
     .Details_row {
         display: flex;
         font-size: $s-scale-4;
-        margin: 15px 18px;
+        padding: 15px 18px;
+        
+        &:nth-child(2n){
+            background: #fff;
+        }
+        
 
         .Details_row_label {
             width: 30%;
@@ -37,16 +44,37 @@
 
             .Inline_content {
                 margin-bottom: 0;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-end;
 
                 .Inline_value {
                     display: inline-block;
-                    width: 250px;
+                    width: 220px;
                     overflow-wrap: break-word;
+
+                    .SignerData_item{
+                        width: 100%;
+                        display: flex;
+                        flex-direction: column;
+                        align-items: flex-end;
+                        font-size: 12px;
+
+                        .SignerData_content{
+                            font-weight: bold;
+                        }
+
+                        .SignerData_key{
+                            width: 100%;
+                            font-weight: bold;
+                        }
+                    }
                 }
 
                 .Inline_attr {
                     display: inline-block;
-                    width: 70px;
+                    width: 90px;
                     font-size: $s-scale-5;
                     color: $s-color-neutral5;
                 }

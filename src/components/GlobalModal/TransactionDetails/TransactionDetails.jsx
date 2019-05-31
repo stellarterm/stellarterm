@@ -26,13 +26,15 @@ export default class TransactionDetails extends React.Component {
                 };
 
                 if (value === undefined) {
-                    return AttrObj;
+                    return null;
                 }
 
                 if (value.code !== undefined) {
                     AttrObj.display = <AssetCard2 code={value.code} issuer={value.issuer} inRow />;
                 } else if (typeof value === 'string') {
                     AttrObj.display = value;
+                } else if (attr === 'signer') {
+                    AttrObj.display = this.getSignerCard(value);
                 } else {
                     AttrObj.display = <pre>{JSON.stringify(value, null, 2)}</pre>;
                 }
@@ -52,6 +54,21 @@ export default class TransactionDetails extends React.Component {
                 return AttrObj;
             })
             .filter(attr => attr !== null);
+    }
+
+    static getSignerCard(signer) {
+        return (
+            <div>
+                <div className="SignerData_item">
+                    <div className="SignerData_title">key:</div>
+                    <div className="SignerData_key">{signer.ed25519PublicKey}</div>
+                </div>
+                <div className="SignerData_item">
+                    <div className="SignerData_title">weight:</div>
+                    <div className="SignerData_content">{signer.weight}</div>
+                </div>
+            </div>
+        );
     }
 
     static getOperationLabel(op) {
