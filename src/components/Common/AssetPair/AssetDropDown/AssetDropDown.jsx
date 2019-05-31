@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../../lib/Driver';
 import AssetCard2 from '../../AssetCard2/AssetCard2';
 import AssetCardList from './AssetCardList/AssetCardList';
@@ -11,6 +12,18 @@ const ARROW_UP = 38;
 const ARROW_DOWN = 40;
 
 const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
+const DEBOUNCE_TIME = 700;
+const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
+const pattern = '^(https?:\\/\\/)?' + // protocol
+    '((([a-zA-Z\\d]([a-zA-Z\\d-]{0,61}[a-zA-Z\\d])*\\.)+' + // sub-domain + domain name
+    '[a-zA-Z]{2,13})' + // extension
+    '|((\\d{1,3}\\.){3}\\d{1,3})' + // OR ip (v4) address
+    '|localhost)' + // OR localhost
+    '(\\:\\d{1,5})?' + // port
+    '(\\/[a-zA-Z\\&\\d%_.~+-:@]*)*' + // path
+    '(\\?[a-zA-Z\\&\\d%_.,~+-:@=;&]*)?' + // query string
+    '(\\#[-a-zA-Z&\\d_]*)?$'; // fragment locator
+const regexp = new RegExp(pattern);
 
 
 export default class AssetDropDown extends React.Component {
@@ -33,9 +46,11 @@ export default class AssetDropDown extends React.Component {
         this.state = {
             isOpenList: false,
             isFocused: false,
-            code: '',
+            inputCode: '',
             termAsset: null,
             activeCardIndex: null,
+            currencies: [],
+            loading: false,
         };
 
         this.handleClickOutside = (e) => {
@@ -44,12 +59,13 @@ export default class AssetDropDown extends React.Component {
             }
             if (this.state.termAsset) {
                 this.onUpdate(this.state.termAsset);
-                this.setState({ code: '' });
+                this.setState({ inputCode: '' });
             }
             this.setState({
                 isOpenList: false,
                 isFocused: false,
                 activeCardIndex: null,
+                currencies: [],
             });
         };
     }
@@ -78,7 +94,7 @@ export default class AssetDropDown extends React.Component {
         if (!ProcessedButtons.has(keyCode) ||
             (keyCode === ENTER && activeCardIndex === null)) { return; }
 
-        const assetsList = this.getFilterAssets();
+        const assetsList = this.getFilteredAssets();
         const cardListLength = assetsList.length;
 
         if (cardListLength === 0) { return; }
@@ -101,32 +117,64 @@ export default class AssetDropDown extends React.Component {
         this.setState({ activeCardIndex: nextIndex });
     }
 
-    getFilterAssets() {
+    getFilteredAssets() {
         const { assets } = this.dTicker.data;
         const { account } = this.props.d.session;
-        const unknownAssets = (account && account.getSortedBalances({ onlyUnknown: true })) || [];
-
         const { code, issuer } = this.props.exception || '';
+        const { inputCode, currencies } = this.state;
+
+        const unknownAssets = (account && account.getSortedBalances({ onlyUnknown: true })) || [];
+        const filteredUnknownAssets = unknownAssets
+            .filter(asset => (
+                (asset.code.indexOf(inputCode.toUpperCase()) > -1) ||
+                (asset.code.indexOf(inputCode.toLowerCase()) > -1) ||
+                (this.constructor.getDomainForUnknownAsset(asset).indexOf(inputCode.toLowerCase()) > -1)
+            ));
+
+        const filteredCurrencies = currencies.filter(currency => (
+            !assets.find(asset => ((asset.code === currency.code) && (asset.issuer === currency.issuer))) &&
+            !unknownAssets.find(asset => ((asset.code === currency.code) && (asset.issuer === currency.issuer))) &&
+            StellarSdk.StrKey.isValidEd25519PublicKey(currency.issuer)
+        ));
+
         const isExceptionNative = this.props.exception && this.props.exception.isNative();
 
         return assets
             .filter((asset) => {
                 const { unlisted } = directory.getAssetByAccountId(asset.code, asset.issuer) || {};
-                const isAssetNative = new StellarSdk.Asset(asset.code, asset.issuer).isNative();
                 return (
-                    !unlisted && ((asset.code !== code) || (asset.issuer !== issuer)) &&
-                    !(isExceptionNative && isAssetNative) &&
-                    ((asset.code.indexOf(this.state.code.toUpperCase()) > -1) ||
-                        (asset.domain.indexOf(this.state.code.toLowerCase()) > -1))
+                    !unlisted &&
+                    ((asset.code.indexOf(inputCode.toUpperCase()) > -1) ||
+                        (asset.domain.indexOf(inputCode.toLowerCase()) > -1))
                 );
             })
-            .concat(unknownAssets
-                .filter(asset => (
-                    (asset.code.indexOf(this.state.code.toUpperCase()) > -1) ||
-                    (asset.code.indexOf(this.state.code) > -1) ||
-                    (this.constructor.getDomainForUnknownAsset(asset).indexOf(this.state.code.toLowerCase()) > -1)
-                )),
-            );
+            .concat(filteredUnknownAssets)
+            .concat(filteredCurrencies)
+            .filter((asset) => {
+                const isAssetNative = new StellarSdk.Asset(asset.code, asset.issuer).isNative();
+                return (
+                    ((asset.code !== code) || (asset.issuer !== issuer)) &&
+                    !(isExceptionNative && isAssetNative)
+                );
+            });
+    }
+
+    async getAssetByDomain(domain) {
+        this.setState({ loading: true });
+        setTimeout(() => this.setState({ loading: false }), 5000);
+        try {
+            const resolved = await resolveAnchor(domain);
+            if (!resolved.CURRENCIES) {
+                this.setState({ loading: false });
+                return;
+            }
+            this.setState({
+                currencies: resolved.CURRENCIES,
+                loading: false,
+            });
+        } catch (e) {
+            this.setState({ loading: false });
+        }
     }
 
     openListByFocus() {
@@ -143,23 +191,30 @@ export default class AssetDropDown extends React.Component {
         }
         if (this.state.termAsset && this.state.isOpenList) {
             this.onUpdate(this.state.termAsset);
-            this.setState({ code: '' });
+            this.setState({ inputCode: '' });
         }
         this.setState({
             isOpenList: !this.state.isOpenList,
             isFocused: !this.state.isOpenList,
             activeCardIndex: null,
+            currencies: [],
         });
     }
 
     handleInput(e) {
         e.preventDefault();
+        const { value } = e.target;
+
         this.setState({
             activeCardIndex: null,
-            code: e.target.value,
+            inputCode: value,
+            currencies: [],
         });
-    }
 
+        if (regexp.test(value)) {
+            this.getAssetByDomain(value);
+        }
+    }
 
     render() {
         const name = this.props.isBase ? 'base' : 'counter';
@@ -187,17 +242,29 @@ export default class AssetDropDown extends React.Component {
                                 type="text"
                                 onChange={e => this.handleInput(e)}
                                 onKeyUp={e => this.setActiveCardIndex(e)}
-                                value={this.state.code}
+                                value={this.state.inputCode}
                                 placeholder={`Set ${name} asset`} />
                         </div>
                     }
-                    <img src={images.dropdown} alt="▼" className={arrowClassName} onClick={() => this.openList()} />
+                    {this.state.loading ?
+                        <div>
+                            <img
+                                src={images['icon-circle-preloader-gif']}
+                                className="AssetDropDown__arrowUp load"
+                                alt="load" />
+                        </div> :
+                        <img
+                            src={images.dropdown}
+                            alt="▼"
+                            className={arrowClassName}
+                            onClick={() => this.openList()} />}
                 </div>
                 {this.state.isOpenList ?
                     <AssetCardList
                         d={this.props.d}
+                        host={this.state.currencies.length ? this.state.inputCode : null}
                         onUpdate={(asset) => { this.onUpdate(asset); }}
-                        assetsList={this.getFilterAssets()}
+                        assetsList={this.getFilteredAssets()}
                         activeCardIndex={this.state.activeCardIndex} /> :
                     null
                 }
