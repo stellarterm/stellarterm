@@ -10,14 +10,14 @@ export default class OfferTables extends React.Component {
         const offers = isBuy ? orderbook.bids : orderbook.asks;
         let depth = 0;
 
-        return offers.map((offer) => {
+        return offers.map((offer, index) => {
             if (isBuy) {
                 depth += Number(offer.amount);
             } else {
                 depth += Number(offer.amount) * Number(offer.price);
             }
             return {
-                key: `${offer.price}-${offer.amount}`,
+                key: `${index}-${offer.price}-${offer.amount}`,
                 price: offer.price,
                 base: isBuy ? (Number(offer.amount) / Number(offer.price)).toFixed(7) : offer.amount,
                 counter: isBuy ? offer.amount : (Number(offer.amount) * Number(offer.price)).toFixed(7),
