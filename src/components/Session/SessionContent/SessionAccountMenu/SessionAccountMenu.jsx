@@ -22,8 +22,7 @@ export default class SessionAccountMenu extends React.Component {
                             {this.constructor.createMenuTab('#account', 'Balances')}
                             {this.constructor.createMenuTab('#account/send', 'Send')}
                             {this.constructor.createMenuTab('#account/addTrust', 'Accept assets')}
-                            {this.props.d.session.authType !== 'ledger' &&
-                                this.constructor.createMenuTab('#account/multisig', 'Multisig')}
+                            {this.constructor.createMenuTab('#account/multisig', 'Multisig')}
                             {this.constructor.createMenuTab('#account/history', 'History')}
                         </nav>
                         <nav className="subNav__nav">

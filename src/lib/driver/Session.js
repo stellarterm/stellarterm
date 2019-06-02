@@ -190,6 +190,9 @@ export default function Send(driver) {
                             modalResult.output.hash().toString('hex'),
                             `\n\n${modalResult.output.toEnvelope().toXDR('base64')}`,
                         );
+                        if (driver.session.account.signers.length > 1) {
+                            driver.modal.handlers.cancel();
+                        }
                         return {
                             status: 'finish',
                             signedTx: modalResult.output,
