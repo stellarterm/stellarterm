@@ -722,7 +722,13 @@ export default function Send(driver) {
                 }
                 const toml = await StellarSdk.StellarTomlResolver.resolve(homeDomain);
 
-                const currency = toml.CURRENCIES.find(cur => cur.code.toUpperCase() === asset.code.toUpperCase());
+                const currency = toml.CURRENCIES.find(cur =>
+                    (cur.code.toUpperCase() === asset.code.toUpperCase() && cur.issuer === asset.issuer),
+                );
+
+                if (!currency) {
+                    throw new Error();
+                }
 
                 const image = currency && currency.image;
                 const colorResult = image && await this.handlers.getAverageColor(image);
