@@ -167,7 +167,7 @@ export default class MultisigEnableStep2 extends React.Component {
                         <span className="MultisigEnableStep2_error">{inputError}</span>}
                     </div>
 
-                    {(valid && !isVaultKey) &&
+                    {(valid && isVaultKey !== undefined && !isVaultKey) &&
                         <div>
                             <label htmlFor="select" className="MultisigEnableStep2_select-label">
                                 Multisig provider
