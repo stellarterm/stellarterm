@@ -94,7 +94,7 @@ export default class OfferMaker extends React.Component {
         }
 
         try {
-          // If there is an error, we will just let the user input change but not the affected inputs
+            // If there is an error, we will just let the user input change but not the affected inputs
             if (item === 'price' || item === 'amount') {
                 const changeValueType = item === 'price' ? 'amount' : 'price';
                 state.total = new BigNumber(
@@ -162,19 +162,18 @@ export default class OfferMaker extends React.Component {
 
     renderTableRow(inputType, assetName) {
         return (
-            <tr className="OfferMaker__table__row">
-                <td className="OfferMaker__table__label">{inputType}</td>
-                <td className="OfferMaker__table__input">
-                    <label className="OfferMaker__table__input__group" htmlFor={inputType}>
+            <tr className="offer_table_row">
+                <td className="offer_table_label">{inputType}</td>
+                <td className="offer_table_input_cell">
+                    <label className="offer_input_group" htmlFor={inputType}>
                         <input
                             type="text"
                             name={inputType}
-                            className="OfferMaker__table__input__input"
                             maxLength="20"
                             value={this.state[inputType]}
                             onChange={e => this.updateState(inputType, e.target.value)}
                             placeholder="" />
-                        <div className="OfferMaker__table__input__group__tag">{assetName}</div>
+                        <div className="offer_input_group_tag">{assetName}</div>
                     </label>
                 </td>
             </tr>
@@ -189,15 +188,15 @@ export default class OfferMaker extends React.Component {
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const baseAssetName = baseBuying.getCode();
         const counterAssetName = counterSelling.getCode();
-        const title = isBuy ?
-            `Buy ${baseAssetName} using ${counterAssetName}` :
-            `Sell ${baseAssetName} for ${counterAssetName}`;
+        const title = isBuy
+            ? `Buy ${baseAssetName} using ${counterAssetName}`
+            : `Sell ${baseAssetName} for ${counterAssetName}`;
         const targetAsset = isBuy ? counterSelling : baseBuying;
         return (
             <div>
                 <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
                 <form onSubmit={e => this.handleSubmit(e)}>
-                    <table className="OfferMaker__table">
+                    <table className="OfferMaker_table">
                         <tbody>
                             {this.renderTableRow('price', counterAssetName)}
                             {this.renderTableRow('amount', baseAssetName)}
@@ -209,7 +208,8 @@ export default class OfferMaker extends React.Component {
                         d={this.props.d}
                         targetAsset={targetAsset}
                         side={this.props.side}
-                        offerState={this.state} />
+                        offerState={this.state}
+                        updateInputData={(type, value) => this.updateState(type, value)} />
                 </form>
             </div>
         );

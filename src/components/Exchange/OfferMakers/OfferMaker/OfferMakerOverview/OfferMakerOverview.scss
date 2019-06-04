@@ -1,0 +1,35 @@
+@import "./OfferMakerResultMessage/OfferMakerResultMessage";
+
+.offer_message {
+    font-size: $s-scale-5;
+}
+
+.offer_overview {
+    margin-top: 12px;
+    border-top: 1px solid $s-color-neutral7;
+    padding-top: 12px;
+}
+
+.offer_userBalance {
+    font-size: $s-scale-5;
+    margin-bottom: 0.5em;
+
+    .link_toInput {
+        text-decoration: none;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+}
+
+.offer_wrongBalance {
+    font-size: $s-scale-5;
+    margin-bottom: 0.5em;
+    color: $s-color-alert;
+}
+
+.offer_acceptAsset {
+    margin-top: 1em;
+    font-size: $s-scale-4;
+}

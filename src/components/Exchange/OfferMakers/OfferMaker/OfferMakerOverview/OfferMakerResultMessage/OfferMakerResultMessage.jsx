@@ -6,7 +6,7 @@ export default function OfferMakerResultMessage(props) {
 
     if (successMessage) {
         return (
-            <div className="s-alert s-alert--success OfferMaker__message">{successMessage}</div>
+            <div className="s-alert s-alert--success offer_message">{successMessage}</div>
         );
     }
 
@@ -14,7 +14,7 @@ export default function OfferMakerResultMessage(props) {
         switch (errorType) {
         case 'buy_not_authorized':
             return (
-                <div className="s-alert s-alert--alert OfferMaker__message">
+                <div className="s-alert s-alert--alert offer_message">
                     Unable to create offer because the issuer has not authorized you to trade this asset. To fix
                     this issue, check with the issuer{"'"}s website.
                     <br />
@@ -24,7 +24,7 @@ export default function OfferMakerResultMessage(props) {
             );
         case 'op_low_reserve':
             return (
-                <div className="s-alert s-alert--alert OfferMaker__message">
+                <div className="s-alert s-alert--alert offer_message">
                     Your account does not have enough XLM to meet the{' '}
                     <a
                         href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance"
@@ -36,7 +36,7 @@ export default function OfferMakerResultMessage(props) {
                     <br />
                     <br />
                     Solutions:
-                    <ul className="OfferMaker__errorList">
+                    <ul className="offerMaker_errors">
                         <li>Send at least 1 XLM to your account</li>
                         <li>Cancel an existing an offer</li>
                         <li>
@@ -47,21 +47,21 @@ export default function OfferMakerResultMessage(props) {
             );
         case 'tx_bad_seq':
             return (
-                <div className="s-alert s-alert--alert OfferMaker__message">
+                <div className="s-alert s-alert--alert offer_message">
                     Transaction failed because sequence got out of sync. Please reload StellarTerm and try again.
                 </div>
             );
         case 'op_underfunded':
             return (
-                <div className="s-alert s-alert--alert OfferMaker__message">
+                <div className="s-alert s-alert--alert offer_message">
                     Transaction failed due to a lack of funds.
                 </div>
             );
         default:
             return (
-                <div className="s-alert s-alert--alert OfferMaker__message">
+                <div className="s-alert s-alert--alert offer_message">
                     Failed to create offer.
-                    <ul className="OfferMaker__errorList">
+                    <ul className="offerMaker_errors">
                         <li>Error code: {errorType}</li>
                     </ul>
                 </div>
