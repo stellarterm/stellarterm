@@ -38,7 +38,10 @@ export default class AssetPair extends React.Component {
                         exception={exception}
                         isBase={isBase} />
                 ) : (
-                    <AssetCard2 code={this.props[assetType].getCode()} issuer={this.props[assetType].getIssuer()} />
+                    <AssetCard2
+                        code={this.props[assetType].getCode()}
+                        issuer={this.props[assetType].getIssuer()}
+                        d={d} />
                 )}
             </div>
         );

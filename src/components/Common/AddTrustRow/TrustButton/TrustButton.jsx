@@ -21,10 +21,15 @@ export default class TrustButton extends React.Component {
 
     handleSubmitTrust(event) {
         event.preventDefault();
-
+        if (this.props.d.session.authType === 'ledger') {
+            this.addDataToLocalStorage();
+        }
         this.props.d.session.handlers
             .addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
             .then((bssResult) => {
+                if (bssResult.status === 'await_signers') {
+                    this.addDataToLocalStorage();
+                }
                 if (bssResult.status !== 'finish') {
                     return null;
                 }

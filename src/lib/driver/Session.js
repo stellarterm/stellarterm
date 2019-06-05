@@ -1,10 +1,13 @@
 import _ from 'lodash';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
+import FastAverageColor from 'fast-average-color';
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
+import directory from '../../../directory';
+
 
 export default function Send(driver) {
     this.event = new Event();
@@ -131,7 +134,7 @@ export default function Send(driver) {
                 }
 
                 // Functions of session after sign in
-                this.account.addUnknownAssetData();
+                this.handlers.addUnknownAssetData();
                 driver.history.handlers.loadHistory(true);
                 driver.history.handlers.listenNewTransactions(driver.Server, this.account.account_id);
                 this.event.trigger();
@@ -670,5 +673,100 @@ export default function Send(driver) {
                 window.location.reload();
             }
         },
+        addUnknownAssetData: () => {
+            const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
+
+            // period = days x hours x min x sec x ms
+            const periodUpdate = 14 * 24 * 60 * 60 * 1000;
+
+            const chainPromise = this.account.balances.reduce((chain, sdkBalance) => {
+                const asset = directory.resolveAssetByAccountId(sdkBalance.asset_code, sdkBalance.asset_issuer);
+                if (asset.domain !== 'unknown' || asset.code === undefined) {
+                    return chain;
+                }
+
+                const assetData = unknownAssetsData.find(assetLocalItem => (
+                    assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
+                ));
+
+                if (assetData && ((new Date() - new Date(assetData.time)) < periodUpdate)) {
+                    return chain;
+                }
+
+                if (assetData) {
+                    unknownAssetsData.splice(unknownAssetsData.indexOf(assetData), 1);
+                }
+
+                return chain.then(newArray =>
+                    this.handlers.loadUnknownAssetData(asset).then(res => [...newArray, res]),
+                );
+            }, Promise.resolve([]));
+
+            chainPromise.then((arr) => {
+                localStorage.setItem('unknownAssetsData', JSON.stringify([...unknownAssetsData, ...arr]));
+                this.event.trigger();
+            });
+        },
+
+        getDomainByIssuer: async (issuer) => {
+            const account = await driver.Server.loadAccount(issuer);
+            if (!account.home_domain) {
+                return null;
+            }
+            return account.home_domain;
+        },
+
+        loadUnknownAssetData: async (asset) => {
+            try {
+                const homeDomain = await this.handlers.getDomainByIssuer(asset.issuer);
+
+                if (homeDomain === null) {
+                    throw new Error();
+                }
+                const toml = await StellarSdk.StellarTomlResolver.resolve(homeDomain);
+
+                const currency = toml.CURRENCIES.find(cur =>
+                    (cur.code.toUpperCase() === asset.code.toUpperCase() && cur.issuer === asset.issuer),
+                );
+
+                if (!currency) {
+                    throw new Error();
+                }
+
+                const image = currency && currency.image;
+                const colorResult = image && await this.handlers.getAverageColor(image);
+                const noError = colorResult && colorResult.error === null;
+                const color = noError ? colorResult.hex : '';
+
+                return {
+                    code: asset.code,
+                    issuer: asset.issuer,
+                    host: homeDomain,
+                    currency,
+                    color,
+                    time: new Date(),
+                };
+            } catch (e) {
+                return {
+                    code: asset.code,
+                    issuer: asset.issuer,
+                    host: '',
+                    currency: {},
+                    color: '',
+                    time: new Date(),
+                };
+            }
+        },
+
+        getAverageColor: imageUrl => new Promise((resolve) => {
+            const fac = new FastAverageColor();
+            const img = document.createElement('img');
+            img.src = `${imageUrl}?rnd${Math.random()}`;
+            img.crossOrigin = 'Anonymous';
+
+            fac.getColorAsync(img, (col) => {
+                resolve(col);
+            });
+        }),
     };
 }

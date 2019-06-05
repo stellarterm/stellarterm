@@ -24,7 +24,7 @@ export default class HistoryTable extends React.Component {
                 return (
                     <tr className="HistoryTable__row" key={details.id}>
                         <td className="HistoryTable__row__item--description">
-                            <HistoryTableRow type={operationType} data={details} />
+                            <HistoryTableRow type={operationType} data={details} d={this.props.d} />
                         </td>
 
                         <td className="HistoryTable__row__item--date">

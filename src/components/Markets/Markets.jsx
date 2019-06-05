@@ -32,7 +32,7 @@ export default function Markets(props) {
                     <CustomPairMenu d={props.d} />
                 </div>
                 <div className="so-back islandBack">
-                    <CustomMarketPicker row />
+                    <CustomMarketPicker row d={props.d} />
                 </div>
             </ErrorBoundary>
         </div>
