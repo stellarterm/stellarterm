@@ -21,14 +21,14 @@ export default class HistoryTableRow extends React.Component {
         this._mounted = false;
     }
 
-    getDomainByLocalStorage(code, issuer) {
+    getDomainFromLocalStorage(code, issuer) {
         const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
         const assetData = unknownAssetsData.find(assetLocalItem => (
             assetLocalItem.code === code && assetLocalItem.issuer === issuer
         ));
 
         if (!assetData) {
-            this.getDomainByToml(issuer);
+            this.getDomainByIssuer(issuer);
             return null;
         }
 
@@ -37,7 +37,7 @@ export default class HistoryTableRow extends React.Component {
 
     getHistoryRowAssetCard(code, issuer, domain, d) {
         const isUnknown = domain === 'unknown';
-        const loadedDomain = isUnknown && (this.getDomainByLocalStorage(code, issuer) || this.state.loadedDomain);
+        const loadedDomain = isUnknown && (this.getDomainFromLocalStorage(code, issuer) || this.state.loadedDomain);
         const viewDomain = (isUnknown && loadedDomain) ? loadedDomain : domain;
         return (
             <span className="HistoryView__asset">
@@ -49,7 +49,7 @@ export default class HistoryTableRow extends React.Component {
         );
     }
 
-    async getDomainByToml(issuer) {
+    async getDomainByIssuer(issuer) {
         const loadedDomain = await this.props.d.session.handlers.getDomainByIssuer(issuer);
         if (this._mounted) {
             this.setState({
