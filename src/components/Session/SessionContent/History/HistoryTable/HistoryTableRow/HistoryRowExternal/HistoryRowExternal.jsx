@@ -7,7 +7,7 @@ export default function HistoryRowExternal({ hash }) {
             <div className="HistoryView__external">
                 View in external website:&nbsp;
                 <a
-                    href={`https://stellar.expert/explorer/tx/${hash}`}
+                    href={`https://stellar.expert/explorer/public/tx/${hash}`}
                     target="_blank"
                     rel="nofollow noopener noreferrer">
                     stellar.expert

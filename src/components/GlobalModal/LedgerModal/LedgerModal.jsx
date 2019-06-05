@@ -4,7 +4,7 @@ import images from '../../../images';
 import Driver from '../../../lib/Driver';
 import TransactionDetails from '../TransactionDetails/TransactionDetails';
 
-export default class GlobalModal extends React.Component {
+export default class LedgerModal extends React.Component {
     constructor(props) {
         super(props);
 
@@ -23,11 +23,13 @@ export default class GlobalModal extends React.Component {
 
     componentDidMount() {
         this.sendTransactionToLedger();
+        this._mounted = true;
     }
 
     componentWillUnmount() {
         this.unsubModal();
         this.unsubSession();
+        this._mounted = false;
     }
 
     getTransactionStatus() {
@@ -116,10 +118,11 @@ export default class GlobalModal extends React.Component {
                 default:
                     break;
                 }
-
-                this.setState({
-                    errorMsg,
-                });
+                if (this._mounted) {
+                    this.setState({
+                        errorMsg,
+                    });
+                }
             });
     }
 
@@ -145,6 +148,6 @@ export default class GlobalModal extends React.Component {
     }
 }
 
-GlobalModal.propTypes = {
+LedgerModal.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
 };
