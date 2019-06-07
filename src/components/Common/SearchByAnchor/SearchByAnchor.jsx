@@ -8,7 +8,17 @@ import Ellipsis from '../Ellipsis/Ellipsis';
 import AssetRow from '../AssetRow/AssetRow';
 
 const DEBOUNCE_TIME = 700;
-const resolveAncor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
+const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
+const pattern = '^(https?:\\/\\/)?' + // protocol
+    '((([a-zA-Z\\d]([a-zA-Z\\d-]{0,61}[a-zA-Z\\d])*\\.)+' + // sub-domain + domain name
+    '[a-zA-Z]{2,13})' + // extension
+    '|((\\d{1,3}\\.){3}\\d{1,3})' + // OR ip (v4) address
+    '|localhost)' + // OR localhost
+    '(\\:\\d{1,5})?' + // port
+    '(\\/[a-zA-Z\\&\\d%_.~+-:@]*)*' + // path
+    '(\\?[a-zA-Z\\&\\d%_.,~+-:@=;&]*)?' + // query string
+    '(\\#[-a-zA-Z&\\d_]*)?$'; // fragment locator
+const regexp = new RegExp(pattern);
 
 export default class SearchByAnchor extends React.Component {
     constructor(props) {
@@ -22,22 +32,27 @@ export default class SearchByAnchor extends React.Component {
 
     async getAssetsFromUrl(domain) {
         try {
-            const resolvedAncor = await resolveAncor(domain);
+            const resolvedAnchor = await resolveAnchor(domain);
             const { anchorDomain } = this.state;
             if (domain !== anchorDomain) {
                 return;
             }
 
-            if (!resolvedAncor.CURRENCIES) {
-                throw new Error();
+            if (!resolvedAnchor.CURRENCIES) {
+                this.setState({
+                    resolveState: 'without_currencies',
+                    allCurrencies: [],
+                });
+                return;
             }
 
             this.setState({
                 resolveState: 'found',
-                allCurrencies: resolvedAncor.CURRENCIES,
+                allCurrencies: resolvedAnchor.CURRENCIES,
             });
         } catch (e) {
             const { anchorDomain } = this.state;
+
             if (domain !== anchorDomain) {
                 return;
             }
@@ -51,6 +66,14 @@ export default class SearchByAnchor extends React.Component {
 
     handleInputFederation({ target }) {
         const anchorDomain = target.value;
+        if (anchorDomain && !regexp.test(anchorDomain)) {
+            this.setState({
+                allCurrencies: [],
+                resolveState: 'invalid_domain',
+                anchorDomain,
+            });
+            return;
+        }
         const resolveState = anchorDomain ? 'pending' : '';
 
         this.setState({
@@ -74,6 +97,20 @@ export default class SearchByAnchor extends React.Component {
             assetResults = (
                     <MessageRow isError>
                         <span>Unable to find currencies for {anchorDomain}</span>
+                    </MessageRow>
+                );
+            break;
+        case 'invalid_domain':
+            assetResults = (
+                    <MessageRow isError>
+                        <span>Invalid domain {anchorDomain}</span>
+                    </MessageRow>
+                );
+            break;
+        case 'without_currencies':
+            assetResults = (
+                    <MessageRow isError>
+                        <span>Domain {anchorDomain} is known for Stellar, but no currencies found</span>
                     </MessageRow>
                 );
             break;
