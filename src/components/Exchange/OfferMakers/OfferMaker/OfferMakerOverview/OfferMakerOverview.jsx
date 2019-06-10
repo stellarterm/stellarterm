@@ -110,6 +110,9 @@ export default class OfferMakerOverview extends React.Component {
         const maxOffer = this.calculateMaxOffer();
         const { amount, total } = this.props.offerState;
 
+        if (amount === 'Infinity') {
+            return true;
+        }
         return Number(isBuy ? total : amount) > Number(maxOffer);
     }
 
