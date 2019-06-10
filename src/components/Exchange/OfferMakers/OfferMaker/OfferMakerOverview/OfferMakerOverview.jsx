@@ -18,23 +18,30 @@ export default class OfferMakerOverview extends React.Component {
         const { targetAsset } = this.props;
         const maxOffer = this.calculateMaxOffer();
         const maxOfferView = this.constructor.capDigits(maxOffer);
+        const inputSideType = this.props.side === 'buy' ? 'total' : 'amount';
+
+        const tradeMaxLink = (
+            <a className="link_toInput" onClick={() => this.props.updateInputData(inputSideType, maxOfferView)}>
+                {maxOfferView}
+            </a>
+        );
 
         return (
             <div>
-                <div className="OfferMaker__youHave">
+                <div className="offer_userBalance">
                     {targetAsset.isNative() ? (
-                        <span>
-                            You may trade up to {maxOfferView} XLM (due to{' '}
+                        <div>
+                            You may trade up to {tradeMaxLink} XLM (due to{' '}
                             <a href="#account">minimum balance requirements</a>.)
-                        </span>
+                        </div>
                     ) : (
-                        <span>
-                            You have {maxOfferView} {targetAsset.getCode()}
-                        </span>
+                        <div>
+                            You have {tradeMaxLink} {targetAsset.getCode()}
+                        </div>
                     )}
                 </div>
                 {this.isInsufficientBalance() && (
-                    <p className="OfferMaker__insufficientBalance">
+                    <p className="offer_wrongBalance">
                         Error: You do not have enough {targetAsset.getCode()} to create this offer.
                     </p>
                 )}
@@ -49,7 +56,7 @@ export default class OfferMakerOverview extends React.Component {
 
         const invalidPrecision = amount < minValue || total < minValue;
         const errorPrecisionMessage = invalidPrecision ? (
-            <p className="OfferMaker__insufficientBalance">
+            <p className="offer_wrongBalance">
                 Error: Minimal amount of any asset for trading is {this.constructor.capDigits(minValue)}
             </p>
         ) : null;
@@ -126,7 +133,7 @@ export default class OfferMakerOverview extends React.Component {
             return (
                 <div>
                     {this.getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling)}
-                    <span className="OfferMaker__message">
+                    <span className="offer_message">
                         <a href="#account">Log in</a> to create an offer
                     </span>
                 </div>
@@ -138,7 +145,7 @@ export default class OfferMakerOverview extends React.Component {
         if (trustNeededAssets.length) {
             return (
                 <div>
-                    <p className="OfferMaker__enable">To trade, activate these assets on your account:</p>
+                    <p className="offer_acceptAsset">To trade, activate these assets on your account:</p>
                     <div className="row__multipleButtons">
                         {trustNeededAssets.map(asset => (
                             <TrustButton
@@ -159,7 +166,7 @@ export default class OfferMakerOverview extends React.Component {
         const minValue = 0.0000001;
 
         return (
-            <div className="OfferMaker__overview">
+            <div className="offer_overview">
                 {this.getBalance()}
                 {this.getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling, minValue)}
                 <OfferMakerResultMessage offerState={this.props.offerState} />
@@ -178,4 +185,5 @@ OfferMakerOverview.propTypes = {
         total: PropTypes.string,
         buttonState: PropTypes.oneOf(['ready', 'pending']),
     }).isRequired,
+    updateInputData: PropTypes.func,
 };
