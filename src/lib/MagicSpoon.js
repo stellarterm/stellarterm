@@ -170,7 +170,7 @@ const MagicSpoon = {
         sdkAccount.applyNewSigners = (newSigners) => {
             let updated = false;
             if (!_.isEqual(sdkAccount.signers, newSigners)) {
-                sdkAccount.balances = newSigners;
+                sdkAccount.signers = newSigners;
                 updated = true;
             }
             if (updated) {

@@ -62,7 +62,7 @@ export default function BalancesTable(props) {
     const balanceRows = allBalances.map((asset) => {
         const { code, issuer, balance, tradeLink } = asset;
         const balanceUSD = asset.balanceUSD !== undefined ? `$${asset.balanceUSD}` : null;
-        const directoryAsset = directory.getAssetByAccountId(balance.code, balance.issuer);
+        const directoryAsset = directory.getAssetByAccountId(code, issuer);
 
         let warning;
         if (directoryAsset !== null && directoryAsset.warning !== undefined) {
