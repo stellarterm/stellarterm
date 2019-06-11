@@ -29,18 +29,15 @@ function tickerGenerator() {
       apiLicense: 'Apache-2.0',
     },
   };
-  const feeData = {};
 
   let tickerPromise = Promise.resolve()
-    .then(() => fetchFeeData(feeData))
-    .then(() => phase1(ticker))
+      .then(() => phase1(ticker))
     .then(() => loadAssets(ticker))
     .then(() => phase3(ticker))
     .then(() => phase4(ticker))
     .then(() => {
       return {
         'v1/ticker.json': JSON.stringify(ticker),
-        'v1/feeData.json': JSON.stringify(feeData),
       };
     })
 
@@ -171,7 +168,7 @@ function phase3(ticker) {
 
         // We get the min so that it can't be gamed by the issuer making a large sell wall
         pair.depth10Amount = _.round(Math.min(sum10PercentBidAmounts, sum10PercentAskAmounts));
-        return Server.tradeAggregation(baseBuying, counterSelling, Date.now() - 86400*1000, Date.now(), 900000).limit(200).order('desc').call()
+        return Server.tradeAggregation(baseBuying, counterSelling, Date.now() - 86400*1000, Date.now(), 900000, 0).limit(200).order('desc').call()
         .then(trades => {
           const XLMOldPrice = ticker._meta.externalPrices.USD_XLM_24hAgo;
           const XLMNewPrice = ticker._meta.externalPrices.USD_XLM;
@@ -436,30 +433,6 @@ function getHorizonMain() {
       console.log('Phase 1: Horizon at ledger #' + horizonMain.core_latest_ledger);
       return horizonMain;
     })
-}
-
-function fetchFeeData(feeData) {
-    console.log('Starting to load fee stats');
-    return rp('https://horizon.stellar.org/fee_stats')
-        .then((response) => {
-            const feeStats = JSON.parse(response);
-            const {
-                ledger_capacity_usage: ledgerCapacityUsage,
-                min_accepted_fee: minAcceptedFee,
-                p10_accepted_fee: p10AcceptedFee,
-            } = feeStats;
-
-            if (ledgerCapacityUsage >= 0.8) {
-                const feeValue = Math.max(minAcceptedFee * 1.5, p10AcceptedFee);
-                feeData.fee_value = Math.min(feeValue, 10000);
-            } else {
-                feeData.fee_value = 100;
-            }
-            console.log('Fee stats loaded');
-        })
-        .catch(() => {
-            console.log('Unable to load fee stats!');
-        });
 }
 
 function getStellarTermDotComVersion() {

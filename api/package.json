@@ -2,14 +2,14 @@
   "name": "stellarterm-ticker",
   "description": "Creates a ticker with information on the markets on Stellar",
   "dependencies": {
-    "aws-sdk": "^2.7.9",
+    "aws-sdk": "^2.465.0",
     "bluebird": "^3.5.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.11",
     "mkdirp": "^0.5.1",
     "node-fetch": "^1.6.3",
     "p-queue": "^2.1.0",
-    "request": "^2.81.0",
+    "request": "^2.88.0",
     "request-promise": "^4.2.1",
-    "stellar-sdk": "^0.8.0"
+    "stellar-sdk": "^1.0.2"
   }
 }
