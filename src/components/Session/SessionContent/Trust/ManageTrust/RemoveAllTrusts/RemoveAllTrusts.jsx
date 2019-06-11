@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
 import Ellipsis from '../../../../../Common/Ellipsis/Ellipsis';
+import images from '../../../../../../images';
 
 export default class RemoveAllTrusts extends React.Component {
     constructor(props) {
@@ -61,21 +62,29 @@ export default class RemoveAllTrusts extends React.Component {
         let removeAssetsLink;
 
         if (status === 'ready') {
-            removeAssetsLink = <a onClick={e => this.clickRemoveAll(e)}>Remove all zero balance assets</a>;
+            removeAssetsLink = (
+                <a onClick={e => this.clickRemoveAll(e)}>
+                    <img src={images['icon-close']} alt="close" />
+                    Remove zero balance assets
+                </a>
+            );
         } else if (status === 'error') {
             removeAssetsLink = (
-                <a onClick={e => this.clickRemoveAll(e)}>Errored when removing zero balance assets</a>
+                <a onClick={e => this.clickRemoveAll(e)}>
+                    <img src={images['icon-close']} alt="close" />
+                    Errored when removing zero balance assets
+                </a>
             );
         } else if (status === 'pending') {
             removeAssetsLink = (
-                <React.Fragment>
-                    Removing all zero balance assets
+                <a>
+                    Removing zero balance assets
                     <Ellipsis />
-                </React.Fragment>
+                </a>
             );
         }
 
-        return zeroAssetsExists ? <div className="Remove_all_assets">{removeAssetsLink}</div> : null;
+        return zeroAssetsExists ? removeAssetsLink : null;
     }
 }
 

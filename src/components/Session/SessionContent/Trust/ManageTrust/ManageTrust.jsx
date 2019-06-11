@@ -35,8 +35,9 @@ export default class ManageTrust extends React.Component {
         return (
             <div className="island">
                 <div className="island__header">Assets you accept</div>
-                <div className="island__paddedContent">
-                    To receive assets on the Stellar network, you must first {'"accept"'} the asset.
+                <div className="island__paddedContent Remove_all_assets">
+                    <span>To receive assets on the Stellar network, you must first {'"accept"'} the asset.</span>
+                    <RemoveAllTrusts d={this.props.d} />
                 </div>
                 <div className="island__separator" />
                 <table className="ManageTrust_table">
@@ -58,7 +59,6 @@ export default class ManageTrust extends React.Component {
                         )}
                     </tbody>
                 </table>
-                <RemoveAllTrusts d={this.props.d} />
             </div>
         );
     }
