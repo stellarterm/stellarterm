@@ -59,7 +59,7 @@ const Stellarify = {
       if (code !== 'XLM') {
         console.error(`Native issuers must have XLM code`);
       }
-      issuer = null;
+      issuer = undefined;
     } else if (!StellarSdk.StrKey.isValidEd25519PublicKey(issuer)) {
       // Since it's not a native asset and the issuer wasn't a public key,
       // it could be an asset issued. Lets try to resolve it!
