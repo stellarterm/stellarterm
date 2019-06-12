@@ -9,15 +9,7 @@ import AssetRow from '../AssetRow/AssetRow';
 
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
-const pattern = '^(https?:\\/\\/)?' + // protocol
-    '((([a-zA-Z\\d]([a-zA-Z\\d-]{0,61}[a-zA-Z\\d])*\\.)+' + // sub-domain + domain name
-    '[a-zA-Z]{2,13})' + // extension
-    '|((\\d{1,3}\\.){3}\\d{1,3})' + // OR ip (v4) address
-    '|localhost)' + // OR localhost
-    '(\\:\\d{1,5})?' + // port
-    '(\\/[a-zA-Z\\&\\d%_.~+-:@]*)*' + // path
-    '(\\?[a-zA-Z\\&\\d%_.,~+-:@=;&]*)?' + // query string
-    '(\\#[-a-zA-Z&\\d_]*)?$'; // fragment locator
+const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 const regexp = new RegExp(pattern);
 
 export default class SearchByAnchor extends React.Component {
