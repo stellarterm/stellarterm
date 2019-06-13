@@ -10,7 +10,7 @@ export default class OfferMakerOverview extends React.Component {
         try {
             return new BigNumber(input).toFixed(7).toString();
         } catch (e) {
-            return input;
+            return (Math.floor((input * 10000000)) / 10000000).toFixed(7);
         }
     }
 
