@@ -151,7 +151,7 @@ export default class OfferMaker extends React.Component {
                 successMessage: 'Offer successfully created',
             });
         } catch (error) {
-            const errorType = this.constructor.getErrorType(error);
+            const errorType = this.constructor.getErrorType(error.response);
             this.setState({
                 buttonState: 'ready',
                 errorMessage: true,
