@@ -146,7 +146,7 @@ export default class AssetCard2 extends React.Component {
 
         if (this.props.inRow) {
             return (
-                <span className="AssetRow">
+                <span className="AssetCardInRow">
                      <img
                          className="Row_logo"
                          src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
