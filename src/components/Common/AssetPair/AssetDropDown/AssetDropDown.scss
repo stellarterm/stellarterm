@@ -57,4 +57,11 @@
   top: 15px;
   transform: rotate(180deg);
   transition: 0.15s;
+
+    &.load{
+        height: 10px;
+        width: 10px;
+        right: 12px;
+        top: 22px;
+    }
 }
