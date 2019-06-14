@@ -111,16 +111,14 @@ export default class TransactionDetails extends React.Component {
 
     render() {
         const { tx } = this.props;
-
-        const networkFeeString = `${new BigNumber(tx.fee).dividedBy(10000000).toString()} XLM`;
+        const isPayment = !!tx.operations.find(op => op.type === 'payment');
 
         return (
             <div className="TransactionDetails">
                 {this.constructor.generateTableRow('Source', tx.source)}
                 {this.constructor.generateTableRow('Sequence', tx.sequence)}
                 {this.getOperations()}
-                {this.constructor.generateTableRow('Network Fee', networkFeeString)}
-                {this.constructor.generateTableRow('Memo', this.getMemo())}
+                {isPayment && this.constructor.generateTableRow('Memo', this.getMemo())}
             </div>
         );
     }
