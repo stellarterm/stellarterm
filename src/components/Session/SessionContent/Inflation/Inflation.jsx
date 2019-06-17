@@ -173,7 +173,7 @@ export default class Inflation extends React.Component {
         } else if (this.state.result === 'error') {
             result = (
                 <div className="s-alert s-alert--alert Inflation__alert">
-                    Error occured while setting inflation destination!
+                    Error occurred while setting inflation destination!
                 </div>
             );
         }

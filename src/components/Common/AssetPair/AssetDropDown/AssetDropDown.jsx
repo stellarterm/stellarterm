@@ -24,7 +24,7 @@ export default class AssetDropDown extends React.Component {
         const assetData = unknownAssetsData.find(assetLocalItem => (
             assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
         ));
-
+        if (!assetData) { return ''; }
         return (assetData.currency && assetData.currency.host) || assetData.host;
     }
     constructor(props) {
