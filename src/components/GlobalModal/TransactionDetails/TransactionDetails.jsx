@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BigNumber from 'bignumber.js';
+import uuidv1 from 'uuid/v1';
 import OperationsMap from './OperationsMap';
 import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
 import Printify from '../../../lib/Printify';
@@ -9,7 +9,7 @@ import Driver from '../../../lib/Driver';
 export default class TransactionDetails extends React.Component {
     static generateTableRow(label, content) {
         return (
-            <div key={`${label}_key`} className="Details_row">
+            <div key={uuidv1()} className="Details_row">
                 <div className="Details_row_label">{label}</div>
                 <div className="Details_row_content">{content}</div>
             </div>
@@ -100,7 +100,7 @@ export default class TransactionDetails extends React.Component {
             const attributes = this.constructor.getOperationAttr(op, d);
             const label = this.constructor.getOperationLabel(op);
             const attributesUi = attributes.map(attribute => (
-                <div className="Inline_content" key={attribute.key}>
+                <div className="Inline_content" key={uuidv1()}>
                     <div className="Inline_value">{attribute.display}</div>
                     {attribute.name ? <span className="Inline_attr">{attribute.name}</span> : null}
                 </div>

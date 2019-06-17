@@ -1,0 +1,14 @@
+@import "./RemoveAllTrusts/RemoveAllTrusts";
+
+.ManageTrust_table {
+    width: 100%;
+
+    .table_head_asset {
+        text-align: center;
+    }
+
+    .table_head_cell {
+        padding: 12px;
+        font-size: 16px;
+    }
+}

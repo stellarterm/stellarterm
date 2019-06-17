@@ -1,0 +1,29 @@
+.Remove_all_assets {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+     a {
+        display: flex;
+        align-items: center;
+        border-radius: 2px;
+        background-color: #f4f4f5;
+        font-size: 12px;
+        text-decoration: none;
+        padding: 0.6em;
+
+         img {
+            height: 1.2em;
+            width: auto;
+            padding-right: 0.4em;
+        }
+
+         &:hover {
+            background-color: #f8f8f8;
+        }
+
+         &:active {
+            background-color: #dedfe0;
+        }
+    }
+}
