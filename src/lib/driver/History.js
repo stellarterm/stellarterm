@@ -69,8 +69,9 @@ export default function History(driver) {
         },
         newOperationCallback: async () => {
             const lastOperation = await this.handlers.getOperations(1);
+            const opsisNotEqual = lastOperation.records[0].id !== this.history.records[0].id;
 
-            if (lastOperation.records.length !== 0) {
+            if (lastOperation.records.length !== 0 && opsisNotEqual) {
                 this.history.records = lastOperation.records.concat(this.history.records);
                 this.handlers.getOperationDetails();
             }
