@@ -29,16 +29,32 @@
   margin-right: 0;
 }
 .subNav__nav__item {
-  display: flex;
-  align-items: center;
-  padding: 0 9px;
-  height: 48px;
-  margin-right: 2em;
-  text-decoration: none;
-  color: $s-color-neutral3;
-  border-bottom: 5px solid transparent;
-  border-top: 5px solid transparent;
+    display: flex;
+    position: relative;
+    align-items: center;
+    padding: 0 9px;
+    height: 48px;
+    margin-right: 2em;
+    text-decoration: none;
+    color: #505558;
+    border-bottom: 5px solid transparent;
+    border-top: 5px solid transparent;
 }
+.subNav__nav__item sup {
+    position: absolute;
+    padding: 0 2px;
+    min-width: 13px;
+    line-height: 13px;
+    right: -7px;
+    top: 5px;
+    border-radius: 2px;
+    background-color: #86d38c;
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: #fff;
+}
+
 .subNav__nav__item:hover {
   border-bottom: 5px solid $s-color-primary6;
 }

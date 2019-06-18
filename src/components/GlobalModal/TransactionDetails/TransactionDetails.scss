@@ -51,7 +51,7 @@
 
                 .Inline_value {
                     display: inline-block;
-                    width: 220px;
+                    max-width: 220px;
                     overflow-wrap: break-word;
 
                     .SignerData_item{
