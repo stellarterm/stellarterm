@@ -21,7 +21,7 @@ export default function DepositAnchors(props) {
                 const trustRow = (
                     <tr className="row" key={`${name}_${assetCode}_${assetIssuer}`}>
                         <td className="row__item--assetCard">
-                            <AssetCard2 code={assetCode} issuer={assetIssuer} />
+                            <AssetCard2 code={assetCode} issuer={assetIssuer} d={props.d} />
                         </td>
 
                         <td className="row__shareOption">

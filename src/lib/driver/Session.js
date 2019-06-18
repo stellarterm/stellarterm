@@ -38,6 +38,54 @@ export default function Send(driver) {
         }
     };
 
+    this.addKnownAssetData = () => {
+        const knownAssetsData = JSON.parse(localStorage.getItem('knownAssetsData')) || [];
+        const { time } = knownAssetsData.find(item => Object.prototype.hasOwnProperty.call(item, 'time')) || '';
+        const periodUpdate = 14 * 24 * 60 * 60 * 1000;
+
+        if (knownAssetsData.length && ((new Date() - new Date(time)) < periodUpdate)) {
+            this.addKnownAssetDataCalled = true;
+            return Promise.resolve();
+        }
+
+        const { anchors } = directory;
+        const chainPromise = Object.keys(anchors).reduce((chain, anchorDomain) => {
+            const { assets } = anchors[anchorDomain];
+
+            return chain.then(newArray => StellarSdk.StellarTomlResolver.resolve(anchorDomain)
+                    .then((toml) => {
+                        const currencies = toml.CURRENCIES;
+                        const arrayAssets = Object.keys(assets).reduce((acc, assetCode) => {
+                            const assetIssuer = assets[assetCode].split('-')[1];
+                            const currency = currencies.find(cur => (
+                                cur.code === assetCode && cur.issuer === assetIssuer
+                            ));
+                            if (!currency || !currency.image) {
+                                return acc;
+                            }
+                            acc.push({
+                                code: assetCode,
+                                issuer: assetIssuer,
+                                logo: currency.image,
+                            });
+                            return acc;
+                        }, []);
+
+                        if (arrayAssets.length === 0) {
+                            return newArray;
+                        }
+                        return [...newArray, ...arrayAssets];
+                    })
+                    .catch(() => newArray));
+        }, Promise.resolve([]));
+
+        return chainPromise.then((res) => {
+            localStorage.setItem('knownAssetsData', JSON.stringify([...res, { time: new Date() }]));
+            this.addKnownAssetDataCalled = true;
+        });
+    };
+    this.addKnownAssetDataPromise = this.addKnownAssetData();
+
     // Ping the Ledger device to see if it is connected
     this.pingLedger = (singlePing) => {
         let brakePing = singlePing || false;

@@ -1,11 +1,13 @@
 import React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
-import hexToRGBA from '../../../lib/hexToRgba';
 import AssetCardMain from './AssetCardMain/AssetCardMain';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../Ellipsis/Ellipsis';
 import images from '../../../images';
+import hexToRGBA from './../../../lib/hexToRgba';
+
 
 // This is AssetCard2, the preferred way of displaying an asset in stellarterm.
 // The parent container should be 340px or wider
@@ -38,7 +40,7 @@ export default class AssetCard2 extends React.Component {
         this._mounted = false;
     }
 
-    getDataFromLocalStorage(asset, anchor) {
+    getUnknownAssetDataFromLocalStorage(asset, anchor) {
         let name = 'load';
         let logo = 'load';
         const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
@@ -65,6 +67,24 @@ export default class AssetCard2 extends React.Component {
             logoPadding,
             color,
         };
+    }
+
+    getKnownAssetDataFromLocalStorage(asset, anchor) {
+        const knownAssetsData = JSON.parse(localStorage.getItem('knownAssetsData')) || [];
+        if (!knownAssetsData.length && !this.props.d.session.addKnownAssetDataCalled) {
+            this.props.d.session.addKnownAssetDataPromise.then(() => this.forceUpdate());
+            return anchor;
+        }
+        const knownAsset = knownAssetsData.find(item => (
+            item.code === asset.code && item.issuer === asset.issuer
+        ));
+
+        if (!knownAsset) {
+            return anchor;
+        }
+
+        knownAsset.logoPadding = true;
+        return knownAsset;
     }
 
     async loadAssetData(asset) {
@@ -117,10 +137,12 @@ export default class AssetCard2 extends React.Component {
         const assetCardClass = `AssetCard2 AssetCard2--container ${this.props.boxy ? 'AssetCard2--boxy' : ''}`;
 
         const isUnknown = anchor.name === 'unknown';
-        const dataFromLocalStorage = isUnknown && this.getDataFromLocalStorage(asset, anchor);
 
-        let { logo, name, color } = dataFromLocalStorage || anchor;
-        let { logoPadding } = dataFromLocalStorage || false;
+        let { name } = isUnknown ? this.getUnknownAssetDataFromLocalStorage(asset, anchor) : anchor;
+        let { logo, logoPadding } = isUnknown ?
+            this.getUnknownAssetDataFromLocalStorage(asset, anchor) :
+            this.getKnownAssetDataFromLocalStorage(asset, anchor);
+        let color = isUnknown ? '#A5A0A7' : anchor.color;
 
         if ((name === 'load' || logo === 'load') && this.state.loadedAssetData) {
             name = this.state.loadedAssetData.host || this.props.host || anchor.name;
@@ -144,20 +166,33 @@ export default class AssetCard2 extends React.Component {
         }
 
         const assetSymbol = asset.code[0]; // Takes first asset symbol, if no any image loaded
+        const unknownLogo = (
+            <div className="AssetCard_unknown_logo unknown_small">
+                <div className="Unknown_circle">
+                    <span className="assetSymbol">{assetSymbol}</span>
+                </div>
+            </div>
+        );
+
+        const template = ReactDOMServer.renderToStaticMarkup(unknownLogo);
+        const div = document.createElement('div');
+        div.innerHTML = template;
 
         if (this.props.inRow) {
             return (
                 <span className="AssetCardInRow">
                     {logo === 'unknown' && logo !== 'load' ? (
-                        <div className="AssetCard_unknown_logo unknown_small">
-                            <div className="Unknown_circle">
-                                <span className="assetSymbol">{assetSymbol}</span>
-                            </div>
-                        </div>
+                        unknownLogo
                     ) : (
                         <img
                             style={Object.assign({}, backgroundStyle, { border: '1px solid' }, borderStyle)}
                             className="Row_logo"
+                            ref={(img) => {
+                                this.img = img;
+                            }}
+                            onError={() => {
+                                this.img.replaceWith(div);
+                            }}
                             src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
                             alt={anchor.name} />)}
                      {name === 'load' ?
@@ -189,7 +224,7 @@ export default class AssetCard2 extends React.Component {
 }
 
 AssetCard2.propTypes = {
-    d: PropTypes.instanceOf(Driver),
+    d: PropTypes.instanceOf(Driver).isRequired,
     code: PropTypes.string.isRequired,
     boxy: PropTypes.bool,
     issuer: PropTypes.string,
