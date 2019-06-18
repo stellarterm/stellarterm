@@ -7,6 +7,7 @@ import directory from 'stellarterm-directory';
 import Printify from '../../../../lib/Printify';
 import Ticker from '../../../../lib/api/Ticker';
 import AssetCard2 from '../../AssetCard2/AssetCard2';
+import Driver from '../../../../lib/Driver';
 
 export default class AssetListRows extends React.Component {
     static getAssetRow(asset, isNativeXlm, ticker) {
@@ -50,7 +51,7 @@ export default class AssetListRows extends React.Component {
     }
 
     componentWillMount() {
-        const { ticker } = this.props;
+        const { ticker, d } = this.props;
 
         const assets = ticker.data.assets
             .map((asset) => {
@@ -72,7 +73,7 @@ export default class AssetListRows extends React.Component {
                                   key={`asset-${asset.id}-${asset.code}`}
                                   className="AssetList_asset">
                                   <div className="asset_assetCard">
-                                      <AssetCard2 code={asset.code} issuer={asset.issuer} />
+                                      <AssetCard2 code={asset.code} issuer={asset.issuer} d={d} />
                                   </div>
                                   {this.constructor.getAssetRow(asset, false, ticker)}
                               </Link>
@@ -120,7 +121,7 @@ export default class AssetListRows extends React.Component {
     }
 
     render() {
-        const { ticker } = this.props;
+        const { ticker, d } = this.props;
         const Xlm = ticker.data.assets.find(asset => asset.id === 'XLM-native');
 
         return (
@@ -129,7 +130,7 @@ export default class AssetListRows extends React.Component {
                     to={`/exchange/${Xlm.topTradePairSlug}`}
                     className="AssetList_asset">
                     <div className="asset_assetCard">
-                        <AssetCard2 code={Xlm.code} issuer={Xlm.issuer} />
+                        <AssetCard2 code={Xlm.code} issuer={Xlm.issuer} d={d} />
                     </div>
                     {AssetListRows.getAssetRow(Xlm, true, ticker)}
                 </Link>
@@ -142,6 +143,7 @@ export default class AssetListRows extends React.Component {
 
 AssetListRows.propTypes = {
     ticker: PropTypes.instanceOf(Ticker).isRequired,
+    d: PropTypes.instanceOf(Driver).isRequired,
     limit: PropTypes.number,
     sortBy: PropTypes.string,
     sortType: PropTypes.bool,

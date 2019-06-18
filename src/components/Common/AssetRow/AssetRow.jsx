@@ -59,12 +59,12 @@ export default class AssetRow extends React.Component {
 
         const discoveredAsset = (
             <AssetCard2
+                d={this.props.d}
                 code={this.props.asset.getCode()}
                 issuer={this.props.asset.getIssuer()}
                 color={this.state.color}
                 currency={this.props.currency}
-                host={this.props.host} />
-        );
+                host={this.props.host} />);
 
         return !tradeLink ? (
             <div className="AssetRow row">
