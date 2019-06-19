@@ -337,8 +337,8 @@ export default function Send(driver) {
                 }
             } catch (err) {
                 this.state = 'error';
-                if (_.has(err.data, 'extras')) {
-                    const { result_codes } = err.data.extras;
+                if (_.has(err.response.data, 'extras')) {
+                    const { result_codes } = err.response.data.extras;
                     const errExtra = result_codes.transaction || result_codes.operations;
                     switch (errExtra.toString()) {
                     case 'op_no_trust':
