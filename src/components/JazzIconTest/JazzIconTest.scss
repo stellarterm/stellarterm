@@ -1,0 +1,32 @@
+.jazzicon {
+    margin-top: 30px;
+
+    .jazzicon_header {
+        background-color: #fff;
+        width: 975px;
+        margin: 0px auto;
+        display: flex;
+        flex-direction: row;
+
+        .jazzicon_input {
+            width: 400px;
+            margin: 40px;
+        }
+        .s-button{
+            height: 100%;
+            margin: 40px;
+        }
+    }
+
+    .jazzicon_content{
+        background-color: #fff;
+        width: 975px;
+        height: 100px;
+        margin: 30px auto;
+        padding: 0px 50px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+}

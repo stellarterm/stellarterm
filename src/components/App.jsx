@@ -8,6 +8,7 @@ import Markets from './Markets/Markets';
 import Download from './Download/Download';
 import Exchange from './Exchange/Exchange';
 import HomePage from './HomePage/HomePage';
+import JazzIconTest from './JazzIconTest/JazzIconTest';
 import TermsOfUse from './TermsOfUse/TermsOfUse';
 import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
 import TestNetwork from './TestNetwork/TestNetwork';
@@ -90,6 +91,8 @@ class TermApp extends React.Component {
             body = <HomePage driver={this.props.d} />;
         } else if (urlParts[0] === 'download') {
             body = <Download />;
+        } else if (urlParts[0] === 'jazzicontest') {
+            body = <JazzIconTest />;
         } else if (urlParts[0] === 'testnet' && network.isTestnet) {
             body = <TestNetwork />;
         } else if (urlParts[0] === 'testnet') {
