@@ -4,7 +4,7 @@ import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../../lib/Driver';
 import AssetCard2 from '../../AssetCard2/AssetCard2';
 import AssetCardList from './AssetCardList/AssetCardList';
-import directory from '../../../../directory';
+import directory from 'stellarterm-directory';
 import images from '../../../../images';
 
 const ENTER = 13;

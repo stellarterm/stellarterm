@@ -6,7 +6,7 @@ import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
-import directory from '../../../directory';
+import directory from 'stellarterm-directory';
 
 
 export default function Send(driver) {
