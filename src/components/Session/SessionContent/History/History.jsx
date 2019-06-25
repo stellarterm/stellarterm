@@ -74,7 +74,6 @@ export default class History extends React.Component {
     scrollHandler() {
         const bottomRow = document.querySelector('#scroll_row_bottom');
         const isBottomVisible = isElementVisible(bottomRow);
-        console.log(isBottomVisible);
 
         if (isBottomVisible && this.props.d.history.isLoading === false) {
             // If scrolled to bottom row, init loading and remove listener

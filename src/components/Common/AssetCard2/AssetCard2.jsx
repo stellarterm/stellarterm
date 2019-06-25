@@ -47,7 +47,7 @@ export default class AssetCard2 extends React.Component {
             assetLocalItem.code === this.props.code && assetLocalItem.issuer === this.props.issuer
         )) || {};
 
-        if (!assetData.time && !this.state.loadedAssetData) {
+        if (!assetData.time && !this.state.loadedAssetData && !this.props.currency) {
             this.loadAssetData(asset);
         }
 
@@ -56,7 +56,7 @@ export default class AssetCard2 extends React.Component {
         const domain = host && host.split('//')[1];
 
         name = this.props.host || assetData.host || domain || (assetData.time ? anchor.name : name);
-        const color = this.props.color || assetData.color || anchor.color;
+        const color = this.props.color || assetData.color;
         logo = image || (currency ? anchor.logo : logo);
         const logoPadding = !!image;
 
@@ -110,7 +110,6 @@ export default class AssetCard2 extends React.Component {
         }
 
         const anchor = directory.getAnchor(asset.domain);
-
         const issuerAccountId =
             asset.issuer === null
                 ? 'native lumens'
@@ -120,16 +119,17 @@ export default class AssetCard2 extends React.Component {
 
         const isUnknown = anchor.name === 'unknown';
 
-        let { logo, name, color } = isUnknown ? this.getDataFromLocalStorage(asset, anchor) : anchor;
+        let { logo, name } = isUnknown ? this.getDataFromLocalStorage(asset, anchor) : anchor;
+        let color = isUnknown ? '#A5A0A7' : anchor.color;
         let { logoPadding } = isUnknown ? this.getDataFromLocalStorage(asset, anchor) : false;
 
-        if (name === 'load' && this.state.loadedAssetData) {
-            name = this.state.loadedAssetData.host || anchor.name;
+        if ((name === 'load' || logo === 'load') && this.state.loadedAssetData) {
+            name = this.state.loadedAssetData.host || this.props.host || anchor.name;
             const { image, host } = this.state.loadedAssetData.currency || '';
             name = (host && host.split('//')[1]) || name;
             logo = image || anchor.logo;
             logoPadding = !!image;
-            color = this.state.loadedAssetData.color;
+            color = this.state.loadedAssetData.color || color;
         }
 
         let borderStyle = {};
@@ -163,7 +163,7 @@ export default class AssetCard2 extends React.Component {
                     backgroundStyle={backgroundStyle}
                     logo={logo}
                     logoWithPadding={logoPadding}
-                    name={name}
+                    name={name.toLowerCase()}
                     assetCode={asset.code}
                     issuerAccountId={issuerAccountId} />
 

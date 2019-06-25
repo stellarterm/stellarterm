@@ -44,17 +44,6 @@ export default () => (
                         </a>
                     </td>
                 </tr>
-                <tr>
-                    <td>Standalone html</td>
-                    <td>
-                        <a
-                            href="https://github.com/stellarterm/stellarterm.github.io"
-                            target="_blank"
-                            rel="nofollow noopener noreferrer">
-                            https://github.com/stellarterm/stellarterm.github.io
-                        </a>
-                    </td>
-                </tr>
             </tbody>
         </table>
     </Generic>

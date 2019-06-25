@@ -1,33 +1,73 @@
 .Footer {
-  font-size: 12px;
-}
-.Footer__chunk {
-  padding: 16px 18px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
-  background: #fff;
-  display: flex;
-  border-radius: 3px 3px 0 0;
-}
+    font-size: 12px;
+    background: #fff;
 
-.Footer__disclaimer {
-  width: auto;
-}
+    .Footer_chunk {
+        display: flex;
+        flex-direction: column;
+        border-radius: 3px 3px 0 0;
 
-.Footer__list {
-  width: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-}
+        .Footer_links {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 1.25em 0;
+            font-size: 14px;
 
-.Footer__list__item {
-  font-size: $s-scale-5;
-  line-height: 1;
-  margin-bottom: 0;
-  text-align: right;
-  margin-bottom: 6px;
-}
+            a {
+                display: flex;
+                align-items: center;
+                text-decoration: none;
+                color: #505558;
+                font-weight: 300;
+                transition: 0.2s ease-in-out;
 
-.Footer__list__item:last-child {
-  margin-bottom: 0;
+                &:hover {
+                    color: #787d7f;
+                }
+
+                img {
+                    margin-right: 0.75em;
+                    height: 1em;
+                    width: auto;
+                }
+            }
+
+            .Footer_social_links {
+                a + a {
+                    margin-left: 2.5em;
+                }
+            }
+
+            .Footer_social_links,
+            .Footer_privacy_links {
+                display: inherit;
+            }
+
+            .Footer_privacy_links {
+                a:first-child {
+                    padding-right: 0.7em;
+                    border-right: solid 1px #dfe0e1;
+                }
+
+                a + a {
+                    border-right: solid 1px #dfe0e1;
+                    padding: 0 0.7em;
+                }
+
+                a:last-child {
+                    padding-left: 0.7em;
+                    padding-right: 0;
+                    border: none;
+                }
+            }
+        }
+
+        .Footer_disclaimer {
+            padding: 1em 0;
+            border-top: solid 1px #dfe0e1;
+            width: auto;
+            text-align: center;
+        }
+    }
 }
