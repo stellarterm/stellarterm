@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Driver from '../../../../lib/Driver';
 import ManageTrust from './ManageTrust/ManageTrust';
 import ManuallyAddTrust from './ManuallyAddTrust/ManuallyAddTrust';
-import AddTrustFromFederation from './AddTrustFromFederation/AddTrustFromFederation';
+import SearchByAnchor from '../../../Common/SearchByAnchor/SearchByAnchor';
 import AddTrustFromDirectory from './AddTrustFromDirectory/AddTrustFromDirectory';
 import ErrorBoundary from '../../../Common/ErrorBoundary/ErrorBoundary';
 
@@ -16,7 +16,7 @@ export default function Trust(props) {
                 <ManageTrust d={d} />
             </div>
             <div className="so-back islandBack">
-                <AddTrustFromFederation d={d} />
+                <SearchByAnchor d={d} />
             </div>
             <div className="so-back islandBack">
                 <AddTrustFromDirectory d={d} />

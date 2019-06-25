@@ -133,7 +133,7 @@ export default class TrustButton extends React.Component {
                 {`Already accepted ${asset.getCode()}`}
             </button>
         ) : (
-            <span className="AddTrustRow__exists">{message}</span>
+            <span className="AssetRow__exists">{message}</span>
         );
     }
 
