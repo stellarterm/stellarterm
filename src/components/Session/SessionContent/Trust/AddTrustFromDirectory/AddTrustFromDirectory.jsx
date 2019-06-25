@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Driver from '../../../../../lib/Driver';
 import directory from '../../../../../directory';
-import AddTrustRow from '../../../../Common/AddTrustRow/AddTrustRow';
+import AssetRow from '../../../../Common/AssetRow/AssetRow';
 
 export default function AddTrustFromDirectory(props) {
     const assetRows = [];
@@ -18,7 +18,7 @@ export default function AddTrustFromDirectory(props) {
             if (assetIsNotXLM) {
                 const sdkAsset = new StellarSdk.Asset(asset.code, asset.issuer);
                 assetAdded[asset.id] = true;
-                assetRows.push(<AddTrustRow key={asset.id} d={props.d} asset={sdkAsset} />);
+                assetRows.push(<AssetRow key={asset.id} d={props.d} asset={sdkAsset} />);
             }
         });
     }
@@ -28,7 +28,7 @@ export default function AddTrustFromDirectory(props) {
 
         if (!(basicSlug in assetAdded)) {
             const asset = new StellarSdk.Asset(assetObj.code, assetObj.issuer);
-            assetRows.push(<AddTrustRow key={basicSlug} d={props.d} asset={asset} />);
+            assetRows.push(<AssetRow key={basicSlug} d={props.d} asset={asset} />);
         }
     });
 
