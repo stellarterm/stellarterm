@@ -158,7 +158,7 @@ export default class SearchByAnchor extends React.Component {
             'Accept asset via anchor domain';
 
         const description = this.props.tradeLink ?
-            'You can create exchange pair by entering the domain name of the issuer' :
+            'View assets issued by anchor (e.g. www.anchorusd.com) and trade them' :
             'You can accept an asset by entering the domain name of the issuer.';
 
         return (
