@@ -137,7 +137,7 @@ export default function Send(driver) {
                 driver.history.handlers.listenNewTransactions(driver.Server, this.account.account_id);
                 this.event.trigger();
             } catch (e) {
-                if (e.data) {
+                if (e.response) {
                     this.state = 'unfunded';
                     this.unfundedAccountId = keypair.publicKey();
                     setTimeout(() => {

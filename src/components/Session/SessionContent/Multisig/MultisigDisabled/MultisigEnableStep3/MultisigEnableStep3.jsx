@@ -69,7 +69,7 @@ export default class MultisigEnableStep3 extends React.Component {
             await result.serverResult;
             this.props.submit.cancel();
         } catch (error) {
-            const errorType = this.constructor.getErrorType(error);
+            const errorType = this.constructor.getErrorType(error.response);
             const errorMessage = this.constructor.getErrorMessage(errorType);
             this.setState({
                 addingError: errorMessage,
