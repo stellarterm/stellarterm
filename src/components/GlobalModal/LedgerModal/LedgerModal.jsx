@@ -116,7 +116,7 @@ export default class LedgerModal extends React.Component {
                     d.modal.handlers.cancel(error.message);
                     break;
                 case 'Hash signing not allowed. Have you enabled it in the app settings?':
-                    errorMsg = 'Please enable hash signing in your Ledger settings!';
+                    errorMsg = 'Please enable hash signing in your Ledger settings';
                     break;
                 default:
                     break;
