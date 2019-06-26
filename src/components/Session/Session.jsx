@@ -28,7 +28,7 @@ export default class Session extends React.Component {
         case 'out':
             return <LoginPage d={d} urlParts={urlParts} />;
         case 'unfunded':
-            return <SessionActivate unfundedAccountId={unfundedAccountId} />;
+            return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} />;
         case 'loading':
             return <SessionLoading />;
         case 'in':
