@@ -209,7 +209,6 @@ export default class AssetDropDown extends React.Component {
     }
 
     render() {
-        const name = this.props.isBase ? 'base' : 'counter';
         const arrowClassName = this.state.isOpenList ? 'AssetDropDown__arrowUp' : 'AssetDropDown__arrowDown';
         const assetDropDownClassName = this.state.isOpenList ? 'AssetDropDown_isOpen' : null;
 
@@ -235,7 +234,7 @@ export default class AssetDropDown extends React.Component {
                                 onChange={e => this.handleInput(e)}
                                 onKeyUp={e => this.setActiveCardIndex(e)}
                                 value={this.state.inputCode}
-                                placeholder={`Set ${name} asset`} />
+                                placeholder="Type asset code or domain name" />
                         </div>
                     }
                     {this.state.loading ?
@@ -270,6 +269,5 @@ AssetDropDown.propTypes = {
     asset: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     exception: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     onUpdate: PropTypes.func,
-    isBase: PropTypes.bool,
     clear: PropTypes.func,
 };

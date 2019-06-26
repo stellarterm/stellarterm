@@ -35,8 +35,7 @@ export default class AssetPair extends React.Component {
                         d={d}
                         asset={this.state[assetType]}
                         clear={() => this.clearAsset(assetType)}
-                        exception={exception}
-                        isBase={isBase} />
+                        exception={exception} />
                 ) : (
                     <AssetCard2
                         code={this.props[assetType].getCode()}
