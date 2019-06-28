@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import directory from 'stellarterm-directory';
 import Ellipsis from '../../Ellipsis/Ellipsis';
 import Driver from '../../../../lib/Driver';
-import directory from '../../../../../directory';
 
 export default class TrustButton extends React.Component {
     static goToLink(e) {
