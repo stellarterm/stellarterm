@@ -169,7 +169,7 @@ export default class Federation extends React.Component {
             })
             .catch((e) => {
                 this.setState({
-                    fedError: e.data !== undefined ? e.data.name : 'Federation error occured! Please try later.',
+                    fedError: e.data !== undefined ? e.data.name : 'Federation error occurred! Please try later.',
                     reqIsResolved: true,
                 });
             });
