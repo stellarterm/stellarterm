@@ -8,14 +8,12 @@
     "test": "./test.sh",
     "setup": "yarn install",
     "start": "./node_modules/.bin/gulp",
-    "directory/": "npm run directory",
-    "directory": "cd directory && ./checkBuild.sh;",
     "lint": "./node_modules/.bin/eslint .",
     "lint-fix": "./node_modules/.bin/eslint . --fix",
-    "hash": "cd dist; openssl dgst -sha256 index.html; openssl dgst -sha256 ../directory/directory.json",
     "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
   },
   "dependencies": {
+    "@babel/core": "^7.4.5",
     "@ledgerhq/hw-app-str": "^4.55.0",
     "@ledgerhq/hw-transport-u2f": "^4.55.0",
     "awesome-debounce-promise": "2.1.0",
@@ -23,6 +21,7 @@
     "babelify": "7.3.0",
     "bignumber.js": "4.1.0",
     "fast-average-color": "^4.3.0",
+    "gulp-babel": "^8.0.0",
     "gulp-sass": "3.1.0",
     "gulp-useref": "3.1.4",
     "lodash": "4.17.11",

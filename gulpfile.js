@@ -2,6 +2,7 @@
 const gulp = require('gulp');
 const del = require('del');
 const runSequence = require('run-sequence');
+const babel = require('gulp-babel');
 
 const $ = {
     sass: require('gulp-sass'),
@@ -217,10 +218,16 @@ gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
 
 // Build production site.
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
+    .pipe(babel({
+        presets: ['es2015'],
+    }))
     .pipe($.uglify())
     .pipe(gulp.dest('dist/scripts')));
 
 gulp.task('inlinesource', () => gulp.src('./dist/index.html')
+    .pipe(babel({
+        presets: ['es2015'],
+    }))
     .pipe($.inlineSource())
     .pipe(gulp.dest('./dist/')));
 
