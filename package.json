@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
     "@ledgerhq/hw-app-str": "^4.55.0",
     "@ledgerhq/hw-transport-u2f": "^4.55.0",
     "awesome-debounce-promise": "2.1.0",
@@ -51,7 +52,7 @@
     "gulp": "3.9.1",
     "gulp-autoprefixer": "3.1.1",
     "gulp-inline-source": "3.1.0",
-    "gulp-uglify": "2.1.2",
+    "gulp-uglify": "3.0.2",
     "run-sequence": "1.2.2",
     "vinyl-source-stream": "1.1.2",
     "watchify": "3.10.0"
