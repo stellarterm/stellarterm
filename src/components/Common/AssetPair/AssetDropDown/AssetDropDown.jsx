@@ -63,10 +63,12 @@ export default class AssetDropDown extends React.Component {
     }
 
     componentWillMount() {
+        this._mounted = true;
         document.addEventListener('mousedown', this.handleClickOutside, false);
     }
 
     componentWillUnmount() {
+        this._mounted = false;
         document.removeEventListener('mousedown', this.handleClickOutside, false);
         this.dTicker.event.unlisten(this.listenId);
     }
@@ -153,7 +155,11 @@ export default class AssetDropDown extends React.Component {
 
     async getAssetByDomain(domain) {
         this.setState({ loading: true });
-        setTimeout(() => this.setState({ loading: false }), 5000);
+        setTimeout(() => {
+            if (this._mounted) {
+                this.setState({ loading: false });
+            }
+        }, 5000);
         try {
             const resolved = await resolveAnchor(domain);
             if (!resolved.CURRENCIES) {
