@@ -103,7 +103,7 @@ export default class PopupAlert extends React.Component {
             .filter(op => op !== null);
     }
 
-    closePopupClick() {
+    hidePopup() {
         this.setState({ isVisible: false });
         setTimeout(() => {
             this.props.d.history.lastOperations = [];
@@ -113,9 +113,15 @@ export default class PopupAlert extends React.Component {
     render() {
         const { isVisible } = this.state;
 
+        if (isVisible) {
+            setTimeout(() => {
+                this.hidePopup();
+            }, 20000);
+        }
+
         return (
             <div className={`PopupAlert ${isVisible ? 'popup-show' : ''}`}>
-                <img src={images['icon-close']} alt="X" className="icon-close" onClick={() => this.closePopupClick()} />
+                <img src={images['icon-close']} alt="X" className="icon-close" onClick={() => this.hidePopup()} />
                 {this.getPopupContent()}
             </div>
         );
