@@ -74,6 +74,7 @@ export default class PopupAlert extends React.Component {
         super(props);
 
         this.listenId = this.props.d.history.eventNewOp.listen(() => {
+            clearTimeout(this.timeout);
             this.setState({ isVisible: true });
         });
 
@@ -114,9 +115,7 @@ export default class PopupAlert extends React.Component {
         const { isVisible } = this.state;
 
         if (isVisible) {
-            setTimeout(() => {
-                this.hidePopup();
-            }, 20000);
+            this.timeout = setTimeout(() => this.hidePopup(), 20000);
         }
 
         return (
