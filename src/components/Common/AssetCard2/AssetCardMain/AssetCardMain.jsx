@@ -32,7 +32,7 @@ export default function AssetCardMain(props) {
                     <span className="AssetCard2__header__code">{assetCode}</span>
                     {name === 'load' ? 
                         <span className="AssetCard2__header__domain"><Ellipsis /></span> :
-                        <span className="AssetCard2__header__domain">{name !== 'unknown' ? name : ''}</span>
+                        <span className="AssetCard2__header__domain">{name !== 'unknown' ? name : 'Unknown'}</span>
                     }
                 </div>
                 <p className="AssetCard2__issuerAccountId">Issuer: {issuerAccountId}</p>
