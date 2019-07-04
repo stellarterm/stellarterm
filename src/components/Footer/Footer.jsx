@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import images from '../../images';
 
 export default () => (
@@ -21,8 +22,8 @@ export default () => (
                 </div>
 
                 <div className="Footer_privacy_links">
-                    <a href="#privacy">Privacy Policy</a>
-                    <a href="#terms-of-use">Terms of use</a>
+                    <Link to="/privacy/">Privacy Policy</Link>
+                    <Link to="/terms-of-use/">Terms of use</Link>
                 </div>
             </div>
 

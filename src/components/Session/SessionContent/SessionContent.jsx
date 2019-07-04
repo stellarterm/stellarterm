@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import Inflation from './Inflation/Inflation';
 import Deposit from './Deposit/Deposit';
@@ -12,67 +13,41 @@ import ErrorBoundary from '../../Common/ErrorBoundary/ErrorBoundary';
 import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
 
 export default function SessionContent(props) {
-    const routePath = props.route;
     const d = props.d;
-    let content;
-
-    switch (routePath) {
-    case undefined:
-        content = <SessionAccount d={d} />;
-        break;
-    case 'addTrust':
-        content = <Trust d={d} />;
-        break;
-    case 'send':
-        content = (
-                <ErrorBoundary>
-                    <div className="so-back islandBack islandBack--t">
-                        <Send d={d} />
-                    </div>
-                </ErrorBoundary>
-            );
-        break;
-    case 'settings':
-        content = (
-                <ErrorBoundary>
-                    <Inflation d={d} />
-                </ErrorBoundary>
-            );
-        break;
-    case 'multisig':
-        content = (
-                <ErrorBoundary>
-                    <Multisig d={d} />
-                </ErrorBoundary>
-            );
-        break;
-    case 'history':
-        content = (
-                <ErrorBoundary>
-                    <History d={d} />
-                </ErrorBoundary>
-            );
-        break;
-    case 'deposit':
-        content = (
-                <ErrorBoundary>
-                    <Deposit d={d} />
-                </ErrorBoundary>
-            );
-        break;
-    default:
-        break;
-    }
 
     return (
         <React.Fragment>
-            <SessionAccountMenu d={d} />
-            {content}
+            <BrowserRouter>
+                <SessionAccountMenu d={d} />
+                <Switch>
+                    <Route exact path="/account/" component={prop => <SessionAccount {...prop} d={d} />} />
+                    <Route exact path="/account/addTrust/" component={prop => <Trust {...prop} d={d} />} />
+                    <Route
+                        exact
+                        path="/account/send/"
+                        component={prop => <ErrorBoundary><Send {...prop} d={d} /></ErrorBoundary>} />
+                    <Route
+                        exact
+                        path="/account/settings/"
+                        component={prop => <ErrorBoundary><Inflation {...prop} d={d} /></ErrorBoundary>} />
+                    <Route
+                        exact
+                        path="/account/multisig/"
+                        component={prop => <ErrorBoundary><Multisig {...prop} d={d} /></ErrorBoundary>} />
+                    <Route
+                        exact
+                        path="/account/history/"
+                        component={prop => <ErrorBoundary><History {...prop} d={d} /></ErrorBoundary>} />
+                    <Route
+                        exact
+                        path="/account/deposit/"
+                        component={prop => <ErrorBoundary><Deposit {...prop} d={d} /></ErrorBoundary>} />
+                </Switch>
+            </BrowserRouter>
         </React.Fragment>
     );
 }
 
 SessionContent.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    route: PropTypes.string,
 };

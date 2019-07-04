@@ -45,7 +45,7 @@ export default class CustomPairMenu extends React.Component {
     }
 
     goToTrade() {
-        window.location = `#${Stellarify.pairToExchangeUrl(this.state.baseBuying, this.state.counterSelling)}`;
+        window.location = `${Stellarify.pairToExchangeUrl(this.state.baseBuying, this.state.counterSelling)}`;
     }
 
     swap() {

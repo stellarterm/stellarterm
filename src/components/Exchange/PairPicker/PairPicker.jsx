@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
+import { Link } from 'react-router-dom';
 import Format from '../../../lib/Format';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
@@ -94,9 +94,9 @@ export default class PairPicker extends React.Component {
             <div className="island">
                 {pairPickerBlock}
 
-                <a href="#markets" className="PairPicker_seeOthers">
+                <Link to="/markets/" className="PairPicker_seeOthers">
                     <span>See other trading pairs</span>
-                </a>
+                </Link>
             </div>
         );
     }

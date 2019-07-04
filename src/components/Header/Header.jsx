@@ -1,7 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export default class Header extends React.Component {
+    static createHeaderTab(url, text) {
+        const rootAddress = window.location.pathname.split('/')[1];
+        const isCurrentTab = rootAddress === url ? ' is-current' : '';
+
+        return (
+            <Link className={`Nav_link${isCurrentTab}`} to={`/${url}/`}>
+                <span>{text}</span>
+            </Link>
+        );
+    }
+
     getNetworkBar() {
         const { isDefault, horizonUrl, networkPassphrase } = this.props.network;
 
@@ -21,17 +33,6 @@ export default class Header extends React.Component {
         ) : null;
     }
 
-    createHeaderTab(url, text) {
-        const { rootAddress } = this.props;
-        const isCurrentTab = rootAddress === url ? ' is-current' : '';
-
-        return (
-            <a className={`Nav_link${isCurrentTab}`} href={`#${url}`}>
-                <span>{text}</span>
-            </a>
-        );
-    }
-
     render() {
         return (
             <div className="Header_main">
@@ -41,11 +42,11 @@ export default class Header extends React.Component {
                     <div className="so-chunk Header">
 
                         <nav className="Header_nav">
-                            <a className="Nav_logo" href="/#">StellarTerm</a>
-                            {this.createHeaderTab('exchange', 'Exchange')}
-                            {this.createHeaderTab('markets', 'Markets')}
-                            {this.createHeaderTab('account', 'Account')}
-                            {this.createHeaderTab('download', 'Download')}
+                            <Link className="Nav_logo" to={'/'}>StellarTerm</Link>
+                            {this.constructor.createHeaderTab('exchange', 'Exchange')}
+                            {this.constructor.createHeaderTab('markets', 'Markets')}
+                            {this.constructor.createHeaderTab('account', 'Account')}
+                            {this.constructor.createHeaderTab('download', 'Download')}
                         </nav>
 
                         <span className="Header_version">v{window.stBuildInfo.version}</span>
@@ -65,5 +66,4 @@ Header.propTypes = {
         isTestnet: PropTypes.bool,
         networkPassphrase: PropTypes.string,
     }).isRequired,
-    rootAddress: PropTypes.string.isRequired,
 };

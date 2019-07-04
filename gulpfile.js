@@ -13,6 +13,9 @@ const browserify = require('browserify');
 const watchify = require('watchify');
 const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
+const browserSyncSpa = require('browser-sync-middleware-spa');
+
+const indexPath = `${__dirname}/dist/index.html`;
 const fs = require('fs');
 const execSync = require('child_process').execSync;
 const argv = require('yargs').argv;
@@ -171,6 +174,7 @@ gulp.task('watch', baseTasks, () => {
         logPrefix: 'BS',
         server: ['dist'],
         https: true,
+        middleware: [browserSyncSpa(/exchange[^-]|^[^.]+$/, indexPath)],
     });
     gulp.watch('./src/index.html', ['html-reload']);
     gulp.watch(['src/**/*.scss'], ['css-reload']);

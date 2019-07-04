@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import Format from '../../../../lib/Format';
 import directory from '../../../../directory';
@@ -67,15 +68,15 @@ export default class AssetListRows extends React.Component {
                         volume24h: asset.volume24h_USD,
                         change24h: asset.change24h_USD,
                         assetRow: (
-                              <a
-                                  href={`#exchange/${asset.topTradePairSlug}`}
+                              <Link
+                                  to={`/exchange/${asset.topTradePairSlug}`}
                                   key={`asset-${asset.id}-${asset.code}`}
                                   className="AssetList_asset">
                                   <div className="asset_assetCard">
                                       <AssetCard2 code={asset.code} issuer={asset.issuer} />
                                   </div>
                                   {this.constructor.getAssetRow(asset, false, ticker)}
-                              </a>
+                              </Link>
                           ),
                     };
             })
@@ -106,14 +107,14 @@ export default class AssetListRows extends React.Component {
 
         return (
             <React.Fragment>
-                <a
-                    href={`#exchange/${Xlm.topTradePairSlug}`}
+                <Link
+                    to={`/exchange/${Xlm.topTradePairSlug}`}
                     className="AssetList_asset">
                     <div className="asset_assetCard">
                         <AssetCard2 code={Xlm.code} issuer={Xlm.issuer} />
                     </div>
                     {AssetListRows.getAssetRow(Xlm, true, ticker)}
-                </a>
+                </Link>
 
                 {this.sortAssets(this.state.assets).map(asset => asset.assetRow)}
             </React.Fragment>

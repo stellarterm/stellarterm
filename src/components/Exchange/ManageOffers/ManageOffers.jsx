@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import Stellarify from '../../../lib/Stellarify';
 import ManageOfferRow from './ManageOfferRow/ManageOfferRow';
@@ -80,7 +81,7 @@ export default class ManageOffers extends React.Component {
         if (this.props.d.session.state !== 'in') {
             return (
                 <div className="island__paddedContent">
-                    <a href="#account">Log in</a> to see your open offers
+                    <Link to="/account/">Log in</Link> to see your open offers
                 </div>
             );
         }
