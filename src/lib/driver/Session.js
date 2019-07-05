@@ -736,13 +736,7 @@ export default function Send(driver) {
                 }
 
                 const image = currency && currency.image;
-                let color;
-                try {
-                    color = image && await this.handlers.getAverageColor(image);
-                } catch (e) {
-                    console.warn(`Can not calculate background color for ${asset.code} (${homeDomain}). Reason: CORS Policy`);
-                    color = '';
-                }
+                const color = image && await this.handlers.getAverageColor(image, asset.code, homeDomain);
 
                 return {
                     code: asset.code,
@@ -764,7 +758,7 @@ export default function Send(driver) {
             }
         },
 
-        getAverageColor: (imageUrl) => {
+        getAverageColor: (imageUrl, code, domain) => {
             const fac = new FastAverageColor();
             const img = document.createElement('img');
             img.src = `${imageUrl}?rnd${Math.random()}`;
@@ -772,8 +766,9 @@ export default function Send(driver) {
 
             return fac.getColorAsync(img)
                 .then(col => col.hex)
-                .catch((e) => {
-                    throw new Error(e);
+                .catch(() => {
+                    console.warn(`Can not calculate background color for ${code} (${domain}). Reason: CORS Policy`);
+                    return '';
                 });
         },
     };

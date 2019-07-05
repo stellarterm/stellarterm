@@ -50,12 +50,9 @@ export default class AssetRow extends React.Component {
     }
 
     async getColor({ image }) {
-        try {
-            const color = await this.props.d.session.handlers.getAverageColor(image);
-            this.setState({ color });
-        } catch (e) {
-            console.warn(`Can not calculate background color for ${this.props.asset.getCode()}(${this.props.host}). Reason: CORS Policy`);
-        }
+        const color =
+            await this.props.d.session.handlers.getAverageColor(image, this.props.asset.getCode(), this.props.host);
+        this.setState({ color });
     }
 
 
