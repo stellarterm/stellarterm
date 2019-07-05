@@ -14,11 +14,10 @@ import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
 import TestNetwork from './TestNetwork/TestNetwork';
 import ReloadToTestnet from './ReloadToTestnet/ReloadToTestnet';
 import Session from './Session/Session';
-import Generic from './Common/Generic/Generic';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Driver from '../lib/Driver';
-import Stellarify from '../lib/Stellarify';
+
 
 window.React = React;
 const mountNode = document.getElementById('app');
@@ -93,22 +92,22 @@ class TermApp extends React.Component {
                                 <Route
                                     exact
                                     path="/"
-                                    component={props => <HomePage {...props} driver={this.props.d} />} />
+                                    render={props => <HomePage {...props} driver={this.props.d} />} />
                                 <Route path="/download/" component={Download} />
                                 <Route path="/testnet/" component={network.isTestnet ? TestNetwork : ReloadToTestnet} />
                                 <Route path="/privacy/" component={PrivacyPolicy} />
                                 <Route path="/terms-of-use/" component={TermsOfUse} />
                                 <Route
                                     path="/account/"
-                                    component={props => <Session {...props} d={this.props.d} urlParts={'account'} />} />
+                                    render={props => <Session {...props} d={this.props.d} urlParts={'account'} />} />
                                 <Route
                                     path="/ledger/"
-                                    component={props => <Session {...props} d={this.props.d} urlParts={'ledger'} />} />
+                                    render={props => <Session {...props} d={this.props.d} urlParts={'ledger'} />} />
                                 <Route
                                     path="/signup/"
-                                    component={props => <Session {...props} d={this.props.d} urlParts={'signup'} />} />
-                                <Route path="/markets" component={props => <Markets {...props} d={this.props.d} />} />
-                                <Route path="/exchange" component={props => <Exchange {...props} d={this.props.d} />} />
+                                    render={props => <Session {...props} d={this.props.d} urlParts={'signup'} />} />
+                                <Route path="/markets" render={props => <Markets {...props} d={this.props.d} />} />
+                                <Route path="/exchange" render={props => <Exchange {...props} d={this.props.d} />} />
 
                                 <Route component={NotFound} />
                             </Switch>

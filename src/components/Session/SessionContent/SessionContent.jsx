@@ -19,28 +19,28 @@ export default function SessionContent(props) {
         <React.Fragment>
             <SessionAccountMenu d={d} />
             <Switch>
-                <Route exact path="/account/" component={prop => <SessionAccount {...prop} d={d} />} />
-                <Route exact path="/account/addTrust/" component={prop => <Trust {...prop} d={d} />} />
+                <Route exact path="/account/" render={prop => <SessionAccount {...prop} d={d} />} />
+                <Route exact path="/account/addTrust/" render={prop => <Trust {...prop} d={d} />} />
                 <Route
                     exact
                     path="/account/send/"
-                    component={prop => <ErrorBoundary><Send {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <ErrorBoundary><Send {...prop} d={d} /></ErrorBoundary>} />
                 <Route
                     exact
                     path="/account/settings/"
-                    component={prop => <ErrorBoundary><Inflation {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <ErrorBoundary><Inflation {...prop} d={d} /></ErrorBoundary>} />
                 <Route
                     exact
                     path="/account/multisig/"
-                    component={prop => <ErrorBoundary><Multisig {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <ErrorBoundary><Multisig {...prop} d={d} /></ErrorBoundary>} />
                 <Route
                     exact
                     path="/account/history/"
-                    component={prop => <ErrorBoundary><History {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <ErrorBoundary><History {...prop} d={d} /></ErrorBoundary>} />
                 <Route
                     exact
                     path="/account/deposit/"
-                    component={prop => <ErrorBoundary><Deposit {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <ErrorBoundary><Deposit {...prop} d={d} /></ErrorBoundary>} />
                 <Redirect from="/ledger/" to="/account/" />
             </Switch>
         </React.Fragment>
