@@ -1,18 +1,129 @@
 @import "./OfferTables/OfferTables";
 @import "./ManageOffers/ManageOffers";
 @import "./OfferMakers/OfferMakers";
-@import "./PriceChart/PriceChart";
+@import "./LightweightChart/LightweightChart";
+@import "./FullscreenKeyAlert/FullscreenKeyAlert";
 @import "./PairPicker/PairPicker";
 
 .Exchange__warning {
-  padding: 18px 18px 0 18px;
+    padding: 18px 18px 0 18px;
 }
+
 .Exchange__orderbook {
-  padding-bottom: 18px;
+    padding-bottom: 18px;
 }
 
 .Exchange__orderbookDisabled {
-  font-size: $s-scale-1;
-  text-align: center;
-  margin-bottom: $s-scale-2;
+    font-size: $s-scale-1;
+    text-align: center;
+    margin-bottom: $s-scale-2;
+}
+
+.chart_Switcher {
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+
+    .switch_Tabs,
+    .fullscreen_Block {
+        display: flex;
+        align-items: center;
+    }
+
+    .switch_Tabs {
+        a {
+            display: flex;
+            text-decoration: none;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+
+            img {
+                opacity: 0.7;
+                margin-right: 5px;
+                width: 24px;
+                height: 24px;
+            }
+        }
+        .activeChart {
+            border-bottom: solid 2px #86d38c;
+
+            img {
+                opacity: 1;
+            }
+        }
+    }
+
+    .fullscreen_Block {
+        img {
+            width: 23px;
+            height: 23px;
+            transition: 0.5s ease-in-out;
+            cursor: pointer;
+
+            &:hover {
+                transform: scale(1.3);
+            }
+        }
+    }
+
+    .fullscreen_iconLeft {
+        position: fixed;
+        left: 0;
+        top: 72px;
+        z-index: 10;
+    }
+
+    .switch_Tabs a,
+    .fullscreen_Block {
+        padding: 11px 18px 9px 18px;
+
+        &:first-child {
+            margin-left: 1em;
+        }
+    }
+}
+
+//Charts styles
+.ChartChunk {
+    margin: 0 auto;
+    height: 500px;
+    border-radius: 3px;
+    position: relative;
+
+    .chart_message {
+        width: 100%;
+        font-size: $s-scale-2;
+        margin-bottom: 0;
+        padding-left: 18px;
+        padding-right: 18px;
+        text-align: center;
+        color: $s-color-neutral6;
+    }
+}
+
+.fullScreenChart {
+    width: 100vw !important;
+    height: calc(100vh - 72px) !important;
+    position: fixed;
+    z-index: 5;
+    top: 72px;
+    left: 0;
+    padding: 0 !important;
+
+    #LightChart {
+        width: 100%;
+        height: 100%;
+    }
+}
+
+.fullscreen_Loading{
+    display: flex;
+    font-size: 21px;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    color: #bdbfc0;
+    width: 100vw;
+    height: calc(100vh - 50px);
 }

@@ -85,10 +85,11 @@ export default class AssetPair extends React.Component {
     }
 
     render() {
-        const { row, d, baseBuying, counterSelling, dropdown, swap } = this.props;
+        const { row, d, baseBuying, counterSelling, dropdown, swap, fullscreen } = this.props;
+        const assetPairClassname = `AssetPair ${fullscreen ? 'AssetPair_fullscreen' : ''}`;
 
         const content = (
-            <div className="AssetPair">
+            <div className={assetPairClassname}>
                 {this.getAssetCard(dropdown, d, 'baseBuying')}
                 {this.getSeparator(swap)}
                 {this.getAssetCard(dropdown, d, 'counterSelling')}
@@ -130,4 +131,5 @@ AssetPair.propTypes = {
     row: PropTypes.bool,
     swap: PropTypes.bool,
     dropdown: PropTypes.bool,
+    fullscreen: PropTypes.bool,
 };

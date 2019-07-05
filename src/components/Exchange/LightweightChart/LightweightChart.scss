@@ -1,0 +1,97 @@
+@import "./ChartDataPanel/ChartDataPanel";
+
+#LightChart {
+    width: 980px;
+    height: 100%;
+}
+
+.chart_Msg_Container {
+    width: 100%;
+    height: calc(100% - 87px);
+    display: flex;
+    align-items: center;
+}
+
+.chart_Msg_Container_fullscreen {
+    @extend .chart_Msg_Container;
+    height: calc(100% - 87px);
+}
+
+.chart_Settings_Panel {
+    border-top: solid 1px #e3e3e4;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    padding: 6px 10px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+
+    .timeFrame_btns {
+        .timeBtn {
+            text-decoration: none;
+            font-size: 14px;
+            color: #505558;
+            padding: 0 10px;
+        }
+
+        .timeBtn_active {
+            color: #68c76f;
+        }
+    }
+
+    .scale_Settings {
+        display: flex;
+
+        .utc_Time,
+        .priceScale_Btns {
+            font-size: 14px;
+        }
+
+        .utc_Time {
+            padding-right: 10px;
+        }
+
+        .priceScale_Btns {
+            .scaleBtn {
+                text-decoration: none;
+                font-size: 14px;
+                color: #505558;
+                padding: 0 10px;
+                border-left: solid 1px #e3e3e4;
+            }
+
+            .scaleBtn_active {
+                color: #68c76f;
+            }
+        }
+    }
+}
+
+.scrollTime_btn {
+    position: absolute;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.5;
+    background-color: #4c525e;
+    right: 80px;
+    bottom: 70px;
+    height: 32px;
+    width: 32px;
+    z-index: 3;
+    border-radius: 50%;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+        opacity: 0.7;
+    }
+
+    &:active {
+        opacity: 1;
+    }
+
+    img {
+        width: 24px;
+        height: 24px;
+    }
+}

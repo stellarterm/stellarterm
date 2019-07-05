@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../../lib/Driver';
@@ -10,6 +11,7 @@ import images from '../../../../images';
 const ENTER = 13;
 const ARROW_UP = 38;
 const ARROW_DOWN = 40;
+const KEY_F = 70;
 
 const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
 const DEBOUNCE_TIME = 700;
@@ -66,7 +68,14 @@ export default class AssetDropDown extends React.Component {
         document.addEventListener('mousedown', this.handleClickOutside, false);
     }
 
+    componentDidMount() {
+        // eslint-disable-next-line react/no-find-dom-node
+        ReactDOM.findDOMNode(this).addEventListener('keyup', e => (e.keyCode === KEY_F ? e.stopPropagation() : null));
+    }
+
     componentWillUnmount() {
+        // eslint-disable-next-line react/no-find-dom-node
+        ReactDOM.findDOMNode(this).removeEventListener('keyup', e => (e.keyCode === KEY_F ? e.stopPropagation() : null));
         document.removeEventListener('mousedown', this.handleClickOutside, false);
         this.dTicker.event.unlisten(this.listenId);
     }

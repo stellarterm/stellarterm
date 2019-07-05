@@ -1,0 +1,39 @@
+.data_Panel {
+    position: absolute;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    z-index: 3;
+
+    .chart_Data {
+        padding-left: 18px;
+        padding-top: 5px;
+
+        .pair_Name,
+        .data_Item,
+        .data_Title,
+        .title_Volume {
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .data_Title,
+        .title_Volume {
+            margin-left: 1em;
+        }
+
+        .title_Volume,
+        .data_Volume {
+            font-size: 14px;
+        }
+
+        .changePositive {
+            color: #4caf50;
+        }
+
+        .changeNegative {
+            color: #ef5350;
+        }
+    }
+}
