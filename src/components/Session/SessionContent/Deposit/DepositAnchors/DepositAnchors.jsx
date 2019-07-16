@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import directory from 'stellarterm-directory';
 import AssetCard2 from '../../../../Common/AssetCard2/AssetCard2';
-import TrustButton from '../../../../Common/AddTrustRow/TrustButton/TrustButton';
+import TrustButton from '../../../../Common/AssetRow/TrustButton/TrustButton';
 
 export default function DepositAnchors(props) {
     const anchorRows = [];

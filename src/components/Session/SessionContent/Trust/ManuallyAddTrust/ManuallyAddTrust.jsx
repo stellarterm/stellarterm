@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Driver from '../../../../../lib/Driver';
-import TrustButton from '../../../../Common/AddTrustRow/TrustButton/TrustButton';
+import TrustButton from '../../../../Common/AssetRow/TrustButton/TrustButton';
 import AssetCard from './AssetCard/AssetCard';
 
 export default class ManuallyAddTrust extends React.Component {

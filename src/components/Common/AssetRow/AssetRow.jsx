@@ -2,9 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../lib/Driver';
 import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
-import TrustButton from '../../Common/AddTrustRow/TrustButton/TrustButton';
+import TrustButton from './TrustButton/TrustButton';
+import Stellarify from '../../../lib/Stellarify';
 
-export default class AddTrustRow extends React.Component {
+export default class AssetRow extends React.Component {
+    static goToTrade(asset) {
+        const native = new StellarSdk.Asset.native();
+        window.location = `#${Stellarify.pairToExchangeUrl(asset, native)}`;
+    }
+
+
     constructor(props) {
         super(props);
         this.state = {
@@ -19,6 +26,29 @@ export default class AddTrustRow extends React.Component {
         }
     }
 
+    getRowActionButton() {
+        if (this.props.tradeLink) {
+            return (
+                <span
+                    onClick={() => this.constructor.goToTrade(this.props.asset)}
+                    className="tradeLink">
+                        trade
+                </span>
+            );
+        }
+
+        return (
+            <TrustButton
+                d={this.props.d}
+                asset={this.props.asset}
+                message={`${this.props.asset.getCode()} accepted`}
+                trustMessage={`Accept ${this.props.asset.getCode()}`}
+                currency={this.props.currency}
+                color={this.state.color}
+                host={this.props.host} />
+        );
+    }
+
     async getColor({ image }) {
         const result = await this.props.d.session.handlers.getAverageColor(image);
         if (result.error === null) {
@@ -26,9 +56,10 @@ export default class AddTrustRow extends React.Component {
         }
     }
 
+
     render() {
         return (
-            <div className="AddTrustRow row">
+            <div className="AssetRow row">
                 <div className="row__assetCard2">
                     <AssetCard2
                         code={this.props.asset.getCode()}
@@ -37,23 +68,17 @@ export default class AddTrustRow extends React.Component {
                         currency={this.props.currency}
                         host={this.props.host} />
                 </div>
-                <TrustButton
-                    d={this.props.d}
-                    asset={this.props.asset}
-                    message={`${this.props.asset.getCode()} accepted`}
-                    trustMessage={`Accept ${this.props.asset.getCode()}`}
-                    currency={this.props.currency}
-                    color={this.state.color}
-                    host={this.props.host} />
+                {this.getRowActionButton()}
             </div>
         );
     }
 }
 
-AddTrustRow.propTypes = {
+AssetRow.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     asset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
     host: PropTypes.string,
+    tradeLink: PropTypes.bool,
     currency: PropTypes.shape({
         image: PropTypes.string,
         host: PropTypes.string,
