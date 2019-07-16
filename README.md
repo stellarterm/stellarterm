@@ -1,6 +1,6 @@
 [![Travis CI status](https://travis-ci.org/stellarterm/stellarterm.svg?branch=master)](https://travis-ci.org/stellarterm/stellarterm)
 
-# StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/stellarterm/stellarterm/tree/master/api) | [directory](https://github.com/stellarterm/stellarterm/blob/master/directory/)
+# StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/stellarterm/stellarterm-api) | [directory](https://github.com/stellarterm/stellarterm-directory)
 This StellarTerm monorepo consists of multiple projects built for the [Stellar network](https://www.stellar.org/) including a [trading client](https://stellarterm.com/). The projects are in this monorepo to enable faster development speed.
 
 ## Web Client
@@ -13,8 +13,7 @@ The API uses the [Serverless framework](https://serverless.com/) for deployment 
 
 It is currently under active development and is not yet finished. See it in action here: [https://api.stellarterm.com/](https://api.stellarterm.com/)
 
-## [Directory](https://github.com/stellarterm/stellarterm/blob/master/directory/README.md)
-StellarTerm maintains a manually curated directory file with a listing of well known anchors and assets on the Stellar network. For more information, see the [directory README](https://github.com/stellarterm/stellarterm/blob/master/directory/README.md).
+
 
 -------------------------------------------------------------------------------
 

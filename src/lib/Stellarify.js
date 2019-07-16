@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import directory from '../directory';
+import directory from 'stellarterm-directory';
 import BigNumber from 'bignumber.js';
 const Stellarify = {
   // orderbookDetails(input) {
