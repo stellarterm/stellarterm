@@ -8,7 +8,7 @@ import LoginPageTabs from './LoginPageTabs/LoginPageTabs';
 import SecurityPhrase from './SecurityPhrase/SecurityPhrase';
 
 export default function LoginPage(props) {
-    const rootAddress = props.urlParts[0];
+    const rootAddress = props.urlParts;
     let pageBody;
 
     switch (rootAddress) {
@@ -44,5 +44,5 @@ export default function LoginPage(props) {
 
 LoginPage.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    urlParts: PropTypes.arrayOf(PropTypes.string),
+    urlParts: PropTypes.string,
 };

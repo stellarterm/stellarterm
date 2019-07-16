@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
 import directory from 'stellarterm-directory';
@@ -14,6 +15,9 @@ import Generic from '../Common/Generic/Generic';
 export default class Exchange extends React.Component {
     constructor(props) {
         super(props);
+        this.state = {
+            wrongUrl: false,
+        };
         this.unsub = this.props.d.orderbook.event.sub(() => {
             this.forceUpdate();
         });
@@ -23,12 +27,38 @@ export default class Exchange extends React.Component {
     }
 
     componentWillMount() {
+        this.getTradePair();
         window.scrollTo(0, 0);
     }
 
     componentWillUnmount() {
         this.unsub();
         this.unsubSession();
+    }
+
+    getTradePair() {
+        const { pathname } = window.location;
+        const urlParts = pathname.split('/');
+        if (urlParts.length === 4) {
+            try {
+                const baseBuying = Stellarify.parseAssetSlug(urlParts[2]);
+                const counterSelling = Stellarify.parseAssetSlug(urlParts[3]);
+                this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
+            } catch (e) {
+                console.error(e);
+                this.setState({ wrongUrl: true });
+            }
+            return;
+        }
+        if (!this.props.d.orderbook.data.ready) {
+            const baseBuying = new StellarSdk.Asset('MOBI', 'GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH');
+            const counterSelling = StellarSdk.Asset.native();
+            this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
+            window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
+            return;
+        }
+        const { baseBuying, counterSelling } = this.props.d.orderbook.data;
+        window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
     }
 
     checkOrderboorWarning() {
@@ -71,6 +101,15 @@ export default class Exchange extends React.Component {
     }
 
     render() {
+        if (this.state.wrongUrl) {
+            return (
+                <Generic title="Pick a market">
+                    Exchange url was invalid. To begin, go to the <Link to="/markets/">market list page</Link> and pick a
+                    trading pair.
+                </Generic>
+            );
+        }
+
         if (!this.props.d.orderbook.data.ready) {
             return (
                 <Generic title="Loading orderbook">

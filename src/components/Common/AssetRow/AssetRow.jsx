@@ -8,7 +8,7 @@ import Stellarify from '../../../lib/Stellarify';
 export default class AssetRow extends React.Component {
     static goToTrade(asset) {
         const native = new StellarSdk.Asset.native();
-        window.location = `#${Stellarify.pairToExchangeUrl(asset, native)}`;
+        window.location = `${Stellarify.pairToExchangeUrl(asset, native)}`;
     }
 
 
