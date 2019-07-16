@@ -465,7 +465,7 @@ const MagicSpoon = {
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
                 .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
-                .setTimeout(30);
+                .setTimeout(0);
     },
 
     buildTxCreateSellOffer(Server, spoonAccount, opts) {
@@ -488,7 +488,7 @@ const MagicSpoon = {
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
             .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
-            .setTimeout(30);
+            .setTimeout(0);
     },
 
     async buildTxSendPayment(Server, spoonAccount, opts) {
@@ -501,7 +501,7 @@ const MagicSpoon = {
                 destination: opts.destination,
                 asset: opts.asset,
                 amount: opts.amount,
-            })).setTimeout(30);
+            })).setTimeout(0);
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error('Destination account does not exist. To create it, you must send a minimum of 1 lumens to create it');
@@ -509,7 +509,7 @@ const MagicSpoon = {
             transaction = transaction.addOperation(StellarSdk.Operation.createAccount({
                 destination: opts.destination,
                 startingBalance: opts.amount,
-            })).setTimeout(30);
+            })).setTimeout(0);
         }
 
         if (opts.memo) {
@@ -527,7 +527,7 @@ const MagicSpoon = {
         });
         // DONT call .build()
 
-        return transaction.setTimeout(30);
+        return transaction.setTimeout(0);
     },
     buildTxChangeTrust(Server, spoonAccount, opts) {
         let sdkLimit;
@@ -542,7 +542,7 @@ const MagicSpoon = {
             limit: sdkLimit,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-      .addOperation(StellarSdk.Operation.changeTrust(operationOpts)).setTimeout(30);
+      .addOperation(StellarSdk.Operation.changeTrust(operationOpts)).setTimeout(0);
       // DONT call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, offer) {
@@ -558,7 +558,7 @@ const MagicSpoon = {
                 amount: '0',
                 price: '1',
                 offerId: offer.id,
-            })).setTimeout(30);
+            })).setTimeout(0);
       // DONT call .build()
     },
 
