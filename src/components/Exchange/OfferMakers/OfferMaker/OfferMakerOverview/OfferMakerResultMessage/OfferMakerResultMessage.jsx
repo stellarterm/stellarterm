@@ -38,7 +38,7 @@ export default function OfferMakerResultMessage(props) {
                     Solutions:
                     <ul className="offerMaker_errors">
                         <li>Send at least 1 XLM to your account</li>
-                        <li>Cancel an existing an offer</li>
+                        <li>Cancel an existing offer</li>
                         <li>
                             Decrease your minimum balance by <a href="#account/addTrust">unaccepting an asset</a>
                         </li>

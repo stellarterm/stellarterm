@@ -147,7 +147,7 @@ export default class AssetCard2 extends React.Component {
 
         if (this.props.inRow) {
             return (
-                <span className="AssetRow">
+                <span className="AssetCardInRow">
                     {logo === 'unknown' && logo !== 'load' ? (
                         <div className="AssetCard_unknown_logo unknown_small">
                             <div className="Unknown_circle">
