@@ -46,10 +46,9 @@ export default class AssetRow extends React.Component {
     }
 
     async getColor({ image }) {
-        const result = await this.props.d.session.handlers.getAverageColor(image);
-        if (result.error === null) {
-            this.setState({ color: result.hex });
-        }
+        const color =
+            await this.props.d.session.handlers.getAverageColor(image, this.props.asset.getCode(), this.props.host);
+        this.setState({ color });
     }
 
 
