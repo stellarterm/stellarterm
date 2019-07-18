@@ -2,42 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
 import Ellipsis from './../../../../../Common/Ellipsis/Ellipsis';
+import ErrorHandler from '../../../../../../lib/ErrorHandler';
 
 const images = require('../../../../../../images');
 
 
 export default class MultisigEnableStep3 extends React.Component {
-    static getErrorType(error) {
-        if (typeof error === 'string') {
-            return error;
-        }
-        if (!error.data) {
-            return `clientError - ${error.message}`;
-        }
-        if (!error.data.extras || !error.data.extras.result_codes) {
-            return `unknownResponse - ${error.message}`;
-        }
-        if (!error.data.extras.result_codes.operations) {
-            return error.data.extras.result_codes.transaction;
-        }
-
-        return error.data.extras.result_codes.operations[0];
-    }
-
-    static getErrorMessage(errorType) {
-        switch (errorType) {
-        case 'tx_bad_seq':
-            return 'Transaction failed because sequence got out of sync. Please reload StellarTerm and try again.';
-        case 'op_low_reserve':
-            return 'Your account does not have enough XLM to meet the minimun balance.';
-        case 'op_underfunded':
-            return 'Transaction failed due to a lack of funds.';
-
-        default:
-            return `Error code: ${errorType}`;
-        }
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -69,8 +39,7 @@ export default class MultisigEnableStep3 extends React.Component {
             await result.serverResult;
             this.props.submit.cancel();
         } catch (error) {
-            const errorType = this.constructor.getErrorType(error.response);
-            const errorMessage = this.constructor.getErrorMessage(errorType);
+            const errorMessage = ErrorHandler(error);
             this.setState({
                 addingError: errorMessage,
                 pending: false,
