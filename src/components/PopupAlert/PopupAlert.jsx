@@ -27,7 +27,7 @@ export default class PopupAlert extends React.Component {
                     <div className="popup-content-cell">
                         <div className="popup-title">Account credited</div>
                         <div className="popup-text">
-                            <div>Recieved:</div>
+                            <div>Received:</div>
                             <div>
                                 {Printify.lightenZeros(op.amount)} <span>{assetCode}</span>
                             </div>
