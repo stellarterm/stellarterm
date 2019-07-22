@@ -2,11 +2,11 @@ import _ from 'lodash';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import FastAverageColor from 'fast-average-color';
+import directory from 'stellarterm-directory';
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
-import directory from '../../../directory';
 
 
 export default function Send(driver) {

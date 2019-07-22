@@ -3,7 +3,7 @@ import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import Stellarify from '../lib/Stellarify';
-import directory from '../directory';
+import directory from 'stellarterm-directory';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
