@@ -18,13 +18,15 @@ export default class SessionAccountMenu extends React.Component {
             <div className="subNavBackClipper">
                 <div className="so-back subNavBack">
                     <div className="so-chunk subNav">
-                        <nav className="subNav__nav">
-                            {this.constructor.createMenuTab('#account', 'Balances')}
-                            {this.constructor.createMenuTab('#account/send', 'Send')}
-                            {this.constructor.createMenuTab('#account/addTrust', 'Accept assets')}
-                            {this.constructor.createMenuTab('#account/multisig', 'Multisig')}
-                            {this.constructor.createMenuTab('#account/history', 'History')}
-                        </nav>
+                        {this.props.onlyLogoutNav ? <nav className="subNav__nav" /> :
+                            <nav className="subNav__nav">
+                                {this.constructor.createMenuTab('#account', 'Balances')}
+                                {this.constructor.createMenuTab('#account/send', 'Send')}
+                                {this.constructor.createMenuTab('#account/addTrust', 'Accept assets')}
+                                {this.constructor.createMenuTab('#account/multisig', 'Multisig')}
+                                {this.constructor.createMenuTab('#account/history', 'History')}
+                            </nav>
+                        }
                         <nav className="subNav__nav">
                             <a
                                 className="subNav__nav__item"
@@ -42,4 +44,5 @@ export default class SessionAccountMenu extends React.Component {
 
 SessionAccountMenu.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    onlyLogoutNav: PropTypes.bool,
 };
