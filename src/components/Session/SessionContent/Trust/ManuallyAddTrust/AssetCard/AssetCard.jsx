@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from '../../../../../../directory';
+import directory from 'stellarterm-directory';
 
 // New code should use AssetCard2 instead of this AssetCard
 export default function AssetCard(props) {
