@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import directory from 'stellarterm-directory';
 import Driver from '../../../lib/Driver';
 import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
 import TrustButton from './TrustButton/TrustButton';
@@ -21,7 +22,8 @@ export default class AssetRow extends React.Component {
 
     componentDidMount() {
         const { currency } = this.props;
-        if (currency && currency.image) {
+        const hasAssetInDirectory = currency && !!directory.getAssetByAccountId(currency.code, currency.issuer);
+        if (currency && currency.image && !hasAssetInDirectory) {
             this.getColor(currency);
         }
     }
