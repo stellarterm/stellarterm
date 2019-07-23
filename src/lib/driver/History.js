@@ -2,7 +2,10 @@ import Event from '../Event';
 
 export default function History(driver) {
     this.event = new Event();
+    this.eventNewOp = new Event();
+
     this.history = { records: [], details: {}, moreRecords: null };
+    this.lastOperations = [];
     this.loadMore = false;
     this.isLoading = false;
     this.allLoaded = false;
@@ -59,7 +62,7 @@ export default function History(driver) {
             }
             this.event.trigger();
         },
-        listenNewTransactions: async (Server, publicKey) => {
+        listenNewTransactions: (Server, publicKey) => {
             Server.operations()
                 .forAccount(publicKey)
                 .cursor('now')
@@ -69,19 +72,23 @@ export default function History(driver) {
         },
         newOperationCallback: async () => {
             const lastOperation = await this.handlers.getOperations(1);
+            const opsisNotEqual = lastOperation.records[0].id !== this.history.records[0].id;
+            const allowedPopupOperations = new Set(['account_credited', 'trade']);
 
-            if (lastOperation.records.length !== 0) {
+            if (opsisNotEqual) {
                 this.history.records = lastOperation.records.concat(this.history.records);
                 this.handlers.getOperationDetails();
+                // Check for operation types for PopupAlert
+                if (allowedPopupOperations.has(lastOperation.records[0].type)) {
+                    this.lastOperations = lastOperation.records.concat(this.lastOperations);
+                    this.eventNewOp.trigger();
+                }
             }
         },
-        getOperations: async (opLimit) => {
-            const opsResult = await driver.Server.effects()
+        getOperations: opLimit => driver.Server.effects()
                 .forAccount(driver.session.account.account_id)
                 .limit(opLimit)
                 .order('desc')
-                .call();
-            return opsResult;
-        },
+                .call(),
     };
 }

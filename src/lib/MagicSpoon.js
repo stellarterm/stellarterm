@@ -3,7 +3,7 @@ import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import Stellarify from '../lib/Stellarify';
-import directory from '../directory';
+import directory from 'stellarterm-directory';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
@@ -273,9 +273,10 @@ const MagicSpoon = {
     // We won't miss any offers assuming that the user only updates their offers through the client
     // with just one window open at a time
         sdkAccount.updateOffers = () => Server.offers('accounts', keypair.publicKey())
-        .limit(100) // TODO: Keep iterating through next() to show more than 100 offers
+        .limit(200) // TODO: Keep iterating through next() to show more than 100 offers
+        .order('desc')
         .call()
-        .then((res) => {
+            .then((res) => {
             const newOffers = {};
             _.each(res.records, (offer) => {
                 newOffers[offer.id] = offer;
@@ -465,7 +466,7 @@ const MagicSpoon = {
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
                 .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
-                .setTimeout(30);
+                .setTimeout(0);
     },
 
     buildTxCreateSellOffer(Server, spoonAccount, opts) {
@@ -488,7 +489,7 @@ const MagicSpoon = {
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
             .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
-            .setTimeout(30);
+            .setTimeout(0);
     },
 
     async buildTxSendPayment(Server, spoonAccount, opts) {
@@ -501,7 +502,7 @@ const MagicSpoon = {
                 destination: opts.destination,
                 asset: opts.asset,
                 amount: opts.amount,
-            })).setTimeout(30);
+            })).setTimeout(0);
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error('Destination account does not exist. To create it, you must send a minimum of 1 lumens to create it');
@@ -509,7 +510,7 @@ const MagicSpoon = {
             transaction = transaction.addOperation(StellarSdk.Operation.createAccount({
                 destination: opts.destination,
                 startingBalance: opts.amount,
-            })).setTimeout(30);
+            })).setTimeout(0);
         }
 
         if (opts.memo) {
@@ -527,7 +528,7 @@ const MagicSpoon = {
         });
         // DONT call .build()
 
-        return transaction.setTimeout(30);
+        return transaction.setTimeout(0);
     },
     buildTxChangeTrust(Server, spoonAccount, opts) {
         let sdkLimit;
@@ -542,7 +543,7 @@ const MagicSpoon = {
             limit: sdkLimit,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-      .addOperation(StellarSdk.Operation.changeTrust(operationOpts)).setTimeout(30);
+      .addOperation(StellarSdk.Operation.changeTrust(operationOpts)).setTimeout(0);
       // DONT call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, offer) {
@@ -558,7 +559,7 @@ const MagicSpoon = {
                 amount: '0',
                 price: '1',
                 offerId: offer.id,
-            })).setTimeout(30);
+            })).setTimeout(0);
       // DONT call .build()
     },
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Driver from '../../../../../../lib/Driver';
-import directory from '../../../../../../directory';
+import directory from 'stellarterm-directory';
 import Printify from '../../../../../../lib/Printify';
 import AssetCard2 from '../../../../../Common/AssetCard2/AssetCard2';
 

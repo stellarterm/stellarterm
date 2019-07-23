@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import directory from '../directory';
+
 
 // Some validation regexes and rules in this file are taken from Stellar Laboratory
 // Do not take code out from this file into other files
