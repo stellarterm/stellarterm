@@ -1,5 +1,5 @@
 import Printify from '../../../../../../lib/Printify';
-import directory from '../../../../../../../directory';
+import directory from 'stellarterm-directory';
 /*
   4 general categories (DATA_TYPES) (account, signer, trade, trustline)
 

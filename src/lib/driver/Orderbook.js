@@ -2,7 +2,7 @@ import _ from 'lodash';
 
 import MagicSpoon from '../MagicSpoon';
 import Stellarify from '../Stellarify';
-import directory from '../../directory';
+
 import Validate from '../Validate';
 import Event from '../Event';
 

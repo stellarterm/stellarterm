@@ -2,6 +2,7 @@
 const gulp = require('gulp');
 const del = require('del');
 const runSequence = require('run-sequence');
+const babel = require('gulp-babel');
 
 const $ = {
     sass: require('gulp-sass'),
@@ -20,7 +21,7 @@ const config = require('./env-config.json');
 
 const reload = browserSync.reload;
 // Default task
-gulp.task('default', ['clean', 'configEnv', 'buildDirectory', 'developApi', 'watch']);
+gulp.task('default', ['clean', 'configEnv', 'developApi', 'watch']);
 
 // Clean
 gulp.task('clean', (cb) => {
@@ -174,13 +175,14 @@ gulp.task('watch', baseTasks, () => {
     });
     gulp.watch('./src/index.html', ['html-reload']);
     gulp.watch(['src/**/*.scss'], ['css-reload']);
-    gulp.watch(['src/directory.js', 'directory/logos/**/*'], ['buildDirectory', 'developApi']);
 });
 
 const bsReload = (done) => {
     browserSync.reload();
     done();
 };
+
+const { tickerDataGenerator } = require('stellarterm-api');
 
 gulp.task('developApi', (cb) => {
     const env = getEnvironment();
@@ -190,16 +192,19 @@ gulp.task('developApi', (cb) => {
         return;
     }
 
-    execSync('(cd ./api/ && ./testTicker.sh)');
-    gulp
-        .src('./api/output/**/*.json')
-        .pipe(gulp.dest('dist/api'))
-        .on('end', cb);
-});
+    const opts = {};
+    opts.ignoreLog = true;
+    tickerDataGenerator(opts)
+        .then((tickerData) => {
+            if (!fs.existsSync('./dist/api')) {
+                fs.mkdirSync('./dist/api');
+            }
+            if (!fs.existsSync('./dist/api/v1')) {
+                fs.mkdirSync('./dist/api/v1');
+            }
 
-gulp.task('buildDirectory', (cb) => {
-    execSync('(cd ./directory/ && ./buildLogos.js && ./buildDirectory.js)');
-    cb();
+            fs.writeFile('./dist/api/v1/ticker.json', tickerData, cb);
+        });
 });
 
 gulp.task('html-reload', ['html'], bsReload);
@@ -213,6 +218,9 @@ gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
 
 // Build production site.
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
+    .pipe(babel({
+        presets: ['@babel/env'],
+    }))
     .pipe($.uglify())
     .pipe(gulp.dest('dist/scripts')));
 
@@ -225,7 +233,6 @@ gulp.task('production', () => {
     runSequence(
         'clean',
         'configEnv',
-        'buildDirectory',
         baseTasks,
         'uglify-js',
         'inlinesource'

@@ -1,3 +1,4 @@
+import directory from 'stellarterm-directory';
 import req from './req';
 import Event from '../Event';
 import * as EnvConsts from '../../env-consts';
@@ -23,6 +24,16 @@ export default class Ticker {
             .then((tickerData) => {
                 this.ready = true;
                 this.data = tickerData;
+                const tickerDirectoryBuild = this.data._meta.directoryBuild;
+                const frontendDirectoryBuild = directory.getBuildId();
+
+                if (tickerDirectoryBuild !== frontendDirectoryBuild) {
+                    console.warn(`${'Stellarterm-directory versions conflict! ' +
+                        'Please, check stellarterm-directory builds in stellarterm frontend application and ' +
+                        'stellarterm-api.\nCurrent versions: \n    stellarterm - '}${frontendDirectoryBuild
+                        }, \n    stellarterm-api - ${tickerDirectoryBuild}`);
+                }
+
                 console.log(`Loaded ticker. Data generated ${Math.round((new Date() - (this.data._meta.start * 1000)) / 1000)} seconds ago.`);
 
                 this.event.trigger();
