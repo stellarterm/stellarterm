@@ -22,12 +22,31 @@ export default class LedgerBody extends React.Component {
         return window.location.protocol === 'http:';
     }
 
+    static isWindowsOS() {
+        return (window.navigator.platform === 'Win32' || window.navigator.platform === 'Win64');
+    }
+
+    componentWillMount() {
+        const isWindowsOS = this.constructor.isWindowsOS();
+        if (!isWindowsOS) {
+            this.brakePing = this.props.d.session.pingLedger();
+        }
+    }
+
+    componentWillUnmount() {
+        const isWindowsOS = this.constructor.isWindowsOS();
+        if (!isWindowsOS) {
+            this.brakePing();
+        }
+    }
+
     render() {
         const d = this.props.d;
         const ledgerConnected = d.session.ledgerConnected;
         const isSupported = this.constructor.browserU2FSupport();
         const isNotChrome = !this.constructor.browserIsGoogleChrome();
         const isHttp = this.constructor.isHttpConnectionUsed();
+        const isWindowsOS = this.constructor.isWindowsOS();
         let loginForm;
 
         if (isNotChrome && !isSupported) {
@@ -35,7 +54,7 @@ export default class LedgerBody extends React.Component {
         } else if (isHttp) {
             loginForm = <LedgerAlert alertType={'useHttps'} />;
         } else if (!ledgerConnected) {
-            loginForm = <LedgerAlert alertType={'searching'} />;
+            loginForm = <LedgerAlert alertType={'searching'} isWindowsOS={isWindowsOS} d={d} />;
         } else if (ledgerConnected) {
             loginForm = <LedgerForm d={d} />;
         }
