@@ -34,6 +34,10 @@ const network = {
     isCustom: false,
 };
 
+if (window.location.hash.indexOf('#') === 0) {
+    window.location.replace(window.location.hash.substr(1));
+}
+
 if (window.location.pathname === '/testnet') {
     network.isDefault = false;
     network.isTestnet = true;
