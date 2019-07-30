@@ -27,7 +27,7 @@ export default class PopupAlert extends React.Component {
                     <div className="popup-content-cell">
                         <div className="popup-title">Account credited</div>
                         <div className="popup-text">
-                            <div>Recieved:</div>
+                            <div>Received:</div>
                             <div>
                                 {Printify.lightenZeros(op.amount)} <span>{assetCode}</span>
                             </div>
@@ -44,9 +44,9 @@ export default class PopupAlert extends React.Component {
                 <div className={`popup-body ${animateBodyClass}`} key={`${op.id}-${op.offer_id}`}>
                     <div className="popup-icon-cell">{icon}</div>
                     <div className="popup-content-cell">
-                        <div className="popup-title">Traded</div>
+                        <div className="popup-title">Trade completed</div>
                         <div className="popup-text">
-                            <div>Buy:</div>
+                            <div>Bought:</div>
                             <div>
                                 {Printify.lightenZeros(op.bought_amount)}
                                 <span> {boughtCode}</span>
