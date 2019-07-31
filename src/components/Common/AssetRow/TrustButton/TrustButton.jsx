@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Ellipsis from '../../Ellipsis/Ellipsis';
 import Driver from '../../../../lib/Driver';
+import ErrorHandler from '../../../../lib/ErrorHandler';
 
 export default class TrustButton extends React.Component {
     static goToLink(e) {
@@ -42,7 +43,6 @@ export default class TrustButton extends React.Component {
                         this.addDataToLocalStorage();
                     })
                     .catch((error) => {
-                        // TODO: Global error handler
                         const { data } = error.response;
                         let errorType = 'unknown';
                         if (data.extras &&
@@ -50,7 +50,7 @@ export default class TrustButton extends React.Component {
                             data.extras.result_codes.operations[0] === 'op_low_reserve') {
                             errorType = 'lowReserve';
                         }
-
+                        console.error('Error: ', ErrorHandler(error));
                         this.setState({
                             status: 'error',
                             errorType,
