@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import url from 'url';
 import PropTypes from 'prop-types';
 import GlobalModal from './GlobalModal/GlobalModal';
@@ -14,11 +15,10 @@ import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
 import TestNetwork from './TestNetwork/TestNetwork';
 import ReloadToTestnet from './ReloadToTestnet/ReloadToTestnet';
 import Session from './Session/Session';
-import Generic from './Common/Generic/Generic';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Driver from '../lib/Driver';
-import Stellarify from '../lib/Stellarify';
+
 
 window.React = React;
 const mountNode = document.getElementById('app');
@@ -34,7 +34,11 @@ const network = {
     isCustom: false,
 };
 
-if (window.location.hash === '#testnet') {
+if (window.location.hash.indexOf('#') === 0) {
+    window.location.replace(window.location.hash.substr(1));
+}
+
+if (window.location.pathname === '/testnet') {
     network.isDefault = false;
     network.isTestnet = true;
     network.horizonUrl = 'https://horizon-testnet.stellar.org';
@@ -66,13 +70,13 @@ class TermApp extends React.Component {
         this.d = props.d;
         this.state = {
             // The url is the hash cleaned up
-            url: parseUrl(window.location.href),
+            url: parseUrl(window.location.pathname),
         };
 
         window.addEventListener(
             'hashchange',
             (e) => {
-                if (e.newURL.indexOf('/#testnet') !== -1) {
+                if (e.newURL.indexOf('/testnet') !== -1) {
                     window.location.reload();
                 }
                 this.setState({ url: parseUrl(e.newURL) });
@@ -82,82 +86,42 @@ class TermApp extends React.Component {
     }
 
     render() {
-        const currentUrl = this.state.url;
-        const urlParts = currentUrl.split('/');
-
-        let body;
-        if (currentUrl === '') {
-            // Home page
-            body = <HomePage driver={this.props.d} />;
-        } else if (urlParts[0] === 'download') {
-            body = <Download />;
-        } else if (urlParts[0] === 'testnet' && network.isTestnet) {
-            body = <TestNetwork />;
-        } else if (urlParts[0] === 'testnet') {
-            body = <ReloadToTestnet />;
-        } else if (urlParts[0] === 'privacy') {
-            body = <PrivacyPolicy />;
-        } else if (urlParts[0] === 'terms-of-use') {
-            body = <TermsOfUse />;
-        } else if (['account', 'signup', 'ledger'].indexOf(urlParts[0]) > -1) {
-            body = <Session d={this.d} urlParts={urlParts} />;
-        } else if (urlParts[0] === 'markets') {
-            body = <Markets d={this.d} />;
-        } else if (urlParts[0] === 'exchange' && urlParts.length === 3) {
-            try {
-                const baseBuying = Stellarify.parseAssetSlug(urlParts[1]);
-                const counterSelling = Stellarify.parseAssetSlug(urlParts[2]);
-
-                this.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
-                body = <Exchange d={this.d} />;
-            } catch (e) {
-                console.error(e);
-                body = (
-                    <Generic title="Pick a market">
-                        Exchange url was invalid. To begin, go to the <a href="#markets">market list page</a> and pick a
-                        trading pair.
-                    </Generic>
-                );
-            }
-        } else if (urlParts[0] === 'exchange' && this.d.orderbook.data.ready) {
-            setTimeout(() => {
-                const { baseBuying, counterSelling } = this.d.orderbook.data;
-                const newUrl = Stellarify.pairToExchangeUrl(baseBuying, counterSelling);
-                window.history.replaceState(null, null, `#${newUrl}`);
-                this.setState({
-                    url: newUrl,
-                });
-            }, 0);
-            body = <Generic title="Loading orderbook">Loading</Generic>;
-        } else if (urlParts[0] === 'exchange') {
-            // Default to a market with good activity
-            const baseBuying = new StellarSdk.Asset('MOBI', 'GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH');
-            const counterSelling = StellarSdk.Asset.native();
-
-            this.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
-            setTimeout(() => {
-                const newUrl = Stellarify.pairToExchangeUrl(baseBuying, counterSelling);
-                window.history.replaceState(null, null, `#${newUrl}`);
-                this.setState({
-                    url: newUrl,
-                });
-            }, 0);
-        } else {
-            body = <NotFound />;
-        }
-
         return (
-            <div className="AppStretch">
-                <GlobalModal d={this.props.d} />
-                <div className="AppStretch AppContainer">
-                    <div>
-                        <Header d={this.props.d} rootAddress={urlParts[0]} network={network} />
-                        {body}
-                        <PopupAlert d={this.props.d}/>
+            <BrowserRouter>
+                <div className="AppStretch">
+                    <GlobalModal d={this.props.d} />
+                    <div className="AppStretch AppContainer">
+                        <div>
+                            <Header d={this.props.d} network={network} />
+                            <Switch>
+                                <Route
+                                    exact
+                                    path="/"
+                                    render={props => <HomePage {...props} driver={this.props.d} />} />
+                                <Route path="/download/" component={Download} />
+                                <Route path="/testnet/" component={network.isTestnet ? TestNetwork : ReloadToTestnet} />
+                                <Route path="/privacy/" component={PrivacyPolicy} />
+                                <Route path="/terms-of-use/" component={TermsOfUse} />
+                                <Route
+                                    path="/account/"
+                                    render={props => <Session {...props} d={this.props.d} urlParts={'account'} />} />
+                                <Route
+                                    path="/ledger/"
+                                    render={props => <Session {...props} d={this.props.d} urlParts={'ledger'} />} />
+                                <Route
+                                    path="/signup/"
+                                    render={props => <Session {...props} d={this.props.d} urlParts={'signup'} />} />
+                                <Route path="/markets" render={props => <Markets {...props} d={this.props.d} />} />
+                                <Route path="/exchange" render={props => <Exchange {...props} d={this.props.d} />} />
+
+                                <Route component={NotFound} />
+                            </Switch>
+                            <PopupAlert d={this.props.d}/>
+                        </div>
+                        <Footer />
                     </div>
-                    <Footer />
                 </div>
-            </div>
+            </BrowserRouter>
         );
     }
 }

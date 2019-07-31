@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../../../../../lib/Driver';
 import Validate from '../../../../../../lib/Validate';
 import SendEditLink from '../Common/SendEditLink';
@@ -57,7 +58,7 @@ export default class SendAmount extends React.Component {
                     <p>
                         You may only send up to <strong>{maxLumenSpend} lumens</strong> due to the minimum balance
                         requirements and open orders.<br />
-                        For more information, see the <a href="#account">minimum balance tool</a>.
+                        For more information, see the <Link to="/account/">minimum balance tool</Link>.
                     </p>
                 );
             } else if (notEnoughAsset) {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Generic from '../Common/Generic/Generic';
 
 export default function TermsOfUse(props) {
@@ -54,7 +55,7 @@ export default function TermsOfUse(props) {
 
             <h3>3. Privacy</h3>
             <p className="termsOfUse__Paragraph">
-                Your privacy is important to us. Please read the <a href="#privacy">privacy policy</a> for more
+                Your privacy is important to us. Please read the <Link to="/privacy/">privacy policy</Link> for more
                 information.
             </p>
 

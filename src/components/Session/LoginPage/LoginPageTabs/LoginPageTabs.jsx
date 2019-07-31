@@ -1,32 +1,33 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
 
 export default function LoginPageTabs(props) {
     return (
         <div className="LoginPage__sidebar">
-            <a
+            <Link
                 className={`LoginPage__sidebar__tab${props.rootAddress === 'signup' ? ' is-active' : ''}`}
-                href="#signup">
+                to="/signup">
                 New account
-            </a>
+            </Link>
 
-            <a
+            <Link
                 className={`LoginPage__sidebar__tab${props.rootAddress === 'account' ? ' is-active' : ''}`}
-                href="#account">
+                to="/account/">
                 Log in with key
-            </a>
+            </Link>
 
-            <a
+            <Link
                 className={`LoginPage__sidebar__tab${props.rootAddress === 'ledger' ? ' is-active' : ''}`}
-                href="#ledger">
+                to="/ledger">
                 <img
                     className="LoginPage__sidebar__tab__img--invertible img--noSelect"
                     src={images['ledger-logo']}
                     alt="Ledger"
                     width="75"
                     height="20" />
-            </a>
+            </Link>
         </div>
     );
 }
