@@ -6,6 +6,7 @@ import directory from 'stellarterm-directory';
 import Validate from '../Validate';
 import Event from '../Event';
 import * as EnvConsts from '../../env-consts';
+import ErrorHandler from '../ErrorHandler';
 
 export default function Send(driver) {
     this.event = new Event();
@@ -337,27 +338,7 @@ export default function Send(driver) {
                 }
             } catch (err) {
                 this.state = 'error';
-                if (_.has(err.response.data, 'extras')) {
-                    const { result_codes } = err.response.data.extras;
-                    const errExtra = result_codes.transaction || result_codes.operations;
-                    switch (errExtra.toString()) {
-                    case 'op_no_trust':
-                        this.errorDetails = 'Destination does not have a trust line';
-                        break;
-                    case 'op_low_reserve':
-                        this.errorDetails = 'New account has to have at least 1 XLM';
-                        break;
-                    case 'tx_bad_seq':
-                        this.errorDetails = 'Transaction failed because sequence got out of sync. ' +
-                                'Please reload StellarTerm and try again.';
-                        break;
-                    default:
-                        this.errorDetails = errExtra.toString();
-                    }
-                } else {
-                    this.errorDetails = err.message;
-                }
-
+                this.errorDetails = ErrorHandler(err);
                 this.event.trigger();
             }
         },

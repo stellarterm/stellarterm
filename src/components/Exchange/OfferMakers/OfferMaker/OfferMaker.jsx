@@ -3,22 +3,17 @@ import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import Driver from '../../../../lib/Driver';
 import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
+import ErrorHandler from '../../../../lib/ErrorHandler';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
     static getErrorType(error) {
-        if (!error.data) {
-            return `clientError - ${error.message}`;
+        if (!error.data ||
+            !error.data.extras ||
+            !error.data.extras.result_codes ||
+            !error.data.extras.result_codes.operations) {
+            return '';
         }
-        if (!error.data.extras || !error.data.extras.result_codes) {
-            return `unknownResponse - ${error.message}`;
-        }
-        if (!error.data.extras.result_codes.operations) {
-            return error.data.extras.result_codes.transaction;
-        }
-        // Common errors:
-        // return 'buy_not_authorized'
-        // return 'op_low_reserve'
         return error.data.extras.result_codes.operations[0];
     }
 
@@ -43,7 +38,7 @@ export default class OfferMaker extends React.Component {
             // Total = price * amount
             total: '',
             buttonState: 'ready', // ready or pending
-            errorMessage: false,
+            errorMessage: '',
             successMessage: '',
         };
 
@@ -151,10 +146,11 @@ export default class OfferMaker extends React.Component {
                 successMessage: 'Offer successfully created',
             });
         } catch (error) {
+            const errorMessage = ErrorHandler(error);
             const errorType = this.constructor.getErrorType(error.response);
             this.setState({
                 buttonState: 'ready',
-                errorMessage: true,
+                errorMessage,
                 errorType,
             });
         }
