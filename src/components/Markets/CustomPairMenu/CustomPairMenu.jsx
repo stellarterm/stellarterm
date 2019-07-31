@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import images from '../../../images';
 import Driver from '../../../lib/Driver';
 import Stellarify from '../../../lib/Stellarify';
@@ -44,9 +45,9 @@ export default class CustomPairMenu extends React.Component {
         this.setState({ [assetType]: asset });
     }
 
-    goToTrade() {
-        window.location = `${Stellarify.pairToExchangeUrl(this.state.baseBuying, this.state.counterSelling)}`;
-    }
+    // goToTrade() {
+    //     window.location = `${Stellarify.pairToExchangeUrl(this.state.baseBuying, this.state.counterSelling)}`;
+    // }
 
     swap() {
         const { baseBuying, counterSelling } = this.state;
@@ -58,6 +59,8 @@ export default class CustomPairMenu extends React.Component {
 
     render() {
         const { baseBuying, counterSelling } = this.state;
+        const link = (baseBuying && counterSelling)
+            && Stellarify.pairToExchangeUrl(this.state.baseBuying, this.state.counterSelling);
 
         return (
             <div className="island">
@@ -79,12 +82,13 @@ export default class CustomPairMenu extends React.Component {
 
                     {this.getAssetDropDown(this.props.d, 'counterSelling')}
 
-                    <button
-                        onClick={() => this.goToTrade()}
-                        disabled={!counterSelling || !baseBuying}
-                        className="CustomPairMenu__button">
-                        Start trading
+                    <Link to={`/${link}`}>
+                        <button
+                            disabled={!counterSelling || !baseBuying}
+                            className="CustomPairMenu__button">
+                            Start trading
                     </button>
+                    </Link>
                 </div>
             </div>
         );

@@ -23,13 +23,17 @@ export default function SendSuccess(props) {
     );
 
     return (
-        <div className="island">
-            <div className="island__header">Send Payment</div>
-            <h3 className="Send__resultTitle">Success!</h3>
-            <div className="Send__resultContent">{resultMessage}</div>
-            <button className="s-button Send__startOver" onClick={handlers.reset}>
-                Start over
-            </button>
+        <div className="so-back islandBack islandBack--t">
+            <div className="island">
+                <div className="island__header">Send Payment</div>
+                <h3 className="Send__resultTitle">Success!</h3>
+                <div className="Send__resultContent">
+                    {resultMessage}
+                </div>
+                <button className="s-button Send__startOver" onClick={handlers.reset}>
+                    Start over
+                </button>
+            </div>
         </div>
     );
 }

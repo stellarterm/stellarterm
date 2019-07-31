@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import directory from 'stellarterm-directory';
 import Ellipsis from '../../Ellipsis/Ellipsis';
@@ -9,8 +10,7 @@ import ErrorHandler from '../../../../lib/ErrorHandler';
 export default class TrustButton extends React.Component {
     static goToLink(e) {
         e.stopPropagation();
-        e.preventDefault();
-        window.location = '#account';
+        // e.preventDefault();
     }
 
     constructor(props) {
@@ -129,7 +129,9 @@ export default class TrustButton extends React.Component {
             return (
                 <button className="s-button" onClick={event => this.handleSubmitTrust(event)}>
                     Error: Not enough lumens. See the{' '}
-                    <a onClick={e => this.constructor.goToLink(e)}>minimum balance section</a> for more info
+                    <Link
+                        to="/account/"
+                        onClick={e => this.constructor.goToLink(e)}>minimum balance section</Link> for more info
                 </button>
             );
         }
