@@ -78,19 +78,55 @@
 }
 .LoginPage__inputGroup {
   margin-bottom: 9px;
+    position: relative;
+}
+
+.LoginPage__intro{
+    margin-bottom: 11px;
 }
 .LoginPage__password {
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
-  border-right: none;
+    position: relative;
+    height: 52px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &::placeholder{
+        opacity: 0.5;
+    }
 }
+
 .LoginPage__inputGroup--path {
   width: 300px;
 }
 .LoginPage__show {
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+    height: 52px;
+    display: flex;
+    align-items: center;
 }
+
+.LoginPage__show_icon{
+    position: absolute;
+    cursor: pointer;
+    z-index: 1;
+    right: 17px;
+    top: 25%;
+    height: 24px;
+    width: 24px;
+}
+
+.LoginPage__generate{
+    min-width: 120px;
+    min-height: 42px;
+    border-radius: 2px;
+
+    &:disabled{
+        border: solid 1px #dfe0e1;
+        background-color: #ffffff;
+    }
+}
+
 .LoginPage__notes {
   border-top: 1px solid $s-color-primary7;
   padding: 20px;
@@ -102,6 +138,7 @@
 
 .LoginPage__generatedNote {
   padding-top: 1em;
+
 }
 .LoginPage__error {
   margin-top: 1em;

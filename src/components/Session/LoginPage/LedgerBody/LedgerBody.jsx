@@ -23,7 +23,7 @@ export default class LedgerBody extends React.Component {
     }
 
     render() {
-        const d = this.props.d;
+        const { d, modal } = this.props;
         const ledgerConnected = d.session.ledgerConnected;
         const isSupported = this.constructor.browserU2FSupport();
         const isNotChrome = !this.constructor.browserIsGoogleChrome();
@@ -38,6 +38,12 @@ export default class LedgerBody extends React.Component {
             loginForm = <LedgerAlert alertType={'searching'} />;
         } else if (ledgerConnected) {
             loginForm = <LedgerForm d={d} />;
+        }
+
+        if (modal) {
+            return (
+                <div className="LoginPage__greenBox">{loginForm}</div>
+            );
         }
 
         return (
@@ -59,4 +65,5 @@ export default class LedgerBody extends React.Component {
 
 LedgerBody.propTypes = {
     d: PropTypes.instanceOf(Driver),
+    modal: PropTypes.bool,
 };

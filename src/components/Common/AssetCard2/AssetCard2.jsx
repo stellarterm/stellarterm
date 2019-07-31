@@ -156,13 +156,13 @@ export default class AssetCard2 extends React.Component {
                         </div>
                     ) : (
                         <img
+                            style={Object.assign({}, backgroundStyle, { border: '1px solid' }, borderStyle)}
                             className="Row_logo"
                             src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
-                            alt={anchor.name} />
-                    )}
-                    {name === 'load' ?
-                        <span>{asset.code} - <Ellipsis /></span> :
-                        <span>{`${asset.code} — ${name}`}</span>
+                            alt={anchor.name} />)}
+                     {name === 'load' ?
+                         <span>{asset.code} - <Ellipsis /></span> :
+                         <span>{`${asset.code}(${name})`}</span>
                     }
                 </span>
             );

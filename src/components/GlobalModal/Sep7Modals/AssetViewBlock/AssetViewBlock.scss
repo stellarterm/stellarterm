@@ -1,0 +1,36 @@
+.AssetViewBlock{
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 20px;
+
+    .AssetViewBlock_logo{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        width: 50px;
+        margin-right: 13px;
+
+        img{
+            height: 40px;
+            width: 40px;
+        }
+
+    }
+
+    .AssetViewBlock_details{
+        display: flex;
+        flex-direction: column;
+        font-weight: 300;
+
+        .AssetViewBlock_details-row{
+            & span:first-child{
+                font-weight: 600;
+                margin-right: 3px;
+            }
+        }
+        & > span{
+            opacity: 0.5;
+        }
+    }
+}

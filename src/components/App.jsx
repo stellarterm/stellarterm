@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import url from 'url';
 import PropTypes from 'prop-types';
 import GlobalModal from './GlobalModal/GlobalModal';
@@ -88,6 +88,12 @@ class TermApp extends React.Component {
     render() {
         return (
             <BrowserRouter>
+                <div>
+                    {window.location.pathname.includes('index.html')
+                    && (window.location.hash ?
+                        <Redirect to={`/?tx=${encodeURIComponent(window.location.hash.substr(1))}`} /> :
+                        <Redirect to="/" />)}
+                </div>
                 <div className="AppStretch">
                     <GlobalModal d={this.props.d} />
                     <div className="AppStretch AppContainer">
@@ -114,10 +120,10 @@ class TermApp extends React.Component {
                                 <Route path="/markets" render={props => <Markets {...props} d={this.props.d} />} />
                                 <Route path="/exchange" render={props => <Exchange {...props} d={this.props.d} />} />
 
-                                <Route component={NotFound} />
+                               <Route component={NotFound} />
                             </Switch>
-                            <PopupAlert d={this.props.d}/>
-                    </div>
+                            <PopupAlert d={this.props.d} />
+                        </div>
                         <Footer />
                     </div>
                 </div>
