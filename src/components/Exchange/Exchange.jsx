@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
-import directory from '../../../directory/directory';
+import directory from 'stellarterm-directory';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';

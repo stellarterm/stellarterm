@@ -26,7 +26,7 @@ export default class ErrorBoundary extends React.Component {
         }
 
         return (
-            <Generic title="An unknown error occured">
+            <Generic title="An unknown error occurred">
                 <div className="Error_text_block">
                     An unexpected error happened. If you want to help this error get fixed, please report it to the{' '}
                     <a

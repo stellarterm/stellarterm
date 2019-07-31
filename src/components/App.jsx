@@ -4,6 +4,7 @@ import { BrowserRouter, Switch, Route } from 'react-router-dom';
 import url from 'url';
 import PropTypes from 'prop-types';
 import GlobalModal from './GlobalModal/GlobalModal';
+import PopupAlert from './PopupAlert/PopupAlert';
 import NotFound from './NotFound/NotFound';
 import Markets from './Markets/Markets';
 import Download from './Download/Download';
@@ -112,7 +113,8 @@ class TermApp extends React.Component {
 
                                 <Route component={NotFound} />
                             </Switch>
-                        </div>
+                        <PopupAlert d={this.props.d}/>
+                    </div>
                         <Footer />
                     </div>
                 </div>

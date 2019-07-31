@@ -4,7 +4,7 @@ import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../../lib/Driver';
 import AssetCard2 from '../../AssetCard2/AssetCard2';
 import AssetCardList from './AssetCardList/AssetCardList';
-import directory from '../../../../directory';
+import directory from 'stellarterm-directory';
 import images from '../../../../images';
 
 const ENTER = 13;
@@ -24,7 +24,7 @@ export default class AssetDropDown extends React.Component {
         const assetData = unknownAssetsData.find(assetLocalItem => (
             assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
         ));
-
+        if (!assetData) { return ''; }
         return (assetData.currency && assetData.currency.host) || assetData.host;
     }
     constructor(props) {
@@ -63,10 +63,12 @@ export default class AssetDropDown extends React.Component {
     }
 
     componentWillMount() {
+        this._mounted = true;
         document.addEventListener('mousedown', this.handleClickOutside, false);
     }
 
     componentWillUnmount() {
+        this._mounted = false;
         document.removeEventListener('mousedown', this.handleClickOutside, false);
         this.dTicker.event.unlisten(this.listenId);
     }
@@ -153,7 +155,11 @@ export default class AssetDropDown extends React.Component {
 
     async getAssetByDomain(domain) {
         this.setState({ loading: true });
-        setTimeout(() => this.setState({ loading: false }), 5000);
+        setTimeout(() => {
+            if (this._mounted) {
+                this.setState({ loading: false });
+            }
+        }, 5000);
         try {
             const resolved = await resolveAnchor(domain);
             if (!resolved.CURRENCIES) {

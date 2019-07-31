@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
+import directory from 'stellarterm-directory';
 import Ellipsis from '../../Ellipsis/Ellipsis';
 import Driver from '../../../../lib/Driver';
 import ErrorHandler from '../../../../lib/ErrorHandler';
@@ -59,10 +60,30 @@ export default class TrustButton extends React.Component {
             });
     }
 
-    addDataToLocalStorage() {
+    async addDataToLocalStorage() {
         const { asset, host, currency, color } = this.props;
-        if (asset.domain === undefined && currency && host) {
-            const unknownAsset = {
+
+        // do not write assets from the directory to the localStorage
+        const assetFromDirectory = directory.resolveAssetByAccountId(asset.code, asset.issuer);
+
+        if (assetFromDirectory.domain !== 'unknown') {
+            return;
+        }
+
+        // check if asset already exists in the localStorage
+        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
+        const localStorageHasAsset = unknownAssetsData.find(item => (
+            (item.code === asset.code) && (item.issuer === asset.issuer)
+        ));
+
+        if (localStorageHasAsset) {
+            return;
+        }
+
+        // if the asset data does not received as props - load it
+        let unknownAsset;
+        if (currency && host) {
+            unknownAsset = {
                 code: asset.code,
                 issuer: asset.issuer,
                 host,
@@ -70,9 +91,11 @@ export default class TrustButton extends React.Component {
                 color,
                 time: new Date(),
             };
-            const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
-            localStorage.setItem('unknownAssetsData', JSON.stringify([...unknownAssetsData, unknownAsset]));
+        } else {
+            unknownAsset = await this.props.d.session.handlers.loadUnknownAssetData(asset);
         }
+
+        localStorage.setItem('unknownAssetsData', JSON.stringify([...unknownAssetsData, unknownAsset]));
     }
 
     checkAssetForAccept() {

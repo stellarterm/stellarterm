@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import Format from '../../../../lib/Format';
-import directory from '../../../../directory';
+import directory from 'stellarterm-directory';
 import Printify from '../../../../lib/Printify';
 import Ticker from '../../../../lib/api/Ticker';
 import AssetCard2 from '../../AssetCard2/AssetCard2';
