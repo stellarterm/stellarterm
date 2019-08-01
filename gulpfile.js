@@ -3,6 +3,8 @@ const gulp = require('gulp');
 const del = require('del');
 const runSequence = require('run-sequence');
 const babel = require('gulp-babel');
+const imagemin = require('gulp-imagemin');
+const svgToMiniDataURI = require('mini-svg-data-uri');
 
 const $ = {
     sass: require('gulp-sass'),
@@ -36,23 +38,37 @@ gulp.task('styles', () => gulp.src('./src/components/App.scss')
         .pipe($.sass().on('error', $.sass.logError))
         .pipe(gulp.dest('./dist/css')));
 
-// Images (For big images that get turned into base64)
-gulp.task('images', (cb) => {
-    let imagesCollection = fs
-        .readdirSync('./images/')
-        .reduce((collection, fileName) => {
-            const [name, extension] = fileName.split('.');
 
-            const mimeType = extension === 'jpg' ? 'jpeg' : extension;
-            const file = fs.readFileSync(`./images/${fileName}`);
-            const b64 = Buffer.from(file).toString('base64');
-            return `${collection}    '${name}': 'data:image/${mimeType};base64, ${b64}',\n`;
-        }, 'const images = {\n');
+gulp.task('minifyImages', () =>
+        gulp
+            .src('./images/*')
+            .pipe(imagemin())
+            .pipe(gulp.dest('./images/')),
+);
+
+// Images (For big images that get turned into base64)
+gulp.task('encodeImages', (cb) => {
+    let imagesCollection = fs.readdirSync('./images/').reduce((collection, fileName) => {
+        const [name, extension] = fileName.split('.');
+        const isVectorImg = extension === 'svg';
+        const mimeType = extension === 'jpg' ? 'jpeg' : extension;
+        const file = fs.readFileSync(`./images/${fileName}`);
+        const b64 = Buffer.from(file).toString('base64');
+        const svgUri = isVectorImg ? svgToMiniDataURI(Buffer.from(file).toString()) : null;
+
+        const img = isVectorImg ? `"${svgUri}"` : `"data:image/${mimeType};base64, ${b64}"`;
+        return `${collection} '${name}': ${img},\n`;
+    }, 'const images = {\n');
 
     imagesCollection += '};\nmodule.exports = images;\n';
     fs.writeFile('./src/images.js', imagesCollection, cb);
 });
 
+gulp.task('buildImages', (done) => {
+    runSequence('minifyImages', 'encodeImages', () => {
+        done();
+    });
+});
 
 // Build time config only for CUSTOM builds of StellarTerm
 gulp.task('customConfig', (cb) => {
@@ -166,7 +182,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe(gulp.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'images', 'scripts', 'copyBower', 'copyStaticFiles'];
+const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'buildImages', 'scripts', 'copyBower', 'copyStaticFiles'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {
