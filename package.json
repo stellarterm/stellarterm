@@ -27,6 +27,7 @@
     "gulp-babel": "^8.0.0",
     "gulp-sass": "3.1.0",
     "gulp-useref": "3.1.4",
+    "lightweight-charts": "^1.0.2",
     "lodash": "4.17.11",
     "moment": "^2.24.0",
     "prop-types": "15.6.0",
