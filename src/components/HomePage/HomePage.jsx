@@ -3,8 +3,13 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Driver from '../../lib/Driver';
 import AssetList from '../Common/AssetList/AssetList';
+import Sep7Handler from './Sep7Handler/Sep7Handler';
+
 
 export default class HomePage extends React.Component {
+    componentDidMount() {
+        Sep7Handler(this.props);
+    }
 
     renderHomePageActions() {
         const state = this.props.driver.session.state;

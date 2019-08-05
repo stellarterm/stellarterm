@@ -1,0 +1,37 @@
+.Sep7ChangeTrustModal{
+    background-color: #fff;
+    width: 612px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    .Sep7ChangeTrustModal_loading{
+        display: flex;
+        flex-direction: row;
+        padding: 30px;
+    }
+
+    .Sep7ChangeTrustModal_content{
+        padding: 30px;
+        max-height: 90vh;
+        overflow-y: auto;
+    }
+    .Modal_button-block{
+        padding-right: 0;
+    }
+
+    .Sep7ChangeTrustModal_desc{
+        font-weight: 300;
+        margin-bottom: 20px;
+    }
+
+    .Sep7ChangeTrustModal_conditions{
+        display: flex;
+        flex-direction: column;
+        margin-bottom: 35px;
+
+        & span:first-child{
+            font-size: 18px;
+            font-weight: normal;
+        }
+    }
+}

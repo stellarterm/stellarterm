@@ -1,0 +1,29 @@
+.Sep7ErrorModal{
+    background-color: #fff;
+    width: 612px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    .Sep7ErrorModal_title{
+        margin: 21px 34px 10px;
+        display: flex;
+        flex-direction: row;
+        justify-content: left;
+        align-items: center;
+        font-size: 18px;
+
+        img{
+            width: 21px;
+            height: 21px;
+            margin-right: 14px;
+        }
+    }
+
+    .Sep7ErrorModal_content{
+        font-size: 16px;
+        font-weight: 300;
+        margin-left: 34px;
+        margin-bottom: 41px;
+    }
+
+}
