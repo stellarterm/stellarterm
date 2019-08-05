@@ -3,6 +3,34 @@
 .OfferMaker_table {
     width: 100%;
 
+    .offer_table_buttons{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: 10px;
+
+        button {
+            width: 90px;
+            height: 30px;
+            opacity: 0.5;
+            border-radius: 2px;
+            border: solid 1px #bdbfc0;
+
+            &.active{
+                opacity: 1;
+            }
+
+            &:hover{
+                opacity: 1;
+            }
+            
+            &:disabled{
+                cursor: not-allowed;
+            }
+        }
+
+    }
+
     .offer_table_row {
         height: 50px;
 
