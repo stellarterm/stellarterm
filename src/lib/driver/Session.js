@@ -401,7 +401,8 @@ export default function Send(driver) {
                 if (this.handlers.isInvalidWeigth()) {
                     return Promise.reject('Custom signers weigth');
                 }
-                const newThreshold = signers.length * 10;
+                const currentThreshold = this.account.thresholds.high_threshold;
+                const newThreshold = (currentThreshold + 10);
                 const signerData = {
                     signer: {
                         ed25519PublicKey: key,
@@ -497,7 +498,12 @@ export default function Send(driver) {
                 if (this.handlers.isInvalidWeigth()) {
                     return Promise.reject('Custom signers weigth');
                 }
-                const newThreshold = (signers.length - 2) * 10;
+                const currentThreshold = this.account.thresholds.high_threshold;
+
+                const newThreshold = ((signers.length - 2) * 10) > currentThreshold ?
+                    currentThreshold :
+                    ((signers.length - 2) * 10);
+
                 const newSignerData = {
                     signer: {
                         ed25519PublicKey: key,
