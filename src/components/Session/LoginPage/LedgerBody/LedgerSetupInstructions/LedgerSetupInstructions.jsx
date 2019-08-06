@@ -5,35 +5,35 @@ export default () => (
     <div className="LoginPage__paddedBox">
         <h3>Setup instructions</h3>
         <ol>
-            <li>Get a Ledger Nano S and connect it to your computer.</li>
+            <li>Get a Ledger device and connect it to your computer.</li>
             <li>
-                Set up your Ledger Nano S by following instructions on the Ledger site:{' '}
+                Set up your Ledger device by following instructions on the Ledger site:{' '}
                 <a
-                    href="https://www.ledgerwallet.com/start/ledger-nano-s"
+                    href="https://www.ledger.com/start/"
                     target="_blank"
                     rel="nofollow noopener noreferrer">
-                    https://www.ledgerwallet.com/start/ledger-nano-s
+                    https://www.ledger.com/start/
                 </a>
             </li>
 
             <li>
                 Install the{' '}
-                <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">
-                    Ledger Manager
+                <a href="https://shop.ledger.com/pages/ledger-live" target="_blank" rel="nofollow noopener noreferrer">
+                    Ledger Live
                 </a>{' '}
                 app on your computer:{' '}
-                <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">
-                    https://www.ledgerwallet.com/apps/manager
+                <a href="https://shop.ledger.com/pages/ledger-live" target="_blank" rel="nofollow noopener noreferrer">
+                    https://shop.ledger.com/pages/ledger-live
                 </a>
             </li>
 
             <li>
-                Inside the Ledger Manager app, go to Applications and install the Stellar app.
+                Inside the Ledger Live app, go to Applications and install the Stellar app.
                 <br />
                 <img
                     src={images['ledger-app']}
                     className="img--noSelect"
-                    alt="Stellar app installation inside Ledger Manager"
+                    alt="Stellar app installation inside Ledger Live"
                     width="355"
                     height="77" />
             </li>
