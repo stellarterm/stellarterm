@@ -1,15 +1,17 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../../lib/Driver';
 import AssetCard2 from '../../AssetCard2/AssetCard2';
 import AssetCardList from './AssetCardList/AssetCardList';
-import directory from '../../../../directory';
+import directory from 'stellarterm-directory';
 import images from '../../../../images';
 
 const ENTER = 13;
 const ARROW_UP = 38;
 const ARROW_DOWN = 40;
+const KEY_F = 70;
 
 const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
 const DEBOUNCE_TIME = 700;
@@ -24,7 +26,7 @@ export default class AssetDropDown extends React.Component {
         const assetData = unknownAssetsData.find(assetLocalItem => (
             assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
         ));
-
+        if (!assetData) { return ''; }
         return (assetData.currency && assetData.currency.host) || assetData.host;
     }
     constructor(props) {
@@ -63,10 +65,19 @@ export default class AssetDropDown extends React.Component {
     }
 
     componentWillMount() {
+        this._mounted = true;
         document.addEventListener('mousedown', this.handleClickOutside, false);
     }
 
+    componentDidMount() {
+        // eslint-disable-next-line react/no-find-dom-node
+        ReactDOM.findDOMNode(this).addEventListener('keyup', e => (e.keyCode === KEY_F ? e.stopPropagation() : null));
+    }
+
     componentWillUnmount() {
+        this._mounted = false;
+        // eslint-disable-next-line react/no-find-dom-node
+        ReactDOM.findDOMNode(this).removeEventListener('keyup', e => (e.keyCode === KEY_F ? e.stopPropagation() : null));
         document.removeEventListener('mousedown', this.handleClickOutside, false);
         this.dTicker.event.unlisten(this.listenId);
     }
@@ -153,7 +164,11 @@ export default class AssetDropDown extends React.Component {
 
     async getAssetByDomain(domain) {
         this.setState({ loading: true });
-        setTimeout(() => this.setState({ loading: false }), 5000);
+        setTimeout(() => {
+            if (this._mounted) {
+                this.setState({ loading: false });
+            }
+        }, 5000);
         try {
             const resolved = await resolveAnchor(domain);
             if (!resolved.CURRENCIES) {
@@ -209,7 +224,6 @@ export default class AssetDropDown extends React.Component {
     }
 
     render() {
-        const name = this.props.isBase ? 'base' : 'counter';
         const arrowClassName = this.state.isOpenList ? 'AssetDropDown__arrowUp' : 'AssetDropDown__arrowDown';
         const assetDropDownClassName = this.state.isOpenList ? 'AssetDropDown_isOpen' : null;
 
@@ -235,7 +249,7 @@ export default class AssetDropDown extends React.Component {
                                 onChange={e => this.handleInput(e)}
                                 onKeyUp={e => this.setActiveCardIndex(e)}
                                 value={this.state.inputCode}
-                                placeholder={`Set ${name} asset`} />
+                                placeholder="Type asset code or domain name" />
                         </div>
                     }
                     {this.state.loading ?
@@ -270,6 +284,5 @@ AssetDropDown.propTypes = {
     asset: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     exception: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     onUpdate: PropTypes.func,
-    isBase: PropTypes.bool,
     clear: PropTypes.func,
 };

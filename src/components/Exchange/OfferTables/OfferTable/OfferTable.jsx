@@ -45,11 +45,7 @@ export default class OfferTable extends React.Component {
             ? Math.max(0, Format.niceNumDecimals(this.props.offers[this.props.offers.length - 1].depth))
             : 7;
 
-        const priceIndex = isBuy ? this.props.offers.length - 1 : 0;
-        const priceNumDecimals = hasOffers
-            ? Math.max(4, Format.niceNumDecimals(this.props.offers[priceIndex].price))
-            : 7;
-
+        const priceNumDecimals = 7;
         const rowItems = [
             {
                 value: Number(offer.depth).toLocaleString('en-US', {
@@ -89,9 +85,10 @@ export default class OfferTable extends React.Component {
 
     render() {
         const isBuy = this.props.side === 'buy';
+        const tableClass = `OfferTable ${isBuy ? 'OfferTable_buy' : 'OfferTable_sell'}`;
 
         return (
-            <div className="OfferTable">
+            <div className={tableClass}>
                 <div className="OfferTable__header">{this.getHeader(isBuy)}</div>
                 <div className="OfferTable__table">{this.getRows(isBuy)}</div>
             </div>

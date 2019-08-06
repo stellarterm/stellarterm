@@ -2,11 +2,11 @@ import _ from 'lodash';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import FastAverageColor from 'fast-average-color';
+import directory from 'stellarterm-directory';
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
-import directory from '../../../directory';
 
 
 export default function Send(driver) {
@@ -39,7 +39,8 @@ export default function Send(driver) {
     };
 
     // Ping the Ledger device to see if it is connected
-    this.pingLedger = () => {
+    this.pingLedger = (singlePing) => {
+        let brakePing = singlePing || false;
         Transport.create()
             .then(transport => new AppStellar(transport))
             .then(app => app.getAppConfiguration())
@@ -56,14 +57,14 @@ export default function Send(driver) {
                 }
 
                 const notSupported = error && error.id === 'U2FNotSupported';
-                if (notSupported) {
+                if (notSupported || brakePing) {
                     return;
                 }
                 // Could not connect to ledger, retry...
                 this.pingLedger();
             });
+        return (() => { brakePing = true; });
     };
-    this.pingLedger(true);
 
     this.handlers = {
         logInWithSecret: async (secretKey) => {
@@ -137,7 +138,7 @@ export default function Send(driver) {
                 driver.history.handlers.listenNewTransactions(driver.Server, this.account.account_id);
                 this.event.trigger();
             } catch (e) {
-                if (e.data) {
+                if (e.response) {
                     this.state = 'unfunded';
                     this.unfundedAccountId = keypair.publicKey();
                     setTimeout(() => {
@@ -400,7 +401,8 @@ export default function Send(driver) {
                 if (this.handlers.isInvalidWeigth()) {
                     return Promise.reject('Custom signers weigth');
                 }
-                const newThreshold = signers.length * 10;
+                const currentThreshold = this.account.thresholds.high_threshold;
+                const newThreshold = (currentThreshold + 10);
                 const signerData = {
                     signer: {
                         ed25519PublicKey: key,
@@ -496,7 +498,12 @@ export default function Send(driver) {
                 if (this.handlers.isInvalidWeigth()) {
                     return Promise.reject('Custom signers weigth');
                 }
-                const newThreshold = (signers.length - 2) * 10;
+                const currentThreshold = this.account.thresholds.high_threshold;
+
+                const newThreshold = ((signers.length - 2) * 10) > currentThreshold ?
+                    currentThreshold :
+                    ((signers.length - 2) * 10);
+
                 const newSignerData = {
                     signer: {
                         ed25519PublicKey: key,
@@ -736,9 +743,7 @@ export default function Send(driver) {
                 }
 
                 const image = currency && currency.image;
-                const colorResult = image && await this.handlers.getAverageColor(image);
-                const noError = colorResult && colorResult.error === null;
-                const color = noError ? colorResult.hex : '';
+                const color = image && await this.handlers.getAverageColor(image, asset.code, homeDomain);
 
                 return {
                     code: asset.code,
@@ -760,15 +765,18 @@ export default function Send(driver) {
             }
         },
 
-        getAverageColor: imageUrl => new Promise((resolve) => {
+        getAverageColor: (imageUrl, code, domain) => {
             const fac = new FastAverageColor();
             const img = document.createElement('img');
             img.src = `${imageUrl}?rnd${Math.random()}`;
             img.crossOrigin = 'Anonymous';
 
-            fac.getColorAsync(img, (col) => {
-                resolve(col);
-            });
-        }),
+            return fac.getColorAsync(img)
+                .then(col => col.hex)
+                .catch(() => {
+                    console.warn(`Can not calculate background color for ${code} (${domain}). Reason: CORS Policy`);
+                    return '';
+                });
+        },
     };
 }

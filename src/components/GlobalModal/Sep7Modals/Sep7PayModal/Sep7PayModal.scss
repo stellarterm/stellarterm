@@ -1,0 +1,39 @@
+.Sep7PayModal{
+    background-color: #fff;
+    width: 612px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    .Sep7PayModal_content{
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+        overflow-y: auto;
+
+        .Sep7PayModal_details{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+        }
+
+        .Sep7PayModal_details_item{
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            font-weight: 300;
+            margin-bottom: 20px;
+
+            & span:first-child{
+                font-weight: normal;
+                font-size: 18px;
+            }
+        }
+    }
+
+    .Modal_button-block{
+        padding-right: 0;
+    }
+}

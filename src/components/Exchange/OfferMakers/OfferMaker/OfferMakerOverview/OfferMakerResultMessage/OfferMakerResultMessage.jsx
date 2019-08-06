@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export default function OfferMakerResultMessage(props) {
     const { successMessage, errorMessage, errorType } = props.offerState;
@@ -32,29 +33,17 @@ export default function OfferMakerResultMessage(props) {
                         rel="nofollow noopener noreferrer">
                       minimum balance
                     </a>
-                    . For more info, see <a href="#account">the minimum balance section</a> of the account page.
+                    . For more info, see <Link to="/account/">the minimum balance section</Link> of the account page.
                     <br />
                     <br />
                     Solutions:
                     <ul className="offerMaker_errors">
                         <li>Send at least 1 XLM to your account</li>
-                        <li>Cancel an existing an offer</li>
+                        <li>Cancel an existing offer</li>
                         <li>
-                            Decrease your minimum balance by <a href="#account/addTrust">unaccepting an asset</a>
+                            Decrease your minimum balance by <Link to="/account/addTrust/">unaccepting an asset</Link>
                         </li>
                     </ul>
-                </div>
-            );
-        case 'tx_bad_seq':
-            return (
-                <div className="s-alert s-alert--alert offer_message">
-                    Transaction failed because sequence got out of sync. Please reload StellarTerm and try again.
-                </div>
-            );
-        case 'op_underfunded':
-            return (
-                <div className="s-alert s-alert--alert offer_message">
-                    Transaction failed due to a lack of funds.
                 </div>
             );
         default:
@@ -62,7 +51,7 @@ export default function OfferMakerResultMessage(props) {
                 <div className="s-alert s-alert--alert offer_message">
                     Failed to create offer.
                     <ul className="offerMaker_errors">
-                        <li>Error code: {errorType}</li>
+                        <li>Error code: {errorMessage}</li>
                     </ul>
                 </div>
             );
@@ -72,7 +61,7 @@ export default function OfferMakerResultMessage(props) {
 }
 OfferMakerResultMessage.propTypes = {
     offerState: PropTypes.shape({
-        errorMessage: PropTypes.bool,
+        errorMessage: PropTypes.string,
         errorType: PropTypes.string,
         successMessage: PropTypes.string,
     }),

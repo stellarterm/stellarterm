@@ -95,14 +95,14 @@ export default class SearchByAnchor extends React.Component {
         case 'invalid_domain':
             assetResults = (
                     <MessageRow isError>
-                        <span>Invalid domain {anchorDomain}</span>
+                        <span>Please enter a valid domain name</span>
                     </MessageRow>
                 );
             break;
         case 'without_currencies':
             assetResults = (
                     <MessageRow isError>
-                        <span>Domain {anchorDomain} is known for Stellar, but no currencies found</span>
+                        <span>No currencies found in the stellar.toml file</span>
                     </MessageRow>
                 );
             break;
@@ -154,11 +154,11 @@ export default class SearchByAnchor extends React.Component {
         );
 
         const headerTitle = this.props.tradeLink ?
-            'Explore via anchor domain' :
+            'Discover assets by domain name' :
             'Accept asset via anchor domain';
 
         const description = this.props.tradeLink ?
-            'You can create exchange pair by entering the domain name of the issuer' :
+            'View assets issued by anchor (e.g. www.anchorusd.com) and trade them' :
             'You can accept an asset by entering the domain name of the issuer.';
 
         return (
