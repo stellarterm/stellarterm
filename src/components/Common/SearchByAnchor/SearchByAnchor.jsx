@@ -164,7 +164,7 @@ export default class SearchByAnchor extends React.Component {
                             name="anchorDomainInput"
                             value={anchorDomain}
                             onChange={e => this.handleInputFederation(e)}
-                            placeholder="Assets domain name (e.g. www.anchorusd.com)" />
+                            placeholder="Enter the anchor domain name to see issued assets (e.g. www.anchorusd.com, apay.io, etc)" />
                     </label>
                 </div>
                 {assetResults}
