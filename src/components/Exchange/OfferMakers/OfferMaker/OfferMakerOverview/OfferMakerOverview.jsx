@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
 import Driver from '../../../../../lib/Driver';
 import TrustButton from '../../../../Common/AssetRow/TrustButton/TrustButton';
@@ -32,7 +33,7 @@ export default class OfferMakerOverview extends React.Component {
                     {targetAsset.isNative() ? (
                         <div>
                             You may trade up to {tradeMaxLink} XLM (due to{' '}
-                            <a href="#account">minimum balance requirements</a>.)
+                            <Link to="/account/">minimum balance requirements</Link>.)
                         </div>
                     ) : (
                         <div>
@@ -134,7 +135,7 @@ export default class OfferMakerOverview extends React.Component {
                 <div>
                     {this.getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling)}
                     <span className="offer_message">
-                        <a href="#account">Log in</a> to create an offer
+                        <Link to="/account/">Log in</Link> to create an offer
                     </span>
                 </div>
             );

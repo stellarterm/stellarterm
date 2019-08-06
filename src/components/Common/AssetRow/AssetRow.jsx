@@ -1,17 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
 import TrustButton from './TrustButton/TrustButton';
 import Stellarify from '../../../lib/Stellarify';
 
 export default class AssetRow extends React.Component {
-    static goToTrade(asset) {
-        const native = new StellarSdk.Asset.native();
-        window.location = `#${Stellarify.pairToExchangeUrl(asset, native)}`;
-    }
-
-
     constructor(props) {
         super(props);
         this.state = {
@@ -28,12 +23,13 @@ export default class AssetRow extends React.Component {
 
     getRowActionButton() {
         if (this.props.tradeLink) {
+            const native = new StellarSdk.Asset.native();
             return (
-                <span
-                    onClick={() => this.constructor.goToTrade(this.props.asset)}
+                <Link
+                    to={`/${Stellarify.pairToExchangeUrl(this.props.asset, native)}`}
                     className="tradeLink">
                         trade
-                </span>
+                </Link>
             );
         }
 

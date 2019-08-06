@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 export default () => (
     <div className="island__sub__division MinBalance__sub">
@@ -26,7 +27,7 @@ export default () => (
         </p>
         <p>
             <strong>To decrease your minimum balance</strong>, you can remove an existing offer or{' '}
-            <a href="#account/addTrust">unaccept an asset</a>.<br />
+            <Link to="/account/addTrust/">unaccept an asset</Link>.<br />
             If you would like to close your Stellar account and withdraw assets somewhere else you can use{' '}
             <a href="https://merge.lobstr.co/" target="_blank" rel="noopener noreferrer">
                 Account Merge tool

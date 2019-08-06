@@ -35,7 +35,7 @@ export default class Session extends React.Component {
             if (!inflationDone) {
                 return <SessionWelcome d={d} />;
             }
-            return <SessionContent d={d} route={urlParts[1]} />;
+            return <SessionContent d={d} />;
         default:
             break;
         }
@@ -45,5 +45,5 @@ export default class Session extends React.Component {
 
 Session.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    urlParts: PropTypes.arrayOf(PropTypes.string),
+    urlParts: PropTypes.string,
 };
