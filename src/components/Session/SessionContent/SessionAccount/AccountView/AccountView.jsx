@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../../../../lib/Driver';
 import MinBalance from './MinBalance/MinBalance';
 import BalancesTable from './BalancesTable/BalancesTable';
@@ -13,7 +14,7 @@ export default function AccountView(props) {
                     <div className="island__header">Balances</div>
                     <div className="AccountView_content">
                         By default, your account is only configured to accept <strong>XLM</strong>. In order to receive
-                        other assets, you must <a href="#account/addTrust">accept</a> them using the{' '}
+                        other assets, you must <Link to="/account/addTrust/">accept</Link> them using the{' '}
                         <strong>Accept assets</strong> tool.
                     </div>
                     <BalancesTable d={props.d} />

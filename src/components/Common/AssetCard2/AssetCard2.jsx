@@ -5,8 +5,7 @@ import hexToRGBA from '../../../lib/hexToRgba';
 import AssetCardMain from './AssetCardMain/AssetCardMain';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../Ellipsis/Ellipsis';
-
-const images = require('../../../images');
+import images from '../../../images';
 
 // This is AssetCard2, the preferred way of displaying an asset in stellarterm.
 // The parent container should be 340px or wider
@@ -57,7 +56,7 @@ export default class AssetCard2 extends React.Component {
 
         name = this.props.host || assetData.host || domain || (assetData.time ? anchor.name : name);
         const color = this.props.color || assetData.color || '#A5A0A7';
-        logo = image || (currency ? anchor.logo : logo);
+        logo = image || (currency ? 'unknown' : logo);
         const logoPadding = !!image;
 
         return {
@@ -127,7 +126,7 @@ export default class AssetCard2 extends React.Component {
             name = this.state.loadedAssetData.host || this.props.host || anchor.name;
             const { image, host } = this.state.loadedAssetData.currency || '';
             name = (host && host.split('//')[1]) || name;
-            logo = image || anchor.logo;
+            logo = image || 'unknown';
             logoPadding = !!image;
             color = this.state.loadedAssetData.color || color;
         }
@@ -144,17 +143,28 @@ export default class AssetCard2 extends React.Component {
             borderStyle = { border: 'none' };
         }
 
+        const assetSymbol = asset.code[0]; // Takes first asset symbol, if no any image loaded
+
         if (this.props.inRow) {
             return (
                 <span className="AssetCardInRow">
-                     <img
-                         className="Row_logo"
-                         src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
-                         alt={anchor.name} />
-                     {name === 'load' ?
-                         <span>{asset.code} - <Ellipsis /></span> :
-                         <span>{`${asset.code} — ${name}`}</span>}
-                 </span>
+                    {logo === 'unknown' && logo !== 'load' ? (
+                        <div className="AssetCard_unknown_logo unknown_small">
+                            <div className="Unknown_circle">
+                                <span className="assetSymbol">{assetSymbol}</span>
+                            </div>
+                        </div>
+                    ) : (
+                        <img
+                            className="Row_logo"
+                            src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
+                            alt={anchor.name} />
+                    )}
+                    {name === 'load' ?
+                        <span>{asset.code} - <Ellipsis /></span> :
+                        <span>{`${asset.code} — ${name}`}</span>
+                    }
+                </span>
             );
         }
         return (
@@ -165,7 +175,8 @@ export default class AssetCard2 extends React.Component {
                     logoWithPadding={logoPadding}
                     name={name.toLowerCase()}
                     assetCode={asset.code}
-                    issuerAccountId={issuerAccountId} />
+                    issuerAccountId={issuerAccountId}
+                    assetSymbol={assetSymbol} />
 
                 {this.props.children ? (
                     <div className="AssetCard2__addon" style={Object.assign({}, borderStyle, backgroundStyle)}>

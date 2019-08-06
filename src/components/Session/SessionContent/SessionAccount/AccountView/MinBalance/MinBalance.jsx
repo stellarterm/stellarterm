@@ -15,7 +15,7 @@ export default function MinBalance(props) {
     ));
 
     return (
-        <div>
+        <div id="minBalance">
             <div className="island__sub">
                 <MinBalanceDescription />
 

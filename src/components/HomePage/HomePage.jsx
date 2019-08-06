@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../lib/Driver';
 import AssetList from '../Common/AssetList/AssetList';
 
@@ -12,9 +13,9 @@ export default class HomePage extends React.Component {
         const signUpLinkClass = 'HomePage__lead__actions__sign-up-button HomePage__lead__actions__button s-button';
         return (
             <div className="HomePage__lead__actions">
-                <a className={signUpLinkClass} href="#signup">Sign Up</a>
+                <Link className={signUpLinkClass} to="/signup/">Sign Up</Link>
                 &nbsp;
-                <a className="s-button HomePage__lead__actions__button" href="#account">Login</a>
+                <Link className="s-button HomePage__lead__actions__button" to="/account/">Login</Link>
             </div>
         );
     }
@@ -28,7 +29,7 @@ export default class HomePage extends React.Component {
                         <div className="HomePage__lead">
 
                             <h2 className="HomePage__lead__title">
-                                Trade on the <a href="#exchange">Stellar Decentralized Exchange</a>
+                                Trade on the <Link to="/exchange/">Stellar Decentralized Exchange</Link>
                             </h2>
 
                             <p className="HomePage__lead__summary">
@@ -36,7 +37,7 @@ export default class HomePage extends React.Component {
                                 open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">
                                 Stellar network</a>.
                                 <br />
-                                Send, receive, and <a href="#exchange">trade</a> assets on the Stellar
+                                Send, receive, and <Link to="/exchange/">trade</Link> assets on the Stellar
                                 network easily with StellarTerm.
                              </p>
                             {this.renderHomePageActions()}
@@ -48,7 +49,7 @@ export default class HomePage extends React.Component {
                     <div className="island">
                         <AssetList d={this.props.driver} limit={6} />
                         <div className="AssetListFooter">
-                            View more assets on the <a href="#markets">market list page</a>.
+                            View more assets on the <Link to="/markets/">market list page</Link>.
                         </div>
                     </div>
                 </div>

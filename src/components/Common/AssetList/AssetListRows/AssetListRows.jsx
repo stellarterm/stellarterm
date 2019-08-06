@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import Format from '../../../../lib/Format';
 import directory from 'stellarterm-directory';
@@ -49,15 +50,14 @@ export default class AssetListRows extends React.Component {
     }
 
     componentWillMount() {
-        const { ticker, limit } = this.props;
+        const { ticker } = this.props;
 
         const assets = ticker.data.assets
-            .map((asset, index) => {
+            .map((asset) => {
                 const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
-                const limitIsReached = limit && index >= limit;
                 const assetIsUndefined = directoryAsset === null || directoryAsset.unlisted;
 
-                const isAssetHidden = limitIsReached || assetIsUndefined || asset.id === 'XLM-native';
+                const isAssetHidden = assetIsUndefined || asset.id === 'XLM-native';
                 return isAssetHidden
                     ? null
                     : {
@@ -67,15 +67,15 @@ export default class AssetListRows extends React.Component {
                         volume24h: asset.volume24h_USD,
                         change24h: asset.change24h_USD,
                         assetRow: (
-                              <a
-                                  href={`#exchange/${asset.topTradePairSlug}`}
+                              <Link
+                                  to={`/exchange/${asset.topTradePairSlug}`}
                                   key={`asset-${asset.id}-${asset.code}`}
                                   className="AssetList_asset">
                                   <div className="asset_assetCard">
                                       <AssetCard2 code={asset.code} issuer={asset.issuer} />
                                   </div>
                                   {this.constructor.getAssetRow(asset, false, ticker)}
-                              </a>
+                              </Link>
                           ),
                     };
             })
@@ -85,19 +85,26 @@ export default class AssetListRows extends React.Component {
     }
 
     sortAssets(allAssets) {
-        const { sortBy, sortType } = this.props;
+        const { sortBy, sortType, limit } = this.props;
         const ascDescType = new Map([[true, 'asc'], [false, 'desc']]);
         const isAscSort = sortType !== null ? ascDescType.get(sortType) : '';
         const halfAssets = [];
 
         const fullInfoAssets = allAssets.filter((asset) => {
-            if (sortBy !== null && (asset[sortBy] === undefined || asset[sortBy] === null)) {
+            const isFullUndefined = !asset.priceXLM && !asset.priceUSD && !asset.change24h && !asset.volume24h;
+
+            if (asset[sortBy] === undefined || asset[sortBy] === null || isFullUndefined) {
                 halfAssets.push(asset);
                 return null;
             }
             return asset;
         });
-        return _.orderBy(fullInfoAssets, sortBy, isAscSort).concat(halfAssets);
+
+        const sortedAssets = limit
+            ? _.orderBy(fullInfoAssets, 'volume24h', 'desc').slice(0, limit - 1)
+            : _.orderBy(fullInfoAssets, sortBy, isAscSort);
+
+        return limit ? _.orderBy(sortedAssets, sortBy, isAscSort) : sortedAssets.concat(halfAssets);
     }
 
     render() {
@@ -106,14 +113,14 @@ export default class AssetListRows extends React.Component {
 
         return (
             <React.Fragment>
-                <a
-                    href={`#exchange/${Xlm.topTradePairSlug}`}
+                <Link
+                    to={`/exchange/${Xlm.topTradePairSlug}`}
                     className="AssetList_asset">
                     <div className="asset_assetCard">
                         <AssetCard2 code={Xlm.code} issuer={Xlm.issuer} />
                     </div>
                     {AssetListRows.getAssetRow(Xlm, true, ticker)}
-                </a>
+                </Link>
 
                 {this.sortAssets(this.state.assets).map(asset => asset.assetRow)}
             </React.Fragment>

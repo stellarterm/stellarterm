@@ -8,8 +8,8 @@ export default () => (
 
             <li>
                 Install the Stellar app with the{' '}
-                <a href="https://www.ledgerwallet.com/apps/manager" target="_blank" rel="nofollow noopener noreferrer">
-                    Ledger Manager
+                <a href="https://shop.ledger.com/pages/ledger-live" target="_blank" rel="nofollow noopener noreferrer">
+                    Ledger Live
                 </a>
                 .
             </li>

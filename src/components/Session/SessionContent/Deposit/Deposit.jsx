@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../../../lib/Driver';
 import DepositAnchors from './DepositAnchors/DepositAnchors';
 import DepositCurrency from './DepositCurrency/DepositCurrency';
@@ -9,7 +10,7 @@ export default class Deposit extends React.Component {
         return (
             <div className="Deposit__content">
                 You haven{"'"}t trusted any assets. Click here to{' '}
-                <a href="#account/addTrust">create your first trust line</a>.
+                <Link to="/account/addTrust/">create your first trust line</Link>.
             </div>
         );
     }

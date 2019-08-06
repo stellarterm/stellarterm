@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 export default function OfferMakerResultMessage(props) {
     const { successMessage, errorMessage, errorType } = props.offerState;
@@ -32,7 +33,7 @@ export default function OfferMakerResultMessage(props) {
                         rel="nofollow noopener noreferrer">
                       minimum balance
                     </a>
-                    . For more info, see <a href="#account">the minimum balance section</a> of the account page.
+                    . For more info, see <Link to="/account/">the minimum balance section</Link> of the account page.
                     <br />
                     <br />
                     Solutions:
@@ -40,7 +41,7 @@ export default function OfferMakerResultMessage(props) {
                         <li>Send at least 1 XLM to your account</li>
                         <li>Cancel an existing offer</li>
                         <li>
-                            Decrease your minimum balance by <a href="#account/addTrust">unaccepting an asset</a>
+                            Decrease your minimum balance by <Link to="/account/addTrust/">unaccepting an asset</Link>
                         </li>
                     </ul>
                 </div>

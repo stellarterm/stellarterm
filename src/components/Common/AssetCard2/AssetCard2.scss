@@ -25,7 +25,7 @@
     margin-right: 8px;
 }
 
-.AssetCard2_logo_load{
+.AssetCard2_logo_load {
     width: 50px;
     height: 50px;
     margin-right: 8px;
@@ -33,7 +33,7 @@
     justify-content: center;
     align-items: center;
 
-    img{
+    img {
         height: 20px;
         width: 20px;
     }
@@ -104,4 +104,46 @@
         line-height: 20px;
         vertical-align: middle;
     }
+}
+
+.AssetCard_unknown_logo {
+    height: 50px;
+    width: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    .Unknown_circle {
+        @extend .AssetCard_unknown_logo;
+        width: 70%;
+        height: 70%;
+        background: #a0a5a7;
+        border-radius: 50%;
+
+        .assetSymbol {
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+        }
+    }
+}
+
+.unknown_small {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    margin-right: 0.5em;
+
+    .Unknown_circle {
+        height: 100%;
+        width: 100%;
+
+        .assetSymbol {
+            font-size: 12px;
+        }
+    }
+}
+
+.margin_AssetContent {
+    margin-left: 8px;
 }

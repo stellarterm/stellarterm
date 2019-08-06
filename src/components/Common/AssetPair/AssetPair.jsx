@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import images from '../../../images';
 import Driver from '../../../lib/Driver';
@@ -64,7 +65,8 @@ export default class AssetPair extends React.Component {
         const base = isBase ? asset : this.props.baseBuying;
         const counter = isBase ? this.props.counterSelling : asset;
 
-        window.location = `#${Stellarify.pairToExchangeUrl(base, counter)}`;
+        this.props.d.orderbook.handlers.setOrderbook(base, counter);
+        window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(base, counter)}`);
     }
 
     clearAsset(assetType) {
@@ -72,7 +74,9 @@ export default class AssetPair extends React.Component {
     }
 
     swap() {
-        window.location = `#${Stellarify.pairToExchangeUrl(this.props.counterSelling, this.props.baseBuying)}`;
+        const { baseBuying, counterSelling } = this.props;
+        this.props.d.orderbook.handlers.setOrderbook(counterSelling, baseBuying);
+        window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(counterSelling, baseBuying)}`);
     }
 
     showErrorMessage() {
@@ -100,12 +104,12 @@ export default class AssetPair extends React.Component {
         }
 
         if (!_.isEqual(baseBuying, counterSelling)) {
-            const url = `#${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`;
+            const url = `/${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`;
             // In the future, this can be split into AssetPairRow and AssetPair if the row is not needed
             return (
-                <a href={url} key={url} className="AssetPairRow">
+                <Link to={url} key={url} className="AssetPairRow">
                     {content}
-                </a>
+                </Link>
             );
         }
 

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import Driver from '../../../../../../lib/Driver';
 import directory from 'stellarterm-directory';
@@ -33,20 +34,20 @@ export default function BalancesTable(props) {
 
                 if (tickerAsset.slug !== 'XLM-native') {
                     tradeLink = (
-                        <a href={`#exchange/${tickerAsset.topTradePairSlug}`} className="BalancesTable__row__trade">
+                        <Link to={`/exchange/${tickerAsset.topTradePairSlug}`} className="BalancesTable__row__trade">
                             trade
-                        </a>
+                        </Link>
                     );
                 }
                 Object.assign(balance, { tradeLink });
             } else if (props.d.ticker.ready && !tickerAsset) {
                 unlistedAssets.push(balance);
                 tradeLink = (
-                    <a
-                        href={`#exchange/${balance.code}-${balance.issuer}/XLM-native`}
+                    <Link
+                        to={`/exchange/${balance.code}-${balance.issuer}/XLM-native`}
                         className="BalancesTable__row__trade">
                         trade
-                    </a>
+                    </Link>
                 );
                 Object.assign(balance, { tradeLink });
                 return null;

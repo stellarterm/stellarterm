@@ -39,7 +39,8 @@ export default function Send(driver) {
     };
 
     // Ping the Ledger device to see if it is connected
-    this.pingLedger = () => {
+    this.pingLedger = (singlePing) => {
+        let brakePing = singlePing || false;
         Transport.create()
             .then(transport => new AppStellar(transport))
             .then(app => app.getAppConfiguration())
@@ -56,14 +57,14 @@ export default function Send(driver) {
                 }
 
                 const notSupported = error && error.id === 'U2FNotSupported';
-                if (notSupported) {
+                if (notSupported || brakePing) {
                     return;
                 }
                 // Could not connect to ledger, retry...
                 this.pingLedger();
             });
+        return (() => { brakePing = true; });
     };
-    this.pingLedger(true);
 
     this.handlers = {
         logInWithSecret: async (secretKey) => {
