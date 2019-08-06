@@ -10,7 +10,13 @@ import SearchByAnchor from '../Common/SearchByAnchor/SearchByAnchor';
 export default function Markets(props) {
     return (
         <div>
-            <div className="so-back islandBack islandBack--t">
+            <ErrorBoundary>
+                <div className="so-back islandBack islandBack--t">
+                    <SearchByAnchor d={props.d} tradeLink />
+                </div>
+            </ErrorBoundary>
+
+            <div className="so-back islandBack">
                 <div className="island">
                     <AssetList d={props.d} />
                     <div className="AssetListFooter">
@@ -30,9 +36,6 @@ export default function Markets(props) {
             </div>
 
             <ErrorBoundary>
-                <div className="so-back islandBack">
-                    <SearchByAnchor d={props.d} tradeLink />
-                </div>
                 <div className="so-back islandBack">
                     <CustomPairMenu d={props.d} />
                 </div>

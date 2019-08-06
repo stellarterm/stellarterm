@@ -1,9 +1,9 @@
-.AssetRow{
+.AssetRow {
     padding: 8px;
     display: flex;
     align-items: center;
 
-    .tradeLink{
+    .tradeLink {
         border-bottom: 1px dotted $s-color-neutral5;
         line-height: 24px;
         height: 24px;
@@ -17,6 +17,25 @@
         min-width: 180px;
     }
 }
+
 .AssetRow__exists {
-  color: $s-color-neutral5;
+    color: $s-color-neutral5;
+}
+
+.AssetRow_flex3 {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 18px;
+    border-top: solid 1px #dfe0e0;
+
+    .tradeLink {
+        line-height: 24px;
+        text-align: right;
+        width: 33%;
+        height: auto;
+        padding: 5px 5px;
+        cursor: pointer;
+        text-decoration: none;
+    }
 }
