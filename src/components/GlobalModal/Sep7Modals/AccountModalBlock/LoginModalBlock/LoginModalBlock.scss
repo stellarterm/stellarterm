@@ -1,0 +1,52 @@
+.LoginModalBlock{
+    border-radius: 4px;
+    border: solid 1px #7ed085;
+    background-color: #f0faf1;
+    padding: 24px 27px 19px 22px;
+
+
+
+    .LoginModalBlock_header{
+        font-size: 18px;
+        padding-bottom: 20px;
+    }
+
+    .LoginModalBlock_menu{
+        display: flex;
+        flex-direction: row;
+        position: relative;
+        font-size: 18px;
+        font-weight: 300;
+        opacity: 0.7;
+        border-bottom: solid 1px #dfe0e1;
+
+        .LoginModalBlock_menu_item{
+            margin-right: 28px;
+            padding-bottom: 10px;
+            position: relative;
+            cursor: pointer;
+
+            &.active{
+                border-bottom: solid 2px #86d38c;
+                margin-bottom: -1px;
+            }
+        }
+    }
+
+    .LoginModalBlock_login_body {
+        margin-top: 20px;
+
+        .LoginPage__greenBox {
+            border: none;
+            margin: 0;
+
+            .LoginPage__form {
+                padding: 0;
+
+                .LoginPage__password {
+                    padding-right: 70px;
+                }
+            }
+        }
+    }
+}

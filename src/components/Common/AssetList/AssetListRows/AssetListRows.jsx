@@ -114,8 +114,7 @@ export default class AssetListRows extends React.Component {
         return (
             <React.Fragment>
                 <Link
-                    to={`/exchange/${Xlm.topTradePairSlug}`}
-                    className="AssetList_asset">
+                    to={`/exchange/${Xlm.topTradePairSlug}`} className="AssetList_asset">
                     <div className="asset_assetCard">
                         <AssetCard2 code={Xlm.code} issuer={Xlm.issuer} />
                     </div>

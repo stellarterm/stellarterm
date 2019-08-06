@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import { Link } from 'react-router-dom';
+import directory from 'stellarterm-directory';
 import Driver from '../../../lib/Driver';
 import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
 import TrustButton from './TrustButton/TrustButton';
