@@ -69,6 +69,9 @@ export function createLightChart(element, cursorMode) {
         localization: {
             locale: 'en-US',
         },
+        handleScale: {
+            axisPressedMouseMove: false,
+        },
     });
 }
 

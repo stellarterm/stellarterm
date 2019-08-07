@@ -18,6 +18,7 @@ export default class Orderbook {
                 });
             },
             setOrderbook: (baseBuying, counterSelling) => {
+                this.event.trigger();
                 // If orderbook is already set, then this is a no-op
                 // Expects baseBuying and counterSelling to StellarSdk.Asset objects
                 base = baseBuying;
