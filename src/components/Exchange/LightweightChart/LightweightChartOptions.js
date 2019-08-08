@@ -8,9 +8,9 @@ const gridLineColor = 'rgba(70, 130, 180, 0.5)';
 const bordersColor = 'rgba(0, 0, 0, 0.4)';
 const candleUpColor = '#4caf50';
 const candleDownColor = '#ef5350';
-const lineChartColor = '#6AD0FE';
-const lineChartTopColor = '#c0ecff';
-const lineChartDownColor = 'rgb(0, 120, 255, 0.0)';
+const areaChartColor = '#6AD0FE';
+const areaChartTopColor = '#c0ecff';
+const areaChartDownColor = 'rgba(0, 120, 255, 0.0)';
 
 export function createLightChart(element, cursorMode) {
     return createChart(element, {
@@ -75,11 +75,11 @@ export function createLightChart(element, cursorMode) {
     });
 }
 
-export function getLineOptions() {
+export function getAreaOptions() {
     return {
-        topColor: lineChartTopColor,
-        bottomColor: lineChartDownColor,
-        lineColor: lineChartColor,
+        topColor: areaChartTopColor,
+        bottomColor: areaChartDownColor,
+        lineColor: areaChartColor,
         lineWidth: 3,
         priceFormat: SDEX_PRICE_FORMAT,
     };

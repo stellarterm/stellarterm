@@ -38,7 +38,7 @@ export default class Exchange extends React.Component {
             chartType: 'lineChart',
             fullscreenMode: false,
             timeFrame: converterOHLC.FRAME_HOUR,
-            scaleMode: PriceScaleMode.Logarithmic,
+            scaleMode: PriceScaleMode.Normal,
         };
         this._handleKeyUp = this._handleKeyUp.bind(this);
     }

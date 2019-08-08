@@ -58,11 +58,11 @@
         img {
             width: 23px;
             height: 23px;
-            transition: 0.5s ease-in-out;
+            transition: 0.25s ease-in-out;
             cursor: pointer;
 
             &:hover {
-                transform: scale(1.3);
+                transform: scale(1.15);
             }
         }
     }

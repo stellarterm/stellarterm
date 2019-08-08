@@ -72,26 +72,27 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    opacity: 0.5;
-    background-color: #4c525e;
-    right: 80px;
-    bottom: 70px;
+    opacity: 0.2;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 4px 0px rgba(0,0,0,0.3);
+    right: 10px;
+    bottom: 60px;
     height: 32px;
     width: 32px;
     z-index: 3;
     border-radius: 50%;
-    transition: 0.2s ease-in-out;
+    transition: 0.15s ease-in-out;
 
     &:hover {
-        opacity: 0.7;
-    }
-
-    &:active {
         opacity: 1;
     }
 
+    &:active {
+        opacity: 0.85;
+    }
+
     img {
-        width: 24px;
-        height: 24px;
+        width: 16px;
+        height: auto;
     }
 }

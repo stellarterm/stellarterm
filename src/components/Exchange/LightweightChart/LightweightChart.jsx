@@ -29,6 +29,7 @@ export default class LightweightChart extends React.Component {
             86400: { trades: [], volumes: [] },
             604800: { trades: [], volumes: [] },
         };
+        this.applyChartOptions = this.applyChartOptions.bind(this);
     }
 
     componentWillMount() {
@@ -37,6 +38,7 @@ export default class LightweightChart extends React.Component {
 
     componentDidMount() {
         this.chartInit();
+        window.addEventListener('resize', this.applyChartOptions);
     }
 
     shouldComponentUpdate() {
@@ -63,6 +65,7 @@ export default class LightweightChart extends React.Component {
 
     componentWillUnmount() {
         this.CHART.unsubscribeVisibleTimeRangeChange();
+        window.removeEventListener('resize', this.applyChartOptions);
     }
 
     onClickTimeFrameBtn(timeFrame) {
@@ -160,7 +163,7 @@ export default class LightweightChart extends React.Component {
         } else if (candlestickChart) {
             this.ohlcSeries = this.CHART.addCandlestickSeries(chartOptions.getCandlestickOptions());
         } else if (lineChart) {
-            this.ohlcSeries = this.CHART.addAreaSeries(chartOptions.getLineOptions());
+            this.ohlcSeries = this.CHART.addAreaSeries(chartOptions.getAreaOptions());
         }
     }
 
@@ -195,11 +198,13 @@ export default class LightweightChart extends React.Component {
 
     applyChartOptions() {
         const chart = document.getElementById('LightChart');
+        const chartCursorMode = this.props.lineChart ? CrosshairMode.Magnet : CrosshairMode.Normal;
 
         this.CHART.applyOptions({
             width: chart.clientWidth,
             height: chart.clientHeight,
             priceScale: { mode: this.props.scaleMode },
+            crosshair: { mode: chartCursorMode },
         });
     }
 
