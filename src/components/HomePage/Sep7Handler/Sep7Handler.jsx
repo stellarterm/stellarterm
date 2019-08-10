@@ -5,6 +5,14 @@ import Driver from '../../../lib/Driver';
 
 
 export default function Sep7Handler(props) {
+    // Supported browsers: Opera, Chrome, Firefox
+
+    if (!window.navigator.registerProtocolHandler) {
+        console.warn('Your browser does not support the Stellar-protocol: SEP-0007. ' +
+            'Use Chrome, Opera or Firefox to open web+stellar links');
+        return;
+    }
+
     // Enable stellarUri in browser
     window.navigator.registerProtocolHandler('web+stellar', `${HOME_URL}?tx=%s`, 'stellarUri');
 
