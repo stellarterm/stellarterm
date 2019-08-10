@@ -343,7 +343,8 @@ export default function Send(driver) {
             const usedKnownSigner = driver.session.account.signers.find(sign => knownSigners[sign.key]);
 
             if (!usedKnownSigner) {
-                driver.modal.handlers.activate('multisigUnknown', signedTx);
+                setTimeout(() =>
+                    driver.modal.handlers.activate('multisigUnknown', signedTx), 1000);
             } else {
                 const signer = knownSigners[usedKnownSigner.key];
                 const body = JSON.stringify({ xdr: signedTx });
