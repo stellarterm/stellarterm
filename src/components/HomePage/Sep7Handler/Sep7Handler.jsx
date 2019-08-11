@@ -29,26 +29,28 @@ export default function Sep7Handler(props) {
     // 1) Payment transactions with amount (donate is not supported now)
     // 2) TX transactions (payment and changeTrust)
 
-    try {
-        const txDetails = parseStellarUri(urlParsed.tx);
-        const { operation } = txDetails;
-        txDetails.verifySignature()
-            .then((isVerified) => {
-                if (!isVerified) {
-                    driver.modal.handlers.activate('Sep7ErrorModal',
-                        'Signatures of transaction is not verified!');
-                } else {
-                    if (operation === 'pay') {
-                        if (txDetails.amount) {
-                            driver.modal.handlers.activate('Sep7PayModal', txDetails);
-                        } else {
-                            driver.modal.handlers.activate('Sep7ErrorModal',
-                                'Payment operations without amount is not supported now!');
-                        }
-                        return;
-                    }
 
-                    const transaction = new StellarSdk.Transaction(txDetails.xdr);
+    const txDetails = parseStellarUri(urlParsed.tx);
+    const { operation } = txDetails;
+    txDetails.verifySignature()
+        .then((isVerified) => {
+            if (!isVerified) {
+                driver.modal.handlers.activate('Sep7ErrorModal',
+                    'Signatures of transaction is not verified!');
+            } else {
+                if (operation === 'pay') {
+                    if (txDetails.amount) {
+                        driver.modal.handlers.activate('Sep7PayModal', txDetails);
+                    } else {
+                        driver.modal.handlers.activate('Sep7ErrorModal',
+                            'Payment operations without amount is not supported now!');
+                    }
+                    return;
+                }
+                try {
+                    const { xdr } = txDetails;
+                    const transaction = new StellarSdk.Transaction(xdr);
+
                     if (transaction.operations.length !== 1) {
                         driver.modal.handlers.activate('Sep7ErrorModal', 'Multiply operations is not supported now!');
                         return;
@@ -62,11 +64,11 @@ export default function Sep7Handler(props) {
                         return;
                     }
                     driver.modal.handlers.activate('Sep7ErrorModal', 'Unsupported operation!');
+                } catch (e) {
+                    driver.modal.handlers.activate('Sep7ErrorModal', 'Wrong transaction uri!');
                 }
-            });
-    } catch (e) {
-        driver.modal.handlers.activate('Sep7ErrorModal', 'Wrong transaction uri!');
-    }
+            }
+        });
 }
 Sep7Handler.propTypes = {
     driver: PropTypes.instanceOf(Driver).isRequired,
