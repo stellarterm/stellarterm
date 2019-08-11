@@ -83,12 +83,17 @@ export default class Sep7PayModal extends React.Component {
             submit.cancel();
         }
 
+        let type = memoType || 'MEMO_TEXT';
+        if (type.toUpperCase() !== type) {
+            type = `MEMO_${type.toUpperCase()}`;
+        }
+
         const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
             destination,
             asset,
             amount,
             memo: (memo) ? {
-                type: memoType || 'MEMO_TEXT',
+                type,
                 content: memo,
             } : undefined,
         });
