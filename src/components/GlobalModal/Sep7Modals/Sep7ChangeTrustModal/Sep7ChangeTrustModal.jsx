@@ -166,7 +166,9 @@ export default class Sep7ChangeTrustModal extends React.Component {
                         currency={currency}
                         domain={domain} />
                     {desc &&
-                        <span className="Sep7ChangeTrustModal_desc">{desc}</span>}
+                        <div className="Sep7ChangeTrustModal_desc">
+                            <span>{desc}</span>
+                        </div>}
                     {conditions &&
                         <div className="Sep7ChangeTrustModal_conditions">
                             <span>Conditions</span>
