@@ -7,8 +7,19 @@ import Sep7Handler from './Sep7Handler/Sep7Handler';
 
 
 export default class HomePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.listenId = this.props.driver.session.event.listen(() => {
+            this.forceUpdate();
+        });
+    }
+
     componentDidMount() {
         Sep7Handler(this.props);
+    }
+
+    componentWillUnmount() {
+        this.props.driver.session.event.unlisten(this.listenId);
     }
 
     renderHomePageActions() {
