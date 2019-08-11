@@ -79,6 +79,10 @@ export default class Sep7PayModal extends React.Component {
         this.setState({ pending: true });
         const { d, submit } = this.props;
 
+        if (d.session.authType === 'ledger') {
+            submit.cancel();
+        }
+
         const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
             destination,
             asset,

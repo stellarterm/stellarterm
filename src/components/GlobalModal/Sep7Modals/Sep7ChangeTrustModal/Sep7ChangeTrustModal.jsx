@@ -89,6 +89,10 @@ export default class Sep7ChangeTrustModal extends React.Component {
         const { code, issuer } = asset;
         const { d, submit } = this.props;
 
+        if (d.session.authType === 'ledger') {
+            submit.cancel();
+        }
+
         const bssResult = parseFloat(limit) === 0 ?
             await d.session.handlers.removeTrust(code, issuer) :
             await d.session.handlers.addTrust(code, issuer);
