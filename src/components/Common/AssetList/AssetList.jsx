@@ -74,7 +74,7 @@ export default class AssetList extends React.Component {
             return loadingMarket;
         }
 
-        const { d, limit } = this.props;
+        const { d, limit, showLowTradable } = this.props;
         const { sortBy, sortType } = this.state;
 
         return (
@@ -86,7 +86,12 @@ export default class AssetList extends React.Component {
                     {this.generateRowTitle('Volume (24h)', 'volume24h')}
                     {this.generateRowTitle('Change (24h)', 'change24h')}
                 </div>
-                <AssetListRows ticker={d.ticker} limit={limit} sortBy={sortBy} sortType={sortType} />
+                <AssetListRows
+                    ticker={d.ticker}
+                    limit={limit}
+                    sortBy={sortBy}
+                    sortType={sortType}
+                    showLowTradable={showLowTradable} />
             </div>
         );
     }
@@ -95,4 +100,5 @@ export default class AssetList extends React.Component {
 AssetList.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     limit: PropTypes.number,
+    showLowTradable: PropTypes.bool,
 };
