@@ -61,6 +61,10 @@ export default class LightweightChart extends React.Component {
             this.setChartSeries();
         }
         this.setChartData();
+
+        if (chartSeriesIsChanged && this.oldSeries !== undefined) {
+            this.CHART.removeSeries(this.oldSeries);
+        }
     }
 
     componentWillUnmount() {
@@ -155,7 +159,7 @@ export default class LightweightChart extends React.Component {
         const { lineChart, barChart, candlestickChart } = this.props;
 
         if (this.ohlcSeries !== undefined) {
-            this.CHART.removeSeries(this.ohlcSeries);
+            this.oldSeries = this.ohlcSeries;
         }
 
         if (barChart) {
