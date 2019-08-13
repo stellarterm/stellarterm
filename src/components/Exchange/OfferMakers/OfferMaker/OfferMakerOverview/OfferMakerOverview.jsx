@@ -16,28 +16,20 @@ export default class OfferMakerOverview extends React.Component {
     }
 
     getBalance() {
-        const { targetAsset } = this.props;
-        const maxOffer = this.calculateMaxOffer();
+        const { targetAsset, maxOffer } = this.props;
         const maxOfferView = this.constructor.capDigits(maxOffer);
-        const inputSideType = this.props.side === 'buy' ? 'total' : 'amount';
-
-        const tradeMaxLink = (
-            <a className="link_toInput" onClick={() => this.props.updateInputData(inputSideType, maxOfferView)}>
-                {maxOfferView}
-            </a>
-        );
 
         return (
             <div>
                 <div className="offer_userBalance">
                     {targetAsset.isNative() ? (
                         <div>
-                            You may trade up to {tradeMaxLink} XLM (due to{' '}
+                            You may trade up to {maxOfferView} XLM (due to{' '}
                             <Link to="/account/">minimum balance requirements</Link>.)
                         </div>
                     ) : (
                         <div>
-                            You have {tradeMaxLink} {targetAsset.getCode()}
+                            You have {maxOfferView} {targetAsset.getCode()}
                         </div>
                     )}
                 </div>
@@ -102,20 +94,9 @@ export default class OfferMakerOverview extends React.Component {
         return trustNeededAssets;
     }
 
-    calculateMaxOffer() {
-        const { targetAsset } = this.props;
-        const { account } = this.props.d.session;
-        const maxLumenSpend = account.maxLumenSpend();
-
-        const targetBalance = targetAsset.isNative() ? maxLumenSpend : account.getBalance(targetAsset);
-        const reservedBalance = account.getReservedBalance(targetAsset);
-
-        return parseFloat(targetBalance) > parseFloat(reservedBalance) ? targetBalance - reservedBalance : 0;
-    }
-
     isInsufficientBalance() {
         const isBuy = this.props.side === 'buy';
-        const maxOffer = this.calculateMaxOffer();
+        const { maxOffer } = this.props;
         const { amount, total } = this.props.offerState;
 
         if (amount === 'Infinity') {
@@ -186,5 +167,5 @@ OfferMakerOverview.propTypes = {
         total: PropTypes.string,
         buttonState: PropTypes.oneOf(['ready', 'pending']),
     }).isRequired,
-    updateInputData: PropTypes.func,
+    maxOffer: PropTypes.number,
 };

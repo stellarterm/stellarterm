@@ -163,7 +163,7 @@ export default class AssetCard2 extends React.Component {
                      {name === 'load' ?
                          <span>{asset.code} - <Ellipsis /></span> :
                          <span>{`${asset.code}(${name})`}</span>
-                    }
+                     }
                 </span>
             );
         }

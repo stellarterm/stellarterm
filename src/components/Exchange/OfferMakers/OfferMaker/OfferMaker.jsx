@@ -52,6 +52,20 @@ export default class OfferMaker extends React.Component {
         this.sessionUnsub();
     }
 
+    getPercentButton(isBuy, maxOffer, percent) {
+        const inputType = isBuy ? 'total' : 'amount';
+        const value = ((maxOffer * percent) / 100).toFixed(7).toString();
+        return (
+            <button
+                onClick={(e) => {
+                    e.preventDefault();
+                    this.updateState(inputType, value);
+                }}
+                disabled={maxOffer === 0}
+                className={`cancel-button ${this.state[inputType] === value && 'active'}`}>{percent}%</button>
+        );
+    }
+
     initialize() {
         if (!this.initialized) {
             this.initialized = true;
@@ -156,6 +170,16 @@ export default class OfferMaker extends React.Component {
         }
     }
 
+    calculateMaxOffer(targetAsset) {
+        const { account } = this.props.d.session;
+        const maxLumenSpend = account.maxLumenSpend();
+
+        const targetBalance = targetAsset.isNative() ? maxLumenSpend : account.getBalance(targetAsset);
+        const reservedBalance = account.getReservedBalance(targetAsset);
+
+        return parseFloat(targetBalance) > parseFloat(reservedBalance) ? targetBalance - reservedBalance : 0;
+    }
+
     renderTableRow(inputType, assetName) {
         return (
             <tr className="offer_table_row">
@@ -176,10 +200,25 @@ export default class OfferMaker extends React.Component {
         );
     }
 
+    renderPercentButtons(isBuy, maxOffer) {
+        return (
+            <tr>
+                <td />
+                <td className="offer_table_buttons">
+                    {this.getPercentButton(isBuy, maxOffer, 25)}
+                    {this.getPercentButton(isBuy, maxOffer, 50)}
+                    {this.getPercentButton(isBuy, maxOffer, 75)}
+                    {this.getPercentButton(isBuy, maxOffer, 100)}
+                </td>
+            </tr>
+        );
+    }
+
     render() {
         if (!this.props.d.orderbook.data.ready) {
             return <div>Loading</div>;
         }
+        const login = this.props.d.session.state === 'in';
         const isBuy = this.props.side === 'buy';
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const baseAssetName = baseBuying.getCode();
@@ -188,6 +227,8 @@ export default class OfferMaker extends React.Component {
             ? `Buy ${baseAssetName} using ${counterAssetName}`
             : `Sell ${baseAssetName} for ${counterAssetName}`;
         const targetAsset = isBuy ? counterSelling : baseBuying;
+        const maxOffer = login ? this.calculateMaxOffer(targetAsset) : 0;
+
         return (
             <div>
                 <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
@@ -196,6 +237,7 @@ export default class OfferMaker extends React.Component {
                         <tbody>
                             {this.renderTableRow('price', counterAssetName)}
                             {this.renderTableRow('amount', baseAssetName)}
+                            {this.renderPercentButtons(isBuy, maxOffer)}
                             {this.renderTableRow('total', counterAssetName)}
                         </tbody>
                     </table>
@@ -205,6 +247,7 @@ export default class OfferMaker extends React.Component {
                         targetAsset={targetAsset}
                         side={this.props.side}
                         offerState={this.state}
+                        maxOffer={maxOffer}
                         updateInputData={(type, value) => this.updateState(type, value)} />
                 </form>
             </div>
