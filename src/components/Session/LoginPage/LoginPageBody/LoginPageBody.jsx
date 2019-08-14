@@ -60,8 +60,10 @@ export default class LoginPageBody extends React.Component {
     }
 
     render() {
+        const { show } = this.state;
         const loginErrorMessage = this.checkForErrorMessages();
-        const inputType = this.state.show ? 'text' : 'password';
+        const inputType = show ? 'text' : 'password';
+        const toggleButtonIcon = show ? 'icon-eye-hide' : 'icon-eye';
 
         return (
             <div className="LoginPage__body">
@@ -80,7 +82,7 @@ export default class LoginPageBody extends React.Component {
                                     placeholder="Example:
                                         SDWN4ELCTO7KEJSM6OFGALEWYDK1JTCNF23CDCRVTZ3UYDH7FGSYF2SDF" />
                                 <img
-                                    src={images['icon-eye']}
+                                    src={images[toggleButtonIcon]}
                                     alt="show"
                                     className="LoginPage__show_icon"
                                     onClick={e => this.toggleShow(e)} />
