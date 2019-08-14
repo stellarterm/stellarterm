@@ -36,6 +36,7 @@
     "react-dom": "16.2.1",
     "react-input-autosize": "^2.2.1",
     "react-router-dom": "^5.0.1",
+    "screenfull": "^4.2.1",
     "stellarterm-api": "git+https://github.com/stellarterm/stellarterm-api.git",
     "stellarterm-directory": "git+https://github.com/stellarterm/stellarterm-directory.git",
     "whatwg-fetch": "2.0.4",

@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Driver from '../../../lib/Driver';
 import images from '../../../images';
 
 import * as chartOptions from './LightweightChartOptions';
 import * as converterOHLC from './ConverterOHLC';
+import exportChartPng from './CanvasHandler';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 
 import {
@@ -13,12 +15,14 @@ import {
 } from '../../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
 import UtcTimeString from './UtcTimeString/UtcTimeString';
 import ChartDataPanel from './ChartDataPanel/ChartDataPanel';
+import FullscreenScrollBlock from './FullscreenScrollBlock/FullscreenScrollBlock';
 
 export default class LightweightChart extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
+            pairName: this.props.pairName,
             chartInited: false,
             isLoadingNext: false,
             isLoadingInit: true,
@@ -192,6 +196,16 @@ export default class LightweightChart extends React.Component {
         this.setState({ chartInited: true });
     }
 
+    getScreenshot() {
+        const { pairName } = this.state;
+        const timeFrameInMin = this.props.timeFrame / 60;
+        const canvasScreenshot = this.CHART.takeScreenshot();
+        const timeString = moment(new Date()).format('MM_DD_YYYY');
+        const imageName = `StellarTerm-${pairName}_${timeString}`;
+        const lastTrade = this.state[this.props.timeFrame].trades.reverse()[0];
+        exportChartPng(canvasScreenshot, imageName, pairName, timeFrameInMin, lastTrade);
+    }
+
     chartInit() {
         window.lightChart = document.getElementById('LightChart');
 
@@ -213,12 +227,11 @@ export default class LightweightChart extends React.Component {
     }
 
     render() {
-        const { chartInited, isLoadingInit } = this.state;
-        const { data } = this.props.d.orderbook;
+        const { chartInited, isLoadingInit, pairName } = this.state;
         const { trades, volumes } = this.state[this.props.timeFrame];
+        const { fullscreen } = this.props;
         const noDataFounded = trades.length === 0;
         const showChartControls = chartInited && !isLoadingInit && !noDataFounded;
-        const pairName = `${data.baseBuying.code}/${data.counterSelling.code}`;
 
         return (
             <React.Fragment>
@@ -231,7 +244,7 @@ export default class LightweightChart extends React.Component {
                         pairName={pairName} />
                 ) : null}
 
-                <div className={this.props.fullscreen ? 'chart_Msg_Container_fullscreen' : 'chart_Msg_Container'}>
+                <div className={fullscreen ? 'chart_Msg_Container_fullscreen' : 'chart_Msg_Container'}>
                     <div id="LightChart" style={isLoadingInit || noDataFounded ? { display: 'none' } : {}} />
                     {noDataFounded && !isLoadingInit ? (
                         <p className="chart_message">No trade history founded!</p>
@@ -254,6 +267,7 @@ export default class LightweightChart extends React.Component {
                             {this.getTimeFrameBtn('1d', converterOHLC.FRAME_DAY)}
                             {this.getTimeFrameBtn('1w', converterOHLC.FRAME_WEEK)}
                         </div>
+                        {fullscreen ? <FullscreenScrollBlock /> : null}
                         <div className="scale_Settings">
                             <UtcTimeString />
                             <div className="priceScale_Btns">
@@ -276,6 +290,7 @@ LightweightChart.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     onUpdate: PropTypes.func.isRequired,
     timeFrame: PropTypes.number.isRequired,
+    pairName: PropTypes.string.isRequired,
     scaleMode: PropTypes.number,
     candlestickChart: PropTypes.bool,
     barChart: PropTypes.bool,

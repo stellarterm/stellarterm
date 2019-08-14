@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import directory from 'stellarterm-directory';
+import screenfull from 'screenfull';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
 import ManageOffers from './ManageOffers/ManageOffers';
@@ -13,7 +14,7 @@ import Ellipsis from '../Common/Ellipsis/Ellipsis';
 import Generic from '../Common/Generic/Generic';
 import AssetPair from '../Common/AssetPair/AssetPair';
 import images from '../../images';
-import FullscreenKeyAlert from './FullscreenKeyAlert/FullscreenKeyAlert';
+import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
 import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
 
@@ -37,10 +38,12 @@ export default class Exchange extends React.Component {
         this.state = {
             chartType: 'lineChart',
             fullscreenMode: false,
+            showAction: false,
             timeFrame: converterOHLC.FRAME_HOUR,
             scaleMode: PriceScaleMode.Normal,
         };
         this._handleKeyUp = this._handleKeyUp.bind(this);
+        this._escExitFullscreen = this._escExitFullscreen.bind(this);
     }
 
     componentWillMount() {
@@ -50,6 +53,11 @@ export default class Exchange extends React.Component {
 
     componentDidMount() {
         document.addEventListener('keyup', this._handleKeyUp);
+        // For handle esc browser from fullscreen
+        document.addEventListener('webkitfullscreenchange', this._escExitFullscreen);
+        document.addEventListener('mozfullscreenchange', this._escExitFullscreen);
+        document.addEventListener('fullscreenchange', this._escExitFullscreen);
+        document.addEventListener('MSFullscreenChange', this._escExitFullscreen);
     }
 
     componentWillUnmount() {
@@ -64,6 +72,11 @@ export default class Exchange extends React.Component {
 
     getChartSwitcherPanel() {
         const { chartType, fullscreenMode } = this.state;
+        const fullscreenBtn = fullscreenMode ? (
+            <img src={images['icon-fullscreen-minimize']} alt="F" onClick={() => this.toggleFullScreen()} />
+        ) : (
+            <img src={images['icon-fullscreen']} alt="F" onClick={() => this.toggleFullScreen()} />
+        );
 
         return (
             <div className="island__header chart_Switcher">
@@ -88,11 +101,18 @@ export default class Exchange extends React.Component {
                     </a>
                 </div>
                 <div className="fullscreen_Block">
-                    {fullscreenMode ? (
-                        <img src={images['icon-fullscreen-minimize']} alt="F" onClick={() => this.toggleFullScreen()} />
-                    ) : (
-                        <img src={images['icon-fullscreen']} alt="F" onClick={() => this.toggleFullScreen()} />
-                    )}
+                    <img
+                        className="screenshot-btn"
+                        src={images['icon-photo']}
+                        alt="Screenshot"
+                        onClick={() => {
+                            this.child.getScreenshot();
+                            this.setState({ showAction: true });
+                            setTimeout(() => {
+                                this.setState({ showAction: false });
+                            }, 4000);
+                        }} />
+                    {screenfull.enabled ? fullscreenBtn : null}
                 </div>
             </div>
         );
@@ -124,31 +144,36 @@ export default class Exchange extends React.Component {
     }
 
     toggleFullScreen() {
-        const { fullscreenMode } = this.state;
-        document.body.style.overflow = fullscreenMode ? 'auto' : 'hidden';
-        document.getElementById('stellarterm_header').classList.toggle('header_Fullscreen');
+        const stHeader = document.getElementById('stellarterm_header');
 
-        this.setState({
-            fullscreenMode: !fullscreenMode,
-        });
+        if (screenfull.isFullscreen) {
+            this.setState({ fullscreenMode: false });
+            stHeader.classList.remove('header_Fullscreen');
+            screenfull.exit();
+        } else if (!screenfull.isFullscreen) {
+            screenfull.request();
+            this.setState({ fullscreenMode: true });
+            stHeader.classList.add('header_Fullscreen');
+            window.scrollTo(0, 0);
+        }
+    }
+
+    _escExitFullscreen() {
+        const noBrowserFullscreen =
+            !document.fullscreenElement &&
+            !document.webkitIsFullScreen &&
+            !document.mozFullScreen &&
+            !document.msFullscreenElement;
+
+        if (noBrowserFullscreen) {
+            this.setState({ fullscreenMode: false });
+            document.getElementById('stellarterm_header').classList.remove('header_Fullscreen');
+        }
     }
 
     _handleKeyUp(e) {
-        const { fullscreenMode } = this.state;
-
-        if (this.props.d.orderbook.data.ready) {
-            switch (e.code) {
-            case 'Escape':
-                if (fullscreenMode) {
-                    this.toggleFullScreen();
-                }
-                break;
-            case 'KeyF':
-                this.toggleFullScreen();
-                break;
-            default:
-                break;
-            }
+        if (e.code === 'KeyF' && screenfull.enabled) {
+            this.toggleFullScreen();
         }
     }
 
@@ -239,28 +264,30 @@ export default class Exchange extends React.Component {
             offermakers = <OfferMakers d={this.props.d} />;
         }
 
-        const { chartType, fullscreenMode, timeFrame, scaleMode } = this.state;
+        const { chartType, fullscreenMode, timeFrame, scaleMode, showAction } = this.state;
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const chartSwitcherPanel = this.getChartSwitcherPanel();
+        const pairName = `${baseBuying.code}/${counterSelling.code}`;
+        const pairPickerClass = `so-back islandBack islandBack--t ${fullscreenMode ? 'hidden-pair' : ''}`;
 
         return (
             <div>
-                <div className="so-back islandBack islandBack--t">
+                <div className={pairPickerClass}>
                     <PairPicker d={this.props.d} />
-                    {fullscreenMode ? (
-                        <AssetPair
-                            baseBuying={baseBuying}
-                            counterSelling={counterSelling}
-                            fullscreen={fullscreenMode}
-                            d={this.props.d}
-                            swap
-                            dropdown />
-                    ) : null}
                 </div>
-                <div className="so-back islandBack">
-                    <div className={`island ChartChunk ${fullscreenMode ? 'fullScreenChart' : ''}`}>
+                {fullscreenMode ? (
+                    <AssetPair
+                        baseBuying={baseBuying}
+                        counterSelling={counterSelling}
+                        fullscreen={fullscreenMode}
+                        d={this.props.d}
+                        swap
+                        dropdown />
+                ) : null}
+                <div className={`so-back islandBack ${fullscreenMode ? 'fullScreenChart' : ''}`}>
+                    <div className="island ChartChunk">
                         {chartSwitcherPanel}
-                        {fullscreenMode ? <FullscreenKeyAlert fullscreenMode={fullscreenMode} /> : null}
+                        {showAction ? <ChartActionAlert text={'Chart screenshot downloaded!'} /> : null}
                         <LightweightChart
                             d={this.props.d}
                             lineChart={chartType === LINE}
@@ -269,11 +296,15 @@ export default class Exchange extends React.Component {
                             timeFrame={timeFrame}
                             scaleMode={scaleMode}
                             fullscreen={fullscreenMode}
+                            pairName={pairName}
+                            ref={(instance) => {
+                                this.child = instance;
+                            }}
                             onUpdate={(stateName, stateValue) => this.setState({ [stateName]: stateValue })} />
                     </div>
                 </div>
                 <div className="so-back islandBack">
-                    <div className="island Exchange__orderbook">
+                    <div className="island">
                         <div className="island__header">Orderbook</div>
                         {thinOrderbookWarning}
                         {warningWarning}

@@ -1,0 +1,35 @@
+.chart_Settings_Panel {
+    .scrollHere_info {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        font-size: 14px;
+        transition: 0.2s ease-in-out;
+
+        &:hover {
+            .icon_downArrow {
+                margin-top: -5px;
+            }
+
+            .arrow-reverse180 {
+                margin-top: -10px;
+            }
+        }
+
+        .icon_downArrow {
+            transition: 0.3s ease-in-out;
+            position: relative;
+            margin-top: -10px;
+            width: 16px;
+            height: auto;
+            opacity: 0.5;
+        }
+
+        .arrow-reverse180 {
+            transform: rotate(180deg);
+            margin-top: -5px;
+        }
+    }
+}

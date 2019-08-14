@@ -70,8 +70,8 @@
 }
 
 .header_Fullscreen {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    width: 100%;
 
     .so-back {
         padding-right: 0;

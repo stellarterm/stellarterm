@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as converterOHLC from '../ConverterOHLC';
+import { fillWithZeros } from '../ConverterOHLC';
 
 export default class ChartDataPanel extends React.Component {
     constructor(props) {
@@ -47,15 +47,15 @@ export default class ChartDataPanel extends React.Component {
                 <div className="chart_Data">
                     <div className="pair_Name">{this.props.pairName}</div>
                     <span className="data_Title">O:</span>{' '}
-                    <span className={spanClass}>{converterOHLC.fillWithZeros(trade.open)}</span>
+                    <span className={spanClass}>{fillWithZeros(trade.open)}</span>
                     <span className="data_Title">H:</span>{' '}
-                    <span className={spanClass}>{converterOHLC.fillWithZeros(trade.high)}</span>
+                    <span className={spanClass}>{fillWithZeros(trade.high)}</span>
                     <span className="data_Title">L:</span>{' '}
-                    <span className={spanClass}>{converterOHLC.fillWithZeros(trade.low)}</span>
+                    <span className={spanClass}>{fillWithZeros(trade.low)}</span>
                     <span className="data_Title">C:</span>{' '}
-                    <span className={spanClass}>{converterOHLC.fillWithZeros(trade.close)}</span>
+                    <span className={spanClass}>{fillWithZeros(trade.close)}</span>
                     <span className="title_Volume">Volume ({volume.volumeName}):</span>{' '}
-                    <span className={`data_Volume ${spanClass}`}>{converterOHLC.fillWithZeros(volume.value)}</span>
+                    <span className={`data_Volume ${spanClass}`}>{fillWithZeros(volume.value)}</span>
                 </div>
             </div>
         );

@@ -22,7 +22,9 @@
 html {
     min-width: 1052px;
     background: #fff;
+    -ms-overflow-style: -ms-autohiding-scrollbar;
 }
+
 body {
     background: linear-gradient(0deg, #ced0ff, #c0ecff);
     color: $s-color-neutral3;
