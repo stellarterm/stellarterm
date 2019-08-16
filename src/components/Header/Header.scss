@@ -69,7 +69,7 @@
     }
 }
 
-.header_Fullscreen {
+@mixin header_fullscreen {
     position: fixed;
     width: 100%;
 
@@ -97,4 +97,20 @@
             }
         }
     }
+}
+
+:-webkit-full-screen #stellarterm_header {
+    @include header_fullscreen;
+}
+
+:-moz-full-screen #stellarterm_header {
+    @include header_fullscreen;
+}
+
+:-ms-fullscreen #stellarterm_header {
+    @include header_fullscreen;
+}
+
+:fullscreen #stellarterm_header {
+    @include header_fullscreen;
 }

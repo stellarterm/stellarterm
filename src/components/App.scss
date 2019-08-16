@@ -22,7 +22,7 @@
 html {
     min-width: 1052px;
     background: #fff;
-    -ms-overflow-style: -ms-autohiding-scrollbar;
+    overflow-x: hidden;
 }
 
 body {
@@ -31,6 +31,7 @@ body {
     font-size: $s-scale-4;
     min-width: 1052px;
 }
+
 #app {
     position: relative;
     min-height: 100vh;
@@ -54,6 +55,7 @@ ul.privacy__ul {
 .AppStretch {
     min-height: 100vh;
 }
+
 .AppContainer {
     display: flex;
     flex-direction: column;

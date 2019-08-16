@@ -17,11 +17,6 @@
     padding-bottom: 18px;
 }
 
-.Exchange_orderbook_fullscreen {
-    margin-top: 100vh;
-    position: relative;
-}
-
 .Exchange__orderbookDisabled {
     font-size: $s-scale-1;
     text-align: center;
@@ -119,7 +114,7 @@
 
 .fullScreenChart {
     position: relative;
-    margin-block-end: 2em;
+    margin-bottom: 2em;
     padding: 0;
     height: 100vh;
 

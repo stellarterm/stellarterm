@@ -33,3 +33,40 @@
         }
     }
 }
+
+.btn_scrollToTop {
+    position: fixed;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.5;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.3);
+    right: 1em;
+    bottom: 1em;
+    height: 32px;
+    width: 32px;
+    z-index: 3;
+    border-radius: 50%;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+        opacity: 1;
+
+        img {
+            margin-bottom: 5px;
+        }
+    }
+
+    &:active {
+        opacity: 0.85;
+    }
+
+    img {
+        transition: 0.2s ease-in-out;
+        transform: rotate(-90deg);
+        width: 16px;
+        height: auto;
+    }
+}

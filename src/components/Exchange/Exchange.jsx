@@ -21,6 +21,8 @@ import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/li
 const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
 const LINE = 'lineChart';
+const keyF = 70;
+const isMicrosoftBrowser = document.documentMode || /Edge/.test(window.navigator.userAgent);
 
 export default class Exchange extends React.Component {
     constructor(props) {
@@ -70,12 +72,32 @@ export default class Exchange extends React.Component {
         }
     }
 
+    getChartScreenshot() {
+        const chartIsDrawn = this.child.state[this.state.timeFrame].trades.length !== 0;
+
+        if (chartIsDrawn) {
+            this.child.getScreenshot();
+            this.setState({ showAction: true });
+            setTimeout(() => {
+                this.setState({ showAction: false });
+            }, 4000);
+        }
+    }
+
     getChartSwitcherPanel() {
         const { chartType, fullscreenMode } = this.state;
         const fullscreenBtn = fullscreenMode ? (
             <img src={images['icon-fullscreen-minimize']} alt="F" onClick={() => this.toggleFullScreen()} />
         ) : (
             <img src={images['icon-fullscreen']} alt="F" onClick={() => this.toggleFullScreen()} />
+        );
+
+        const downloadScreenshotBtn = (
+            <img
+                className="screenshot-btn"
+                src={images['icon-photo']}
+                alt="Screenshot"
+                onClick={() => this.getChartScreenshot()} />
         );
 
         return (
@@ -101,17 +123,7 @@ export default class Exchange extends React.Component {
                     </a>
                 </div>
                 <div className="fullscreen_Block">
-                    <img
-                        className="screenshot-btn"
-                        src={images['icon-photo']}
-                        alt="Screenshot"
-                        onClick={() => {
-                            this.child.getScreenshot();
-                            this.setState({ showAction: true });
-                            setTimeout(() => {
-                                this.setState({ showAction: false });
-                            }, 4000);
-                        }} />
+                    {!isMicrosoftBrowser ? downloadScreenshotBtn : null}
                     {screenfull.enabled ? fullscreenBtn : null}
                 </div>
             </div>
@@ -144,16 +156,12 @@ export default class Exchange extends React.Component {
     }
 
     toggleFullScreen() {
-        const stHeader = document.getElementById('stellarterm_header');
-
         if (screenfull.isFullscreen) {
             this.setState({ fullscreenMode: false });
-            stHeader.classList.remove('header_Fullscreen');
             screenfull.exit();
         } else if (!screenfull.isFullscreen) {
             screenfull.request();
             this.setState({ fullscreenMode: true });
-            stHeader.classList.add('header_Fullscreen');
             window.scrollTo(0, 0);
         }
     }
@@ -167,12 +175,11 @@ export default class Exchange extends React.Component {
 
         if (noBrowserFullscreen) {
             this.setState({ fullscreenMode: false });
-            document.getElementById('stellarterm_header').classList.remove('header_Fullscreen');
         }
     }
 
-    _handleKeyUp(e) {
-        if (e.code === 'KeyF' && screenfull.enabled) {
+    _handleKeyUp({ keyCode }) {
+        if (keyCode === keyF && screenfull.enabled) {
             this.toggleFullScreen();
         }
     }
@@ -304,7 +311,7 @@ export default class Exchange extends React.Component {
                     </div>
                 </div>
                 <div className="so-back islandBack">
-                    <div className="island">
+                    <div className="island Exchange_orderbook">
                         <div className="island__header">Orderbook</div>
                         {thinOrderbookWarning}
                         {warningWarning}

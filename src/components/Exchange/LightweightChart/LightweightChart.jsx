@@ -191,6 +191,8 @@ export default class LightweightChart extends React.Component {
             if (tradesIsLoaded && param.from === lastTradeElement.time && !this.state.isLoadingNext) {
                 this.getNextTrades();
             }
+            // Sets first visible trade, only for screenshot
+            this.firstVisibleTrade = this.state[this.props.timeFrame].trades.find(trade => trade.time === param.to);
         });
 
         this.setState({ chartInited: true });
@@ -202,8 +204,7 @@ export default class LightweightChart extends React.Component {
         const canvasScreenshot = this.CHART.takeScreenshot();
         const timeString = moment(new Date()).format('MM_DD_YYYY');
         const imageName = `StellarTerm-${pairName}_${timeString}`;
-        const lastTrade = this.state[this.props.timeFrame].trades.reverse()[0];
-        exportChartPng(canvasScreenshot, imageName, pairName, timeFrameInMin, lastTrade);
+        exportChartPng(canvasScreenshot, imageName, pairName, timeFrameInMin, this.firstVisibleTrade);
     }
 
     chartInit() {
@@ -259,21 +260,23 @@ export default class LightweightChart extends React.Component {
 
                 {showChartControls ? (
                     <div className="chart_Settings_Panel">
-                        <div className="timeFrame_btns">
-                            {this.getTimeFrameBtn('1m', converterOHLC.FRAME_MINUTE)}
-                            {this.getTimeFrameBtn('5m', converterOHLC.FRAME_5MINUTES)}
-                            {this.getTimeFrameBtn('15m', converterOHLC.FRAME_FOURTH_HOUR)}
-                            {this.getTimeFrameBtn('1h', converterOHLC.FRAME_HOUR)}
-                            {this.getTimeFrameBtn('1d', converterOHLC.FRAME_DAY)}
-                            {this.getTimeFrameBtn('1w', converterOHLC.FRAME_WEEK)}
-                        </div>
-                        {fullscreen ? <FullscreenScrollBlock /> : null}
-                        <div className="scale_Settings">
-                            <UtcTimeString />
-                            <div className="priceScale_Btns">
-                                {this.getChangeScaleBtn('%', PriceScaleMode.Percentage)}
-                                {this.getChangeScaleBtn('Log', PriceScaleMode.Logarithmic)}
-                                {this.getChangeScaleBtn('Normal', PriceScaleMode.Normal)}
+                        <div className="panel_container">
+                            <div className="timeFrame_btns">
+                                {this.getTimeFrameBtn('1m', converterOHLC.FRAME_MINUTE)}
+                                {this.getTimeFrameBtn('5m', converterOHLC.FRAME_5MINUTES)}
+                                {this.getTimeFrameBtn('15m', converterOHLC.FRAME_FOURTH_HOUR)}
+                                {this.getTimeFrameBtn('1h', converterOHLC.FRAME_HOUR)}
+                                {this.getTimeFrameBtn('1d', converterOHLC.FRAME_DAY)}
+                                {this.getTimeFrameBtn('1w', converterOHLC.FRAME_WEEK)}
+                            </div>
+                            {fullscreen ? <FullscreenScrollBlock /> : null}
+                            <div className="scale_Settings">
+                                <UtcTimeString />
+                                <div className="priceScale_Btns">
+                                    {this.getChangeScaleBtn('%', PriceScaleMode.Percentage)}
+                                    {this.getChangeScaleBtn('Log', PriceScaleMode.Logarithmic)}
+                                    {this.getChangeScaleBtn('Normal', PriceScaleMode.Normal)}
+                                </div>
                             </div>
                         </div>
                         <a className="scrollTime_btn" onClick={() => this.CHART.timeScale().scrollToRealTime()}>

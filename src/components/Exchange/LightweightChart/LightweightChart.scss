@@ -22,8 +22,12 @@
     border-top: solid 1px #e3e3e4;
     padding: 6px 10px;
     width: 100%;
-    display: flex;
-    justify-content: space-between;
+    
+    .panel_container{
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
 
     .timeFrame_btns {
         .timeBtn {
@@ -40,6 +44,7 @@
 
     .scale_Settings {
         display: flex;
+        align-items: center;
 
         .utc_Time,
         .priceScale_Btns {
