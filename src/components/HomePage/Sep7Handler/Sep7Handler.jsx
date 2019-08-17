@@ -63,7 +63,7 @@ export default function Sep7Handler(props) {
                         driver.modal.handlers.activate('Sep7TChangeTrustModal', txDetails);
                         return;
                     }
-                    driver.modal.handlers.activate('Sep7ErrorModal', 'Unsupported operation!');
+                    driver.modal.handlers.activate('Sep7ErrorModal', 'This type of operation is not currently supported');
                 } catch (e) {
                     driver.modal.handlers.activate('Sep7ErrorModal', 'Wrong transaction uri!');
                 }
