@@ -24,7 +24,7 @@ export default class LoginModalBlock extends React.Component {
         return (
             <div className="LoginModalBlock">
                 <div className="LoginModalBlock_header">
-                    <span>Please, login to complete transaction</span>
+                    <span>Please log in to complete transaction</span>
                 </div>
                 <div className="LoginModalBlock_menu">
                     <div
