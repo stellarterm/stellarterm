@@ -19,7 +19,7 @@ export default function TransactionAuthorBlock(props) {
                 <div className="TransactionAuthorBlock_attention">
                     Origin domain is not provided for this transaction signature request.
                     This transaction is potentially harmful to your account and may be a scam.
-                    Be extra careful and sign the transaction only if you are confident in its source.
+                    Be extra careful and sign the transaction only if you are 100% confident in its source and its nature.
                 </div>
             </div>
         );
