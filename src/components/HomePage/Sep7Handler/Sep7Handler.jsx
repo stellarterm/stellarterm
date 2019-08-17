@@ -36,7 +36,7 @@ export default function Sep7Handler(props) {
         .then((isVerified) => {
             if (!isVerified) {
                 driver.modal.handlers.activate('Sep7ErrorModal',
-                    'Signatures of transaction is not verified!');
+                    'Security warning: signature of this transaction request is not valid!');
             } else {
                 if (operation === 'pay') {
                     if (txDetails.amount) {
