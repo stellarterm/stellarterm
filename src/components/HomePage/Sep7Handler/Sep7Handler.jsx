@@ -65,7 +65,7 @@ export default function Sep7Handler(props) {
                     }
                     driver.modal.handlers.activate('Sep7ErrorModal', 'This type of operation is not currently supported');
                 } catch (e) {
-                    driver.modal.handlers.activate('Sep7ErrorModal', 'Wrong transaction uri!');
+                    driver.modal.handlers.activate('Sep7ErrorModal', 'Error: Could not parse transaction request URI!');
                 }
             }
         });
