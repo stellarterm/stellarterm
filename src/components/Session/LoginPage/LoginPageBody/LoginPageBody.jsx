@@ -69,7 +69,7 @@ export default class LoginPageBody extends React.Component {
             <div className="LoginPage__body">
                 <div className="LoginPage__greenBox">
                     <div className="LoginPage__form">
-                        <p className="LoginPage__intro">Your secret key</p>
+                        <p className="LoginPage__intro">Log in with your secret key to manage your account</p>
 
                         <form onSubmit={e => this.handleSubmit(e)}>
                             <label className="s-inputGroup LoginPage__inputGroup" htmlFor="inputSecretKey">
