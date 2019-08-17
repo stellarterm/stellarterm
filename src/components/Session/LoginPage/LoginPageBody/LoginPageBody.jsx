@@ -80,7 +80,7 @@ export default class LoginPageBody extends React.Component {
                                     value={this.state.secretInput}
                                     onChange={e => this.handleInput(e)}
                                     placeholder="Example:
-                                        SDWN4ELCTO7KEJSM6OFGALEWYDK1JTCNF23CDCRVTZ3UYDH7FGSYF2SDF" />
+                                        SDWN4ELCTO7KEJSM6OFGALEWYDK1JTCNF23CDCRVTZ3UYDH7FGSY....." />
                                 <img
                                     src={images[toggleButtonIcon]}
                                     alt="show"
