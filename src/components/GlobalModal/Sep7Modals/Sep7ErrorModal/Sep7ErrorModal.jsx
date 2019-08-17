@@ -19,7 +19,7 @@ export default function Sep7ErrorModal(props) {
             </div>
             <div className="Sep7ErrorModal_title">
                 <img src={images['icon-circle-fail']} alt="fail" />
-                <span>Transaction failed </span>
+                <span>{props.error || 'Unknown error!'}</span>
             </div>
             <div className="Sep7ErrorModal_content">
                 <span>This transaction signature request contains invalid or unsupported data and can not be signed.</span>
