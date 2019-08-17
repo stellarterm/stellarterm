@@ -22,7 +22,7 @@ export default function Sep7ErrorModal(props) {
                 <span>Transaction failed </span>
             </div>
             <div className="Sep7ErrorModal_content">
-                <span>{props.error || 'Unknown error!'}</span>
+                <span>This transaction signature request contains invalid or unsupported data and can not be signed.</span>
             </div>
             <div className="Modal_button-block">
                 <button
