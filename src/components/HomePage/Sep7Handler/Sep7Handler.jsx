@@ -43,7 +43,7 @@ export default function Sep7Handler(props) {
                         driver.modal.handlers.activate('Sep7PayModal', txDetails);
                     } else {
                         driver.modal.handlers.activate('Sep7ErrorModal',
-                            'Payment operations without amount is not supported now!');
+                            'Payment operations without specified amount are not supported yet');
                     }
                     return;
                 }
