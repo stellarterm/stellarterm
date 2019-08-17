@@ -13,7 +13,7 @@ export default function AccountModalBlock(props) {
         if (userFederation) {
             return (
                 <div className="AccountModalBlock_account">
-                    <span>You logged as:</span>
+                    <span>Logged in as:</span>
                     <span>{userFederation}*stellarterm.com</span>
                 </div>
             );
