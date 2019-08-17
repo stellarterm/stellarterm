@@ -52,7 +52,7 @@ export default function Sep7Handler(props) {
                     const transaction = new StellarSdk.Transaction(xdr);
 
                     if (transaction.operations.length !== 1) {
-                        driver.modal.handlers.activate('Sep7ErrorModal', 'Multiply operations is not supported now!');
+                        driver.modal.handlers.activate('Sep7ErrorModal', 'Transactions with multiple operations are not supported yet');
                         return;
                     }
                     if (transaction.operations[0].type === 'payment') {
