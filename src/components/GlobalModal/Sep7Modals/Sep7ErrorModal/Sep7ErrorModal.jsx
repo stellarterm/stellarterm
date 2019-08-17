@@ -8,7 +8,7 @@ export default function Sep7ErrorModal(props) {
     return (
         <div className="Sep7ErrorModal">
             <div className="Modal_header">
-                <span>Invalid request</span>
+                <span>Invalid transaction signature request</span>
                 <img
                     src={images['icon-close']}
                     alt="X"
