@@ -31,7 +31,7 @@ export default function Sep7ErrorModal(props) {
                         props.submit.cancel();
                         window.history.pushState({}, null, '/');
                     }}>
-                    Cancel
+                    Close
                 </button>
             </div>
         </div>
