@@ -57,7 +57,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
         );
     }
 
-    async getDataFromToml(asset, d) {
+    async getDataFromToml(asset, d, submit) {
         try {
             const domain = await d.session.handlers.getDomainByIssuer(asset.issuer);
             this.setState({ domain });
@@ -67,6 +67,12 @@ export default class Sep7ChangeTrustModal extends React.Component {
                 return;
             }
             const currency = CURRENCIES.find(curr => (curr.code === asset.code && curr.issuer === asset.issuer));
+
+            if (!currency) {
+                submit.cancel();
+                d.modal.handlers.activate('Sep7ErrorModal',
+                    'Could not verify the asset connection to home domain.');
+            }
 
             const { desc, conditions } = currency || '';
             this.setState({
@@ -126,7 +132,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
         const buttons = this.getButtons(line, limit);
         const { desc, conditions, loaded, error, currency, domain } = this.state;
         if (!loaded) {
-            this.getDataFromToml(line, d);
+            this.getDataFromToml(line, d, submit);
         }
 
         const balance = account && account.getBalance(line);

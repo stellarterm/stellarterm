@@ -127,8 +127,7 @@ export default class Sep7PayModal extends React.Component {
         const balance = account && (asset.isNative() ? account.maxLumenSpend() : account.getBalance(asset));
         const available = state !== 'in' ?
             'Login required' :
-            `${(balance - account.getReservedBalance(asset))} ${asset.code}`;
-
+            `${(Math.floor((balance - account.getReservedBalance(asset)) * 10000000) / 10000000).toFixed(7)} ${asset.code}`;
         const buttons = this.getButtons(asset, destination, amount, memoType, memo);
         const { error } = this.state;
 
