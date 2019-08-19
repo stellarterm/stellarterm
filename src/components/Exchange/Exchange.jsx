@@ -293,7 +293,7 @@ export default class Exchange extends React.Component {
                         dropdown />
                 ) : null}
                 <div className={`so-back islandBack ${fullscreenMode ? 'fullScreenChart' : ''}`}>
-                    <div className="island ChartChunk">
+                    <div className="island ChartChunk" id="ChartChunk">
                         {chartSwitcherPanel}
                         {showAction ? <ChartActionAlert text={'Chart screenshot downloaded!'} /> : null}
                         <LightweightChart

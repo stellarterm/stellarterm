@@ -38,19 +38,16 @@
             transition: 0.2s ease-in-out;
 
             &:hover {
-                .icon_downArrow {
-                    margin-top: 13px;
-                }
-
+                .icon_downArrow,
                 .arrow-reverse180 {
-                    margin-top: 9px;
+                    opacity: 0.8;
                 }
             }
 
             .icon_downArrow {
-                transition: 0.3s ease-in-out;
+                transition: 0.2s ease-in-out;
                 position: absolute;
-                margin-top: 8px;
+                padding-top: 20px;
                 width: 16px;
                 height: auto;
                 opacity: 0.5;
@@ -58,7 +55,6 @@
 
             .arrow-reverse180 {
                 transform: rotate(180deg);
-                margin-top: 14px;
             }
         }
 
@@ -82,6 +78,10 @@
                     color: #505558;
                     padding: 0 10px;
                     border-left: solid 1px #e3e3e4;
+
+                    &:last-child {
+                        padding-right: 18px;
+                    }
                 }
 
                 .scaleBtn_active {

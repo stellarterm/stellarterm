@@ -144,3 +144,7 @@
     width: 100vw;
     height: calc(100vh + 72px);
 }
+
+:-ms-fullscreen #ChartChunk {
+    width: 100vw !important;
+}
