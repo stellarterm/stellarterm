@@ -18,59 +18,6 @@
     height: calc(100% - 87px);
 }
 
-.chart_Settings_Panel {
-    border-top: solid 1px #e3e3e4;
-    padding: 6px 10px;
-    width: 100%;
-    
-    .panel_container{
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-    }
-
-    .timeFrame_btns {
-        .timeBtn {
-            text-decoration: none;
-            font-size: 14px;
-            color: #505558;
-            padding: 0 10px;
-        }
-
-        .timeBtn_active {
-            color: #68c76f;
-        }
-    }
-
-    .scale_Settings {
-        display: flex;
-        align-items: center;
-
-        .utc_Time,
-        .priceScale_Btns {
-            font-size: 14px;
-        }
-
-        .utc_Time {
-            padding-right: 10px;
-        }
-
-        .priceScale_Btns {
-            .scaleBtn {
-                text-decoration: none;
-                font-size: 14px;
-                color: #505558;
-                padding: 0 10px;
-                border-left: solid 1px #e3e3e4;
-            }
-
-            .scaleBtn_active {
-                color: #68c76f;
-            }
-        }
-    }
-}
-
 .scrollTime_btn {
     position: absolute;
     text-decoration: none;

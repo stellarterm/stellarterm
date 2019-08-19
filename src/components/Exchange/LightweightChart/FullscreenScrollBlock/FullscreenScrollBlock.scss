@@ -1,35 +1,93 @@
 .chart_Settings_Panel {
-    .scrollHere_info {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        cursor: pointer;
-        font-size: 14px;
-        transition: 0.2s ease-in-out;
+    border-top: solid 1px #e3e3e4;
+    width: 100%;
 
-        &:hover {
+    .panel_container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        .timeFrame_btns,
+        .scrollHere_info,
+        .scale_Settings {
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeFrame_btns {
+            .timeBtn {
+                text-decoration: none;
+                font-size: 14px;
+                color: #505558;
+                padding: 0 10px;
+            }
+
+            .timeBtn_active {
+                color: #68c76f;
+            }
+        }
+
+        .scrollHere_info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s ease-in-out;
+
+            &:hover {
+                .icon_downArrow {
+                    margin-top: 13px;
+                }
+
+                .arrow-reverse180 {
+                    margin-top: 9px;
+                }
+            }
+
             .icon_downArrow {
-                margin-top: -5px;
+                transition: 0.3s ease-in-out;
+                position: absolute;
+                margin-top: 8px;
+                width: 16px;
+                height: auto;
+                opacity: 0.5;
             }
 
             .arrow-reverse180 {
-                margin-top: -10px;
+                transform: rotate(180deg);
+                margin-top: 14px;
             }
         }
 
-        .icon_downArrow {
-            transition: 0.3s ease-in-out;
-            position: relative;
-            margin-top: -10px;
-            width: 16px;
-            height: auto;
-            opacity: 0.5;
-        }
+        .scale_Settings {
+            display: flex;
+            align-items: center;
 
-        .arrow-reverse180 {
-            transform: rotate(180deg);
-            margin-top: -5px;
+            .utc_Time,
+            .priceScale_Btns {
+                font-size: 14px;
+            }
+
+            .utc_Time {
+                padding-right: 10px;
+            }
+
+            .priceScale_Btns {
+                .scaleBtn {
+                    text-decoration: none;
+                    font-size: 14px;
+                    color: #505558;
+                    padding: 0 10px;
+                    border-left: solid 1px #e3e3e4;
+                }
+
+                .scaleBtn_active {
+                    color: #68c76f;
+                }
+            }
         }
     }
 }

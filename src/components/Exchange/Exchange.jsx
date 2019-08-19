@@ -23,6 +23,7 @@ const CANDLE = 'candlestickChart';
 const LINE = 'lineChart';
 const keyF = 70;
 const isMicrosoftBrowser = document.documentMode || /Edge/.test(window.navigator.userAgent);
+const isIE = /MSIE|Trident/.test(window.navigator.userAgent);
 
 export default class Exchange extends React.Component {
     constructor(props) {
@@ -179,7 +180,7 @@ export default class Exchange extends React.Component {
     }
 
     _handleKeyUp({ keyCode }) {
-        if (keyCode === keyF && screenfull.enabled) {
+        if (keyCode === keyF && screenfull.enabled && !isIE) {
             this.toggleFullScreen();
         }
     }

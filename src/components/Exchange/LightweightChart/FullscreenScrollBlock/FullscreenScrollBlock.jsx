@@ -3,7 +3,7 @@ import images from '../../../../images';
 
 export default class FullscreenScrollBlock extends React.Component {
     static checkIsScrollOnTop() {
-        return window.scrollY <= 0;
+        return window.scrollY <= 0 || window.pageYOffset <= 0;
     }
 
     constructor(props) {
@@ -25,7 +25,6 @@ export default class FullscreenScrollBlock extends React.Component {
 
     onClickScrollBlock() {
         const { isScrollOnTop } = this.state;
-
         const supportsNativeSmoothScroll = 'scrollBehavior' in document.documentElement.style;
         const top = isScrollOnTop ? 500 : 0;
 
@@ -47,8 +46,9 @@ export default class FullscreenScrollBlock extends React.Component {
 
     render() {
         const { isScrollOnTop } = this.state;
+        const isIE = /MSIE|Trident/.test(window.navigator.userAgent);
 
-        return (
+        return !isIE ? (
             <React.Fragment>
                 <div className="scrollHere_info" onClick={() => this.onClickScrollBlock()}>
                     <span>Click here to scroll {isScrollOnTop ? 'down' : 'to top'}</span>
@@ -65,6 +65,6 @@ export default class FullscreenScrollBlock extends React.Component {
                     </a>
                 ) : null}
             </React.Fragment>
-        );
+        ) : null;
     }
 }
