@@ -1,0 +1,27 @@
+@import "LoginModalBlock/LoginModalBlock";
+
+.AccountModalBlock_account{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 40px;
+
+    span:last-child{
+        font-size: 18px;
+        font-weight: bold;
+    }
+}
+
+.AccountModalBlock_unfunded{
+    border-radius: 2px;
+    border: solid 1px #ff4961;
+    background-color: #f6c5c5;
+    padding: 20px;
+}
+
+.AccountModalBlock_loading{
+    padding: 20px;
+}

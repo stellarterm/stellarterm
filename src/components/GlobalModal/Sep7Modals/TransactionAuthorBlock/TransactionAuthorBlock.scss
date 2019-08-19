@@ -1,0 +1,40 @@
+.TransactionAuthorBlock{
+    border-radius: 2px;
+    border: solid 1px #bdbfc033;
+    background-color: #f4f4f533;
+    margin-bottom: 25px;
+    padding: 27px 20px 20px;
+
+    .TransactionAuthorBlock_header{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 22px;
+        border-bottom: solid 1px #bdbfc033;
+        font-weight: 300;
+
+        .TransactionAuthorBlock_author {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            font-size: 18px;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
+        }
+    }
+
+    .TransactionAuthorBlock_attention{
+        padding-top: 22px;
+        color: #e33c4c;
+        font-weight: normal;
+    }
+
+    .TransactionAuthorBlock_content{
+        padding-top: 22px;
+        font-weight: normal;
+    }
+}
