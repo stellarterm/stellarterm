@@ -128,17 +128,17 @@ export default class SearchByAnchor extends React.Component {
 
                 const key = currency.code + currency.issuer;
                 return (
-                    <AssetRow
-                        key={key}
-                        d={this.props.d}
-                        tradeLink={this.props.tradeLink}
-                        asset={asset}
-                        currency={currency}
-                        host={anchorDomain} />
+                        <AssetRow
+                            key={key}
+                            d={this.props.d}
+                            tradeLink={this.props.tradeLink}
+                            asset={asset}
+                            currency={currency}
+                            host={anchorDomain} />
                 );
             });
             assetsAmount = assetResults.filter(asset => asset !== null).length;
-
+            assetResults = this.props.tradeLink ? <div className="AssetRow_flex3">{assetResults}</div> : assetResults;
             break;
         default:
             break;
@@ -153,31 +153,18 @@ export default class SearchByAnchor extends React.Component {
             assetResults
         );
 
-        const headerTitle = this.props.tradeLink ?
-            'Discover assets by domain name' :
-            'Accept asset via anchor domain';
-
-        const description = this.props.tradeLink ?
-            'View assets issued by anchor (e.g. www.anchorusd.com) and trade them' :
-            'You can accept an asset by entering the domain name of the issuer.';
-
         return (
             <div className="island">
-                <div className="island__header">{headerTitle}</div>
                 <div className="island__paddedContent">
-                    <p>{description}</p>
+                    <p className="anchor_Search_title">Discover assets issued by anchor and trade them</p>
                     <label className="s-inputGroup AddTrust_inputGroup" htmlFor="anchorDomainInput">
-                        <span className="s-inputGroup__item s-inputGroup__item--tag S-flexItem-1of4">
-                            <span>Anchor Domain</span>
-                        </span>
-
                         <input
                             className="s-inputGroup__item S-flexItem-share"
                             type="text"
                             name="anchorDomainInput"
                             value={anchorDomain}
                             onChange={e => this.handleInputFederation(e)}
-                            placeholder="example: sureremit.co" />
+                            placeholder="Enter the anchor domain name to see issued assets (e.g. www.anchorusd.com, apay.io, etc)" />
                     </label>
                 </div>
                 {assetResults}

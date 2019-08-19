@@ -3,7 +3,7 @@
         "API_URL": "https://api-staging.stellarterm.com/v1/",
         "LOBSTR_VAULT_URL": "https://vault-staging.lobstr.co/api/",
         "FEDERATION_API_URL": "https://fed.stellarterm.com/",
-        "HOME_URL": "https://staging.stellarterm.com/",
+        "HOME_URL": "https://staging--hopeful-brahmagupta-343062.netlify.com/",
         "HOME_DOMAIN": "staging.stellarterm.com",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/"
     },

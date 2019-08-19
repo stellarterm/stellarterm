@@ -46,7 +46,7 @@ export default class AssetCard2 extends React.Component {
             assetLocalItem.code === this.props.code && assetLocalItem.issuer === this.props.issuer
         )) || {};
 
-        if (!assetData.time && !this.state.loadedAssetData && !this.props.currency) {
+        if (!assetData.time && !this.state.loadedAssetData && !this.props.currency && !this._mounted) {
             this.loadAssetData(asset);
         }
 
@@ -55,7 +55,7 @@ export default class AssetCard2 extends React.Component {
         const domain = host && host.split('//')[1];
 
         name = this.props.host || assetData.host || domain || (assetData.time ? anchor.name : name);
-        const color = this.props.color || assetData.color;
+        const color = this.props.color || assetData.color || '#A5A0A7';
         logo = image || (currency ? 'unknown' : logo);
         const logoPadding = !!image;
 
@@ -117,10 +117,10 @@ export default class AssetCard2 extends React.Component {
         const assetCardClass = `AssetCard2 AssetCard2--container ${this.props.boxy ? 'AssetCard2--boxy' : ''}`;
 
         const isUnknown = anchor.name === 'unknown';
+        const dataFromLocalStorage = isUnknown && this.getDataFromLocalStorage(asset, anchor);
 
-        let { logo, name } = isUnknown ? this.getDataFromLocalStorage(asset, anchor) : anchor;
-        let color = isUnknown ? '#A5A0A7' : anchor.color;
-        let { logoPadding } = isUnknown ? this.getDataFromLocalStorage(asset, anchor) : false;
+        let { logo, name, color } = dataFromLocalStorage || anchor;
+        let { logoPadding } = dataFromLocalStorage || false;
 
         if ((name === 'load' || logo === 'load') && this.state.loadedAssetData) {
             name = this.state.loadedAssetData.host || this.props.host || anchor.name;
@@ -156,14 +156,14 @@ export default class AssetCard2 extends React.Component {
                         </div>
                     ) : (
                         <img
+                            style={Object.assign({}, backgroundStyle, { border: '1px solid' }, borderStyle)}
                             className="Row_logo"
                             src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
-                            alt={anchor.name} />
-                    )}
-                    {name === 'load' ?
-                        <span>{asset.code} - <Ellipsis /></span> :
-                        <span>{`${asset.code} — ${name}`}</span>
-                    }
+                            alt={anchor.name} />)}
+                     {name === 'load' ?
+                         <span>{asset.code} - <Ellipsis /></span> :
+                         <span>{`${asset.code}(${name})`}</span>
+                     }
                 </span>
             );
         }

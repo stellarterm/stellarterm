@@ -344,7 +344,8 @@ export default function Send(driver) {
             const usedKnownSigner = driver.session.account.signers.find(sign => knownSigners[sign.key]);
 
             if (!usedKnownSigner) {
-                driver.modal.handlers.activate('multisigUnknown', signedTx);
+                setTimeout(() =>
+                    driver.modal.handlers.activate('multisigUnknown', signedTx), 1000);
             } else {
                 const signer = knownSigners[usedKnownSigner.key];
                 const body = JSON.stringify({ xdr: signedTx });
@@ -401,7 +402,8 @@ export default function Send(driver) {
                 if (this.handlers.isInvalidWeigth()) {
                     return Promise.reject('Custom signers weigth');
                 }
-                const newThreshold = signers.length * 10;
+                const currentThreshold = this.account.thresholds.high_threshold;
+                const newThreshold = (currentThreshold + 10);
                 const signerData = {
                     signer: {
                         ed25519PublicKey: key,
@@ -497,7 +499,12 @@ export default function Send(driver) {
                 if (this.handlers.isInvalidWeigth()) {
                     return Promise.reject('Custom signers weigth');
                 }
-                const newThreshold = (signers.length - 2) * 10;
+                const currentThreshold = this.account.thresholds.high_threshold;
+
+                const newThreshold = ((signers.length - 2) * 10) > currentThreshold ?
+                    currentThreshold :
+                    ((signers.length - 2) * 10);
+
                 const newSignerData = {
                     signer: {
                         ed25519PublicKey: key,
@@ -737,9 +744,7 @@ export default function Send(driver) {
                 }
 
                 const image = currency && currency.image;
-                const colorResult = image && await this.handlers.getAverageColor(image);
-                const noError = colorResult && colorResult.error === null;
-                const color = noError ? colorResult.hex : '';
+                const color = image && await this.handlers.getAverageColor(image, asset.code, homeDomain);
 
                 return {
                     code: asset.code,
@@ -761,15 +766,18 @@ export default function Send(driver) {
             }
         },
 
-        getAverageColor: imageUrl => new Promise((resolve) => {
+        getAverageColor: (imageUrl, code, domain) => {
             const fac = new FastAverageColor();
             const img = document.createElement('img');
             img.src = `${imageUrl}?rnd${Math.random()}`;
             img.crossOrigin = 'Anonymous';
 
-            fac.getColorAsync(img, (col) => {
-                resolve(col);
-            });
-        }),
+            return fac.getColorAsync(img)
+                .then(col => col.hex)
+                .catch(() => {
+                    console.warn(`Can not calculate background color for ${code} (${domain}). Reason: CORS Policy`);
+                    return '';
+                });
+        },
     };
 }
