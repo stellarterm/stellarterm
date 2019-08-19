@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { isStellarUri, parseStellarUri } from '@stellarguard/stellar-uri';
-import { HOME_URL } from '../../../env-consts';
 import Driver from '../../../lib/Driver';
 
 
@@ -14,7 +13,7 @@ export default function Sep7Handler(props) {
     }
 
     // Enable stellarUri in browser
-    window.navigator.registerProtocolHandler('web+stellar', `${HOME_URL}?tx=%s`, 'stellarUri');
+    window.navigator.registerProtocolHandler('web+stellar', `${window.location.origin}?tx=%s`, 'stellarUri');
 
     // Check is StellarUri
     const urlParsed = [...new window.URLSearchParams(window.location.search).entries()].reduce((sum, [key, val]) =>
