@@ -7,6 +7,15 @@ import Printify from '../../../../lib/Printify';
 
 // Dumb component that mainly renders the UI
 export default class OfferTable extends React.Component {
+    static getHeaderItem(text, assetName) {
+        return (
+            <React.Fragment>
+                <span className="header_text">{text}</span>
+                <span className="pair_small"> ({assetName})</span>
+            </React.Fragment>
+        );
+    }
+
     getRowStyle(isBuy, offer) {
         const depthPercentage = Math.min(100, Number((offer.depth / this.props.maxDepth) * 100).toFixed(1));
 
@@ -20,11 +29,12 @@ export default class OfferTable extends React.Component {
     }
 
     getHeader(isBuy) {
+        const { baseCurrency, counterCurrency } = this.props;
         const headerItems = [
-            `Sum ${this.props.counterCurrency}`,
-            this.props.counterCurrency,
-            this.props.baseCurrency,
-            'Price',
+            this.constructor.getHeaderItem('Depth', counterCurrency),
+            this.constructor.getHeaderItem('Sum', counterCurrency),
+            this.constructor.getHeaderItem('Amount', baseCurrency),
+            this.constructor.getHeaderItem('Price', baseCurrency),
         ];
 
         if (!isBuy) {
@@ -74,9 +84,10 @@ export default class OfferTable extends React.Component {
         return this.props.offers.map(offer => (
             <div className="OfferTable__row_background" key={offer.key}>
                 <div
-                    className="OfferTable__row"
-                    style={this.getRowStyle(isBuy, offer)}
-                    onClick={() => this.props.d.orderbook.handlers.pickPrice(offer.price)}>
+                    className="OfferTable_hoverBlock"
+                    onClick={() => this.props.d.orderbook.handlers.pickPrice(offer.price)} />
+
+                <div className="OfferTable__row" style={this.getRowStyle(isBuy, offer)}>
                     {this.getRowItems(isBuy, offer)}
                 </div>
             </div>

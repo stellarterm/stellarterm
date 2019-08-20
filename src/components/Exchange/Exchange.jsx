@@ -313,16 +313,20 @@ export default class Exchange extends React.Component {
                 </div>
                 <div className="so-back islandBack">
                     <div className="island Exchange_orderbook">
-                        <div className="island__header">Orderbook</div>
+                        <div className="island__header">Create new offer</div>
                         {thinOrderbookWarning}
                         {warningWarning}
-                        <div>
-                            {offermakers}
-                            <div className="island__separator" />
-                            <OfferTables d={this.props.d} />
-                        </div>
+                        {offermakers}
                     </div>
                 </div>
+
+                <div className="so-back islandBack">
+                    <div className="island Orderbook">
+                        <div className="island__header">Orderbook {pairName}</div>
+                        <OfferTables d={this.props.d} />
+                    </div>
+                </div>
+
                 <div className="so-back islandBack">
                     <div className="island">
                         <div className="island__header">Manage offers</div>
