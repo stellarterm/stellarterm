@@ -93,12 +93,15 @@ export default class AssetDropDown extends React.Component {
 
     setActiveCardIndex({ keyCode }) {
         const { activeCardIndex } = this.state;
+        const assetsList = this.getFilteredAssets();
+        const cardListLength = assetsList.length;
+
+        if (cardListLength === 1) {
+            this.setState({ activeCardIndex: 0 });
+        }
 
         if (!ProcessedButtons.has(keyCode) ||
             (keyCode === ENTER && activeCardIndex === null)) { return; }
-
-        const assetsList = this.getFilteredAssets();
-        const cardListLength = assetsList.length;
 
         if (cardListLength === 0) { return; }
 

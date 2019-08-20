@@ -140,7 +140,7 @@ export default class AssetCard2 extends React.Component {
         }
 
         if (this.props.noborder) {
-            borderStyle = { border: 'none' };
+            borderStyle = { border: '1px solid transparent' };
         }
 
         const assetSymbol = asset.code[0]; // Takes first asset symbol, if no any image loaded
