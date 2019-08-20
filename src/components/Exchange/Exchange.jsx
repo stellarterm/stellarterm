@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import directory from 'stellarterm-directory';
 import { Link } from 'react-router-dom';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
-import directory from 'stellarterm-directory';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';
@@ -24,6 +24,9 @@ export default class Exchange extends React.Component {
         this.unsubSession = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
+        this.ubsubHistory = this.props.history.listen(() => {
+            this.getTradePair();
+        });
     }
 
     componentWillMount() {
@@ -34,6 +37,7 @@ export default class Exchange extends React.Component {
     componentWillUnmount() {
         this.unsub();
         this.unsubSession();
+        this.ubsubHistory();
     }
 
     getTradePair() {
@@ -104,8 +108,8 @@ export default class Exchange extends React.Component {
         if (this.state.wrongUrl) {
             return (
                 <Generic title="Pick a market">
-                    Exchange url was invalid. To begin, go to the <Link to="/markets/">market list page</Link> and pick a
-                    trading pair.
+                    Exchange url was invalid. To begin, go to the <Link to="/markets/">market list page</Link> and pick
+                    a trading pair.
                 </Generic>
             );
         }
@@ -174,4 +178,5 @@ export default class Exchange extends React.Component {
 
 Exchange.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    history: PropTypes.objectOf(PropTypes.any),
 };
