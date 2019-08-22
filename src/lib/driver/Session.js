@@ -295,7 +295,7 @@ export default function Send(driver) {
                             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'));
                             this.account.refresh();
                             if (this.authType === 'ledger') {
-                                driver.modal.handlers.ledgerFinish('closeWithTimeout');
+                                driver.modal.handlers.ledgerFinish('closeWithTimeout', 3000);
                             }
                             return transactionResult;
                         })
@@ -580,32 +580,32 @@ export default function Send(driver) {
             return this.handlers.buildSignSubmit(txMarker);
         },
 
-        getJwtToken: () => {
-            const userPublicKey = this.account.accountId();
+        getJwtToken: (endpointUrl) => {
             const headers = { 'Content-Type': 'application/json' };
-            const params = { account: userPublicKey };
 
             return request
-                .get(getEndpoint('getJwtToken', params), { headers })
+                .get(endpointUrl, { headers })
                 .then((resChallenge) => {
                     const tx = new StellarSdk.Transaction(resChallenge.transaction);
                     return this.handlers.sign(tx);
                 })
                 .then((tx) => {
                     const body = JSON.stringify({ transaction: tx.signedTx.toEnvelope().toXDR('base64') });
-                    return request.post(getEndpoint('getJwtToken'), { headers, body });
+                    return request.post(endpointUrl, { headers, body });
                 })
-                .then((res) => {
-                    this.jwtToken = res.token;
+                .then(({ token }) => {
                     if (this.authType === 'ledger') {
-                        driver.modal.handlers.ledgerFinish('close');
+                        driver.modal.handlers.ledgerFinish('closeWithTimeout', 1000);
                     }
+                    return token;
                 });
         },
 
         setFederation: async (fedName) => {
             if (this.jwtToken === null) {
-                await this.handlers.getJwtToken();
+                const userPublicKey = this.account.accountId();
+                const params = { account: userPublicKey };
+                this.jwtToken = await this.handlers.getJwtToken(getEndpoint('getJwtToken', params));
             }
 
             const headers = { 'Content-Type': 'application/json', Authorization: `JWT ${this.jwtToken}` };

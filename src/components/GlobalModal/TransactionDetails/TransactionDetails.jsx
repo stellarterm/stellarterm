@@ -99,8 +99,9 @@ export default class TransactionDetails extends React.Component {
             const attributes = this.constructor.getOperationAttr(op, d);
             const label = this.constructor.getOperationLabel(op);
             const isDeleteOffer = label === 'Delete Offer';
+            const isManageData = label === 'Manage Data';
 
-            const attributesUi = attributes.map((attribute) => {
+            const attributesUi = isManageData ? op.name : attributes.map((attribute) => {
                 const hideDeleteItems = attribute.name === 'amount' || attribute.name === 'price';
 
                 return isDeleteOffer && hideDeleteItems ? null : (
@@ -111,10 +112,6 @@ export default class TransactionDetails extends React.Component {
                 );
             });
 
-            // Temp solution for hide big json data when setting Federation
-            if (label === 'Manage Data') {
-                return null;
-            }
             return this.constructor.generateTableRow(label, attributesUi);
         });
     }

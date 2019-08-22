@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import Driver from '../../../../../../lib/Driver';
-import directory from 'stellarterm-directory';
 import Printify from '../../../../../../lib/Printify';
 import AssetCardMain from '../../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
+import AssetActionButtons from '../AssetActionButtons';
 
 export default function BalancesTable(props) {
     const account = props.d.session.account;
@@ -33,22 +32,12 @@ export default function BalancesTable(props) {
                 Object.assign(balance, { balanceUSD });
 
                 if (tickerAsset.slug !== 'XLM-native') {
-                    tradeLink = (
-                        <Link to={`/exchange/${tickerAsset.topTradePairSlug}`} className="BalancesTable__row__trade">
-                            trade
-                        </Link>
-                    );
+                    tradeLink = `/exchange/${tickerAsset.topTradePairSlug}`;
                 }
                 Object.assign(balance, { tradeLink });
             } else if (props.d.ticker.ready && !tickerAsset) {
                 unlistedAssets.push(balance);
-                tradeLink = (
-                    <Link
-                        to={`/exchange/${balance.code}-${balance.issuer}/XLM-native`}
-                        className="BalancesTable__row__trade">
-                        trade
-                    </Link>
-                );
+                tradeLink = `/exchange/${balance.code}-${balance.issuer}/XLM-native`;
                 Object.assign(balance, { tradeLink });
                 return null;
             }
@@ -61,29 +50,21 @@ export default function BalancesTable(props) {
     const allBalances = sortedByBalance.concat(sortedByUSD).reverse();
 
     const balanceRows = allBalances.map((asset) => {
-        const { code, issuer, balance, tradeLink } = asset;
+        const { code, issuer, balance } = asset;
         const balanceUSD = asset.balanceUSD !== undefined ? `$${asset.balanceUSD}` : null;
-        const directoryAsset = directory.getAssetByAccountId(code, issuer);
 
-        let warning;
-        if (directoryAsset !== null && directoryAsset.warning !== undefined) {
-            warning = (
-                <div className="s-alert s-alert--warning BalancesTable__row__item__warning">
-                    {directoryAsset.warning}
-                </div>
-            );
-        }
         return (
             <tr className="BalancesTable__row" key={code + issuer}>
                 <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
                     <AssetCardMain code={code} issuer={issuer} d={props.d} />
-                    {warning}
                 </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
                     {Printify.lightenZeros(balance)}
                 </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">{balanceUSD}</td>
-                <td className="BalancesTable__row__item BalancesTable__row__item--amount">{tradeLink}</td>
+                <td>
+                    <AssetActionButtons d={props.d} asset={asset} onlyIcons />
+                </td>
             </tr>
         );
     });

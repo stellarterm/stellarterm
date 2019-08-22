@@ -35,14 +35,18 @@
     outline: auto 5px -webkit-focus-ring-color;
 }
 
+.btn_cancel.is-disabled,
+.btn_cancel:disabled,
+.btn_cancel[disabled],
 .s-button.is-disabled,
 .s-button:disabled,
 .s-button[disabled] {
-    border: 1px solid $s-color-neutral5;
-    background: $s-color-neutral8;
-    color: $s-color-neutral5;
+    opacity: 0.5;
     box-shadow: none;
 }
+
+.btn_cancel.is-disabled:hover,
+.btn_cancel:disabled:hover,
 .s-button.is-disabled:hover,
 .s-button:disabled:hover {
     z-index: 1; // reset z-index so that it doesn't show above hover

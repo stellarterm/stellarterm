@@ -1,0 +1,19 @@
+.withdraw_completed_block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-weight: normal;
+
+    img {
+        margin-top: 3em;
+        margin-bottom: 1.5em;
+        width: 100px;
+        height: 100px;
+    }
+
+    .withdrawed_amount {
+        font-size: 40px;
+        font-weight: bold;
+    }
+}

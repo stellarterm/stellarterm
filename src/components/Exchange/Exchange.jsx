@@ -256,16 +256,7 @@ export default class Exchange extends React.Component {
 
         const thinOrderbookWarning = this.checkOrderbookWarning();
         const data = this.props.d.orderbook.data;
-        let warningWarning;
-
         const directoryAsset = directory.getAssetByAccountId(data.baseBuying.code, data.baseBuying.issuer);
-        if (directoryAsset !== null && directoryAsset.warning !== undefined) {
-            warningWarning = (
-                <div className="Exchange__warning">
-                    <div className="s-alert s-alert--warning">{directoryAsset.warning}</div>
-                </div>
-            );
-        }
 
         let offermakers;
         if (directoryAsset !== null && directoryAsset.disabled !== undefined) {
@@ -321,7 +312,6 @@ export default class Exchange extends React.Component {
                     <div className="island">
                         <div className="island__header">Create new offer</div>
                         {thinOrderbookWarning}
-                        {warningWarning}
                         {offermakers}
                     </div>
                 </div>
