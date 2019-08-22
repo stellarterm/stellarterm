@@ -21,6 +21,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
             currency: undefined,
             domain: undefined,
             loaded: false,
+            isLoadInProcess: false,
         };
         this.listenId = this.props.d.session.event.listen(() => {
             this.forceUpdate();
@@ -58,6 +59,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
     }
 
     async getDataFromToml(asset, d, submit) {
+        this.setState({ isLoadInProcess: true });
         try {
             const domain = await d.session.handlers.getDomainByIssuer(asset.issuer);
             this.setState({ domain });
@@ -130,8 +132,8 @@ export default class Sep7ChangeTrustModal extends React.Component {
         const [operation] = tx.operations;
         const { limit, line } = operation;
         const buttons = this.getButtons(line, limit);
-        const { desc, conditions, loaded, error, currency, domain } = this.state;
-        if (!loaded) {
+        const { desc, conditions, loaded, error, currency, domain, isLoadInProcess } = this.state;
+        if (!isLoadInProcess) {
             this.getDataFromToml(line, d, submit);
         }
 
