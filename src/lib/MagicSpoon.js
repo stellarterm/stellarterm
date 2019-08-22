@@ -207,50 +207,47 @@ const MagicSpoon = {
         };
 
         sdkAccount.explainReserve = () => {
-            const items = [];
+            const reserveItems = [];
 
             const entriesTrustlines = sdkAccount.balances.length - 1;
             const entriesOffers = Object.keys(sdkAccount.offers).length;
             const entriesSigners = sdkAccount.signers.length - 1;
             const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers - entriesSigners;
 
-            items.push({
-                entryType: 'Base reserve',
-                amount: 1,
-                XLM: 1,
+            reserveItems.push({
+                reserveType: 'Base reserve',
+                typeCount: 0,
+                reservedXLM: 1,
+            });
+            reserveItems.push({
+                reserveType: 'Extra',
+                typeCount: 0,
+                reservedXLM: 0.5,
+            });
+            reserveItems.push({
+                reserveType: 'Trustlines',
+                typeCount: entriesTrustlines,
+                reservedXLM: entriesTrustlines * 0.5,
+            });
+            reserveItems.push({
+                reserveType: 'Offers',
+                typeCount: entriesOffers,
+                reservedXLM: entriesOffers * 0.5,
+            });
+            reserveItems.push({
+                reserveType: 'Signers',
+                typeCount: entriesSigners,
+                reservedXLM: entriesSigners * 0.5,
+            });
+            reserveItems.push({
+                reserveType: 'Others',
+                typeCount: entriesOthers,
+                reservedXLM: entriesOthers * 0.5,
             });
 
-            items.push({
-                entryType: 'Trustlines',
-                amount: entriesTrustlines,
-                XLM: entriesTrustlines * 0.5,
-            });
-
-            items.push({
-                entryType: 'Offers',
-                amount: entriesOffers,
-                XLM: entriesOffers * 0.5,
-            });
-            items.push({
-                entryType: 'Signers',
-                amount: entriesSigners,
-                XLM: entriesSigners * 0.5,
-            });
-            items.push({
-                entryType: 'Others',
-                amount: entriesOthers,
-                XLM: entriesOthers * 0.5,
-            });
-            items.push({
-                entryType: 'Extra',
-                amount: '',
-                XLM: 0.5,
-            });
-
-            const totalLumens = _.sumBy(items, 'XLM');
             return {
-                items,
-                totalLumens,
+                reserveItems,
+                totalReservedXLM: _.sumBy(reserveItems, 'reservedXLM'),
             };
         };
 
