@@ -3,7 +3,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
 import SendEditLink from '../Common/SendEditLink';
-import AssetCard2 from '../../../../../Common/AssetCard2/AssetCard2';
+import AssetCardMain from '../../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
 
 export default class SendAsset extends React.Component {
     getStepContent() {
@@ -39,7 +39,7 @@ export default class SendAsset extends React.Component {
             return (
                 <div className="row--lite" key={slug}>
                     <div className="row__fixedAsset">
-                        <AssetCard2
+                        <AssetCardMain
                             d={this.props.d}
                             code={availability.asset.getCode()}
                             issuer={availability.asset.getIssuer()} />
@@ -54,7 +54,7 @@ export default class SendAsset extends React.Component {
         const { asset } = this.props.d.send.step2.availability;
         return (
             <div className="Send__content Send__overview Send__assetContainer">
-                <AssetCard2 code={asset.getCode()} issuer={asset.getIssuer()} d={this.props.d} />
+                <AssetCardMain code={asset.getCode()} issuer={asset.getIssuer()} d={this.props.d} />
             </div>
         );
     }

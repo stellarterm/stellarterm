@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import directory from 'stellarterm-directory';
-import AssetCard2 from '../../../../Common/AssetCard2/AssetCard2';
+import AssetCardMain from '../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
 import TrustButton from '../../../../Common/AssetRow/TrustButton/TrustButton';
 
 export default function DepositAnchors(props) {
@@ -21,7 +21,7 @@ export default function DepositAnchors(props) {
                 const trustRow = (
                     <tr className="row" key={`${name}_${assetCode}_${assetIssuer}`}>
                         <td className="row__item--assetCard">
-                            <AssetCard2 code={assetCode} issuer={assetIssuer} d={props.d} />
+                            <AssetCardMain code={assetCode} issuer={assetIssuer} d={props.d} />
                         </td>
 
                         <td className="row__shareOption">

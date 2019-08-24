@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AssetCard2 from '../../../../../Common/AssetCard2/AssetCard2';
+import AssetCardMain from '../../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
 import HistoryRowExternal from './HistoryRowExternal/HistoryRowExternal';
 import { getHistoryRowsData, checkDataType } from './HistoryRowsData';
 import Driver from '../../../../../../lib/Driver';
@@ -43,7 +43,7 @@ export default class HistoryTableRow extends React.Component {
             <span className="HistoryView__asset">
                 {code}-{viewDomain}
                 <div className="HistoryView__asset__card">
-                    <AssetCard2 code={code} issuer={issuer} d={d} />
+                    <AssetCardMain code={code} issuer={issuer} d={d} />
                 </div>
             </span>
         );

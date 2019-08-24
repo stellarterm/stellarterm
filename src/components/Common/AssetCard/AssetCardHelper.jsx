@@ -1,24 +1,10 @@
 import React from 'react';
-import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
-import AssetCardMain from './AssetCardMain/AssetCardMain';
 import Driver from '../../../lib/Driver';
-import Ellipsis from '../Ellipsis/Ellipsis';
-import images from '../../../images';
-import hexToRGBA from './../../../lib/hexToRgba';
 
 
-// This is AssetCard2, the preferred way of displaying an asset in stellarterm.
-// The parent container should be 340px or wider
-
-// Options
-//  - boxy: removes the rounded borders
-
-// You may also pass in children elements to sit nicely with the AssetCard2.
-// The children elements are responsible for padding within the AssetCard
-
-export default class AssetCard2 extends React.Component {
+export default class AssetCardHelper extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -87,21 +73,9 @@ export default class AssetCard2 extends React.Component {
         return knownAsset;
     }
 
-    async loadAssetData(asset) {
-        if (!this.props.d) {
-            return;
-        }
-        const loadedAssetData = await this.props.d.session.handlers.loadUnknownAssetData(asset);
-        if (this._mounted) {
-            this.setState({
-                loadedAssetData,
-            });
-        }
-    }
-
-    render() {
+    getRenderedAssetData() {
         if (!this.props.code) {
-            throw new Error(`AssetCard2 expects to get a code in the this.props. Instead, got: ${this.props.code}`);
+            throw new Error(`AssetCard expects to get a code in the this.props. Instead, got: ${this.props.code}`);
         }
 
         const isXLMNative = this.props.code === 'XLM' && this.props.domain === undefined && this.props.issuer === undefined;
@@ -117,25 +91,18 @@ export default class AssetCard2 extends React.Component {
             asset = directory.resolveAssetByAccountId(this.props.code, this.props.issuer);
         } else {
             throw new Error(
-                `AssetCard2 expects to get either domain or issuer. Input code: ${this.props.code} Domain: ${
+                `AssetCard expects to get either domain or issuer. Input code: ${this.props.code} Domain: ${
                     this.props.domain
                     } Issuer: ${this.props.issuer}`,
             );
         }
         if (asset === null) {
             throw new Error(
-                'AssetCard2 expects domains or issuer to point to a valid asset/anchor. Please do validation before calling AssetCard2',
+                'AssetCardHelper expects domains or issuer to point to a valid asset/anchor. Please do validation before calling AssetCardHelper',
             );
         }
 
         const anchor = directory.getAnchor(asset.domain);
-        const issuerAccountId =
-            asset.issuer === null
-                ? 'native lumens'
-                : `${asset.issuer.substr(0, 12)}.........${asset.issuer.substr(-12, 12)}`;
-
-        const assetCardClass = `AssetCard2 AssetCard2--container ${this.props.boxy ? 'AssetCard2--boxy' : ''}`;
-
         const isUnknown = anchor.name === 'unknown';
 
         let { name } = isUnknown ? this.getUnknownAssetDataFromLocalStorage(asset, anchor) : anchor;
@@ -153,89 +120,41 @@ export default class AssetCard2 extends React.Component {
             color = this.state.loadedAssetData.color || color;
         }
 
-        let borderStyle = {};
-        const backgroundStyle = {};
+        return ({
+            asset,
+            logo,
+            logoPadding,
+            domain: name,
+            color,
+        });
+    }
 
-        if (color) {
-            backgroundStyle.background = hexToRGBA(color, 0.08);
-            borderStyle.borderColor = color;
+    async loadAssetData(asset) {
+        if (!this.props.d) {
+            return;
         }
-
-        if (this.props.noborder) {
-            borderStyle = { border: 'none' };
+        const loadedAssetData = await this.props.d.session.handlers.loadUnknownAssetData(asset);
+        if (this._mounted) {
+            this.setState({
+                loadedAssetData,
+            });
         }
+    }
 
-        const assetSymbol = asset.code[0]; // Takes first asset symbol, if no any image loaded
-        const unknownLogo = (
-            <div className="AssetCard_unknown_logo unknown_small">
-                <div className="Unknown_circle">
-                    <span className="assetSymbol">{assetSymbol}</span>
-                </div>
-            </div>
-        );
-
-        const template = ReactDOMServer.renderToStaticMarkup(unknownLogo);
-        const div = document.createElement('div');
-        div.innerHTML = template;
-
-        if (this.props.inRow) {
-            return (
-                <span className="AssetCardInRow">
-                    {logo === 'unknown' && logo !== 'load' ? (
-                        unknownLogo
-                    ) : (
-                        <img
-                            style={Object.assign({}, backgroundStyle, { border: '1px solid' }, borderStyle)}
-                            className="Row_logo"
-                            ref={(img) => {
-                                this.img = img;
-                            }}
-                            onError={() => {
-                                this.img.replaceWith(div);
-                            }}
-                            src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
-                            alt={anchor.name} />)}
-                     {name === 'load' ?
-                         <span>{asset.code} - <Ellipsis /></span> :
-                         <span>{`${asset.code}(${name})`}</span>
-                     }
-                </span>
-            );
-        }
-        return (
-            <div className={assetCardClass} style={borderStyle}>
-                <AssetCardMain
-                    backgroundStyle={backgroundStyle}
-                    logo={logo}
-                    logoWithPadding={logoPadding}
-                    name={name.toLowerCase()}
-                    assetCode={asset.code}
-                    issuerAccountId={issuerAccountId}
-                    assetSymbol={assetSymbol} />
-
-                {this.props.children ? (
-                    <div className="AssetCard2__addon" style={Object.assign({}, borderStyle, backgroundStyle)}>
-                        {this.props.children}
-                    </div>
-                ) : null}
-            </div>
-        );
+    render() {
+        return null;
     }
 }
 
-AssetCard2.propTypes = {
+AssetCardHelper.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     code: PropTypes.string.isRequired,
-    boxy: PropTypes.bool,
     issuer: PropTypes.string,
     domain: PropTypes.string,
-    children: PropTypes.element,
-    noborder: PropTypes.bool,
     host: PropTypes.string,
     color: PropTypes.string,
     currency: PropTypes.shape({
         image: PropTypes.string,
         host: PropTypes.string,
     }),
-    inRow: PropTypes.bool,
 };
