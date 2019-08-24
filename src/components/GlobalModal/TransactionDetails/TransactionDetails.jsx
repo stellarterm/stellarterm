@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import BigNumber from 'bignumber.js';
 import OperationsMap from './OperationsMap';
-import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
+import AssetCardInRow from '../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import Printify from '../../../lib/Printify';
 import Driver from '../../../lib/Driver';
 
@@ -31,7 +30,7 @@ export default class TransactionDetails extends React.Component {
                 }
 
                 if (value.code !== undefined) {
-                    AttrObj.display = <AssetCard2 code={value.code} issuer={value.issuer} d={d} inRow />;
+                    AttrObj.display = <AssetCardInRow code={value.code} issuer={value.issuer} d={d} />;
                 } else if (typeof value === 'string') {
                     AttrObj.display = value;
                 } else if (attr === 'signer') {

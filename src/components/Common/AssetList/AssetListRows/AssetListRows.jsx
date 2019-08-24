@@ -6,7 +6,7 @@ import Format from '../../../../lib/Format';
 import directory from 'stellarterm-directory';
 import Printify from '../../../../lib/Printify';
 import Ticker from '../../../../lib/api/Ticker';
-import AssetCard2 from '../../AssetCard2/AssetCard2';
+import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import Driver from '../../../../lib/Driver';
 
 export default class AssetListRows extends React.Component {
@@ -73,7 +73,7 @@ export default class AssetListRows extends React.Component {
                                   key={`asset-${asset.id}-${asset.code}`}
                                   className="AssetList_asset">
                                   <div className="asset_assetCard">
-                                      <AssetCard2 code={asset.code} issuer={asset.issuer} d={d} />
+                                      <AssetCardMain code={asset.code} issuer={asset.issuer} d={d} />
                                   </div>
                                   {this.constructor.getAssetRow(asset, false, ticker)}
                               </Link>
@@ -130,7 +130,7 @@ export default class AssetListRows extends React.Component {
                     to={`/exchange/${Xlm.topTradePairSlug}`}
                     className="AssetList_asset">
                     <div className="asset_assetCard">
-                        <AssetCard2 code={Xlm.code} issuer={Xlm.issuer} d={d} />
+                        <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
                     </div>
                     {AssetListRows.getAssetRow(Xlm, true, ticker)}
                 </Link>

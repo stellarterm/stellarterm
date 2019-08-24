@@ -5,7 +5,7 @@ import ErrorHandler from '../../../../lib/ErrorHandler';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
-import AssetViewBlock from '../AssetViewBlock/AssetViewBlock';
+import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 
 const images = require('./../../../../images');
 
@@ -18,8 +18,6 @@ export default class Sep7ChangeTrustModal extends React.Component {
             pending: false,
             desc: undefined,
             conditions: undefined,
-            currency: undefined,
-            domain: undefined,
             loaded: false,
         };
         this.listenId = this.props.d.session.event.listen(() => {
@@ -60,7 +58,6 @@ export default class Sep7ChangeTrustModal extends React.Component {
     async getDataFromToml(asset, d, submit) {
         try {
             const domain = await d.session.handlers.getDomainByIssuer(asset.issuer);
-            this.setState({ domain });
             const toml = await StellarSdk.StellarTomlResolver.resolve(domain);
             const { CURRENCIES } = toml;
             if (!CURRENCIES) {
@@ -78,7 +75,6 @@ export default class Sep7ChangeTrustModal extends React.Component {
             this.setState({
                 desc,
                 conditions,
-                currency,
                 loaded: true,
             });
         } catch (e) {
@@ -130,7 +126,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
         const [operation] = tx.operations;
         const { limit, line } = operation;
         const buttons = this.getButtons(line, limit);
-        const { desc, conditions, loaded, error, currency, domain } = this.state;
+        const { desc, conditions, loaded, error } = this.state;
         if (!loaded) {
             this.getDataFromToml(line, d, submit);
         }
@@ -170,11 +166,10 @@ export default class Sep7ChangeTrustModal extends React.Component {
                         }} />
                 </div>
                 <div className="Sep7ChangeTrustModal_content">
-                    <AssetViewBlock
+                    <AssetCardSeparateLogo
                         d={d}
-                        asset={line}
-                        currency={currency}
-                        domain={domain} />
+                        code={line.code}
+                        issuer={line.issuer} />
                     {desc &&
                         <div className="Sep7ChangeTrustModal_desc">
                             <span>{desc}</span>

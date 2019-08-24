@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../../lib/Driver';
-import AssetCard2 from '../../AssetCard2/AssetCard2';
+import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import AssetCardList from './AssetCardList/AssetCardList';
 import directory from 'stellarterm-directory';
 import images from '../../../../images';
@@ -234,7 +234,7 @@ export default class AssetDropDown extends React.Component {
                 <div>
                     {this.props.asset ?
                         <div className="AssetDropDown__full" onClick={() => this.openList()}>
-                        <AssetCard2
+                        <AssetCardMain
                             d={this.props.d}
                             code={this.props.asset.code}
                             issuer={this.props.asset.issuer} />

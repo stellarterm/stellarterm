@@ -1,0 +1,30 @@
+.AssetCardInRow {
+    display: inline-block;
+
+    .Row_logo {
+        height: 20px;
+        margin-right: 0.5em;
+    }
+
+    .Row_logo,
+    span {
+        line-height: 20px;
+        vertical-align: middle;
+    }
+}
+
+.unknown_small {
+    display: inline-block;
+    height: 20px;
+    width: 20px;
+    margin-right: 0.5em;
+
+    .Unknown_circle {
+        height: 100%;
+        width: 100%;
+
+        .assetSymbol {
+            font-size: 12px;
+        }
+    }
+}
