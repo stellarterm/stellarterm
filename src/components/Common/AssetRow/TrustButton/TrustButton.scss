@@ -1,0 +1,54 @@
+.TrustButton_accept{
+    color: #86d38c;
+    font-weight: 600;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+
+    & span{
+        margin-left: 5px;
+    }
+
+    .TrustButton_accept-icon{
+        font-size: 26px;
+    }
+
+    &.error{
+        color: #ff415b;
+        position: relative;
+
+        .TrustButton_accept-icon{
+            transform: rotate(45deg);
+        }
+
+        .TrustButton_error-popup{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            width: max-content;
+            height: 28px;
+            padding: 0 11px;
+            background-color: #fe6d74;
+            color: #fff;
+            bottom: 40px;
+            right: 1px;
+            z-index: 2;
+            font-size: 13px;
+            font-weight: normal;
+            border-radius: 2px;
+            cursor: default;
+
+            &::after {
+                content: '';
+                position: absolute;
+                right: 28px;
+                top: 27px;
+                border: 4px solid transparent;
+                border-top: 4px solid #fe6d74;
+            }
+        }
+    }
+}

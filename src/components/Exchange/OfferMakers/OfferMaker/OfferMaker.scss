@@ -1,16 +1,40 @@
 @import "./OfferMakerOverview/OfferMakerOverview";
 
+.OfferMaker_title{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+    .OfferMaker_balance{
+        cursor: pointer;
+        text-decoration: none;
+
+        span:first-child {
+            opacity: 0.5;
+        }
+    }
+}
+
 .OfferMaker_table {
     width: 100%;
 
+    .invalidPrecision_popup{
+        display: none;
+    }
+    .offer_table_buttons-separator{
+        border-bottom: 1px dashed #e0e5e5;
+        td {
+            padding-bottom: 18px;
+        }
+    }
     .offer_table_buttons{
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        margin-bottom: 10px;
 
         button {
-            width: 90px;
+            width: 84px;
             height: 30px;
             opacity: 0.5;
             border-radius: 2px;
@@ -23,7 +47,7 @@
             &:hover{
                 opacity: 1;
             }
-            
+
             &:disabled{
                 cursor: not-allowed;
             }
@@ -34,31 +58,78 @@
     .offer_table_row {
         height: 50px;
 
+        &:last-child{
+            td {
+                padding-top: 16px;
+                padding-bottom: 15px;
+            }
+        }
+
         .offer_table_label {
             padding-right: 18px;
             text-transform: capitalize;
+            font-weight: normal;
         }
 
         .offer_table_input_cell {
-            width: auto;
+            width: 350px;
             min-width: 100px;
 
             .offer_input_group {
                 display: flex;
 
                 input {
-                    width: 100%;
+                    width: 75%;
                     border-radius: 3px 0 0 3px;
                     border-right: 0;
                 }
 
                 .offer_input_group_tag {
-                    padding: 0.3333em 1em 0.3333em 1em;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    min-width: 25%;
+                    padding: 0 5px;
                     background: $s-color-neutral8;
                     font-weight: bold;
                     border-radius: 0 3px 3px 0;
                     border: 1px solid $s-color-neutral6;
                 }
+            }
+        }
+    }
+
+    .invalidValue{
+
+
+        .offer_input_group {
+            position: relative;
+
+            .invalidValue_popup {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                position: absolute;
+                height: 20px;
+                padding: 0 11px;
+                background-color: #fe6d74;
+                color: #fff;
+                top: 40px;
+                z-index: 2;
+                font-size: 13px;
+
+                &::after {
+                    content: '';
+                    position: absolute;
+                    left: 20px;
+                    bottom: 19px;
+                    border: 4px solid transparent;
+                    border-bottom: 4px solid #fe6d74;
+                }
+            }
+
+            input {
+                border-color: #fe6d74;
             }
         }
     }

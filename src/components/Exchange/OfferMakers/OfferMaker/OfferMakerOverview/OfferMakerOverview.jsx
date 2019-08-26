@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
 import Driver from '../../../../../lib/Driver';
-import TrustButton from '../../../../Common/AssetRow/TrustButton/TrustButton';
 import OfferMakerResultMessage from './OfferMakerResultMessage/OfferMakerResultMessage';
+
 
 export default class OfferMakerOverview extends React.Component {
     static capDigits(input) {
@@ -15,94 +15,39 @@ export default class OfferMakerOverview extends React.Component {
         }
     }
 
-    getBalance() {
-        const { targetAsset, maxOffer } = this.props;
-        const maxOfferView = this.constructor.capDigits(maxOffer);
+    getButtonContent(capitalizedSide, baseBuying, counterSelling) {
+        const { valid, amount, total, buttonState } = this.props.offerState;
+
+        if (buttonState === 'pending') {
+            return <div className="nk-spinner" />;
+        }
+
+        if (!valid) {
+            return `${capitalizedSide} ${baseBuying.getCode()} `;
+        }
 
         return (
-            <div>
-                <div className="offer_userBalance">
-                    {targetAsset.isNative() ? (
-                        <div>
-                            You may trade up to {maxOfferView} XLM (due to{' '}
-                            <Link to="/account/">minimum balance requirements</Link>.)
-                        </div>
-                    ) : (
-                        <div>
-                            You have {maxOfferView} {targetAsset.getCode()}
-                        </div>
-                    )}
-                </div>
-                {this.isInsufficientBalance() && (
-                    <p className="offer_wrongBalance">
-                        Error: You do not have enough {targetAsset.getCode()} to create this offer.
-                    </p>
-                )}
-            </div>
+            `${capitalizedSide} ${this.constructor.capDigits(amount)} ${baseBuying.getCode()} 
+             for ${this.constructor.capDigits(total)} ${counterSelling.getCode()}`
         );
     }
-    getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling, minValue) {
-        const { valid, amount, total } = this.props.offerState;
-        if (!valid) {
+
+    getSubmitButton(capitalizedSide, baseBuying, counterSelling) {
+        if (this.props.hasTrustNeeded) {
             return null;
         }
-
-        const invalidPrecision = amount < minValue || total < minValue;
-        const errorPrecisionMessage = invalidPrecision ? (
-            <p className="offer_wrongBalance">
-                Error: Minimal amount of any asset for trading is {this.constructor.capDigits(minValue)}
-            </p>
-        ) : null;
-
-        return (
-            <div>
-                {errorPrecisionMessage}
-                <div className="s-alert s-alert--info">
-                    {capitalizedSide} {this.constructor.capDigits(amount)} {baseBuying.getCode()} for{' '}
-                    {this.constructor.capDigits(total)} {counterSelling.getCode()}
-                </div>
-            </div>
-        );
-    }
-
-    getSubmitButton(capitalizedSide, baseBuying, minValue) {
-        const { valid, buttonState, amount, total } = this.props.offerState;
+        const { offerState } = this.props;
+        const { valid, buttonState } = offerState;
         const isButtonReady = buttonState === 'ready';
-        const invalidPrecision = amount < minValue || total < minValue;
 
         return (
-            <input
+            <button
                 type="submit"
-                className="s-button"
-                value={isButtonReady ? `${capitalizedSide} ${baseBuying.getCode()}` : 'Creating offer...'}
-                disabled={!valid || this.isInsufficientBalance() || !isButtonReady || invalidPrecision} />
+                className={`offer_button ${capitalizedSide}`}
+                disabled={!valid || !isButtonReady}>
+                {this.getButtonContent(capitalizedSide, baseBuying, counterSelling)}
+            </button>
         );
-    }
-
-    getTrustNeededAssets(baseBuying, counterSelling) {
-        const { account } = this.props.d.session;
-        const baseBalance = account.getBalance(baseBuying);
-        const counterBalance = account.getBalance(counterSelling);
-
-        const trustNeededAssets = [];
-        if (baseBalance === null) {
-            trustNeededAssets.push(baseBuying);
-        }
-        if (counterBalance === null) {
-            trustNeededAssets.push(counterSelling);
-        }
-        return trustNeededAssets;
-    }
-
-    isInsufficientBalance() {
-        const isBuy = this.props.side === 'buy';
-        const { maxOffer } = this.props;
-        const { amount, total } = this.props.offerState;
-
-        if (amount === 'Infinity') {
-            return true;
-        }
-        return Number(isBuy ? total : amount) > Number(maxOffer);
     }
 
     render() {
@@ -113,46 +58,18 @@ export default class OfferMakerOverview extends React.Component {
 
         if (!login) {
             return (
-                <div>
-                    {this.getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling)}
+                <div className="OfferMakerOverview_login">
                     <span className="offer_message">
-                        <Link to="/account/">Log in</Link> to create an offer
+                        <Link to="/account/">Log in</Link> or <Link to="/signup/">Sign up</Link> create an offer
                     </span>
                 </div>
             );
         }
 
-        const trustNeededAssets = this.getTrustNeededAssets(baseBuying, counterSelling);
-
-        if (trustNeededAssets.length) {
-            return (
-                <div>
-                    <p className="offer_acceptAsset">To trade, activate these assets on your account:</p>
-                    <div className="row__multipleButtons">
-                        {trustNeededAssets.map(asset => (
-                            <TrustButton
-                                key={`${asset.getCode()}-${asset.getIssuer()}`}
-                                d={this.props.d}
-                                asset={asset}
-                                message={`${asset.getCode()} accepted`}
-                                trustMessage={`Accept ${asset.getCode()}`} />
-                        ))}
-                    </div>
-                </div>
-            );
-        }
-
-        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
-        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
-
-        const minValue = 0.0000001;
-
         return (
             <div className="offer_overview">
-                {this.getBalance()}
-                {this.getInputSummaryMessage(capitalizedSide, baseBuying, counterSelling, minValue)}
                 <OfferMakerResultMessage offerState={this.props.offerState} />
-                {this.getSubmitButton(capitalizedSide, baseBuying, minValue)}
+                {this.getSubmitButton(capitalizedSide, baseBuying, counterSelling)}
             </div>
         );
     }
@@ -160,12 +77,11 @@ export default class OfferMakerOverview extends React.Component {
 OfferMakerOverview.propTypes = {
     side: PropTypes.oneOf(['buy', 'sell']).isRequired,
     d: PropTypes.instanceOf(Driver).isRequired,
-    targetAsset: PropTypes.objectOf(PropTypes.string),
+    hasTrustNeeded: PropTypes.bool,
     offerState: PropTypes.shape({
         valid: PropTypes.bool,
         amount: PropTypes.string,
         total: PropTypes.string,
         buttonState: PropTypes.oneOf(['ready', 'pending']),
     }).isRequired,
-    maxOffer: PropTypes.number,
 };

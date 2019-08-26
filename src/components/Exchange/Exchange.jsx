@@ -229,7 +229,7 @@ export default class Exchange extends React.Component {
             return (
                 <Generic title="Pick a market">
                     Exchange url was invalid. To begin, go to the <Link to="/markets/">market list page</Link> and pick
-                    a trading pair.
+                     a trading pair.
                 </Generic>
             );
         }
@@ -312,17 +312,21 @@ export default class Exchange extends React.Component {
                     </div>
                 </div>
                 <div className="so-back islandBack">
-                    <div className="island Exchange_orderbook">
-                        <div className="island__header">Orderbook</div>
+                    <div className="island">
+                        <div className="island__header">Create new offer</div>
                         {thinOrderbookWarning}
                         {warningWarning}
-                        <div>
-                            {offermakers}
-                            <div className="island__separator" />
-                            <OfferTables d={this.props.d} />
-                        </div>
+                        {offermakers}
                     </div>
                 </div>
+
+                <div className="so-back islandBack">
+                    <div className="island Exchange__orderbook">
+                        <div className="island__header">Orderbook {pairName}</div>
+                        <OfferTables d={this.props.d} />
+                    </div>
+                </div>
+
                 <div className="so-back islandBack">
                     <div className="island">
                         <div className="island__header">Manage offers</div>

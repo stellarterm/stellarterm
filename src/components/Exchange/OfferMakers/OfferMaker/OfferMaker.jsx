@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
 import Driver from '../../../../lib/Driver';
 import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
@@ -61,7 +62,7 @@ export default class OfferMaker extends React.Component {
                     e.preventDefault();
                     this.updateState(inputType, value);
                 }}
-                disabled={maxOffer === 0}
+                disabled={parseFloat(maxOffer) === 0}
                 className={`cancel-button ${this.state[inputType] === value && 'active'}`}>{percent}%</button>
         );
     }
@@ -89,11 +90,11 @@ export default class OfferMaker extends React.Component {
     }
 
     // TODO: Limit the number of digits after the decimal that can be input
-    updateState(item, value) {
+    updateState(item, value, minValue, targetInputType, maxOffer) {
         const state = Object.assign(this.state, {
             // Reset messages
             successMessage: '',
-            errorMessage: false,
+            errorMessage: '',
         });
         state.valid = false;
         if (item === 'price' || item === 'amount' || item === 'total') {
@@ -116,9 +117,11 @@ export default class OfferMaker extends React.Component {
             } else {
                 throw new Error('Invalid item type');
             }
+            const hasInvalidPrecision = (state.price < minValue) || (state.amount < minValue)
+                || (state.total < minValue);
+            const isInsufficient = state[targetInputType] > maxOffer;
 
-            // TODO: truer valid
-            state.valid = true;
+            state.valid = !hasInvalidPrecision && !isInsufficient;
         } catch (e) {
             // Invalid input somewhere
         }
@@ -150,7 +153,7 @@ export default class OfferMaker extends React.Component {
             amount: '',
             total: '',
             successMessage: '',
-            errorMessage: false,
+            errorMessage: '',
         });
 
         try {
@@ -180,9 +183,25 @@ export default class OfferMaker extends React.Component {
         return parseFloat(targetBalance) > parseFloat(reservedBalance) ? targetBalance - reservedBalance : 0;
     }
 
-    renderTableRow(inputType, assetName) {
+    renderTableRow(inputType, assetName, isBuy, maxOffer, login) {
+        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
+        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
+        const minValue = 0.0000001;
+
+        const invalidPrecision = this.state[inputType] !== '' && this.state[inputType] < minValue;
+
+        const targetInputType = isBuy ? 'total' : 'amount';
+        const isInsufficient = login && (inputType === targetInputType) && this.state[inputType] > maxOffer;
+        let errorMessage;
+        if (invalidPrecision) {
+            errorMessage = `Minimal amount is ${minValue.toFixed(7)}`;
+        }
+        if (isInsufficient) {
+            errorMessage = `Not enough ${assetName}`;
+        }
+
         return (
-            <tr className="offer_table_row">
+            <tr className={`offer_table_row ${invalidPrecision || isInsufficient ? 'invalidValue' : ''}`}>
                 <td className="offer_table_label">{inputType}</td>
                 <td className="offer_table_input_cell">
                     <label className="offer_input_group" htmlFor={inputType}>
@@ -191,9 +210,13 @@ export default class OfferMaker extends React.Component {
                             name={inputType}
                             maxLength="20"
                             value={this.state[inputType]}
-                            onChange={e => this.updateState(inputType, e.target.value)}
+                            onChange={e =>
+                                this.updateState(inputType, e.target.value, minValue, targetInputType, maxOffer)}
                             placeholder="" />
                         <div className="offer_input_group_tag">{assetName}</div>
+                        <div className="invalidValue_popup">
+                            {errorMessage}
+                        </div>
                     </label>
                 </td>
             </tr>
@@ -202,15 +225,20 @@ export default class OfferMaker extends React.Component {
 
     renderPercentButtons(isBuy, maxOffer) {
         return (
-            <tr>
-                <td />
-                <td className="offer_table_buttons">
-                    {this.getPercentButton(isBuy, maxOffer, 25)}
-                    {this.getPercentButton(isBuy, maxOffer, 50)}
-                    {this.getPercentButton(isBuy, maxOffer, 75)}
-                    {this.getPercentButton(isBuy, maxOffer, 100)}
-                </td>
-            </tr>
+            <React.Fragment>
+                <tr>
+                    <td />
+                    <td className="offer_table_buttons">
+                        {this.getPercentButton(isBuy, maxOffer, 25)}
+                        {this.getPercentButton(isBuy, maxOffer, 50)}
+                        {this.getPercentButton(isBuy, maxOffer, 75)}
+                        {this.getPercentButton(isBuy, maxOffer, 100)}
+                    </td>
+                </tr>
+                <tr className="offer_table_buttons-separator">
+                    <td /><td /><td /><td /><td />
+                </tr>
+            </React.Fragment>
         );
     }
 
@@ -219,36 +247,48 @@ export default class OfferMaker extends React.Component {
             return <div>Loading</div>;
         }
         const login = this.props.d.session.state === 'in';
+        const { hasTrustNeeded } = this.props;
         const isBuy = this.props.side === 'buy';
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const baseAssetName = baseBuying.getCode();
         const counterAssetName = counterSelling.getCode();
         const title = isBuy
-            ? `Buy ${baseAssetName} using ${counterAssetName}`
-            : `Sell ${baseAssetName} for ${counterAssetName}`;
+            ? <span>Buy <b>{baseAssetName}</b></span>
+            : <span>Sell <b>{baseAssetName}</b></span>;
+
         const targetAsset = isBuy ? counterSelling : baseBuying;
         const maxOffer = login ? this.calculateMaxOffer(targetAsset) : 0;
+        const maxOfferView = (Math.floor((maxOffer) * 10000000) / 10000000).toFixed(7);
+
 
         return (
             <div>
-                <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
+                <div className="OfferMaker_title">
+                    <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
+                    {(login && !hasTrustNeeded) &&
+                        <Link to="/account/" className="OfferMaker_balance">
+                            <span>Available: </span>
+                            <span>{maxOfferView} {targetAsset.code}</span>
+                        </Link>
+                    }
+                </div>
                 <form onSubmit={e => this.handleSubmit(e)}>
                     <table className="OfferMaker_table">
                         <tbody>
                             {this.renderTableRow('price', counterAssetName)}
-                            {this.renderTableRow('amount', baseAssetName)}
-                            {this.renderPercentButtons(isBuy, maxOffer)}
-                            {this.renderTableRow('total', counterAssetName)}
+                            {this.renderTableRow('amount', baseAssetName, isBuy, maxOffer, login)}
+                            {this.renderPercentButtons(isBuy, maxOfferView)}
+                            {this.renderTableRow('total', counterAssetName, isBuy, maxOffer, login)}
                         </tbody>
                     </table>
 
                     <OfferMakerOverview
                         d={this.props.d}
                         targetAsset={targetAsset}
+                        hasTrustNeeded={this.props.hasTrustNeeded}
                         side={this.props.side}
                         offerState={this.state}
-                        maxOffer={maxOffer}
-                        updateInputData={(type, value) => this.updateState(type, value)} />
+                        maxOffer={maxOffer} />
                 </form>
             </div>
         );
@@ -258,4 +298,5 @@ export default class OfferMaker extends React.Component {
 OfferMaker.propTypes = {
     side: PropTypes.oneOf(['buy', 'sell']).isRequired,
     d: PropTypes.instanceOf(Driver).isRequired,
+    hasTrustNeeded: PropTypes.bool,
 };
