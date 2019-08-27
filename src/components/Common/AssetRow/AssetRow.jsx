@@ -6,6 +6,7 @@ import Driver from '../../../lib/Driver';
 import TrustButton from './TrustButton/TrustButton';
 import Stellarify from '../../../lib/Stellarify';
 import AssetCardSeparateLogo from '../AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
+import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 
 export default class AssetRow extends React.Component {
     constructor(props) {
@@ -56,12 +57,19 @@ export default class AssetRow extends React.Component {
     render() {
         const { tradeLink } = this.props;
 
-        const discoveredAsset = (
+        const discoveredAsset = !tradeLink ? (
             <AssetCardSeparateLogo
                 d={this.props.d}
                 code={this.props.asset.getCode()}
                 issuer={this.props.asset.getIssuer()}
                 longIssuer
+                color={this.state.color}
+                currency={this.props.currency}
+                host={this.props.host} />) : (
+            <AssetCardMain
+                d={this.props.d}
+                code={this.props.asset.getCode()}
+                issuer={this.props.asset.getIssuer()}
                 color={this.state.color}
                 currency={this.props.currency}
                 host={this.props.host} />);

@@ -710,8 +710,9 @@ export default function Send(driver) {
             }
             return bssResult;
         },
-        removeOffer: async (offer) => {
-            const tx = MagicSpoon.buildTxRemoveOffer(driver.Server, this.account, offer);
+        // offers can be single or array of offers
+        removeOffer: async (offers) => {
+            const tx = MagicSpoon.buildTxRemoveOffer(driver.Server, this.account, offers);
             const bssResult = await this.handlers.buildSignSubmit(tx);
             if (bssResult.status === 'finish') {
                 bssResult.serverResult.then((res) => {

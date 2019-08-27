@@ -33,34 +33,40 @@ export default class OfferMaker extends React.Component {
 
         this.state = {
             valid: false,
-            price: '', // Most sticky item (since the price is pretty static)
-            amount: '',
+            price: props.existingOffer ? props.existingOffer.price : '', // Most sticky item (since the price is pretty static)
+            amount: props.existingOffer ? props.existingOffer.baseAmount : '',
 
             // Total = price * amount
-            total: '',
+            total: props.existingOffer ? props.existingOffer.counterAmount : '',
+            offerId: props.existingOffer ? props.existingOffer.id : undefined,
             buttonState: 'ready', // ready or pending
             errorMessage: '',
             successMessage: '',
         };
 
-        if (this.props.d.orderbook.data.ready) {
+        if (this.props.d.orderbook.data.ready && !this.props.existingOffer) {
             this.state = Object.assign(this.state, this.initialize());
         }
+    }
+
+    componentWillMount() {
+        this._mounted = true;
     }
 
     componentWillUnmount() {
         this.orderbookUnsub();
         this.sessionUnsub();
+        this._mounted = false;
     }
 
-    getPercentButton(isBuy, maxOffer, percent) {
+    getPercentButton(isBuy, maxOffer, percent, minValue) {
         const inputType = isBuy ? 'total' : 'amount';
         const value = ((maxOffer * percent) / 100).toFixed(7).toString();
         return (
             <button
                 onClick={(e) => {
                     e.preventDefault();
-                    this.updateState(inputType, value);
+                    this.updateState(inputType, value, minValue, inputType, maxOffer);
                 }}
                 disabled={parseFloat(maxOffer) === 0}
                 className={`cancel-button ${this.state[inputType] === value && 'active'}`}>{percent}%</button>
@@ -119,49 +125,59 @@ export default class OfferMaker extends React.Component {
             }
             const hasInvalidPrecision = (state.price < minValue) || (state.amount < minValue)
                 || (state.total < minValue);
-            const isInsufficient = state[targetInputType] > maxOffer;
+            const isInsufficient = parseFloat(state[targetInputType]) > parseFloat(maxOffer);
 
             state.valid = !hasInvalidPrecision && !isInsufficient;
         } catch (e) {
             // Invalid input somewhere
         }
-        this.setState(state);
+        if (this._mounted) {
+            this.setState(state);
+        }
     }
 
     async handleSubmit(event) {
         event.preventDefault();
-
-        const { price, amount, total } = this.state;
+        if (this.props.d.session.authType === 'ledger') {
+            this.props.d.modal.handlers.cancel();
+        }
+        const { price, amount, total, offerId } = this.state;
         const handlers = this.props.d.session.handlers;
-        const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total });
+        const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total, offerId });
 
         if (signAndSubmit.status === 'await_signers') {
-            this.setState({
-                amount: '',
-                total: '',
-                valid: false,
-                buttonState: 'ready',
-                successMessage: 'Offer was signed with your key. Add additional signatures and submit to the network.',
-            });
+            this.props.d.modal.handlers.cancel();
+            if (this._mounted) {
+                this.setState({
+                    amount: '',
+                    total: '',
+                    valid: false,
+                    buttonState: 'ready',
+                    successMessage: 'Offer was signed with your key. Add additional signatures and submit to the network.',
+                });
+            }
         }
 
         if (signAndSubmit.status !== 'finish') { return; }
-
-        this.setState({
-            valid: false,
-            buttonState: 'pending',
-            amount: '',
-            total: '',
-            successMessage: '',
-            errorMessage: '',
-        });
-
+        if (this._mounted) {
+            this.setState({
+                valid: false,
+                buttonState: 'pending',
+                amount: '',
+                total: '',
+                successMessage: '',
+                errorMessage: '',
+            });
+        }
         try {
             await signAndSubmit.serverResult;
-            this.setState({
-                buttonState: 'ready',
-                successMessage: 'Offer successfully created',
-            });
+            this.props.d.modal.handlers.cancel();
+            if (this._mounted) {
+                this.setState({
+                    buttonState: 'ready',
+                    successMessage: 'Offer successfully created',
+                });
+            }
         } catch (error) {
             const errorMessage = ErrorHandler(error);
             const errorType = this.constructor.getErrorType(error.response);
@@ -183,15 +199,12 @@ export default class OfferMaker extends React.Component {
         return parseFloat(targetBalance) > parseFloat(reservedBalance) ? targetBalance - reservedBalance : 0;
     }
 
-    renderTableRow(inputType, assetName, isBuy, maxOffer, login) {
-        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
-        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
-        const minValue = 0.0000001;
-
+    renderTableRow(inputType, assetName, isBuy, maxOffer, login, minValue) {
         const invalidPrecision = this.state[inputType] !== '' && this.state[inputType] < minValue;
 
         const targetInputType = isBuy ? 'total' : 'amount';
-        const isInsufficient = login && (inputType === targetInputType) && this.state[inputType] > maxOffer;
+        const isInsufficient = login && (inputType === targetInputType) &&
+            parseFloat(this.state[inputType]) > parseFloat(maxOffer);
         let errorMessage;
         if (invalidPrecision) {
             errorMessage = `Minimal amount is ${minValue.toFixed(7)}`;
@@ -223,16 +236,16 @@ export default class OfferMaker extends React.Component {
         );
     }
 
-    renderPercentButtons(isBuy, maxOffer) {
+    renderPercentButtons(isBuy, maxOffer, minValue) {
         return (
             <React.Fragment>
                 <tr>
                     <td />
                     <td className="offer_table_buttons">
-                        {this.getPercentButton(isBuy, maxOffer, 25)}
-                        {this.getPercentButton(isBuy, maxOffer, 50)}
-                        {this.getPercentButton(isBuy, maxOffer, 75)}
-                        {this.getPercentButton(isBuy, maxOffer, 100)}
+                        {this.getPercentButton(isBuy, maxOffer, 25, minValue)}
+                        {this.getPercentButton(isBuy, maxOffer, 50, minValue)}
+                        {this.getPercentButton(isBuy, maxOffer, 75, minValue)}
+                        {this.getPercentButton(isBuy, maxOffer, 100, minValue)}
                     </td>
                 </tr>
                 <tr className="offer_table_buttons-separator">
@@ -247,7 +260,7 @@ export default class OfferMaker extends React.Component {
             return <div>Loading</div>;
         }
         const login = this.props.d.session.state === 'in';
-        const { hasTrustNeeded } = this.props;
+        const { hasTrustNeeded, existingOffer } = this.props;
         const isBuy = this.props.side === 'buy';
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const baseAssetName = baseBuying.getCode();
@@ -257,8 +270,24 @@ export default class OfferMaker extends React.Component {
             : <span>Sell <b>{baseAssetName}</b></span>;
 
         const targetAsset = isBuy ? counterSelling : baseBuying;
+        // amount of edited offer
+        const amountOfEditedOffer =
+            (existingOffer && parseFloat(isBuy ? existingOffer.counterAmount : existingOffer.baseAmount)) || 0;
+
+        // balance without amount of open offers
         const maxOffer = login ? this.calculateMaxOffer(targetAsset) : 0;
-        const maxOfferView = (Math.floor((maxOffer) * 10000000) / 10000000).toFixed(7);
+
+        const maxOfferView = (Math.floor((maxOffer + amountOfEditedOffer) * 10000000) / 10000000).toFixed(7);
+        const availableView = (
+            <div className="OfferMaker_balance">
+                <span>Available: </span>
+                <span>{maxOfferView} {targetAsset.code}</span>
+            </div>
+        );
+
+        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
+        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
+        const minValue = 0.0000001;
 
 
         return (
@@ -266,29 +295,26 @@ export default class OfferMaker extends React.Component {
                 <div className="OfferMaker_title">
                     <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
                     {(login && !hasTrustNeeded) &&
-                        <Link to="/account/" className="OfferMaker_balance">
-                            <span>Available: </span>
-                            <span>{maxOfferView} {targetAsset.code}</span>
-                        </Link>
+                        (existingOffer ?
+                            availableView :
+                            <Link to="/account/">{availableView}</Link>)
                     }
                 </div>
                 <form onSubmit={e => this.handleSubmit(e)}>
                     <table className="OfferMaker_table">
                         <tbody>
-                            {this.renderTableRow('price', counterAssetName)}
-                            {this.renderTableRow('amount', baseAssetName, isBuy, maxOffer, login)}
-                            {this.renderPercentButtons(isBuy, maxOfferView)}
-                            {this.renderTableRow('total', counterAssetName, isBuy, maxOffer, login)}
+                            {this.renderTableRow('price', counterAssetName, isBuy, maxOfferView, login, minValue)}
+                            {this.renderTableRow('amount', baseAssetName, isBuy, maxOfferView, login, minValue)}
+                            {this.renderPercentButtons(isBuy, maxOfferView, minValue)}
+                            {this.renderTableRow('total', counterAssetName, isBuy, maxOfferView, login, minValue)}
                         </tbody>
                     </table>
 
                     <OfferMakerOverview
                         d={this.props.d}
-                        targetAsset={targetAsset}
                         hasTrustNeeded={this.props.hasTrustNeeded}
                         side={this.props.side}
-                        offerState={this.state}
-                        maxOffer={maxOffer} />
+                        offerState={this.state} />
                 </form>
             </div>
         );
@@ -299,4 +325,5 @@ OfferMaker.propTypes = {
     side: PropTypes.oneOf(['buy', 'sell']).isRequired,
     d: PropTypes.instanceOf(Driver).isRequired,
     hasTrustNeeded: PropTypes.bool,
+    existingOffer: PropTypes.objectOf(PropTypes.any),
 };

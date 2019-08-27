@@ -60,7 +60,7 @@ export default class OfferMakerOverview extends React.Component {
             return (
                 <div className="OfferMakerOverview_login">
                     <span className="offer_message">
-                        <Link to="/account/">Log in</Link> or <Link to="/signup/">Sign up</Link> create an offer
+                        <Link to="/account/">Log in</Link> or <Link to="/signup/">Sign up</Link> to create an offer
                     </span>
                 </div>
             );
