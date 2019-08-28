@@ -5,6 +5,7 @@ import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from 'trezor-connect';
 import FastAverageColor from 'fast-average-color';
 import directory from 'stellarterm-directory';
+import isElectron from 'is-electron';
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
@@ -172,6 +173,7 @@ export default function Send(driver) {
         },
         logIn: async (keypair, opts) => {
             this.setupError = false;
+            this.brakeUnfundedCheck = false;
             if (this.state !== 'unfunded') {
                 this.state = 'loading';
                 this.event.trigger();
@@ -201,6 +203,11 @@ export default function Send(driver) {
                 driver.history.listenNewTransactions(driver.Server, this.account.account_id);
                 this.event.trigger('login');
             } catch (e) {
+                if (this.brakeUnfundedCheck) {
+                    this.state = 'out';
+                    this.event.trigger();
+                    return;
+                }
                 if (e.response) {
                     this.state = 'unfunded';
                     this.unfundedAccountId = keypair.publicKey();
@@ -753,7 +760,23 @@ export default function Send(driver) {
             return bssResult;
         },
         logout: () => {
-            window.location.reload();
+            try {
+                if (!isElectron()) {
+                    window.location.reload();
+                    return;
+                }
+                if (this.account) {
+                    this.account.clearKeypair();
+                    delete this.account;
+                    init();
+                    this.event.trigger();
+                }
+                this.brakeUnfundedCheck = true;
+                init();
+                this.event.trigger();
+            } catch (e) {
+                window.location.reload();
+            }
         },
         addUnknownAssetData: () => {
             const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
