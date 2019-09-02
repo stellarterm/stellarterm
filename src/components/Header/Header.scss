@@ -68,3 +68,49 @@
         }
     }
 }
+
+@mixin header_fullscreen {
+    position: fixed;
+    width: 100%;
+
+    .so-back {
+        padding-right: 0;
+        padding-left: 18px;
+    }
+
+    .so-chunk {
+        max-width: 100%;
+    }
+
+    .Header_background {
+        .Header {
+            .Header_nav {
+                .Nav_logo {
+                    margin-right: 16px;
+                }
+                .Nav_link {
+                    margin-right: 5px;
+                }
+            }
+            .Header_version {
+                display: none;
+            }
+        }
+    }
+}
+
+:-webkit-full-screen #stellarterm_header {
+    @include header_fullscreen;
+}
+
+:-moz-full-screen #stellarterm_header {
+    @include header_fullscreen;
+}
+
+:-ms-fullscreen #stellarterm_header {
+    @include header_fullscreen;
+}
+
+:fullscreen #stellarterm_header {
+    @include header_fullscreen;
+}
