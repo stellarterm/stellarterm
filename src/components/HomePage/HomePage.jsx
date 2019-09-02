@@ -3,8 +3,24 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Driver from '../../lib/Driver';
 import AssetList from '../Common/AssetList/AssetList';
+import Sep7Handler from './Sep7Handler/Sep7Handler';
+
 
 export default class HomePage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.listenId = this.props.driver.session.event.listen(() => {
+            this.forceUpdate();
+        });
+    }
+
+    componentDidMount() {
+        Sep7Handler(this.props);
+    }
+
+    componentWillUnmount() {
+        this.props.driver.session.event.unlisten(this.listenId);
+    }
 
     renderHomePageActions() {
         const state = this.props.driver.session.state;

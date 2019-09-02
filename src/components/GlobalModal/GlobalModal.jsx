@@ -16,6 +16,9 @@ import SignWithLedgerModal from './LedgerModal/LedgerModal';
 import TransactionDetails from './TransactionDetails/TransactionDetails';
 import MultisigSubmitModal from './MultisigSubmitModal/MultisigSubmitModal';
 import MultisigUnknownSubmitModal from './MultisigUnknownSubmitModal/MultisigUnknownSubmitModal';
+import Sep7PayModal from './Sep7Modals/Sep7PayModal/Sep7PayModal';
+import Sep7ErrorModal from './Sep7Modals/Sep7ErrorModal/Sep7ErrorModal';
+import Sep7ChangeTrustModal from './Sep7Modals/Sep7ChangeTrustModal/Sep7ChangeTrustModal';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -98,6 +101,12 @@ export default class GlobalModal extends React.Component {
             body = <MultisigDisableModal submit={d.modal.handlers} signerKey={modal.inputData} d={d} />;
         } else if (modal.modalName === 'multisigSetRequiredSigners') {
             body = <MultisigSetRequiredSigners submit={d.modal.handlers} d={d} />;
+        } else if (modal.modalName === 'Sep7PayModal') {
+            body = <Sep7PayModal submit={d.modal.handlers} txDetails={modal.inputData} d={d} />;
+        } else if (modal.modalName === 'Sep7TChangeTrustModal') {
+            body = <Sep7ChangeTrustModal submit={d.modal.handlers} txDetails={modal.inputData} d={d} />;
+        } else if (modal.modalName === 'Sep7ErrorModal') {
+            body = <Sep7ErrorModal submit={d.modal.handlers} error={modal.inputData} />;
         } else {
             body = (
                 <div className="GlobalModal">

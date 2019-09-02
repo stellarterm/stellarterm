@@ -36,7 +36,7 @@ export default class Header extends React.Component {
 
     render() {
         return (
-            <div className="Header_main">
+            <div className="Header_main" id="stellarterm_header">
                 {this.getNetworkBar()}
 
                 <div className="so-back Header_background">

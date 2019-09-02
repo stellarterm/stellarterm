@@ -23,13 +23,16 @@
 html {
     min-width: 1052px;
     background: #fff;
+    overflow-x: hidden;
 }
+
 body {
     background: linear-gradient(0deg, #ced0ff, #c0ecff);
     color: $s-color-neutral3;
     font-size: $s-scale-4;
     min-width: 1052px;
 }
+
 #app {
     position: relative;
     min-height: 100vh;
@@ -53,6 +56,7 @@ ul.privacy__ul {
 .AppStretch {
     min-height: 100vh;
 }
+
 .AppContainer {
     display: flex;
     flex-direction: column;

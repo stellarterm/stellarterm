@@ -4,6 +4,8 @@ import Driver from '../../../../lib/Driver';
 import AcceptTerms from '../Common/AcceptTerms';
 import LoginSecurityNotes from './LoginSecurityNotes/LoginSecurityNotes';
 
+const images = require('./../../../../images');
+
 export default class LoginPageBody extends React.Component {
     constructor(props) {
         super(props);
@@ -58,14 +60,16 @@ export default class LoginPageBody extends React.Component {
     }
 
     render() {
+        const { show } = this.state;
         const loginErrorMessage = this.checkForErrorMessages();
-        const inputType = this.state.show ? 'text' : 'password';
+        const inputType = show ? 'text' : 'password';
+        const toggleButtonIcon = show ? 'icon-eye-hide' : 'icon-eye';
 
         return (
             <div className="LoginPage__body">
                 <div className="LoginPage__greenBox">
                     <div className="LoginPage__form">
-                        <p className="LoginPage__intro">Log in with your secret key to manage your account.</p>
+                        <p className="LoginPage__intro">Log in with your secret key to manage your account</p>
 
                         <form onSubmit={e => this.handleSubmit(e)}>
                             <label className="s-inputGroup LoginPage__inputGroup" htmlFor="inputSecretKey">
@@ -75,23 +79,20 @@ export default class LoginPageBody extends React.Component {
                                     className="s-inputGroup__item S-flexItem-share LoginPage__password"
                                     value={this.state.secretInput}
                                     onChange={e => this.handleInput(e)}
-                                    placeholder="Secret key (example:
-                                        SBSMVCIWBL3HDB7N4EI3QKBKI4D5ZDSSDF7TMPB.....)" />
-
-                                <div>
-                                    <a
-                                        className="LoginPage__show s-button s-button--light"
-                                        onClick={e => this.toggleShow(e)}>
-                                        Show
-                                    </a>
-                                </div>
+                                    placeholder="Example:
+                                        SDWN4ELCTO7KEJSM6OFGALEWYDK1JTCNF23CDCRVTZ3UYDH7FGSY....." />
+                                <img
+                                    src={images[toggleButtonIcon]}
+                                    alt="show"
+                                    className="LoginPage__show_icon"
+                                    onClick={e => this.toggleShow(e)} />
                             </label>
 
                             {loginErrorMessage}
                             <AcceptTerms loginButtonText={'Log in'} />
                         </form>
                     </div>
-                    <LoginSecurityNotes />
+                    {!this.props.modal && <LoginSecurityNotes />}
                 </div>
             </div>
         );
@@ -100,4 +101,5 @@ export default class LoginPageBody extends React.Component {
 
 LoginPageBody.propTypes = {
     d: PropTypes.instanceOf(Driver),
+    modal: PropTypes.bool,
 };

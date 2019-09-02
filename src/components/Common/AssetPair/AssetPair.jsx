@@ -67,6 +67,7 @@ export default class AssetPair extends React.Component {
 
         this.props.d.orderbook.handlers.setOrderbook(base, counter);
         window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(base, counter)}`);
+        window.scrollTo(0, 0);
     }
 
     clearAsset(assetType) {
@@ -77,6 +78,7 @@ export default class AssetPair extends React.Component {
         const { baseBuying, counterSelling } = this.props;
         this.props.d.orderbook.handlers.setOrderbook(counterSelling, baseBuying);
         window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(counterSelling, baseBuying)}`);
+        window.scrollTo(0, 0);
     }
 
     showErrorMessage() {
@@ -85,10 +87,11 @@ export default class AssetPair extends React.Component {
     }
 
     render() {
-        const { row, d, baseBuying, counterSelling, dropdown, swap } = this.props;
+        const { row, d, baseBuying, counterSelling, dropdown, swap, fullscreen } = this.props;
+        const assetPairClassname = `AssetPair ${fullscreen ? 'AssetPair_fullscreen' : ''}`;
 
         const content = (
-            <div className="AssetPair">
+            <div className={assetPairClassname}>
                 {this.getAssetCard(dropdown, d, 'baseBuying')}
                 {this.getSeparator(swap)}
                 {this.getAssetCard(dropdown, d, 'counterSelling')}
@@ -130,4 +133,5 @@ AssetPair.propTypes = {
     row: PropTypes.bool,
     swap: PropTypes.bool,
     dropdown: PropTypes.bool,
+    fullscreen: PropTypes.bool,
 };

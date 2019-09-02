@@ -1,0 +1,22 @@
+@import "AccountModalBlock/AccountModalBlock";
+@import "Sep7ErrorModal/Sep7ErrorModal";
+@import "TransactionAuthorBlock/TransactionAuthorBlock";
+@import "Sep7PayModal/Sep7PayModal";
+@import "Sep7ChangeTrustModal/Sep7ChangeTrustModal";
+@import "AssetViewBlock/AssetViewBlock";
+
+.Sep7PayModal_error{
+    display: flex;
+    align-items: center;
+    border-radius: 2px;
+    border: solid 1px #ff496180;
+    background-color: #f6c5c580;
+    padding: 16px;
+    margin-bottom: 40px;
+
+    img{
+        width: 20px;
+        height: 20px;
+        margin-right: 16px;
+    }
+}

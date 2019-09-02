@@ -46,24 +46,12 @@ export default function OfferMakerResultMessage(props) {
                     </ul>
                 </div>
             );
-        case 'tx_bad_seq':
-            return (
-                <div className="s-alert s-alert--alert offer_message">
-                    Transaction failed because sequence got out of sync. Please reload StellarTerm and try again.
-                </div>
-            );
-        case 'op_underfunded':
-            return (
-                <div className="s-alert s-alert--alert offer_message">
-                    Transaction failed due to a lack of funds.
-                </div>
-            );
         default:
             return (
                 <div className="s-alert s-alert--alert offer_message">
                     Failed to create offer.
                     <ul className="offerMaker_errors">
-                        <li>Error code: {errorType}</li>
+                        <li>Error code: {errorMessage}</li>
                     </ul>
                 </div>
             );
@@ -73,7 +61,7 @@ export default function OfferMakerResultMessage(props) {
 }
 OfferMakerResultMessage.propTypes = {
     offerState: PropTypes.shape({
-        errorMessage: PropTypes.bool,
+        errorMessage: PropTypes.string,
         errorType: PropTypes.string,
         successMessage: PropTypes.string,
     }),
