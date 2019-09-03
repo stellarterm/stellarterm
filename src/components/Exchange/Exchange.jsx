@@ -47,6 +47,9 @@ export default class Exchange extends React.Component {
         };
         this._handleKeyUp = this._handleKeyUp.bind(this);
         this._escExitFullscreen = this._escExitFullscreen.bind(this);
+        this.ubsubHistory = this.props.history.listen(() => {
+            this.getTradePair();
+        });
     }
 
     componentWillMount() {
@@ -66,6 +69,7 @@ export default class Exchange extends React.Component {
     componentWillUnmount() {
         this.unsub();
         this.unsubSession();
+        this.ubsubHistory();
         document.removeEventListener('keyup', this._handleKeyUp);
 
         if (this.state.fullscreenMode) {
@@ -336,4 +340,5 @@ export default class Exchange extends React.Component {
 
 Exchange.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    history: PropTypes.objectOf(PropTypes.any),
 };
