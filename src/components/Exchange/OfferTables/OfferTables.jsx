@@ -73,7 +73,7 @@ export default class OfferTables extends React.Component {
         }
 
         return (
-            <div className="OfferTables island__sub">
+            <div className="OfferTables">
                 {this.getOffersTable('buy', orderbook)}
                 {this.getOffersTable('sell', orderbook)}
             </div>
