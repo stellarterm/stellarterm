@@ -93,8 +93,8 @@ errorMap
         'The issuer of selling asset does not exist.')
     .set('op_buy_no_issuer',
         'The issuer of buying asset does not exist.')
-    .set('op_not_found',
-        'An offer with that offerID cannot be found.')
+    .set('op_offer_not_found',
+        'An offer with some offerID cannot be found.')
     .set('op_too_many_signers',
         '20 is the maximum number of signers an account can have, and adding another signer would exceed that.')
     .set('op_bad_flags',
