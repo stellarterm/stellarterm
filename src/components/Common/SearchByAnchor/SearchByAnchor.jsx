@@ -138,7 +138,9 @@ export default class SearchByAnchor extends React.Component {
                 );
             });
             assetsAmount = assetResults.filter(asset => asset !== null).length;
-            assetResults = this.props.tradeLink ? <div className="AssetRow_flex3">{assetResults}</div> : assetResults;
+            assetResults = this.props.tradeLink ?
+                <div className="AssetRow_flex3">{assetResults}</div> :
+                <div className="AssetRowContainer">{assetResults}</div>;
             break;
         default:
             break;
@@ -164,7 +166,8 @@ export default class SearchByAnchor extends React.Component {
                             name="anchorDomainInput"
                             value={anchorDomain}
                             onChange={e => this.handleInputFederation(e)}
-                            placeholder="Enter the anchor domain name to see issued assets (e.g. www.anchorusd.com, apay.io, etc)" />
+                            placeholder="Enter the anchor domain name to see issued assets
+                             e.g. www.anchorusd.com, apay.io, etc)" />
                     </label>
                 </div>
                 {assetResults}

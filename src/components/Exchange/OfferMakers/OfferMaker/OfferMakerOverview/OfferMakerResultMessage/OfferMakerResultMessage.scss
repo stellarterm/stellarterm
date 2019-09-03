@@ -1,3 +1,28 @@
-.offerMaker_errors {
-    margin-left: 2em;
+.OfferMakerResultMessage_message{
+    width: 100%;
+    font-size: 16px;
+    font-weight: normal;
+    color: #505558;
+    padding: 14px 17px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    margin-bottom: 10px;
+
+    img{
+        height: 20px;
+        width: 20px;
+        margin-right: 20px;
+    }
+
+    &.success{
+        border: solid 1px #7ed085;
+        background-color: #f0faf1;
+    }
+
+    &.failed{
+        border: solid 1px #ff496180;
+        background-color: #f6c5c580;
+    }
 }

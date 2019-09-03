@@ -1,5 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import images from '../../../../images';
+import Driver from '../../../../lib/Driver';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {
@@ -9,24 +11,47 @@ export default class ManageOffers extends React.Component {
         };
     }
 
-    getRowItems() {
+    getActionButtons() {
         const { ready } = this.state;
+
+        return (
+            <div className="ManageOffers__table__actions">
+                <button onClick={e => this.handleEdit(e)} title="Edit offer">
+                    <img src={images['icon-edit-small']} alt="..." />
+                </button>
+                <button onClick={e => this.handleCancel(e)} title="Remove offer">
+                    {ready ?
+                        <span>+</span> :
+                        <img src={images['icon-circle-preloader-gif']} alt="..." width="10" height="10" /> }
+                </button>
+            </div>
+        );
+    }
+
+    getRowItems() {
         const { price, baseAmount, counterAmount } = this.props.rectifiedOffer;
-
-        const cancelLink = ready ?
-            <a onClick={e => this.handleCancel(e)}>Cancel offer</a> :
-            <span>Cancelling...</span>;
-
-        const rowItems = [price, baseAmount, counterAmount, cancelLink];
-        if (this.props.invert) {
+        const rowItems = [price, baseAmount, counterAmount];
+        if (this.props.side === 'buy') {
             rowItems.reverse();
         }
 
+        rowItems.push(this.getActionButtons());
+
         return (
-            rowItems.map(item => (
-                <td className="ManageOffers__table__row__item" key={item}>{item}</td>
-            ))
+            rowItems.map((item, index) => {
+                const key = item + index;
+                return (
+                    <td className="ManageOffers__table__row__item" key={key}>{item}</td>
+                );
+            })
         );
+    }
+
+    handleEdit(event) {
+        event.preventDefault();
+        const { rectifiedOffer, side } = this.props;
+        const offerData = { rectifiedOffer, side };
+        this.props.d.modal.handlers.activate('EditOfferModal', offerData);
     }
 
     async handleCancel(event) {
@@ -34,7 +59,6 @@ export default class ManageOffers extends React.Component {
 
         const { handlers } = this.props.d.session;
         const { rectifiedOffer } = this.props;
-
         const signAndSubmit = await handlers.removeOffer(rectifiedOffer);
 
         if (signAndSubmit.status !== 'finish') { return; }
@@ -58,7 +82,8 @@ export default class ManageOffers extends React.Component {
     }
 }
 ManageOffers.propTypes = {
-    invert: PropTypes.bool,
+    d: PropTypes.instanceOf(Driver).isRequired,
+    side: PropTypes.string,
     rectifiedOffer: PropTypes.shape({
         price: PropTypes.string,
         baseAmount: PropTypes.string,

@@ -6,8 +6,10 @@
 
 .offer_overview {
     margin-top: 12px;
-    border-top: 1px solid $s-color-neutral7;
-    padding-top: 12px;
+
+    &:empty{
+        border-top: 1px solid $s-color-neutral7;
+    }
 }
 
 .offer_userBalance {
@@ -30,6 +32,81 @@
 }
 
 .offer_acceptAsset {
-    margin-top: 1em;
     font-size: $s-scale-4;
+    margin-left: 20px;
+    font-weight: normal;
+}
+
+.OfferMakerOverview_login{
+    width: 100%;
+    height: 52px;
+    margin-top: 15px;
+    border: solid 1px #bdbfc048;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .offer_message{
+        font-size: $s-scale-4;
+        font-weight: normal;
+    }
+    
+    a{
+        color: #69c76f;
+        text-decoration: none;
+    }
+}
+
+.offer_button{
+    width: 100%;
+    height: 52px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    color: #fff;
+    border-radius: 2px;
+    cursor: pointer;
+    opacity: 0.8;
+
+
+    &:hover{
+        opacity: 1;
+    }
+    
+    &:disabled{
+        cursor: not-allowed;
+    }
+    
+    &.Sell{
+        background-color: #fe6d74;
+        border: solid 1px #fa464f;
+    }
+    
+    &.Buy{
+        background-color: #69c76f;
+        border: solid 1px #5eb464;
+    }
+}
+
+$color: rgba(#fff, .3) !default;
+$color_inner: #fff !default;
+$size: 30px !default;
+$weight: 3px !default;
+$speed: .5s !default;
+
+.nk-spinner {
+    position: relative;
+    box-sizing: border-box;
+    width: $size;
+    height: $size;
+    text-indent: -9999em;
+    border: $weight solid $color;
+    border-left: $weight solid $color_inner;
+    border-radius: 50%;
+    animation: nk-spinner $speed infinite linear;
+}
+
+@keyframes nk-spinner {
+    100% { transform: rotate(360deg) }
 }
