@@ -25,7 +25,9 @@ export default class Exchange extends React.Component {
             this.forceUpdate();
         });
         this.ubsubHistory = this.props.history.listen(() => {
-            this.getTradePair();
+            if (this.props.history.action === 'POP') {
+                this.getTradePair();
+            }
         });
     }
 
@@ -58,11 +60,11 @@ export default class Exchange extends React.Component {
             const baseBuying = new StellarSdk.Asset('MOBI', 'GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH');
             const counterSelling = StellarSdk.Asset.native();
             this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
-            window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
+            window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
             return;
         }
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
-        window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
+        window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
     }
 
     checkOrderboorWarning() {
