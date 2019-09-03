@@ -30,7 +30,7 @@ export default function OfferMakers(props) {
         <div>
             <div className="OfferMakers island__sub">
                 <div className="OfferMakers_maker island__sub__division">
-                <OfferMaker d={props.d} side="buy" hasTrustNeeded={hasTrustNeeded} />
+                    <OfferMaker d={props.d} side="buy" hasTrustNeeded={hasTrustNeeded} />
                 </div>
                 <div className="OfferMakers_maker island__sub__division">
                     <OfferMaker d={props.d} side="sell" hasTrustNeeded={hasTrustNeeded} />
