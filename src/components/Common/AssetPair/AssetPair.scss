@@ -20,7 +20,7 @@
 }
 
 .AssetPair__card {
-    flex: 1 0 auto;
+    flex: 1 0;
 }
 
 a.AssetPairRow:hover .AssetPair__separator {
@@ -61,6 +61,7 @@ a.AssetPairRow:hover .AssetPair__separator {
     }
 
     .AssetPair__card {
+        flex: 1 0 auto;
         width: 265px;
 
         .AssetCard2__logo {

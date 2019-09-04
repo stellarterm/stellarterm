@@ -50,10 +50,10 @@ export default class CancelOffersModal extends React.Component {
                 </div>
                 <div className="CancelOffersModal_content">
                     <div className="CancelOffersModal_title">
-                        Do you really wants to cancel all {side} offers?
+                        Do you really want to cancel all {side} offers?
                     </div>
                     <div className="CancelOffersModal_text">
-                        After confirmation, all of you {side} offer will be removed, funds will return to your balance
+                        After confirmation, all of you {side} offers will be removed, funds will return to your balance.
                     </div>
                     {errorMessage &&
                         <div className="OfferMakerResultMessage_message failed">
@@ -61,9 +61,15 @@ export default class CancelOffersModal extends React.Component {
                             {errorMessage}
                         </div>}
                     <div className="Modal_button-block">
-                        <button className="cancel-button" onClick={() => submit.cancel()}>Back</button>
+                        <button
+                            className="cancel-button"
+                            disabled={!buttonReady}
+                            onClick={() => submit.cancel()}>
+                            Back
+                        </button>
                         <button
                             className="s-button"
+                            disabled={!buttonReady}
                             onClick={() => this.removeOffers(submit, offers)}>
                             {buttonReady ? 'Confirm' : <div className="nk-spinner" />}
                         </button>
