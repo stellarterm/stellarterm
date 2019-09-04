@@ -32,6 +32,12 @@
         flex-direction: row;
         justify-content: center;
         align-items: center;
+
+        &:disabled{
+            border: 1px solid #5eb464;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            background: $s-color-primary4;
+        }
     }
 
 }

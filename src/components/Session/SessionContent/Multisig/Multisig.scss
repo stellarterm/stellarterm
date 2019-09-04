@@ -37,4 +37,8 @@
     border: solid 1px #dfe0e1;
     background-color: #ffffff;
     color: #505558;
+
+    &:disabled{
+        cursor: not-allowed;
+    }
 }

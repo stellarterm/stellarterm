@@ -62,7 +62,7 @@ export default class MultisigEnableStep3 extends React.Component {
                         account. You will need to confirm payments, adding, removing, trading assets etc.
                     </span>
                     <span className="MultisigEnableStep3_content-alert">
-                        Be careful! If you will lose access to your signer account, you will not be able to use
+                        Be careful! If you lose access to your signer account, you will not be able to use
                         your signed Stellar account.
                     </span>
                 </div>
