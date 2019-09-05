@@ -26,7 +26,7 @@ const config = require('./env-config.json');
 
 const reload = browserSync.reload;
 // Default task
-gulp.task('default', ['clean', 'configEnv', 'developApi', 'watch']);
+gulp.task('default', ['clean', 'configEnv', 'developApi', 'buildImages', 'watch']);
 
 // Clean
 gulp.task('clean', (cb) => {
@@ -182,7 +182,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe(gulp.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'buildImages', 'scripts', 'copyBower', 'copyStaticFiles'];
+const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'scripts', 'copyBower', 'copyStaticFiles'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {
@@ -253,6 +253,7 @@ gulp.task('production', () => {
     runSequence(
         'clean',
         'configEnv',
+        'buildImages',
         baseTasks,
         'uglify-js',
         'inlinesource'
