@@ -53,7 +53,8 @@ export default class CancelOffersModal extends React.Component {
                         Do you really want to cancel all {side} offers?
                     </div>
                     <div className="CancelOffersModal_text">
-                        After confirmation, all of you {side} offers will be removed, funds will return to your balance.
+                        After confirmation, all of your {side} offers will be
+                         removed, funds will return to your balance.
                     </div>
                     {errorMessage &&
                         <div className="OfferMakerResultMessage_message failed">
