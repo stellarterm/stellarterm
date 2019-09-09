@@ -42,7 +42,16 @@ gulp.task('styles', () => gulp.src('./src/components/App.scss')
 gulp.task('minifyImages', () =>
         gulp
             .src('./images/*')
-            .pipe(imagemin())
+            .pipe(
+                imagemin([
+                    imagemin.gifsicle({ interlaced: true }),
+                    imagemin.jpegtran({ progressive: true }),
+                    imagemin.optipng({ optimizationLevel: 5 }),
+                    imagemin.svgo({
+                        plugins: [{ removeViewBox: false }],
+                    }),
+                ]),
+            )
             .pipe(gulp.dest('./images/')),
 );
 
