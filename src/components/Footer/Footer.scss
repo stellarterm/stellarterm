@@ -69,5 +69,10 @@
             width: auto;
             text-align: center;
         }
+
+        .Footer_disclaimer + .Footer_disclaimer{
+            border-top: none;
+            padding-top: 0;
+        }
     }
 }
