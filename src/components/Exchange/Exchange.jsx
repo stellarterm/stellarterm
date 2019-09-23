@@ -37,6 +37,11 @@ export default class Exchange extends React.Component {
         this.unsubSession = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
+        this.ubsubHistory = this.props.history.listen(() => {
+            if (this.props.history.action === 'POP') {
+                this.getTradePair();
+            }
+        });
 
         this.state = {
             chartType: 'lineChart',
@@ -66,6 +71,7 @@ export default class Exchange extends React.Component {
     componentWillUnmount() {
         this.unsub();
         this.unsubSession();
+        this.ubsubHistory();
         document.removeEventListener('keyup', this._handleKeyUp);
 
         if (this.state.fullscreenMode) {
@@ -149,11 +155,11 @@ export default class Exchange extends React.Component {
             const baseBuying = new StellarSdk.Asset('MOBI', 'GA6HCMBLTZS5VYYBCATRBRZ3BZJMAFUDKYYF6AH6MVCMGWMRDNSWJPIH');
             const counterSelling = StellarSdk.Asset.native();
             this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
-            window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
+            window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
             return;
         }
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
-        window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
+        window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
     }
 
     toggleFullScreen() {
@@ -340,4 +346,5 @@ export default class Exchange extends React.Component {
 
 Exchange.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    history: PropTypes.objectOf(PropTypes.any),
 };
