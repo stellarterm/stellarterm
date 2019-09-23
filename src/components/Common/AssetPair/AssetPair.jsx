@@ -5,7 +5,7 @@ import _ from 'lodash';
 import images from '../../../images';
 import Driver from '../../../lib/Driver';
 import Stellarify from '../../../lib/Stellarify';
-import AssetCard2 from '../AssetCard2/AssetCard2';
+import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import AssetDropDown from './AssetDropDown/AssetDropDown';
 
 export default class AssetPair extends React.Component {
@@ -38,7 +38,7 @@ export default class AssetPair extends React.Component {
                         clear={() => this.clearAsset(assetType)}
                         exception={exception} />
                 ) : (
-                    <AssetCard2
+                    <AssetCardMain
                         code={this.props[assetType].getCode()}
                         issuer={this.props[assetType].getIssuer()}
                         d={d} />

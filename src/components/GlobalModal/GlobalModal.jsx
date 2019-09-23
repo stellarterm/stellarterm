@@ -19,6 +19,8 @@ import MultisigUnknownSubmitModal from './MultisigUnknownSubmitModal/MultisigUnk
 import Sep7PayModal from './Sep7Modals/Sep7PayModal/Sep7PayModal';
 import Sep7ErrorModal from './Sep7Modals/Sep7ErrorModal/Sep7ErrorModal';
 import Sep7ChangeTrustModal from './Sep7Modals/Sep7ChangeTrustModal/Sep7ChangeTrustModal';
+import EditOfferModal from './EditOfferModal/EditOfferModal';
+import CancelOffersModal from './CancelOffersModal/CancelOffersModal';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -42,72 +44,90 @@ export default class GlobalModal extends React.Component {
         const modal = d.modal;
         let body;
 
-        if (modal.modalName === 'sign') {
+        switch (modal.modalName) {
+        case 'sign': {
             let laboratoryContent;
-            if (
-                d.session.account.inflation_destination === 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW'
-            ) {
+            if (d.session.account.inflation_destination === 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW') {
                 laboratoryContent = (
-                    <div className="GlobalModal__content">
-                        <a
-                            href={`https://www.stellar.org/laboratory/#txsigner?xdr=
+                        <div className="GlobalModal__content">
+                            <a
+                                href={`https://www.stellar.org/laboratory/#txsigner?xdr=
                               ${encodeURI(modal.inputData.toEnvelope().toXDR('base64'))}&network=public`}
-                            target="_blank"
-                            rel="nofollow noopener noreferrer">
-                            View in Stellar Laboratory
-                        </a>
-                    </div>
-                );
+                                target="_blank"
+                                rel="nofollow noopener noreferrer">
+                                View in Stellar Laboratory
+                            </a>
+                        </div>
+                    );
             }
             // To get tx xdr: modal.inputData.toEnvelope().toXDR('base64')
             body = (
-                <div className="GlobalModal">
-                    <div className="GlobalModal__header">Sign transaction</div>
-                    <div className="GlobalModal__content">
-                        <TransactionDetails tx={modal.inputData} />
+                    <div className="GlobalModal">
+                        <div className="GlobalModal__header">Sign transaction</div>
+                        <div className="GlobalModal__content">
+                            <TransactionDetails tx={modal.inputData} />
+                        </div>
+                        {laboratoryContent}
+                        <div className="GlobalModal__navigation">
+                            <button
+                                className="s-button s-button--light"
+                                onClick={() => {
+                                    d.modal.handlers.cancel();
+                                }}>
+                                Cancel
+                            </button>
+                            <button
+                                className="s-button"
+                                onClick={() => {
+                                    d.modal.handlers.finish();
+                                }}>
+                                Sign
+                            </button>
+                        </div>
                     </div>
-                    {laboratoryContent}
-                    <div className="GlobalModal__navigation">
-                        <button
-                            className="s-button s-button--light"
-                            onClick={() => {
-                                d.modal.handlers.cancel();
-                            }}>
-                            Cancel
-                        </button>
-                        <button
-                            className="s-button"
-                            onClick={() => {
-                                d.modal.handlers.finish();
-                            }}>
-                            Sign
-                        </button>
-                    </div>
-                </div>
-            );
-        } else if (modal.modalName === 'signWithLedger') {
+                );
+            break;
+        }
+        case 'signWithLedger':
             body = <SignWithLedgerModal d={d} />;
-        } else if (modal.modalName === 'multisig') {
+            break;
+        case 'multisig':
             body = <MultisigSubmitModal signer={modal.inputData} submit={d.modal.handlers} />;
-        } else if (modal.modalName === 'multisigUnknown') {
+            break;
+        case 'multisigUnknown':
             body = <MultisigUnknownSubmitModal tx={modal.inputData} submit={d.modal.handlers} />;
-        } else if (modal.modalName === 'multisigEnableStep1') {
+            break;
+        case 'multisigEnableStep1':
             body = <MultisigEnableStep1 submit={d.modal.handlers} d={modal.inputData} />;
-        } else if (modal.modalName === 'multisigEnableStep2') {
+            break;
+        case 'multisigEnableStep2':
             body = <MultisigEnableStep2 submit={d.modal.handlers} d={modal.inputData} />;
-        } else if (modal.modalName === 'multisigEnableStep3') {
+            break;
+        case 'multisigEnableStep3':
             body = <MultisigEnableStep3 submit={d.modal.handlers} signerData={modal.inputData} d={d} />;
-        } else if (modal.modalName === 'multisigDisableModal') {
+            break;
+        case 'multisigDisableModal':
             body = <MultisigDisableModal submit={d.modal.handlers} signerKey={modal.inputData} d={d} />;
-        } else if (modal.modalName === 'multisigSetRequiredSigners') {
+            break;
+        case 'multisigSetRequiredSigners':
             body = <MultisigSetRequiredSigners submit={d.modal.handlers} d={d} />;
-        } else if (modal.modalName === 'Sep7PayModal') {
+            break;
+        case 'Sep7PayModal':
             body = <Sep7PayModal submit={d.modal.handlers} txDetails={modal.inputData} d={d} />;
-        } else if (modal.modalName === 'Sep7TChangeTrustModal') {
+            break;
+        case 'Sep7TChangeTrustModal':
             body = <Sep7ChangeTrustModal submit={d.modal.handlers} txDetails={modal.inputData} d={d} />;
-        } else if (modal.modalName === 'Sep7ErrorModal') {
+            break;
+        case 'Sep7ErrorModal':
             body = <Sep7ErrorModal submit={d.modal.handlers} error={modal.inputData} />;
-        } else {
+            break;
+        case 'EditOfferModal':
+            body = <EditOfferModal submit={d.modal.handlers} offerData={modal.inputData} d={d} />;
+            break;
+        case 'CancelOffersModal':
+            body = <CancelOffersModal submit={d.modal.handlers} offersData={modal.inputData} d={d} />;
+            break;
+        default:
             body = (
                 <div className="GlobalModal">
                     <div className="GlobalModal__content">Error: missing modal {modal.modalName}</div>
@@ -122,6 +142,7 @@ export default class GlobalModal extends React.Component {
                     </div>
                 </div>
             );
+            break;
         }
 
         return <div className={`GlobalModalBackdrop${d.modal.active ? '' : ' is-hidden'}`}>{body}</div>;

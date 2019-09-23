@@ -87,6 +87,7 @@ export default class AssetList extends React.Component {
                     {this.generateRowTitle('Change (24h)', 'change24h')}
                 </div>
                 <AssetListRows
+                    d={d}
                     ticker={d.ticker}
                     limit={limit}
                     sortBy={sortBy}

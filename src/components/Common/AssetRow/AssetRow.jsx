@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
 import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
-import AssetCard2 from '../../Common/AssetCard2/AssetCard2';
 import TrustButton from './TrustButton/TrustButton';
 import Stellarify from '../../../lib/Stellarify';
+import AssetCardSeparateLogo from '../AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
+import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 
 export default class AssetRow extends React.Component {
     constructor(props) {
@@ -38,7 +39,6 @@ export default class AssetRow extends React.Component {
                 d={this.props.d}
                 asset={this.props.asset}
                 message={`${this.props.asset.getCode()} accepted`}
-                trustMessage={`Accept ${this.props.asset.getCode()}`}
                 currency={this.props.currency}
                 color={this.state.color}
                 host={this.props.host} />
@@ -57,21 +57,31 @@ export default class AssetRow extends React.Component {
     render() {
         const { tradeLink } = this.props;
 
-        const discoveredAsset = (
-            <AssetCard2
+        const discoveredAsset = !tradeLink ? (
+            <AssetCardSeparateLogo
+                d={this.props.d}
+                code={this.props.asset.getCode()}
+                issuer={this.props.asset.getIssuer()}
+                longIssuer
+                color={this.state.color}
+                currency={this.props.currency}
+                host={this.props.host} />) : (
+            <AssetCardMain
+                d={this.props.d}
                 code={this.props.asset.getCode()}
                 issuer={this.props.asset.getIssuer()}
                 color={this.state.color}
                 currency={this.props.currency}
-                host={this.props.host} />
-        );
+                host={this.props.host} />);
 
         return !tradeLink ? (
-            <div className="AssetRow row">
-                <div className="row__assetCard2">
+            <div className="AssetRow">
+                <div className="AssetRow_asset">
                     {discoveredAsset}
                 </div>
-                {this.getRowActionButton()}
+                <div className="AssetRow_action">
+                    {this.getRowActionButton()}
+                </div>
             </div>
         ) : (
             this.getRowActionButton(discoveredAsset)
