@@ -86,3 +86,38 @@
         color: $s-color-neutral3;
     }
 }
+
+.AssetList_Header {
+    padding: 12px 18px;
+    border-bottom: 1px solid $s-color-neutral8;
+
+    display: flex;
+    justify-content: space-between;
+
+    .ListHeader_Title {
+        font-size: 18px;
+        font-weight: normal;
+    }
+
+    .ListHeader_lowTradable {
+        display: flex;
+        align-items: center;
+        font-size: 13px;
+        padding-left: 0.5em;
+        cursor: pointer;
+
+        &:hover {
+            background-color: rgba(104, 200, 111, 0.1);
+        }
+
+        &:active {
+            background-color: rgba(104, 200, 111, 0.15);
+        }
+
+        .checkbox_lowTradable {
+            cursor: pointer;
+            font-size: 18px;
+            margin: 0 0.5em;
+        }
+    }
+}

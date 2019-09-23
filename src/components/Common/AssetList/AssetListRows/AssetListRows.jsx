@@ -85,26 +85,38 @@ export default class AssetListRows extends React.Component {
     }
 
     sortAssets(allAssets) {
-        const { sortBy, sortType, limit } = this.props;
+        const { sortBy, sortType, limit, showLowTradable } = this.props;
         const ascDescType = new Map([[true, 'asc'], [false, 'desc']]);
         const isAscSort = sortType !== null ? ascDescType.get(sortType) : '';
-        const halfAssets = [];
+        const halfInfoAssets = [];
+        const lowTradableAssets = [];
 
         const fullInfoAssets = allAssets.filter((asset) => {
             const isFullUndefined = !asset.priceXLM && !asset.priceUSD && !asset.change24h && !asset.volume24h;
 
             if (asset[sortBy] === undefined || asset[sortBy] === null || isFullUndefined) {
-                halfAssets.push(asset);
+                halfInfoAssets.push(asset);
+                return null;
+            } else if (asset.volume24h < 1) {
+                lowTradableAssets.push(asset);
                 return null;
             }
             return asset;
         });
 
-        const sortedAssets = limit
+        const fullInfosortedAssets = limit
             ? _.orderBy(fullInfoAssets, 'volume24h', 'desc').slice(0, limit - 1)
             : _.orderBy(fullInfoAssets, sortBy, isAscSort);
 
-        return limit ? _.orderBy(sortedAssets, sortBy, isAscSort) : sortedAssets.concat(halfAssets);
+        const allAvaliableAssets = _.orderBy(fullInfosortedAssets.concat(lowTradableAssets), sortBy, isAscSort);
+
+        const allAvaliableSortedAssets = showLowTradable
+            ? allAvaliableAssets.concat(halfInfoAssets)
+            : fullInfosortedAssets;
+
+        return limit
+            ? _.orderBy(fullInfosortedAssets, sortBy, isAscSort)
+            : allAvaliableSortedAssets;
     }
 
     render() {
@@ -133,4 +145,5 @@ AssetListRows.propTypes = {
     limit: PropTypes.number,
     sortBy: PropTypes.string,
     sortType: PropTypes.bool,
+    showLowTradable: PropTypes.bool,
 };

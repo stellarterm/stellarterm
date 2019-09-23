@@ -1,0 +1,31 @@
+.Fullscreen_key_alert {
+    position: absolute;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    z-index: 5;
+    left: 0;
+    right: 0;
+    margin-top: 2em;
+    margin-left: auto;
+    margin-right: auto;
+    transition: 0.75s ease-in-out;
+
+    .keyAlert_cell {
+        background-color: #021243;
+        padding: 1em;
+        opacity: 0.75;
+        font-size: 16px;
+        color: rgba(255, 255, 255, 0.75);
+    }
+}
+
+.keyAlert_hide {
+    opacity: 0;
+    z-index: 0;
+}
+
+.keyAlert_visible{
+    opacity: 1;
+}

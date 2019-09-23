@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import isElectron from 'is-electron';
 
 export default class Header extends React.Component {
     static createHeaderTab(url, text) {
@@ -35,7 +36,7 @@ export default class Header extends React.Component {
 
     render() {
         return (
-            <div className="Header_main">
+            <div className="Header_main" id="stellarterm_header">
                 {this.getNetworkBar()}
 
                 <div className="so-back Header_background">
@@ -46,7 +47,7 @@ export default class Header extends React.Component {
                             {this.constructor.createHeaderTab('exchange', 'Exchange')}
                             {this.constructor.createHeaderTab('markets', 'Markets')}
                             {this.constructor.createHeaderTab('account', 'Account')}
-                            {this.constructor.createHeaderTab('download', 'Download')}
+                            {!isElectron() ? this.constructor.createHeaderTab('download', 'Download') : null}
                         </nav>
 
                         <span className="Header_version">v{window.stBuildInfo.version}</span>

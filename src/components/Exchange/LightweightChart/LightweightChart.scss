@@ -1,0 +1,50 @@
+@import "./ChartDataPanel/ChartDataPanel";
+@import "./FullscreenScrollBlock/FullscreenScrollBlock";
+
+#LightChart {
+    width: 980px;
+    height: 100%;
+}
+
+.chart_Msg_Container {
+    width: 100%;
+    height: calc(100% - 87px);
+    display: flex;
+    align-items: center;
+}
+
+.chart_Msg_Container_fullscreen {
+    @extend .chart_Msg_Container;
+    height: calc(100% - 87px);
+}
+
+.scrollTime_btn {
+    position: absolute;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.2;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.3);
+    right: 15px;
+    bottom: 60px;
+    height: 32px;
+    width: 32px;
+    z-index: 3;
+    border-radius: 50%;
+    transition: 0.15s ease-in-out;
+
+    &:hover {
+        opacity: 1;
+    }
+
+    &:active {
+        opacity: 0.85;
+    }
+
+    img {
+        width: 16px;
+        height: auto;
+    }
+}

@@ -1,0 +1,130 @@
+.chart_Settings_Panel {
+    border-top: solid 1px #e3e3e4;
+    width: 100%;
+
+    .panel_container {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+
+        .timeFrame_btns,
+        .scrollHere_info,
+        .scale_Settings {
+            height: 36px;
+            display: flex;
+            align-items: center;
+        }
+
+        .timeFrame_btns {
+            .timeBtn {
+                text-decoration: none;
+                font-size: 14px;
+                color: #505558;
+                padding: 0 10px;
+            }
+
+            .timeBtn_active {
+                color: #68c76f;
+            }
+        }
+
+        .scrollHere_info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s ease-in-out;
+
+            &:hover {
+                .icon_downArrow,
+                .arrow-reverse180 {
+                    opacity: 0.8;
+                }
+            }
+
+            .icon_downArrow {
+                transition: 0.2s ease-in-out;
+                position: absolute;
+                padding-top: 20px;
+                width: 16px;
+                height: auto;
+                opacity: 0.5;
+            }
+
+            .arrow-reverse180 {
+                transform: rotate(180deg);
+            }
+        }
+
+        .scale_Settings {
+            display: flex;
+            align-items: center;
+
+            .utc_Time,
+            .priceScale_Btns {
+                font-size: 14px;
+            }
+
+            .utc_Time {
+                padding-right: 10px;
+            }
+
+            .priceScale_Btns {
+                .scaleBtn {
+                    text-decoration: none;
+                    font-size: 14px;
+                    color: #505558;
+                    padding: 0 10px;
+                    border-left: solid 1px #e3e3e4;
+
+                    &:last-child {
+                        padding-right: 18px;
+                    }
+                }
+
+                .scaleBtn_active {
+                    color: #68c76f;
+                }
+            }
+        }
+    }
+}
+
+.btn_scrollToTop {
+    position: fixed;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.5;
+    background-color: #ffffff;
+    box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.3);
+    right: 1em;
+    bottom: 1em;
+    height: 32px;
+    width: 32px;
+    z-index: 3;
+    border-radius: 50%;
+    transition: 0.2s ease-in-out;
+
+    &:hover {
+        opacity: 1;
+
+        img {
+            margin-bottom: 5px;
+        }
+    }
+
+    &:active {
+        opacity: 0.85;
+    }
+
+    img {
+        transition: 0.2s ease-in-out;
+        transform: rotate(-90deg);
+        width: 16px;
+        height: auto;
+    }
+}

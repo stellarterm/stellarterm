@@ -1,0 +1,105 @@
+.DownloadBack {
+    background-image: linear-gradient(to bottom, #ffffff, #c3e6ff 21%, #cbd5fe);
+    color: #324351;
+    line-height: normal;
+
+    .Desktop_centered {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        .desktop_title {
+            font-size: 42px;
+            font-weight: 300;
+            margin-top: 75px;
+        }
+
+        .desktop_subtitle {
+            font-size: 20px;
+            font-weight: 300;
+            margin-top: 0.4em;
+            margin-bottom: 1.6em;
+        }
+
+        .desktop_screens {
+            margin-top: 43px;
+            min-width: 1052px;
+            height: auto;
+            width: 75%;
+        }
+
+        .os_icons {
+            display: flex;
+
+            .os_icon {
+                margin: 0 15px 30px 15px;
+                height: 28px;
+            }
+        }
+
+        .download_link {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1em 4em;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 2px;
+            border: solid 1px #5eb464;
+            background-color: #69c76f;
+
+            &:hover {
+                border: 1px solid #498c4e;
+                background: #53a059;
+            }
+
+            &:active {
+                border: 1px solid #3e7843;
+                background: #498c4e;
+                box-shadow: none;
+            }
+        }
+    }
+
+    .Description_icon_block {
+        display: flex;
+        justify-content: flex-end;
+        align-self: stretch;
+        width: 10%;
+
+        img {
+            height: 41px;
+            width: auto;
+            margin-right: 20px;
+        }
+    }
+
+    .Desktop_description {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        max-width: 1052px;
+        margin-bottom: 100px;
+
+        .description-block {
+            display: flex;
+            align-self: stretch;
+            flex-direction: column;
+            width: 395px;
+
+            .description-title {
+                font-size: 20px;
+                font-weight: bold;
+                margin: 8px 0;
+            }
+
+            .description-text {
+                font-size: 14px;
+                font-weight: 300;
+            }
+        }
+    }
+}
