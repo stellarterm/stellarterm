@@ -60,6 +60,18 @@
                     background: $s-color-primary4;
                     color: #fff;
                 }
+
+                .buy_crypto {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    img {
+                        margin-left: 0.5em;
+                        height: 15px;
+                        width: 52px;
+                    }
+                }
             }
 
             .Header_version {
