@@ -123,6 +123,7 @@ export default class AssetCardHelper extends React.Component {
         return ({
             asset,
             logo,
+            directoryLogo: !isUnknown && anchor.logo,
             logoPadding,
             domain: name,
             color,

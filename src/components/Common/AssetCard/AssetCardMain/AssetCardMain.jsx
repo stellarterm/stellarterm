@@ -9,7 +9,7 @@ import AssetCardHelper from '../AssetCardHelper';
 
 export default class AssetCardMain extends AssetCardHelper {
     render() {
-        const { asset, logo, logoPadding, domain, color } = this.getRenderedAssetData();
+        const { asset, logo, logoPadding, domain, color, directoryLogo } = this.getRenderedAssetData();
 
         const issuerAccountId =
             asset.issuer === null
@@ -52,7 +52,11 @@ export default class AssetCardMain extends AssetCardHelper {
                     this.img = img;
                 }}
                 onError={() => {
-                    this.img.replaceWith(div);
+                    if (directoryLogo) {
+                        this.img.src = directoryLogo;
+                    } else {
+                        this.img.replaceWith(div);
+                    }
                 }}
                 className={`AssetCardMain__logo ${logoClassName}`}
                 src={logo}

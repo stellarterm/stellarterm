@@ -8,7 +8,7 @@ import Ellipsis from '../../Ellipsis/Ellipsis';
 
 
 export default class AssetCardSeparateLogo extends AssetCardHelper {
-    getLogoBlock(logo, color, asset) {
+    getLogoBlock(logo, color, asset, directoryLogo) {
         const style = {
             border: `1px solid ${color}`,
             background: `${color}0D`,
@@ -47,17 +47,21 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
                         this.img = img;
                     }}
                     onError={() => {
-                        this.img.replaceWith(div);
+                        if (directoryLogo) {
+                            this.img.src = directoryLogo;
+                        } else {
+                            this.img.replaceWith(div);
+                        }
                     }} />
             </div>
         );
     }
 
     render() {
-        const { asset, logo, domain, color } = this.getRenderedAssetData();
+        const { asset, logo, domain, color, directoryLogo } = this.getRenderedAssetData();
         const { code, issuer } = asset;
 
-        const logoBlock = this.getLogoBlock(logo, color, asset);
+        const logoBlock = this.getLogoBlock(logo, color, asset, directoryLogo);
 
         const viewIssuer = this.props.longIssuer ?
             issuer :
