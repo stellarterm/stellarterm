@@ -67,12 +67,20 @@ export default class OfferTables extends React.Component {
 
     render() {
         const orderbook = this.props.d.orderbook.data;
+        const { asks, bids } = orderbook;
+        const isOrderbookEmpty = asks.length === 0 && bids.length === 0;
 
         if (!orderbook.ready) {
             return <div>Loading</div>;
         }
 
-        return (
+        return isOrderbookEmpty ? (
+            <div className="OfferTables">
+                <div className="island__sub__division">
+                    <h3 className="island__sub__division__title">Orderbook is empty</h3>
+                </div>
+            </div>
+        ) : (
             <div className="OfferTables">
                 {this.getOffersTable('buy', orderbook)}
                 {this.getOffersTable('sell', orderbook)}

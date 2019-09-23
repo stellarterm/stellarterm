@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
@@ -41,8 +42,8 @@ export default class OfferTable extends React.Component {
             headerItems.reverse();
         }
 
-        return headerItems.map(item => (
-            <div className="OfferTable__header__item" key={item}>
+        return headerItems.map((item, index) => (
+            <div className="OfferTable__header__item" key={`headerItem-${index}`}>
                 {item}
             </div>
         ));
