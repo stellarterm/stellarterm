@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AssetCard2 from '../../../AssetCard2/AssetCard2';
+import AssetCardMain from '../../../AssetCard/AssetCardMain/AssetCardMain';
 import Driver from '../../../../../lib/Driver';
 
 export default class AssetCardList extends React.Component {
@@ -32,7 +32,7 @@ export default class AssetCardList extends React.Component {
                         this.activeRef = node;
                     } : null}
                     onClick={() => this.handleChoose(asset)}>
-                        <AssetCard2
+                        <AssetCardMain
                             d={d}
                             code={asset.code}
                             issuer={asset.issuer}

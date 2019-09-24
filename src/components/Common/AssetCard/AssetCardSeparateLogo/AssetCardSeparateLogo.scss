@@ -1,0 +1,35 @@
+.AssetCardSeparateLogo{
+    display: flex;
+    flex-direction: row;
+
+    .AssetCardSeparateLogo_logo{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 50px;
+        width: 50px;
+        margin-right: 13px;
+
+        img{
+            height: 40px;
+            width: 40px;
+        }
+
+    }
+
+    .AssetCardSeparateLogo_details{
+        display: flex;
+        flex-direction: column;
+        font-weight: 300;
+
+        .AssetCardSeparateLogo_details-row{
+            & > span:first-child{
+                font-weight: 600;
+                margin-right: 3px;
+            }
+        }
+        & > span{
+            opacity: 0.5;
+        }
+    }
+}

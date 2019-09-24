@@ -28,8 +28,7 @@ export default class ManageOffers extends React.Component {
             .sort((a, b) => (side === 'buy' ? Number(b.price) - Number(a.price) : Number(a.price) - Number(b.price)));
     }
 
-    getManageOffersRows(side) {
-        const sortedRectifiedOffers = this.getSortedRectifiedOffers(side);
+    getManageOffersRows(side, sortedRectifiedOffers) {
         if (sortedRectifiedOffers.length === 0) {
             return (
                 <tr>
@@ -41,14 +40,22 @@ export default class ManageOffers extends React.Component {
         }
 
         return sortedRectifiedOffers.map(offer => (
-            <ManageOfferRow invert={side === 'buy'} d={this.props.d} rectifiedOffer={offer} key={offer.id} />
+            <ManageOfferRow side={side} d={this.props.d} rectifiedOffer={offer} key={offer.id} />
         ));
+    }
+
+    cancelAllOffers(e, side, offers) {
+        e.preventDefault();
+        const offersData = { side, offers };
+        this.props.d.modal.handlers.activate('CancelOffersModal', offersData);
     }
 
     renderManageOffersTable(side) {
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
+        const sortedRectifiedOffers = this.getSortedRectifiedOffers(side);
+        const hasOffers = !!sortedRectifiedOffers.length;
+
         const headerTitles = [
-            { title: '', className: '' },
             { title: counterSelling.getCode(), className: 'ManageOffers__table__header__item' },
             { title: baseBuying.getCode(), className: 'ManageOffers__table__header__item' },
             { title: 'Price', className: 'ManageOffers__table__header__item' },
@@ -57,20 +64,30 @@ export default class ManageOffers extends React.Component {
         if (side === 'sell') {
             headerTitles.reverse();
         }
+        headerTitles.push({ title: 'Actions', className: 'ManageOffers__table__header__item' });
 
         return (
-            <div className=" island__sub__division">
-                <h3 className="island__sub__division__title">Your {side} offers</h3>
+            <div className="ManageOffers__content island__sub__division">
+                <div className="ManageOffers__header">
+                    <h3 className="ManageOffers__title">Your {side} offers</h3>
+                    {sortedRectifiedOffers.length > 1 &&
+                        <button onClick={e => this.cancelAllOffers(e, side, sortedRectifiedOffers)}>
+                            <span>+</span>
+                            Cancel {side} offers
+                        </button>}
+                </div>
                 <table className="ManageOffers__table">
                     <tbody>
-                        <tr className="ManageOffers__table__header">
-                            {headerTitles.map(({ title, className }) => (
-                                <td className={className} key={title}>
-                                    {title}
-                                </td>
-                            ))}
-                        </tr>
-                        {this.getManageOffersRows(side)}
+                        {hasOffers &&
+                            <tr className="ManageOffers__table__header">
+                                {headerTitles.map(({ title, className }) => (
+                                    <td className={className} key={title}>
+                                        {title}
+                                    </td>
+                                ))}
+                            </tr>
+                        }
+                        {this.getManageOffersRows(side, sortedRectifiedOffers)}
                     </tbody>
                 </table>
             </div>
@@ -81,19 +98,20 @@ export default class ManageOffers extends React.Component {
         if (this.props.d.session.state !== 'in') {
             return (
                 <div className="island__paddedContent">
-                    <Link to="/account/">Log in</Link> to see your open offers
+                    <div className="OfferMakerOverview_login">
+                        <span className="offer_message">
+                            <Link to="/account/">Log in</Link> or <Link to="/signup/">Sign up </Link>
+                            to see your open offers
+                        </span>
+                    </div>
                 </div>
             );
         }
 
         return (
-            <div className="island--pb">
-                <div className="ManageOffers">
-                    <div className=" island__sub">
-                        {this.renderManageOffersTable('buy')}
-                        {this.renderManageOffersTable('sell')}
-                    </div>
-                </div>
+            <div className="ManageOffers">
+                {this.renderManageOffersTable('buy')}
+                {this.renderManageOffersTable('sell')}
             </div>
         );
     }

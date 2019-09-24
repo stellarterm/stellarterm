@@ -356,6 +356,7 @@ const MagicSpoon = {
     // opts.price -- Exchange ratio selling/buying
     // opts.amount -- Here, it's relative to the base (JS-sdk does: Total amount selling)
     // opts.type -- String of either 'buy' or 'sell' (relative to base currency)
+    // opts.offerId - for edit existing offer
     buildTxCreateBuyOffer(Server, spoonAccount, opts) {
         const bigOptsPrice = new BigNumber(opts.price).toPrecision(15);
         const bigOptsAmount = new BigNumber(opts.amount).toPrecision(15);
@@ -366,17 +367,18 @@ const MagicSpoon = {
         const sdkSelling = opts.counterSelling; // ex: USD
         const sdkPrice = new BigNumber(bigOptsPrice);
         const sdkAmount = new BigNumber(bigOptsAmount);
+        const offerId = opts.offerId || 0; // 0 for new offer
 
         const operationOpts = {
             buying: sdkBuying,
             selling: sdkSelling,
             buyAmount: String(sdkAmount),
             price: String(sdkPrice),
-            offerId: 0, // 0 for new offer
+            offerId,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-            .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
-            .setTimeout(30);
+                .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
+                .setTimeout(0);
     },
 
     buildTxCreateSellOffer(Server, spoonAccount, opts) {
@@ -389,13 +391,14 @@ const MagicSpoon = {
         const sdkSelling = opts.baseBuying; // ex: lumens
         const sdkPrice = new BigNumber(bigOptsPrice);
         const sdkAmount = new BigNumber(bigOptsAmount);
+        const offerId = opts.offerId || 0; // 0 for new offer
 
         const operationOpts = {
             buying: sdkBuying,
             selling: sdkSelling,
             amount: String(sdkAmount),
             price: String(sdkPrice),
-            offerId: 0, // 0 for new offer
+            offerId,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
             .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
@@ -416,7 +419,7 @@ const MagicSpoon = {
                         amount: opts.amount,
                     }),
                 )
-                .setTimeout(30);
+                .setTimeout(0);
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error(
@@ -430,7 +433,7 @@ const MagicSpoon = {
                         startingBalance: opts.amount,
                     }),
                 )
-                .setTimeout(30);
+                .setTimeout(0);
         }
 
         if (opts.memo) {
@@ -464,28 +467,29 @@ const MagicSpoon = {
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
             .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
-            .setTimeout(30);
+            .setTimeout(0);
         // DONT call .build()
     },
-    buildTxRemoveOffer(Server, spoonAccount, offer) {
+    buildTxRemoveOffer(Server, spoonAccount, opts) {
+        const offers = Array.isArray(opts) ? opts : [opts];
         function parseAsset(asset) {
             return asset.asset_type === 'native'
                 ? StellarSdk.Asset.native()
                 : new StellarSdk.Asset(asset.asset_code, asset.asset_issuer);
         }
 
-        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-            .addOperation(
-                StellarSdk.Operation.manageSellOffer({
-                    buying: parseAsset(offer.buying),
-                    selling: parseAsset(offer.selling),
-                    amount: '0',
-                    price: '1',
-                    offerId: offer.id,
-                }),
-            )
-            .setTimeout(30);
-        // DONT call .build()
+        const transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
+        offers.forEach((offer) => {
+            transaction.addOperation(StellarSdk.Operation.manageSellOffer({
+                buying: parseAsset(offer.buying),
+                selling: parseAsset(offer.selling),
+                amount: '0',
+                price: '1',
+                offerId: offer.id,
+            }));
+        });
+        return transaction.setTimeout(0);
+      // DONT call .build()
     },
 
     overwrite(buffer) {

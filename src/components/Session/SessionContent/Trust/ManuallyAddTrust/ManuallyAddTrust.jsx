@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import Driver from '../../../../../lib/Driver';
-import TrustButton from '../../../../Common/AssetRow/TrustButton/TrustButton';
-import AssetCard from './AssetCard/AssetCard';
+import AssetRow from '../../../../Common/AssetRow/AssetRow';
 
 export default class ManuallyAddTrust extends React.Component {
     constructor(props) {
@@ -68,24 +67,8 @@ export default class ManuallyAddTrust extends React.Component {
         this.loadUnknownData(asset);
         return (
             <React.Fragment>
-                <div className="island__separator" />
-                <div className="AddTrust__confirmation">
-                    <div className="confirm_AssetCard">
-                        <AssetCard
-                            asset={asset}
-                            fixed
-                            currency={this.state.unknownAssetData.currency}
-                            host={this.state.unknownAssetData.host} />
-                    </div>
-                    <TrustButton
-                        isManualTrust
-                        d={this.props.d}
-                        asset={asset}
-                        message={`${asset.getCode()} accepted`}
-                        color={this.state.unknownAssetData.color}
-                        currency={this.state.unknownAssetData.currency}
-                        host={this.state.unknownAssetData.host}
-                        trustMessage={`Accept asset ${asset.getCode()}`} />
+                <div className="AssetRowContainer">
+                    <AssetRow d={this.props.d} asset={asset} />
                 </div>
             </React.Fragment>
         );
