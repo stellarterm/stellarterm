@@ -47,7 +47,7 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
                         this.img = img;
                     }}
                     onError={() => {
-                        if (directoryLogo) {
+                    if (directoryLogo) {
                             this.img.src = directoryLogo;
                         } else {
                             this.img.replaceWith(div);
@@ -60,7 +60,6 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
     render() {
         const { asset, logo, domain, color, directoryLogo } = this.getRenderedAssetData();
         const { code, issuer } = asset;
-
         const logoBlock = this.getLogoBlock(logo, color, asset, directoryLogo);
 
         const viewIssuer = this.props.longIssuer ?

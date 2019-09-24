@@ -9,6 +9,7 @@ import Driver from '../../../../lib/Driver';
 
 export default class AssetCardInRow extends AssetCardHelper {
     render() {
+
         const { asset, logo, domain, color, directoryLogo } = this.getRenderedAssetData();
         const borderStyle = {};
         const backgroundStyle = {};

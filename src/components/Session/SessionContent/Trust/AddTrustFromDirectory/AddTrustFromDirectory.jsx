@@ -42,7 +42,7 @@ export default function AddTrustFromDirectory(props) {
                     Note: StellarTerm does not endorse any of these anchors.
                 </p>
             </div>
-            <div className="AddTrustFromDirectory">{assetRows}</div>
+            <div className="AssetRowContainer">{assetRows}</div>
         </div>
     );
 }

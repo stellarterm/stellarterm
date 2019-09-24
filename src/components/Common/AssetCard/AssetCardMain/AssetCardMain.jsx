@@ -10,7 +10,6 @@ import AssetCardHelper from '../AssetCardHelper';
 export default class AssetCardMain extends AssetCardHelper {
     render() {
         const { asset, logo, logoPadding, domain, color, directoryLogo } = this.getRenderedAssetData();
-
         const issuerAccountId =
             asset.issuer === null
                 ? 'native lumens'
@@ -52,7 +51,7 @@ export default class AssetCardMain extends AssetCardHelper {
                     this.img = img;
                 }}
                 onError={() => {
-                    if (directoryLogo) {
+                if (directoryLogo) {
                         this.img.src = directoryLogo;
                     } else {
                         this.img.replaceWith(div);

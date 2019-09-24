@@ -1,0 +1,43 @@
+.CancelOffersModal{
+    background-color: #fff;
+    width: 612px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    .CancelOffersModal_content{
+        padding: 21px 13px 15px 32px;
+        color: #505558;
+
+        .CancelOffersModal_title{
+            font-size: 18px;
+            font-weight: normal;
+            margin-bottom: 10px;
+        }
+
+        .CancelOffersModal_text{
+            font-size: 16px;
+            font-weight: 300;
+            margin-right: 34px;
+            margin-bottom: 21px;
+        }
+
+        .OfferMakerResultMessage_message{
+            margin-right: 34px;
+            width: auto;
+        }
+    }
+
+    .s-button{
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        &:disabled{
+            border: 1px solid #5eb464;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+            background: $s-color-primary4;
+        }
+    }
+
+}

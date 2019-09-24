@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import directory from 'stellarterm-directory';
-import Ellipsis from '../../Ellipsis/Ellipsis';
 import Driver from '../../../../lib/Driver';
 import ErrorHandler from '../../../../lib/ErrorHandler';
+import images from '../../../../images';
 
 export default class TrustButton extends React.Component {
     static goToLink(e) {
@@ -13,11 +13,24 @@ export default class TrustButton extends React.Component {
         // e.preventDefault();
     }
 
+    static renderPendingButton() {
+        return (
+            <div className="TrustButton_accept">
+                <img
+                    src={images['icon-circle-preloader-gif']}
+                    width="20"
+                    height="20"
+                    alt="load" />
+            </div>
+        );
+    }
+
     constructor(props) {
         super(props);
         this.state = {
             status: 'ready', // ready, error, or pending
             errorType: '', // 'unknown' | 'lowReserve'
+            errorMessage: '',
         };
     }
 
@@ -51,10 +64,10 @@ export default class TrustButton extends React.Component {
                             data.extras.result_codes.operations[0] === 'op_low_reserve') {
                             errorType = 'lowReserve';
                         }
-                        console.error('Error: ', ErrorHandler(error));
                         this.setState({
                             status: 'error',
                             errorType,
+                            errorMessage: ErrorHandler(error),
                         });
                     });
             });
@@ -107,43 +120,37 @@ export default class TrustButton extends React.Component {
         );
     }
 
-    renderPendingButton() {
-        return (
-            <button className="s-button" disabled onClick={event => this.handleSubmitTrust(event)}>
-                Accepting asset {this.props.asset.getCode()}
-                <Ellipsis />
-            </button>
-        );
-    }
-
     renderAcceptButton() {
         return (
-            <button className="s-button" onClick={event => this.handleSubmitTrust(event)}>
-                {this.props.trustMessage}
-            </button>
+            <div className="TrustButton_accept" onClick={event => this.handleSubmitTrust(event)}>
+                <span className="TrustButton_accept-icon">+</span>
+                <span>ACCEPT</span>
+            </div>
         );
     }
 
     renderErrorButton() {
+        let errorPopup = <span>{this.state.errorMessage}</span>;
         if (this.state.errorType === 'lowReserve') {
-            return (
-                <button className="s-button" onClick={event => this.handleSubmitTrust(event)}>
-                    Error: Not enough lumens. See the{' '}
-                    <Link
-                        to="/account/"
-                        onClick={e => this.constructor.goToLink(e)}>minimum balance section</Link> for more info
-                </button>
-            );
+            errorPopup =
+                (<span>
+                    Not enough lumens. See the{' '}
+                    <Link to="/account/" onClick={e => this.constructor.goToLink(e)}>
+                        minimum balance section
+                    </Link>
+                </span>);
         }
         return (
-            <button className="s-button" onClick={event => this.handleSubmitTrust(event)}>
-                Error accepting asset {this.props.asset.getCode()}
-            </button>
+            <div className="TrustButton_accept error" onClick={event => this.handleSubmitTrust(event)}>
+                <div className="TrustButton_error-popup">{errorPopup}</div>
+                <span className="TrustButton_accept-icon">+</span>
+                <span>FAILED</span>
+            </div>
         );
     }
 
     renderUrlButton() {
-        const { message, isManualTrust, asset } = this.props;
+        const { message } = this.props;
 
         if (message.startsWith('https://')) {
             return (
@@ -153,11 +160,7 @@ export default class TrustButton extends React.Component {
             );
         }
 
-        return isManualTrust ? (
-            <button className="s-button" disabled>
-                {`Already accepted ${asset.getCode()}`}
-            </button>
-        ) : (
+        return (
             <span className="AssetRow__exists">{message}</span>
         );
     }
@@ -167,7 +170,7 @@ export default class TrustButton extends React.Component {
         const assetAccepted = this.checkAssetForAccept();
 
         if (this.state.status === 'pending') {
-            button = this.renderPendingButton();
+            button = this.constructor.renderPendingButton();
         } else if (this.state.status === 'error') {
             button = this.renderErrorButton();
         } else if (assetAccepted) {
@@ -176,7 +179,7 @@ export default class TrustButton extends React.Component {
             button = this.renderAcceptButton();
         }
 
-        return this.props.isManualTrust ? button : <div className="row__shareOption">{button}</div>;
+        return button;
     }
 }
 
@@ -184,8 +187,6 @@ TrustButton.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     asset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
     message: PropTypes.string.isRequired,
-    trustMessage: PropTypes.string.isRequired,
-    isManualTrust: PropTypes.bool,
     host: PropTypes.string,
     color: PropTypes.string,
     currency: PropTypes.shape({
