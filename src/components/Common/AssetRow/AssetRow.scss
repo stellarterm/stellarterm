@@ -1,7 +1,10 @@
+@import "TrustButton/TrustButton";
+
 .AssetRow {
-    padding: 8px;
+    padding: 15px 0;
     display: flex;
     align-items: center;
+    justify-content: space-between;
 
     .tradeLink {
         border-bottom: 1px dotted $s-color-neutral5;
@@ -15,6 +18,23 @@
 
     .s-button {
         min-width: 180px;
+    }
+}
+
+.AssetRowContainer{
+    display: flex;
+    flex-direction: column;
+    border: solid 1px #bdbfc032;
+    background-color: #f4f4f532;
+    margin: 0 20px 22px;
+    padding: 0 18px;
+
+    .AssetRow{
+        border-bottom: solid 1px #bdbfc032;
+
+        &:last-child{
+            border-bottom: none;
+        }
     }
 }
 

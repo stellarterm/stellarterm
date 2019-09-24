@@ -1,26 +1,133 @@
-.ManageOffers__table {
+.ManageOffers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     width: 100%;
-    text-align: right;
-    font-size: 16px;
-}
 
-.ManageOffers__table__header {
-    background: $s-color-neutral8;
-    font-weight: bold;
-    text-align: center;
-}
-.ManageOffers__table__header__item {
-    padding: 4px 8px 4px 2px;
-}
-.ManageOffers__table__row:hover {
-    background: #fdfdc8;
-}
-.ManageOffers__table__row__item {
-    padding: 4px 8px 4px 2px;
-    text-align: right;
+    .ManageOffers__content {
+        margin: 0;
+        padding: 24px 30px 25px 18px;
+
+        &:first-child {
+            border-right: 1px solid #dfe0e180;
+        }
+
+        .ManageOffers__header {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+
+            .ManageOffers__title {
+                text-align: left;
+                font-size: 18px;
+                margin-bottom: 2px;
+                font-weight: 400;
+            }
+
+            button{
+                font-size: 12px;
+                padding: 0 13px;
+                border: none;
+                border-radius: 2px;
+                background-color: #f4f4f5;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                opacity: 0.7;
+
+                &:hover{
+                    opacity: 1;
+                }
+
+                & > span{
+                    display: inline-block;
+                    font-size: 20px;
+                    font-weight: bold;
+                    transform: rotate(45deg);
+                    margin-right: 8px;
+                }
+            }
+        }
+
+        .ManageOffers__table {
+            width: 100%;
+            text-align: right;
+            font-size: 16px;
+        }
+
+        .ManageOffers__table__header {
+            font-weight: bold;
+        }
+
+        .ManageOffers__table__header__item {
+            padding: 30px 8px 4px 2px;
+            text-align: left;
+
+            &:last-child{
+                text-align: right;
+            }
+        }
+
+        .ManageOffers__table__row {
+            border-bottom: 1px solid #f3f6f6;
+
+            &:last-child{
+                border-bottom: none;
+            }
+        }
+
+        .ManageOffers__table__row__item {
+            padding: 14px 8px 14px 2px;
+            text-align: left;
+            color: #505558;
+
+            &:last-child{
+                text-align: right;
+            }
+
+            .ManageOffers__table__actions{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: flex-end;
+
+                button{
+                    margin-left: 5px;
+                    width: 24px;
+                    height: 24px;
+                    background-color: #f4f4f5;
+                    border: none;
+                    border-radius: 2px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    opacity: 0.7;
+
+                    &:hover{
+                        opacity: 1;
+                    }
+
+                    img{
+                        width: 14px;
+                        height: 14px;
+                    }
+
+                    span{
+                        display: inline-block;
+                        transform: rotate(45deg);
+                        font-size: 20px;
+                        font-weight: bold;
+                        line-height: 22px;
+                    }
+                }
+            }
+
+        }
+    }
 }
 
 .ManageOffers__table__row__none {
-    padding: 4px 8px;
-    text-align: center;
+    padding: 4px 0;
+    text-align: left;
 }

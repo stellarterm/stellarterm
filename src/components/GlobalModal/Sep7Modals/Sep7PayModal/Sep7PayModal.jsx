@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AssetCard2 from './../../../Common/AssetCard2/AssetCard2';
 import Driver from '../../../../lib/Driver';
 import MagicSpoon from '../../../../lib/MagicSpoon';
 import ErrorHandler from './../../../../lib/ErrorHandler';
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
+import AssetCardInRow from '../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 
 const images = require('./../../../../images');
 
@@ -151,7 +151,7 @@ export default class Sep7PayModal extends React.Component {
                         </div>
                         <div className="Sep7PayModal_details_item">
                             <span>Asset</span>
-                            <AssetCard2 code={asset.code} issuer={asset.issuer} d={d} inRow />
+                            <AssetCardInRow code={asset.code} issuer={asset.issuer} d={d} />
                         </div>
                         <div className="Sep7PayModal_details_item">
                             <span>Available</span>

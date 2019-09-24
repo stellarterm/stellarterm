@@ -1,9 +1,8 @@
-.AssetViewBlock{
+.AssetCardSeparateLogo{
     display: flex;
     flex-direction: row;
-    margin-bottom: 20px;
 
-    .AssetViewBlock_logo{
+    .AssetCardSeparateLogo_logo{
         display: flex;
         justify-content: center;
         align-items: center;
@@ -18,13 +17,13 @@
 
     }
 
-    .AssetViewBlock_details{
+    .AssetCardSeparateLogo_details{
         display: flex;
         flex-direction: column;
         font-weight: 300;
 
-        .AssetViewBlock_details-row{
-            & span:first-child{
+        .AssetCardSeparateLogo_details-row{
+            & > span:first-child{
                 font-weight: 600;
                 margin-right: 3px;
             }

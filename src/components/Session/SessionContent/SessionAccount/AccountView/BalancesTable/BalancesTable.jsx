@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Driver from '../../../../../../lib/Driver';
 import directory from 'stellarterm-directory';
 import Printify from '../../../../../../lib/Printify';
-import AssetCard2 from '../../../../../Common/AssetCard2/AssetCard2';
+import AssetCardMain from '../../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
 
 export default function BalancesTable(props) {
     const account = props.d.session.account;
@@ -76,7 +76,7 @@ export default function BalancesTable(props) {
         return (
             <tr className="BalancesTable__row" key={code + issuer}>
                 <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
-                    <AssetCard2 code={code} issuer={issuer} d={props.d} />
+                    <AssetCardMain code={code} issuer={issuer} d={props.d} />
                     {warning}
                 </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
