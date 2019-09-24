@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
@@ -7,6 +8,15 @@ import Printify from '../../../../lib/Printify';
 
 // Dumb component that mainly renders the UI
 export default class OfferTable extends React.Component {
+    static getHeaderItem(text, assetName) {
+        return (
+            <React.Fragment>
+                <span className="header_text">{text}</span>
+                <span className="pair_small"> ({assetName})</span>
+            </React.Fragment>
+        );
+    }
+
     getRowStyle(isBuy, offer) {
         const depthPercentage = Math.min(100, Number((offer.depth / this.props.maxDepth) * 100).toFixed(1));
 
@@ -20,19 +30,20 @@ export default class OfferTable extends React.Component {
     }
 
     getHeader(isBuy) {
+        const { baseCurrency, counterCurrency } = this.props;
         const headerItems = [
-            `Sum ${this.props.counterCurrency}`,
-            this.props.counterCurrency,
-            this.props.baseCurrency,
-            'Price',
+            this.constructor.getHeaderItem('Depth', counterCurrency),
+            this.constructor.getHeaderItem('Sum', counterCurrency),
+            this.constructor.getHeaderItem('Amount', baseCurrency),
+            this.constructor.getHeaderItem('Price', baseCurrency),
         ];
 
         if (!isBuy) {
             headerItems.reverse();
         }
 
-        return headerItems.map(item => (
-            <div className="OfferTable__header__item" key={item}>
+        return headerItems.map((item, index) => (
+            <div className="OfferTable__header__item" key={`headerItem-${index}`}>
                 {item}
             </div>
         ));
@@ -45,11 +56,7 @@ export default class OfferTable extends React.Component {
             ? Math.max(0, Format.niceNumDecimals(this.props.offers[this.props.offers.length - 1].depth))
             : 7;
 
-        const priceIndex = isBuy ? this.props.offers.length - 1 : 0;
-        const priceNumDecimals = hasOffers
-            ? Math.max(4, Format.niceNumDecimals(this.props.offers[priceIndex].price))
-            : 7;
-
+        const priceNumDecimals = 7;
         const rowItems = [
             {
                 value: Number(offer.depth).toLocaleString('en-US', {
@@ -78,9 +85,10 @@ export default class OfferTable extends React.Component {
         return this.props.offers.map(offer => (
             <div className="OfferTable__row_background" key={offer.key}>
                 <div
-                    className="OfferTable__row"
-                    style={this.getRowStyle(isBuy, offer)}
-                    onClick={() => this.props.d.orderbook.handlers.pickPrice(offer.price)}>
+                    className="OfferTable_hoverBlock"
+                    onClick={() => this.props.d.orderbook.handlers.pickPrice(offer.price)} />
+
+                <div className="OfferTable__row" style={this.getRowStyle(isBuy, offer)}>
                     {this.getRowItems(isBuy, offer)}
                 </div>
             </div>
@@ -89,9 +97,10 @@ export default class OfferTable extends React.Component {
 
     render() {
         const isBuy = this.props.side === 'buy';
+        const tableClass = `OfferTable ${isBuy ? 'OfferTable_buy' : 'OfferTable_sell'}`;
 
         return (
-            <div className="OfferTable">
+            <div className={tableClass}>
                 <div className="OfferTable__header">{this.getHeader(isBuy)}</div>
                 <div className="OfferTable__table">{this.getRows(isBuy)}</div>
             </div>

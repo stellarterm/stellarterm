@@ -1,1 +1,16 @@
 @import "./OfferTable/OfferTable";
+
+.OfferTables {
+    display: flex;
+
+    .island__sub__division {
+        margin: 0;
+        border-right: solid 1px #dfe0e1;
+
+        .island__sub__division__title {
+            text-align: left;
+            margin: 1.5em 1em;
+            font-weight: normal;
+        }
+    }
+}
