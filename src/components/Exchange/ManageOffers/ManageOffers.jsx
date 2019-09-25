@@ -71,7 +71,9 @@ export default class ManageOffers extends React.Component {
                 <div className="ManageOffers__header">
                     <h3 className="ManageOffers__title">Your {side} offers</h3>
                     {sortedRectifiedOffers.length > 1 &&
-                        <button onClick={e => this.cancelAllOffers(e, side, sortedRectifiedOffers)}>
+                        <button
+                            className="CancelOffers_button"
+                            onClick={e => this.cancelAllOffers(e, side, sortedRectifiedOffers)}>
                             <span>+</span>
                             Cancel {side} offers
                         </button>}

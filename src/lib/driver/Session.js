@@ -25,6 +25,7 @@ export default function Send(driver) {
         this.authType = ''; // '', 'secret', 'ledger', 'pubkey'
         this.jwtToken = null;
         this.userFederation = '';
+        this.promisesForMyltipleLoading = {};
     };
     init();
 
@@ -775,6 +776,14 @@ export default function Send(driver) {
             return account.home_domain;
         },
 
+        noRepeatedLoadUnknownAssetData: (asset) => {
+            const id = asset.code + asset.issuer;
+            if (!this.promisesForMyltipleLoading[id]) {
+                this.promisesForMyltipleLoading[id] = this.handlers.loadUnknownAssetData(asset);
+            }
+            return this.promisesForMyltipleLoading[id];
+        },
+
         loadUnknownAssetData: async (asset) => {
             try {
                 const homeDomain = await this.handlers.getDomainByIssuer(asset.issuer);
@@ -795,11 +804,18 @@ export default function Send(driver) {
                 const image = currency && currency.image;
                 const color = image && await this.handlers.getAverageColor(image, asset.code, homeDomain);
 
+                // Stellarterm used only "image" and "host" fields;
+
+                const minifiedCurrency = {
+                    host: currency.host,
+                    image: currency.image,
+                };
+
                 return {
                     code: asset.code,
                     issuer: asset.issuer,
                     host: homeDomain,
-                    currency,
+                    currency: minifiedCurrency,
                     color,
                     time: new Date(),
                 };

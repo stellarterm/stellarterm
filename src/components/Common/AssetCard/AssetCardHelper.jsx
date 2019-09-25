@@ -134,7 +134,7 @@ export default class AssetCardHelper extends React.Component {
         if (!this.props.d) {
             return;
         }
-        const loadedAssetData = await this.props.d.session.handlers.loadUnknownAssetData(asset);
+        const loadedAssetData = await this.props.d.session.handlers.noRepeatedLoadUnknownAssetData(asset);
         if (this._mounted) {
             this.setState({
                 loadedAssetData,

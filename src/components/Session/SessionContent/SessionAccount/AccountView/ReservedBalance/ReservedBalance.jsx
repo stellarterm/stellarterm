@@ -8,9 +8,9 @@ import ReservedDescription from './ReservedDescription/ReservedDescription';
 export default function ReservedBalance(props) {
     const reserveData = props.d.session.account.explainReserve();
     const reserveTypesMap = new Map([
-        ['Trustlines', '/account/assets/'],
+        ['Trustlines', '/account/addTrust/'],
         ['Signers', '/account/multisig/'],
-        ['Offers', '/account/activity/orders/'],
+        ['Offers', '/account/activity/'],
     ]);
 
     const reservedRows = reserveData.reserveItems.map(({ reserveType, typeCount, reservedXLM }) => {
