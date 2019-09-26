@@ -63,7 +63,7 @@ export default class LoginPageBody extends React.Component {
         const { show } = this.state;
         const loginErrorMessage = this.checkForErrorMessages();
         const inputType = show ? 'text' : 'password';
-        const toggleButtonIcon = show ? 'icon-eye-hide' : 'icon-eye';
+        const toggleButtonIcon = show ? 'icon-eye' : 'icon-eye-hide';
 
         return (
             <div className="LoginPage__body">
