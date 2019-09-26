@@ -4,11 +4,10 @@ import directory from 'stellarterm-directory';
 import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
-
 import TrustButton from './TrustButton/TrustButton';
 import Stellarify from '../../../lib/Stellarify';
 import AssetCardSeparateLogo from '../AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
-import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
+
 
 export default class AssetRow extends React.Component {
     constructor(props) {
