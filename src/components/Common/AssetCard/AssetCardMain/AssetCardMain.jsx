@@ -47,16 +47,7 @@ export default class AssetCardMain extends AssetCardHelper {
         const logoSymbol = logoIsUnknown ?
             (unknownLogo) :
             (<img
-                ref={(img) => {
-                    this.img = img;
-                }}
-                onError={() => {
-                if (directoryLogo) {
-                        this.img.src = directoryLogo;
-                    } else {
-                        this.img.replaceWith(div);
-                    }
-                }}
+                onError={e => this.constructor.onImageLoadError(e, directoryLogo, div)}
                 className={`AssetCardMain__logo ${logoClassName}`}
                 src={logo}
                 alt={asset.code} />

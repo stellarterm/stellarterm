@@ -43,16 +43,7 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
                 <img
                     src={logo}
                     alt="logo"
-                    ref={(img) => {
-                        this.img = img;
-                    }}
-                    onError={() => {
-                    if (directoryLogo) {
-                            this.img.src = directoryLogo;
-                        } else {
-                            this.img.replaceWith(div);
-                        }
-                    }} />
+                    onError={e => this.constructor.onImageLoadError(e, directoryLogo, div)} />
             </div>
         );
     }
