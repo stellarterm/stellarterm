@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
 import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
+import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import TrustButton from './TrustButton/TrustButton';
 import Stellarify from '../../../lib/Stellarify';
 import AssetCardSeparateLogo from '../AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
-import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
+
 
 export default class AssetRow extends React.Component {
     constructor(props) {
@@ -57,6 +58,7 @@ export default class AssetRow extends React.Component {
     render() {
         const { tradeLink } = this.props;
 
+
         const discoveredAsset = !tradeLink ? (
             <AssetCardSeparateLogo
                 d={this.props.d}
@@ -65,6 +67,7 @@ export default class AssetRow extends React.Component {
                 longIssuer
                 color={this.state.color}
                 currency={this.props.currency}
+
                 host={this.props.host} />) : (
             <AssetCardMain
                 d={this.props.d}
