@@ -9,7 +9,6 @@ import Driver from '../../../../lib/Driver';
 
 export default class AssetCardInRow extends AssetCardHelper {
     render() {
-
         const { asset, logo, domain, color, directoryLogo } = this.getRenderedAssetData();
         const borderStyle = {};
         const backgroundStyle = {};
@@ -41,16 +40,7 @@ export default class AssetCardInRow extends AssetCardHelper {
                     <img
                         style={Object.assign({}, backgroundStyle, { border: '1px solid' }, borderStyle)}
                         className="Row_logo"
-                        ref={(img) => {
-                            this.img = img;
-                        }}
-                        onError={() => {
-                            if (directoryLogo) {
-                                this.img.src = directoryLogo;
-                            } else {
-                                this.img.replaceWith(div);
-                            }
-                        }}
+                        onError={e => this.constructor.onImageLoadError(e, directoryLogo, div)}
                         src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
                         alt={asset.code} />)}
                 {domain === 'load' ?
