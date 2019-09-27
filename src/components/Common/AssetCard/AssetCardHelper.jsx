@@ -6,11 +6,14 @@ import Driver from '../../../lib/Driver';
 
 export default class AssetCardHelper extends React.Component {
     static onImageLoadError(e, directoryLogo, unknownLogoTemplate) {
-        if (directoryLogo) {
-            e.target.src = directoryLogo;
-        } else {
-            e.target.replaceWith(unknownLogoTemplate);
-        }
+        const directoryLogoTemplate = document.createElement('img');
+        directoryLogoTemplate.src = directoryLogo;
+        directoryLogoTemplate.alt = e.target.alt;
+        directoryLogoTemplate.classList.add(e.target.classList[0]);
+
+        const template = directoryLogo ? directoryLogoTemplate : unknownLogoTemplate;
+
+        e.target.replaceWith(template);
     }
 
     constructor(props) {
