@@ -5,6 +5,14 @@ import Driver from '../../../lib/Driver';
 
 
 export default class AssetCardHelper extends React.Component {
+    static onImageLoadError(e, directoryLogo, unknownLogoTemplate) {
+        if (directoryLogo) {
+            e.target.src = directoryLogo;
+        } else {
+            e.target.replaceWith(unknownLogoTemplate);
+        }
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -123,6 +131,7 @@ export default class AssetCardHelper extends React.Component {
         return ({
             asset,
             logo,
+            directoryLogo: !isUnknown && anchor.logo,
             logoPadding,
             domain: name,
             color,
