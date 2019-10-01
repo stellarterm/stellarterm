@@ -295,7 +295,7 @@ export default function Send(driver) {
                             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'));
                             this.account.refresh();
                             if (this.authType === 'ledger') {
-                                driver.modal.handlers.ledgerFinish(true);
+                                driver.modal.handlers.ledgerFinish('closeWithTimeout');
                             }
                             return transactionResult;
                         })
