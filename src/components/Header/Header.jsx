@@ -36,7 +36,7 @@ export default class Header extends React.Component {
                 href={`https://lobstr.co/buy-crypto${targetAddressParam}`}
                 target="_blank"
                 rel="nofollow noopener noreferrer">
-                <span>Buy crypto </span>
+                <span>Buy Lumens </span>
                 <img src={images['icon-visa-mc']} alt="credit-card" />
             </a>
         );
