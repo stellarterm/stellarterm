@@ -1,11 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import directory from 'stellarterm-directory';
 import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../../lib/Driver';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import AssetCardList from './AssetCardList/AssetCardList';
-import directory from 'stellarterm-directory';
 import images from '../../../../images';
 
 const ENTER = 13;
@@ -16,6 +16,7 @@ const KEY_F = 70;
 const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
+// eslint-disable-next-line no-useless-escape
 const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 const regexp = new RegExp(pattern);
 
@@ -64,12 +65,9 @@ export default class AssetDropDown extends React.Component {
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._mounted = true;
         document.addEventListener('mousedown', this.handleClickOutside, false);
-    }
-
-    componentDidMount() {
         // eslint-disable-next-line react/no-find-dom-node
         ReactDOM.findDOMNode(this).addEventListener('keyup', e => (e.keyCode === KEY_F ? e.stopPropagation() : null));
     }

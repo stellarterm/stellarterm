@@ -20,6 +20,7 @@ export default class AcceptTerms extends React.Component {
                         className="LoginPage__accept__checkbox"
                         type="checkbox"
                         checked={this.state.termsAccepted}
+                        readOnly
                         onClick={() => this.setState({ termsAccepted: !this.state.termsAccepted })} />
                     <span className="LoginPage__accept__label">
                         I accept the{' '}

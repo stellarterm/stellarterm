@@ -49,7 +49,7 @@ export default class OfferMaker extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._mounted = true;
     }
 

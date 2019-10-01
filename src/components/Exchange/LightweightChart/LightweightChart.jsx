@@ -36,11 +36,9 @@ export default class LightweightChart extends React.Component {
         this.applyChartOptions = this.applyChartOptions.bind(this);
     }
 
-    componentWillMount() {
-        this.getTrades(this.props.timeFrame);
-    }
-
     componentDidMount() {
+        this._mounted = true;
+        this.getTrades(this.props.timeFrame);
         this.chartInit();
         window.addEventListener('resize', this.applyChartOptions);
     }
@@ -72,6 +70,7 @@ export default class LightweightChart extends React.Component {
     }
 
     componentWillUnmount() {
+        this._mounted = false;
         this.CHART.unsubscribeVisibleTimeRangeChange();
         window.removeEventListener('resize', this.applyChartOptions);
     }
@@ -94,16 +93,17 @@ export default class LightweightChart extends React.Component {
             const fullLoaded = res.records.length === 0;
             const convertedTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
             const convertedVolume = converterOHLC.getVolumeData(convertedTrades, data);
-
-            this.setState({
-                isLoadingInit: false,
-                [timeFrame]: {
-                    trades: convertedTrades,
-                    volumes: convertedVolume,
-                    nextTrades: res.next,
-                    fullHistoryLoaded: fullLoaded,
-                },
-            });
+            if (this._mounted) {
+                this.setState({
+                    isLoadingInit: false,
+                    [timeFrame]: {
+                        trades: convertedTrades,
+                        volumes: convertedVolume,
+                        nextTrades: res.next,
+                        fullHistoryLoaded: fullLoaded,
+                    },
+                });
+            }
         });
     }
 
@@ -121,15 +121,17 @@ export default class LightweightChart extends React.Component {
             const concatedTrades = [...convertedTrades, ...this.state[timeFrame].trades];
             const concatedVolumes = [...convertedVolume, ...this.state[timeFrame].volumes];
 
-            this.setState({
-                isLoadingNext: false,
-                [timeFrame]: {
-                    trades: concatedTrades,
-                    volumes: concatedVolumes,
-                    nextTrades: res.next,
-                    fullHistoryLoaded: fullLoaded,
-                },
-            });
+            if (this._mounted) {
+                this.setState({
+                    isLoadingNext: false,
+                    [timeFrame]: {
+                        trades: concatedTrades,
+                        volumes: concatedVolumes,
+                        nextTrades: res.next,
+                        fullHistoryLoaded: fullLoaded,
+                    },
+                });
+            }
         });
     }
 
