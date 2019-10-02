@@ -26,9 +26,9 @@ export default class Header extends React.Component {
     }
 
     getBuyCryptoLobsterLink() {
-        const { account } = this.props.d.session;
-        const accountID = account === null ? '' : account.accountId();
-        const targetAddressParam = accountID !== '' ? `?target_address=${accountID}` : '';
+        const { account, unfundedAccountId } = this.props.d.session;
+        const accountID = account === null ? unfundedAccountId : account.accountId();
+        const targetAddressParam = `?target_address=${accountID}`;
 
         return (
             <a
