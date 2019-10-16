@@ -6,19 +6,12 @@ import images from '../../images';
 import Driver from '../../lib/Driver';
 
 export default class Header extends React.Component {
-    static createHeaderTab(url, text) {
-        const rootAddress = window.location.pathname.split('/')[1];
-        const isCurrentTab = rootAddress === url ? ' is-current' : '';
-
-        return (
-            <Link className={`Nav_link${isCurrentTab}`} to={`/${url}/`}>
-                <span>{text}</span>
-            </Link>
-        );
-    }
-
     constructor(props) {
         super(props);
+
+        this.state = {
+            currentTab: '/',
+        };
 
         this.listenId = this.props.d.session.event.listen(() => {
             this.forceUpdate();
@@ -61,6 +54,20 @@ export default class Header extends React.Component {
         ) : null;
     }
 
+    createHeaderTab(url, text) {
+        const currentTabClass = this.state.currentTab === url ? ' is-current' : '';
+
+        return (
+            <Link to={url} className={`Nav_link${currentTabClass}`} onClick={() => this.clickHeaderItem(url)}>
+                <span>{text}</span>
+            </Link>
+        );
+    }
+
+    clickHeaderItem(tabClicked) {
+        this.setState({ currentTab: tabClicked });
+    }
+
     render() {
         return (
             <div className="Header_main" id="stellarterm_header">
@@ -69,14 +76,14 @@ export default class Header extends React.Component {
                 <div className="so-back Header_background">
                     <div className="so-chunk Header">
                         <nav className="Header_nav">
-                            <Link className="Nav_logo" to={'/'}>
+                            <Link className="Nav_logo" to={'/'} onClick={() => this.clickHeaderItem('/')}>
                                 StellarTerm
                             </Link>
-                            {this.constructor.createHeaderTab('exchange', 'Exchange')}
-                            {this.constructor.createHeaderTab('markets', 'Markets')}
+                            {this.createHeaderTab('/exchange/', 'Exchange')}
+                            {this.createHeaderTab('/markets/', 'Markets')}
                             {this.getBuyCryptoLobsterLink()}
-                            {this.constructor.createHeaderTab('account', 'Account')}
-                            {!isElectron() ? this.constructor.createHeaderTab('download', 'Download') : null}
+                            {this.createHeaderTab('/account/', 'Account')}
+                            {!isElectron() ? this.createHeaderTab('/download/', 'Download') : null}
                         </nav>
 
                         <span className="Header_version">v{window.stBuildInfo.version}</span>
