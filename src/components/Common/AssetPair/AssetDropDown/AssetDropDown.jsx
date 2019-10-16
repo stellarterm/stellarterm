@@ -91,12 +91,11 @@ export default class AssetDropDown extends React.Component {
 
     setActiveCardIndex({ keyCode }) {
         const { activeCardIndex } = this.state;
+        const assetsList = this.getFilteredAssets();
+        const cardListLength = assetsList.length;
 
         if (!ProcessedButtons.has(keyCode) ||
             (keyCode === ENTER && activeCardIndex === null)) { return; }
-
-        const assetsList = this.getFilteredAssets();
-        const cardListLength = assetsList.length;
 
         if (cardListLength === 0) { return; }
 
@@ -185,7 +184,7 @@ export default class AssetDropDown extends React.Component {
     openListByFocus() {
         this.setState({
             isOpenList: true,
-            activeCardIndex: null,
+            activeCardIndex: 0,
         });
     }
 
@@ -211,7 +210,7 @@ export default class AssetDropDown extends React.Component {
         const { value } = e.target;
 
         this.setState({
-            activeCardIndex: null,
+            activeCardIndex: 0,
             inputCode: value,
             currencies: [],
         });
