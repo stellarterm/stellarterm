@@ -4,7 +4,7 @@ import images from '../../images';
 export default () => (
     <div className="DownloadBack">
         <div className="Desktop_centered">
-            <h1 className="desktop_title">Stellarterm For Your Desktop</h1>
+            <h1 className="desktop_title">StellarTerm For Your Desktop</h1>
             <h2 className="desktop_subtitle">
                 Send, receive, and trade assets on the Stellar network easily from any desktop platform
             </h2>
