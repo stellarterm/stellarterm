@@ -184,10 +184,12 @@ export default class AssetDropDown extends React.Component {
     }
 
     openListByFocus() {
-        this.setState({
-            isOpenList: true,
-            activeCardIndex: 0,
-        });
+        if (this.state.activeCardIndex === null) {
+            this.setState({
+                isOpenList: true,
+                activeCardIndex: 0,
+            });
+        } else { this.setState({ isOpenList: true }); }
     }
 
     openList() {
