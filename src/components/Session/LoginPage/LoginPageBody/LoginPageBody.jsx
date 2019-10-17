@@ -78,6 +78,7 @@ export default class LoginPageBody extends React.Component {
                                     type={inputType}
                                     className="s-inputGroup__item S-flexItem-share LoginPage__password"
                                     value={this.state.secretInput}
+                                    maxLength={56}
                                     onChange={e => this.handleInput(e)}
                                     placeholder="Example:
                                         SDWN4ELCTO7KEJSM6OFGALEWYDK1JTCNF23CDCRVTZ3UYDH7FGSY....." />
