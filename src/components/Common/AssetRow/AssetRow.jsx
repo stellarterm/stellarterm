@@ -58,6 +58,7 @@ export default class AssetRow extends React.Component {
     render() {
         const { tradeLink } = this.props;
 
+
         const discoveredAsset = !tradeLink ? (
             <AssetCardSeparateLogo
                 d={this.props.d}
@@ -66,6 +67,7 @@ export default class AssetRow extends React.Component {
                 longIssuer
                 color={this.state.color}
                 currency={this.props.currency}
+
                 host={this.props.host} />) : (
             <AssetCardMain
                 d={this.props.d}
