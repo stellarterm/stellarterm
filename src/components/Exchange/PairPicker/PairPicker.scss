@@ -1,38 +1,109 @@
 .PairPicker_assetPair {
-    padding: 16px 18px;
-    border-bottom: 1px solid $s-color-neutral7;
+    padding: 16px 18px 20px;
 }
 
-.PairPicker_infoBar {
+.PairPicker_marketsTable{
+    width: 100%;
+    padding: 0 20px 20px;
     display: flex;
-    align-items: center;
-    padding: 16px 18px;
-    border-bottom: 1px solid $s-color-neutral7;
+    flex-direction: column;
 
-    .InfoBar_pair {
-        flex: 1;
+
+    .PairPicker_marketsTable-header{
+        display: flex;
+        width: 100%;
+
+        span{
+            flex: 2;
+            font-size: 16px;
+            font-weight: 300;
+            color: #505558;
+        }
     }
 
-    .Infobar_ticker {
-        width: 300px;
-        margin-left: 16px;
-        font-size: $s-scale-3;
+    .PairPicker_marketsTable-content{
+        display: flex;
+        width: 100%;
 
-        .Ticker_title {
-            font-size: $s-scale-5;
-            color: $s-color-neutral4;
-            margin-bottom: 0;
-        }
+        span{
+            flex: 2;
+            font-size: 18px;
+            font-weight: 600;
+            color: #252625;
 
-        .Ticker_data {
-            font-size: $s-scale-2;
-            line-height: 1;
-            margin-bottom: 0;
-            font-weight: bold;
-
-            .Ticker_course:first-child {
-                margin-right: 20px;
+            &.negative > span{
+                color: #ff415b;
             }
+
+            &.positive > span{
+                color: #69c76f;
+            }
+
+            &.up {
+                animation-name: up;
+                -webkit-animation-name: up;
+                -moz-animation-name: up;
+                -o-animation-name: up;
+
+                animation-duration: 1s;
+                -webkit-animation-duration: 1s;
+                -moz-animation-duration: 1s;
+                -o-animation-duration: 1s;
+
+
+                @keyframes up {
+                    from {background-color: #00ff00;}
+                    to {background-color: #fff;}
+                }
+
+                @-webkit-keyframes up {
+                    from {background-color: #00ff00;}
+                    to {background-color: #fff;}
+                }
+
+                @-moz-keyframes up {
+                    from {background-color: #00ff00;}
+                    to {background-color: #fff;}
+                }
+
+                @-o-keyframes up {
+                    from {background-color: #00ff00;}
+                    to {background-color: #fff;}
+                }
+            }
+
+            &.down {
+                animation-name: down;
+                -webkit-animation-name: down;
+                -moz-animation-name: down;
+                -o-animation-name: down;
+
+                animation-duration: 1s;
+                -webkit-animation-duration: 1s;
+                -moz-animation-duration: 1s;
+                -o-animation-duration: 1s;
+
+                @keyframes down {
+                    from {background-color: #ff0000;}
+                    to {background-color: #fff;}
+                }
+
+                @-webkit-keyframes down {
+                    from {background-color: #ff0000;}
+                    to {background-color: #fff;}
+                }
+
+                @-moz-keyframes down {
+                    from {background-color: #ff0000;}
+                    to {background-color: #fff;}
+                }
+
+                @-o-keyframes down {
+                    from {background-color: #ff0000;}
+                    to {background-color: #fff;}
+                }
+            }
+
         }
     }
 }
@@ -44,6 +115,7 @@
     padding: 12px 18px;
     color: $s-color-neutral5;
     border-radius: 0 0 3px 3px;
+    border-top: 1px solid $s-color-neutral7;
 
     &:hover {
         color: $s-color-neutral4;

@@ -337,12 +337,13 @@ const MagicSpoon = {
         });
         // TODO: Orderbook streamclosing
     },
-    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION) {
+    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, LIMIT) {
+        const limit = LIMIT || 100;
         const START_TIME = 1514764800; // 01/01/2018
         const END_TIME = Date.now() + 86400000; // Current time + 1 day
         // TODO: Iteration throught next() with binding to chart scroll
         return Server.tradeAggregation(baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION * 1000, 0)
-            .limit(100)
+            .limit(limit)
             .order('desc')
             .call()
             .then(res => res)
