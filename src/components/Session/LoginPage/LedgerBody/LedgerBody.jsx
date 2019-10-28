@@ -26,7 +26,7 @@ export default class LedgerBody extends React.Component {
         return (window.navigator.platform === 'Win32' || window.navigator.platform === 'Win64');
     }
 
-    componentWillMount() {
+    componentDidMount() {
         const isWindowsOS = this.constructor.isWindowsOS();
         if (!isWindowsOS) {
             this.brakePing = this.props.d.session.pingLedger();

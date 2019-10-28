@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import _ from 'lodash';
-import Format from '../../../../lib/Format';
 import directory from 'stellarterm-directory';
+import _ from 'lodash';
+import { niceNumDecimals } from '../../../../lib/Format';
 import Printify from '../../../../lib/Printify';
 import Ticker from '../../../../lib/api/Ticker';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
@@ -12,11 +12,11 @@ import Driver from '../../../../lib/Driver';
 export default class AssetListRows extends React.Component {
     static getAssetRow(asset, isNativeXlm, ticker) {
         const priceUSD = asset.price_USD
-            ? <span>${Printify.lightenZeros(asset.price_USD.toString(), Format.niceNumDecimals(asset.price_USD))}</span>
+            ? <span>${Printify.lightenZeros(asset.price_USD.toString(), niceNumDecimals(asset.price_USD))}</span>
             : '-';
 
         const priceXLM = asset.price_XLM
-            ? Printify.lightenZeros(asset.price_XLM.toString(), Format.niceNumDecimals(asset.price_XLM))
+            ? Printify.lightenZeros(asset.price_XLM.toString(), niceNumDecimals(asset.price_XLM))
             : '-';
 
         const volume24h = asset.volume24h_USD
@@ -50,7 +50,9 @@ export default class AssetListRows extends React.Component {
         );
     }
 
-    componentWillMount() {
+    constructor(props) {
+        super(props);
+
         const { ticker, d } = this.props;
 
         const assets = ticker.data.assets
@@ -68,21 +70,23 @@ export default class AssetListRows extends React.Component {
                         volume24h: asset.volume24h_USD,
                         change24h: asset.change24h_USD,
                         assetRow: (
-                              <Link
-                                  to={`/exchange/${asset.topTradePairSlug}`}
-                                  key={`asset-${asset.id}-${asset.code}`}
-                                  className="AssetList_asset">
-                                  <div className="asset_assetCard">
-                                      <AssetCardMain code={asset.code} issuer={asset.issuer} d={d} />
-                                  </div>
-                                  {this.constructor.getAssetRow(asset, false, ticker)}
-                              </Link>
-                          ),
+                            <Link
+                                to={`/exchange/${asset.topTradePairSlug}`}
+                                key={`asset-${asset.id}-${asset.code}`}
+                                className="AssetList_asset">
+                                <div className="asset_assetCard">
+                                    <AssetCardMain code={asset.code} issuer={asset.issuer} d={d} />
+                                </div>
+                                {this.constructor.getAssetRow(asset, false, ticker)}
+                            </Link>
+                        ),
                     };
             })
             .filter(asset => asset !== null);
 
-        this.setState({ assets });
+        this.state = {
+            assets,
+        };
     }
 
     sortAssets(allAssets) {

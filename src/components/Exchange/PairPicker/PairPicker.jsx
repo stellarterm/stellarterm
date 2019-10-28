@@ -1,16 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Format from '../../../lib/Format';
+import { niceRound } from '../../../lib/Format';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import AssetPair from '../../Common/AssetPair/AssetPair';
 
 export default class PairPicker extends React.Component {
-    componentWillUnmount() {
-        this.props.d.ticker.event.sub(() => {
+    componentDidMount() {
+        this.unsub = this.props.d.ticker.event.sub(() => {
             this.forceUpdate();
         });
+    }
+    componentWillUnmount() {
+        this.unsub();
     }
 
     getPriceBlock() {
@@ -31,17 +34,17 @@ export default class PairPicker extends React.Component {
         if (isBaseNative) {
             return (
                 <p className="Ticker_data">
-                    {Format.niceRound(latestPrice)} XLM/{counterSelling.getCode()}
+                    {niceRound(latestPrice)} XLM/{counterSelling.getCode()}
                 </p>
             );
         }
 
-        let latestXLM = Format.niceRound(latestPrice);
+        let latestXLM = niceRound(latestPrice);
         if ((1 - data.bids[0].price) / data.asks[0].price > 0.4) {
-            latestXLM = Format.niceRound(data.bids[0].price);
+            latestXLM = niceRound(data.bids[0].price);
         }
 
-        const latestUSD = Format.niceRound(latestXLM * d.ticker.data._meta.externalPrices.USD_XLM);
+        const latestUSD = niceRound(latestXLM * d.ticker.data._meta.externalPrices.USD_XLM);
         return (
             <p className="Ticker_data">
                 <span className="Ticker_course">{latestXLM} XLM</span>
