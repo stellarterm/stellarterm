@@ -19,18 +19,15 @@
 
         .Header {
             display: flex;
-            padding-top: 18px;
-            padding-left: 18px;
-            padding-right: 18px;
-            align-items: baseline;
+            align-items: center;
             justify-content: space-between;
+            padding: 18px 18px 21px;
 
             &:after {
                 display: none;
             }
 
             .Header_nav {
-                height: 54px;
                 display: flex;
                 align-items: baseline;
                 position: relative;
@@ -50,6 +47,7 @@
                     padding: 4px 10px;
                     margin-right: 16px;
                     border-radius: 3px;
+                    white-space: nowrap;
                 }
 
                 .Nav_link.is-current {
@@ -74,8 +72,103 @@
                 }
             }
 
-            .Header_version {
-                opacity: 0.5;
+            .Header_login{
+                display: flex;
+                flex-direction: row;
+                color: #86d38c;
+                align-items: center;
+                font-size: 16px;
+                font-weight: 600;
+
+                .Header_login-button{
+                    cursor: pointer;
+                    display: flex;
+                    flex-direction: row;
+                    text-decoration: none;
+                    margin-right: 20px;
+
+                    img{
+                        height: 24px;
+                        width: 24px;
+                        margin-right: 5px;
+                    }
+                }
+            }
+
+            .Header_account{
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+
+                .Header_account-info{
+                    display: flex;
+                    flex-direction: column;
+                    text-align: right;
+                    margin-right: 10px;
+                    line-height: normal;
+                    position: relative;
+
+                    &.CopyButton{
+                        align-items: unset;
+                    }
+
+                    .federation{
+                        font-weight: normal;
+                        color: #505558;
+                        max-width: 200px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
+                    .public-key{
+                        font-size: 12px;
+                        font-weight: normal;
+                        color: #505558;
+                        opacity: 0.3;
+                    }
+
+                    .CopyButton__popup {
+                        display: none;
+
+                        right: 0;
+                        left: unset;
+                        &::after{
+                            content: '';
+                            bottom: unset;
+                            top: -16px;
+                            left: unset;
+                            right: 10px;
+                            border: 8px solid transparent;
+                            border-bottom: 8px solid #7ed085;
+                        }
+
+                        &.federationPopup{
+                            display: block;
+                            top: 25px;
+                        }
+
+                        &.publicKeyPopup{
+                            display: block;
+                            top: 40px;
+                        }
+                    }
+                }
+
+                .Header_account-icon{
+                    height: 32px;
+                    width: 32px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    border-radius: 50%;
+                    border: solid 2px #e1f4e2;
+
+                    img{
+                        height: 14px;
+                        width: 14px;
+                    }
+                }
             }
         }
     }

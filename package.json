@@ -41,6 +41,7 @@
     "react-input-autosize": "^2.2.1",
     "react-router-dom": "5.1.0",
     "screenfull": "^4.2.1",
+    "stellar-identicon-js": "^1.0.0",
     "stellar-sdk": "^1.0.5",
     "stellarterm-api": "git+https://github.com/stellarterm/stellarterm-api.git",
     "stellarterm-directory": "git+https://github.com/stellarterm/stellarterm-directory.git",
