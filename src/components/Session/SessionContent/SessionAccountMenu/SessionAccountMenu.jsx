@@ -18,7 +18,8 @@ export default class SessionAccountMenu extends React.Component {
     }
 
     render() {
-        const qtyOpenOffers = Object.values(this.props.d.session.account.offers).length;
+        const { account } = this.props.d.session;
+        const qtyOpenOffers = account && Object.values(account.offers).length;
         return (
             <div className="subNavBackClipper">
                 <div className="so-back subNavBack">
