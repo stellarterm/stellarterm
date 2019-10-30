@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
-import LoginPageBody from '../../../../Session/LoginPage/LoginPageBody/LoginPageBody';
-import LedgerBody from '../../../../Session/LoginPage/LedgerBody/LedgerBody';
+import Driver from '../../../../lib/Driver';
+import LoginPageBody from '../../../Session/LoginPage/LoginPageBody/LoginPageBody';
+import LedgerBody from '../../../Session/LoginPage/LedgerBody/LedgerBody';
 
 export default class LoginModalBlock extends React.Component {
     constructor(props) {
@@ -17,15 +17,18 @@ export default class LoginModalBlock extends React.Component {
     }
 
     render() {
-        const { d } = this.props;
+        const { d, title } = this.props;
         const { openTab } = this.state;
         const isSecret = openTab === 'secret';
         const isLedger = openTab === 'ledger';
+        const viewTitle = title &&
+            (<div className="LoginModalBlock_header">
+                <span>{title}</span>
+            </div>);
+
         return (
             <div className="LoginModalBlock">
-                <div className="LoginModalBlock_header">
-                    <span>Please log in to complete transaction</span>
-                </div>
+                {viewTitle}
                 <div className="LoginModalBlock_menu">
                     <div
                         onClick={() => this.handleChoose('secret')}
@@ -48,4 +51,5 @@ export default class LoginModalBlock extends React.Component {
 }
 LoginModalBlock.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    title: PropTypes.string,
 };

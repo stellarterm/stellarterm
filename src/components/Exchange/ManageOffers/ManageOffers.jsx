@@ -95,13 +95,25 @@ export default class ManageOffers extends React.Component {
     }
 
     render() {
-        if (this.props.d.session.state !== 'in') {
+        if (this.props.d.session.state === 'out' || this.props.d.session.state === 'loading') {
             return (
                 <div className="island__paddedContent">
                     <div className="OfferMakerOverview_login">
                         <span className="offer_message">
-                            <Link to="/account/">Log in</Link> or <Link to="/signup/">Sign up </Link>
-                            to see your open offers
+                            <a onClick={() => this.props.d.modal.handlers.activate('LoginModal')}>Log in</a>
+                            {' '}or <Link to="/signup/">Sign up </Link> to see your open offers
+                        </span>
+                    </div>
+                </div>
+            );
+        }
+
+        if (this.props.d.session.state === 'unfunded') {
+            return (
+                <div className="island__paddedContent">
+                    <div className="OfferMakerOverview_login">
+                        <span className="offer_message">
+                            <Link to="/account/">Activate your Stellar account to trade</Link>
                         </span>
                     </div>
                 </div>

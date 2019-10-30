@@ -21,6 +21,7 @@ import Sep7ErrorModal from './Sep7Modals/Sep7ErrorModal/Sep7ErrorModal';
 import Sep7ChangeTrustModal from './Sep7Modals/Sep7ChangeTrustModal/Sep7ChangeTrustModal';
 import EditOfferModal from './EditOfferModal/EditOfferModal';
 import CancelOffersModal from './CancelOffersModal/CancelOffersModal';
+import LoginModal from './LoginModal/LoginModal';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -126,6 +127,9 @@ export default class GlobalModal extends React.Component {
             break;
         case 'CancelOffersModal':
             body = <CancelOffersModal submit={d.modal.handlers} offersData={modal.inputData} d={d} />;
+            break;
+        case 'LoginModal':
+            body = <LoginModal submit={d.modal.handlers} d={d} />;
             break;
         default:
             body = (
