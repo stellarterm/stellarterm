@@ -50,7 +50,7 @@
         font-size: $s-scale-4;
         font-weight: normal;
     }
-    
+
     a{
         color: #69c76f;
         text-decoration: none;
@@ -73,16 +73,16 @@
     &:hover{
         opacity: 1;
     }
-    
+
     &:disabled{
         cursor: not-allowed;
     }
-    
+
     &.Sell{
         background-color: #fe6d74;
         border: solid 1px #fa464f;
     }
-    
+
     &.Buy{
         background-color: #69c76f;
         border: solid 1px #5eb464;
@@ -109,4 +109,24 @@ $speed: .5s !default;
 
 @keyframes nk-spinner {
     100% { transform: rotate(360deg) }
+}
+
+.nk-spinner-green {
+    margin-right: 6px;
+    .nk-spinner {
+        width: 12px;
+        height: 12px;
+        border: 2px solid #7ed085;
+        border-left: 2px solid #fff;
+    }
+}
+.nk-spinner-small-black {
+    margin-left: 3px;
+    .nk-spinner {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border: 1px solid #000;
+        border-left: 1px solid #fff;
+    }
 }

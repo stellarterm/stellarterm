@@ -1,0 +1,145 @@
+@import "ActivitityNavMenu/ActivityNavMenu";
+
+.Activity{
+    margin-top: 27px;
+    margin-bottom: 30px;
+    height: 100%;
+
+
+
+    .Activity_empty{
+        padding: 23px;
+    }
+
+    .Activity_wrap{
+        width: 100%;
+
+        .Activity_header{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            padding: 25px 16px 23px 23px;
+
+            span{
+                font-size: 18px;
+                font-weight: normal;
+            }
+
+        }
+
+        .Activity-table-body{
+            max-height: calc(100vh - 470px);
+
+            & .ReactVirtualized__List:focus{
+                outline: none!important;
+            }
+        }
+
+        .Activity-table{
+            width: 100%;
+            text-align: left;
+            scroll-padding: 0;
+
+
+            .Activity-table-row{
+                border-top: solid 1px #f4f4f5;
+                padding: 11px 0;
+                display: flex;
+                flex-direction: row;
+
+
+
+                .Activity-table-cell{
+                    flex: 4;
+                    width: 0;
+                    display: flex;
+                    align-items: center;
+
+                    .Activity-table-identicon{
+                        height: 26px;
+                        width: 26px;
+                        border-radius: 50%;
+                        border: solid 1px #f4f4f5;
+                        display: inline-flex;
+                        align-items: center;
+                        justify-content: center;
+                        margin-right: 8px;
+
+                        img {
+                            height: 14px;
+                            width: 14px;
+                        }
+                    }
+
+
+                    &:first-child{
+                        padding-left: 23px;
+                    }
+                    &.flex1{
+                        flex: 1;
+                    }
+                    &.flex2{
+                        flex: 2;
+                    }
+                    &.flex3{
+                        flex: 3;
+                    }
+                    &.flex5{
+                        flex: 5;
+                    }
+                    &.flex6{
+                        flex: 6;
+                    }
+                    &.flex8{
+                        flex: 8;
+                    }
+                    &.flex9{
+                        flex: 9;
+                    }
+                    &.flex10{
+                        flex: 10;
+                    }
+                }
+
+                .Activity-table_item_right{
+                    text-align: right;
+                }
+
+                &.head {
+                    font-weight: bold;
+                    padding-bottom: 10px;
+                }
+
+
+
+                .Activity-table_actions{
+                    display: flex;
+                    flex-direction: row;
+                    justify-content: space-around;
+                    align-items: center;
+
+                    img{
+                        height: 24px;
+                        width: 24px;
+                        cursor: pointer;
+                    }
+
+                    a{
+                        align-self: normal;
+                    }
+                }
+
+                .red{
+                    color: #f92828;
+                }
+
+                .green{
+                    color: #1e9b28;
+                }
+            }
+        }
+
+    }
+}
+
+
