@@ -423,7 +423,7 @@ const MagicSpoon = {
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error(
-                    'Destination account does not exist. To create it, you must send a minimum of 1 lumens to create it',
+                    'Destination account does not exist. To create it, you must send at least 1 XLM.',
                 );
             }
             transaction = transaction
