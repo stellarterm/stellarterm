@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import Inflation from './Inflation/Inflation';
-import Deposit from './Deposit/Deposit';
 import History from './History/History';
 import Trust from './Trust/Trust';
 import Send from './Send/Send';
@@ -37,10 +36,6 @@ export default function SessionContent(props) {
                     exact
                     path="/account/history/"
                     render={prop => <ErrorBoundary><History {...prop} d={d} /></ErrorBoundary>} />
-                <Route
-                    exact
-                    path="/account/deposit/"
-                    render={prop => <ErrorBoundary><Deposit {...prop} d={d} /></ErrorBoundary>} />
                 <Redirect from="/ledger/" to="/account/" />
             </Switch>
         </React.Fragment>

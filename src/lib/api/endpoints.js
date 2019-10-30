@@ -33,6 +33,14 @@ export const endpoints = {
     },
 };
 
+function getUrlParams(params) {
+    return params !== undefined
+        ? Object.keys(params)
+              .map(key => `${key}=${encodeURIComponent(params[key])}`)
+              .join('&')
+        : null;
+}
+
 export function getEndpoint(endpointName, params) {
     if (!_.has(endpoints, endpointName)) {
         return null;
@@ -43,12 +51,12 @@ export function getEndpoint(endpointName, params) {
         : `${EnvConsts.HOME_URL}${endpoints[endpointName].url}`;
 
     // If GET params is provided
-    const urlParams =
-        params !== undefined
-            ? Object.keys(params)
-                  .map(key => `${key}=${encodeURIComponent(params[key])}`)
-                  .join('&')
-            : null;
+    const urlParams = getUrlParams(params);
 
     return urlParams === null ? endpoint : `${endpoint}?${urlParams}`;
+}
+
+export function getUrlWithParams(endpointUrl, params) {
+    const urlParams = getUrlParams(params);
+    return urlParams === null ? endpointUrl : `${endpointUrl}?${urlParams}`;
 }

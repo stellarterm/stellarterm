@@ -8,6 +8,9 @@ export default function Modal() {
     this.activeResolver = () => {};
     this.txStatus = false;
 
+    this.nextModalName = '';
+    this.nextModalData = null;
+
     this.handlers = {
         // To activate a modal, use d.modal.activate
         // The callback will give you an object that always contains status
@@ -49,26 +52,33 @@ export default function Modal() {
             this.event.trigger();
         },
 
-        ledgerFinish: (result) => {
+        checkNextModal: () => {
+            const nextModalProvided = this.nextModalName !== '' && this.nextModalData !== null;
+
+            if (nextModalProvided) {
+                this.handlers.activate(this.nextModalName, this.nextModalData);
+                this.nextModalName = '';
+                this.nextModalData = null;
+            }
+        },
+
+        ledgerFinish: (result, timeoutMs) => {
             this.txStatus = result;
             switch (result) {
             case 'close':
+                clearTimeout(this.timeoutClose);
                 this.active = false;
                 this.modalName = '';
-                clearTimeout(this.timeoutClose);
                 this.event.trigger();
+                this.handlers.checkNextModal();
                 break;
             case 'error':
                 this.event.trigger();
                 break;
             case 'closeWithTimeout':
                 this.timeoutClose = setTimeout(() => {
-                    if (this.modalName === 'signWithLedger') {
-                        this.active = false;
-                        this.modalName = '';
-                        this.event.trigger();
-                    }
-                }, 3000);
+                    this.handlers.ledgerFinish('close');
+                }, timeoutMs);
                 break;
             default:
                 break;

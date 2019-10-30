@@ -1,0 +1,26 @@
+@import "./AssetBalance/AssetBalance";
+@import "./WithdrawCompleted/WithdrawCompleted";
+@import "./Sep6ModalContent/Sep6ModalContent";
+
+.Sep6Modal {
+    background-color: #fff;
+    width: 640px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    a {
+        text-decoration: none;
+        color: #69c76f;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .Sep6Modal_content {
+        padding: 30px;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+    }
+}

@@ -37,7 +37,7 @@ export default class LedgerModal extends React.Component {
         const { errorMsg, result } = this.state;
         const waitingForConfirm = errorMsg === null;
         const waitingForHorizon = result !== null;
-        const isSuccess = d.modal.txStatus === true;
+        const isSuccess = d.modal.txStatus === 'closeWithTimeout';
         const isAnyError = errorMsg || d.modal.txStatus === 'error';
 
         return (
@@ -109,7 +109,7 @@ export default class LedgerModal extends React.Component {
             .catch((error) => {
                 let errorMsg = error.message;
                 switch (errorMsg) {
-                case 'Failed to sign with Ledger device: U2F TIMEOUT':
+                case 'Failed to sign with Ledger device: U2F DEVICE_INELIGIBLE':
                     errorMsg = 'Timed out when signing with Ledger. Please try again';
                     break;
                 case 'Transaction approval request was rejected':

@@ -17,6 +17,7 @@ import TransactionDetails from './TransactionDetails/TransactionDetails';
 import MultisigSubmitModal from './MultisigSubmitModal/MultisigSubmitModal';
 import MultisigUnknownSubmitModal from './MultisigUnknownSubmitModal/MultisigUnknownSubmitModal';
 import Sep7PayModal from './Sep7Modals/Sep7PayModal/Sep7PayModal';
+import Sep6Modal from './Sep6Modal/Sep6Modal';
 import Sep7ErrorModal from './Sep7Modals/Sep7ErrorModal/Sep7ErrorModal';
 import Sep7ChangeTrustModal from './Sep7Modals/Sep7ChangeTrustModal/Sep7ChangeTrustModal';
 import EditOfferModal from './EditOfferModal/EditOfferModal';
@@ -126,6 +127,9 @@ export default class GlobalModal extends React.Component {
             break;
         case 'CancelOffersModal':
             body = <CancelOffersModal submit={d.modal.handlers} offersData={modal.inputData} d={d} />;
+            break;
+        case 'Sep6Modal':
+            body = <Sep6Modal d={d} data={modal.inputData} />;
             break;
         default:
             body = (
