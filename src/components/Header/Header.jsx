@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import isElectron from 'is-electron';
+import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../images';
 import Driver from '../../lib/Driver';
 
@@ -12,6 +13,7 @@ class Header extends React.Component {
 
         this.state = {
             currentPath: window.location.pathname,
+            showPopup: '',
         };
     }
 
@@ -21,6 +23,10 @@ class Header extends React.Component {
         if (currentPath !== prevProps.location.pathname) {
             this.setState({ currentPath });
         }
+    }
+
+    componentWillUnmount() {
+        this.props.d.session.event.unlisten(this.listenId);
     }
 
     getBuyCryptoLobsterLink() {
@@ -59,6 +65,61 @@ class Header extends React.Component {
         ) : null;
     }
 
+    getAccountBlock() {
+        const { state, account, userFederation, unfundedAccountId } = this.props.d.session;
+        const { showPopup } = this.state;
+
+        if (state === 'out') {
+            return (
+                <div className="Header_login">
+                    <Link className="Header_login-button" to="/signup/">
+                        <img src={images['icon-sign-up']} alt="sign" />
+                        <span>SIGN UP</span>
+                    </Link>
+                    <Link className="Header_login-button" to="/account/">
+                        <img src={images['icon-login']} alt="login" />
+                        <span>LOGIN</span>
+                    </Link>
+                </div>
+            );
+        }
+        if (state === 'loading') {
+            return null;
+        }
+        const fullFederation = `${userFederation}*stellarterm.com`;
+        const accountId = (account && account.account_id) || unfundedAccountId;
+        const viewPublicKey = `${accountId.substr(0, 5)}...${accountId.substr(-5, 5)}`;
+        const canvas = createStellarIdenticon(accountId);
+        const renderedIcon = canvas.toDataURL();
+        return (
+            <div className="Header_account">
+                <div className="Header_account-info CopyButton">
+                    <span
+                        className="federation"
+                        onClick={() => this.handleCopy('federationPopup', fullFederation)}>
+                            {userFederation}
+                    </span>
+                    <span
+                        className="public-key"
+                        onClick={() => this.handleCopy(!userFederation ?
+                                'federationPopup' : 'publicKeyPopup', accountId)}>
+                            {viewPublicKey}
+                    </span>
+                    <div className={`CopyButton__popup ${showPopup}`}>Copied to clipboard</div>
+                </div>
+                <div className="Header_account-icon">
+                    <img src={renderedIcon} alt="icon" />
+                </div>
+            </div>
+        );
+    }
+
+    handleCopy(popupShowType, text) {
+        window.navigator.clipboard.writeText(text);
+        this.setState({ showPopup: popupShowType });
+        setTimeout(() => this.setState({ showPopup: '' }), 1000);
+    }
+
     checkAccountTab(url) {
         const { currentPath } = this.state;
         return url === '/account/' && (currentPath.includes('ledger') || currentPath.includes('signup'));
@@ -78,6 +139,7 @@ class Header extends React.Component {
     }
 
     render() {
+        const accountBlock = this.getAccountBlock();
         return (
             <div className="Header_main" id="stellarterm_header">
                 {this.getNetworkBar()}
@@ -95,7 +157,7 @@ class Header extends React.Component {
                             {!isElectron() ? this.createHeaderTab('/download/', 'Download') : null}
                         </nav>
 
-                        <span className="Header_version">v{window.stBuildInfo.version}</span>
+                        {accountBlock}
                     </div>
                 </div>
             </div>

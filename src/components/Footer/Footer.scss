@@ -63,16 +63,28 @@
             }
         }
 
-        .Footer_disclaimer {
-            padding: 1em 0;
+        .Footer_disclaimer_block {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
             border-top: solid 1px #dfe0e1;
-            width: auto;
-            text-align: center;
-        }
+            padding: 1em 0;
 
-        .Footer_disclaimer + .Footer_disclaimer{
-            border-top: none;
-            padding-top: 0;
+            .Footer_disclaimer_column {
+                max-width: 780px;
+                display: flex;
+                flex-direction: column;
+
+                .Footer_disclaimer {
+                    width: auto;
+                    text-align: left;
+                }
+
+                .Footer_disclaimer + .Footer_disclaimer {
+                    border-top: none;
+                    padding: 1em 0;
+                }
+            }
         }
     }
 }

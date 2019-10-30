@@ -614,6 +614,7 @@ export default function Send(driver) {
 
             const response = await reqType(getEndpoint('setFederation'), { headers, body });
             this.userFederation = response.name.split('*')[0];
+            this.event.trigger();
             await this.handlers.setHomeDomain();
             return response;
         },
