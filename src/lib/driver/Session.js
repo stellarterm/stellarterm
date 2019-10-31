@@ -195,7 +195,7 @@ export default function Send(driver) {
                             // Avoid race conditions
                             this.handlers.logIn(keypair, opts);
                         }
-                    }, 2000);
+                    }, 5000);
                     this.event.trigger();
                     return;
                 }
