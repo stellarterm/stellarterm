@@ -7,6 +7,7 @@ import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCar
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT } from './../Activity';
+import Printify from '../../../../../lib/Printify';
 
 
 export default class ActivityTradesHistory extends React.Component {
@@ -65,14 +66,14 @@ export default class ActivityTradesHistory extends React.Component {
                 <div className="Activity-table-cell flex5">
                     <AssetCardInRow d={d} code={counter.code} issuer={counter.issuer} />
                 </div>
-                <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {isBuy ? bought_amount : sold_amount}
+                <div className="Activity-table_item_right Activity-table-cell flex4">
+                    {Printify.lightenZeros(isBuy ? bought_amount : sold_amount)}
                 </div>
-                <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {isBuy ? priceRevert : price}
+                <div className="Activity-table_item_right Activity-table-cell flex4">
+                    {Printify.lightenZeros(isBuy ? priceRevert : price)}
                 </div>
-                <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {isBuy ? sold_amount : bought_amount}
+                <div className="Activity-table_item_right Activity-table-cell flex4">
+                    {Printify.lightenZeros(isBuy ? sold_amount : bought_amount)}
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <img
@@ -115,9 +116,9 @@ export default class ActivityTradesHistory extends React.Component {
                         <div className="Activity-table-cell flex2">Side</div>
                         <div className="Activity-table-cell flex5">Sell</div>
                         <div className="Activity-table-cell flex5">Buy</div>
-                        <div className="Activity-table_item_right Activity-table-cell flex3">Amount</div>
-                        <div className="Activity-table_item_right Activity-table-cell flex3">Price</div>
-                        <div className="Activity-table_item_right Activity-table-cell flex3">Total</div>
+                        <div className="Activity-table_item_right Activity-table-cell flex4">Amount</div>
+                        <div className="Activity-table_item_right Activity-table-cell flex4">Price</div>
+                        <div className="Activity-table_item_right Activity-table-cell flex4">Total</div>
                         <div className="Activity-table-cell Activity-table_actions flex1" />
                     </div>
                     <div style={{ height: ListHeight }} className="Activity-table-body">

@@ -7,6 +7,7 @@ import Driver from '../../../../../lib/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT } from './../Activity';
+import Printify from '../../../../../lib/Printify';
 
 
 export default class ActivityPaymentsHistory extends React.Component {
@@ -14,7 +15,7 @@ export default class ActivityPaymentsHistory extends React.Component {
         switch (type) {
         case 'create_account':
             return ({
-                opType: (account === account_id) ? 'Сreated by' : 'Сreated',
+                opType: (account === account_id) ? 'Created by' : 'Created',
                 address: (account === account_id) ? funder : account,
             });
         case 'account_merge': return ({
@@ -49,7 +50,7 @@ export default class ActivityPaymentsHistory extends React.Component {
             this.constructor.getOperationTypeAndAddress(type, account, account_id, funder, from, to);
         const canvas = createStellarIdenticon(address);
         const renderedIcon = canvas.toDataURL();
-        const viewAddress = address && `${address.substr(0, 24)}...${address.substr(-12, 12)}`;
+        const viewAddress = address && `${address.substr(0, 18)}...${address.substr(-12, 12)}`;
 
         const asset = asset_issuer ? new StellarSdk.Asset(asset_code, asset_issuer) : new StellarSdk.Asset.native();
 
@@ -60,7 +61,7 @@ export default class ActivityPaymentsHistory extends React.Component {
             <div key={key} style={style} className="Activity-table-row">
                 <div className="Activity-table-cell">{date} at {time}</div>
                 <div className="Activity-table-cell flex2">{opType}</div>
-                <div className="Activity-table-cell flex10">
+                <div className="Activity-table-cell flex8">
                     <div className="Activity-table-identicon">
                         <img src={renderedIcon} alt="id" />
                     </div>
@@ -69,7 +70,9 @@ export default class ActivityPaymentsHistory extends React.Component {
                 <div className="Activity-table-cell">
                     <AssetCardInRow d={this.props.d} code={asset.code} issuer={asset.issuer} />
                 </div>
-                <div className="Activity-table_item_right Activity-table-cell flex2">{viewAmount}</div>
+                <div className="Activity-table_item_right Activity-table-cell flex3">
+                    {Printify.lightenZeros(viewAmount)}
+                </div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <a
                         href={`https://stellar.expert/explorer/public/tx/${transaction_hash}`}
@@ -103,9 +106,9 @@ export default class ActivityPaymentsHistory extends React.Component {
                     <div className="Activity-table-row head">
                         <div className="Activity-table-cell">Date/Time</div>
                         <div className="Activity-table-cell flex2">Type</div>
-                        <div className="Activity-table-cell flex10">Address</div>
+                        <div className="Activity-table-cell flex8">Address</div>
                         <div className="Activity-table-cell">Asset</div>
-                        <div className="Activity-table_item_right Activity-table-cell flex2">Amount</div>
+                        <div className="Activity-table_item_right Activity-table-cell flex3">Amount</div>
                         <div className="Activity-table-cell Activity-table_actions flex1" />
                     </div>
                     <div style={{ height: ListHeight }} className="Activity-table-body">

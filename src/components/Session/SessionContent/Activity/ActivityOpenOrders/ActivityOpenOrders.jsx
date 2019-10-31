@@ -10,8 +10,11 @@ export default class ActivityOpenOrders extends React.Component {
         return <ActivityOpenOrdersRow key={key} virtualKey={key} offer={offer} d={d} style={style} />;
     }
 
-    componentWillMount() {
-        this.props.d.session.account.updateOffers();
+    componentDidUpdate() {
+        const hasNullDate = this.props.openOffers.find(offer => offer.last_modified_time === null);
+        if (hasNullDate) {
+            this.props.d.session.account.updateOffers();
+        }
     }
 
     cancelAllOffers(e, side, offers) {
@@ -32,23 +35,24 @@ export default class ActivityOpenOrders extends React.Component {
             <div className="Activity_wrap">
                 <div className="Activity_header">
                     <span>Open orders</span>
-                    <button
-                        className="CancelOffers_button"
-                        onClick={e => this.cancelAllOffers(e, '', openOffers)}>
-                        <span>+</span>
-                        Cancel all orders
-                    </button>
+                    {openOffers.length > 1 &&
+                        <button
+                            className="CancelOffers_button"
+                            onClick={e => this.cancelAllOffers(e, '', openOffers)}>
+                            <span>+</span>
+                            Cancel all orders
+                        </button>}
                 </div>
                 <div className="Activity-table">
                     <div className="Activity-table-row head">
-                        <div className="Activity-table-cell flex5">Created</div>
-                        <div className="Activity-table-cell flex2">Side</div>
+                        <div className="Activity-table-cell flex4">Created</div>
+                        <div className="Activity-table-cell flex1">Side</div>
                         <div className="Activity-table-cell">Sell</div>
                         <div className="Activity-table-cell">Buy</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Amount</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Price</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Total</div>
-                        <div className="Activity-table-cell Activity-table_actions flex2" />
+                        <div className="Activity-table-cell Activity-table_actions flex1_5" />
                     </div>
                     <div className="Activity-table-body" style={{ height: ListHeight }}>
                         <AutoSizer>
