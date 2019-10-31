@@ -15,6 +15,9 @@ class Header extends React.Component {
             currentPath: window.location.pathname,
             showPopup: '',
         };
+        this.listenId = this.props.d.session.event.listen(() => {
+            this.forceUpdate();
+        });
     }
 
     componentDidUpdate(prevProps) {
@@ -23,9 +26,6 @@ class Header extends React.Component {
         if (currentPath !== prevProps.location.pathname) {
             this.setState({ currentPath });
         }
-        this.listenId = this.props.d.session.event.listen(() => {
-            this.forceUpdate();
-        });
     }
 
     componentWillUnmount() {
