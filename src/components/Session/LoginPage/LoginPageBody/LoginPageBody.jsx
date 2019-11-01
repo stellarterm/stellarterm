@@ -90,7 +90,7 @@ export default class LoginPageBody extends React.Component {
                             </label>
 
                             {loginErrorMessage}
-                            <AcceptTerms loginButtonText={'Log in'} />
+                            <AcceptTerms loginButtonText={'Log in'} d={this.props.d} />
                         </form>
                     </div>
                     {!this.props.modal && <LoginSecurityNotes />}
