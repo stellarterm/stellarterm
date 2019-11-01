@@ -2,10 +2,9 @@
 
 .Federations_block {
     border-top: 1px solid #ddd;
-    position: relative;
-    width: 980px;
+    width: 100%;
     left: calc(-18px);
-    padding: 20px 16px;
+    padding: 20px 0;
     padding-bottom: 0px;
 
     .alert_isEditing {
@@ -45,11 +44,19 @@
     }
 
     .Account_alert_left {
+        width: 100%;
+        max-width: 700px;
+        overflow-x: scroll;
+
         .no_federation_text {
             display: flex;
             height: 100%;
             align-items: center;
         }
+    }
+
+    .bordered_federation{
+        border-right: 1px solid #69c76f;
     }
 
     .Account_alert_right {

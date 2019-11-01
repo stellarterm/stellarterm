@@ -38,7 +38,6 @@ export default class FederationInpit extends React.Component {
                     onKeyUp={(e) => {
                         this.props.onKeyPressed(e.keyCode);
                     }} />
-                <span>*stellarterm.com</span>
             </div>
         );
     }
