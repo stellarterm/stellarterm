@@ -6,6 +6,7 @@ import Driver from '../../../../../../lib/Driver';
 import images from '../../../../../../images';
 import AssetCardInRow from '../../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import { formatDate } from './../../Activity';
+import Printify from '../../../../../../lib/Printify';
 
 
 export default class ActivityOpenOrdersRow extends React.Component {
@@ -46,7 +47,7 @@ export default class ActivityOpenOrdersRow extends React.Component {
         const { offer, d, virtualKey, style } = this.props;
         const { buttonReady } = this.state;
         const { last_modified_time, buying, selling, amount, price, price_r, id } = offer;
-        const { time, date } = formatDate(last_modified_time);
+        const { time, date, emptyDate } = formatDate(last_modified_time);
         const base = buying.asset_issuer ?
             new StellarSdk.Asset(buying.asset_code, buying.asset_issuer) : new StellarSdk.Asset.native();
 
@@ -75,8 +76,8 @@ export default class ActivityOpenOrdersRow extends React.Component {
 
         return (
             <div className="Activity-table-row" key={virtualKey} style={style}>
-                <div className="Activity-table-cell flex5">{date} at {time}</div>
-                <div className="Activity-table-cell flex2">
+                <div className="Activity-table-cell flex4">{!emptyDate && `${date} at ${time}`}</div>
+                <div className="Activity-table-cell flex1">
                     <span className={isBuySide ? 'green' : 'red'}>{isBuySide ? 'Buy' : 'Sell'}</span>
                 </div>
                 <div className="Activity-table-cell">
@@ -86,15 +87,15 @@ export default class ActivityOpenOrdersRow extends React.Component {
                     <AssetCardInRow d={d} code={base.code} issuer={base.issuer} />
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {offerData.rectifiedOffer.baseAmount}
+                    {Printify.lightenZeros(offerData.rectifiedOffer.baseAmount)}
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {offerData.rectifiedOffer.price}
+                    {Printify.lightenZeros(offerData.rectifiedOffer.price)}
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {offerData.rectifiedOffer.counterAmount}
+                    {Printify.lightenZeros(offerData.rectifiedOffer.counterAmount)}
                 </div>
-                <div className="Activity-table_actions Activity-table-cell flex2">
+                <div className="Activity-table_actions Activity-table-cell flex1_5">
                     <img
                         onClick={e => this.handleEdit(e, offerData)}
                         src={images['icon-edit']}
