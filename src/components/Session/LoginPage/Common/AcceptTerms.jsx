@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import Driver from '../../../../lib/Driver';
 
 export default class AcceptTerms extends React.Component {
     constructor(props) {
@@ -24,7 +25,10 @@ export default class AcceptTerms extends React.Component {
                         onClick={() => this.setState({ termsAccepted: !this.state.termsAccepted })} />
                     <span className="LoginPage__accept__label">
                         I accept the{' '}
-                        <Link to="/terms-of-use/" className="LoginPage__accept__link">
+                        <Link
+                            to="/terms-of-use/"
+                            className="LoginPage__accept__link"
+                            onClick={() => this.props.d.modal.handlers.cancel()}>
                             Terms of Use
                         </Link>
                         , understand the risks associated with cryptocurrencies, and know that StellarTerm does not
@@ -46,4 +50,5 @@ export default class AcceptTerms extends React.Component {
 AcceptTerms.propTypes = {
     funcOnSubmit: PropTypes.func,
     loginButtonText: PropTypes.string.isRequired,
+    d: PropTypes.instanceOf(Driver),
 };
