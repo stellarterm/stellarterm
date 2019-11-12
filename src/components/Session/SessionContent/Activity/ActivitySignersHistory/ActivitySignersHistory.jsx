@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../../../../images';
-import { formatDate, ROW_HEIGHT } from './../Activity';
+import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from './../Activity';
 
 const SIGNERS_TYPES = ['signer_removed', 'signer_created', 'signer_updated', 'account_thresholds_updated'];
 
@@ -73,7 +73,7 @@ export default class ActivitySignersHistory extends React.Component {
 
         return (
             <div key={key} style={style} className="Activity-table-row">
-                <div className="Activity-table-cell">{date} at {time}</div>
+                <div className="Activity-table-cell">{date},{time}</div>
                 <div className="Activity-table-cell ">{viewType}</div>
                 <div className="Activity-table-cell">{keyWeight}</div>
                 <div className="Activity-table-cell flex8">{viewKey}</div>
@@ -92,7 +92,9 @@ export default class ActivitySignersHistory extends React.Component {
         const { history, loading } = this.props;
         const signersHistory = this.constructor.filterHistoryBySigners(history);
 
-        const ListHeight = ROW_HEIGHT * signersHistory.length;
+        const listHeight = ROW_HEIGHT * signersHistory.length;
+        const maxHeight = Math.min(listHeight, TABLE_MAX_HEIGHT);
+        const withScroll = listHeight > TABLE_MAX_HEIGHT;
 
         return (
             <div className="Activity_wrap">
@@ -106,14 +108,14 @@ export default class ActivitySignersHistory extends React.Component {
                     </span>
                 </div>
                 <div className="Activity-table">
-                    <div className="Activity-table-row head">
+                    <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
                         <div className="Activity-table-cell">Date/Time</div>
                         <div className="Activity-table-cell">Type</div>
                         <div className="Activity-table-cell">Key weight</div>
                         <div className="Activity-table-cell flex8">Key</div>
                         <div className="Activity-table-cell Activity-table_actions flex1" />
                     </div>
-                    <div className="Activity-table-body" style={{ height: ListHeight }}>
+                    <div className="Activity-table-body" style={{ height: maxHeight }}>
                         <AutoSizer>
                             {({ height, width }) => (
                                 <InfiniteLoader

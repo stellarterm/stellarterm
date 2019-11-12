@@ -28,8 +28,6 @@
         }
 
         .Activity-table-body{
-            max-height: calc(100vh - 470px);
-
             & .ReactVirtualized__List:focus{
                 outline: none!important;
             }
@@ -75,6 +73,13 @@
                         }
                     }
 
+                    .lightenZeros{
+                        width: 100%;
+                        word-wrap: break-word;
+                        line-height: 15px;
+                        text-align: right;
+                    }
+
 
                     &:first-child{
                         padding-left: 23px;
@@ -109,7 +114,7 @@
                 }
 
                 .Activity-table_item_right{
-                    text-align: right;
+                    justify-content: flex-end;
                 }
 
                 &.head {
