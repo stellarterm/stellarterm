@@ -29,6 +29,7 @@ export default class ActivityOpenOrdersRow extends React.Component {
 
         try {
             await signAndSubmit.serverResult;
+            this.setState({ buttonReady: 'true' });
         } catch (error) {
             console.error('Errored when cancelling offer', error);
             this.setState({ buttonReady: 'true' });
