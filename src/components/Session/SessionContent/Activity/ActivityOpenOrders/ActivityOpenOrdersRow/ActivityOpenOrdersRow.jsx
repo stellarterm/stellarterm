@@ -7,6 +7,7 @@ import images from '../../../../../../images';
 import AssetCardInRow from '../../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import { formatDate } from './../../Activity';
 import Printify from '../../../../../../lib/Printify';
+import Ellipsis from '../../../../../Common/Ellipsis/Ellipsis';
 
 
 export default class ActivityOpenOrdersRow extends React.Component {
@@ -77,7 +78,9 @@ export default class ActivityOpenOrdersRow extends React.Component {
 
         return (
             <div className="Activity-table-row" key={virtualKey} style={style}>
-                <div className="Activity-table-cell flex3">{!emptyDate ? `${date},${time}` : 'Loading'}</div>
+                <div className="Activity-table-cell flex3">
+                    {!emptyDate ? `${date},${time}` : <span>Loading<Ellipsis /></span>}
+                </div>
                 <div className="Activity-table-cell flex1">
                     <span className={isBuySide ? 'green' : 'red'}>{isBuySide ? 'Buy' : 'Sell'}</span>
                 </div>
