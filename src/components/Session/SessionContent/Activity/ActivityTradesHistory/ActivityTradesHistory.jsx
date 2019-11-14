@@ -56,7 +56,7 @@ export default class ActivityTradesHistory extends React.Component {
 
         return (
             <div key={key} style={style} className="Activity-table-row">
-                <div className="Activity-table-cell flex5">{date},{time}</div>
+                <div className="Activity-table-cell flex4">{date},{time}</div>
                 <div className="Activity-table-cell flex2">
                     <span className={isBuy ? 'green' : 'red'}>{isBuy ? 'Buy' : 'Sell'}</span>
                 </div>
@@ -114,7 +114,7 @@ export default class ActivityTradesHistory extends React.Component {
                 </div>
                 <div className="Activity-table">
                     <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
-                        <div className="Activity-table-cell flex5">Date/Time</div>
+                        <div className="Activity-table-cell flex4">Date/Time</div>
                         <div className="Activity-table-cell flex2">Side</div>
                         <div className="Activity-table-cell flex5">Sell</div>
                         <div className="Activity-table-cell flex5">Buy</div>
