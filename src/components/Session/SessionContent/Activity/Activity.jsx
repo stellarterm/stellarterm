@@ -10,17 +10,15 @@ import ActivitySignersHistory from './ActivitySignersHistory/ActivitySignersHist
 import ActivityTrustlinesHistory from './ActivityTrustlinesHistory/ActivityTrustlinesHistory';
 
 export const ROW_HEIGHT = 47;
+export const TABLE_MAX_HEIGHT = window.innerHeight - 470;
+export const SCROLL_WIDTH = 17;
 export const formatDate = (timestamp) => {
     if (timestamp === null) {
         return {
             emptyDate: true,
         };
     }
-    const date = new Date(timestamp).toLocaleDateString('en-US', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-    });
+    const date = new Date(timestamp).toLocaleDateString();
     const time = new Date(timestamp).toLocaleTimeString('en-US', {
         hour: '2-digit',
         minute: '2-digit',

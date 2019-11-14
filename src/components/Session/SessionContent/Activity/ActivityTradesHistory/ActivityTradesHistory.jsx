@@ -6,7 +6,7 @@ import BigNumber from 'bignumber.js';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
-import { formatDate, ROW_HEIGHT } from './../Activity';
+import { formatDate, ROW_HEIGHT, TABLE_MAX_HEIGHT, SCROLL_WIDTH } from './../Activity';
 import Printify from '../../../../../lib/Printify';
 
 
@@ -56,7 +56,7 @@ export default class ActivityTradesHistory extends React.Component {
 
         return (
             <div key={key} style={style} className="Activity-table-row">
-                <div className="Activity-table-cell flex5">{date} at {time}</div>
+                <div className="Activity-table-cell flex5">{date},{time}</div>
                 <div className="Activity-table-cell flex2">
                     <span className={isBuy ? 'green' : 'red'}>{isBuy ? 'Buy' : 'Sell'}</span>
                 </div>
@@ -96,7 +96,9 @@ export default class ActivityTradesHistory extends React.Component {
             );
         }
 
-        const ListHeight = ROW_HEIGHT * tradeHistory.length;
+        const listHeight = ROW_HEIGHT * tradeHistory.length;
+        const maxHeight = Math.min(listHeight, TABLE_MAX_HEIGHT);
+        const withScroll = listHeight > TABLE_MAX_HEIGHT;
 
 
         return (
@@ -111,7 +113,7 @@ export default class ActivityTradesHistory extends React.Component {
                     </span>
                 </div>
                 <div className="Activity-table">
-                    <div className="Activity-table-row head">
+                    <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
                         <div className="Activity-table-cell flex5">Date/Time</div>
                         <div className="Activity-table-cell flex2">Side</div>
                         <div className="Activity-table-cell flex5">Sell</div>
@@ -121,7 +123,7 @@ export default class ActivityTradesHistory extends React.Component {
                         <div className="Activity-table_item_right Activity-table-cell flex4">Total</div>
                         <div className="Activity-table-cell Activity-table_actions flex1" />
                     </div>
-                    <div style={{ height: ListHeight }} className="Activity-table-body">
+                    <div style={{ height: maxHeight }} className="Activity-table-body">
                         <AutoSizer>
                             {({ height, width }) => (
                                 <InfiniteLoader

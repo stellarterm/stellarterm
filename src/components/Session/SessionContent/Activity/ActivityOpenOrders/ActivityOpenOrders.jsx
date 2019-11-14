@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { AutoSizer, List } from 'react-virtualized';
 import Driver from '../../../../../lib/Driver';
 import ActivityOpenOrdersRow from './ActivityOpenOrdersRow/ActivityOpenOrdersRow';
-import { ROW_HEIGHT } from './../Activity';
+import { ROW_HEIGHT, TABLE_MAX_HEIGHT, SCROLL_WIDTH } from './../Activity';
 
 export default class ActivityOpenOrders extends React.Component {
     static getTableContent(offer, key, style, d) {
@@ -29,7 +29,9 @@ export default class ActivityOpenOrders extends React.Component {
             return (<div className="Activity_empty">You have no open orders.</div>);
         }
 
-        const ListHeight = ROW_HEIGHT * openOffers.length;
+        const listHeight = ROW_HEIGHT * openOffers.length;
+        const maxHeight = Math.min(listHeight, TABLE_MAX_HEIGHT);
+        const withScroll = listHeight > TABLE_MAX_HEIGHT;
 
         return (
             <div className="Activity_wrap">
@@ -44,8 +46,8 @@ export default class ActivityOpenOrders extends React.Component {
                         </button>}
                 </div>
                 <div className="Activity-table">
-                    <div className="Activity-table-row head">
-                        <div className="Activity-table-cell flex4">Created</div>
+                    <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
+                        <div className="Activity-table-cell flex3">Created</div>
                         <div className="Activity-table-cell flex1">Side</div>
                         <div className="Activity-table-cell">Sell</div>
                         <div className="Activity-table-cell">Buy</div>
@@ -54,7 +56,7 @@ export default class ActivityOpenOrders extends React.Component {
                         <div className="Activity-table_item_right Activity-table-cell flex3">Total</div>
                         <div className="Activity-table-cell Activity-table_actions flex1_5" />
                     </div>
-                    <div className="Activity-table-body" style={{ height: ListHeight }}>
+                    <div className="Activity-table-body" style={{ height: maxHeight }}>
                         <AutoSizer>
                             {({ height, width }) => (
                                 <List
