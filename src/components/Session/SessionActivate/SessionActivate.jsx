@@ -19,7 +19,7 @@ export default function SessionActivate(props) {
                 <div className="island">
                     <div className="activate_Description">
                         <div className="titleDesc">Account activation required</div>
-                        <p>
+                        <p className="noMargin-p">
                             To use your Stellar account, you must activate it by sending at least{' '}
                             <span className="markedBold">5 lumens (XLM)</span> to your account. <br />
                             You can buy lumens (XLM) from an exchange and send them to your address.
