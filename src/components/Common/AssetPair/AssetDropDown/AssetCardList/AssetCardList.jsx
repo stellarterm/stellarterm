@@ -4,8 +4,10 @@ import AssetCardMain from '../../../AssetCard/AssetCardMain/AssetCardMain';
 import Driver from '../../../../../lib/Driver';
 
 export default class AssetCardList extends React.Component {
-    componentDidUpdate() {
-        this.scrollToMyRef();
+    componentDidUpdate(prevProps) {
+        if (prevProps.activeCardIndex !== this.props.activeCardIndex) {
+            this.scrollToMyRef();
+        }
     }
 
     scrollToMyRef() {

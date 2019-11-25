@@ -49,7 +49,7 @@ export default class OfferMaker extends React.Component {
         }
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this._mounted = true;
     }
 
@@ -95,7 +95,6 @@ export default class OfferMaker extends React.Component {
         return {};
     }
 
-    // TODO: Limit the number of digits after the decimal that can be input
     updateState(item, value, minValue, targetInputType, maxOffer) {
         const state = Object.assign(this.state, {
             // Reset messages
@@ -103,8 +102,14 @@ export default class OfferMaker extends React.Component {
             errorMessage: '',
         });
         state.valid = false;
+
+        const [integerPart, fractionalPart] = value.split('.');
+
+        const roundedValue = (fractionalPart && fractionalPart.length > 7) ?
+            `${integerPart}.${fractionalPart.slice(0, 7)}` : value;
+
         if (item === 'price' || item === 'amount' || item === 'total') {
-            state[item] = value;
+            state[item] = roundedValue;
         } else {
             throw new Error('Invalid item type');
         }
@@ -114,11 +119,11 @@ export default class OfferMaker extends React.Component {
             if (item === 'price' || item === 'amount') {
                 const changeValueType = item === 'price' ? 'amount' : 'price';
                 state.total = new BigNumber(
-                    new BigNumber(value).times(new BigNumber(state[changeValueType])).toFixed(7),
+                    new BigNumber(roundedValue).times(new BigNumber(state[changeValueType])).toFixed(7),
                 ).toString();
             } else if (item === 'total') {
                 state.amount = new BigNumber(
-                    new BigNumber(value).dividedBy(new BigNumber(state.price)).toFixed(7),
+                    new BigNumber(roundedValue).dividedBy(new BigNumber(state.price)).toFixed(7),
                 ).toString();
             } else {
                 throw new Error('Invalid item type');

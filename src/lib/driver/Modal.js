@@ -61,11 +61,13 @@ export default function Modal() {
             case 'error':
                 this.event.trigger();
                 break;
-            case true:
+            case 'closeWithTimeout':
                 this.timeoutClose = setTimeout(() => {
-                    this.active = false;
-                    this.modalName = '';
-                    this.event.trigger();
+                    if (this.modalName === 'signWithLedger') {
+                        this.active = false;
+                        this.modalName = '';
+                        this.event.trigger();
+                    }
                 }, 3000);
                 break;
             default:

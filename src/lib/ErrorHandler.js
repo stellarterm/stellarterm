@@ -43,7 +43,7 @@ errorMap
         'An unknown error occurred.')
     // operation errors
     .set('op_low_reserve',
-        'Your account does not have enough XLM to meet the minimum balance.')
+        'The destination is a new non-activated account. A new account has to have at least 1 XLM.')
     .set('op_underfunded',
         'Transaction failed due to a lack of funds.')
     .set('op_malformed',

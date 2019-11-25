@@ -1,28 +1,46 @@
+/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
-import { Link } from 'react-router-dom';
+import PropTypes from 'prop-types';
+import { Link, withRouter } from 'react-router-dom';
 import images from '../../images';
 
-export default function Footer(props) {
-    const isExchangePage = window.location.pathname.includes('exchange');
+class Footer extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            isExchangePage: this.props.location.pathname.includes('exchange'),
+        };
+    }
 
-    return (
-        <div className="so-back Footer">
-            <div className="so-chunk Footer_chunk">
-                <div className="Footer_links">
-                    <div className="Footer_social_links">
-                        <a href="https://twitter.com/stellarterm" target="_blank" rel="noopener noreferrer">
-                            <img src={images['icon-twitter']} alt="twitter" />
-                            @StellarTerm
-                        </a>
-                        <a href="mailto:support@stellarterm.com">
-                            <img src={images['icon-email']} alt="email" />
-                            support@stellarterm.com
-                        </a>
-                        <a href="mailto:partners@stellarterm.com">
-                            <img src={images['icon-email']} alt="email" />
-                            partners@stellarterm.com
-                        </a>
-                    </div>
+    componentDidUpdate(prevProps) {
+        const currentPath = this.props.location.pathname;
+
+        if (currentPath !== prevProps.location.pathname) {
+            this.setState({ isExchangePage: currentPath.includes('exchange') });
+        }
+    }
+
+    render() {
+        const { isExchangePage } = this.state;
+
+        return (
+            <div className="so-back Footer">
+                <div className="so-chunk Footer_chunk">
+                    <div className="Footer_links">
+                        <div className="Footer_social_links">
+                            <a href="https://twitter.com/stellarterm" target="_blank" rel="noopener noreferrer">
+                                <img src={images['icon-twitter']} alt="twitter" />
+                                @StellarTerm
+                            </a>
+                            <a href="mailto:support@stellarterm.com">
+                                <img src={images['icon-email']} alt="email" />
+                                support@stellarterm.com
+                            </a>
+                            <a href="mailto:partners@stellarterm.com">
+                                <img src={images['icon-email']} alt="email" />
+                                partners@stellarterm.com
+                            </a>
+                        </div>
 
                     <div className="Footer_privacy_links">
                         <Link to="/privacy/">Privacy Policy</Link>
@@ -54,6 +72,12 @@ export default function Footer(props) {
                     </div>
                 </div>
             </div>
-        </div>
-    );
+        </div>);
+    }
 }
+
+Footer.propTypes = {
+    location: PropTypes.objectOf(PropTypes.any),
+};
+
+export default withRouter(props => <Footer {...props} />);

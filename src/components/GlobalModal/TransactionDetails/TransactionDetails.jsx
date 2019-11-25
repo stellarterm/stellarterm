@@ -80,13 +80,13 @@ export default class TransactionDetails extends React.Component {
     static getOperationLabel(op) {
         switch (op.type) {
         case 'changeTrust':
-            return op.limit === '0' ? 'Remove Asset' : 'Accept Asset';
+            return parseFloat(op.limit) === 0 ? 'Remove Asset' : 'Accept Asset';
         case 'manageOffer':
-            return op.amount === '0' ? 'Delete Offer' : 'Manage Offer';
+            return parseFloat(op.amount) === 0 ? 'Delete Offer' : 'Manage Offer';
         case 'manageBuyOffer':
-            return op.buyAmount === '0' ? 'Delete Offer' : 'Manage Offer';
+            return parseFloat(op.buyAmount) === 0 ? 'Delete Offer' : 'Manage Offer';
         case 'manageSellOffer':
-            return op.amount === '0' ? 'Delete Offer' : 'Manage Offer';
+            return parseFloat(op.amount) === 0 ? 'Delete Offer' : 'Manage Offer';
         default:
             break;
         }
@@ -98,12 +98,18 @@ export default class TransactionDetails extends React.Component {
         return tx.operations.map((op) => {
             const attributes = this.constructor.getOperationAttr(op, d);
             const label = this.constructor.getOperationLabel(op);
-            const attributesUi = attributes.map(attribute => (
-                <div className="Inline_content" key={attribute.key}>
-                    <div className="Inline_value">{attribute.display}</div>
-                    {attribute.name ? <span className="Inline_attr">{attribute.name}</span> : null}
-                </div>
-            ));
+            const isDeleteOffer = label === 'Delete Offer';
+
+            const attributesUi = attributes.map((attribute) => {
+                const hideDeleteItems = attribute.name === 'amount' || attribute.name === 'price';
+
+                return isDeleteOffer && hideDeleteItems ? null : (
+                    <div className="Inline_content" key={attribute.key}>
+                        <div className="Inline_value">{attribute.display}</div>
+                        {attribute.name ? <span className="Inline_attr">{attribute.name}</span> : null}
+                    </div>
+                );
+            });
 
             // Temp solution for hide big json data when setting Federation
             if (label === 'Manage Data') {
