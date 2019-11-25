@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import millify from 'millify';
+import { niceRound } from '../../../lib/Format';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import AssetPair from '../../Common/AssetPair/AssetPair';
@@ -33,12 +34,17 @@ export default class PairPicker extends React.Component {
             lastChangesDirection: '',
         };
     }
+
     componentDidMount() {
         this._mounted = true;
         this.getLastTrades();
         this.unsub = this.props.d.ticker.event.sub(() => {
             this.forceUpdate();
         });
+    }
+
+    componentWillUnmount() {
+        this.unsub();
     }
 
     componentWillUpdate(nextProps, nextState) {

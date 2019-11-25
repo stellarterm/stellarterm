@@ -173,7 +173,6 @@ export default function Send(driver) {
 
                 const inflationDoneDestinations = {
                     GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW: true,
-                    GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT: true,
                 };
 
                 if (inflationDoneDestinations[this.account.inflation_destination]) {
@@ -195,7 +194,7 @@ export default function Send(driver) {
                             // Avoid race conditions
                             this.handlers.logIn(keypair, opts);
                         }
-                    }, 2000);
+                    }, 5000);
                     this.event.trigger();
                     return;
                 }
@@ -295,7 +294,7 @@ export default function Send(driver) {
                             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'));
                             this.account.refresh();
                             if (this.authType === 'ledger') {
-                                driver.modal.handlers.ledgerFinish(true);
+                                driver.modal.handlers.ledgerFinish('closeWithTimeout');
                             }
                             return transactionResult;
                         })
