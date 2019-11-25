@@ -164,7 +164,7 @@ export default class MultisigEnabled extends React.Component {
             <div className="MultisigEnabled-header-required-signers">
                 <span>
                     {requiredSigner} of {signers.length - 1} signers required to sign transactions.
-                    (Your account + {requiredSigner - 1} co-signer)
+                    (Your account + {requiredSigner - 1} co-signer{requiredSigner > 2 && 's'})
                 </span>
                 <div
                     className="CopyButton"
