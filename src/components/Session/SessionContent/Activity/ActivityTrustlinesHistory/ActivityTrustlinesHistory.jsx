@@ -55,7 +55,7 @@ export default class ActivityTrustlinesHistory extends React.Component {
 
         return (
             <div key={key} style={style} className="Activity-table-row">
-                <div className="Activity-table-cell">{date},{time}</div>
+                <div className="Activity-table-cell">{date} {time}</div>
                 <div className="Activity-table-cell flex3">{viewType}</div>
                 <div className="Activity-table-cell flex5">
                     <AssetCardInRow d={this.props.d} code={asset_code} issuer={asset_issuer} />

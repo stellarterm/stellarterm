@@ -53,7 +53,7 @@ export default function ReservedBalance(props) {
 
                 <div className="reserved_item_total">
                     <span>Total reserved</span>
-                    <span>{reserveData.totalReservedXLM}</span>
+                    <span>{reserveData.totalReservedXLM} XLM</span>
                 </div>
             </div>
         </div>

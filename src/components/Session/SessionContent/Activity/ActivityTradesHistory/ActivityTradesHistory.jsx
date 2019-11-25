@@ -56,7 +56,7 @@ export default class ActivityTradesHistory extends React.Component {
 
         return (
             <div key={key} style={style} className="Activity-table-row">
-                <div className="Activity-table-cell flex4">{date},{time}</div>
+                <div className="Activity-table-cell flex4">{date} {time}</div>
                 <div className="Activity-table-cell flex2">
                     <span className={isBuy ? 'green' : 'red'}>{isBuy ? 'Buy' : 'Sell'}</span>
                 </div>

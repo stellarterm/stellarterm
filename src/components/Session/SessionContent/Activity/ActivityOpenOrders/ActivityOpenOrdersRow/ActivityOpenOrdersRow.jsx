@@ -79,7 +79,7 @@ export default class ActivityOpenOrdersRow extends React.Component {
         return (
             <div className="Activity-table-row" key={virtualKey} style={style}>
                 <div className="Activity-table-cell flex3">
-                    {!emptyDate ? `${date},${time}` : <span>Loading<Ellipsis /></span>}
+                    {!emptyDate ? `${date} ${time}` : <span>Loading<Ellipsis /></span>}
                 </div>
                 <div className="Activity-table-cell flex1">
                     <span className={isBuySide ? 'green' : 'red'}>{isBuySide ? 'Buy' : 'Sell'}</span>
