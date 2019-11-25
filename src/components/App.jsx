@@ -18,6 +18,7 @@ import Session from './Session/Session';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Driver from '../lib/Driver';
+import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
 
 
 window.React = React;
@@ -90,43 +91,52 @@ class TermApp extends React.Component {
             <BrowserRouter>
                 <div>
                     {window.location.pathname.includes('index.html')
-                    && (window.location.hash ?
-                        <Redirect to={`/?tx=${encodeURIComponent(window.location.hash.substr(1))}`} /> :
-                        <Redirect to="/" />)}
+                        && (window.location.hash ?
+                            <Redirect to={`/?tx=${encodeURIComponent(window.location.hash.substr(1))}`} /> :
+                            <Redirect to="/" />)}
                 </div>
-                <div className="AppStretch">
-                    <GlobalModal d={this.props.d} />
-                    <div className="AppStretch AppContainer">
-                        <div>
-                            <Header d={this.props.d} network={network} />
-                            <Switch>
-                                <Route
-                                    exact
-                                    path="/"
-                                    render={props => <HomePage {...props} driver={this.props.d} />} />
-                                <Route path="/download/" component={Download} />
-                                <Route path="/testnet/" component={network.isTestnet ? TestNetwork : ReloadToTestnet} />
-                                <Route path="/privacy/" component={PrivacyPolicy} />
-                                <Route path="/terms-of-use/" component={TermsOfUse} />
-                                <Route
-                                    path="/account/"
-                                    render={props => <Session {...props} d={this.props.d} urlParts={'account'} />} />
-                                <Route
-                                    path="/ledger/"
-                                    render={props => <Session {...props} d={this.props.d} urlParts={'ledger'} />} />
-                                <Route
-                                    path="/signup/"
-                                    render={props => <Session {...props} d={this.props.d} urlParts={'signup'} />} />
-                                <Route path="/markets" render={props => <Markets {...props} d={this.props.d} />} />
-                                <Route path="/exchange" render={props => <Exchange {...props} d={this.props.d} />} />
 
-                               <Route component={NotFound} />
-                            </Switch>
-                            <PopupAlert d={this.props.d} />
+                <ErrorBoundary>
+                    <div className="AppStretch">
+                        <GlobalModal d={this.props.d} />
+                        <div className="AppStretch AppContainer">
+                            <div>
+                                <Header d={this.props.d} network={network} />
+                                <Switch>
+                                    <Route
+                                        exact
+                                        path="/"
+                                        render={props => <HomePage {...props} driver={this.props.d} />} />
+                                    <Route path="/download/" component={Download} />
+                                    <Route
+                                        path="/testnet/"
+                                        component={network.isTestnet ? TestNetwork : ReloadToTestnet} />
+                                    <Route path="/privacy/" component={PrivacyPolicy} />
+                                    <Route path="/terms-of-use/" component={TermsOfUse} />
+                                    <Route
+                                        path="/account/"
+                                        render={props => <Session {...props} d={this.props.d} urlParts={'account'} />} />
+                                    <Route
+                                        path="/ledger/"
+                                        render={props => <Session {...props} d={this.props.d} urlParts={'ledger'} />} />
+                                    <Route
+                                        path="/signup/"
+                                        render={props => <Session {...props} d={this.props.d} urlParts={'signup'} />} />
+                                    <Route
+                                        path="/markets"
+                                        render={props => <Markets {...props} d={this.props.d} />} />
+                                    <Route
+                                        path="/exchange"
+                                        render={props => <Exchange {...props} d={this.props.d} />} />
+
+                                    <Route component={NotFound} />
+                                </Switch>
+                                <PopupAlert d={this.props.d} />
+                            </div>
+                            <Footer />
                         </div>
-                        <Footer />
                     </div>
-                </div>
+                </ErrorBoundary>
             </BrowserRouter>
         );
     }
