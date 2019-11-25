@@ -33,6 +33,7 @@ export default class PairPicker extends React.Component {
             lastChangesDirection: '',
         };
     }
+
     componentDidMount() {
         this._mounted = true;
         this.getLastTrades();
