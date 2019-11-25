@@ -1,4 +1,4 @@
-.OfferMakerResultMessage_message{
+.OfferMakerResultMessage_message {
     width: 100%;
     font-size: 16px;
     font-weight: normal;
@@ -10,18 +10,18 @@
     justify-content: left;
     margin-bottom: 10px;
 
-    img{
-        height: 20px;
+    img {
+        height: 30px;
         width: auto;
         margin-right: 20px;
     }
 
-    &.success{
+    &.success {
         border: solid 1px #7ed085;
         background-color: #f0faf1;
     }
 
-    &.failed{
+    &.failed {
         border: solid 1px #ff496180;
         background-color: #f6c5c580;
     }
