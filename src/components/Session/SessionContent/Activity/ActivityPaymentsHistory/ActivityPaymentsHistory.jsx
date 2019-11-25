@@ -59,7 +59,7 @@ export default class ActivityPaymentsHistory extends React.Component {
 
         return (
             <div key={key} style={style} className="Activity-table-row">
-                <div className="Activity-table-cell">{date},{time}</div>
+                <div className="Activity-table-cell">{date} {time}</div>
                 <div className="Activity-table-cell flex2">{opType}</div>
                 <div className="Activity-table-cell flex8">
                     <div className="Activity-table-identicon">

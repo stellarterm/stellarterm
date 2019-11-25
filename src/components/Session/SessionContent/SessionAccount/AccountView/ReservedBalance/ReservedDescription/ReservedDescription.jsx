@@ -17,7 +17,7 @@ export default () => (
                 href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance"
                 target="_blank"
                 rel="noopener noreferrer">
-                Stellar developer docs
+                Stellar developer docs.
             </a>
         </p>
         <p>
