@@ -466,9 +466,15 @@ const MagicSpoon = {
             asset: opts.asset,
             limit: sdkLimit,
         };
-        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee })
             .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
             .setTimeout(0);
+
+        if (opts.memo) {
+            transaction = transaction.addMemo(Stellarify.memo(opts.memo.memoType, opts.memo.memo));
+        }
+
+        return transaction;
         // DONT call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, opts) {
