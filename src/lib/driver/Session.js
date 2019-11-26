@@ -671,19 +671,21 @@ export default function Send(driver) {
             this.inflationDone = true;
             this.event.trigger();
         },
-        addTrust: async (code, issuer) => {
+        addTrust: async (code, issuer,  memo) => {
             // We only add max trust line
             // Having a "limit" is a design mistake in Stellar that was carried over from the Ripple codebase
             const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
                 asset: new StellarSdk.Asset(code, issuer),
+                memo,
             });
             return await this.handlers.buildSignSubmit(tx);
         },
-        removeTrust: async (code, issuer) => {
+        removeTrust: async (code, issuer, memo) => {
             // Trust lines are removed by setting limit to 0
             const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
                 asset: new StellarSdk.Asset(code, issuer),
                 limit: '0',
+                memo,
             });
             return await this.handlers.buildSignSubmit(tx);
         },
