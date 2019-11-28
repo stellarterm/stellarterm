@@ -5,13 +5,12 @@ import ManageTrust from './ManageTrust/ManageTrust';
 import ManuallyAddTrust from './ManuallyAddTrust/ManuallyAddTrust';
 import SearchByAnchor from '../../../Common/SearchByAnchor/SearchByAnchor';
 import AddTrustFromDirectory from './AddTrustFromDirectory/AddTrustFromDirectory';
-import ErrorBoundary from '../../../Common/ErrorBoundary/ErrorBoundary';
 
 export default function Trust(props) {
     const d = props.d;
 
     return (
-        <ErrorBoundary>
+        <React.Fragment>
             <div className="so-back islandBack islandBack--t">
                 <ManageTrust d={d} />
             </div>
@@ -24,7 +23,7 @@ export default function Trust(props) {
             <div className="so-back islandBack">
                 <ManuallyAddTrust d={d} />
             </div>
-        </ErrorBoundary>
+        </React.Fragment>
     );
 }
 

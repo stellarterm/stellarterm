@@ -1,8 +1,108 @@
-.Error_text_block {
-    margin-bottom: 1em;
+@mixin flex-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.Error_steps_list {
-    list-style-type: decimal;
-    margin-left: 1em;
+@mixin font-14 { font-size: 14px; }
+@mixin font-16 { font-size: 16px; }
+
+.Error_boundary {
+    @include font-14;
+
+    .Generic__content{
+        padding: 0;
+
+        h1, p { font-weight: normal; }
+
+        .Error_boundary_title {
+            @include flex-center;
+            flex-direction: column;
+            padding: 40px 35px;
+            border-bottom: solid 1px #f4f4f5;
+
+            h1 {
+                font-size: 30px;
+                margin-bottom: 0.2em;
+            }
+
+            p {
+                color: #9aa6ac;
+
+                strong { color: #1c2e3e; }
+            }
+        }
+
+
+        .Error_content {
+            padding: 40px 35px;
+            
+            p { @include font-16; }
+
+            .Error_steps_list {
+                list-style-type: decimal;
+                font-weight: normal;
+                margin-left: 1em;
+                color: #9aa6ac;
+
+                li { font-weight: normal; }
+            }
+
+            pre {
+                @include so-code__wrap;
+                border-radius: 2px;
+                padding: 1.75em;
+                overflow-wrap: break-word;
+                border: 1px solid rgba(189, 191, 192, 0.3);
+                background-color: rgba(244, 244, 245, 0.2);
+            }
+
+            .secretKey_warning {
+                @include flex-center;
+                @include font-14;
+                justify-content: start;
+                margin-top: 0.5em;
+                color: #9aa6ac;
+                font-style: italic;
+            }
+
+            .issue_btns_container {
+                @include flex-center;
+                justify-content: space-between;
+                margin-bottom: 2em;
+
+                .issue_btn {
+                    @include flex-center;
+                    @include font-16;
+                    padding: 0.7em 2.5em;
+                    color: #fff;
+                    text-decoration: none;
+                    border-radius: 2px;
+                    border: solid 1px #5eb464;
+                    background-color: #69c76f;
+        
+                    &:hover {
+                        border: 1px solid #498c4e;
+                        background: #53a059;
+                    }
+        
+                    &:active {
+                        border: 1px solid #3e7843;
+                        background: #498c4e;
+                        box-shadow: none;
+                    }
+                } 
+
+                .CopyButton {
+                    .CopyButton__popup {
+                        left: 0;
+                
+                        &::after {
+                            left: 50%;
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
