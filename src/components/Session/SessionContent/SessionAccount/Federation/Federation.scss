@@ -46,7 +46,7 @@
     .Account_alert_left {
         width: 100%;
         max-width: 700px;
-        overflow-x: scroll;
+        overflow-x: auto;
 
         .no_federation_text {
             display: flex;
