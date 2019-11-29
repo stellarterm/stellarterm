@@ -50,30 +50,24 @@ export default class ActivityTradesHistory extends React.Component {
         const { time, date } = formatDate(created_at);
 
         const price = new BigNumber(bought_amount).dividedBy(sold_amount).toFixed(7);
-        const priceRevert = new BigNumber(sold_amount).dividedBy(bought_amount).toFixed(7);
-
-        const isBuy = !counter.isNative();
 
         return (
             <div key={key} style={style} className="Activity-table-row">
                 <div className="Activity-table-cell flex4">{date} {time}</div>
-                <div className="Activity-table-cell flex2">
-                    <span className={isBuy ? 'green' : 'red'}>{isBuy ? 'Buy' : 'Sell'}</span>
-                </div>
                 <div className="Activity-table-cell flex5">
                     <AssetCardInRow d={d} code={base.code} issuer={base.issuer} />
                 </div>
                 <div className="Activity-table-cell flex5">
                     <AssetCardInRow d={d} code={counter.code} issuer={counter.issuer} />
                 </div>
-                <div className="Activity-table_item_right Activity-table-cell flex4">
-                    {Printify.lightenZeros(isBuy ? bought_amount : sold_amount)}
+                <div className="Activity-table_item_right Activity-table-cell flex5">
+                    {Printify.lightenZeros(sold_amount, undefined, ` ${sold_asset_code || 'XLM'}`)}
                 </div>
-                <div className="Activity-table_item_right Activity-table-cell flex4">
-                    {Printify.lightenZeros(isBuy ? priceRevert : price)}
+                <div className="Activity-table_item_right Activity-table-cell flex5">
+                    {Printify.lightenZeros(price)}
                 </div>
-                <div className="Activity-table_item_right Activity-table-cell flex4">
-                    {Printify.lightenZeros(isBuy ? sold_amount : bought_amount)}
+                <div className="Activity-table_item_right Activity-table-cell flex5">
+                    {Printify.lightenZeros(bought_amount, undefined, ` ${bought_asset_code || 'XLM'}`)}
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <img
@@ -115,12 +109,11 @@ export default class ActivityTradesHistory extends React.Component {
                 <div className="Activity-table">
                     <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
                         <div className="Activity-table-cell flex4">Date/Time</div>
-                        <div className="Activity-table-cell flex2">Side</div>
                         <div className="Activity-table-cell flex5">Sell</div>
                         <div className="Activity-table-cell flex5">Buy</div>
-                        <div className="Activity-table_item_right Activity-table-cell flex4">Amount</div>
-                        <div className="Activity-table_item_right Activity-table-cell flex4">Price</div>
-                        <div className="Activity-table_item_right Activity-table-cell flex4">Total</div>
+                        <div className="Activity-table_item_right Activity-table-cell flex5">Amount</div>
+                        <div className="Activity-table_item_right Activity-table-cell flex5">Price</div>
+                        <div className="Activity-table_item_right Activity-table-cell flex5">Total</div>
                         <div className="Activity-table-cell Activity-table_actions flex1" />
                     </div>
                     <div style={{ height: maxHeight }} className="Activity-table-body">
