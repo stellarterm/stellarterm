@@ -16,3 +16,9 @@ package-lock.json
 .idea
 
 .vscode
+directory/logos.json
+directory/directory.json
+
+api/setEnvironment.sh
+api/setStagingEnvironment.sh
+/cmc-key.js
