@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 // For pretty printing in the UI
 const Printify = {
-  lightenZeros(number, numDecimals) {
+  lightenZeros(number, numDecimals, postfix) {
     if (!_.isString(number)) {
       console.error('lightenZeros only takes in strings. Got type: ' + typeof number);
       return <span className="lightenZeros">{number}</span>;
@@ -25,7 +25,10 @@ const Printify = {
       unemph = <span className="lightenZeros__unemph">{unemphMatch[0]}</span>
     }
     // Formats a number into a react element with 0s unemphasized
-    return <span className="lightenZeros">{Number(wholeAmount).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}{emph}{unemph}</span>;
+    return <span className="lightenZeros">
+        {Number(wholeAmount).toLocaleString('en-US', {minimumFractionDigits: 0, maximumFractionDigits: 0})}
+        {emph}{unemph}{postfix}
+    </span>;
   },
   lighten(input) {
     if (!_.isString(input)) {
