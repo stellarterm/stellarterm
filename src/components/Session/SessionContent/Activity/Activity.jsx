@@ -100,7 +100,10 @@ export default class Activity extends React.Component {
     render() {
         const { d } = this.props;
         const { history, loading, paymentHistory, paymentsLoading } = this.state;
-        const openOffers = Object.values(d.session.account.offers);
+        const openOffers = Object.values(d.session.account.offers)
+            .sort((a, b) =>
+                (new Date(b.last_modified_time).getTime() - new Date(a.last_modified_time).getTime()));
+
         const hasOpenOffers = !!openOffers.length;
 
         return (
