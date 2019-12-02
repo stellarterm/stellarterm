@@ -1,15 +1,44 @@
 .AssetCardInRow {
-    display: inline-block;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    width: 100%;
 
     .Row_logo {
         height: 20px;
-        margin-right: 0.5em;
+        width: 20px;
+        min-width: 20px;
+        margin-right: 3px;
     }
 
-    .Row_logo,
-    span {
+    .Row_logo, .AssetCardInRow_main {
         line-height: 20px;
         vertical-align: middle;
+    }
+
+    .AssetCardInRow_main {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        width: 83%;
+
+        .AssetCardInRow_domain {
+            font-size: 12px !important;
+            color: rgba(0, 0, 0, 0.6);
+            margin-left: 1px;
+            vertical-align: text-top;
+            font-weight: 300 !important;
+            white-space: nowrap;
+            text-align: left;
+            text-overflow: ellipsis;
+            overflow: hidden;
+
+            &:hover{
+                overflow: unset;
+                background-color: #fff;
+                z-index: 2;
+            }
+        }
     }
 }
 
@@ -17,7 +46,7 @@
     display: inline-block;
     height: 20px;
     width: 20px;
-    margin-right: 0.5em;
+    margin-right: 3px;
 
     .Unknown_circle {
         height: 100%;

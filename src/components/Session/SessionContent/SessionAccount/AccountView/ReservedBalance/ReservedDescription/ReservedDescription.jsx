@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 export default () => (
-    <div className="island__sub__division MinBalance__sub">
+    <div className="reserved_description">
         <p>
             The Stellar network requires accounts to maintain a{' '}
             <a
@@ -17,7 +17,7 @@ export default () => (
                 href="https://www.stellar.org/developers/guides/concepts/fees.html#minimum-account-balance"
                 target="_blank"
                 rel="noopener noreferrer">
-                Stellar developer docs
+                Stellar developer docs.
             </a>
         </p>
         <p>
@@ -27,8 +27,7 @@ export default () => (
         </p>
         <p>
             <strong>To decrease your minimum balance</strong>, you can remove an existing offer or{' '}
-            <Link to="/account/addTrust/">unaccept an asset</Link>.<br />
-            If you would like to close your Stellar account and withdraw assets somewhere else you can use{' '}
+            <Link to="/account/addTrust/">unaccept an asset</Link>. If you would like to close your Stellar account and withdraw assets somewhere else you can use{' '}
             <a href="https://merge.lobstr.co/" target="_blank" rel="noopener noreferrer">
                 Account Merge tool
             </a>
