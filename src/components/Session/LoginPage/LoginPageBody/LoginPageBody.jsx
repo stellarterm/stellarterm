@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import Driver from '../../../../lib/Driver';
 import AcceptTerms from '../Common/AcceptTerms';
 import LoginSecurityNotes from './LoginSecurityNotes/LoginSecurityNotes';
-
-const images = require('./../../../../images');
+import images from '../../../../images';
 
 export default class LoginPageBody extends React.Component {
     constructor(props) {
@@ -63,7 +62,7 @@ export default class LoginPageBody extends React.Component {
         const { show } = this.state;
         const loginErrorMessage = this.checkForErrorMessages();
         const inputType = show ? 'text' : 'password';
-        const toggleButtonIcon = show ? 'icon-eye-hide' : 'icon-eye';
+        const toggleButtonIcon = show ? 'icon-eye' : 'icon-eye-hide';
 
         return (
             <div className="LoginPage__body">
@@ -78,6 +77,7 @@ export default class LoginPageBody extends React.Component {
                                     type={inputType}
                                     className="s-inputGroup__item S-flexItem-share LoginPage__password"
                                     value={this.state.secretInput}
+                                    maxLength={56}
                                     onChange={e => this.handleInput(e)}
                                     placeholder="Example:
                                         SDWN4ELCTO7KEJSM6OFGALEWYDK1JTCNF23CDCRVTZ3UYDH7FGSY....." />

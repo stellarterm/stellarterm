@@ -52,7 +52,8 @@ export default class MultisigSetRequiredSigners extends React.Component {
                 <div className="MultisigSetRequiredSigners_content">
                     <div className="MultisigSetRequiredSigners_title">
                         Set number of signatures required to make transactions.
-                        You have {signers.length - 1} signers total. (Your account + {signers.length - 2} co-signers)
+                        You have {signers.length - 1} signers total. (Your account + {signers.length - 2} co-signer
+                        {signers.length > 3 && 's'})
                     </div>
                     <div className="MultisigSetRequiredSigners_setup">
                         <div className="MultisigSetRequiredSigners_setup-info">
@@ -61,7 +62,8 @@ export default class MultisigSetRequiredSigners extends React.Component {
                             </span>
                             <span>
                                 {requiredSigners} of {signers.length - 1}{' '}
-                                 will required. (You account + {requiredSigners - 1} co-signers)
+                                 will required. (You account + {requiredSigners - 1} co-signer
+                                {requiredSigners > 2 && 's'})
                             </span>
                         </div>
                         <div className="MultisigSetRequiredSigners_setup-handler">

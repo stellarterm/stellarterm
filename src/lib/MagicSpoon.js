@@ -326,12 +326,13 @@ const MagicSpoon = {
         });
         // TODO: Orderbook streamclosing
     },
-    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION) {
+    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, LIMIT) {
+        const limit = LIMIT || 100;
         const START_TIME = 1514764800; // 01/01/2018
         const END_TIME = Date.now() + 86400000; // Current time + 1 day
         // TODO: Iteration throught next() with binding to chart scroll
         return Server.tradeAggregation(baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION * 1000, 0)
-            .limit(100)
+            .limit(limit)
             .order('desc')
             .call()
             .then(res => res)
@@ -412,7 +413,7 @@ const MagicSpoon = {
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error(
-                    'Destination account does not exist. To create it, you must send a minimum of 1 lumens to create it',
+                    'Destination account does not exist. To create it, you must send at least 1 XLM.',
                 );
             }
             transaction = transaction
@@ -454,9 +455,15 @@ const MagicSpoon = {
             asset: opts.asset,
             limit: sdkLimit,
         };
-        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee })
             .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
             .setTimeout(0);
+
+        if (opts.memo) {
+            transaction = transaction.addMemo(Stellarify.memo(opts.memo.memoType, opts.memo.memo));
+        }
+
+        return transaction;
         // DONT call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, opts) {

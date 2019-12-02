@@ -13,6 +13,5 @@ before_script:
   # - npm run lint || true
 script:
   - npm run production
-  - npm run test
   - cd dist; echo "./fetchTravisBuild.sh stellarterm-build-output/stellarterm/stellarterm/${TRAVIS_BUILD_NUMBER}/${TRAVIS_JOB_NUMBER}/dist/index.html $(openssl dgst -sha256 index.html | sed 's/^.* //')"
   - npm run hash

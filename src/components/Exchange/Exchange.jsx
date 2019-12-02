@@ -28,9 +28,7 @@ const isIE = /MSIE|Trident/.test(window.navigator.userAgent);
 export default class Exchange extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            wrongUrl: false,
-        };
+
         this.unsub = this.props.d.orderbook.event.sub(() => {
             this.forceUpdate();
         });
@@ -44,6 +42,7 @@ export default class Exchange extends React.Component {
         });
 
         this.state = {
+            wrongUrl: false,
             chartType: 'lineChart',
             fullscreenMode: false,
             showAction: false,
@@ -54,12 +53,9 @@ export default class Exchange extends React.Component {
         this._escExitFullscreen = this._escExitFullscreen.bind(this);
     }
 
-    componentWillMount() {
+    componentDidMount() {
         this.getTradePair();
         window.scrollTo(0, 0);
-    }
-
-    componentDidMount() {
         document.addEventListener('keyup', this._handleKeyUp);
         // For handle esc browser from fullscreen
         document.addEventListener('webkitfullscreenchange', this._escExitFullscreen);
@@ -73,6 +69,10 @@ export default class Exchange extends React.Component {
         this.unsubSession();
         this.ubsubHistory();
         document.removeEventListener('keyup', this._handleKeyUp);
+        document.removeEventListener('webkitfullscreenchange', this._escExitFullscreen);
+        document.removeEventListener('mozfullscreenchange', this._escExitFullscreen);
+        document.removeEventListener('fullscreenchange', this._escExitFullscreen);
+        document.removeEventListener('MSFullscreenChange', this._escExitFullscreen);
 
         if (this.state.fullscreenMode) {
             this.toggleFullScreen();

@@ -37,6 +37,7 @@ export default class Markets extends React.Component {
                                 Include 24h zero volume assets
                                 <input
                                     type="checkbox"
+                                    readOnly
                                     className="checkbox_lowTradable"
                                     checked={zeroAssetsVisible} />
                             </div>
