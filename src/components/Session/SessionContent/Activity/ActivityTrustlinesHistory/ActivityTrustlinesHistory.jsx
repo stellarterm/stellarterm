@@ -35,6 +35,13 @@ export default class ActivityTrustlinesHistory extends React.Component {
         return null;
     }
 
+    componentDidMount() {
+        const history = this.constructor.filterHistoryByTrustlines(this.props.history);
+        if (history.length === 0 && !this.props.isFull && !this.props.loading) {
+            this.props.loadMore();
+        }
+    }
+
     componentWillUpdate(nextProps) {
         if (nextProps.history.length === this.props.history.length) {
             return;
@@ -146,4 +153,5 @@ ActivityTrustlinesHistory.propTypes = {
     history: PropTypes.arrayOf(PropTypes.any),
     loading: PropTypes.bool,
     loadMore: PropTypes.func,
+    isFull: PropTypes.bool,
 };
