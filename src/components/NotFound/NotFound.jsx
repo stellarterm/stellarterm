@@ -15,7 +15,7 @@ export default function NotFound(props) {
         : "Page doesn't exist!";
 
     const description404 = isExchange404
-        ? <p>One or two assets of pair doesn{"'"}t exist. Please, <Link to="/markets/">pick a correct trading pair.</Link></p>
+        ? <p>One or two assets of pair don{"'"}t exist. Please, <Link to="/markets/">choose another trading pair.</Link></p>
         : <p>Go to the <Link to="/">Home Page</Link> to choose a new direction.</p>;
 
     return (
