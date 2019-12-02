@@ -22,6 +22,13 @@ export default class ActivityTradesHistory extends React.Component {
         ));
     }
 
+    componentDidMount() {
+        const history = this.constructor.filterHistoryByTrade(this.props.history);
+        if (history.length === 0 && !this.props.isFull && !this.props.loading) {
+            this.props.loadMore();
+        }
+    }
+
     componentWillUpdate(nextProps) {
         if (nextProps.history.length === this.props.history.length) {
             return;
@@ -153,4 +160,5 @@ ActivityTradesHistory.propTypes = {
     history: PropTypes.arrayOf(PropTypes.any),
     loading: PropTypes.bool,
     loadMore: PropTypes.func,
+    isFull: PropTypes.bool,
 };

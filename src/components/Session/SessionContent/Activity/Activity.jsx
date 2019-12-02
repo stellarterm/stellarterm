@@ -35,71 +35,71 @@ export default class Activity extends React.Component {
         super(props);
         this.state = {
             history: [],
-            loading: false,
+            historyLoading: false,
             historyNext: undefined,
-            isHistoryFull: false,
+            historyIsFull: false,
             paymentHistory: [],
-            paymentsLoading: false,
+            paymentHistoryLoading: false,
             paymentHistoryNext: undefined,
-            isPaymentHistoryFull: false,
+            paymentHistoryIsFull: false,
         };
     }
 
     componentDidUpdate() {
         if (window.location.pathname !== '/account/activity/' && (this.state.history.length === 0)
-            && !this.state.loading) {
+            && !this.state.historyLoading) {
             this.getHistory();
         }
         if (window.location.pathname === '/account/activity/payments/' && (this.state.paymentHistory.length === 0)
-            && !this.state.paymentsLoading) {
+            && !this.state.paymentHistoryLoading) {
             this.getPaymentHistory();
         }
     }
 
     getHistory() {
-        this.setState({ loading: true });
+        this.setState({ historyLoading: true });
         this.props.d.history.handlers.getOperations(200).then((history) => {
             this.setState({
                 history: history.records,
                 historyNext: history.next,
-                loading: false,
+                historyLoading: false,
             });
         });
     }
 
     getPaymentHistory() {
-        this.setState({ paymentsLoading: true });
+        this.setState({ paymentHistoryLoading: true });
         this.props.d.history.handlers.getPaymentsHistory(200).then((history) => {
             this.setState({
                 paymentHistory: history.records,
                 paymentHistoryNext: history.next,
-                paymentsLoading: false,
+                paymentHistoryLoading: false,
             });
         });
     }
 
-    loadMore(next, historyType, loadingType, nextType, isFullType) {
-        if (this.state[loadingType] || this.state[isFullType]) {
+    loadMore(next, historyType) {
+        if (this.state[`${historyType}Loading`] || this.state[`${historyType}IsFull`] || !next) {
             return;
         }
-        this.setState({ [loadingType]: true });
+        this.setState({ [`${historyType}Loading`]: true });
         next().then((res) => {
             if (res.records.length === 0) {
-                this.setState({ [loadingType]: false, [isFullType]: true });
+                this.setState({ [`${historyType}Loading`]: false, [`${historyType}IsFull`]: true });
                 return;
             }
 
             this.setState({
                 [historyType]: [...this.state[historyType], ...res.records],
-                [nextType]: res.next,
-                [loadingType]: false,
+                [`${historyType}Next`]: res.next,
+                [`${historyType}Loading`]: false,
             });
         });
     }
 
     render() {
         const { d } = this.props;
-        const { history, loading, paymentHistory, paymentsLoading } = this.state;
+        const { history, historyLoading, historyIsFull, paymentHistory, paymentHistoryLoading } = this.state;
         const openOffers = Object.values(d.session.account.offers)
             .sort((a, b) =>
                 (new Date(b.last_modified_time).getTime() - new Date(a.last_modified_time).getTime()));
@@ -121,13 +121,10 @@ export default class Activity extends React.Component {
                         render={() =>
                             <ActivityTradesHistory
                                 d={d}
-                                loadMore={() => this.loadMore(this.state.historyNext,
-                                    'history',
-                                    'loading',
-                                    'historyNext',
-                                    'isHistoryFull')}
+                                loadMore={() => this.loadMore(this.state.historyNext, 'history')}
+                                isFull={historyIsFull}
                                 history={history}
-                                loading={loading} />} />
+                                loading={historyLoading} />} />
 
                     <Route
                         exact
@@ -135,14 +132,10 @@ export default class Activity extends React.Component {
                         render={() =>
                             <ActivityPaymentsHistory
                                 d={d}
-                                loadMore={() => this.loadMore(this.state.paymentHistoryNext,
-                                    'paymentHistory',
-                                    'paymentsLoading',
-                                    'paymentHistoryNext',
-                                    'isPaymentHistoryFull')}
+                                loadMore={() => this.loadMore(this.state.paymentHistoryNext, 'paymentHistory')}
                                 allHistory={history}
                                 history={paymentHistory}
-                                loading={paymentsLoading} />} />
+                                loading={paymentHistoryLoading} />} />
 
                     <Route
                         exact
@@ -150,25 +143,19 @@ export default class Activity extends React.Component {
                         render={() =>
                             <ActivitySignersHistory
                                 history={history}
-                                loadMore={() => this.loadMore(this.state.historyNext,
-                                    'history',
-                                    'loading',
-                                    'historyNext',
-                                    'isHistoryFull')}
-                                loading={loading} />} />
+                                isFull={historyIsFull}
+                                loadMore={() => this.loadMore(this.state.historyNext, 'history')}
+                                loading={historyLoading} />} />
                     <Route
                         exact
                         path="/account/activity/trustlines/"
                         render={() =>
                             <ActivityTrustlinesHistory
                                 d={d}
-                                loadMore={() => this.loadMore(this.state.historyNext,
-                                    'history',
-                                    'loading',
-                                    'historyNext',
-                                    'isHistoryFull')}
+                                loadMore={() => this.loadMore(this.state.historyNext, 'history')}
+                                isFull={historyIsFull}
                                 history={history}
-                                loading={loading} />} />
+                                loading={historyLoading} />} />
 
 
                     <Route render={() => <div>The requested page was not found.</div>} />
