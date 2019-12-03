@@ -12,11 +12,11 @@ export default function NotFound(props) {
 
     const titleText = isExchange404
         ? "Exchange market doesn't exist!"
-        : "Page doesn't exist!";
+        : 'Page Not Found';
 
     const description404 = isExchange404
         ? <p>One or two assets of pair don{"'"}t exist. Please, <Link to="/markets/">choose another trading pair.</Link></p>
-        : <p>Go to the <Link to="/">Home Page</Link> to choose a new direction.</p>;
+        : <p>This page does not exist or was recently moved. Go to <Link to="/">Home page.</Link></p>;
 
     const notFoundContent = (
         <div className="notFound-container">
