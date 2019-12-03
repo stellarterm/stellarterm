@@ -24,6 +24,14 @@ const execSync = require('child_process').execSync;
 const argv = require('yargs').argv;
 const config = require('./env-config.json');
 
+try {
+    // !You need to add coin market cup key to your environment
+    // eslint-disable-next-line import/no-unresolved,global-require
+    require('./cmc-key');
+    // eslint-disable-next-line no-empty
+} catch (e) {}
+
+
 const reload = browserSync.reload;
 // Default task
 gulp.task('default', ['clean', 'configEnv', 'developApi', 'buildImages', 'watch']);
@@ -121,7 +129,12 @@ function getEnvironment() {
     } else if (process.env.CONTEXT === 'branch-deploy' && process.env.BRANCH === 'staging') {
         deployEnv = 'staging';
     }
-    return deployEnv || process.env.NODE_ENV || argv.env || 'local';
+    const ENV = deployEnv || process.env.NODE_ENV || argv.env || 'local';
+    if (ENV === 'local' && !process.env.COIN_MARKET_CUP_KEY) {
+        console.warn('No COIN_MARKET_CUP_KEY found. Can not use local environment. Staging env will be used');
+        return 'staging';
+    }
+    return ENV;
 }
 
 gulp.task('configEnv', (cb) => {

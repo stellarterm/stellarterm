@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Driver from '../../../../../lib/Driver';
-import MinBalance from './MinBalance/MinBalance';
+import ReservedBalance from './ReservedBalance/ReservedBalance';
 import BalancesTable from './BalancesTable/BalancesTable';
 import Generic from '../../../../Common/Generic/Generic';
 
@@ -36,8 +36,8 @@ export default function AccountView(props) {
             </Generic>
             <div className="so-back islandBack">
                 <div className="island">
-                    <div className="island__header">Minimum Balance</div>
-                    <MinBalance d={props.d} />
+                    <div className="island__header">Reserved Balance</div>
+                    <ReservedBalance d={props.d} />
                 </div>
             </div>
         </div>

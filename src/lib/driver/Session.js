@@ -25,6 +25,7 @@ export default function Send(driver) {
         this.authType = ''; // '', 'secret', 'ledger', 'pubkey'
         this.jwtToken = null;
         this.userFederation = '';
+        this.promisesForMyltipleLoading = {};
     };
     init();
 
@@ -671,19 +672,21 @@ export default function Send(driver) {
             this.inflationDone = true;
             this.event.trigger();
         },
-        addTrust: async (code, issuer) => {
+        addTrust: async (code, issuer,  memo) => {
             // We only add max trust line
             // Having a "limit" is a design mistake in Stellar that was carried over from the Ripple codebase
             const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
                 asset: new StellarSdk.Asset(code, issuer),
+                memo,
             });
             return await this.handlers.buildSignSubmit(tx);
         },
-        removeTrust: async (code, issuer) => {
+        removeTrust: async (code, issuer, memo) => {
             // Trust lines are removed by setting limit to 0
             const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
                 asset: new StellarSdk.Asset(code, issuer),
                 limit: '0',
+                memo,
             });
             return await this.handlers.buildSignSubmit(tx);
         },
@@ -775,7 +778,15 @@ export default function Send(driver) {
             return account.home_domain;
         },
 
-        loadUnknownAssetData: async (asset) => {
+        loadUnknownAssetData: (asset) => {
+            const id = asset.code + asset.issuer;
+            if (!this.promisesForMyltipleLoading[id]) {
+                this.promisesForMyltipleLoading[id] = this.handlers.singleLoadUnknownAssetData(asset);
+            }
+            return this.promisesForMyltipleLoading[id];
+        },
+
+        singleLoadUnknownAssetData: async (asset) => {
             try {
                 const homeDomain = await this.handlers.getDomainByIssuer(asset.issuer);
 
@@ -792,14 +803,19 @@ export default function Send(driver) {
                     throw new Error();
                 }
 
-                const image = currency && currency.image;
+                const { image, host } = currency;
                 const color = image && await this.handlers.getAverageColor(image, asset.code, homeDomain);
+
+                // Stellarterm used only "image" and "host" fields;
 
                 return {
                     code: asset.code,
                     issuer: asset.issuer,
                     host: homeDomain,
-                    currency,
+                    currency: {
+                        host,
+                        image,
+                    },
                     color,
                     time: new Date(),
                 };

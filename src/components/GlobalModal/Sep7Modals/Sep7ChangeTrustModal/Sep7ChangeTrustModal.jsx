@@ -30,7 +30,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
         this.props.d.session.event.unlisten(this.listenId);
     }
 
-    getButtons(asset, limit) {
+    getButtons(asset, limit, memo) {
         const { submit, d } = this.props;
         const { state } = d.session;
         if (state !== 'in') {
@@ -48,7 +48,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
                 </button>
                 <button
                     disabled={this.state.pending}
-                    onClick={() => this.handleSubmit(asset, limit)}
+                    onClick={() => this.handleSubmit(asset, limit, memo)}
                     className="s-button">
                     Confirm{this.state.pending && <Ellipsis />}
                 </button>
@@ -88,7 +88,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
         }
     }
 
-    async handleSubmit(asset, limit) {
+    async handleSubmit(asset, limit, memo) {
         this.setState({ pending: true });
         const { code, issuer } = asset;
         const { d, submit } = this.props;
@@ -98,8 +98,8 @@ export default class Sep7ChangeTrustModal extends React.Component {
         }
 
         const bssResult = parseFloat(limit) === 0 ?
-            await d.session.handlers.removeTrust(code, issuer) :
-            await d.session.handlers.addTrust(code, issuer);
+            await d.session.handlers.removeTrust(code, issuer, memo) :
+            await d.session.handlers.addTrust(code, issuer, memo);
 
         if (bssResult.status === 'await_signers') {
             submit.cancel();
@@ -125,9 +125,12 @@ export default class Sep7ChangeTrustModal extends React.Component {
         const { account } = d.session;
         const { xdr, originDomain } = txDetails;
         const tx = new StellarSdk.Transaction(xdr);
+        const { type, value } = StellarSdk.Memo.fromXDRObject(tx._memo);
+        const memoType = type && `MEMO_${type.toUpperCase()}`;
+        const memo = value && value.toString();
         const [operation] = tx.operations;
         const { limit, line } = operation;
-        const buttons = this.getButtons(line, limit);
+        const buttons = this.getButtons(line, limit, { memo, memoType });
         const { desc, conditions, loaded, error, isLoadInProcess } = this.state;
         if (!isLoadInProcess) {
             this.getDataFromToml(line, d, submit);
@@ -181,6 +184,12 @@ export default class Sep7ChangeTrustModal extends React.Component {
                             <span>Conditions</span>
                             <span>{conditions}</span>
                         </div>}
+                    {memo &&
+                        <div className="Sep7ChangeTrustModal_conditions">
+                            <span>Memo</span>
+                            <span>{memo}</span>
+                        </div>
+                    }
 
                     {parseFloat(limit) === 0 && balance &&
                         <div className="Sep7ChangeTrustModal_conditions">

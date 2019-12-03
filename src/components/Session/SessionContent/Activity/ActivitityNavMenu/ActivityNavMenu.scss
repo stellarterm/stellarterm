@@ -1,0 +1,26 @@
+.ActivityNavMenu {
+    background-color: $s-color-neutral8;
+    font-size: $s-scale-3;
+    padding-left: 24px;
+
+
+    .ActivityNavMenu_item {
+        margin-right: 20px;
+        text-decoration: none;
+        line-height: 48px;
+        display: inline-flex;
+        align-items: center;
+
+        &.is-current {
+            border-bottom: solid 2px #86d38c;
+        }
+
+        .green_dot{
+            width: 5px;
+            height: 5px;
+            border-radius: 50%;
+            background-color: #86d38c;
+            margin-left: 7px;
+        }
+    }
+}

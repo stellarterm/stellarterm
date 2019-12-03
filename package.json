@@ -40,6 +40,7 @@
     "react-dom": "16.9.0",
     "react-input-autosize": "^2.2.1",
     "react-router-dom": "5.1.0",
+    "react-virtualized": "^9.21.1",
     "screenfull": "^4.2.1",
     "stellar-identicon-js": "^1.0.0",
     "stellar-sdk": "^1.0.5",
