@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import millify from 'millify';
-import { niceRound } from '../../../lib/Format';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import AssetPair from '../../Common/AssetPair/AssetPair';
+import MagicSpoon from '../../../lib/MagicSpoon';
 
 const RESOLUTION_MINUTE = 60;
 // 24 hour = 96 section of 15 min;
@@ -31,6 +31,7 @@ export default class PairPicker extends React.Component {
         this.state = {
             last24HourTrades: undefined,
             lastMinutesTrade: undefined,
+            counterWithLumenLastTrade: undefined,
             lastChangesDirection: '',
         };
     }
@@ -43,13 +44,9 @@ export default class PairPicker extends React.Component {
         });
     }
 
-    componentWillUnmount() {
-        this.unsub();
-    }
-
-    componentWillUpdate(nextProps, nextState) {
-        const nextChanges = parseFloat(this.constructor.get24ChangesPercent(nextState));
-        const prevChanges = parseFloat(this.constructor.get24ChangesPercent(this.state));
+    componentDidUpdate(prevProps, prevState) {
+        const nextChanges = parseFloat(this.constructor.get24ChangesPercent(this.state));
+        const prevChanges = parseFloat(this.constructor.get24ChangesPercent(prevState));
         const firstLoad = prevChanges === null;
         if (!firstLoad && prevChanges < nextChanges) {
             this.setChangesDirection('up');
@@ -73,9 +70,11 @@ export default class PairPicker extends React.Component {
     }
 
     getPairMarketsData() {
-        const { last24HourTrades, lastMinutesTrade } = this.state;
+        const { d } = this.props;
+        const { baseBuying } = d.orderbook.data;
+        const { last24HourTrades, lastMinutesTrade, counterWithLumenLastTrade } = this.state;
 
-        if (!last24HourTrades || !lastMinutesTrade) {
+        if (!last24HourTrades || !lastMinutesTrade || !counterWithLumenLastTrade || !d.ticker.ready) {
             return {
                 status: 'load',
             };
@@ -99,9 +98,17 @@ export default class PairPicker extends React.Component {
                 return acc;
             }, { volume24: 0, price24high: 0, price24low: 0 });
 
+        const convertedLastPriceToXLM = counterWithLumenLastTrade === 'notRequired' ?
+            lastPrice :
+            lastPrice * counterWithLumenLastTrade.records[0].open;
+
+        const { USD_XLM } = d.ticker.data._meta.externalPrices;
+        const lastUsdPrice = baseBuying.isNative() ? USD_XLM : USD_XLM * convertedLastPriceToXLM;
+
         return {
             status: 'trades_fully',
             lastPrice,
+            lastUsdPrice,
             changes24,
             volume24,
             price24low,
@@ -110,9 +117,20 @@ export default class PairPicker extends React.Component {
     }
 
     async getLastTrades() {
+        const { d } = this.props;
+        const { baseBuying, counterSelling } = d.orderbook.data;
+        const pairWithoutLumen = !baseBuying.isNative() && !counterSelling.isNative();
+
         const lastTradesWithStep15min =
-            await this.props.d.orderbook.handlers.getTrades(RESOLUTION_15_MINUTES, LIMIT_15_MINUTES);
-        const lastMinutesTrade = await this.props.d.orderbook.handlers.getTrades(RESOLUTION_MINUTE, 1);
+            await d.orderbook.handlers.getTrades(RESOLUTION_15_MINUTES, LIMIT_15_MINUTES);
+
+        const lastMinutesTrade = await d.orderbook.handlers.getTrades(RESOLUTION_MINUTE, 1);
+
+        const counterWithLumenLastTrade = pairWithoutLumen ?
+            await MagicSpoon.tradeAggregation(d.Server, counterSelling, StellarSdk.Asset.native(),
+                RESOLUTION_MINUTE, 1) :
+            'notRequired';
+
 
         if (!this._mounted) {
             return;
@@ -123,6 +141,7 @@ export default class PairPicker extends React.Component {
         this.setState({
             last24HourTrades,
             lastMinutesTrade,
+            counterWithLumenLastTrade,
         });
 
         // Update every 15 seconds
@@ -133,16 +152,13 @@ export default class PairPicker extends React.Component {
         const { d } = this.props;
         const { counterSelling } = d.orderbook.data;
         const counterAssetCode = counterSelling.getCode();
-        const { status, lastPrice, changes24, volume24, price24low, price24high } = this.getPairMarketsData();
+        const { status, lastPrice, lastUsdPrice, changes24, volume24, price24low, price24high } =
+            this.getPairMarketsData();
 
         if (status === 'load') {
             return (
                 <div className="PairPicker_marketsTable-content">
-                    <span><Ellipsis /></span>
-                    <span><Ellipsis /></span>
-                    <span><Ellipsis /></span>
-                    <span><Ellipsis /></span>
-                    <span><Ellipsis /></span>
+                    {(new Array(6)).fill(<span><Ellipsis /></span>)}
                 </div>
             );
         }
@@ -150,7 +166,7 @@ export default class PairPicker extends React.Component {
         if (status === 'no_trades') {
             return (
                 <div className="PairPicker_marketsTable-content">
-                    <span>—</span><span>—</span><span>—</span><span>—</span><span>—</span>
+                    {(new Array(6)).fill(<span>—</span>)}
                 </div>
             );
         }
@@ -161,6 +177,7 @@ export default class PairPicker extends React.Component {
         return (
             <div className="PairPicker_marketsTable-content">
                 <span>{lastPrice} {counterAssetCode}</span>
+                <span>${lastUsdPrice.toFixed(7)}</span>
                 <span className={noChanges ? '' : changesClassName}>
                             <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24}%</span>
                         </span>
@@ -189,6 +206,7 @@ export default class PairPicker extends React.Component {
                 <div className="PairPicker_marketsTable">
                     <div className="PairPicker_marketsTable-header">
                         <span>Last price</span>
+                        <span>Last USD price</span>
                         <span>24h changes </span>
                         <span>24h High</span>
                         <span>24h Low</span>
