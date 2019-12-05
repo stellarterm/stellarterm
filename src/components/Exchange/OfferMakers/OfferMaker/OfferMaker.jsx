@@ -53,6 +53,12 @@ export default class OfferMaker extends React.Component {
         this._mounted = true;
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.existingOffer && prevProps.existingOffer.price !== this.props.existingOffer.price) {
+            this.setInitialState();
+        }
+    }
+
     componentWillUnmount() {
         this.orderbookUnsub();
         this.sessionUnsub();
@@ -73,26 +79,39 @@ export default class OfferMaker extends React.Component {
         );
     }
 
+    setInitialState() {
+        this.setState({
+            valid: false,
+            price: this.props.existingOffer.price, // Most sticky item (since the price is pretty static)
+            amount: this.props.existingOffer.baseAmount,
+            total: this.props.existingOffer.counterAmount,
+            offerId: this.props.existingOffer.id,
+            buttonState: 'ready',
+            errorMessage: '',
+            successMessage: '',
+        });
+    }
+
     initialize() {
         if (!this.initialized) {
-            this.initialized = true;
-            const state = {};
-
-            // Initialize price
-            if (this.props.side === 'buy' && this.props.d.orderbook.data.bids.length > 0) {
-                state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString();
-                // Get rid of extra 0s
-            } else if (this.props.d.orderbook.data.asks.length > 0) {
-                // Proptypes validation makes sure this is sell
-                state.price = new BigNumber(this.props.d.orderbook.data.asks[0].price).toString();
-                // Get rid of extra 0s
-            }
-
-            state.errorType = '';
-
-            return state;
+            return {};
         }
-        return {};
+        this.initialized = true;
+        const state = {};
+
+        // Initialize price
+        if (this.props.side === 'buy' && this.props.d.orderbook.data.bids.length > 0) {
+            state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString();
+            // Get rid of extra 0s
+        } else if (this.props.d.orderbook.data.asks.length > 0) {
+            // Proptypes validation makes sure this is sell
+            state.price = new BigNumber(this.props.d.orderbook.data.asks[0].price).toString();
+            // Get rid of extra 0s
+        }
+
+        state.errorType = '';
+
+        return state;
     }
 
     updateState(item, value, minValue, targetInputType, maxOffer) {
