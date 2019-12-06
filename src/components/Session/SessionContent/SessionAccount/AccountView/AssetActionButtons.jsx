@@ -24,12 +24,31 @@ export default class AssetActionButtons extends React.Component {
         });
     }
 
+    getBuyCryptoLobsterLink(isXLMNative) {
+        const { account, unfundedAccountId } = this.props.d.session;
+        const accountID = account === null ? unfundedAccountId : account.accountId();
+        const targetAddressParam = `?target_address=${accountID}`;
+
+        if (!isXLMNative) { return null; }
+
+        return (
+            <a
+                href={`https://lobstr.co/buy-crypto${targetAddressParam}`}
+                target="_blank" rel="nofollow noopener noreferrer">
+                <div className="actionBtn">
+                    <div className="btnHint btnHint_buyLumens">Buy lumens</div>
+                    <img className="actionBtn_icon" src={images['icon-deposit']} alt="withdraw" />
+                </div>
+            </a>
+        );
+    }
+
     render() {
         const { onlyIcons, asset } = this.props;
-
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
         const isDepositEnabled = directoryAsset !== null && directoryAsset.deposit === true;
         const isWithdrawEnabled = directoryAsset !== null && directoryAsset.withdraw === true;
+        const isXLMNative = asset.code === 'XLM' && asset.issuer === null;
 
         const containerClass = `ActionBtns_container ${onlyIcons ? 'hide_ActionText' : ''}`;
 
@@ -39,7 +58,6 @@ export default class AssetActionButtons extends React.Component {
                     <div className="actionBtn" onClick={() => this.onSep6Click(true)}>
                         <div className="btnHint">Deposit</div>
                         <img className="actionBtn_icon" src={images['icon-deposit']} alt="deposit" />
-                        <span className="actionBtn_text">Deposit</span>
                     </div>
                 ) : null}
 
@@ -47,15 +65,15 @@ export default class AssetActionButtons extends React.Component {
                     <div className="actionBtn" onClick={() => this.onSep6Click(false)}>
                         <div className="btnHint">Withdraw</div>
                         <img className="actionBtn_icon" src={images['icon-withdraw']} alt="withdraw" />
-                        <span className="actionBtn_text">Withdraw</span>
                     </div>
                 ) : null}
+
+                {this.getBuyCryptoLobsterLink(isXLMNative)}
 
                 <Link to={'send/'}>
                     <div className="actionBtn">
                         <div className="btnHint">Send</div>
                         <img className="actionBtn_icon" src={images['icon-send']} alt="send" />
-                        <span className="actionBtn_text">Send</span>
                     </div>
                 </Link>
 
@@ -64,7 +82,6 @@ export default class AssetActionButtons extends React.Component {
                         <div className="actionBtn">
                             <div className="btnHint">Trade</div>
                             <img className="actionBtn_icon" src={images['icon-trade']} alt="trade" />
-                            <span className="actionBtn_text">Trade</span>
                         </div>
                     </Link>
                 ) : null}

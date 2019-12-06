@@ -62,7 +62,7 @@ export default class Sep6ModalConfirm extends React.Component {
         return (
             <div className="content_main">
                 <div className="content_block">
-                    <div className="content_title">Deposit address or instructions:</div>
+                    <div className="content_title">Deposit address or instructions</div>
                     <div className="content_text">{res.how || 'No instructions'}</div>
                 </div>
 

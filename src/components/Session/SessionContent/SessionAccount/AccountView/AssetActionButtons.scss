@@ -11,9 +11,6 @@
         padding: 0.5em;
         cursor: pointer;
 
-        .actionBtn_text {
-        }
-
         .actionBtn_icon {
             width: 24px;
             height: 24px;
@@ -34,19 +31,20 @@
         position: relative;
         justify-content: center;
 
-        .actionBtn_text {
-            display: none;
-        }
-
         &:hover {
             .btnHint {
                 opacity: 1;
             }
         }
 
-        .btnHint {
+        .btnHint_buyLumens{
+            width: 120px;
+        }
 
-            display: block;
+        .btnHint {
+            display: flex;
+            justify-content: center;
+            align-items: center;
             opacity: 0;
             top: 35px;
             color: #fff;

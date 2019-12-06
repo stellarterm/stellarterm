@@ -27,12 +27,12 @@ export default function AssetBalance(props) {
     const usdBalance = (parseFloat(assetBalance) * assetUsdPrice).toFixed(2);
 
     const descriptionSpan = isDeposit
-        ? <span>Deposit native {asset.code} to get {asset.code} ({domainLink}) asset issued on Stellar.</span>
+        ? <span>Deposit native {asset.code} to get {asset.code} ({domainLink}) asset issued on Stellar</span>
         : <span>Withdraw {asset.code} ({domainLink}) Stellar asset to get native {asset.code}</span>;
 
     const descriptionConfirm = isDeposit
-        ? <span>Please recheck deposit details before sending funds.</span>
-        : <span>Please check withdraw details and click Confirm to withdraw.</span>;
+        ? <span>Please check the deposit details before sending funds</span>
+        : <span>Please check the details and click the Confirm button to withdraw</span>;
 
     return (
         <React.Fragment>
