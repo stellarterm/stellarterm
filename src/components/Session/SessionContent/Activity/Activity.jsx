@@ -59,7 +59,7 @@ export default class Activity extends React.Component {
 
     getHistory() {
         this.setState({ historyLoading: true });
-        this.props.d.history.handlers.getOperations(200).then((history) => {
+        this.props.d.history.getOperations(200).then((history) => {
             this.setState({
                 history: history.records,
                 historyNext: history.next,
@@ -70,7 +70,7 @@ export default class Activity extends React.Component {
 
     getPaymentHistory() {
         this.setState({ paymentHistoryLoading: true });
-        this.props.d.history.handlers.getPaymentsHistory(200).then((history) => {
+        this.props.d.history.getPaymentsHistory(200).then((history) => {
             this.setState({
                 paymentHistory: history.records,
                 paymentHistoryNext: history.next,
