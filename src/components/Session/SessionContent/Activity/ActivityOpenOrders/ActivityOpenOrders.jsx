@@ -48,9 +48,8 @@ export default class ActivityOpenOrders extends React.Component {
                 <div className="Activity-table">
                     <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
                         <div className="Activity-table-cell flex3">Created</div>
-                        <div className="Activity-table-cell flex1">Side</div>
-                        <div className="Activity-table-cell">Sell</div>
-                        <div className="Activity-table-cell">Buy</div>
+                        <div className="Activity-table-cell flex3">Sell</div>
+                        <div className="Activity-table-cell flex3">Buy</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Amount</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Price</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Total</div>

@@ -40,7 +40,7 @@ export default class ActivityOpenOrdersRow extends React.Component {
     handleEdit(event, offerData) {
         event.preventDefault();
         const { base, counter } = offerData.rectifiedOffer;
-        this.props.d.orderbook.handlers.setOrderbook(base, counter);
+        this.props.d.orderbook.handlers.setOrderbook(counter, base);
         this.props.d.modal.handlers.activate('EditOfferModal', offerData);
     }
 
@@ -59,21 +59,18 @@ export default class ActivityOpenOrdersRow extends React.Component {
         const priceRevert = new BigNumber(price_r.d).dividedBy(price_r.n).toFixed(7);
         const total = new BigNumber(price_r.n).dividedBy(price_r.d).times(amount).toFixed(7);
 
-        // if counterSelling is XLM(native)- display offers as buy side
-        // if baseBuying is XLM(native) - display offer as sell side
-
-        const isBuySide = !base.isNative();
-
         const offerData = {
             rectifiedOffer: {
                 id,
-                price: isBuySide ? priceRevert : price,
-                base: isBuySide ? base : counter,
-                counter: isBuySide ? counter : base,
-                baseAmount: isBuySide ? total : amount,
-                counterAmount: isBuySide ? amount : total,
+                price,
+                priceRevert,
+                base,
+                counter,
+                baseAmount: amount,
+                counterAmount: total,
             },
-            side: isBuySide ? 'buy' : 'sell',
+            withSwitch: true,
+            side: 'sell',
         };
 
         return (
@@ -81,23 +78,22 @@ export default class ActivityOpenOrdersRow extends React.Component {
                 <div className="Activity-table-cell flex3">
                     {!emptyDate ? `${date} ${time}` : <span>Loading<Ellipsis /></span>}
                 </div>
-                <div className="Activity-table-cell flex1">
-                    <span className={isBuySide ? 'green' : 'red'}>{isBuySide ? 'Buy' : 'Sell'}</span>
-                </div>
-                <div className="Activity-table-cell">
+                <div className="Activity-table-cell flex3">
                     <AssetCardInRow d={d} code={counter.code} issuer={counter.issuer} />
                 </div>
-                <div className="Activity-table-cell">
+                <div className="Activity-table-cell flex3">
                     <AssetCardInRow d={d} code={base.code} issuer={base.issuer} />
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(offerData.rectifiedOffer.baseAmount)}
+                    {Printify.lightenZeros(offerData.rectifiedOffer.baseAmount,
+                        undefined, ` ${counter.code || 'XLM'}`)}
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
                     {Printify.lightenZeros(offerData.rectifiedOffer.price)}
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(offerData.rectifiedOffer.counterAmount)}
+                    {Printify.lightenZeros(offerData.rectifiedOffer.counterAmount,
+                        undefined, ` ${base.code || 'XLM'}`)}
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1_5">
                     <img
