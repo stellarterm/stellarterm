@@ -93,7 +93,7 @@ export default class OfferMaker extends React.Component {
     }
 
     initialize() {
-        if (!this.initialized) {
+        if (this.initialized) {
             return {};
         }
         this.initialized = true;
