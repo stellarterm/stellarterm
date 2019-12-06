@@ -76,44 +76,51 @@ export default class Sep7PayModal extends React.Component {
     }
 
     async handlePayment(asset, destination, amount, memoType, memo) {
-        this.setState({ pending: true });
-        const { d, submit } = this.props;
+        try {
+            this.setState({ pending: true });
+            const { d, submit } = this.props;
 
-        if (d.session.authType === 'ledger') {
-            submit.cancel();
-        }
+            if (d.session.authType === 'ledger') {
+                submit.cancel();
+            }
 
-        let type = memoType || 'MEMO_TEXT';
-        if (type.toUpperCase() !== type) {
-            type = `MEMO_${type.toUpperCase()}`;
-        }
+            let type = memoType || 'MEMO_TEXT';
+            if (type.toUpperCase() !== type) {
+                type = `MEMO_${type.toUpperCase()}`;
+            }
 
-        const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
-            destination,
-            asset,
-            amount,
-            memo: (memo) ? {
-                type,
-                content: memo,
-            } : undefined,
-        });
-        const bssResult = await d.session.handlers.buildSignSubmit(tx);
-        if (bssResult.status === 'await_signers') {
-            submit.cancel();
-            window.history.pushState({}, null, '/');
-        }
-        if (bssResult.status === 'finish') {
-            bssResult.serverResult
-                .then(() => {
-                    submit.cancel();
-                    window.history.pushState({}, null, '/');
-                })
-                .catch((e) => {
-                    this.setState({
-                        error: e,
-                        pending: false,
+            const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
+                destination,
+                asset,
+                amount,
+                memo: (memo) ? {
+                    type,
+                    content: memo,
+                } : undefined,
+            });
+            const bssResult = await d.session.handlers.buildSignSubmit(tx);
+            if (bssResult.status === 'await_signers') {
+                submit.cancel();
+                window.history.pushState({}, null, '/');
+            }
+            if (bssResult.status === 'finish') {
+                bssResult.serverResult
+                    .then(() => {
+                        submit.cancel();
+                        window.history.pushState({}, null, '/');
+                    })
+                    .catch((e) => {
+                        this.setState({
+                            error: e,
+                            pending: false,
+                        });
                     });
-                });
+            }
+        } catch (e) {
+            this.setState({
+                error: e,
+                pending: false,
+            });
         }
     }
 

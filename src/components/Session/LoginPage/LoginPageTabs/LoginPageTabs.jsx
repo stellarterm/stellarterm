@@ -20,7 +20,7 @@ export default function LoginPageTabs(props) {
 
             <Link
                 className={`LoginPage__sidebar__tab${props.rootAddress === 'ledger' ? ' is-active' : ''}`}
-                to="/ledger">
+                to="/ledger/">
                 <img
                     className="LoginPage__sidebar__tab__img--invertible img--noSelect"
                     src={images['ledger-logo']}

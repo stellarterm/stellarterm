@@ -71,7 +71,9 @@ export default class ManageOffers extends React.Component {
                 <div className="ManageOffers__header">
                     <h3 className="ManageOffers__title">Your {side} offers</h3>
                     {sortedRectifiedOffers.length > 1 &&
-                        <button onClick={e => this.cancelAllOffers(e, side, sortedRectifiedOffers)}>
+                        <button
+                            className="CancelOffers_button"
+                            onClick={e => this.cancelAllOffers(e, side, sortedRectifiedOffers)}>
                             <span>+</span>
                             Cancel {side} offers
                         </button>}
@@ -95,13 +97,25 @@ export default class ManageOffers extends React.Component {
     }
 
     render() {
-        if (this.props.d.session.state !== 'in') {
+        if (this.props.d.session.state === 'out' || this.props.d.session.state === 'loading') {
             return (
                 <div className="island__paddedContent">
                     <div className="OfferMakerOverview_login">
                         <span className="offer_message">
-                            <Link to="/account/">Log in</Link> or <Link to="/signup/">Sign up </Link>
-                            to see your open offers
+                            <a onClick={() => this.props.d.modal.handlers.activate('LoginModal')}>Log in</a>
+                            {' '}or <Link to="/signup/">Sign up </Link> to see your open offers
+                        </span>
+                    </div>
+                </div>
+            );
+        }
+
+        if (this.props.d.session.state === 'unfunded') {
+            return (
+                <div className="island__paddedContent">
+                    <div className="OfferMakerOverview_login">
+                        <span className="offer_message">
+                            <Link to="/account/">Activate your Stellar account to trade</Link>
                         </span>
                     </div>
                 </div>

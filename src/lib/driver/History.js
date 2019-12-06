@@ -90,5 +90,11 @@ export default function History(driver) {
                 .limit(opLimit)
                 .order('desc')
                 .call(),
+
+        getPaymentsHistory: opLimit => driver.Server.payments()
+            .forAccount(driver.session.account.account_id)
+            .limit(opLimit)
+            .order('desc')
+            .call(),
     };
 }

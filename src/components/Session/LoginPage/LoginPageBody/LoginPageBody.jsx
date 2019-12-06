@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import Driver from '../../../../lib/Driver';
 import AcceptTerms from '../Common/AcceptTerms';
 import LoginSecurityNotes from './LoginSecurityNotes/LoginSecurityNotes';
-
-const images = require('./../../../../images');
+import images from '../../../../images';
 
 export default class LoginPageBody extends React.Component {
     constructor(props) {
@@ -90,7 +89,7 @@ export default class LoginPageBody extends React.Component {
                             </label>
 
                             {loginErrorMessage}
-                            <AcceptTerms loginButtonText={'Log in'} />
+                            <AcceptTerms loginButtonText={'Log in'} d={this.props.d} />
                         </form>
                     </div>
                     {!this.props.modal && <LoginSecurityNotes />}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import LoginModalBlock from './LoginModalBlock/LoginModalBlock';
+import LoginModalBlock from '../../LoginModal/LoginModalBlock/LoginModalBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
 import Driver from '../../../../lib/Driver';
 
@@ -33,7 +33,7 @@ export default function AccountModalBlock(props) {
                 </div>
         );
     case 'out':
-        return (<LoginModalBlock d={d} />);
+        return (<LoginModalBlock d={d} title="Please log in to complete transaction" />);
     case 'loading':
         return (
                 <div className="AccountModalBlock_loading">

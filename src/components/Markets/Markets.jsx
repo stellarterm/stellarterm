@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../lib/Driver';
 import AssetList from '../Common/AssetList/AssetList';
-import ErrorBoundary from '../Common/ErrorBoundary/ErrorBoundary';
 import CustomPairMenu from './CustomPairMenu/CustomPairMenu';
 import CustomMarketPicker from './CustomMarketPicker/CustomMarketPicker';
 import SearchByAnchor from '../Common/SearchByAnchor/SearchByAnchor';
@@ -21,11 +20,9 @@ export default class Markets extends React.Component {
 
         return (
             <div>
-                <ErrorBoundary>
-                    <div className="so-back islandBack islandBack--t">
-                        <SearchByAnchor d={d} tradeLink />
-                    </div>
-                </ErrorBoundary>
+                <div className="so-back islandBack islandBack--t">
+                    <SearchByAnchor d={d} tradeLink />
+                </div>
 
                 <div className="so-back islandBack">
                     <div className="island">
@@ -59,14 +56,12 @@ export default class Markets extends React.Component {
                     </div>
                 </div>
 
-                <ErrorBoundary>
-                    <div className="so-back islandBack">
-                        <CustomPairMenu d={d} />
-                    </div>
-                    <div className="so-back islandBack">
-                        <CustomMarketPicker row d={d} />
-                    </div>
-                </ErrorBoundary>
+                <div className="so-back islandBack">
+                    <CustomPairMenu d={d} />
+                </div>
+                <div className="so-back islandBack">
+                    <CustomMarketPicker row d={d} />
+                </div>
             </div>
         );
     }

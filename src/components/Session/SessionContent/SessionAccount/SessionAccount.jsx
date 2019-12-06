@@ -4,14 +4,13 @@ import Driver from '../../../../lib/Driver';
 import Federation from './Federation/Federation';
 import AccountView from './AccountView/AccountView';
 import Generic from '../../../Common/Generic/Generic';
-import ErrorBoundary from '../../../Common/ErrorBoundary/ErrorBoundary';
 import AccountIdBlock from '../../AccountIdBlock/AccountIdBlock';
 
 export default function SessionAccount(props) {
     const accountID = props.d.session.account.accountId();
 
     return (
-        <ErrorBoundary>
+        <React.Fragment>
             <Generic>
                 <AccountIdBlock accountID={accountID} />
                 <p className="AccountView_text">
@@ -22,7 +21,7 @@ export default function SessionAccount(props) {
             </Generic>
 
             <AccountView d={props.d} />
-        </ErrorBoundary>
+        </React.Fragment>
     );
 }
 
