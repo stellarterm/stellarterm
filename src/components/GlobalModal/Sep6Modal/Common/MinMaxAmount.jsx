@@ -26,7 +26,7 @@ export default function MinMaxAmount(props) {
     }
 
     const titleText = isDeposit ? 'deposit' : 'withdraw';
-    const fullTitleText = `${titleActionText} ${titleText} amount:`;
+    const fullTitleText = `${titleActionText} ${titleText} amount`;
 
     if (bothLimits) {
         warningText = 'insufficient or excessive';
@@ -38,17 +38,17 @@ export default function MinMaxAmount(props) {
         ) : (
             <React.Fragment>
                 <div className="content_block">
-                    <div className="content_title">Minimum deposit amount:</div>
+                    <div className="content_title">Minimum deposit amount</div>
                     <div className="content_text">
                         {min} {assetCode}
                     </div>
                     <div className="content_text">
                         <img src={images['icon-warning-triangle']} alt="warning" />
-                        Be careful, you can lose money if the amount is {warningText}.
+                        Be careful! You can lose your money if the amount is {warningText}.
                     </div>
                 </div>
                 <div className="content_block">
-                    <div className="content_title">Maximum deposit amount:</div>
+                    <div className="content_title">Maximum deposit amount</div>
                     <div className="content_text">
                         {max} {assetCode}
                     </div>
@@ -69,7 +69,7 @@ export default function MinMaxAmount(props) {
             </div>
             <div className="content_text">
                 <img src={images['icon-warning-triangle']} alt="warning" />
-                Be careful, you can lose money if the amount is {warningText}.
+                Be careful! You can lose your money if the amount is {warningText}.
             </div>
         </div>
     );

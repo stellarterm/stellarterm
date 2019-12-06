@@ -22,7 +22,8 @@ export default function FeeBlock(props) {
         feeText = `${feePercent}%`;
         totalFee = amountProvided ? (
             <div>
-                {Printify.lightenZeros((parseFloat(amountForFee) / 100) * feePercent).toFixed(7)} {assetCode}
+                {Printify.lightenZeros(((parseFloat(amountForFee) / 100) * feePercent).toFixed(7))}{' '}
+                {assetCode}
             </div>
         ) : (
             feeText
@@ -41,18 +42,18 @@ export default function FeeBlock(props) {
 
     return !amountProvided ? (
         <div className="content_block">
-            <div className="content_title">Fee:</div>
+            <div className="content_title">Fee</div>
             <div className="content_text">{feeText}</div>
         </div>
     ) : (
         <React.Fragment>
             <div className="content_block">
-                <div className="content_title">Fee:</div>
+                <div className="content_title">Fee</div>
                 <div className="content_text">{feeText}</div>
             </div>
             {isfixedFee || isNoFee ? null : (
                 <div className="content_block">
-                    <div className="content_title">Total fee:</div>
+                    <div className="content_title">Total fee</div>
                     <div className="content_text">{totalFee}</div>
                 </div>
             )}

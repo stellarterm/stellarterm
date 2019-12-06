@@ -113,7 +113,7 @@ export default class Sep6ModalContent extends React.Component {
                 {isDeposit && !depositFieldsProvided ? (
                     <React.Fragment>
                         <div className="content_block">
-                            <div className="content_title">Deposit address or instructions:</div>
+                            <div className="content_title">Deposit address or instructions</div>
                             <div className="content_text">{response.how || 'No instructions'}</div>
                         </div>
 

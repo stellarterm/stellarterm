@@ -7,7 +7,7 @@ export default function MemoBlock(props) {
 
     return isNoMemo ? null : (
         <div className="content_block">
-            <div className="content_title">Memo:</div>
+            <div className="content_title">Memo</div>
             <div className="content_text">{memo}</div>
         </div>
     );

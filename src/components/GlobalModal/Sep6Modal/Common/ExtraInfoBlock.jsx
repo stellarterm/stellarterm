@@ -16,7 +16,7 @@ export default function ExtraInfoBlock(props) {
 
     return noExtraInfo ? null : (
         <div className="content_block extra_info">
-            <div className="content_title">Extra info:</div>
+            <div className="content_title">Extra info</div>
 
             {isOnlyString ? (
                 <div className="content_text">{extra}</div>
