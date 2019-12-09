@@ -6,6 +6,7 @@ export default class History {
         this.driver = driver;
 
         this.popupHistory = [];
+        this.isLoading = false;
         this.lastOpTime = 0;
     }
 
@@ -26,7 +27,10 @@ export default class History {
     }
 
     async newEffectCallback() {
-        const lastOperations = await this.getOperations(15);
+        if (this.isLoading) { return; }
+        this.isLoading = true;
+        const lastOperations = await this.getOperations(20);
+        this.isLoading = false;
 
         if (this.lastOpTime === new Date(lastOperations.records[0].created_at).getTime()) { return; }
 

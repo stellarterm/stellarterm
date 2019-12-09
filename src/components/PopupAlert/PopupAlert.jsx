@@ -98,14 +98,6 @@ export default class PopupAlert extends React.Component {
         this.props.d.history.event.unlisten(this.listenId);
     }
 
-    hidePopup() {
-        this.setState({ isVisible: false });
-        setTimeout(() => {
-            this.props.d.history.cleanSessionHistory();
-        }, 500);
-    }
-
-
     getPopupTemplate(op) {
         if (!actionTypes.has(op.type)) { return null; }
 
@@ -121,13 +113,22 @@ export default class PopupAlert extends React.Component {
         case 'account_inflation_destination_updated':
             opBody = <div className="popup-title">{titleText}</div>;
             break;
-        case 'account_credited' || 'account_debited':
+        case 'account_credited':
             opBody = this.constructor.getPaymentBody(op, titleText);
             break;
-        case 'trustline_created' || 'trustline_removed':
+        case 'account_debited':
+            opBody = this.constructor.getPaymentBody(op, titleText);
+            break;
+        case 'trustline_created':
             opBody = this.constructor.getTruslineBody(op, titleText);
             break;
-        case 'signer_created' || 'signer_removed' || 'signer_updated':
+        case 'trustline_removed':
+            opBody = this.constructor.getTruslineBody(op, titleText);
+            break;
+        case 'signer_removed':
+            opBody = this.constructor.getMultisigBody(op, titleText);
+            break;
+        case 'signer_created':
             opBody = this.constructor.getMultisigBody(op, titleText);
             break;
         default:
@@ -142,6 +143,13 @@ export default class PopupAlert extends React.Component {
                 <div className="popup-content-cell">{opBody}</div>
             </div>
         );
+    }
+
+    hidePopup() {
+        this.setState({ isVisible: false });
+        setTimeout(() => {
+            this.props.d.history.cleanSessionHistory();
+        }, 500);
     }
 
     render() {
