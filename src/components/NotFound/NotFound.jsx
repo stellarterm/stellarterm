@@ -11,12 +11,17 @@ export default function NotFound(props) {
         : <img src={images['icon-notFound']} alt="not-found" />;
 
     const titleText = isExchange404
-        ? "Exchange market doesn't exist!"
-        : 'Page Not Found';
+        ? 'Market pair not found'
+        : 'Page not found';
 
-    const description404 = isExchange404
-        ? <p>One or two assets of pair don{"'"}t exist. Please, <Link to="/markets/">choose another trading pair.</Link></p>
-        : <p>This page does not exist or was recently moved. Go to <Link to="/">Home page.</Link></p>;
+    const description404 = isExchange404 ? (
+        <p>
+            Exchange pair was not found on the ledger. Check the selected assets
+            or <Link to="/markets/">choose another pair.</Link>
+        </p>
+    ) : (
+        <p>This page does not exist or was recently moved. Go to <Link to="/">Home page.</Link></p>
+    );
 
     const notFoundContent = (
         <div className="notFound-container">
