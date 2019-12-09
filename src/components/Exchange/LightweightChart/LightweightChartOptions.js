@@ -1,4 +1,4 @@
-import { createChart } from '../../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
+import { createChart } from '../../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.development';
 
 export const volumeUpColor = 'rgba(76, 175, 80, 0.5)';
 export const volumeDownColor = 'rgba(239, 83, 80, 0.5)';
@@ -29,7 +29,7 @@ export function createLightChart(element, cursorMode) {
         },
         timeScale: {
             rightOffset: 10,
-            fixLeftEdge: true,
+            fixLeftEdge: false,
             lockVisibleTimeRangeOnResize: true,
             rightBarStaysOnScroll: true,
             borderVisible: true,

@@ -4,6 +4,7 @@ import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import Stellarify from '../lib/Stellarify';
+import ErrorHandler from './ErrorHandler';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
@@ -305,10 +306,10 @@ const MagicSpoon = {
                 this.baseBuying = baseBuying;
                 this.counterSelling = counterSelling;
                 this.ready = true;
-                onUpdate();
+                onUpdate(() => {});
             });
 
-        Server.orderbook(baseBuying, counterSelling).stream({
+        const closeFunc = Server.orderbook(baseBuying, counterSelling).stream({
             onmessage: (res) => {
                 let updated = false;
                 if (!_.isEqual(this.bids, res.bids)) {
@@ -320,25 +321,26 @@ const MagicSpoon = {
                     updated = true;
                 }
                 if (updated) {
-                    onUpdate();
+                    onUpdate(closeFunc);
                 }
             },
         });
-        // TODO: Orderbook streamclosing
     },
-    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, LIMIT) {
-        const limit = LIMIT || 100;
+
+    closeOrderbookStreaming(Server) {
+        Server.orderbook.close();
+    },
+
+    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, limit) {
         const START_TIME = 1514764800; // 01/01/2018
         const END_TIME = Date.now() + 86400000; // Current time + 1 day
-        // TODO: Iteration throught next() with binding to chart scroll
         return Server.tradeAggregation(baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION * 1000, 0)
             .limit(limit)
             .order('desc')
             .call()
             .then(res => res)
             .catch((error) => {
-                // TODO: Throw to global stellar error handler
-                console.error(error);
+                console.error(ErrorHandler(error));
             });
     },
     // opts.baseBuying -- StellarSdk.Asset (example: XLM)

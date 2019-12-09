@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { fillWithZeros } from '../ConverterOHLC';
+import { fillWithZeros, getReadableVolume } from '../ConverterOHLC';
 
 export default class ChartDataPanel extends React.Component {
     constructor(props) {
@@ -55,7 +55,7 @@ export default class ChartDataPanel extends React.Component {
                     <span className="data_Title">C:</span>{' '}
                     <span className={spanClass}>{fillWithZeros(trade.close)}</span>
                     <span className="title_Volume">Volume ({volume.volumeName}):</span>{' '}
-                    <span className={`data_Volume ${spanClass}`}>{fillWithZeros(volume.value)}</span>
+                    <span className={`data_Volume ${spanClass}`}>{getReadableVolume(volume.value)}</span>
                 </div>
             </div>
         );

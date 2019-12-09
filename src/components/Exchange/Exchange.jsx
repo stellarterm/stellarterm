@@ -16,7 +16,7 @@ import AssetPair from '../Common/AssetPair/AssetPair';
 import images from '../../images';
 import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
-import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
+import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.development';
 
 const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
@@ -73,6 +73,7 @@ export default class Exchange extends React.Component {
         document.removeEventListener('mozfullscreenchange', this._escExitFullscreen);
         document.removeEventListener('fullscreenchange', this._escExitFullscreen);
         document.removeEventListener('MSFullscreenChange', this._escExitFullscreen);
+        this.props.d.orderbook.closeOrderbookStream();
 
         if (this.state.fullscreenMode) {
             this.toggleFullScreen();
@@ -93,6 +94,15 @@ export default class Exchange extends React.Component {
 
     getChartSwitcherPanel() {
         const { chartType, fullscreenMode } = this.state;
+        const fullscreenHint = fullscreenMode ? (
+            <div className="btnHint">
+                Press <span className="keySpan">F</span> or <span className="keySpan">esc</span> to exit fullscreen
+            </div>
+        ) : (
+            <div className="btnHint">
+                Press <span className="keySpan">F</span> to enter fullscreen
+            </div>
+        );
         const fullscreenBtn = fullscreenMode ? (
             <img src={images['icon-fullscreen-minimize']} alt="F" onClick={() => this.toggleFullScreen()} />
         ) : (
@@ -130,8 +140,20 @@ export default class Exchange extends React.Component {
                     </a>
                 </div>
                 <div className="fullscreen_Block">
-                    {!isMicrosoftBrowser ? downloadScreenshotBtn : null}
-                    {screenfull.enabled ? fullscreenBtn : null}
+                {!isMicrosoftBrowser ? (
+                        <div className="actionBtn">
+                            {downloadScreenshotBtn}
+                            <div className="btnHint">Take screenshot</div>
+                        </div>
+                    ) : null}
+                    {screenfull.enabled ? (
+                        <React.Fragment>
+                            <div className="actionBtn">
+                                {fullscreenBtn}
+                                {fullscreenHint}
+                            </div>
+                        </React.Fragment>
+                    ) : null}
                 </div>
             </div>
         );

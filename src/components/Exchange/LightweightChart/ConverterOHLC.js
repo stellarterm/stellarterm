@@ -17,6 +17,22 @@ export function fillWithZeros(value) {
     return fractionNumber.length <= ZEROS_NUMBER ? value.toFixed(ZEROS_NUMBER) : value;
 }
 
+export function getReadableVolume(volume) {
+    let readableVolume = fillWithZeros(volume);
+
+    if (volume > 1000) {
+        readableVolume = `${(volume / 1000).toFixed(3)}K`;
+    }
+    if (volume > 1000000) {
+        readableVolume = `${(volume / 1000000).toFixed(2)}M`;
+    }
+    if (volume < 1000) {
+        readableVolume = volume.toFixed(7);
+    }
+
+    return readableVolume;
+}
+
 export function getVolumeData(trades, { baseBuying, counterSelling }) {
     return trades.map((trade) => {
         // Displays XLM volume, if traded to xlm, else used base_volume
@@ -48,6 +64,7 @@ export function convertTimeframeData(trades, timeFrame) {
                 high: trades[index - 1].open,
                 low: trades[index - 1].open,
                 close: trades[index - 1].close,
+                value: trades[index - 1].close,
                 baseVolume: 0,
                 counterVolume: 0,
             };
@@ -65,6 +82,26 @@ export function convertTimeframeData(trades, timeFrame) {
     });
 }
 
+export function fillFromLastTrade(lastStateCandleOffset, timeFrame, lastCandle) {
+    const nullTrades = [];
+    const fillCounter = Math.floor(lastStateCandleOffset / timeFrame);
+    for (let i = 1; i <= fillCounter; i++) {
+        const fillTrade = {
+            time: (lastCandle.time + timeFrame) * i,
+            close: lastCandle.close,
+            value: lastCandle.close,
+            open: lastCandle.close,
+            high: lastCandle.close,
+            low: lastCandle.close,
+            baseVolume: 0,
+            counterVolume: 0,
+            avg: lastCandle.low,
+        };
+        nullTrades.push(fillTrade);
+    }
+    return nullTrades;
+}
+
 export function aggregationToOhlc(trades, timeFrame) {
     // Adds minutes time offset for chart trade points
     const dynamicTradeOffset = timeFrame >= FRAME_DAY ? 0 : TRADE_OFFSET;
@@ -73,6 +110,7 @@ export function aggregationToOhlc(trades, timeFrame) {
         .map(trade => ({
             time: (new Date(trade.timestamp).getTime() / 1000) + dynamicTradeOffset,
             close: parseFloat(trade.close),
+            value: parseFloat(trade.close),
             open: parseFloat(trade.open),
             high: parseFloat(trade.high),
             low: parseFloat(trade.low),

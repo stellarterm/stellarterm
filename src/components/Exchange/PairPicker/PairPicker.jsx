@@ -1,17 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import millify from 'millify';
-import { niceRound } from '../../../lib/Format';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import AssetPair from '../../Common/AssetPair/AssetPair';
+import { getReadableVolume, FRAME_HOUR } from '../LightweightChart/ConverterOHLC';
 
 const RESOLUTION_MINUTE = 60;
-// 24 hour = 96 section of 15 min;
-// 15 min = 900 s
-const RESOLUTION_15_MINUTES = 900;
-const LIMIT_15_MINUTES = 96;
+// 1 Day volume data
+const LIMIT = 24;
 const PERIOD = 86400000;
 
 export default class PairPicker extends React.Component {
@@ -111,7 +108,7 @@ export default class PairPicker extends React.Component {
 
     async getLastTrades() {
         const lastTradesWithStep15min =
-            await this.props.d.orderbook.handlers.getTrades(RESOLUTION_15_MINUTES, LIMIT_15_MINUTES);
+            await this.props.d.orderbook.handlers.getTrades(FRAME_HOUR, LIMIT);
         const lastMinutesTrade = await this.props.d.orderbook.handlers.getTrades(RESOLUTION_MINUTE, 1);
 
         if (!this._mounted) {
@@ -166,7 +163,7 @@ export default class PairPicker extends React.Component {
                         </span>
                 <span>{price24high} {counterAssetCode}</span>
                 <span>{price24low} {counterAssetCode}</span>
-                <span>{millify(volume24)} {counterAssetCode}</span>
+                <span>{getReadableVolume(volume24)} {counterAssetCode}</span>
             </div>
         );
     }
