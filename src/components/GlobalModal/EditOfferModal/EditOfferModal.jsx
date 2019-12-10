@@ -70,7 +70,7 @@ export default class EditOfferModal extends React.Component {
                                 className="EditOfferModal_switch-description-button"
                                 onClick={() => this.revertOffer()}>
                                     <img src={images['icon-swap-green']} alt="swap" />
-                                    Swap pair and view as {side === 'sell' ? 'buy' : 'sell'} offer
+                                    <span>Swap pair and view as {side === 'sell' ? 'buy' : 'sell'} offer</span>
                             </span>
                         </div>
                         <div className="EditOfferModal_info">

@@ -32,13 +32,15 @@
                 display: flex;
                 margin-top: 5px;
                 color: #69c76f;
-                text-decoration: underline;
-                text-decoration-color: #69c76f;
-                text-decoration-style: dotted;
                 cursor: pointer;
                 img{
                     margin-left: -5px;
                     margin-right: 5px;
+                }
+
+                span{
+                    border-bottom: 1px dotted #69c76f;
+                    height: 100%;
                 }
             }
         }
