@@ -14,6 +14,7 @@ const actionTypes = new Map([
     ['trustline_created', 'Trustline created'],
     ['trustline_removed', 'Trustline removed'],
     ['trade', 'Trade completed'],
+    ['account_thresholds_updated', 'Number of required signers updated'],
 ]);
 
 export default class PopupAlert extends React.Component {
@@ -131,6 +132,9 @@ export default class PopupAlert extends React.Component {
         case 'signer_created':
             opBody = this.constructor.getMultisigBody(op, titleText);
             break;
+        case 'account_thresholds_updated':
+            opBody = this.constructor.getMultisigBody(op, titleText);
+            break;
         default:
             return null;
         }
@@ -163,12 +167,12 @@ export default class PopupAlert extends React.Component {
             operation => this.getPopupTemplate(operation),
         ).filter(operation => operation !== null);
 
-        return (
+        return allOperations.length > 0 ? (
             <div className={`PopupAlert ${isVisible ? 'popup-show' : ''}`}>
                 <img src={images['icon-close']} alt="X" className="icon-close" onClick={() => this.hidePopup()} />
                 {allOperations}
             </div>
-        );
+        ) : null;
     }
 }
 
