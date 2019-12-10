@@ -158,7 +158,7 @@ export default class PairPicker extends React.Component {
         if (status === 'load') {
             return (
                 <div className="PairPicker_marketsTable-content">
-                    {(new Array(6)).fill(<span><Ellipsis /></span>)}
+                    {Array.from({ length: 6 }, (item, index) => <span key={index}><Ellipsis /></span>)}
                 </div>
             );
         }
@@ -166,7 +166,7 @@ export default class PairPicker extends React.Component {
         if (status === 'no_trades') {
             return (
                 <div className="PairPicker_marketsTable-content">
-                    {(new Array(6)).fill(<span>—</span>)}
+                    {Array.from({ length: 6 }, (item, index) => <span key={index}>—</span>)}
                 </div>
             );
         }
@@ -179,8 +179,8 @@ export default class PairPicker extends React.Component {
                 <span>{lastPrice} {counterAssetCode}</span>
                 <span>${lastUsdPrice.toFixed(7)}</span>
                 <span className={noChanges ? '' : changesClassName}>
-                            <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24}%</span>
-                        </span>
+                    <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24}%</span>
+                </span>
                 <span>{price24high} {counterAssetCode}</span>
                 <span>{price24low} {counterAssetCode}</span>
                 <span>{millify(volume24)} {counterAssetCode}</span>
