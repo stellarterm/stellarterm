@@ -78,7 +78,7 @@ export default class ActivityTradesHistory extends React.Component {
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <img
-                        title="stellar.expert"
+                        title="StellarExpert"
                         src={images['icon-info']}
                         alt="i"
                         onClick={() => { this.constructor.goToStellarExpert(operation).then(); }} />
