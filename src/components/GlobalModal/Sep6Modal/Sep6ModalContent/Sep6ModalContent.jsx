@@ -14,7 +14,7 @@ import FeeBlock from '../Common/FeeBlock';
 import ExtraInfoBlock from '../Common/ExtraInfoBlock';
 import EstimatedTime from '../Common/EstimatedTIme';
 import MinMaxAmount from '../Common/MinMaxAmount';
-import KycForm from './KycFrame/KycFrame';
+import KycFrame from './KycFrame/KycFrame';
 
 const kycStatusTypes = new Set(['denied', 'pending']);
 
@@ -105,7 +105,9 @@ export default class Sep6ModalContent extends React.Component {
         const { d, asset, isDeposit } = this.props;
 
         const showMainInfo =
-            !kycStatusTypes.has(response.status) && response.type !== 'interactive_customer_info_needed';
+            !kycStatusTypes.has(response.status) &&
+            response.type !== 'interactive_customer_info_needed' &&
+            response.type !== 'customer_info_status';
         const depositFieldsProvided = _.has(this.assetInfo, 'fields') && !_.isEmpty(this.assetInfo.fields);
 
         return showMainInfo ? (
@@ -225,7 +227,6 @@ export default class Sep6ModalContent extends React.Component {
     render() {
         const { reqErrorMsg, isLoading, response, assetDisabled } = this.state;
         const isAnyError = reqErrorMsg !== null;
-        const kycDenied = response.status === 'denied';
 
         if ((_.isEmpty(response) || assetDisabled) && !isLoading) {
             return (
@@ -243,7 +244,7 @@ export default class Sep6ModalContent extends React.Component {
 
         return (
             <React.Fragment>
-                {isAnyError || kycDenied ? (
+                {isAnyError ? (
                     <div className="content_error">
                         <div className="sep6_requestError">
                             <img src={images['icon-circle-fail']} alt="fail" />
@@ -259,7 +260,7 @@ export default class Sep6ModalContent extends React.Component {
                         </div>
                     ) : (
                         <React.Fragment>
-                            <KycForm
+                            <KycFrame
                                 time={response.eta || ''}
                                 kycUrl={response.url || ''}
                                 status={response.status || ''}

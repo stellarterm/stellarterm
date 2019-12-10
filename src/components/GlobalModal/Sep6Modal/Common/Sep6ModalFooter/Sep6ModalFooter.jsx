@@ -23,9 +23,11 @@ export default class Sep6ModalFooter extends React.Component {
         this.setState({ isPending: true, isError: false, errorMsg: '' });
 
         withdrawRequest().then((res) => {
+            const kycStatusTypes = new Set(['denied', 'pending']);
             const isInteractive = res.type === 'interactive_customer_info_needed';
+            const isKycError = kycStatusTypes.has(res.status) && res.type === 'customer_info_status';
 
-            if (isInteractive) {
+            if (isInteractive || isKycError) {
                 this.setState({ neededKyc: true, isPending: false });
             } else if (this.props.isAnyError) {
                 this.setState({ isPending: false });
