@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import EstimatedTime from '../../Common/EstimatedTIme';
 import images from '../../../../../images';
 
-export default function KycForm(props) {
+export default function KycFrame(props) {
     const { sizes, kycUrl, status, moreInfo, time } = props;
     const frameSizes = sizes === '' ? { width: 500, height: 500 } : { width: sizes.width, height: sizes.height };
     const statusText = new Map([
@@ -44,7 +44,7 @@ export default function KycForm(props) {
     );
 }
 
-KycForm.propTypes = {
+KycFrame.propTypes = {
     sizes: PropTypes.oneOfType([PropTypes.string, PropTypes.objectOf(PropTypes.number)]).isRequired,
     time: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     kycUrl: PropTypes.string,
