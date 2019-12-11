@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "private": true,
   "scripts": {
-    "setup": "yarn install",
+    "setup": "yarn cache clean && yarn install",
     "start": "./node_modules/.bin/gulp",
     "lint": "./node_modules/.bin/eslint .",
     "lint-fix": "./node_modules/.bin/eslint . --fix",
