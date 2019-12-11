@@ -56,7 +56,7 @@
     "browser-sync": "^2.26.7",
     "browserify": "16.0.0",
     "del": "0.1.3",
-    "eslint": "3.19.0",
+    "eslint": "4.18.2",
     "eslint-config-airbnb": "14.1.0",
     "eslint-plugin-import": "2.8.0",
     "eslint-plugin-jsx-a11y": "3.0.2",
