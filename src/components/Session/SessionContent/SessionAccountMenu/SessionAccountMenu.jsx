@@ -4,17 +4,22 @@ import { Link } from 'react-router-dom';
 import Driver from '../../../../lib/Driver';
 
 export default class SessionAccountMenu extends React.Component {
-    static createMenuTab(url, text) {
-        const isCurrentTab = window.location.pathname === url ? ' is-current' : '';
+    static createMenuTab(url, text, active) {
+        const currentAccountUrlPart = window.location.pathname.split('/')[2];
+        const accountUrlPart = url.split('/')[2];
+        const isCurrentTab = currentAccountUrlPart === accountUrlPart ? ' is-current' : '';
 
         return (
             <Link className={`subNav__nav__item${isCurrentTab}`} to={url}>
                 <span>{text}</span>
+                {!!active && <sup>{active}</sup>}
             </Link>
         );
     }
 
     render() {
+        const { account } = this.props.d.session;
+        const qtyOpenOffers = account && Object.values(account.offers).length;
         return (
             <div className="subNavBackClipper">
                 <div className="so-back subNavBack">
@@ -25,7 +30,7 @@ export default class SessionAccountMenu extends React.Component {
                                 {this.constructor.createMenuTab('/account/send/', 'Send')}
                                 {this.constructor.createMenuTab('/account/addTrust/', 'Accept assets')}
                                 {this.constructor.createMenuTab('/account/multisig/', 'Multisig')}
-                                {this.constructor.createMenuTab('/account/history/', 'History')}
+                                {this.constructor.createMenuTab('/account/activity/', 'Activity', qtyOpenOffers)}
                             </nav>
                         }
                         <nav className="subNav__nav">

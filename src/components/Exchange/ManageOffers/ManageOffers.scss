@@ -24,30 +24,6 @@
                 margin-bottom: 2px;
                 font-weight: 400;
             }
-
-            button{
-                font-size: 12px;
-                padding: 0 13px;
-                border: none;
-                border-radius: 2px;
-                background-color: #f4f4f5;
-                display: flex;
-                flex-direction: row;
-                align-items: center;
-                opacity: 0.7;
-
-                &:hover{
-                    opacity: 1;
-                }
-
-                & > span{
-                    display: inline-block;
-                    font-size: 20px;
-                    font-weight: bold;
-                    transform: rotate(45deg);
-                    margin-right: 8px;
-                }
-            }
         }
 
         .ManageOffers__table {
@@ -130,4 +106,27 @@
 .ManageOffers__table__row__none {
     padding: 4px 0;
     text-align: left;
+}
+.CancelOffers_button{
+    font-size: 12px;
+    padding: 0 13px;
+    border: none;
+    border-radius: 2px;
+    background-color: #f4f4f5;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    opacity: 0.7;
+
+    &:hover{
+        opacity: 1;
+    }
+
+    & > span{
+        display: inline-block;
+        font-size: 20px;
+        font-weight: bold;
+        transform: rotate(45deg);
+        margin-right: 8px;
+    }
 }

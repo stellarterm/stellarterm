@@ -4,12 +4,13 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import Inflation from './Inflation/Inflation';
 import Deposit from './Deposit/Deposit';
-import History from './History/History';
 import Trust from './Trust/Trust';
 import Send from './Send/Send';
 import SessionAccount from './SessionAccount/SessionAccount';
 import Multisig from './Multisig/Multisig';
 import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
+import NotFound from '../../NotFound/NotFound';
+import Activity from './Activity/Activity';
 
 export default function SessionContent(props) {
     const d = props.d;
@@ -33,14 +34,14 @@ export default function SessionContent(props) {
                     path="/account/multisig/"
                     render={prop => <Multisig {...prop} d={d} />} />
                 <Route
-                    exact
-                    path="/account/history/"
-                    render={prop => <History {...prop} d={d} />} />
+                    path="/account/activity/"
+                    render={prop => <Activity {...prop} d={d} />} />
                 <Route
                     exact
                     path="/account/deposit/"
                     render={prop => <Deposit {...prop} d={d} />} />
                 <Redirect from="/ledger/" to="/account/" />
+                <Route render={() => <NotFound />} />
             </Switch>
         </React.Fragment>
     );
