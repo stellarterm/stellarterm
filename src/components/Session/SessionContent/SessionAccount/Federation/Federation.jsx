@@ -66,7 +66,6 @@ export default class Federation extends React.Component {
         const { isEditing, address } = this.state;
         const alertClass = `Account_alert ${isEditing ? 'alert_isEditing' : ''}`;
         const fedExists = address !== '';
-
         let content;
 
         if (isEditing) {
