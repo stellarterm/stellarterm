@@ -2,3 +2,7 @@
 /.well-known/stellar.toml
    # Headers for that file:
    Access-Control-Allow-Origin: *
+/*
+   # for all pages
+   X-Frame-Options: DENY
+   X-XSS-Protection: 1; mode=block
