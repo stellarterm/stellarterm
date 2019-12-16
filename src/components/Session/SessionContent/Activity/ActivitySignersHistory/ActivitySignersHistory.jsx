@@ -86,7 +86,7 @@ export default class ActivitySignersHistory extends React.Component {
                 <div className="Activity-table-cell flex8">{viewKey}</div>
                 <div className="Activity-table-cell Activity-table_actions flex1">
                     <img
-                        title="stellar.expert"
+                        title="StellarExpert"
                         src={images['icon-info']}
                         alt="i"
                         onClick={() => { this.constructor.goToStellarExpert(operation).then(); }} />

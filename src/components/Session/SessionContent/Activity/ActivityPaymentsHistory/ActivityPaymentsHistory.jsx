@@ -78,7 +78,7 @@ export default class ActivityPaymentsHistory extends React.Component {
                         href={`https://stellar.expert/explorer/public/tx/${transaction_hash}`}
                         target="_blank"
                         rel="noopener noreferrer">
-                            <img title="stellar.expert" src={images['icon-info']} alt="i" />
+                            <img title="StellarExpert" src={images['icon-info']} alt="i" />
                     </a>
                 </div>
             </div>
