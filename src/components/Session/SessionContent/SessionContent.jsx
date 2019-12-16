@@ -8,7 +8,6 @@ import Trust from './Trust/Trust';
 import Send from './Send/Send';
 import SessionAccount from './SessionAccount/SessionAccount';
 import Multisig from './Multisig/Multisig';
-import ErrorBoundary from '../../Common/ErrorBoundary/ErrorBoundary';
 import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
 import NotFound from '../../NotFound/NotFound';
 import Activity from './Activity/Activity';
@@ -25,22 +24,22 @@ export default function SessionContent(props) {
                 <Route
                     exact
                     path="/account/send/"
-                    render={prop => <ErrorBoundary><Send {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <Send {...prop} d={d} />} />
                 <Route
                     exact
                     path="/account/settings/"
-                    render={prop => <ErrorBoundary><Inflation {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <Inflation {...prop} d={d} />} />
                 <Route
                     exact
                     path="/account/multisig/"
-                    render={prop => <ErrorBoundary><Multisig {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <Multisig {...prop} d={d} />} />
                 <Route
                     path="/account/activity/"
-                    render={prop => <ErrorBoundary><Activity {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <Activity {...prop} d={d} />} />
                 <Route
                     exact
                     path="/account/deposit/"
-                    render={prop => <ErrorBoundary><Deposit {...prop} d={d} /></ErrorBoundary>} />
+                    render={prop => <Deposit {...prop} d={d} />} />
                 <Redirect from="/ledger/" to="/account/" />
                 <Route render={() => <NotFound />} />
             </Switch>
