@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import directory from 'stellarterm-directory';
 import screenfull from 'screenfull';
 import Driver from '../../lib/Driver';
@@ -13,6 +12,7 @@ import LightweightChart from './LightweightChart/LightweightChart';
 import Ellipsis from '../Common/Ellipsis/Ellipsis';
 import Generic from '../Common/Generic/Generic';
 import AssetPair from '../Common/AssetPair/AssetPair';
+import NotFound from '../NotFound/NotFound';
 import images from '../../images';
 import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
@@ -231,14 +231,7 @@ export default class Exchange extends React.Component {
     }
 
     render() {
-        if (this.state.wrongUrl) {
-            return (
-                <Generic title="Pick a market">
-                    Exchange url was invalid. To begin, go to the <Link to="/markets/">market list page</Link> and pick
-                     a trading pair.
-                </Generic>
-            );
-        }
+        if (this.state.wrongUrl) { return <NotFound isExchange404 />; }
 
         if (!this.props.d.orderbook.data.ready) {
             return this.state.fullscreenMode ? (

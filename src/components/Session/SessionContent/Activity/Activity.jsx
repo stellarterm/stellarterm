@@ -8,6 +8,7 @@ import ActivityTradesHistory from './ActivityTradesHistory/ActivityTradesHistory
 import ActivityPaymentsHistory from './ActivityPaymentsHistory/ActivityPaymentsHistory';
 import ActivitySignersHistory from './ActivitySignersHistory/ActivitySignersHistory';
 import ActivityTrustlinesHistory from './ActivityTrustlinesHistory/ActivityTrustlinesHistory';
+import NotFound from '../../../NotFound/NotFound';
 
 export const ROW_HEIGHT = 47;
 export const TABLE_MAX_HEIGHT = window.innerHeight - 470;
@@ -158,7 +159,7 @@ export default class Activity extends React.Component {
                                 loading={historyLoading} />} />
 
 
-                    <Route render={() => <div>The requested page was not found.</div>} />
+                    <Route render={() => <NotFound withoutWrapper />} />
                 </Switch>
             </div>
         );
