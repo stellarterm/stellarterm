@@ -102,8 +102,15 @@ export default class Activity extends React.Component {
         const { d } = this.props;
         const { history, historyLoading, historyIsFull, paymentHistory, paymentHistoryLoading } = this.state;
         const openOffers = Object.values(d.session.account.offers)
-            .sort((a, b) =>
-                (new Date(b.last_modified_time).getTime() - new Date(a.last_modified_time).getTime()));
+            .sort((a, b) => {
+                if (!a.last_modified_time) {
+                    return -1;
+                }
+                if (!b.last_modified_time) {
+                    return 1;
+                }
+                return (new Date(b.last_modified_time).getTime() - new Date(a.last_modified_time).getTime());
+            });
 
         const hasOpenOffers = !!openOffers.length;
 
