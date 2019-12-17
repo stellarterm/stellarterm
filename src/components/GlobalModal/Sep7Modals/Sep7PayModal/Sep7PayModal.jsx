@@ -178,7 +178,7 @@ export default class Sep7PayModal extends React.Component {
                     {error &&
                         <div className="Sep7PayModal_error">
                             <img src={images['icon-circle-fail']} alt="fail" />
-                            <span>{ErrorHandler(error)}</span>
+                            <span>{ErrorHandler(error, 'payment')}</span>
                         </div>}
                     {buttons}
                 </div>
