@@ -31,8 +31,8 @@ export default function AssetBalance(props) {
         : <span>Withdraw {asset.code} ({domainLink}) Stellar asset to get native {asset.code}</span>;
 
     const descriptionConfirm = isDeposit
-        ? <span>Please check the deposit details before sending funds</span>
-        : <span>Please check the details and click the Confirm button to withdraw</span>;
+        ? <span>Please review the deposit details before sending funds</span>
+        : <span>Please review the details and click the Withdraw button</span>;
 
     return (
         <React.Fragment>

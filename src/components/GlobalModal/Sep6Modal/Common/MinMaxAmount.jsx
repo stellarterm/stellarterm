@@ -44,7 +44,7 @@ export default function MinMaxAmount(props) {
                     </div>
                     <div className="content_text">
                         <img src={images['icon-warning-triangle']} alt="warning" />
-                        Be careful! You can lose your money if the amount is {warningText}.
+                        Be careful! Your funds may be lost if you transfer an {warningText} amount.
                     </div>
                 </div>
                 <div className="content_block">
@@ -69,7 +69,7 @@ export default function MinMaxAmount(props) {
             </div>
             <div className="content_text">
                 <img src={images['icon-warning-triangle']} alt="warning" />
-                Be careful! You can lose your money if the amount is {warningText}.
+                Be careful! Your funds may be lost if you transfer an {warningText} amount.
             </div>
         </div>
     );

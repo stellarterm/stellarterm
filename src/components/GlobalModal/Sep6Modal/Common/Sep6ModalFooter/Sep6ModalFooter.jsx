@@ -53,12 +53,12 @@ export default class Sep6ModalFooter extends React.Component {
     }
 
     getActionButtonText() {
-        const { isDeposit, needConfirm } = this.props;
+        const { needConfirm } = this.props;
         const { isError } = this.state;
-        const btnText = isDeposit ? 'Deposit' : 'Withdraw';
+        const btnText = 'Continue';
 
         if (needConfirm) {
-            return 'Confirm';
+            return 'Withdraw';
         } else if (isError) {
             return 'Retry';
         }

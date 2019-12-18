@@ -60,7 +60,7 @@ export default class FieldGenerator extends React.Component {
         const fieldParams = fields[field];
         const noDescProvided = defaultFieldDesc.has(field) && fields[field].description === undefined;
 
-        const isOptionalField = fields[field].optional === undefined ? true : fields[field].optional;
+        const isOptionalField = fields[field].optional === undefined && field !== 'dest' ? true : fields[field].optional;
         const fieldDescription = noDescProvided ? defaultFieldDesc.get(field) : fields[field].description;
 
         return Object.assign(fieldParams, {
@@ -89,6 +89,10 @@ export default class FieldGenerator extends React.Component {
                         autoComplete="off"
                         autoFocus />
                     <div className="withdraw_code">{asset.code}</div>
+                </div>
+
+                <div className="input_additional_info">
+                    <span>{amount.description}</span>
                 </div>
 
                 <MinMaxAmount min={min} max={max} assetCode={asset.code} withdrawFormLabel />
