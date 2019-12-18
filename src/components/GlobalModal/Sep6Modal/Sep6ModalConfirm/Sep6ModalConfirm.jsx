@@ -21,7 +21,7 @@ export default class Sep6ModalConfirm extends React.Component {
 
     renderWithdrawInfo() {
         const { res } = this.state;
-        const { asset } = this.props;
+        const { asset, isDeposit } = this.props;
 
         return (
             <div className="content_main">
@@ -42,7 +42,7 @@ export default class Sep6ModalConfirm extends React.Component {
 
                 <MemoBlock memo={res.memo || ''} memoType={res.memo_type || ''} />
 
-                <EstimatedTime time={res.eta || ''} />
+                <EstimatedTime time={res.eta || ''} isDeposit={isDeposit} />
 
                 <FeeBlock
                     feeFixed={res.fee_fixed || 0}
@@ -57,7 +57,7 @@ export default class Sep6ModalConfirm extends React.Component {
 
     renderDepositInfo() {
         const { res } = this.state;
-        const { asset } = this.props;
+        const { asset, isDeposit } = this.props;
 
         return (
             <div className="content_main">
@@ -68,7 +68,7 @@ export default class Sep6ModalConfirm extends React.Component {
 
                 <MinMaxAmount min={res.min_amount || ''} max={res.max_amount || ''} assetCode={asset.code} isDeposit />
 
-                <EstimatedTime time={res.eta || ''} />
+                <EstimatedTime time={res.eta || ''} isDeposit={isDeposit} />
 
                 <FeeBlock
                     feeFixed={res.fee_fixed || 0}

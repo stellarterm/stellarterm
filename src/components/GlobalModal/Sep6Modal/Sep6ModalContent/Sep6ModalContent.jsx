@@ -31,7 +31,7 @@ export default class Sep6ModalContent extends React.Component {
             isLoading: true,
             assetDisabled: false,
             reqErrorMsg: null,
-            isFormError: true,
+            isFormError: false,
             response: {},
             requestParams: {
                 asset_code: this.props.asset.code,
@@ -124,7 +124,7 @@ export default class Sep6ModalContent extends React.Component {
                             feePercent={response.fee_percent || 0}
                             assetCode={asset.code} />
 
-                        <EstimatedTime time={response.eta || ''} />
+                        <EstimatedTime time={response.eta || ''} isDeposit={isDeposit} />
 
                         <MinMaxAmount
                             min={response.min_amount || ''}

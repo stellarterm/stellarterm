@@ -2,7 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default function EstimatedTime(props) {
-    const { time, kycTime } = props;
+    const { time, kycTime, isDeposit } = props;
+    const actionText = isDeposit ? 'deposit' : 'withdrawal';
     const noTimeInfo = time === '';
     const waitTimeInMins = Math.ceil(time / 60);
     let timeString;
@@ -17,7 +18,7 @@ export default function EstimatedTime(props) {
         timeString = `${waitTimeInMins} minutes`;
     }
 
-    const timeTitle = `Estimated ${kycTime ? 'KYC request pending' : 'transaction'} time`;
+    const timeTitle = `Estimated ${kycTime ? 'KYC request pending' : actionText} time`;
 
     return (
         <div className="content_block">
@@ -30,4 +31,5 @@ export default function EstimatedTime(props) {
 EstimatedTime.propTypes = {
     time: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     kycTime: PropTypes.bool,
+    isDeposit: PropTypes.bool,
 };
