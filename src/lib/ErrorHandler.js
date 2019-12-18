@@ -16,7 +16,7 @@ function getErrorCode(error) {
 }
 
 const errorMap = new Map();
-// 'ERROR_CODE' - 'DESCRIPTION'
+// 'OPERATION_NAME:(not required) + ERROR_CODE' - 'DESCRIPTION'
 // TX errors: https://www.stellar.org/developers/guides/concepts/transactions.html
 // OP errors: https://www.stellar.org/developers/guides/concepts/list-of-operations.html
 errorMap
@@ -43,6 +43,8 @@ errorMap
         'An unknown error occurred.')
     // operation errors
     .set('op_low_reserve',
+        'Your account does not have enough XLM to meet the minimum balance.')
+    .set('payment:op_low_reserve',
         'The destination is a new non-activated account. A new account has to have at least 1 XLM.')
     .set('op_underfunded',
         'Transaction failed due to a lack of funds.')
@@ -143,8 +145,13 @@ errorMap
         'and INT64_MAX (9223372036854775807 or 0x7fffffffffffffff).');
 
 
-export default function ErrorHandler(error) {
+export default function ErrorHandler(error, errorPrefix) {
     const errorCode = getErrorCode(error);
+
+    if (errorPrefix && errorMap.has(`${errorPrefix}:${errorCode}`)) {
+        return errorMap.get(`${errorPrefix}:${errorCode}`);
+    }
+
     return errorMap.has(errorCode) ?
         errorMap.get(errorCode) :
         errorCode;
