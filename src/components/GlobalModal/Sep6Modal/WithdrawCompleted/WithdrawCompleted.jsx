@@ -14,7 +14,10 @@ export default function WithdrawCompleted(props) {
                 <div className="withdrawed_amount">
                     {withdrawAmount} {asset.code}
                 </div>
-                <div>Funds have been sent to anchor.</div>
+                <div style={{ textAlign: 'center' }}>
+                    Funds have been sent to anchor. <br />
+                    Please allow some time for a transaction to be processed.
+                </div>
             </div>
 
             <Sep6ModalFooter
