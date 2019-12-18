@@ -53,7 +53,7 @@ export default class FieldGenerator extends React.Component {
 
         const actionText = isDeposit ? 'deposit' : 'withdraw';
         const defaultFieldDesc = new Map([
-            ['amount', `${asset.code} amount you want ${actionText}`],
+            ['amount', `${asset.code} amount you want to ${actionText}`],
             ['dest', `${asset.code} destination address`],
         ]);
 
