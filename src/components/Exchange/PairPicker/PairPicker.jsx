@@ -92,15 +92,19 @@ export default class PairPicker extends React.Component {
             .reduce((acc, record) => {
                 acc.volume24 += parseFloat(record.counter_volume);
                 acc.price24high = (!acc.price24high || acc.price24high < parseFloat(record.high)) ?
-                        parseFloat(record.high) : acc.price24high;
+                    parseFloat(record.high) : acc.price24high;
                 acc.price24low = (!acc.price24low || acc.price24low > parseFloat(record.low)) ?
                     parseFloat(record.low) : acc.price24low;
                 return acc;
             }, { volume24: 0, price24high: 0, price24low: 0 });
 
+        const counterWithLumenLastTradeOpen =
+            (counterWithLumenLastTrade !== 'notRequired' && counterWithLumenLastTrade.records.length) ?
+                counterWithLumenLastTrade.records[0].open : 0;
+
         const convertedLastPriceToXLM = counterWithLumenLastTrade === 'notRequired' ?
             lastPrice :
-            lastPrice * counterWithLumenLastTrade.records[0].open;
+            lastPrice * counterWithLumenLastTradeOpen;
 
         const { USD_XLM } = d.ticker.data._meta.externalPrices;
         const lastUsdPrice = baseBuying.isNative() ? USD_XLM : USD_XLM * convertedLastPriceToXLM;
@@ -136,7 +140,7 @@ export default class PairPicker extends React.Component {
             return;
         }
         const last24HourTrades = lastTradesWithStep15min.records
-                .filter(record => ((new Date() - record.timestamp) < PERIOD));
+            .filter(record => ((new Date() - record.timestamp) < PERIOD));
 
         this.setState({
             last24HourTrades,
@@ -173,11 +177,12 @@ export default class PairPicker extends React.Component {
 
         const noChanges = changes24 === '0.00';
         const changesClassName = (changes24 >= 0) ? 'positive' : 'negative';
+        const lastUsdView = lastUsdPrice !== 0 ? `$${lastUsdPrice.toFixed(7)}` : '—';
 
         return (
             <div className="PairPicker_marketsTable-content">
                 <span>{lastPrice} {counterAssetCode}</span>
-                <span>${lastUsdPrice.toFixed(7)}</span>
+                <span>{lastUsdView}</span>
                 <span className={noChanges ? '' : changesClassName}>
                     <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24}%</span>
                 </span>
