@@ -42,32 +42,37 @@ class Footer extends React.Component {
                             </a>
                         </div>
 
-                        <div className="Footer_privacy_links">
-                            <Link to="/privacy/">Privacy Policy</Link>
-                            <Link to="/terms-of-use/">Terms of use</Link>
-                        </div>
+                    <div className="Footer_privacy_links">
+                        <Link to="/privacy/">Privacy Policy</Link>
+                        <Link to="/terms-of-use/">Terms of use</Link>
                     </div>
-
-                    <div className="Footer_disclaimer">
-                        Cryptocurrency assets are subject to high market risks and volatility. Past performance is not
-                        indicative of future results. Investments in blockchain assets may result in loss of part or all
-                        of your investment. StellarTerm does NOT endorse ANY asset on the Stellar network. Please do
-                        your own research and use caution.
-                    </div>
-
-                    {isExchangePage ? (
+                </div>
+                <div className="Footer_disclaimer_block">
+                    <div className="Footer_disclaimer_column">
                         <div className="Footer_disclaimer">
-                            This product includes software developed at TradingView, Inc. TradingView Lightweight Charts
-                            Copyright (с) 2019{' '}
-                            <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">
-                                TradingView
-                            </a>
-                            , Inc.
+                            Cryptocurrency assets are subject to high market risks and volatility. Past performance is
+                             not indicative of future results. Investments in blockchain assets may result in loss of
+                             part or all of your investment. StellarTerm does NOT endorse ANY asset on the Stellar
+                             network. Please do your own research and use caution.
                         </div>
-                    ) : null}
+
+                        {isExchangePage ? (
+                            <div className="Footer_disclaimer">
+                                This product includes software developed at TradingView, Inc. TradingView Lightweight
+                                 Charts Copyright (с) 2019{' '}
+                                <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">
+                                    TradingView
+                                </a>
+                                , Inc.
+                            </div>
+                        ) : null}
+                    </div>
+                    <div>
+                        v{window.stBuildInfo.version}
+                    </div>
                 </div>
             </div>
-        );
+        </div>);
     }
 }
 

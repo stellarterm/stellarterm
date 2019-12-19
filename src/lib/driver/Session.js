@@ -25,6 +25,7 @@ export default function Send(driver) {
         this.authType = ''; // '', 'secret', 'ledger', 'pubkey'
         this.jwtToken = null;
         this.userFederation = '';
+        this.promisesForMyltipleLoading = {};
     };
     init();
 
@@ -173,7 +174,6 @@ export default function Send(driver) {
 
                 const inflationDoneDestinations = {
                     GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW: true,
-                    GCCD6AJOYZCUAQLX32ZJF2MKFFAUJ53PVCFQI3RHWKL3V47QYE2BNAUT: true,
                 };
 
                 if (inflationDoneDestinations[this.account.inflation_destination]) {
@@ -182,8 +182,7 @@ export default function Send(driver) {
 
                 // Functions of session after sign in
                 this.handlers.addUnknownAssetData();
-                driver.history.handlers.loadHistory(true);
-                driver.history.handlers.listenNewTransactions(driver.Server, this.account.account_id);
+                driver.history.listenNewTransactions(driver.Server, this.account.account_id);
                 this.event.trigger();
             } catch (e) {
                 if (e.response) {
@@ -195,7 +194,7 @@ export default function Send(driver) {
                             // Avoid race conditions
                             this.handlers.logIn(keypair, opts);
                         }
-                    }, 2000);
+                    }, 5000);
                     this.event.trigger();
                     return;
                 }
@@ -614,6 +613,7 @@ export default function Send(driver) {
 
             const response = await reqType(getEndpoint('setFederation'), { headers, body });
             this.userFederation = response.name.split('*')[0];
+            this.event.trigger();
             await this.handlers.setHomeDomain();
             return response;
         },
@@ -671,19 +671,21 @@ export default function Send(driver) {
             this.inflationDone = true;
             this.event.trigger();
         },
-        addTrust: async (code, issuer) => {
+        addTrust: async (code, issuer,  memo) => {
             // We only add max trust line
             // Having a "limit" is a design mistake in Stellar that was carried over from the Ripple codebase
             const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
                 asset: new StellarSdk.Asset(code, issuer),
+                memo,
             });
             return await this.handlers.buildSignSubmit(tx);
         },
-        removeTrust: async (code, issuer) => {
+        removeTrust: async (code, issuer, memo) => {
             // Trust lines are removed by setting limit to 0
             const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
                 asset: new StellarSdk.Asset(code, issuer),
                 limit: '0',
+                memo,
             });
             return await this.handlers.buildSignSubmit(tx);
         },
@@ -775,7 +777,15 @@ export default function Send(driver) {
             return account.home_domain;
         },
 
-        loadUnknownAssetData: async (asset) => {
+        loadUnknownAssetData: (asset) => {
+            const id = asset.code + asset.issuer;
+            if (!this.promisesForMyltipleLoading[id]) {
+                this.promisesForMyltipleLoading[id] = this.handlers.singleLoadUnknownAssetData(asset);
+            }
+            return this.promisesForMyltipleLoading[id];
+        },
+
+        singleLoadUnknownAssetData: async (asset) => {
             try {
                 const homeDomain = await this.handlers.getDomainByIssuer(asset.issuer);
 
@@ -792,14 +802,19 @@ export default function Send(driver) {
                     throw new Error();
                 }
 
-                const image = currency && currency.image;
+                const { image, host } = currency;
                 const color = image && await this.handlers.getAverageColor(image, asset.code, homeDomain);
+
+                // Stellarterm used only "image" and "host" fields;
 
                 return {
                     code: asset.code,
                     issuer: asset.issuer,
                     host: homeDomain,
-                    currency,
+                    currency: {
+                        host,
+                        image,
+                    },
                     color,
                     time: new Date(),
                 };

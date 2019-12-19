@@ -53,6 +53,12 @@ export default class OfferMaker extends React.Component {
         this._mounted = true;
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.existingOffer && prevProps.existingOffer.price !== this.props.existingOffer.price) {
+            this.setInitialState();
+        }
+    }
+
     componentWillUnmount() {
         this.orderbookUnsub();
         this.sessionUnsub();
@@ -73,29 +79,41 @@ export default class OfferMaker extends React.Component {
         );
     }
 
-    initialize() {
-        if (!this.initialized) {
-            this.initialized = true;
-            const state = {};
-
-            // Initialize price
-            if (this.props.side === 'buy' && this.props.d.orderbook.data.bids.length > 0) {
-                state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString();
-                // Get rid of extra 0s
-            } else if (this.props.d.orderbook.data.asks.length > 0) {
-                // Proptypes validation makes sure this is sell
-                state.price = new BigNumber(this.props.d.orderbook.data.asks[0].price).toString();
-                // Get rid of extra 0s
-            }
-
-            state.errorType = '';
-
-            return state;
-        }
-        return {};
+    setInitialState() {
+        this.setState({
+            valid: false,
+            price: this.props.existingOffer.price, // Most sticky item (since the price is pretty static)
+            amount: this.props.existingOffer.baseAmount,
+            total: this.props.existingOffer.counterAmount,
+            offerId: this.props.existingOffer.id,
+            buttonState: 'ready',
+            errorMessage: '',
+            successMessage: '',
+        });
     }
 
-    // TODO: Limit the number of digits after the decimal that can be input
+    initialize() {
+        if (this.initialized) {
+            return {};
+        }
+        this.initialized = true;
+        const state = {};
+
+        // Initialize price
+        if (this.props.side === 'buy' && this.props.d.orderbook.data.bids.length > 0) {
+            state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString();
+            // Get rid of extra 0s
+        } else if (this.props.d.orderbook.data.asks.length > 0) {
+            // Proptypes validation makes sure this is sell
+            state.price = new BigNumber(this.props.d.orderbook.data.asks[0].price).toString();
+            // Get rid of extra 0s
+        }
+
+        state.errorType = '';
+
+        return state;
+    }
+
     updateState(item, value, minValue, targetInputType, maxOffer) {
         const state = Object.assign(this.state, {
             // Reset messages
@@ -103,8 +121,14 @@ export default class OfferMaker extends React.Component {
             errorMessage: '',
         });
         state.valid = false;
+
+        const [integerPart, fractionalPart] = value.split('.');
+
+        const roundedValue = (fractionalPart && fractionalPart.length > 7) ?
+            `${integerPart}.${fractionalPart.slice(0, 7)}` : value;
+
         if (item === 'price' || item === 'amount' || item === 'total') {
-            state[item] = value;
+            state[item] = roundedValue;
         } else {
             throw new Error('Invalid item type');
         }
@@ -114,11 +138,11 @@ export default class OfferMaker extends React.Component {
             if (item === 'price' || item === 'amount') {
                 const changeValueType = item === 'price' ? 'amount' : 'price';
                 state.total = new BigNumber(
-                    new BigNumber(value).times(new BigNumber(state[changeValueType])).toFixed(7),
+                    new BigNumber(roundedValue).times(new BigNumber(state[changeValueType])).toFixed(7),
                 ).toString();
             } else if (item === 'total') {
                 state.amount = new BigNumber(
-                    new BigNumber(value).dividedBy(new BigNumber(state.price)).toFixed(7),
+                    new BigNumber(roundedValue).dividedBy(new BigNumber(state.price)).toFixed(7),
                 ).toString();
             } else {
                 throw new Error('Invalid item type');

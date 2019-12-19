@@ -33,7 +33,7 @@ export default class AssetCardInRow extends AssetCardHelper {
 
 
         return (
-            <span className="AssetCardInRow">
+            <div className="AssetCardInRow">
                 {logo === 'unknown' && logo !== 'load' ? (
                     unknownLogo
                 ) : (
@@ -44,10 +44,16 @@ export default class AssetCardInRow extends AssetCardHelper {
                         src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
                         alt={asset.code} />)}
                 {domain === 'load' ?
-                    <span>{asset.code} <span className="AssetCardInRow_domain"><Ellipsis /></span></span> :
-                    <span>{asset.code}<span className="AssetCardInRow_domain">{domain}</span></span>
+                    <div className="AssetCardInRow_main">
+                        <div className="AssetCardInRow_code">{asset.code}</div>
+                        <span className="AssetCardInRow_domain"><Ellipsis /></span>
+                    </div> :
+                    <div className="AssetCardInRow_main">
+                        <div className="AssetCardInRow_code">{asset.code}</div>
+                        <span className="AssetCardInRow_domain">{domain}</span>
+                    </div>
                 }
-                </span>
+            </div>
         );
     }
 }

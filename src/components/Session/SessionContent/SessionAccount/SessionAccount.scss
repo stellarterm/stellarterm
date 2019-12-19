@@ -14,7 +14,6 @@
 
 .Account_alert {
     display: flex;
-    height: 77px;
     margin-bottom: 1em;
     border-radius: 3px;
     background: $s-color-primary9;
@@ -36,7 +35,7 @@
     }
 
     .Account_alert_right {
-        height: 100%;
+        height: inherit;
         display: flex;
         justify-content: space-between;
         align-items: center;

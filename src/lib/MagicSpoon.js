@@ -207,50 +207,39 @@ const MagicSpoon = {
         };
 
         sdkAccount.explainReserve = () => {
-            const items = [];
-
             const entriesTrustlines = sdkAccount.balances.length - 1;
             const entriesOffers = Object.keys(sdkAccount.offers).length;
             const entriesSigners = sdkAccount.signers.length - 1;
             const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers - entriesSigners;
+            const reserveItems = [{
+                reserveType: 'Base reserve',
+                typeCount: 0,
+                reservedXLM: 1,
+            }, {
+                reserveType: 'Extra',
+                typeCount: 0,
+                reservedXLM: 0.5,
+            }, {
+                reserveType: 'Trustlines',
+                typeCount: entriesTrustlines,
+                reservedXLM: entriesTrustlines * 0.5,
+            }, {
+                reserveType: 'Offers',
+                typeCount: entriesOffers,
+                reservedXLM: entriesOffers * 0.5,
+            }, {
+                reserveType: 'Signers',
+                typeCount: entriesSigners,
+                reservedXLM: entriesSigners * 0.5,
+            }, {
+                reserveType: 'Others',
+                typeCount: entriesOthers,
+                reservedXLM: entriesOthers * 0.5,
+            }];
 
-            items.push({
-                entryType: 'Base reserve',
-                amount: 1,
-                XLM: 1,
-            });
-
-            items.push({
-                entryType: 'Trustlines',
-                amount: entriesTrustlines,
-                XLM: entriesTrustlines * 0.5,
-            });
-
-            items.push({
-                entryType: 'Offers',
-                amount: entriesOffers,
-                XLM: entriesOffers * 0.5,
-            });
-            items.push({
-                entryType: 'Signers',
-                amount: entriesSigners,
-                XLM: entriesSigners * 0.5,
-            });
-            items.push({
-                entryType: 'Others',
-                amount: entriesOthers,
-                XLM: entriesOthers * 0.5,
-            });
-            items.push({
-                entryType: 'Extra',
-                amount: '',
-                XLM: 0.5,
-            });
-
-            const totalLumens = _.sumBy(items, 'XLM');
             return {
-                items,
-                totalLumens,
+                reserveItems,
+                totalReservedXLM: _.sumBy(reserveItems, 'reservedXLM'),
             };
         };
 
@@ -337,12 +326,13 @@ const MagicSpoon = {
         });
         // TODO: Orderbook streamclosing
     },
-    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION) {
+    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, LIMIT) {
+        const limit = LIMIT || 100;
         const START_TIME = 1514764800; // 01/01/2018
         const END_TIME = Date.now() + 86400000; // Current time + 1 day
         // TODO: Iteration throught next() with binding to chart scroll
         return Server.tradeAggregation(baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION * 1000, 0)
-            .limit(100)
+            .limit(limit)
             .order('desc')
             .call()
             .then(res => res)
@@ -423,7 +413,7 @@ const MagicSpoon = {
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error(
-                    'Destination account does not exist. To create it, you must send a minimum of 1 lumens to create it',
+                    'Destination account does not exist. To create it, you must send at least 1 XLM.',
                 );
             }
             transaction = transaction
@@ -465,9 +455,15 @@ const MagicSpoon = {
             asset: opts.asset,
             limit: sdkLimit,
         };
-        return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee })
             .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
             .setTimeout(0);
+
+        if (opts.memo) {
+            transaction = transaction.addMemo(Stellarify.memo(opts.memo.memoType, opts.memo.memo));
+        }
+
+        return transaction;
         // DONT call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, opts) {
