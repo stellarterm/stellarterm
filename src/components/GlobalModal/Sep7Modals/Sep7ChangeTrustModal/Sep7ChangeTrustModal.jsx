@@ -26,8 +26,29 @@ export default class Sep7ChangeTrustModal extends React.Component {
         });
     }
 
+    componentDidMount() {
+        const { d, submit } = this.props;
+        const { line } = this.getTransactionDetails();
+        if (!this.state.isLoadInProcess) {
+            this.getDataFromToml(line, d, submit);
+        }
+    }
+
     componentWillUnmount() {
         this.props.d.session.event.unlisten(this.listenId);
+    }
+
+    getTransactionDetails() {
+        const { txDetails } = this.props;
+        const { xdr, originDomain } = txDetails;
+        const tx = new StellarSdk.Transaction(xdr);
+        const { type, value } = StellarSdk.Memo.fromXDRObject(tx._memo);
+        const memoType = type && `MEMO_${type.toUpperCase()}`;
+        const memo = value && value.toString();
+        const [operation] = tx.operations;
+        const { limit, line } = operation;
+
+        return { line, limit, memo, memoType, originDomain };
     }
 
     getButtons(asset, limit, memo) {
@@ -121,21 +142,11 @@ export default class Sep7ChangeTrustModal extends React.Component {
     }
 
     render() {
-        const { submit, d, txDetails } = this.props;
+        const { submit, d } = this.props;
         const { account } = d.session;
-        const { xdr, originDomain } = txDetails;
-        const tx = new StellarSdk.Transaction(xdr);
-        const { type, value } = StellarSdk.Memo.fromXDRObject(tx._memo);
-        const memoType = type && `MEMO_${type.toUpperCase()}`;
-        const memo = value && value.toString();
-        const [operation] = tx.operations;
-        const { limit, line } = operation;
-        const buttons = this.getButtons(line, limit, { memo, memoType });
-        const { desc, conditions, loaded, error, isLoadInProcess } = this.state;
-        if (!isLoadInProcess) {
-            this.getDataFromToml(line, d, submit);
-        }
-
+        const { line, limit, memo, memoType, originDomain } = this.getTransactionDetails();
+        const buttons = this.getButtons(line, limit, memo && { memo, memoType });
+        const { desc, conditions, loaded, error } = this.state;
         const balance = account && account.getBalance(line);
 
         if (!loaded) {

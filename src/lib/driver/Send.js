@@ -1,8 +1,7 @@
 import _ from 'lodash';
-
+import directory from 'stellarterm-directory';
 import MagicSpoon from '../MagicSpoon';
 import Stellarify from '../Stellarify';
-import directory from 'stellarterm-directory';
 import Validate from '../Validate';
 import Event from '../Event';
 import * as EnvConsts from '../../env-consts';
@@ -338,7 +337,7 @@ export default function Send(driver) {
                 }
             } catch (err) {
                 this.state = 'error';
-                this.errorDetails = ErrorHandler(err);
+                this.errorDetails = ErrorHandler(err, 'payment');
                 this.event.trigger();
             }
         },
