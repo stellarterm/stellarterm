@@ -1,0 +1,70 @@
+.Sep6Modal {
+    .Modal_footer {
+        display: flex;
+        justify-content: space-between;
+        padding: 35px 0px 0px 0px;
+
+        .transaction_support {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: normal;
+        }
+
+        .cancel-button {
+            padding: 0.8em 2.5em;
+        }
+
+        .Action_buttons {
+            display: flex;
+
+            button {
+                width: 120px;
+                height: 50px;
+                outline: none;
+                border-radius: 2px;
+                font-weight: normal;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .s-button {
+                img {
+                    width: 24px;
+                    height: 24px;
+                }
+            }
+
+            .btn_cancel {
+                font-weight: lighter;
+                background-color: #ffffff;
+                border: solid 1px #dfe0e1;
+                color: #505558;
+                outline: none;
+
+                &:hover {
+                    border: solid 1px #b9b9b9;
+                }
+
+                &:active {
+                    border: solid 1px #9a9a9a;
+                }
+
+                &[disabled] {
+                    opacity: 0.5;
+                }
+            }
+
+            button:not(:only-child):first-child {
+                margin-right: 10px;
+            }
+        }
+    }
+
+    .Sep6Modal_content + .Modal_footer {
+        padding: 0px 30px 30px 30px;
+    }
+}

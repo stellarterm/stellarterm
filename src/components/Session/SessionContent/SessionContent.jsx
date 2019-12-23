@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import Inflation from './Inflation/Inflation';
-import Deposit from './Deposit/Deposit';
 import Trust from './Trust/Trust';
 import Send from './Send/Send';
 import SessionAccount from './SessionAccount/SessionAccount';
@@ -36,10 +35,6 @@ export default function SessionContent(props) {
                 <Route
                     path="/account/activity/"
                     render={prop => <Activity {...prop} d={d} />} />
-                <Route
-                    exact
-                    path="/account/deposit/"
-                    render={prop => <Deposit {...prop} d={d} />} />
                 <Redirect from="/ledger/" to="/account/" />
                 <Route render={() => <NotFound />} />
             </Switch>

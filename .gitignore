@@ -6,7 +6,6 @@ src/env-consts.js
 
 npm-debug.log
 package-lock.json
-api/package-lock.json
 
 # OSX
 *.DS_Store
@@ -16,9 +15,4 @@ api/package-lock.json
 
 .idea
 
-directory/logos.json
-directory/directory.json
-
-api/setEnvironment.sh
-api/setStagingEnvironment.sh
-/cmc-key.js
+.vscode
