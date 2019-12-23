@@ -10,15 +10,10 @@ export default function KycFrame(props) {
         ['denied', 'Your KYC request declined!'],
         ['pending', 'Your KYC request is pending, please wait.'],
     ]);
-    // status: can be only one of 'pending' || 'denied'
-    const noStatus = status === '';
-    const noFrameUrl = kycUrl === '';
-    const noMoreInfo = moreInfo === '';
-    const noEtaTime = time === '';
 
     return (
         <React.Fragment>
-            {noStatus ? null : (
+            {status ? (
                 <div className="content_block">
                     <div className="content_title">
                         {status === 'pending' ? (
@@ -29,17 +24,17 @@ export default function KycFrame(props) {
 
                         {statusText.has(status) ? statusText.get(status) : null}
                     </div>
-                    {noMoreInfo ? null : <div className="content_text">{moreInfo}</div>}
+                    {moreInfo ? <div className="content_text">{moreInfo}</div> : null}
                 </div>
-            )}
+            ) : null}
 
-            {noEtaTime || noStatus ? null : <EstimatedTime time={time} kycTime />}
+            {time && status ? <EstimatedTime time={time} kycTime /> : null}
 
-            {noFrameUrl || !noStatus ? null : (
+            {kycUrl && !status ? (
                 <div className="kyc_frame_container">
                     <iframe src={kycUrl} width={frameSizes.width} height={frameSizes.height} allow="camera" />
                 </div>
-            )}
+            ) : null}
         </React.Fragment>
     );
 }

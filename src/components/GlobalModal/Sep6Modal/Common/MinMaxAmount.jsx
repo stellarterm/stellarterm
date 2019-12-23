@@ -3,54 +3,50 @@ import PropTypes from 'prop-types';
 import images from '../../../../images';
 
 export default function MinMaxAmount(props) {
-    const { withdrawFormLabel, isDeposit, assetCode, min, max } = props;
-    const noAnyLimit = min === '' && max === '';
-    const bothLimits = min !== '' && max !== '';
-    const onlyMinLimit = min !== '' && max === '';
-    const onlyMaxLimit = max !== '' && min === '';
+    const { withdrawFormLabel, isDeposit, assetCode, minLimit, maxLimit } = props;
 
-    if (noAnyLimit) { return null; }
+    if (!minLimit && !maxLimit) { return null; }
 
     let titleActionText;
     let minMaxAmount;
     let warningText;
 
-    if (onlyMinLimit) {
+    if (!maxLimit && minLimit) {
         titleActionText = 'Minimum';
         warningText = 'insufficient';
-        minMaxAmount = min;
-    } else if (onlyMaxLimit) {
+        minMaxAmount = minLimit;
+    } else if (maxLimit && !minLimit) {
         titleActionText = 'Maximum';
         warningText = 'excessive';
-        minMaxAmount = max;
+        minMaxAmount = maxLimit;
     }
 
     const titleText = isDeposit ? 'deposit' : 'withdraw';
     const fullTitleText = `${titleActionText} ${titleText} amount`;
 
-    if (bothLimits) {
+    if (maxLimit && minLimit) {
         warningText = 'insufficient or excessive';
 
         return withdrawFormLabel ? (
             <div className="input_additional_info">
-                <span>{`Minimum: ${min} ${assetCode}. Maximum: ${max} ${assetCode}`}</span>
+                <span>{`Minimum: ${minLimit} ${assetCode}. Maximum: ${maxLimit} ${assetCode}`}</span>
             </div>
         ) : (
             <React.Fragment>
                 <div className="content_block">
                     <div className="content_title">Minimum deposit amount</div>
                     <div className="content_text">
-                        {min} {assetCode}
-                    </div>
-                    <div className="content_text">
-                        <img src={images['icon-warning-triangle']} alt="warning" />
-                        Be careful! Your funds may be lost if you transfer an {warningText} amount.
+                        {minLimit} {assetCode}
                     </div>
                 </div>
                 <div className="content_block">
                     <div className="content_title">Maximum deposit amount</div>
                     <div className="content_text">
-                        {max} {assetCode}
+                        {maxLimit} {assetCode}
+                    </div>
+                    <div className="content_text">
+                        <img src={images['icon-warning-triangle']} alt="warning" />
+                        Be careful! Your funds may be lost if you transfer an {warningText} amount.
                     </div>
                 </div>
             </React.Fragment>
@@ -79,6 +75,6 @@ MinMaxAmount.propTypes = {
     isDeposit: PropTypes.bool,
     withdrawFormLabel: PropTypes.bool,
     assetCode: PropTypes.string.isRequired,
-    min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    minLimit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    maxLimit: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
 };

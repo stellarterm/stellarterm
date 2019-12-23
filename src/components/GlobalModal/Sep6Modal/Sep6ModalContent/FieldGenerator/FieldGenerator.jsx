@@ -95,7 +95,7 @@ export default class FieldGenerator extends React.Component {
                     <span>{amount.description}</span>
                 </div>
 
-                <MinMaxAmount min={min} max={max} assetCode={asset.code} withdrawFormLabel />
+                <MinMaxAmount minLimit={min || ''} maxLimit={max || ''} assetCode={asset.code} withdrawFormLabel />
             </div>
         );
     }
