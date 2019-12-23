@@ -8393,27 +8393,6 @@ stellar-sdk@^1.0.2, stellar-sdk@^1.0.5:
     toml "^2.3.0"
     urijs "^1.19.1"
 
-"stellarterm-api@git+https://github.com/stellarterm/stellarterm-api.git":
-  version "1.0.0"
-  uid "1302fba1e7280d2b9979fdc4c35129271eb1f4ea"
-  resolved "git+https://github.com/stellarterm/stellarterm-api.git#1302fba1e7280d2b9979fdc4c35129271eb1f4ea"
-  dependencies:
-    aws-sdk "^2.465.0"
-    bluebird "^3.5.0"
-    lodash "^4.17.11"
-    mkdirp "^0.5.1"
-    node-fetch "^1.6.3"
-    p-queue "^2.1.0"
-    request "^2.88.0"
-    request-promise "^4.2.1"
-    stellar-sdk "^1.0.2"
-    stellarterm-directory "git+https://github.com/stellarterm/stellarterm-directory.git"
-
-"stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git":
-  version "1.0.0"
-  uid "51585a7536014746c45ecd89f5d96bd17d2faedf"
-  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#51585a7536014746c45ecd89f5d96bd17d2faedf"
-
 stream-browserify@^2.0.0:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/stream-browserify/-/stream-browserify-2.0.1.tgz#66266ee5f9bdb9940a4e4514cafb43bb71e5c9db"
