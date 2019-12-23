@@ -9,8 +9,13 @@ import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from './../Activity';
 import Printify from '../../../../../lib/Printify';
 
+const PAYMENTS_TYPES = ['create_account', 'account_merge', 'payment'];
 
 export default class ActivityPaymentsHistory extends React.Component {
+    static filterPaymentsHistory(history) {
+        return history.filter(item => (PAYMENTS_TYPES.includes(item.type)));
+    }
+
     static getOperationTypeAndAddress(type, account, account_id, funder, from, to) {
         switch (type) {
         case 'create_account':
@@ -24,8 +29,8 @@ export default class ActivityPaymentsHistory extends React.Component {
         });
         case 'payment': return ({
             opType: (to === account_id) ?
-                    <span>Receive</span> :
-                    <span>Send</span>,
+                <span>Receive</span> :
+                <span>Send</span>,
             address: (to === account_id) ? from : to,
         });
         default: break;
@@ -33,8 +38,10 @@ export default class ActivityPaymentsHistory extends React.Component {
         return null;
     }
 
-    componentWillUpdate(nextProps) {
-        if ((this.props.history.length !== 0) && (nextProps.history.length - this.props.history.length === 0)) {
+    componentDidUpdate(prevProps) {
+        const prevHistory = this.constructor.filterPaymentsHistory(prevProps.history);
+        const currentHistory = this.constructor.filterPaymentsHistory(this.props.history);
+        if ((currentHistory.length !== 0) && (prevHistory.length === currentHistory.length)) {
             this.props.loadMore();
         }
     }
@@ -78,7 +85,7 @@ export default class ActivityPaymentsHistory extends React.Component {
                         href={`https://stellar.expert/explorer/public/tx/${transaction_hash}`}
                         target="_blank"
                         rel="noopener noreferrer">
-                            <img title="StellarExpert" src={images['icon-info']} alt="i" />
+                        <img title="StellarExpert" src={images['icon-info']} alt="i" />
                     </a>
                 </div>
             </div>
@@ -88,8 +95,9 @@ export default class ActivityPaymentsHistory extends React.Component {
 
     render() {
         const { history, loading } = this.props;
+        const paymentHistory = this.constructor.filterPaymentsHistory(history);
 
-        const listHeight = ROW_HEIGHT * history.length;
+        const listHeight = ROW_HEIGHT * paymentHistory.length;
         const maxHeight = Math.min(listHeight, TABLE_MAX_HEIGHT);
         const withScroll = listHeight > TABLE_MAX_HEIGHT;
 
@@ -100,7 +108,7 @@ export default class ActivityPaymentsHistory extends React.Component {
                         Payments history
                         {loading &&
                             <span className="nk-spinner-small-black">
-                                    <div className="nk-spinner" />
+                                <div className="nk-spinner" />
                             </span>}
                     </span>
                 </div>
@@ -118,9 +126,9 @@ export default class ActivityPaymentsHistory extends React.Component {
                             {({ height, width }) => (
                                 <InfiniteLoader
                                     isRowLoaded={() => {}}
-                                    rowCount={history.length}
+                                    rowCount={paymentHistory.length}
                                     loadMoreRows={(e) => {
-                                        if (e.stopIndex + 40 > history.length) {
+                                        if (e.stopIndex + 40 > paymentHistory.length) {
                                             this.props.loadMore();
                                         }
                                     }}>
@@ -131,10 +139,10 @@ export default class ActivityPaymentsHistory extends React.Component {
                                             onRowsRendered={onRowsRendered}
                                             ref={registerChild}
                                             rowHeight={ROW_HEIGHT}
-                                            rowCount={history.length}
+                                            rowCount={paymentHistory.length}
                                             rowRenderer={
                                                 ({ key, index, style }) =>
-                                                    this.getPaymentsHistoryRow(history[index], key, style)} />
+                                                    this.getPaymentsHistoryRow(paymentHistory[index], key, style)} />
                                     )}
                                 </InfiniteLoader>
                             )}
