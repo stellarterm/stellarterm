@@ -127,8 +127,8 @@ export default class Sep6ModalContent extends React.Component {
                         <EstimatedTime time={response.eta || ''} isDeposit={isDeposit} />
 
                         <MinMaxAmount
-                            min={response.min_amount || ''}
-                            max={response.max_amount || ''}
+                            minLimit={response.min_amount || ''}
+                            maxLimit={response.max_amount || ''}
                             assetCode={asset.code}
                             isDeposit />
 

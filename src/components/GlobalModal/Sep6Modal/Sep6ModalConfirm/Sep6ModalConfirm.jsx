@@ -27,7 +27,7 @@ export default class Sep6ModalConfirm extends React.Component {
             <div className="content_main">
                 <div className="content_block">
                     <div className="content_title">Amount</div>
-                    <div className="content_text">{res.amount}</div>
+                    <div className="content_text">{res.amount} {asset.code}</div>
                 </div>
 
                 <div className="content_block">
@@ -66,7 +66,7 @@ export default class Sep6ModalConfirm extends React.Component {
                     <div className="content_text">{res.how || 'No instructions'}</div>
                 </div>
 
-                <MinMaxAmount min={res.min_amount || ''} max={res.max_amount || ''} assetCode={asset.code} isDeposit />
+                <MinMaxAmount minLimit={res.min_amount || ''} maxLimit={res.max_amount || ''} assetCode={asset.code} isDeposit />
 
                 <EstimatedTime time={res.eta || ''} isDeposit={isDeposit} />
 
