@@ -2574,8 +2574,8 @@ concat-stream@~1.5.1:
     typedarray "~0.0.5"
 
 concat-with-sourcemaps@^1.0.0:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/concat-with-sourcemaps/-/concat-with-sourcemaps-1.0.5.tgz#8964bc2347d05819b63798104d87d6e001bed8d0"
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/concat-with-sourcemaps/-/concat-with-sourcemaps-1.1.0.tgz#d4ea93f05ae25790951b99e7b3b09e3908a4082e"
   dependencies:
     source-map "^0.6.1"
 
@@ -8392,6 +8392,27 @@ stellar-sdk@^1.0.2, stellar-sdk@^1.0.5:
     stellar-base "^1.0.2"
     toml "^2.3.0"
     urijs "^1.19.1"
+
+"stellarterm-api@git+https://github.com/stellarterm/stellarterm-api.git":
+  version "1.0.0"
+  uid "1302fba1e7280d2b9979fdc4c35129271eb1f4ea"
+  resolved "git+https://github.com/stellarterm/stellarterm-api.git#1302fba1e7280d2b9979fdc4c35129271eb1f4ea"
+  dependencies:
+    aws-sdk "^2.465.0"
+    bluebird "^3.5.0"
+    lodash "^4.17.11"
+    mkdirp "^0.5.1"
+    node-fetch "^1.6.3"
+    p-queue "^2.1.0"
+    request "^2.88.0"
+    request-promise "^4.2.1"
+    stellar-sdk "^1.0.2"
+    stellarterm-directory "git+https://github.com/stellarterm/stellarterm-directory.git"
+
+"stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git":
+  version "1.0.0"
+  uid f66776bb23342806028f3af04676cbd2f2c2f5aa
+  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#f66776bb23342806028f3af04676cbd2f2c2f5aa"
 
 stream-browserify@^2.0.0:
   version "2.0.1"
