@@ -1,10 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import images from '../../../images';
 import Loading from '../Loading/Loading';
 import Ellipsis from '../Ellipsis/Ellipsis';
 import AssetListRows from './AssetListRows/AssetListRows';
+import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
+import TopVolumeAssets from '../../Markets/TopVolumeAssets/TopVolumeAssets';
+
 
 export default class AssetList extends React.Component {
     constructor(props) {
@@ -21,8 +25,21 @@ export default class AssetList extends React.Component {
         };
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.fromStellarTicker !== prevProps.fromStellarTicker) {
+            this.resetSort();
+        }
+    }
+
     componentWillUnmount() {
         this.dTicker.event.unlisten(this.listenId);
+    }
+
+    resetSort() {
+        this.setState({
+            sortBy: 'volume24h',
+            sortType: false,
+        });
     }
 
     handleSorting(sortName) {
@@ -33,7 +50,7 @@ export default class AssetList extends React.Component {
                 sortBy: sortName,
                 sortType: true,
             });
-        } else if (sortBy !== null && sortBy !== sortName) {
+        } else if (sortBy !== sortName) {
             this.setState({
                 sortBy: sortName,
                 sortType: true,
@@ -74,8 +91,9 @@ export default class AssetList extends React.Component {
             return loadingMarket;
         }
 
-        const { d, limit, showLowTradable } = this.props;
+        const { d, limit, showLowTradable, fromStellarTicker } = this.props;
         const { sortBy, sortType } = this.state;
+        const Xlm = d.ticker.data.assets.find(asset => asset.id === 'XLM-native');
 
         return (
             <div className="AssetList">
@@ -86,13 +104,25 @@ export default class AssetList extends React.Component {
                     {this.generateRowTitle('Volume (24h)', 'volume24h')}
                     {this.generateRowTitle('Change (24h)', 'change24h')}
                 </div>
-                <AssetListRows
-                    d={d}
-                    ticker={d.ticker}
-                    limit={limit}
-                    sortBy={sortBy}
-                    sortType={sortType}
-                    showLowTradable={showLowTradable} />
+                <Link
+                    to={`/exchange/${Xlm.topTradePairSlug}`}
+                    className="AssetList_asset">
+                    <div className="asset_assetCard">
+                        <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
+                    </div>
+                    {AssetListRows.getAssetRow(Xlm, true, d.ticker)}
+                </Link>
+                {!fromStellarTicker ? (
+                    <AssetListRows
+                        d={d}
+                        ticker={d.ticker}
+                        limit={limit}
+                        sortBy={sortBy}
+                        sortType={sortType}
+                        showLowTradable={showLowTradable} />
+                ) : (
+                    <TopVolumeAssets d={d} sortBy={sortBy} sortType={sortType} />
+                )}
             </div>
         );
     }
@@ -102,4 +132,5 @@ AssetList.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     limit: PropTypes.number,
     showLowTradable: PropTypes.bool,
+    fromStellarTicker: PropTypes.bool,
 };
