@@ -53,9 +53,16 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
         const { code, issuer } = asset;
         const logoBlock = this.getLogoBlock(logo, color, asset, directoryLogo);
 
-        const viewIssuer = this.props.longIssuer ?
-            issuer :
-            `${issuer.substr(0, 6)}...${issuer.substr(-6, 6)}`;
+        let viewIssuer = '';
+        const isNative = code === 'XLM' && !issuer;
+
+        if (isNative) {
+            viewIssuer = 'Native lumens';
+        } else {
+            viewIssuer = this.props.longIssuer ?
+                issuer :
+                `${issuer.substr(0, 6)}...${issuer.substr(-6, 6)}`;
+        }
 
         return (
             <div className="AssetCardSeparateLogo">
@@ -67,7 +74,7 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
                             {domain !== 'load' ? domain : <Ellipsis />}
                         </span>
                     </div>
-                    <span>{viewIssuer}</span>
+                    {this.props.noIssuer ? null : <span>{viewIssuer}</span>}
                 </div>
             </div>
         );
@@ -78,5 +85,6 @@ AssetCardSeparateLogo.propTypes = {
     code: PropTypes.string,
     issuer: PropTypes.string,
     longIssuer: PropTypes.bool,
+    noIssuer: PropTypes.bool,
 };
 

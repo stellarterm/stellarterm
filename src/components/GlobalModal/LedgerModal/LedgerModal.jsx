@@ -82,7 +82,7 @@ export default class LedgerModal extends React.Component {
                         <div className="Action_buttons">
                             {waitingForConfirm || waitingForHorizon || isAnyError ? (
                                 <button
-                                    className="btn_cancel"
+                                    className="s-btn_cancel"
                                     onClick={() => {
                                         d.modal.handlers.cancel();
                                     }}>

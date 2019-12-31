@@ -1,10 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../lib/Driver';
-import SendDest from './Step1/SendDest';
-import SendAsset from './Step2/SendAsset';
-import SendAmount from './Step3/SendAmount';
-import SendReview from './Step4/SendReview';
+import SendDest from './SendDest';
+import SendAsset from './SendAsset';
+import SendMemo from './SendMemo';
 
 export default class SendSetup extends React.Component {
     constructor(props) {
@@ -20,26 +19,30 @@ export default class SendSetup extends React.Component {
 
     render() {
         const { d } = this.props;
-        const { step } = d.send;
+        const { clickReviewPayment, allFieldsValid } = d.send;
 
         return (
-            <div className="so-back islandBack islandBack--t">
-                <div className="island">
-                    <div className="island__header">
-                        <div className="Setup_title">
-                            <span>Send payment</span>
-                            <button className="ClearBtn" onClick={() => d.send.handlers.reset()}>
-                                Clear Form
-                            </button>
-                        </div>
+            <div className="Send_block">
+                <div className="Send_title">
+                    <h1>Send payment</h1>
+                    <div className="field_description">
+                        Send assets directly to any Stellar wallet
                     </div>
-                    <SendDest d={d} isCurrentStep={step === 1} stepIsPassed={step > 1} />
-                    <div className="Send_separator" />
-                    <SendAsset d={d} isCurrentStep={step === 2} stepIsPassed={step > 2} />
-                    <div className="Send_separator" />
-                    <SendAmount d={d} isCurrentStep={step === 3} stepIsPassed={step > 3} />
-                    <div className="Send_separator" />
-                    <SendReview d={d} isCurrentStep={step === 4} />
+                </div>
+
+                <SendDest d={d} />
+
+                <SendAsset d={d} />
+
+                <SendMemo d={d} />
+
+                <div className="Send_button_block">
+                    <button
+                        className="s-button"
+                        disabled={!allFieldsValid}
+                        onClick={() => clickReviewPayment()}>
+                        Next
+                    </button>
                 </div>
             </div>
         );
