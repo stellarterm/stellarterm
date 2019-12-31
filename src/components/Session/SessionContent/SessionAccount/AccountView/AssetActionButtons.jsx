@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import directory from 'stellarterm-directory';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
+import Stellarify from '../../../../../lib/Stellarify';
 
 export default class AssetActionButtons extends React.Component {
     constructor(props) {
@@ -22,6 +23,11 @@ export default class AssetActionButtons extends React.Component {
             isDeposit,
             asset: directoryAsset,
         });
+    }
+
+    onSendAssetClick(code, issuer) {
+        const clickedSlug = Stellarify.assetToSlug(new StellarSdk.Asset(code, issuer));
+        this.props.d.send.pickAssetToSend(clickedSlug);
     }
 
     getBuyCryptoLobsterLink(isXLMNative) {
@@ -70,7 +76,7 @@ export default class AssetActionButtons extends React.Component {
 
                 {this.getBuyCryptoLobsterLink(isXLMNative)}
 
-                <Link to={'send/'}>
+                <Link to={'send/'} onClick={() => this.onSendAssetClick(asset.code, asset.issuer)}>
                     <div className="actionBtn">
                         <div className="btnHint">Send</div>
                         <img className="actionBtn_icon" src={images['icon-send']} alt="send" />
