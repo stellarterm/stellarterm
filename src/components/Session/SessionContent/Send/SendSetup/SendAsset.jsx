@@ -98,7 +98,7 @@ export default class SendAsset extends React.Component {
                 validationMessage = (
                     <span>
                         You may only send up to <strong>{maxSpend} {asset.code}</strong> due to the minimum balance
-                        requirements or open orders.<br />
+                        requirements and open orders.<br />
                         For more information, see the <Link to="/account/">minimum balance section</Link>.
                     </span>
                 );
