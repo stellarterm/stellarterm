@@ -250,7 +250,7 @@ export default class LightweightChart extends React.Component {
                 <div className={fullscreen ? 'chart_Msg_Container_fullscreen' : 'chart_Msg_Container'}>
                     <div id="LightChart" style={isLoadingInit || noDataFounded ? { display: 'none' } : {}} />
                     {noDataFounded && !isLoadingInit ? (
-                        <p className="chart_message">No trade history founded!</p>
+                        <p className="chart_message">No trade history found!</p>
                     ) : null}
                     {isLoadingInit ? (
                         <p className="chart_message">
