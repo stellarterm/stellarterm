@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import Driver from '../../lib/Driver';
 import AssetList from '../Common/AssetList/AssetList';
 import Sep7Handler from './Sep7Handler/Sep7Handler';
-import HomeAlert from './HomeAlert/HomeAlert';
 
 
 export default class HomePage extends React.Component {
@@ -60,10 +59,6 @@ export default class HomePage extends React.Component {
                             {this.renderHomePageActions()}
                         </div>
                     </div>
-                </div>
-
-                <div className="so-back islandBack">
-                    <HomeAlert />
                 </div>
 
                 <div className="so-back islandBack HomePage__assetList">
