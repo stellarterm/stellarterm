@@ -42,13 +42,13 @@ export default class ActivityTrustlinesHistory extends React.Component {
         }
     }
 
-    componentWillUpdate(nextProps) {
-        if (nextProps.history.length === this.props.history.length) {
+    componentDidUpdate(prevProps) {
+        if (prevProps.history.length === this.props.history.length) {
             return;
         }
-        const nextHistory = this.constructor.filterHistoryByTrustlines(nextProps.history);
+        const prevHistory = this.constructor.filterHistoryByTrustlines(prevProps.history);
         const currentHistory = this.constructor.filterHistoryByTrustlines(this.props.history);
-        if (nextHistory.length - currentHistory.length === 0) {
+        if (prevHistory.length === currentHistory.length) {
             this.props.loadMore();
         }
     }
@@ -86,7 +86,7 @@ export default class ActivityTrustlinesHistory extends React.Component {
 
         if (!loading && trustlineHistory.length === 0) {
             return (
-              <div className="Activity_empty">You have no trustlines history</div>
+                <div className="Activity_empty">You have no trustlines history</div>
             );
         }
 
