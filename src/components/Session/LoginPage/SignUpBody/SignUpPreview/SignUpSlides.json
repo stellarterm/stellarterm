@@ -1,0 +1,22 @@
+[
+    {
+        "image": "signup-manage",
+        "title": "Manage Stellar account",
+        "desc": "Fast access to your Stellar account. Discover new tokens and market pairs, place orders and send funds using memorable addresses in just a few clicks.\n"
+    },
+    {
+        "image": "signup-security",
+        "title": "Hardware and multisig wallets \n",
+        "desc": "Keep your crypto assets safe and protected. StellarTerm features full support of Ledger hardware wallets and multisignature Stellar accounts."
+    },
+    {
+        "image": "signup-trading",
+        "title": "Advanced trading features",
+        "desc": "Trade hundreds of market pairs on SDEX in real-time. View live stats and prices, seamlessly switch markets, manage and edit live offers."
+    },
+    {
+        "image": "signup-apps",
+        "title": "Desktop apps",
+        "desc": "If you prefer a desktop experience, we offer desktop apps for macOS, Windows and Linux. For extra security, you can use Github to build from the source. "
+    }
+]

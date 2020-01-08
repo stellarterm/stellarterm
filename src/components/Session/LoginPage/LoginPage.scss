@@ -1,200 +1,311 @@
-@import "./SecurityPhrase/SecurityPhrase";
+@import "./SecretPhrase/SecretPhrase";
+@import "LedgerBody/LedgerLoginLink/LedgerLoginLink";
+@import "SignUpBody/SignUpBody";
 
-.LoginPage {
-  display: flex;
-}
-.LoginPage__sidebar {
-  background: #fafafb;
-  padding-top: 16px;
-  width: 200px;
-  flex: 0 0 200px;
-  padding-left: 18px;
-  border-right: 1px solid $s-color-neutral7;
-  border-radius: 0 0 0 3px;
-}
-.LoginPage__sidebar__tab {
-  display: flex;
-  align-items: center;
-  min-height: 50px;
-  padding: 12px 18px;
-  margin-bottom: 16px;
-  border-top: 1px solid $s-color-neutral7;
-  border-left: 1px solid $s-color-neutral7;
-  border-bottom: 1px solid $s-color-neutral7;
-  border-radius: 3px 0 0 3px;
-  background: #fff;
-  text-decoration: none;
-}
-.LoginPage__sidebar__tab img {
-  display: block;
-}
-.LoginPage__sidebar__tab.is-active {
-  background: $s-color-primary4;
-  font-weight: bold;
-  color: #fff;
-  border-color: $s-color-primary3;
-}
-.LoginPage__sidebar__tab.is-active img.LoginPage__sidebar__tab__img--invertible {
-  filter: brightness(100);
+.LoginPage_row-content{
+    display: flex;
+    flex-direction: row;
 }
 
-.LoginPage__sidebar__tab:hover {
-  text-decoration: underline
+.LoginPage__title{
+    font-size: 30px;
+    font-weight: normal;
+    color: #1c2e3e;
 }
-.LoginPage__body {
-  flex: 1;
+
+.LoginPage__body{
+    width: 100%;
+    padding: 19px 32px 33px;
+
+    &.LoginPage__popup{
+        padding: 0;
+        .LoginPage__form {
+            p{
+                font-size: 16px;
+                font-weight: 300;
+                color: #505558;
+            }
+            .LoginPage__intro {
+                margin-bottom: 0;
+            }
+        }
+
+        .LoginPage__accept{
+            background-color: #c3e9c5;
+        }
+
+        .LoginPage__greenBox{
+            padding: 0;
+        }
+    }
+
+    .LoginPage__header{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 9px;
+
+        .LoginPage__header-wrap{
+            display: flex;
+            flex-direction: column;
+
+            .LoginPage__intro{
+                font-size: 14px;
+                font-weight: normal;
+                color: #9aa6ac;
+            }
+        }
+    }
+
+    .LoginPage__form{
+        width: 100%;
+
+        p{
+            font-size: 14px;
+            font-weight: normal;
+            margin-bottom: 5px;
+        }
+
+        .LoginPage__intro{
+            color: #9aa6ac;
+            margin-bottom: 38px;
+        }
+
+        .LoginPage__inputGroup{
+            width: 100%;
+            height: 55px;
+            position: relative;
+
+            .LoginPage__password{
+                margin-bottom: 18px;
+
+                &::placeholder{
+                    text-transform: uppercase;
+                    letter-spacing: 1.5px;
+                }
+            }
+
+            .LoginPage__show_icon{
+                position: absolute;
+                cursor: pointer;
+                z-index: 1;
+                top: 0;
+                right: 17px;
+                height: 24px;
+                width: 24px;
+            }
+        }
+    }
+
+    .LoginPage__accept{
+        display: flex;
+        flex-wrap: nowrap;
+        align-items: center;
+        padding: 12px 20px 16px 14px;
+        background: #f0faf1;
+        border-radius: 2px;
+        margin-bottom: 18px;
+        color: #505558;
+
+        .LoginPage__accept__label {
+            font-size: 13px;
+        }
+
+        .LoginPage__accept__link {
+            text-decoration: none;
+            border-bottom: 1px dotted currentColor;
+        }
+        .LoginPage__accept__link:hover {
+            border-bottom: 1px solid currentColor;
+        }
+
+        .LoginPage__accept__checkbox {
+            margin-right: 12px;
+            cursor: pointer;
+        }
+    }
+
+    .LoginPage__submitBlock {
+        .LoginPage__button {
+            width: 188px;
+            height: 55px;
+            border-radius: 2px;
+            border: solid 1px #5eb464;
+            background-color: #69c76f;
+            font-size: 16px;
+            font-weight: normal;
+            color: #fff;
+            outline: none;
+
+            &:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+        }
+
+    }
 }
+
+.LoginPage_green-link{
+    color: #68c86f;
+    font-size: 14px;
+    font-weight: normal;
+    border-bottom: 1px dotted #68c86f;
+    cursor: pointer;
+}
+
+.LoginPage__signupInvite{
+    margin-left: 29px;
+    font-size: 14px;
+    font-weight: normal;
+    color: #9aa6ac;
+
+    a{
+        text-decoration: none;
+        color: #68c86f;
+    }
+}
+
 .LoginPage__greenBox {
-  border: 1px solid $s-color-primary7;
-  background: $s-color-primary9;
-  border-radius: $s-var-radius;
-  margin: 16px 18px;
-}
-.LoginPage__paddedBox {
-  padding: 16px 18px;
-}
-.LoginBox__divider {
-  border-top: 1px solid $s-color-neutral7;
-  width: 100%;
-}
-.LoginBox__spacer {
-  padding-top: 24px;
-  padding-bottom: 24px;
+    border: 1px solid $s-color-primary7;
+    background: $s-color-primary9;
+    border-radius: $s-var-radius;
+    padding: 31px 37px 24px 29px;
+    font-size: 16px;
+    color: #505558;
+    margin-top: 20px;
+    margin-bottom: 26px;
+
+    .LoginPage__submitWrap{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .LoginPage__customPath{
+        margin-left: 30px;
+        line-height: 55px;
+
+        .LoginPage__bip32Path {
+            font-weight: 700;
+
+            .LoginPage__bip32PathInput {
+                padding-right: 0;
+                margin-left: 3px;
+                margin-right: 4px;
+                padding-left: 12px;
+                outline: none;
+            }
+        }
+
+    }
+
+    .LoginPage__accept{
+        background-color: #c3e9c5;;
+    }
+
 }
 
-.LoginPage__form {
-  padding: 20px;
-}
-.LoginPage__form p:last-child {
-  margin-bottom: 0;
-}
-.LoginPage__form__list {
-  padding-bottom: 10px;
-}
-.LoginPage__form--title {
-  font-size: $s-scale-1;
-  margin-bottom: 16px;
-  &.browser-support { font-size: 21px; }
-}
-.LoginPage__inputGroup {
-  margin-bottom: 9px;
-    position: relative;
+.LoginPage__form--title{
+    font-size: 18px;
+    font-weight: normal;
 }
 
-.LoginPage__intro{
-    margin-bottom: 11px;
-}
-.LoginPage__password {
+.LoginPage__password{
     position: relative;
-    height: 52px;
+    width: 100%;
+    height: 55px;
     overflow: hidden;
     text-overflow: ellipsis;
+    border-radius: 2px;
+    border: solid 1px #d7e0e4;
+    padding: 0 22px;
 
     &::placeholder{
+        font-size: 14px;
+        font-weight: normal;
         opacity: 0.5;
     }
 }
 
-.LoginPage__inputGroup--path {
-  width: 300px;
-}
-.LoginPage__show {
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
-    height: 52px;
+.LoginPage_instructions-wrap{
     display: flex;
-    align-items: center;
-}
+    flex-direction: row;
+    border-top: 1px solid #f5f5f5;
+    padding: 39px 39px 48px 32px;
+    font-size: 14px;
+    font-weight: normal;
 
-.LoginPage__show_icon{
-    position: absolute;
-    cursor: pointer;
-    z-index: 1;
-    right: 17px;
-    top: 25%;
-    height: 24px;
-    width: 24px;
-}
+    .LoginPage_instructions {
+        margin-right: 75px;
 
-.LoginPage__generate{
-    min-width: 120px;
-    min-height: 42px;
-    border-radius: 2px;
+        p {
+            margin-bottom: 0;
 
-    &:disabled{
-        border: solid 1px #dfe0e1;
+        }
+
+        a{
+            color: #7ed085;
+        }
+
+        ol {
+            margin: 0;
+            padding: 0;
+            list-style-position: inside;
+
+            li{
+                margin-top: 10px;
+                margin-bottom: 20px;
+                color: #9aa6ac;
+
+                strong{
+                  color: #1c2e3e;
+                }
+            }
+        }
+
+        .LoginPage_instructions-image{
+            width: 542px;
+            padding: 15px 0;
+            border-radius: 2px;
+            border: solid 1px #ebeff1;
+            background-color: #f9f9f9;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 10px;
+            margin-left: 16px;
+        }
     }
-}
 
-.LoginPage__notes {
-  border-top: 1px solid $s-color-primary7;
-  padding: 20px;
-}
+    .LoginPage_notes{
+        color: #9aa6ac;
+        padding-top: 15px;
 
-.LoginPage ul {
-  margin-left: 2em;
-}
 
-.LoginPage__generatedNote {
-  padding-top: 1em;
+        .LoginPage_notes-title{
+            color: #1c2e3e;
+        }
 
-}
-.LoginPage__error {
-  margin-top: 1em;
-  margin-bottom: 0;
-}
+        ul{
+            list-style-type: none;
+            margin-top: 12px;
 
-.LoginPage__accept {
-  display: flex;
-  flex-wrap: nowrap;
-  align-items: center;
-  padding: 8px 12px;
-  border: 1px solid $s-color-primary7;
-  // background: rgba(0,0,0,0.05);
-  background: $s-color-primary7;
-  border-radius: 3px;
-  margin-bottom: 10px;
-}
-.LoginPage__accept__link {
-  text-decoration: none;
-  border-bottom: 1px dotted currentColor;
-}
-.LoginPage__accept__link:hover {
-  border-bottom: 1px solid currentColor;
-}
+            li {
+                display: flex;
+                flex-direction: row;
+                padding-bottom: 12px;
 
-.LoginPage__accept__checkbox {
-  margin-right: 12px;
-  cursor: pointer;
-}
-.LoginPage__accept__label {
-  font-size: $s-scale-5;
-}
-
-.LoginBox__ledgerNanoHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-end;
-  padding: 36px 32px 18px 32px;
-}
-.LoginPage__activateCustomPath {
-  align-self: center;
-  margin-left: 18px;
-}
-.LoginPage__customPath {
-  margin-left: 18px;
-}
-.LoginPage__customPath__input {
-  padding-right: 0;
-  margin-left: 3px;
-  margin-right: 4px;
-  padding-left: 12px;
-}
-.LoginPage__customPath__surrounding {
-  font-weight: bold;
-}
-.LoginPage_qrcode{
-    display: flex;
-    justify-content: center;
-    margin: 30px 0;
+                &::before {
+                    line-height: 18px;
+                    display: block;
+                    color: #68c86f;
+                    content: '·';
+                    font-size: 30px;
+                    font-style: normal;
+                    margin-right: 8px;
+                }
+            }
+        }
+    }
 }

@@ -1,67 +1,76 @@
 import React from 'react';
-import AcceptTerms from '../Common/AcceptTerms';
-import clickToSelect from '../../../../lib/clickToSelect';
-import SignUpDescription from './SignUpDescription/SignUpDescription';
-import SignUpSecurityNotes from './SignUpSecurityNotes/SignUpSecurityNotes';
+import PropTypes from 'prop-types';
+import SignUpPreview from './SignUpPreview/SignUpPreview';
+import LedgerLoginLink from '../LedgerBody/LedgerLoginLink/LedgerLoginLink';
+import SignUpGenerateKeyPair from './SignUpGenerateKeyPair/SignUpGenerateKeyPair';
+import LoginPageBody from '../LoginPageBody/LoginPageBody';
+import Driver from '../../../../lib/Driver';
+
 
 export default class SignUpBody extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             newKeypair: null,
+            signUpStep: 'preview',
         };
     }
 
-    handleGenerate() {
-        const keypair = StellarSdk.Keypair.random();
-        this.setState({
-            newKeypair: {
-                pubKey: keypair.publicKey(),
-                secretKey: keypair.secret(),
-            },
-        });
+    getSignUpBody() {
+        const { signUpStep } = this.state;
+        switch (signUpStep) {
+        case 'preview': {
+            return (
+                <React.Fragment>
+                    <div className="SignUpBody">
+                        <SignUpPreview nextStep={() => this.setSignUpStep('generateKeyPair')} />
+                    </div>
+                    <LedgerLoginLink narrow />
+                </React.Fragment>
+            );
+        }
+        case 'generateKeyPair': {
+            return (
+                <React.Fragment>
+                    <div className="SignUpBody">
+                        <SignUpGenerateKeyPair
+                            nextStep={() => this.setSignUpStep('finish')}
+                            prevStep={() => this.setSignUpStep('preview')} />
+                    </div>
+                </React.Fragment>
+            );
+        }
+        case 'finish': {
+            return (
+                <React.Fragment>
+                    <div className="islandBack--t">
+                        <div className="LoginPage island">
+                            <LoginPageBody
+                                d={this.props.d}
+                                verifySignUp
+                                prevSignUpStep={() => this.setSignUpStep('generateKeyPair')} />
+                        </div>
+                    </div>
+                </React.Fragment>
+            );
+        }
+        default: return null;
+        }
     }
 
-    renderNewAccoutDetails() {
-        return (
-            <div className="LoginPage__generatedNote">
-                <p>
-                    <strong>
-                        Keep your key secure. This secret key will only be showed to you once. StellarTerm does not save
-                        it and will not be able to help you recover it if lost.
-                    </strong>
-                </p>
-                <p>
-                    Public key (will be your Account ID): <br /> {this.state.newKeypair.pubKey}
-                </p>
-                <p>
-                    Secret key (<strong>SAVE THIS AND KEEP THIS SECURE</strong>):{' '}
-                    <span className="clickToSelect" onClick={clickToSelect}>
-                        {this.state.newKeypair.secretKey}
-                    </span>
-                </p>
-            </div>
-        );
+    setSignUpStep(signUpStep) {
+        this.setState({ signUpStep });
     }
 
     render() {
-        let newKeyPairDetails;
-
-        if (this.state.newKeypair !== null) {
-            newKeyPairDetails = this.renderNewAccoutDetails();
-        }
-
+        const body = this.getSignUpBody();
         return (
-            <div className="LoginPage__body">
-                <div className="LoginPage__greenBox">
-                    <div className="LoginPage__form">
-                        <SignUpDescription />
-                        <AcceptTerms funcOnSubmit={() => this.handleGenerate()} loginButtonText={'Generate keypair'} />
-                        {newKeyPairDetails}
-                    </div>
-                    <SignUpSecurityNotes />
-                </div>
-            </div>
+            <React.Fragment>
+                {body}
+            </React.Fragment>
         );
     }
 }
+SignUpBody.propTypes = {
+    d: PropTypes.instanceOf(Driver),
+};

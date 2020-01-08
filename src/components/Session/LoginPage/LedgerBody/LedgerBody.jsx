@@ -1,11 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import Driver from '../../../../lib/Driver';
-import LedgerLogo from './LedgerLogo/LedgerLogo';
 import LedgerForm from './LedgerForm/LedgerForm';
 import LedgerAlert from './LedgerAlert/LedgerAlert';
 import LedgerSetupNotes from './LedgerSetupNotes/LedgerSetupNotes';
 import LedgerSetupInstructions from './LedgerSetupInstructions/LedgerSetupInstructions';
+import SecretPhrase from '../SecretPhrase/SecretPhrase';
+import HiddenDescription from '../Common/HiddenDescription';
+import images from './../../../../images';
+
 
 export default class LedgerBody extends React.Component {
     static browserIsGoogleChrome() {
@@ -26,6 +30,13 @@ export default class LedgerBody extends React.Component {
         return (window.navigator.platform === 'Win32' || window.navigator.platform === 'Win64');
     }
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            showInstructions: false,
+        };
+    }
+
     componentDidMount() {
         const isWindowsOS = this.constructor.isWindowsOS();
         if (!isWindowsOS) {
@@ -42,6 +53,7 @@ export default class LedgerBody extends React.Component {
 
     render() {
         const { d, modal } = this.props;
+        const { showInstructions } = this.state;
         const ledgerConnected = d.session.ledgerConnected;
         const isSupported = this.constructor.browserU2FSupport();
         const isNotChrome = !this.constructor.browserIsGoogleChrome();
@@ -61,23 +73,46 @@ export default class LedgerBody extends React.Component {
 
         if (modal) {
             return (
-                <div className="LoginPage__greenBox">{loginForm}</div>
+                <div className="LoginPage__body LoginPage__popup">
+                    <div className="LoginPage__greenBox">{loginForm}</div>
+                </div>
             );
         }
 
         return (
-            <div className="LoginPage__body">
-                <LedgerLogo />
-
-                <div className="LoginPage__greenBox">{loginForm}</div>
-
-                <div className="LoginBox__spacer">
-                    <div className="LoginBox__divider" />
+            <React.Fragment>
+                <div className="LoginPage_row-content">
+                    <div className="LoginPage__body">
+                        <div className="LoginPage__header">
+                            <Link to="/account/">
+                                <img src={images['icon-arrow-left-green-large']} alt="<" />
+                            </Link>
+                            <HiddenDescription />
+                        </div>
+                        <div className="LoginPage__header">
+                            <div className="LoginPage__header-wrap">
+                                <span className="LoginPage__title">Access your account</span>
+                                <span className="LoginPage__intro">Use StellarTerm with your Ledger account</span>
+                            </div>
+                            <img src={images['ledger-logo']} alt="ledger" width="133" />
+                        </div>
+                        {loginForm}
+                        {!showInstructions &&
+                            <span
+                                className="LoginPage_green-link"
+                                onClick={() => this.setState({ showInstructions: true })}>
+                                Show setup instructions
+                            </span>
+                        }
+                    </div>
+                    <SecretPhrase d={d} />
                 </div>
-
-                <LedgerSetupInstructions />
-                <LedgerSetupNotes />
-            </div>
+                {showInstructions && (
+                    <div className="LoginPage_instructions-wrap">
+                        <LedgerSetupInstructions />
+                        <LedgerSetupNotes />
+                    </div>)}
+            </React.Fragment>
         );
     }
 }

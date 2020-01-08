@@ -31,7 +31,7 @@ export default class HomePage extends React.Component {
             <div className="HomePage__lead__actions">
                 <Link className={signUpLinkClass} to="/signup/">Sign Up</Link>
                 &nbsp;
-                <Link className="s-button HomePage__lead__actions__button" to="/account/">Login</Link>
+                <Link className="s-button HomePage__lead__actions__button" to="/account/">Log in</Link>
             </div>
         );
     }

@@ -4,8 +4,8 @@ import Driver from '../../../lib/Driver';
 import SignUpBody from './SignUpBody/SignUpBody';
 import LedgerBody from './LedgerBody/LedgerBody';
 import LoginPageBody from './LoginPageBody/LoginPageBody';
-import LoginPageTabs from './LoginPageTabs/LoginPageTabs';
-import SecurityPhrase from './SecurityPhrase/SecurityPhrase';
+import LedgerLoginLink from './LedgerBody/LedgerLoginLink/LedgerLoginLink';
+
 
 export default function LoginPage(props) {
     const rootAddress = props.urlParts;
@@ -13,13 +13,29 @@ export default function LoginPage(props) {
 
     switch (rootAddress) {
     case 'account':
-        pageBody = <LoginPageBody d={props.d} />;
+        pageBody = (
+            <div className="so-back islandBack islandBack--t">
+                <div className="island">
+                    <div className="LoginPage">
+                        <LoginPageBody d={props.d} />
+                    </div>
+                </div>
+            </div>
+        );
         break;
     case 'ledger':
-        pageBody = <LedgerBody d={props.d} />;
+        pageBody = (
+            <div className="so-back islandBack islandBack--t">
+                <div className="island">
+                    <div className="LoginPage">
+                        <LedgerBody d={props.d} />
+                    </div>
+                </div>
+            </div>
+        );
         break;
     case 'signup':
-        pageBody = <SignUpBody />;
+        pageBody = <SignUpBody d={props.d} />;
         break;
     default:
         break;
@@ -27,17 +43,8 @@ export default function LoginPage(props) {
 
     return (
         <React.Fragment>
-            <SecurityPhrase />
-            <div className="so-back islandBack islandBack--t">
-                <div className="island">
-                    <div className="island__header">Access your account</div>
-
-                    <div className="LoginPage">
-                        <LoginPageTabs rootAddress={rootAddress} />
-                        {pageBody}
-                    </div>
-                </div>
-            </div>
+            {pageBody}
+            {rootAddress === 'account' && <LedgerLoginLink />}
         </React.Fragment>
     );
 }
