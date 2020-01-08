@@ -120,8 +120,8 @@ export default class Sep6ModalContent extends React.Component {
                         </div>
 
                         <FeeBlock
-                            feeFixed={response.fee_fixed || 0}
-                            feePercent={response.fee_percent || 0}
+                            feeFixed={parseFloat(response.fee_fixed) || 0}
+                            feePercent={parseFloat(response.fee_percent) || 0}
                             assetCode={asset.code} />
 
                         <EstimatedTime time={response.eta || ''} isDeposit={isDeposit} />

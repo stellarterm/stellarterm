@@ -45,8 +45,8 @@ export default class Sep6ModalConfirm extends React.Component {
                 <EstimatedTime time={res.eta || ''} isDeposit={isDeposit} />
 
                 <FeeBlock
-                    feeFixed={res.fee_fixed || 0}
-                    feePercent={res.fee_percent || 0}
+                    feeFixed={parseFloat(res.fee_fixed) || 0}
+                    feePercent={parseFloat(res.fee_percent) || 0}
                     assetCode={asset.code}
                     amountForFee={parseFloat(res.amount)} />
 
@@ -71,8 +71,8 @@ export default class Sep6ModalConfirm extends React.Component {
                 <EstimatedTime time={res.eta || ''} isDeposit={isDeposit} />
 
                 <FeeBlock
-                    feeFixed={res.fee_fixed || 0}
-                    feePercent={res.fee_percent || 0}
+                    feeFixed={parseFloat(res.fee_fixed) || 0}
+                    feePercent={parseFloat(res.fee_percent) || 0}
                     assetCode={asset.code}
                     amountForFee={parseFloat(res.amount)} />
 
