@@ -22,6 +22,7 @@ import Sep7ErrorModal from './Sep7Modals/Sep7ErrorModal/Sep7ErrorModal';
 import Sep7ChangeTrustModal from './Sep7Modals/Sep7ChangeTrustModal/Sep7ChangeTrustModal';
 import EditOfferModal from './EditOfferModal/EditOfferModal';
 import CancelOffersModal from './CancelOffersModal/CancelOffersModal';
+import LoginModal from './LoginModal/LoginModal';
 import SecretPhraseSetup from './SecretPhraseSetup/SecretPhraseSetup';
 
 export default class GlobalModal extends React.Component {
@@ -134,6 +135,9 @@ export default class GlobalModal extends React.Component {
             break;
         case 'Sep6Modal':
             body = <Sep6Modal d={d} data={modal.inputData} />;
+            break;
+        case 'LoginModal':
+            body = <LoginModal submit={d.modal.handlers} d={d} />;
             break;
         default:
             body = (
