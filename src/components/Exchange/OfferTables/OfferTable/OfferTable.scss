@@ -16,16 +16,40 @@
             color: #b8bbbc;
         }
 
+        .MarketTable_header_item {
+            text-align: left;
+            padding: 5px 1rem;
+            width: 25%;
+        }
+
         .OfferTable__header__item {
             width: 25%;
             padding: 5px 10px;
         }
     }
+    
+    .MarketTable_table {
+        max-height: 600px;
+        overflow: auto;
+        cursor: none;
+    }
 
+    .MarketTable_table,
     .OfferTable__table {
         width: 100%;
         position: relative;
         cursor: pointer;
+
+        .MarketTable_row{
+            display: flex;
+            width: 100%;
+            border-top: solid 1px rgba(0, 0, 0, 0.05);
+
+            .MarketTable_row_item {
+                padding: 4px 1rem;
+                width: 25%;
+            }
+        }
 
         .OfferTable__row_background {
             background: #fff;

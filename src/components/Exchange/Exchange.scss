@@ -4,6 +4,7 @@
 @import "./LightweightChart/LightweightChart";
 @import "./ChartActionAlert/ChartActionAlert";
 @import "./PairPicker/PairPicker";
+@import "./MarketsHistory/MarketsHistory";
 
 .hidden-pair {
     display: none;
@@ -27,7 +28,7 @@
     padding: 0;
 }
 
-.chart_Switcher {
+.tabs_Switcher {
     display: flex;
     justify-content: space-between;
     padding: 0;
@@ -53,7 +54,7 @@
                 height: 24px;
             }
         }
-        .activeChart {
+        .active_Tab {
             border-bottom: solid 2px #86d38c;
 
             img {
