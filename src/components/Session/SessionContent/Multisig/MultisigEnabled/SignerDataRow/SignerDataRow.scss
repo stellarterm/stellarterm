@@ -13,7 +13,27 @@
     }
 
     .SignerDataRow_key{
-        min-width: 360px;
+        min-width: 420px;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-start;
+
+
+        .SignerDataRow_icon{
+            height: 26px;
+            width: 26px;
+            margin-right: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: solid 2px #f4f4f5;
+
+            img{
+                height: 14px;
+                width: 14px;
+            }
+        }
     }
     .SignerDataRow_weight{
         min-width: 50px;
