@@ -2,6 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
 import Phrases from './SecretPhrases.json';
+import Sep7Handler from '../../HomePage/Sep7Handler/Sep7Handler';
+import Driver from '../../../lib/Driver';
 
 
 export default class SecretPhraseSetup extends React.Component {
@@ -35,10 +37,11 @@ export default class SecretPhraseSetup extends React.Component {
         localStorage.setItem('security-phrase', secretPhrase);
         this.props.update();
         this.props.submit.cancel();
+        Sep7Handler(this.props.d);
     }
 
     render() {
-        const { submit } = this.props;
+        const { submit, d } = this.props;
         const { secretPhrase, buttonReady } = this.state;
         return (
             <div className="SecretPhraseSetup">
@@ -47,7 +50,10 @@ export default class SecretPhraseSetup extends React.Component {
                     <img
                         src={images['icon-close']}
                         alt="X"
-                        onClick={() => submit.cancel()} />
+                        onClick={() => {
+                            submit.cancel();
+                            Sep7Handler(d);
+                        }} />
                 </div>
                 <div className="SecretPhraseSetup_wrap">
                     <p className="SecretPhraseSetup_title">
@@ -81,7 +87,10 @@ export default class SecretPhraseSetup extends React.Component {
                         <button
                             className="cancel-button"
                             disabled={!buttonReady}
-                            onClick={() => submit.cancel()}>
+                            onClick={() => {
+                                submit.cancel();
+                                Sep7Handler(d);
+                            }}>
                             Cancel
                         </button>
                         <button
@@ -99,4 +108,5 @@ export default class SecretPhraseSetup extends React.Component {
 SecretPhraseSetup.propTypes = {
     submit: PropTypes.objectOf(PropTypes.func),
     update: PropTypes.func,
+    d: PropTypes.instanceOf(Driver),
 };

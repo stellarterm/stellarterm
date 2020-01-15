@@ -19,8 +19,8 @@ export default class SecretPhrase extends React.Component {
         if (isSecretPhraseMissing) {
             return (
                 <React.Fragment>
-                    <p className="SecretPhrase_title">
-                        <img src={images['icon-warning-small']} alt="warn" />
+                    <p className="SecretPhrase_title SecretPhrase_title-alert">
+                        <img src={images['icon-warning-small-red']} alt="warn" className="SecretPhrase_img-blinking" />
                         Secret Phrase not found
                     </p>
                     <p className="SecretPhrase_content">
@@ -40,7 +40,7 @@ export default class SecretPhrase extends React.Component {
         return (
             <React.Fragment>
                 <p className="SecretPhrase_title">
-                    <img src={images['icon-warning-small']} alt="warn" />
+                    <img src={images['icon-circle-success']} alt="warn" className="SecretPhrase_img-blinking" />
                     Make sure that your Secret Phrase is
                 </p>
                 <p className="SecretPhrase_phrase">

@@ -131,7 +131,7 @@ export default class GlobalModal extends React.Component {
             body = <CancelOffersModal submit={d.modal.handlers} offersData={modal.inputData} d={d} />;
             break;
         case 'SecretPhraseSetup':
-            body = <SecretPhraseSetup submit={d.modal.handlers} update={modal.inputData} />;
+            body = <SecretPhraseSetup submit={d.modal.handlers} update={modal.inputData} d={d} />;
             break;
         case 'Sep6Modal':
             body = <Sep6Modal d={d} data={modal.inputData} />;

@@ -103,7 +103,7 @@ export default class ManageOffers extends React.Component {
                     <div className="OfferMakerOverview_login">
                         <span className="offer_message">
                             <a onClick={() => this.props.d.modal.handlers.activate('LoginModal')}>Log in</a>
-                            {' '}or <Link to="/signup/">Sign up </Link> to see your open offers
+                            {' '}or <Link to="/signup/">Create new account </Link> to see your open offers
                         </span>
                     </div>
                 </div>

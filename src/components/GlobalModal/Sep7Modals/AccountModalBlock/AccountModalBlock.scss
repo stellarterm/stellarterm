@@ -9,9 +9,15 @@
     font-weight: 300;
     margin-bottom: 40px;
 
-    span:last-child{
+    .AccountModalBlock_account-id{
         font-size: 18px;
         font-weight: bold;
+        display: flex;
+        align-items: center;
+
+        .AccountModalBlock_identicon{
+            margin-right: 7px;
+        }
     }
 }
 
@@ -24,4 +30,19 @@
 
 .AccountModalBlock_loading{
     padding: 20px;
+}
+
+.AccountModalBlock_out{
+    display: flex;
+    flex-direction: column;
+    font-size: 18px;
+    font-weight: normal;
+
+    .s-button{
+        margin-top: 28px;
+        width: 160px;
+        height: 52px;
+        outline: none;
+        font-size: 16px;
+    }
 }

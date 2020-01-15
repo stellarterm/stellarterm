@@ -46,6 +46,10 @@
         align-items: center;
         margin-bottom: 9px;
 
+        .LoginPage__header-goBack{
+            cursor: pointer;
+        }
+
         .LoginPage__header-wrap{
             display: flex;
             flex-direction: column;
@@ -219,7 +223,7 @@
     text-overflow: ellipsis;
     border-radius: 2px;
     border: solid 1px #d7e0e4;
-    padding: 0 22px;
+    padding: 0 50px 0 22px;
 
     &::placeholder{
         font-size: 14px;

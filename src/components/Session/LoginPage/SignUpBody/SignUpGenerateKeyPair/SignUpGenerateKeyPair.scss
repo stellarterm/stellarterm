@@ -94,6 +94,21 @@
             display: flex;
             flex-direction: row;
             align-items: center;
+            margin-top: 20px;
+            margin-bottom: 3px;
+            max-width: 160px;
+
+            &.SignUpGenerateKeyPair_desc-title-backup{
+                margin-top: 5px;
+            }
+
+            img{
+                margin-right: 5px;
+            }
+        }
+
+        .SignUpGenerateKeyPair_desc-content{
+            margin-bottom: 26px;
         }
 
         .s-button {
@@ -104,9 +119,16 @@
             font-weight: 300;
         }
 
-        .LoginPage_green-link {
-            float: right;
-            margin-top: 5px;
+        .SignUpGenerateKeyPair_actions{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+
+            .LoginPage_green-link{
+                margin-bottom: 5px;
+            }
         }
 
     }

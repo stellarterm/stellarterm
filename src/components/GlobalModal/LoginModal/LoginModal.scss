@@ -1,3 +1,5 @@
+@import "SecretPhraseModalBlock/SecretPhraseModalBlock";
+
 .LoginModal {
     background-color: #fff;
     width: 612px;
@@ -5,6 +7,6 @@
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
 
     .LoginModal_content{
-        padding: 15px;
+        padding: 35px
     }
 }

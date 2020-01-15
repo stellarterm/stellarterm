@@ -64,8 +64,6 @@ export default class SignUpPreview extends React.Component {
 
         return (
             <div
-                onMouseEnter={() => this.stopSlideShow()}
-                onMouseLeave={() => this.startSlideShow()}
                 className={`SignUpPreview_slide ${slideDirection}`}
                 key={activeSlideIndex}>
                 <img src={images[slide.image]} alt="img" className="SignUpPreview_slide-image" />
@@ -79,10 +77,13 @@ export default class SignUpPreview extends React.Component {
         const slide = this.renderSlide();
         const dots = this.renderCarouselDots();
         return (
-            <div className="SignUpPreview">
+            <div
+                className="SignUpPreview"
+                onMouseEnter={() => this.stopSlideShow()}
+                onMouseLeave={() => this.startSlideShow()}>
                 {slide}
                 {dots}
-                <button onClick={() => this.props.nextStep()} className="s-button">New Stellar account</button>
+                <button onClick={() => this.props.nextStep()} className="s-button">Generate new Stellar account</button>
                 <span className="LoginPage__signupInvite">
                     Already have an account? <Link to="/account/">Log in</Link>
                 </span>

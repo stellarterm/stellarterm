@@ -11,7 +11,6 @@ export default class SignUpBody extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            newKeypair: null,
             signUpStep: 'preview',
         };
     }
@@ -43,7 +42,7 @@ export default class SignUpBody extends React.Component {
         case 'finish': {
             return (
                 <React.Fragment>
-                    <div className="islandBack--t">
+                    <div className="islandBack--t islandBack">
                         <div className="LoginPage island">
                             <LoginPageBody
                                 d={this.props.d}

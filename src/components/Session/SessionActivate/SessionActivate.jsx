@@ -52,7 +52,7 @@ export default function SessionActivate(props) {
                                     <div className="block_container">
                                         <div className="buyTitle">Fast & Easy</div>
                                         <div className="buyDesc">
-                                            Lumens reach your wallet in 10-30 minutes on average
+                                            Lumens reach your account in 10-30 minutes on average
                                         </div>
                                     </div>
                                 </div>
@@ -64,8 +64,8 @@ export default function SessionActivate(props) {
                                     <div className="block_container">
                                         <div className="buyTitle">Secure</div>
                                         <div className="buyDesc">
-                                            Indacoin complies with PCI SAQ when storing, processing and transmitting
-                                            cardholder data
+                                            Payment processor complies with PCI SAQ when storing, processing and
+                                             transmitting cardholder data
                                         </div>
                                     </div>
                                 </div>
@@ -77,7 +77,7 @@ export default function SessionActivate(props) {
                                     <div className="block_container">
                                         <div className="buyTitle">Convenient</div>
                                         <div className="buyDesc">
-                                            Deposit XLM to your wallet using Visa or MasterCard credit card
+                                            Deposit XLM to your account using Visa or MasterCard credit card
                                         </div>
                                     </div>
                                 </div>

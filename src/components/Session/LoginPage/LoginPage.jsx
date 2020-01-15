@@ -28,7 +28,7 @@ export default function LoginPage(props) {
             <div className="so-back islandBack islandBack--t">
                 <div className="island">
                     <div className="LoginPage">
-                        <LedgerBody d={props.d} />
+                        <LedgerBody {...props} d={props.d} />
                     </div>
                 </div>
             </div>

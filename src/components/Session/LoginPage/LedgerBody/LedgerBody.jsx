@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Driver from '../../../../lib/Driver';
 import LedgerForm from './LedgerForm/LedgerForm';
 import LedgerAlert from './LedgerAlert/LedgerAlert';
@@ -84,9 +83,11 @@ export default class LedgerBody extends React.Component {
                 <div className="LoginPage_row-content">
                     <div className="LoginPage__body">
                         <div className="LoginPage__header">
-                            <Link to="/account/">
-                                <img src={images['icon-arrow-left-green-large']} alt="<" />
-                            </Link>
+                            <img
+                                onClick={() => this.props.history.goBack()}
+                                className="LoginPage__header-goBack"
+                                src={images['icon-arrow-left-green-large']}
+                                alt="<" />
                             <HiddenDescription />
                         </div>
                         <div className="LoginPage__header">
@@ -120,4 +121,5 @@ export default class LedgerBody extends React.Component {
 LedgerBody.propTypes = {
     d: PropTypes.instanceOf(Driver),
     modal: PropTypes.bool,
+    history: PropTypes.objectOf(PropTypes.any),
 };

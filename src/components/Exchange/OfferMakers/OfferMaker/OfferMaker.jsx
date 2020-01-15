@@ -28,6 +28,9 @@ export default class OfferMaker extends React.Component {
             }
         });
         this.sessionUnsub = this.props.d.session.event.sub(() => {
+            if (this.state.amount) {
+                this.updateState('amount', this.state.amount);
+            }
             this.forceUpdate();
         });
 

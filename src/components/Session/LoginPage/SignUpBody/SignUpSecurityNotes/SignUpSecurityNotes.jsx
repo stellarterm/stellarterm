@@ -1,10 +1,7 @@
 import React from 'react';
 
 export default () => (
-    <div className="InfoBlockWithHoverDescription-popup">
-        <p className="InfoBlockWithHoverDescription-popup-title">
-            Account generation security notes
-        </p>
+    <div className="InfoBlockWithHoverDescription-popup InfoBlockWithHoverDescription-popup-left">
         <p>
             The key is generated using entropy from {' '}
             <a
@@ -17,8 +14,12 @@ export default () => (
             <a href="https://w3c.github.io/webcrypto/" target="_blank" rel="noopener noreferrer">
                 Web Cryptography API
             </a>
-            . However, using a secure random number generation does not protect you from a
+            .
+        </p>
+        <p>
+            However, using a secure random number generation does not protect you from a
             compromised computer. Take great care to make sure your computer is secure and do not
-            run this on a computer you do not trust.</p>
+            run this on a computer you do not trust.
+        </p>
     </div>
 );
