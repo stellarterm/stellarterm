@@ -13,6 +13,19 @@ export default class SendSetup extends React.Component {
         });
     }
 
+    componentDidMount() {
+        this.props.d.send.fetchSelfAssets();
+        const urlParams = new URLSearchParams(window.location.search);
+        const noAssetParam = urlParams.get('asset') === null;
+        const assetToSend = noAssetParam ? 'XLM-native' : urlParams.get('asset');
+
+        try {
+            this.props.d.send.pickAssetToSend(assetToSend);
+        } catch (e) {
+            console.error(e);
+        }
+    }
+
     componentWillUnmount() {
         this.props.d.send.event.unlisten(this.listenId);
     }
@@ -36,13 +49,16 @@ export default class SendSetup extends React.Component {
 
                 <SendMemo d={d} />
 
-                <div className="Send_button_block">
-                    <button
-                        className="s-button"
-                        disabled={!allFieldsValid}
-                        onClick={() => clickReviewPayment()}>
-                        Next
-                    </button>
+                <div className="Input_flexed_block">
+                    <div className="Send_input_block" />
+                    <div className="Send_button_block">
+                        <button
+                            className="s-button"
+                            disabled={!allFieldsValid}
+                            onClick={() => clickReviewPayment()}>
+                            Next
+                        </button>
+                    </div>
                 </div>
             </div>
         );

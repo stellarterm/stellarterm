@@ -25,11 +25,6 @@ export default class AssetActionButtons extends React.Component {
         });
     }
 
-    onSendAssetClick(code, issuer) {
-        const clickedSlug = Stellarify.assetToSlug(new StellarSdk.Asset(code, issuer));
-        this.props.d.send.pickAssetToSend(clickedSlug);
-    }
-
     getBuyCryptoLobsterLink(isXLMNative) {
         const { account, unfundedAccountId } = this.props.d.session;
         const accountID = account === null ? unfundedAccountId : account.accountId();
@@ -76,7 +71,10 @@ export default class AssetActionButtons extends React.Component {
 
                 {this.getBuyCryptoLobsterLink(isXLMNative)}
 
-                <Link to={'send/'} onClick={() => this.onSendAssetClick(asset.code, asset.issuer)}>
+                <Link
+                    to={`send?asset=${Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer))}`}
+                    onClick={() => this.props.d.send.resetSendForm()}>
+
                     <div className="actionBtn">
                         <div className="btnHint">Send</div>
                         <img className="actionBtn_icon" src={images['icon-send']} alt="send" />

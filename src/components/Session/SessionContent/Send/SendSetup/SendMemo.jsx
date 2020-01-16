@@ -20,6 +20,20 @@ export default class SendMemo extends React.Component {
             isOpenList: false,
             selectedType: this.props.d.send.memoType,
         };
+
+        this.handleClickOutside = (e) => {
+            if (this.node.contains(e.target)) { return; }
+            this.setState({ isOpenList: false });
+        };
+    }
+
+
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside, false);
     }
 
     onClickMemoDropdown(memoType) {
@@ -131,6 +145,7 @@ export default class SendMemo extends React.Component {
         return (
             <div className="Input_flexed_block">
                 <div className={memoInputClass}>
+                    {memoValidationMessage ? <div className="invalidValue_popup">Memo is not valid</div> : null}
                     {this.getMemoInput()}
 
                     <div className="field_description">
@@ -138,7 +153,9 @@ export default class SendMemo extends React.Component {
                     </div>
                 </div>
 
-                <div className={memoDropdownClass}>
+                <div
+                    className={memoDropdownClass}
+                    ref={(node) => { this.node = node; }} >
                     {this.getMemoDropdown()}
                 </div>
             </div>

@@ -21,8 +21,7 @@ export default function SessionContent(props) {
                 <Route exact path="/account/" render={prop => <SessionAccount {...prop} d={d} />} />
                 <Route exact path="/account/addTrust/" render={prop => <Trust {...prop} d={d} />} />
                 <Route
-                    exact
-                    path="/account/send/"
+                    path="/account/send"
                     render={prop => <Send {...prop} d={d} />} />
                 <Route
                     exact
