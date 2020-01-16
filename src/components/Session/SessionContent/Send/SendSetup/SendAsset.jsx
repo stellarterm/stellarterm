@@ -6,6 +6,7 @@ import Driver from '../../../../../lib/Driver';
 import Validate from '../../../../../lib/Validate';
 import images from '../../../../../images';
 import AssetCardSeparateLogo from '../../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
+import AppPopover from '../../../../Common/AppPopover/AppPopover';
 
 export default class SendAsset extends React.Component {
     constructor(props) {
@@ -13,10 +14,23 @@ export default class SendAsset extends React.Component {
 
         this.state = {
             isOpenList: false,
+            isFocused: false,
             selectedSlug: this.props.d.send.choosenSlug,
+        };
+
+        this.handleClickOutside = (e) => {
+            if (this.node.contains(e.target)) { return; }
+            this.setState({ isOpenList: false });
         };
     }
 
+    componentDidMount() {
+        document.addEventListener('mousedown', this.handleClickOutside, false);
+    }
+
+    componentWillUnmount() {
+        document.removeEventListener('mousedown', this.handleClickOutside, false);
+    }
 
     onClickAssetDropdown(slug) {
         const { pickAssetToSend } = this.props.d.send;
@@ -41,6 +55,7 @@ export default class SendAsset extends React.Component {
                 className="dropdown_item"
                 onClick={() => this.onClickAssetDropdown(slug)}
                 key={`${availability.asset.getCode()}-${availability.asset.getIssuer()}`}>
+
                 <AssetCardSeparateLogo
                     d={this.props.d}
                     code={availability.asset.getCode()}
@@ -52,7 +67,9 @@ export default class SendAsset extends React.Component {
         const arrowClassName = `dropdown_arrow ${isOpenList ? 'arrow_reverse' : ''}`;
 
         return (
-            <div className="Send_dropdown">
+            <div
+                className="Send_dropdown"
+                ref={(node) => { this.node = node; }} >
                 <div className="dropdown_selected" onClick={() => this.onClickAssetDropdown()}>
                     <AssetCardSeparateLogo
                         d={this.props.d}
@@ -70,39 +87,79 @@ export default class SendAsset extends React.Component {
         );
     }
 
+    getReservedMessage() {
+        const { d } = this.props;
+        const { asset } = d.send.assetToSend;
+        const { account } = d.session;
+
+        const currentAsset = d.send.getAsset();
+        const targetBalance = account.getBalance(currentAsset);
+        if (parseFloat(targetBalance) === 0) { return null; }
+
+        const isXlmNative = asset.isNative();
+        const reserveData = account.explainReserve();
+        const { totalReservedXLM, reserveItems } = reserveData;
+        const reservedAmount = isXlmNative ? totalReservedXLM : account.getReservedBalance(currentAsset);
+
+        const reservedRows = reserveItems.map(({ reserveType, typeCount, reservedXLM }) => (
+            <div className="reserved_item" key={`${reserveType}-${typeCount}`}>
+                <span>
+                    {reserveType} {typeCount === 0 ? '' : `(${typeCount})`}
+                </span>
+                <span>{reservedXLM} XLM</span>
+            </div>
+        ));
+
+        return (
+            <React.Fragment>
+                <AppPopover
+                    content={
+                        isXlmNative ? (
+                            <div className="reserve_table">
+                                <div className="reserved_item reserved_item_bold">
+                                    <span>Reserved</span>
+                                    <span>{reservedAmount} XLM</span>
+                                </div>
+                                {reservedRows}
+                                <Link to="/account#reserved" className="reserved_link">
+                                    More information
+                                    <img className="icon_arrow" src={images['icon-arrow-right']} alt="arrow" />
+                                </Link>
+                            </div>
+                        ) : (
+                            <React.Fragment>
+                                <p><strong>{reservedAmount} {asset.code}</strong> reserved in active offers</p>
+                                <Link to="/account/activity/" className="reserved_link">
+                                    More information
+                                    <img className="icon_arrow" src={images['icon-arrow-right']} alt="arrow" />
+                                </Link>
+                            </React.Fragment>
+                        )
+                    } />
+                <div>{reservedAmount} {asset.code} are reserved in your wallet by Stellar network</div>
+            </React.Fragment>
+        );
+    }
+
     render() {
         const { d } = this.props;
         const { amountToSend, updateAmountValue, getAsset, getMaxAssetSpend } = d.send;
+        const { asset } = d.send.assetToSend;
         const { account } = d.session;
 
-        const { asset } = d.send.assetToSend;
-
-        const maxLumenSpend = getMaxAssetSpend();
-        const targetBalance = account.getBalance(getAsset());
-        const isXlmNative = asset.code === 'XLM' && asset.issuer === undefined;
-        const notEnoughBalance = Number(amountToSend) > Number(maxLumenSpend);
-
-        let amountValid = Validate.amount(amountToSend);
-        let validationMessage;
+        const currentAsset = getAsset();
+        const targetBalance = account.getBalance(currentAsset);
+        const isXlmNative = asset.isNative();
+        const maxAssetSpend = isXlmNative
+            ? account.maxLumenSpend()
+            : Number(getMaxAssetSpend(targetBalance)).toFixed(7);
+        const amountValid = Validate.amount(amountToSend);
+        let amountErrorMsg;
 
         if (amountValid === false) {
-            validationMessage = <p>Amount is invalid</p>;
-        } else if (asset !== null) {
-            const maxAssetSpend = getMaxAssetSpend(targetBalance);
-            const notEnoughAsset = Number(amountToSend) > Number(maxAssetSpend);
-
-            if ((isXlmNative && notEnoughBalance) || notEnoughAsset) {
-                amountValid = false;
-                const maxSpend = isXlmNative ? maxLumenSpend : maxAssetSpend;
-
-                validationMessage = (
-                    <span>
-                        You may only send up to <strong>{maxSpend} {asset.code}</strong> due to the minimum balance
-                        requirements and open orders.<br />
-                        For more information, see the <Link to="/account/">minimum balance section</Link>.
-                    </span>
-                );
-            }
+            amountErrorMsg = 'Amount is invalid';
+        } else if (Number(amountToSend) > Number(maxAssetSpend)) {
+            amountErrorMsg = `Not enough ${asset.code}`;
         }
 
         const isDestAcceptAsset = d.send.availableAssets[d.send.choosenSlug].sendable;
@@ -111,6 +168,12 @@ export default class SendAsset extends React.Component {
             <div className="Input_flexed_block">
                 <div className="Send_input_block">
                     <label htmlFor="inputSendAmount">Amount</label>
+                    {amountErrorMsg ? (
+                        <div className="invalidValue_popup">
+                            {amountErrorMsg}
+                        </div>
+                    ) : null}
+
                     <input
                         name="inputSendAmount"
                         type="text"
@@ -119,20 +182,27 @@ export default class SendAsset extends React.Component {
                         placeholder="Enter amount" />
 
                     <div className="field_description">
-                        {validationMessage}
+                        {this.getReservedMessage()}
                     </div>
                 </div>
 
                 <div className="Send_dropdown_block">
-                    {isDestAcceptAsset
-                        ? <label htmlFor="recipient">Asset</label>
-                        : <label htmlFor="recipient">Destination does not accept this asset.</label>
-                    }
+                    {isDestAcceptAsset ? (
+                        <label htmlFor="asset">Asset</label>
+                    ) : (
+                        <React.Fragment>
+                            <label htmlFor="asset">Asset</label>
+                            <div className="invalidValue_popup">
+                                Destination does not accept this asset
+                            </div>
+                        </React.Fragment>
+                    )}
+
                     {this.getAssetsDropdown()}
 
-                    {account.getBalance(getAsset()) !== null ? (
-                        <div className="asset_balance">Balance:&nbsp;
-                            <span className="asset_amount" onClick={() => updateAmountValue(targetBalance)}>{targetBalance}</span>
+                    {account.getBalance(currentAsset) !== null ? (
+                        <div className="asset_balance">Available:&nbsp;
+                            <span className="asset_amount" onClick={() => updateAmountValue(maxAssetSpend)}>{maxAssetSpend}</span>
                         </div>
                     ) : null}
                 </div>

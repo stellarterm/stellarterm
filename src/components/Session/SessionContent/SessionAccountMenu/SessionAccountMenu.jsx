@@ -27,7 +27,7 @@ export default class SessionAccountMenu extends React.Component {
                         {this.props.onlyLogoutNav ? <nav className="subNav__nav" /> :
                             <nav className="subNav__nav">
                                 {this.constructor.createMenuTab('/account/', 'Balances')}
-                                {this.constructor.createMenuTab('/account/send/', 'Send')}
+                                {this.constructor.createMenuTab('/account/send', 'Send')}
                                 {this.constructor.createMenuTab('/account/addTrust/', 'Accept assets')}
                                 {this.constructor.createMenuTab('/account/multisig/', 'Multisig')}
                                 {this.constructor.createMenuTab('/account/activity/', 'Activity', qtyOpenOffers)}

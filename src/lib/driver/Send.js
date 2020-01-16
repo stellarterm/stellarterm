@@ -54,9 +54,7 @@ export default class Send {
     getMaxAssetSpend(assetBalance) {
         const { account } = this.d.session;
         const openOrdersSum = account.getReservedBalance(this.getAsset());
-        const maxLumenSpend = account.maxLumenSpend();
-        const targetCurrency = assetBalance || maxLumenSpend;
-        return parseFloat(targetCurrency) > parseFloat(openOrdersSum) ? (targetCurrency - openOrdersSum).toFixed(7) : 0;
+        return parseFloat(assetBalance) > parseFloat(openOrdersSum) ? (assetBalance - openOrdersSum).toFixed(7) : 0;
     }
 
     loadTargetAccountDetails() {
@@ -88,6 +86,19 @@ export default class Send {
         }).catch(() => { });
     }
 
+    fetchSelfAssets() {
+        _.each(this.d.session.account.balances, (balance) => {
+            const asset = Stellarify.asset(balance);
+            const slug = Stellarify.assetToSlug(asset);
+            if (asset.isNative()) { return; }
+
+            this.availableAssets[slug] = {
+                asset,
+                sendable: true,
+            };
+        });
+    }
+
     calculateAvailableAssets() {
         if (!Validate.publicKey(this.accountId).ready) {
             this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = {
@@ -97,10 +108,12 @@ export default class Send {
             this.assetToSend = this.availableAssets['XLM-native'];
             return;
         }
+
         const senderTrusts = {};
         const receiverTrusts = {};
         const sendableAssets = {};
         const unSendableAssets = {};
+
         _.each(this.d.session.account.balances, (balance) => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
@@ -119,6 +132,7 @@ export default class Send {
                 senderTrusts[slug] = true;
             }
         });
+
         _.each(this.targetAccount.balances, (balance) => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
@@ -128,6 +142,7 @@ export default class Send {
             // We don't really care about the usecase of sending to issuer.
             receiverTrusts[slug] = true;
         });
+
         _.each(this.targetAccount.balances, (balance) => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
@@ -146,6 +161,7 @@ export default class Send {
                 // Asset can't be sent.
             }
         });
+
         // Show stuff the recipient doesn't trust
         _.each(this.d.session.account.balances, (balance) => {
             const asset = Stellarify.asset(balance);
@@ -185,7 +201,6 @@ export default class Send {
 
         if (Validate.publicKey(this.destInput).ready) {
             this.accountId = this.destInput;
-            this.allFieldsValid = this.validateAllFields();
             // Check for memo requirements in the destination
             if (Object.prototype.hasOwnProperty.call(directory.destinations, this.accountId)) {
                 const destination = directory.destinations[this.accountId];
@@ -248,6 +263,7 @@ export default class Send {
                     this.event.trigger();
                 });
         }
+        this.allFieldsValid = this.validateAllFields();
         this.event.trigger();
     }
 
@@ -281,6 +297,7 @@ export default class Send {
     }
 
     pickAssetToSend(slug) {
+        window.history.pushState({}, null, `/account/send?asset=${slug}`);
         if (!Validate.publicKey(this.accountId).ready) {
             this.availableAssets[slug] = {
                 asset: Stellarify.parseAssetSlug(slug),
@@ -347,14 +364,15 @@ export default class Send {
         const notValidMemo = this.memoType !== 'none' && !Validate.memo(this.memoContent, this.memoType).ready;
         const destNoTrustline = !this.availableAssets[this.choosenSlug].sendable;
 
+        const isXlmNative = this.getAsset(this.assetToSend).isNative();
         const targetBalance = this.d.session.account.getBalance(this.getAsset());
-        const maxAssetSpend = this.getMaxAssetSpend(targetBalance);
-        const notEnoughLumens = Number(this.amountToSend) > Number(this.getMaxAssetSpend());
+        const maxAssetSpend = isXlmNative
+            ? this.d.session.account.maxLumenSpend()
+            : this.getMaxAssetSpend(targetBalance);
         const notEnoughAsset = Number(this.amountToSend) > Number(maxAssetSpend);
-        const isXlmNative = this.assetToSend.asset.code === 'XLM' && this.assetToSend.asset.issuer === undefined;
 
         if (
-            (isXlmNative && notEnoughLumens) ||
+            notEnoughAsset ||
             notEnoughAsset ||
             notValidDestination ||
             notValidAmount ||
