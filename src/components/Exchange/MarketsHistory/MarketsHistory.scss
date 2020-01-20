@@ -19,10 +19,8 @@
             width: 100%;
             font-size: 14px;
 
-            .row-left,
-            .row-right {
-                flex: 1;
-                padding: 5px 1.2em;
+            .row-short {
+                flex: 0.35 !important;
             }
 
             .row-left {
@@ -31,6 +29,13 @@
 
             .row-right {
                 text-align: right !important;
+            }
+
+            .row-left,
+            .row-right {
+                flex: 1;
+                padding: 5px 1.2em;
+                align-items: center;
             }
 
             .MarketTable_header {

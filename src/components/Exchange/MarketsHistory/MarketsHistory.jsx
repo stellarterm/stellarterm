@@ -10,7 +10,7 @@ import images from '../../../images';
 export default class MarketsHistory extends React.Component {
     static getAccountRow(publiKey) {
         const baseAccount = createStellarIdenticon(publiKey).toDataURL();
-        const basePublicKey = publiKey && `${publiKey.substr(0, 6)}...${publiKey.substr(-6, 6)}`;
+        const basePublicKey = publiKey && `${publiKey.substr(0, 5)}...${publiKey.substr(-5, 5)}`;
         return <span className="publicKey_icon"><img src={baseAccount} alt={publiKey} /> {basePublicKey}</span>;
     }
 
@@ -33,12 +33,13 @@ export default class MarketsHistory extends React.Component {
         );
 
         const rowItems = [
+            { value: sideText, key: 'side', className: 'row-left row-short' },
             { value: `${relativeTradeTime} ago`, key: 'date', className: 'row-left' },
-            { value: sideText, key: 'side', className: 'row-left' },
             { value: this.constructor.getAccountRow(trade.base_account), key: 'seller', className: 'row-left' },
             { value: this.constructor.getAccountRow(trade.counter_account), key: 'buyer', className: 'row-left' },
             { value: Printify.lightenZeros(tradePrice), key: 'price', className: 'row-right' },
-            { value: Printify.lightenZeros(trade.counter_amount), key: 'amount', className: 'row-right' },
+            { value: Printify.lightenZeros(trade.base_amount), key: 'amount_base', className: 'row-right' },
+            { value: Printify.lightenZeros(trade.counter_amount), key: 'amount_counter', className: 'row-right' },
         ];
 
         return (
@@ -59,11 +60,11 @@ export default class MarketsHistory extends React.Component {
         return (
             <div className="MarketTable">
                 <div className="MarketTable_header">
-                    <div className="MarketTable_header_item row-left">
-                        <span className="header_text">When</span>
+                    <div className="MarketTable_header_item row-left row-short">
+                        <span className="header_text">Side</span>
                     </div>
                     <div className="MarketTable_header_item row-left">
-                        <span className="header_text">Side</span>
+                        <span className="header_text">When</span>
                     </div>
                     <div className="MarketTable_header_item row-left">
                         <span className="header_text">Seller</span>
@@ -73,6 +74,10 @@ export default class MarketsHistory extends React.Component {
                     </div>
                     <div className="MarketTable_header_item row-right">
                         <span className="header_text">Price</span>
+                        <span className="pair_small"> ({baseBuying.code}/{counterSelling.code})</span>
+                    </div>
+                    <div className="MarketTable_header_item row-right">
+                        <span className="header_text">Amount</span>
                         <span className="pair_small"> ({baseBuying.code})</span>
                     </div>
                     <div className="MarketTable_header_item row-right">
