@@ -64,7 +64,7 @@ export default class CustomPairMenu extends React.Component {
 
         return (
             <div className="island">
-                <div className="island__header CustomPairMenu__header">Exchange pair</div>
+                <div className="island__header">Exchange pair</div>
                 <div className="island__sub CustomPairMenu__title_container">
                     <div className="island__sub__division">
                         <h3 className="CustomPairMenu__title">Base asset</h3>

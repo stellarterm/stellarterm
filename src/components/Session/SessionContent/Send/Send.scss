@@ -16,6 +16,52 @@
         .publicKey_resolved {
             color: #1c2e3e;
         }
+
+        .InfoHover_block {
+            .App_popover {
+                font-weight: lighter;
+                opacity: 0.9;
+
+                .reserve_table {
+                    .reserved_item_bold {
+                        font-weight: bold;
+                        font-size: 14px;
+                    }
+
+                    .reserved_item {
+                        display: flex;
+                        justify-content: space-between;
+                        padding: 5px 0;
+                    }
+                }
+
+                p {
+                    margin: 0;
+                }
+
+                a {
+                    margin-top: 1.5em;
+                    text-decoration: none;
+                }
+
+                .reserved_link {
+                    display: flex;
+                    align-items: center;
+
+                    &:hover {
+                        img {
+                            margin-left: 3px;
+                        }
+                    }
+
+                    img {
+                        transition: 0.15s ease-in-out;
+                        width: 12px;
+                        height: 12px;
+                    }
+                }
+            }
+        }
     }
 
     .Send_title {
@@ -35,7 +81,32 @@
     .Send_input_block,
     .Send_dropdown_block {
         display: flex;
+        position: relative;
         flex-direction: column;
+
+        .invalidValue_popup {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            height: 20px;
+            padding: 0 11px;
+            background-color: #fe6d74;
+            border-radius: 2px;
+            color: #fff;
+            right: 0;
+            z-index: 2;
+            font-size: 13px;
+
+            &::after {
+                content: "";
+                position: absolute;
+                right: 20px;
+                bottom: -8px;
+                border: 4px solid transparent;
+                border-top: 4px solid #fe6d74;
+            }
+        }
 
         label,
         input {
@@ -67,6 +138,8 @@
         }
 
         input + .field_description {
+            display: flex;
+            align-items: center;
             margin-top: 5px;
         }
     }
@@ -82,6 +155,15 @@
         .Send_input_block {
             width: 70%;
             margin-right: 2em;
+        }
+
+        .Send_button_block {
+            width: 30%;
+            margin-top: 0;
+
+            button {
+                width: 100%;
+            }
         }
 
         .Send_dropdown_block {
@@ -101,7 +183,6 @@
             }
 
             .Send_dropdown {
-                padding: 9px;
                 border-radius: 2px;
                 border: solid 1px #d7e0e4;
                 position: relative;
@@ -115,17 +196,18 @@
                     cursor: pointer;
                     transition: 0.1s ease;
                     border: 1px solid transparent;
-                    padding-left: 0.8em;
                     display: flex;
                     align-items: center;
                     font-size: 14px;
-                    height: 35px;
+                    height: 55px;
+                    width: 100%;
+                    padding: 0 15px;
 
                     .dropdown_arrow {
                         width: 24px;
                         height: 100%;
                         position: absolute;
-                        right: 0;
+                        right: 10px;
                         transition: 0.15s;
                     }
 
@@ -137,23 +219,13 @@
                         .AssetCardSeparateLogo_logo,
                         .AssetCardMain_logo_load,
                         .AssetCard_unknown_logo {
-                            background: #fff !important;
-                            border: none !important;
-
-                            .Unknown_circle {
-                                background: #a0a5a7 !important;
-                            }
-                        }
-
-                        .AssetCardSeparateLogo_logo,
-                        .AssetCardMain_logo_load,
-                        .AssetCard_unknown_logo {
-                            height: 33px;
-                            width: 33px;
+                            margin-right: 10px;
+                            height: 35px;
+                            width: 35px;
 
                             img {
-                                height: 30px;
-                                width: 30px;
+                                height: 29px;
+                                width: 29px;
                             }
 
                             .Unknown_circle {
@@ -185,18 +257,15 @@
                     position: absolute;
                     overflow-y: auto;
                     width: calc(100% + 2px);
-                    max-height: 300px;
+                    max-height: 277px;
                     border: solid 1px #d7e0e4;
+                    border-top: none;
                     background: #fff;
                     left: -1px;
-                    margin-top: 1em;
-                    padding: 9px;
 
                     .dropdown_item {
-                        width: 100%;
-
                         &:hover {
-                            opacity: 0.75;
+                            background: rgba(215, 224, 228, 0.2);
                         }
                     }
                 }

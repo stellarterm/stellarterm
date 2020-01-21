@@ -5,9 +5,18 @@ import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 
 export default function SendSuccess(props) {
-    const { txId, resetSendForm } = props.d.send;
+    const { d, awaitSiners } = props;
+    const { txId, resetSendForm, accountId, assetToSend, amountToSend } = d.send;
 
-    const resultMessage = !props.awaitSiners ? (
+    const resultMessage = awaitSiners ? (
+        <React.Fragment>
+            <div className="content_title">Additional signatures required</div>
+            <div className="content_text">
+                Transaction was signed with your secret key. <br />
+                Sign the transation in the multisig service of your choice and submit it to the network.
+            </div>
+        </React.Fragment>
+    ) : (
         <React.Fragment>
             <div className="content_title">Transaction ID
                 <a
@@ -23,30 +32,22 @@ export default function SendSuccess(props) {
                 {txId}
             </div>
         </React.Fragment>
-    ) : (
-        <React.Fragment>
-            <div className="content_title">Additional signature is needed</div>
-
-            <div className="content_text">
-                Transaction was signed with your key. <br />
-                Add additional signatures and submit to the network.
-            </div>
-        </React.Fragment>
     );
-
-    const { accountId, assetToSend, amountToSend } = props.d.send;
 
     const identiconImg = createStellarIdenticon(accountId).toDataURL();
     const shortAddress = `${accountId.substr(0, 6)}...${accountId.substr(-6, 6)}`;
+
+    const descriptionText = awaitSiners ? 'Recipient ' : 'Was sent to ';
 
     return (
         <div className="Send_block">
             <div className="Send_details">
                 <img src={images['icon-big-circle-success']} alt="success" className="status_icon" />
-                <h1>{amountToSend} {assetToSend.asset.code}</h1>
+                {awaitSiners ? null : <h1>{amountToSend} {assetToSend.asset.code}</h1>}
 
                 <div className="field_description">
-                    Was sent to <img src={identiconImg} alt="identicon" className="identicon_resolved" />
+                    {descriptionText}
+                    <img src={identiconImg} alt="identicon" className="identicon_resolved" />
                     <span className="publicKey_resolved">{shortAddress}</span>
                 </div>
 
