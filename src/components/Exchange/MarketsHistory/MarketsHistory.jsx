@@ -81,7 +81,7 @@ export default class MarketsHistory extends React.Component {
                         <span className="pair_small"> ({baseBuying.code})</span>
                     </div>
                     <div className="MarketTable_header_item row-right">
-                        <span className="header_text">Amount</span>
+                        <span className="header_text">Total</span>
                         <span className="pair_small"> ({counterSelling.code})</span>
                     </div>
                 </div>
