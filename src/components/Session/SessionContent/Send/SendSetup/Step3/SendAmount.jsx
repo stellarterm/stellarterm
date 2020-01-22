@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../../../lib/Driver';
 import Validate from '../../../../../../lib/Validate';
 import SendEditLink from '../Common/SendEditLink';

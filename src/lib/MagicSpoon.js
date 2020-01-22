@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
