@@ -197,6 +197,7 @@ export default class Send {
 
         if (this.destInput === '') {
             this.memoType = 'none';
+            this.memoContent = '';
         }
 
         if (Validate.publicKey(this.destInput).ready) {
@@ -205,6 +206,7 @@ export default class Send {
             if (Object.prototype.hasOwnProperty.call(directory.destinations, this.accountId)) {
                 const destination = directory.destinations[this.accountId];
                 if (destination.requiredMemoType) {
+                    this.memoContent = '';
                     this.memoRequired = true;
                     this.memoType = destination.requiredMemoType;
                 }
@@ -260,6 +262,7 @@ export default class Send {
                     }
                     console.error(error);
                     this.federationNotFound = true;
+                    this.allFieldsValid = this.validateAllFields();
                     this.event.trigger();
                 });
         }
@@ -356,10 +359,11 @@ export default class Send {
     }
 
     validateAllFields() {
+        const destinationIsEmpty = this.destInput === '';
         const notValidDestination =
-            this.destInput !== '' &&
-            Validate.publicKey(this.destInput).message &&
-            Validate.address(this.destInput).message;
+            !Validate.publicKey(this.destInput).ready &&
+            !Validate.address(this.destInput).ready;
+
         const notValidAmount = !Validate.amount(this.amountToSend);
         const notValidMemo = this.memoType !== 'none' && !Validate.memo(this.memoContent, this.memoType).ready;
         const destNoTrustline = !this.availableAssets[this.choosenSlug].sendable;
@@ -372,10 +376,11 @@ export default class Send {
         const notEnoughAsset = Number(this.amountToSend) > Number(maxAssetSpend);
 
         if (
-            notEnoughAsset ||
-            notEnoughAsset ||
+            destinationIsEmpty ||
             notValidDestination ||
+            this.federationNotFound ||
             notValidAmount ||
+            notEnoughAsset ||
             notValidMemo ||
             destNoTrustline) {
             return false;

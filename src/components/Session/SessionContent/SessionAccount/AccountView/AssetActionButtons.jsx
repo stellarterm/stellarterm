@@ -72,7 +72,7 @@ export default class AssetActionButtons extends React.Component {
                 {this.getBuyCryptoLobsterLink(isXLMNative)}
 
                 <Link
-                    to={`send?asset=${Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer))}`}
+                    to={`/account/send?asset=${Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer))}`}
                     onClick={() => this.props.d.send.resetSendForm()}>
 
                     <div className="actionBtn">

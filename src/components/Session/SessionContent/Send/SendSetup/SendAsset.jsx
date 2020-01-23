@@ -14,7 +14,6 @@ export default class SendAsset extends React.Component {
 
         this.state = {
             isOpenList: false,
-            isFocused: false,
             selectedSlug: this.props.d.send.choosenSlug,
         };
 
@@ -100,6 +99,9 @@ export default class SendAsset extends React.Component {
         const reserveData = account.explainReserve();
         const { totalReservedXLM, reserveItems } = reserveData;
         const reservedAmount = isXlmNative ? totalReservedXLM : account.getReservedBalance(currentAsset);
+        const isNoTrustline = reservedAmount === null;
+
+        if (isNoTrustline) { return null; }
 
         const reservedRows = reserveItems.map(({ reserveType, typeCount, reservedXLM }) => (
             <div className="reserved_item" key={`${reserveType}-${typeCount}`}>
@@ -154,6 +156,7 @@ export default class SendAsset extends React.Component {
             ? account.maxLumenSpend()
             : Number(getMaxAssetSpend(targetBalance)).toFixed(7);
         const amountValid = Validate.amount(amountToSend);
+
         let amountErrorMsg;
 
         if (amountValid === false) {
@@ -193,7 +196,7 @@ export default class SendAsset extends React.Component {
                         <React.Fragment>
                             <label htmlFor="asset">Asset</label>
                             <div className="invalidValue_popup">
-                                Destination does not accept this asset
+                                Recipient does not accept this asset
                             </div>
                         </React.Fragment>
                     )}

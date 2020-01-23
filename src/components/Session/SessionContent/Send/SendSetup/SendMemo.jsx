@@ -116,7 +116,7 @@ export default class SendMemo extends React.Component {
 
         return (
             <React.Fragment>
-                <label htmlFor="memo">Memo message</label>
+                <label htmlFor="memo">Memo content</label>
                 <input
                     name="memo"
                     type="text"
@@ -130,7 +130,7 @@ export default class SendMemo extends React.Component {
 
     render() {
         const { d } = this.props;
-        const { memoRequired, memoType, memoContent } = d.send;
+        const { memoRequired, memoType, memoContent, memoContentLocked } = d.send;
 
         let memoValidationMessage;
 
@@ -139,7 +139,8 @@ export default class SendMemo extends React.Component {
             memoValidationMessage = memoV.message ? memoV.message : null;
         }
 
-        const memoInputClass = `Send_input_block ${memoType === 'none' ? 'disabled_block' : ''}`;
+        const isDisabledInput = memoType === 'none' || memoContentLocked;
+        const memoInputClass = `Send_input_block ${isDisabledInput ? 'disabled_block' : ''}`;
         const memoDropdownClass = `Send_dropdown_block ${memoRequired ? 'disabled_block' : ''}`;
 
         return (

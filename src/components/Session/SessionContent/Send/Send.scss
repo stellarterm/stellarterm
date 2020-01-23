@@ -4,6 +4,7 @@
 
     .field_description {
         font-size: 14px;
+        line-height: 14px;
         color: #9aa6ac;
 
         .identicon_resolved {
@@ -189,6 +190,13 @@
 
                 .dropdown_selected {
                     position: relative;
+
+                    .AssetCardSeparateLogo_details-row {
+                        max-width: 160px;
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
                 }
 
                 .dropdown_selected,
@@ -216,10 +224,13 @@
                     }
 
                     .AssetCardSeparateLogo {
+                        .AssetCardMain_logo_load {
+                            margin-right: 13px;
+                        }
+
                         .AssetCardSeparateLogo_logo,
                         .AssetCardMain_logo_load,
                         .AssetCard_unknown_logo {
-                            margin-right: 10px;
                             height: 35px;
                             width: 35px;
 
@@ -337,11 +348,14 @@
 
         h1 + .field_description {
             margin-top: 1em;
+            display: flex;
+            align-items: center;
+            line-height: 14px;
         }
 
         .field_description {
             text-align: center;
-            font-size: 16px;
+            font-size: 14px;
             color: #9aa6ac;
 
             .publicKey_resolved {
@@ -373,6 +387,8 @@
                 .content_text {
                     margin-top: 10px;
                     color: #9aa6ac;
+                    display: flex;
+                    align-items: center;
 
                     .identicon_resolved {
                         height: 14px;
@@ -381,6 +397,7 @@
                     }
 
                     .publicKey_resolved {
+                        line-height: 14px;
                         color: #9aa6ac;
                     }
                 }
