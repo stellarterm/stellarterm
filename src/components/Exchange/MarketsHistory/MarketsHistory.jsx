@@ -7,10 +7,13 @@ import Driver from '../../../lib/Driver';
 import Printify from '../../../lib/Printify';
 import images from '../../../images';
 
+const MARKET_ROWS_COUNT = 200;
+let prevPrice = 0;
+
 export default class MarketsHistory extends React.Component {
     static getAccountRow(publiKey) {
         const baseAccount = createStellarIdenticon(publiKey).toDataURL();
-        const basePublicKey = publiKey && `${publiKey.substr(0, 5)}...${publiKey.substr(-5, 5)}`;
+        const basePublicKey = publiKey && `${publiKey.substr(0, 6)}...${publiKey.substr(-6, 6)}`;
         return <span className="publicKey_icon"><img src={baseAccount} alt={publiKey} /> {basePublicKey}</span>;
     }
 
@@ -24,20 +27,28 @@ export default class MarketsHistory extends React.Component {
     getRowItems(trade, rowKey, rowStyle) {
         const relativeTradeTime = moment(new Date(trade.ledger_close_time)).startOf('minute').fromNow(true);
 
-        const tradePrice = (trade.counter_amount / trade.base_amount).toFixed(7);
+        const currentPrice = (trade.price.n / trade.price.d).toFixed(7);
 
-        const sideText = trade.base_is_seller ? (
-            <span className="trade_Side trade_down"><img src={images['icon-trade-down']} alt="trade-down" /> Sell</span>
+        const priceMoveUp = Number(currentPrice) > Number(prevPrice);
+        const priceIsEqual = Number(currentPrice) === Number(prevPrice);
+
+        let priceMoveClass = priceMoveUp ? 'trade_up' : 'trade_down';
+        let sideText = priceMoveUp ? (
+            <span className="trade_Side"><img src={images['icon-trade-up']} alt="up" /></span>
         ) : (
-            <span className="trade_Side trade_up"><img src={images['icon-trade-up']} alt="trade-up" /> Buy</span>
+            <span className="trade_Side"><img src={images['icon-trade-down']} alt="down" /></span>
         );
 
+        if (priceIsEqual) {
+            priceMoveClass = '';
+            sideText = '';
+        }
+
         const rowItems = [
-            { value: sideText, key: 'side', className: 'row-left row-short' },
             { value: `${relativeTradeTime} ago`, key: 'date', className: 'row-left' },
             { value: this.constructor.getAccountRow(trade.base_account), key: 'seller', className: 'row-left' },
             { value: this.constructor.getAccountRow(trade.counter_account), key: 'buyer', className: 'row-left' },
-            { value: Printify.lightenZeros(tradePrice), key: 'price', className: 'row-right' },
+            { value: <div className={priceMoveClass}>{sideText} {Printify.lightenZeros(currentPrice)}</div>, key: 'price', className: 'row-right' },
             { value: Printify.lightenZeros(trade.base_amount), key: 'amount_base', className: 'row-right' },
             { value: Printify.lightenZeros(trade.counter_amount), key: 'amount_counter', className: 'row-right' },
         ];
@@ -60,9 +71,6 @@ export default class MarketsHistory extends React.Component {
         return (
             <div className="MarketTable">
                 <div className="MarketTable_header">
-                    <div className="MarketTable_header_item row-left row-short">
-                        <span className="header_text">Side</span>
-                    </div>
                     <div className="MarketTable_header_item row-left">
                         <span className="header_text">When</span>
                     </div>
@@ -94,7 +102,12 @@ export default class MarketsHistory extends React.Component {
                                 height={height}
                                 rowHeight={30}
                                 rowCount={trades.length}
-                                rowRenderer={({ key, index, style }) => this.getRowItems(trades[index], key, style)} />
+                                rowRenderer={({ key, index, style }) => {
+                                    prevPrice = index === MARKET_ROWS_COUNT - 1
+                                        ? prevPrice
+                                        : (trades[index + 1].price.n / trades[index + 1].price.d).toFixed(7);
+                                    return this.getRowItems(trades[index], key, style);
+                                }} />
                         )}
                     </AutoSizer>
                 </div>
