@@ -37,13 +37,18 @@ export default function SendSuccess(props) {
     const identiconImg = createStellarIdenticon(accountId).toDataURL();
     const shortAddress = `${accountId.substr(0, 6)}...${accountId.substr(-6, 6)}`;
 
-    const descriptionText = awaitSiners ? 'Recipient ' : 'Was sent to ';
+    const descriptionText = awaitSiners ? 'Recipient ' : 'Payment sent to ';
 
     return (
         <div className="Send_block">
             <div className="Send_details">
-                <img src={images['icon-big-circle-success']} alt="success" className="status_icon" />
-                {awaitSiners ? null : <h1>{amountToSend} {assetToSend.asset.code}</h1>}
+                {awaitSiners ? (
+                    <img src={images['sign-unknown']} alt="multisig" className="status_icon" />
+                ) : (
+                    <img src={images['icon-big-circle-success']} alt="success" className="status_icon" />  
+                )}
+
+                <h1>{awaitSiners ? 'Almost done' : `${amountToSend} ${assetToSend.asset.code}`}</h1>
 
                 <div className="field_description">
                     {descriptionText}
@@ -60,7 +65,7 @@ export default function SendSuccess(props) {
 
             <div className="Send_button_block">
                 <button className="s-button" onClick={() => resetSendForm()}>
-                    Ok
+                    Start over
                 </button>
             </div>
         </div>

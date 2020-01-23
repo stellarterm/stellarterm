@@ -15,7 +15,7 @@ export default class SendDest extends React.Component {
         const notValidDestination = Validate.publicKey(destInput).message && Validate.address(destInput).message;
 
         if (notValidDestination) {
-            return 'Stellar address or account ID is invalid';
+            return 'Stellar or federation address is invalid';
         }
         if (federationNotFound) {
             return <span>Unable to resolve federation address {<strong>{destInput}</strong>}</span>;
@@ -65,7 +65,7 @@ export default class SendDest extends React.Component {
                     maxLength="56"
                     type="text"
                     name="recipient"
-                    placeholder="Stellar or federation address" />
+                    placeholder="Enter Stellar or federation address" />
 
                 {inputNotice}
             </div>

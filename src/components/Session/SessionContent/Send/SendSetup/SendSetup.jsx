@@ -17,7 +17,7 @@ export default class SendSetup extends React.Component {
         this.props.d.send.fetchSelfAssets();
         const urlParams = new URLSearchParams(window.location.search);
         const noAssetParam = urlParams.get('asset') === null;
-        const assetToSend = noAssetParam ? 'XLM-native' : urlParams.get('asset');
+        const assetToSend = noAssetParam ? this.props.d.send.choosenSlug : urlParams.get('asset');
 
         try {
             this.props.d.send.pickAssetToSend(assetToSend);
