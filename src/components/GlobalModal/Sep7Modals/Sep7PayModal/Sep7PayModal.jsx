@@ -8,6 +8,7 @@ import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
 import AssetCardInRow from '../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
+import Sep7GetBuiltTx from '../Sep7GetBuiltTx/Sep7GetBuiltTx';
 
 const images = require('./../../../../images');
 
@@ -50,7 +51,7 @@ export default class Sep7PayModal extends React.Component {
         this.props.d.session.event.unlisten(this.listenId);
     }
 
-    getButtons(asset, destination, amount, memoType, memo) {
+    getButtons() {
         const { submit, d } = this.props;
         const { state } = d.session;
         if (state !== 'in') {
@@ -68,7 +69,7 @@ export default class Sep7PayModal extends React.Component {
                 </button>
                 <button
                     disabled={this.state.pending}
-                    onClick={() => this.handlePayment(asset, destination, amount, memoType, memo)}
+                    onClick={() => this.handlePayment()}
                     className="s-button">
                     Confirm{this.state.pending && <Ellipsis />}
                 </button>
@@ -76,30 +77,39 @@ export default class Sep7PayModal extends React.Component {
         );
     }
 
-    async handlePayment(asset, destination, amount, memoType, memo) {
+    getPaymentTx(txDetails, d) {
+        const { asset, amount, destination, memo, memoType } = this.constructor.getPaymentDetails(txDetails);
+        let type = memoType || 'MEMO_TEXT';
+        if (type.toUpperCase() !== type) {
+            type = `MEMO_${type.toUpperCase()}`;
+        }
+        return MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
+            destination,
+            asset,
+            amount,
+            memo: (memo) ? {
+                type,
+                content: memo,
+            } : undefined,
+        });
+    }
+
+    async handlePayment() {
         try {
             this.setState({ pending: true });
-            const { d, submit } = this.props;
-
+            const { d, submit, txDetails } = this.props;
             if (d.session.authType === 'ledger') {
                 submit.cancel();
             }
+            const isPay = txDetails.operation === 'pay';
+            const tx = isPay ?
+                await this.getPaymentTx(txDetails, d) :
+                await Sep7GetBuiltTx(txDetails, d);
 
-            let type = memoType || 'MEMO_TEXT';
-            if (type.toUpperCase() !== type) {
-                type = `MEMO_${type.toUpperCase()}`;
-            }
+            const bssResult = isPay ?
+                await d.session.handlers.buildSignSubmit(tx) :
+                await d.session.handlers.signSubmit(tx);
 
-            const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
-                destination,
-                asset,
-                amount,
-                memo: (memo) ? {
-                    type,
-                    content: memo,
-                } : undefined,
-            });
-            const bssResult = await d.session.handlers.buildSignSubmit(tx);
             if (bssResult.status === 'await_signers') {
                 submit.cancel();
                 window.history.pushState({}, null, '/');
@@ -130,13 +140,13 @@ export default class Sep7PayModal extends React.Component {
         const { state, account } = d.session;
         const { originDomain } = txDetails;
 
-        const { asset, amount, destination, memo, memoType } = this.constructor.getPaymentDetails(txDetails);
+        const { asset, amount, destination, memo } = this.constructor.getPaymentDetails(txDetails);
 
         const balance = account && (asset.isNative() ? account.maxLumenSpend() : account.getBalance(asset));
         const available = state !== 'in' ?
             'Login required' :
             `${(Math.floor((balance - account.getReservedBalance(asset)) * 10000000) / 10000000).toFixed(7)} ${asset.code}`;
-        const buttons = this.getButtons(asset, destination, amount, memoType, memo);
+        const buttons = this.getButtons();
         const { error } = this.state;
 
         return (

@@ -55,30 +55,30 @@ export default function Send(driver) {
             const { assets } = anchors[anchorDomain];
 
             return chain.then(newArray => StellarSdk.StellarTomlResolver.resolve(anchorDomain)
-                    .then((toml) => {
-                        const currencies = toml.CURRENCIES;
-                        const arrayAssets = Object.keys(assets).reduce((acc, assetCode) => {
-                            const assetIssuer = assets[assetCode].split('-')[1];
-                            const currency = currencies.find(cur => (
-                                cur.code === assetCode && cur.issuer === assetIssuer
-                            ));
-                            if (!currency || !currency.image) {
-                                return acc;
-                            }
-                            acc.push({
-                                code: assetCode,
-                                issuer: assetIssuer,
-                                logo: currency.image,
-                            });
+                .then((toml) => {
+                    const currencies = toml.CURRENCIES;
+                    const arrayAssets = Object.keys(assets).reduce((acc, assetCode) => {
+                        const assetIssuer = assets[assetCode].split('-')[1];
+                        const currency = currencies.find(cur => (
+                            cur.code === assetCode && cur.issuer === assetIssuer
+                        ));
+                        if (!currency || !currency.image) {
                             return acc;
-                        }, []);
-
-                        if (arrayAssets.length === 0) {
-                            return newArray;
                         }
-                        return [...newArray, ...arrayAssets];
-                    })
-                    .catch(() => newArray));
+                        acc.push({
+                            code: assetCode,
+                            issuer: assetIssuer,
+                            logo: currency.image,
+                        });
+                        return acc;
+                    }, []);
+
+                    if (arrayAssets.length === 0) {
+                        return newArray;
+                    }
+                    return [...newArray, ...arrayAssets];
+                })
+                .catch(() => newArray));
         }, Promise.resolve([]));
 
         return chainPromise.then((res) => {
@@ -154,6 +154,7 @@ export default function Send(driver) {
                     this.setupLedgerError = u2fErrorCodes[error.errorCode];
                 }
                 this.event.trigger();
+                return null;
             }
         },
         logIn: async (keypair, opts) => {
@@ -207,7 +208,8 @@ export default function Send(driver) {
         },
 
         // Using buildSignSubmit is the preferred way to go. It handles sequence numbers correctly.
-        // If you use sign, you have to pay attention to sequence numbers because js-stellar-sdk's .build() updates it magically
+        // If you use sign, you have to pay attention to sequence numbers
+        // because js-stellar-sdk's .build() updates it magically
         // The reason this doesn't take in a TransactionBuilder so we can call build() here is that there
         // are cases when we want to paste in a raw transaction and sign that
         sign: async (tx) => {
@@ -273,11 +275,13 @@ export default function Send(driver) {
             // (finish only means modal finished; It does NOT mean the transaction succeeded)
 
             // This will also undo the sequence number that stellar-sdk magically adds
+            const tx = txBuilder.build();
+            return this.handlers.signSubmit(tx);
+        },
+        signSubmit: async (tx) => {
             let result = {
                 status: 'cancel',
             };
-
-            const tx = txBuilder.build();
             try {
                 const signResult = await this.handlers.sign(tx);
                 if (signResult.status === 'finish') {
@@ -672,7 +676,7 @@ export default function Send(driver) {
             this.inflationDone = true;
             this.event.trigger();
         },
-        addTrust: async (code, issuer,  memo) => {
+        addTrust: async (code, issuer, memo) => {
             // We only add max trust line
             // Having a "limit" is a design mistake in Stellar that was carried over from the Ripple codebase
             const tx = MagicSpoon.buildTxChangeTrust(driver.Server, this.account, {
