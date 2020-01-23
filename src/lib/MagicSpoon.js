@@ -299,13 +299,17 @@ const MagicSpoon = {
         // Initial orderbook load
         Server.orderbook(baseBuying, counterSelling)
             .call()
-            .then((res) => {
-                this.asks = res.asks;
-                this.bids = res.bids;
+            .then((orderbook) => {
+                this.asks = orderbook.asks;
+                this.bids = orderbook.bids;
                 this.baseBuying = baseBuying;
                 this.counterSelling = counterSelling;
-                this.ready = true;
-                onUpdate();
+
+                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(({ records }) => {
+                    this.marketTradesHistory = records;
+                    this.ready = true;
+                    onUpdate();
+                });
             });
 
         Server.orderbook(baseBuying, counterSelling).stream({
@@ -341,6 +345,18 @@ const MagicSpoon = {
                 console.error(error);
             });
     },
+    pairTrades(Server, baseBuying, counterSelling, LIMIT) {
+        const limit = LIMIT || 100;
+
+        return Server.trades()
+            .forAssetPair(baseBuying, counterSelling)
+            .limit(limit)
+            .order('desc')
+            .call()
+            .catch((error) => {
+                console.error(error);
+            });
+    },
     // opts.baseBuying -- StellarSdk.Asset (example: XLM)
     // opts.counterSelling -- StellarSdk.Asset (example: USD)
     // opts.price -- Exchange ratio selling/buying
@@ -367,8 +383,8 @@ const MagicSpoon = {
             offerId,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-                .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
-                .setTimeout(0);
+            .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
+            .setTimeout(0);
     },
 
     buildTxCreateSellOffer(Server, spoonAccount, opts) {
@@ -485,7 +501,7 @@ const MagicSpoon = {
             }));
         });
         return transaction.setTimeout(0);
-      // DONT call .build()
+        // DONT call .build()
     },
 
     overwrite(buffer) {
