@@ -60,7 +60,7 @@ export default class SendReview extends React.Component {
 
                         {federationAddress !== '' ? (
                             <div className="content_block">
-                                <div className="content_title">Recipients federation address</div>
+                                <div className="content_title">Recipient federation address</div>
                                 <div className="content_text">
                                     {federationAddress}
                                 </div>
