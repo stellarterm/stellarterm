@@ -213,7 +213,7 @@ export default class Send {
             }
             this.loadTargetAccountDetails();
         } else if (Validate.address(this.destInput).ready) {
-            // Prevent race race conditions
+            // Prevent race conditions
             const destInput = this.destInput;
             const targetDomain = destInput.split('*')[1];
             const federationDomain = targetDomain === 'stellarterm.com' ? EnvConsts.HOME_DOMAIN : targetDomain;
