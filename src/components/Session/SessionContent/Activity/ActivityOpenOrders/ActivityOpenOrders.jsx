@@ -10,13 +10,6 @@ export default class ActivityOpenOrders extends React.Component {
         return <ActivityOpenOrdersRow key={key} virtualKey={key} offer={offer} d={d} style={style} />;
     }
 
-    componentDidUpdate() {
-        const hasNullDate = this.props.openOffers.find(offer => offer.last_modified_time === null);
-        if (hasNullDate) {
-            this.props.d.session.account.updateOffers();
-        }
-    }
-
     cancelAllOffers(e, side, offers) {
         e.preventDefault();
         const offersData = { side, offers };
