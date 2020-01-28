@@ -7,7 +7,7 @@ import { ROW_HEIGHT, TABLE_MAX_HEIGHT, SCROLL_WIDTH } from './../Activity';
 
 export default class ActivityOpenOrders extends React.Component {
     static getTableContent(offer, key, style, d) {
-        return <ActivityOpenOrdersRow key={key} virtualKey={key} offer={offer} d={d} style={style} />;
+        return <ActivityOpenOrdersRow key={offer.id} offer={offer} d={d} style={style} />;
     }
 
     componentDidUpdate() {
