@@ -211,6 +211,7 @@ const MagicSpoon = {
             const entriesOffers = Object.keys(sdkAccount.offers).length;
             const entriesSigners = sdkAccount.signers.length - 1;
             const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers - entriesSigners;
+            const inActiveOffers = Number(sdkAccount.getReservedBalance(StellarSdk.Asset.native()));
             const reserveItems = [{
                 reserveType: 'Base reserve',
                 typeCount: 0,
@@ -219,6 +220,10 @@ const MagicSpoon = {
                 reserveType: 'Extra',
                 typeCount: 0,
                 reservedXLM: 0.5,
+            }, {
+                reserveType: 'XLM in active offers',
+                typeCount: 0,
+                reservedXLM: inActiveOffers,
             }, {
                 reserveType: 'Trustlines',
                 typeCount: entriesTrustlines,

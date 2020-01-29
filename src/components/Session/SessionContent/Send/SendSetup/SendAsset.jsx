@@ -145,16 +145,18 @@ export default class SendAsset extends React.Component {
 
     render() {
         const { d } = this.props;
-        const { amountToSend, updateAmountValue, getAsset, getMaxAssetSpend } = d.send;
+        const { amountToSend, updateAmountValue, getAsset } = d.send;
         const { asset } = d.send.assetToSend;
         const { account } = d.session;
 
         const currentAsset = getAsset();
-        const targetBalance = account.getBalance(currentAsset);
         const isXlmNative = asset.isNative();
-        const maxAssetSpend = isXlmNative
-            ? account.maxLumenSpend()
-            : Number(getMaxAssetSpend(targetBalance)).toFixed(7);
+        const targetBalance = isXlmNative ? account.maxLumenSpend() : account.getBalance(currentAsset);
+        const reservedBalance = account.getReservedBalance(currentAsset);
+
+        const maxAssetSpend = parseFloat(targetBalance) > parseFloat(reservedBalance) ?
+            (targetBalance - reservedBalance) : 0;
+
         const amountValid = Validate.amount(amountToSend);
 
         let amountErrorMsg;
@@ -205,7 +207,9 @@ export default class SendAsset extends React.Component {
 
                     {account.getBalance(currentAsset) !== null ? (
                         <div className="asset_balance">Available:&nbsp;
-                            <span className="asset_amount" onClick={() => updateAmountValue(maxAssetSpend)}>{maxAssetSpend}</span>
+                            <span className="asset_amount" onClick={() => updateAmountValue(maxAssetSpend.toString())}>
+                                {maxAssetSpend}
+                            </span>
                         </div>
                     ) : null}
                 </div>
