@@ -1,4 +1,5 @@
 import React from 'react';
+import * as StellarSdk from 'stellar-sdk';
 import AcceptTerms from '../Common/AcceptTerms';
 import clickToSelect from '../../../../lib/clickToSelect';
 import SignUpDescription from './SignUpDescription/SignUpDescription';

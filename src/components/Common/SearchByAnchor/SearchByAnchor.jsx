@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import Debounce from 'awesome-debounce-promise/dist/index';
 import Stellarify from '../../../lib/Stellarify';
 import Driver from '../../../lib/Driver';
@@ -87,32 +88,32 @@ export default class SearchByAnchor extends React.Component {
         switch (resolveState) {
         case 'notfound':
             assetResults = (
-                    <MessageRow isError>
-                        <span>Unable to find currencies for {anchorDomain}</span>
-                    </MessageRow>
-                );
+                <MessageRow isError>
+                    <span>Unable to find currencies for {anchorDomain}</span>
+                </MessageRow>
+            );
             break;
         case 'invalid_domain':
             assetResults = (
-                    <MessageRow isError>
-                        <span>Please enter a valid domain name</span>
-                    </MessageRow>
-                );
+                <MessageRow isError>
+                    <span>Please enter a valid domain name</span>
+                </MessageRow>
+            );
             break;
         case 'without_currencies':
             assetResults = (
-                    <MessageRow isError>
-                        <span>No currencies found in the stellar.toml file</span>
-                    </MessageRow>
-                );
+                <MessageRow isError>
+                    <span>No currencies found in the stellar.toml file</span>
+                </MessageRow>
+            );
             break;
         case 'pending':
             assetResults = (
-                    <MessageRow>
-                        <span>Loading currencies for {anchorDomain}</span>
-                        <Ellipsis />
-                    </MessageRow>
-                );
+                <MessageRow>
+                    <span>Loading currencies for {anchorDomain}</span>
+                    <Ellipsis />
+                </MessageRow>
+            );
             break;
         case 'found':
             assetResults = allCurrencies.map((currency) => {
@@ -128,13 +129,13 @@ export default class SearchByAnchor extends React.Component {
 
                 const key = currency.code + currency.issuer;
                 return (
-                        <AssetRow
-                            key={key}
-                            d={this.props.d}
-                            tradeLink={this.props.tradeLink}
-                            asset={asset}
-                            currency={currency}
-                            host={anchorDomain} />
+                    <AssetRow
+                        key={key}
+                        d={this.props.d}
+                        tradeLink={this.props.tradeLink}
+                        asset={asset}
+                        currency={currency}
+                        host={anchorDomain} />
                 );
             });
             assetsAmount = assetResults.filter(asset => asset !== null).length;
