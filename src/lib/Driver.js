@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import BigNumber from 'bignumber.js';
+import * as StellarSdk from 'stellar-sdk';
 
 import Ticker from './api/Ticker';
 import Send from './driver/Send';

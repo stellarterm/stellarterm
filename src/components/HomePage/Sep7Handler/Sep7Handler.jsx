@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import { isStellarUri, parseStellarUri } from '@stellarguard/stellar-uri';
 import Driver from '../../../lib/Driver';
 
@@ -17,7 +18,7 @@ export default function Sep7Handler(props) {
 
     // Check is StellarUri
     const urlParsed = [...new window.URLSearchParams(window.location.search).entries()].reduce((sum, [key, val]) =>
-            Object.assign({ [key]: val }, sum), {}) || {};
+        Object.assign({ [key]: val }, sum), {}) || {};
     if (!isStellarUri(urlParsed.tx)) {
         return;
     }

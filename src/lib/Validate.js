@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as StellarSdk from 'stellar-sdk';
 
 
 // Some validation regexes and rules in this file are taken from Stellar Laboratory

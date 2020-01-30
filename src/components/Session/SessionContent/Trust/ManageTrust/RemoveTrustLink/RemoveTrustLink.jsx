@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../../../lib/Driver';
 import Ellipsis from '../../../../../Common/Ellipsis/Ellipsis';
 

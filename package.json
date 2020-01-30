@@ -88,9 +88,6 @@
       [
         "babelify",
         {
-          "ignore": [
-            "bower_components"
-          ],
           "plugins": [
             "transform-runtime"
           ],
