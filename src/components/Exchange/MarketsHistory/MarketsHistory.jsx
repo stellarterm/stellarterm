@@ -7,7 +7,6 @@ import Driver from '../../../lib/Driver';
 import Printify from '../../../lib/Printify';
 import images from '../../../images';
 
-const MARKET_ROWS_COUNT = 200;
 let prevPrice = 0;
 
 export default class MarketsHistory extends React.Component {
@@ -103,7 +102,7 @@ export default class MarketsHistory extends React.Component {
                                 rowHeight={30}
                                 rowCount={trades.length}
                                 rowRenderer={({ key, index, style }) => {
-                                    prevPrice = index === MARKET_ROWS_COUNT - 1
+                                    prevPrice = index === trades.length - 1
                                         ? prevPrice
                                         : (trades[index + 1].price.n / trades[index + 1].price.d).toFixed(7);
                                     return this.getRowItems(trades[index], key, style);
