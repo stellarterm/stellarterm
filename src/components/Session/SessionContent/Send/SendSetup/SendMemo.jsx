@@ -50,12 +50,12 @@ export default class SendMemo extends React.Component {
     }
 
     getMemoDropdown() {
-        const { isOpenList, selectedType } = this.state;
+        const { isOpenList } = this.state;
         const { memoRequired, memoType } = this.props.d.send;
 
         const onclickDropdownFunc = memoRequired ? null : () => this.onClickMemoDropdown();
         const memoNote = memoRequired ? 'Recipient requires a memo. Please make sure it is correct.' : '';
-        const memoDropdownText = isOpenList ? 'Choose memo type' : memoTypes.get(selectedType);
+        const memoDropdownText = isOpenList ? 'Choose memo type' : memoTypes.get(memoType);
 
         const arrowClassName = `dropdown_arrow ${isOpenList ? 'arrow_reverse' : ''}`;
 
