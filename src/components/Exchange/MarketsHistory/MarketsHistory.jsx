@@ -7,7 +7,6 @@ import Driver from '../../../lib/Driver';
 import Printify from '../../../lib/Printify';
 import images from '../../../images';
 
-const MARKET_ROWS_COUNT = 200;
 let prevPrice = 0;
 
 export default class MarketsHistory extends React.Component {
@@ -67,6 +66,8 @@ export default class MarketsHistory extends React.Component {
     getHistoryTable() {
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const { trades } = this.state;
+        const rowHeight = 30;
+        const tableHeight = trades.length > 20 ? 600 : trades.length * rowHeight;
 
         return (
             <div className="MarketTable">
@@ -94,16 +95,16 @@ export default class MarketsHistory extends React.Component {
                     </div>
                 </div>
 
-                <div className="MarketTable_table" style={{ height: 600 }}>
+                <div className="MarketTable_table" style={{ height: tableHeight }}>
                     <AutoSizer>
                         {({ height, width }) => (
                             <List
                                 width={width}
                                 height={height}
-                                rowHeight={30}
+                                rowHeight={rowHeight}
                                 rowCount={trades.length}
                                 rowRenderer={({ key, index, style }) => {
-                                    prevPrice = index === MARKET_ROWS_COUNT - 1
+                                    prevPrice = index === trades.length - 1
                                         ? prevPrice
                                         : (trades[index + 1].price.n / trades[index + 1].price.d).toFixed(7);
                                     return this.getRowItems(trades[index], key, style);
