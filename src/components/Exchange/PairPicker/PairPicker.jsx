@@ -34,14 +34,17 @@ export default class PairPicker extends React.Component {
             counterWithLumenLastTrade: undefined,
             lastChangesDirection: '',
         };
+        this.unsub = this.props.d.ticker.event.sub(() => {
+            this.forceUpdate();
+        });
+        this.unsubOrderbook = this.props.d.orderbook.event.sub(() => {
+            this.forceUpdate();
+        });
     }
 
     componentDidMount() {
         this._mounted = true;
         this.getLastTrades();
-        this.unsub = this.props.d.ticker.event.sub(() => {
-            this.forceUpdate();
-        });
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -59,6 +62,7 @@ export default class PairPicker extends React.Component {
     componentWillUnmount() {
         this._mounted = false;
         this.unsub();
+        this.unsubOrderbook();
         clearTimeout(this.updateDataTimeout);
     }
 
