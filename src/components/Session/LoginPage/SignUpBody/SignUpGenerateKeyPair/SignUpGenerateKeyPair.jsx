@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../../../../images';
 import SignUpSecurityNotes from '../SignUpSecurityNotes/SignUpSecurityNotes';
