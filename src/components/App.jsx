@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import * as StellarSdk from 'stellar-sdk';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import url from 'url';
 import PropTypes from 'prop-types';

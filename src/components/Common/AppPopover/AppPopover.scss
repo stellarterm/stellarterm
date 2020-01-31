@@ -1,0 +1,40 @@
+.InfoHover_block {
+    position: relative;
+    height: 24px;
+    width: 24px;
+
+    img {
+        height: 24px;
+        width: 24px;
+    }
+
+    .App_popover {
+        position: absolute;
+        left: 0;
+        top: 25px;
+        z-index: 2;
+        width: 280px;
+        padding: 15px 20px;
+        visibility: hidden;
+        opacity: 0.78;
+        background-color: #021243;
+        color: #fff;
+        font-size: 13px;
+
+        &::after {
+            content: "";
+            position: absolute;
+            left: 5px;
+            top: -6px;
+            border: 6px solid transparent;
+            border-top: none;
+            border-bottom: 6px solid #021243;
+        }
+    }
+
+    &:hover {
+        .App_popover {
+            visibility: visible;
+        }
+    }
+}

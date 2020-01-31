@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
 import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../../lib/Driver';
@@ -233,10 +234,10 @@ export default class AssetDropDown extends React.Component {
                 <div>
                     {this.props.asset ?
                         <div className="AssetDropDown__full" onClick={() => this.openList()}>
-                        <AssetCardMain
-                            d={this.props.d}
-                            code={this.props.asset.code}
-                            issuer={this.props.asset.issuer} />
+                            <AssetCardMain
+                                d={this.props.d}
+                                code={this.props.asset.code}
+                                issuer={this.props.asset.issuer} />
                         </div> :
                         <div className={`AssetDropDown__empty ${assetDropDownClassName}`}>
                             <input

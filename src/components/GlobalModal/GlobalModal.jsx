@@ -73,7 +73,7 @@ export default class GlobalModal extends React.Component {
                     {laboratoryContent}
                     <div className="GlobalModal__navigation">
                         <button
-                            className="s-button s-button--light"
+                            className="s-btn_cancel"
                             onClick={() => {
                                 d.modal.handlers.cancel();
                             }}>
@@ -145,7 +145,7 @@ export default class GlobalModal extends React.Component {
                     <div className="GlobalModal__content">Error: missing modal {modal.modalName}</div>
                     <div className="GlobalModal__navigation">
                         <button
-                            className="s-button s-button--light"
+                            className="s-btn_cancel"
                             onClick={() => {
                                 d.modal.handlers.cancel();
                             }}>

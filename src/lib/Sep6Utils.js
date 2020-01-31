@@ -1,3 +1,4 @@
+import * as StellarSdk from 'stellar-sdk';
 import * as request from './api/request';
 import { getUrlWithParams } from './api/endpoints';
 

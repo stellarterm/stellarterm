@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import * as StellarSdk from 'stellar-sdk';
 import images from '../../../images';
 import Driver from '../../../lib/Driver';
 import Stellarify from '../../../lib/Stellarify';
@@ -64,7 +65,7 @@ export default class CustomPairMenu extends React.Component {
 
         return (
             <div className="island">
-                <div className="island__header CustomPairMenu__header">Exchange pair</div>
+                <div className="island__header">Exchange pair</div>
                 <div className="island__sub CustomPairMenu__title_container">
                     <div className="island__sub__division">
                         <h3 className="CustomPairMenu__title">Base asset</h3>
@@ -87,7 +88,7 @@ export default class CustomPairMenu extends React.Component {
                             disabled={!counterSelling || !baseBuying}
                             className="CustomPairMenu__button">
                             Start trading
-                    </button>
+                        </button>
                     </Link>
                 </div>
             </div>

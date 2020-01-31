@@ -70,7 +70,7 @@
     "watchify": "^3.11.1"
   },
   "engines": {
-    "node": ">=7.4.0"
+    "node": "^10.15.3"
   },
   "jest": {
     "transform": {
@@ -88,9 +88,6 @@
       [
         "babelify",
         {
-          "ignore": [
-            "bower_components"
-          ],
           "plugins": [
             "transform-runtime"
           ],

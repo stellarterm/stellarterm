@@ -204,7 +204,7 @@ gulp.task('buildBundle', ['styles', 'buildScripts', 'moveLibraries'], () => gulp
     .pipe(gulp.useref())
     .pipe(gulp.dest('dist')));
 
-const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'scripts', 'copyBower', 'copyStaticFiles'];
+const baseTasks = ['html', 'styles', 'customConfig', 'buildInfo', 'scripts', 'copyStaticFiles'];
 
 // Watch
 gulp.task('watch', baseTasks, () => {
@@ -251,9 +251,6 @@ gulp.task('developApi', (cb) => {
 
 gulp.task('html-reload', ['html'], bsReload);
 gulp.task('css-reload', ['styles'], bsReload);
-
-gulp.task('copyBower', () => gulp.src('bower_components/**/*')
-    .pipe(gulp.dest('dist/bower_components/')));
 
 gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
     .pipe(gulp.dest('dist/')));

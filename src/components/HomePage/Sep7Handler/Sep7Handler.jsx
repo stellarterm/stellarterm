@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import { isStellarUri, parseStellarUri } from '@stellarguard/stellar-uri';
 import Driver from '../../../lib/Driver';
 

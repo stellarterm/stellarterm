@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
+import * as StellarSdk from 'stellar-sdk';
 import screenfull from 'screenfull';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
@@ -9,6 +10,7 @@ import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';
 import PairPicker from './PairPicker/PairPicker';
 import LightweightChart from './LightweightChart/LightweightChart';
+import MarketsHistory from './MarketsHistory/MarketsHistory';
 import Ellipsis from '../Common/Ellipsis/Ellipsis';
 import Generic from '../Common/Generic/Generic';
 import AssetPair from '../Common/AssetPair/AssetPair';
@@ -44,6 +46,7 @@ export default class Exchange extends React.Component {
         this.state = {
             wrongUrl: false,
             chartType: 'lineChart',
+            marketType: 'orderbook',
             fullscreenMode: false,
             showAction: false,
             timeFrame: converterOHLC.FRAME_HOUR,
@@ -108,23 +111,23 @@ export default class Exchange extends React.Component {
         );
 
         return (
-            <div className="island__header chart_Switcher">
+            <div className="island__header tabs_Switcher">
                 <div className="switch_Tabs">
                     <a
                         onClick={() => this.setState({ chartType: 'lineChart' })}
-                        className={chartType === LINE ? 'activeChart' : ''}>
+                        className={chartType === LINE ? 'active_Tab' : ''}>
                         <img src={images['icon-lineChart']} alt="line" />
                         <span>Linechart</span>
                     </a>
                     <a
                         onClick={() => this.setState({ chartType: 'candlestickChart' })}
-                        className={chartType === CANDLE ? 'activeChart' : ''}>
+                        className={chartType === CANDLE ? 'active_Tab' : ''}>
                         <img src={images['icon-candleChart']} alt="candle" />
                         <span>Candlestick</span>
                     </a>
                     <a
                         onClick={() => this.setState({ chartType: 'barChart' })}
-                        className={chartType === BAR ? 'activeChart' : ''}>
+                        className={chartType === BAR ? 'active_Tab' : ''}>
                         <img src={images['icon-barChart']} alt="bar" />
                         <span>Bar chart</span>
                     </a>
@@ -265,10 +268,12 @@ export default class Exchange extends React.Component {
             offermakers = <OfferMakers d={this.props.d} />;
         }
 
-        const { chartType, fullscreenMode, timeFrame, scaleMode, showAction } = this.state;
+        const { chartType, marketType, fullscreenMode, timeFrame, scaleMode, showAction } = this.state;
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const chartSwitcherPanel = this.getChartSwitcherPanel();
         const pairName = `${baseBuying.code}/${counterSelling.code}`;
+        const isOrderbookTab = marketType === 'orderbook';
+        const isHistoryTab = marketType === 'history';
         const pairPickerClass = `so-back islandBack islandBack--t ${fullscreenMode ? 'hidden-pair' : ''}`;
 
         return (
@@ -314,8 +319,22 @@ export default class Exchange extends React.Component {
 
                 <div className="so-back islandBack">
                     <div className="island Orderbook">
-                        <div className="island__header">Orderbook {pairName}</div>
-                        <OfferTables d={this.props.d} />
+                        <div className="island__header tabs_Switcher">
+                            <div className="switch_Tabs">
+                                <a
+                                    onClick={() => this.setState({ marketType: 'orderbook' })}
+                                    className={isOrderbookTab ? 'active_Tab' : ''}>
+                                    <span>Orderbook</span>
+                                </a>
+                                <a
+                                    onClick={() => this.setState({ marketType: 'history' })}
+                                    className={isHistoryTab ? 'active_Tab' : ''}>
+                                    <span>Trades history</span>
+                                </a>
+                            </div>
+                        </div>
+                        {isOrderbookTab ? <OfferTables d={this.props.d} /> : null}
+                        {isHistoryTab ? <MarketsHistory d={this.props.d} /> : null}
                     </div>
                 </div>
 

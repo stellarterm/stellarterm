@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../lib/Driver';
 
 
@@ -101,7 +102,7 @@ export default class AssetCardHelper extends React.Component {
             throw new Error(
                 `AssetCard expects to get either domain or issuer. Input code: ${this.props.code} Domain: ${
                     this.props.domain
-                    } Issuer: ${this.props.issuer}`,
+                } Issuer: ${this.props.issuer}`,
             );
         }
         if (asset === null) {

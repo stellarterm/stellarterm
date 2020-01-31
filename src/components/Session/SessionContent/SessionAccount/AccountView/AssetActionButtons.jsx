@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import directory from 'stellarterm-directory';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
+import Stellarify from '../../../../../lib/Stellarify';
 
 export default class AssetActionButtons extends React.Component {
     constructor(props) {
@@ -70,7 +72,10 @@ export default class AssetActionButtons extends React.Component {
 
                 {this.getBuyCryptoLobsterLink(isXLMNative)}
 
-                <Link to={'send/'}>
+                <Link
+                    to={`/account/send?asset=${Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer))}`}
+                    onClick={() => this.props.d.send.resetSendForm()}>
+
                     <div className="actionBtn">
                         <div className="btnHint">Send</div>
                         <img className="actionBtn_icon" src={images['icon-send']} alt="send" />

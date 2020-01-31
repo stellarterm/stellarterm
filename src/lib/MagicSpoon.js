@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
@@ -211,6 +212,7 @@ const MagicSpoon = {
             const entriesOffers = Object.keys(sdkAccount.offers).length;
             const entriesSigners = sdkAccount.signers.length - 1;
             const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers - entriesSigners;
+            const inActiveOffers = Number(sdkAccount.getReservedBalance(StellarSdk.Asset.native()));
             const reserveItems = [{
                 reserveType: 'Base reserve',
                 typeCount: 0,
@@ -219,6 +221,10 @@ const MagicSpoon = {
                 reserveType: 'Extra',
                 typeCount: 0,
                 reservedXLM: 0.5,
+            }, {
+                reserveType: 'XLM in active offers',
+                typeCount: 0,
+                reservedXLM: inActiveOffers,
             }, {
                 reserveType: 'Trustlines',
                 typeCount: entriesTrustlines,
@@ -271,6 +277,10 @@ const MagicSpoon = {
                 .order('desc')
                 .call()
                 .then((res) => {
+                    const hasNullDate = res.records.find(offer => offer.last_modified_time === null);
+                    if (hasNullDate) {
+                        return null;
+                    }
                     const newOffers = {};
                     _.each(res.records, (offer) => {
                         newOffers[offer.id] = offer;
@@ -299,13 +309,17 @@ const MagicSpoon = {
         // Initial orderbook load
         Server.orderbook(baseBuying, counterSelling)
             .call()
-            .then((res) => {
-                this.asks = res.asks;
-                this.bids = res.bids;
+            .then((orderbook) => {
+                this.asks = orderbook.asks;
+                this.bids = orderbook.bids;
                 this.baseBuying = baseBuying;
                 this.counterSelling = counterSelling;
-                this.ready = true;
-                onUpdate();
+
+                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(({ records }) => {
+                    this.marketTradesHistory = records;
+                    this.ready = true;
+                    onUpdate();
+                });
             });
 
         Server.orderbook(baseBuying, counterSelling).stream({
@@ -341,6 +355,18 @@ const MagicSpoon = {
                 console.error(error);
             });
     },
+    pairTrades(Server, baseBuying, counterSelling, LIMIT) {
+        const limit = LIMIT || 100;
+
+        return Server.trades()
+            .forAssetPair(baseBuying, counterSelling)
+            .limit(limit)
+            .order('desc')
+            .call()
+            .catch((error) => {
+                console.error(error);
+            });
+    },
     // opts.baseBuying -- StellarSdk.Asset (example: XLM)
     // opts.counterSelling -- StellarSdk.Asset (example: USD)
     // opts.price -- Exchange ratio selling/buying
@@ -367,8 +393,8 @@ const MagicSpoon = {
             offerId,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
-                .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
-                .setTimeout(0);
+            .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
+            .setTimeout(0);
     },
 
     buildTxCreateSellOffer(Server, spoonAccount, opts) {
@@ -400,7 +426,7 @@ const MagicSpoon = {
         // be a createAccount operation
         let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
         try {
-            const destAccount = await Server.loadAccount(opts.destination);
+            // const destAccount = await Server.loadAccount(opts.destination);
             transaction = transaction
                 .addOperation(
                     StellarSdk.Operation.payment({
@@ -485,7 +511,7 @@ const MagicSpoon = {
             }));
         });
         return transaction.setTimeout(0);
-      // DONT call .build()
+        // DONT call .build()
     },
 
     overwrite(buffer) {

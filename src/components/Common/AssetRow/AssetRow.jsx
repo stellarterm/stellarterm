@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
+import * as StellarSdk from 'stellar-sdk';
 import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';

@@ -6,7 +6,6 @@ import SignUpGenerateKeyPair from './SignUpGenerateKeyPair/SignUpGenerateKeyPair
 import LoginPageBody from '../LoginPageBody/LoginPageBody';
 import Driver from '../../../../lib/Driver';
 
-
 export default class SignUpBody extends React.Component {
     constructor(props) {
         super(props);

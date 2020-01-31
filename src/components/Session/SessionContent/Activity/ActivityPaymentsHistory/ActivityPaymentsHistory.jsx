@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
 import Driver from '../../../../../lib/Driver';
@@ -61,8 +62,10 @@ export default class ActivityPaymentsHistory extends React.Component {
 
         const asset = asset_issuer ? new StellarSdk.Asset(asset_code, asset_issuer) : new StellarSdk.Asset.native();
 
+        const itemFromCommonHistory = allHistory.find(item => item.paging_token.indexOf(paging_token) === 0);
+
         const viewAmount = amount || starting_balance
-            || allHistory.find(item => item.paging_token.indexOf(paging_token) === 0).amount;
+            || (itemFromCommonHistory && itemFromCommonHistory.amount);
 
         return (
             <div key={key} style={style} className="Activity-table-row">
