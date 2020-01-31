@@ -271,6 +271,10 @@ const MagicSpoon = {
                 .order('desc')
                 .call()
                 .then((res) => {
+                    const hasNullDate = res.records.find(offer => offer.last_modified_time === null);
+                    if (hasNullDate) {
+                        return null;
+                    }
                     const newOffers = {};
                     _.each(res.records, (offer) => {
                         newOffers[offer.id] = offer;
@@ -416,7 +420,7 @@ const MagicSpoon = {
         // be a createAccount operation
         let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
         try {
-            const destAccount = await Server.loadAccount(opts.destination);
+            // const destAccount = await Server.loadAccount(opts.destination);
             transaction = transaction
                 .addOperation(
                     StellarSdk.Operation.payment({

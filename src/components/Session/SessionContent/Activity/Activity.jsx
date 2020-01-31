@@ -14,11 +14,6 @@ export const ROW_HEIGHT = 47;
 export const TABLE_MAX_HEIGHT = window.innerHeight - 470;
 export const SCROLL_WIDTH = 17;
 export const formatDate = (timestamp) => {
-    if (timestamp === null) {
-        return {
-            emptyDate: true,
-        };
-    }
     const date = new Date(timestamp).toLocaleDateString();
     const time = new Date(timestamp).toLocaleTimeString('en-US', {
         hour: '2-digit',
@@ -102,8 +97,15 @@ export default class Activity extends React.Component {
         const { d } = this.props;
         const { history, historyLoading, historyIsFull, paymentHistory, paymentHistoryLoading } = this.state;
         const openOffers = Object.values(d.session.account.offers)
-            .sort((a, b) =>
-                (new Date(b.last_modified_time).getTime() - new Date(a.last_modified_time).getTime()));
+            .sort((a, b) => {
+                if (!a.last_modified_time) {
+                    return -1;
+                }
+                if (!b.last_modified_time) {
+                    return 1;
+                }
+                return (new Date(b.last_modified_time).getTime() - new Date(a.last_modified_time).getTime());
+            });
 
         const hasOpenOffers = !!openOffers.length;
 
