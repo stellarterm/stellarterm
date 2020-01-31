@@ -30,7 +30,7 @@ export default class Send extends React.Component {
         } else if (state === 'success') {
             sendActionBlock = <SendSuccess d={d} />;
         } else if (state === 'success_signers') {
-            sendActionBlock = <SendSuccess d={d} awaitSiners />;
+            sendActionBlock = <SendSuccess d={d} awaitSigners />;
         }
 
         const islandClass = `island ${state !== 'setup' ? 'Send_short' : ''}`;

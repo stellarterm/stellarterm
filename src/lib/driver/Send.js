@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import directory from 'stellarterm-directory';
+import * as StellarSdk from 'stellar-sdk';
 import MagicSpoon from '../MagicSpoon';
 import Stellarify from '../Stellarify';
 import Validate from '../Validate';
@@ -191,14 +192,13 @@ export default class Send {
         // Reset the defaults
         this.accountId = '';
         this.federationAddress = '';
-        this.memoRequired = false;
-        this.memoContentLocked = false;
-        this.federationNotFound = false;
-
-        if (this.destInput === '') {
+        if (this.destInput === '' || (this.memoContentLocked && this.memoRequired)) {
             this.memoType = 'none';
             this.memoContent = '';
         }
+        this.memoRequired = false;
+        this.memoContentLocked = false;
+        this.federationNotFound = false;
 
         if (Validate.publicKey(this.destInput).ready) {
             this.accountId = this.destInput;

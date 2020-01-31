@@ -5,10 +5,10 @@ import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 
 export default function SendSuccess(props) {
-    const { d, awaitSiners } = props;
+    const { d, awaitSigners } = props;
     const { txId, resetSendForm, accountId, assetToSend, amountToSend } = d.send;
 
-    const resultMessage = awaitSiners ? (
+    const resultMessage = awaitSigners ? (
         <React.Fragment>
             <div className="content_title">Additional signatures required</div>
             <div className="content_text">
@@ -37,24 +37,26 @@ export default function SendSuccess(props) {
     const identiconImg = createStellarIdenticon(accountId).toDataURL();
     const shortAddress = `${accountId.substr(0, 6)}...${accountId.substr(-6, 6)}`;
 
-    const descriptionText = awaitSiners ? 'Recipient ' : 'Payment sent to ';
-
     return (
         <div className="Send_block">
             <div className="Send_details">
-                {awaitSiners ? (
+                {awaitSigners ? (
                     <img src={images['sign-unknown']} alt="multisig" className="status_icon" />
                 ) : (
-                    <img src={images['icon-big-circle-success']} alt="success" className="status_icon" />  
+                    <img src={images['icon-big-circle-success']} alt="success" className="status_icon" />
                 )}
 
-                <h1>{awaitSiners ? 'Almost done' : `${amountToSend} ${assetToSend.asset.code}`}</h1>
+                <h1>{awaitSigners ? 'Almost done' : `${amountToSend} ${assetToSend.asset.code}`}</h1>
 
-                <div className="field_description">
-                    {descriptionText}
-                    <img src={identiconImg} alt="identicon" className="identicon_resolved" />
-                    <span className="publicKey_resolved">{shortAddress}</span>
-                </div>
+                {!awaitSigners ? (
+                    <div className="field_description">
+                        Payment sent to {' '}
+                        <img src={identiconImg} alt="identicon" className="identicon_resolved" />
+                        <span className="publicKey_resolved">{shortAddress}</span>
+                    </div>
+                ) : (
+                    <div className="field_description" />
+                )}
 
                 <div className="content_main">
                     <div className="content_block">
@@ -74,5 +76,5 @@ export default function SendSuccess(props) {
 
 SendSuccess.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    awaitSiners: PropTypes.bool,
+    awaitSigners: PropTypes.bool,
 };

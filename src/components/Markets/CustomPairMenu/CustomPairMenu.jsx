@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import * as StellarSdk from 'stellar-sdk';
 import images from '../../../images';
 import Driver from '../../../lib/Driver';
 import Stellarify from '../../../lib/Stellarify';
@@ -87,7 +88,7 @@ export default class CustomPairMenu extends React.Component {
                             disabled={!counterSelling || !baseBuying}
                             className="CustomPairMenu__button">
                             Start trading
-                    </button>
+                        </button>
                     </Link>
                 </div>
             </div>

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import directory from 'stellarterm-directory';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 import Stellarify from '../../../../../lib/Stellarify';

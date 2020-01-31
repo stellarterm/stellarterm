@@ -1,7 +1,6 @@
 {
   "extends": "airbnb",
   "globals": {
-    "StellarSdk": true,
     "window": true,
     "document": true,
     "localStorage": true,

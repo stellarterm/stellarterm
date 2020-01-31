@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../../../lib/Driver';
 
 const images = require('../../../../../../images');
@@ -185,14 +186,14 @@ export default class MultisigEnableStep2 extends React.Component {
                                         <div
                                             className="MultisigEnableStep2_select-row"
                                             onClick={() => this.handleSelect('isGuard')}>
-                                                <img src={images['sign-stellarguard']} alt="guard" />
-                                                <span>StellarGuard</span>
+                                            <img src={images['sign-stellarguard']} alt="guard" />
+                                            <span>StellarGuard</span>
                                         </div>
                                         <div
                                             className="MultisigEnableStep2_select-row"
                                             onClick={() => this.handleSelect('other')}>
-                                                <img src={images['sign-unknown']} alt="signer-unknown" />
-                                                <span>Other</span>
+                                            <img src={images['sign-unknown']} alt="signer-unknown" />
+                                            <span>Other</span>
                                         </div>
                                     </div>}
                                 {selectError &&
