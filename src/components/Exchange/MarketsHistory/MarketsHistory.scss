@@ -25,16 +25,18 @@
 
             .row-left {
                 text-align: left !important;
+                padding-left: 1em!important;
             }
 
             .row-right {
                 text-align: right !important;
+                padding-right: 1em!important;
             }
 
             .row-left,
             .row-right {
                 flex: 1;
-                padding: 5px 1.2em;
+                padding: 5px 0;
                 align-items: center;
             }
 
