@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Driver from '../../../../lib/Driver';
 
 export default class AcceptTerms extends React.Component {
     constructor(props) {
@@ -12,9 +11,10 @@ export default class AcceptTerms extends React.Component {
     }
 
     render() {
+        const { withSignUpLink, loginButtonText, funcOnSubmit } = this.props;
         return (
             <React.Fragment>
-                <label className="s-inputGroup LoginPage__accept" htmlFor="inputAcceptCheckbox">
+                <label className="LoginPage__accept" htmlFor="inputAcceptCheckbox">
                     <input
                         id="inputAcceptCheckbox"
                         name="inputAcceptCheckbox"
@@ -28,7 +28,7 @@ export default class AcceptTerms extends React.Component {
                         <Link
                             to="/terms-of-use/"
                             className="LoginPage__accept__link"
-                            onClick={() => this.props.d.modal.handlers.cancel()}>
+                            target="_blank">
                             Terms of Use
                         </Link>
                         , understand the risks associated with cryptocurrencies, and know that StellarTerm does not
@@ -36,12 +36,18 @@ export default class AcceptTerms extends React.Component {
                     </span>
                 </label>
 
-                <input
-                    type="submit"
-                    className="LoginPage__generate s-button"
-                    onClick={this.props.funcOnSubmit}
-                    value={this.props.loginButtonText}
-                    disabled={!this.state.termsAccepted} />
+                <div className="LoginPage__submitBlock">
+                    <input
+                        type="submit"
+                        className="LoginPage__button"
+                        onClick={funcOnSubmit}
+                        value={loginButtonText}
+                        disabled={!this.state.termsAccepted} />
+                    {withSignUpLink &&
+                        <span className="LoginPage__signupInvite">
+                            Don&#39;t have an account? <Link to="/signup/">Create new account</Link>
+                        </span>}
+                </div>
             </React.Fragment>
         );
     }
@@ -50,5 +56,5 @@ export default class AcceptTerms extends React.Component {
 AcceptTerms.propTypes = {
     funcOnSubmit: PropTypes.func,
     loginButtonText: PropTypes.string.isRequired,
-    d: PropTypes.instanceOf(Driver),
+    withSignUpLink: PropTypes.bool,
 };

@@ -53,7 +53,7 @@ function processOperations(operations, driver, txDetails) {
 }
 
 
-export default function Sep7Handler(props) {
+export default function Sep7Handler(driver) {
     // Supported browsers: Opera, Chrome, Firefox
 
     if (!window.navigator.registerProtocolHandler) {
@@ -72,7 +72,10 @@ export default function Sep7Handler(props) {
         return;
     }
 
-    const { driver } = props;
+    // Supported:
+    // 1) Payment transactions with amount (donate is not supported now)
+    // 2) TX transactions (payment and changeTrust)
+
     const txDetails = parseStellarUri(urlParsed.tx);
     const { operation } = txDetails;
     txDetails.verifySignature()

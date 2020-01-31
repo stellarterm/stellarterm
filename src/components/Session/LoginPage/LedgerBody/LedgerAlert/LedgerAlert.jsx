@@ -10,45 +10,45 @@ export default function LedgerAlert(props) {
     switch (props.alertType) {
     case 'useChrome':
         ledgerAlert = (
-                <p className="LoginPage__form--title browser-support">
+            <p className="LoginPage__form--title browser-support">
                     Ledger is not supported on your browser.<br /> Please use Google Chrome,
                     Opera or Firefox with U2F extension.
-                </p>
-            );
+            </p>
+        );
         break;
     case 'useHttps':
         ledgerAlert = (
-                <p className="LoginPage__form--title">
+            <p className="LoginPage__form--title">
                     Ledger only works on a https site.
-                    <br />
+                <br />
                     Please use{' '}
-                    <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
+                <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
                         https://stellarterm.com/
-                    </a>
-                </p>
-            );
+                </a>
+            </p>
+        );
         break;
     case 'searching':
         ledgerAlert = (
-                <React.Fragment>
-                    {!isWindowsOS && <p className="LoginPage__form--title">
+            <React.Fragment>
+                {!isWindowsOS && <p className="LoginPage__form--title">
                         Scanning for Ledger Wallet connection
-                        <Ellipsis />
-                    </p>}
-                    <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
-                    <p>If it still does not show up, restart your Ledger, and refresh this webpage.</p>
-                    {isWindowsOS &&
+                    <Ellipsis />
+                </p>}
+                <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
+                <p>If it still does not show up, restart your Ledger, and refresh this webpage.</p>
+                {isWindowsOS &&
                         <button
                             onClick={() => d.session.pingLedger(true)}
                             className="s-button">Check Ledger connection</button>}
-                    </React.Fragment>
-            );
+            </React.Fragment>
+        );
         break;
     default:
         break;
     }
 
-    return <div className="LoginPage__form LoginPage__form--simpleMessage">{ledgerAlert}</div>;
+    return <div className="LoginPage__greenBox">{ledgerAlert}</div>;
 }
 
 LedgerAlert.propTypes = {

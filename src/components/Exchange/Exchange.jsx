@@ -166,6 +166,9 @@ export default class Exchange extends React.Component {
     }
 
     toggleFullScreen() {
+        if (this.props.d.modal.active) {
+            return;
+        }
         if (screenfull.isFullscreen) {
             this.setState({ fullscreenMode: false });
             screenfull.exit();

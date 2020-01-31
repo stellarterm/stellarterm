@@ -77,7 +77,7 @@ class Header extends React.Component {
                 <div className="Header_login">
                     <Link className="Header_login-button" to="/signup/">
                         <img src={images['icon-sign-up']} alt="sign" />
-                        <span>SIGN UP</span>
+                        <span>NEW ACCOUNT</span>
                     </Link>
                     <Link className="Header_login-button" to="/account/">
                         <img src={images['icon-login']} alt="login" />
@@ -100,13 +100,13 @@ class Header extends React.Component {
                     <span
                         className="federation"
                         onClick={() => this.handleCopy('federationPopup', fullFederation)}>
-                            {userFederation}
+                        {userFederation}
                     </span>
                     <span
                         className="public-key"
                         onClick={() => this.handleCopy(!userFederation ?
-                                'federationPopup' : 'publicKeyPopup', accountId)}>
-                            {viewPublicKey}
+                            'federationPopup' : 'publicKeyPopup', accountId)}>
+                        {viewPublicKey}
                     </span>
                     <div className={`CopyButton__popup ${showPopup}`}>Copied to clipboard</div>
                 </div>

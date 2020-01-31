@@ -15,7 +15,7 @@ export default class HomePage extends React.Component {
     }
 
     componentDidMount() {
-        Sep7Handler(this.props);
+        Sep7Handler(this.props.driver);
     }
 
     componentWillUnmount() {
@@ -29,9 +29,9 @@ export default class HomePage extends React.Component {
         const signUpLinkClass = 'HomePage__lead__actions__sign-up-button HomePage__lead__actions__button s-button';
         return (
             <div className="HomePage__lead__actions">
-                <Link className={signUpLinkClass} to="/signup/">Sign Up</Link>
+                <Link className={signUpLinkClass} to="/signup/">New account</Link>
                 &nbsp;
-                <Link className="s-button HomePage__lead__actions__button" to="/account/">Login</Link>
+                <Link className="s-button HomePage__lead__actions__button" to="/account/">Log in</Link>
             </div>
         );
     }
