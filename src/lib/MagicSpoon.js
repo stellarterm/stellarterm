@@ -426,7 +426,11 @@ const MagicSpoon = {
         // be a createAccount operation
         let transaction = new StellarSdk.TransactionBuilder(spoonAccount, { fee });
         try {
-            // const destAccount = await Server.loadAccount(opts.destination);
+            // destAccount is created to check the activation of the destination,
+            // if the account is not activated, it will be created in catch with createAccount
+            // eslint-disable-next-line no-unused-vars
+            const destAccount = await Server.loadAccount(opts.destination);
+
             transaction = transaction
                 .addOperation(
                     StellarSdk.Operation.payment({
