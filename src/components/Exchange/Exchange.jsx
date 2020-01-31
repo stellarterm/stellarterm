@@ -271,9 +271,10 @@ export default class Exchange extends React.Component {
         const isOrderbookTab = marketType === 'orderbook';
         const isHistoryTab = marketType === 'history';
         const pairPickerClass = `so-back islandBack islandBack--t ${fullscreenMode ? 'hidden-pair' : ''}`;
+        const uniqPairKey = Stellarify.pairToExchangeUrl(baseBuying, counterSelling);
 
         return (
-            <div>
+            <div key={uniqPairKey}>
                 <div className={pairPickerClass}>
                     <PairPicker d={this.props.d} />
                 </div>

@@ -37,9 +37,6 @@ export default class PairPicker extends React.Component {
         this.unsub = this.props.d.ticker.event.sub(() => {
             this.forceUpdate();
         });
-        this.unsubOrderbook = this.props.d.orderbook.event.sub(() => {
-            this.forceUpdate();
-        });
     }
 
     componentDidMount() {
@@ -62,7 +59,6 @@ export default class PairPicker extends React.Component {
     componentWillUnmount() {
         this._mounted = false;
         this.unsub();
-        this.unsubOrderbook();
         clearTimeout(this.updateDataTimeout);
     }
 
