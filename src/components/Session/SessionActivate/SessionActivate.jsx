@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Redirect } from 'react-router-dom';
 import QRCode from 'qrcode.react';
 import SessionAccountMenu from '../SessionContent/SessionAccountMenu/SessionAccountMenu';
 import ErrorBoundary from '../../Common/ErrorBoundary/ErrorBoundary';
@@ -13,6 +14,7 @@ export default function SessionActivate(props) {
 
     return (
         <ErrorBoundary>
+            <Redirect to={'/account/'} />
             <SessionAccountMenu d={props.d} onlyLogoutNav />
 
             <div className="so-back islandBack islandBack--t">

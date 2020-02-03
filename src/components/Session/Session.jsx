@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import LoginPage from './LoginPage/LoginPage';
 import Driver from '../../lib/Driver';
 import SessionActivate from './SessionActivate/SessionActivate';
