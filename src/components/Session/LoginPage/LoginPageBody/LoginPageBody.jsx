@@ -13,12 +13,16 @@ export default class LoginPageBody extends React.Component {
             secretInput: '',
             invalidKey: false,
             show: false,
+            isPublicKey: false,
         };
     }
 
     handleSubmit(event) {
         event.preventDefault();
         const secretKeyInput = this.state.secretInput;
+        if (this.state.isPublicKey) {
+            this.props.d.session.handlers.logInWithPublicKey(secretKeyInput);
+        }
 
         try {
             StellarSdk.Keypair.fromSecret(secretKeyInput);
@@ -34,7 +38,10 @@ export default class LoginPageBody extends React.Component {
     }
 
     handleInput(event) {
-        this.setState({ secretInput: event.target.value });
+        this.setState({
+            secretInput: event.target.value,
+            isPublicKey: StellarSdk.StrKey.isValidEd25519PublicKey(event.target.value),
+        });
     }
 
     checkForErrorMessages() {
@@ -44,7 +51,7 @@ export default class LoginPageBody extends React.Component {
         if (isInvalidKey) {
             return (
                 <div className="s-alert s-alert--alert">
-                    Invalid secret key. Hint: it starts with the letter S and is all uppercase
+                    Invalid secret or public key. Hint: it starts with the letter S or G and is all uppercase
                 </div>
             );
         } else if (isSetupError) {
@@ -60,7 +67,7 @@ export default class LoginPageBody extends React.Component {
     }
 
     render() {
-        const { show } = this.state;
+        const { show, isPublicKey } = this.state;
         const loginErrorMessage = this.checkForErrorMessages();
         const inputType = show ? 'text' : 'password';
         const toggleButtonIcon = show ? 'icon-eye' : 'icon-eye-hide';
@@ -69,7 +76,7 @@ export default class LoginPageBody extends React.Component {
             <div className="LoginPage__body">
                 <div className="LoginPage__greenBox">
                     <div className="LoginPage__form">
-                        <p className="LoginPage__intro">Log in with your secret key to manage your account</p>
+                        <p className="LoginPage__intro">Log in with your secret or public key to manage your account</p>
 
                         <form onSubmit={e => this.handleSubmit(e)}>
                             <label className="s-inputGroup LoginPage__inputGroup" htmlFor="inputSecretKey">
@@ -90,7 +97,7 @@ export default class LoginPageBody extends React.Component {
                             </label>
 
                             {loginErrorMessage}
-                            <AcceptTerms loginButtonText={'Log in'} />
+                            <AcceptTerms loginButtonText={isPublicKey ? 'Log in with public key' : 'Log in'} />
                         </form>
                     </div>
                     {!this.props.modal && <LoginSecurityNotes />}
