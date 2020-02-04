@@ -31,22 +31,22 @@ export default async function Sep7GetBuiltTx(txDetails, d) {
             transaction.source === 'GAAZI4TCR3TY5OJHCTJC2A4QSY6CJWJH5IAJTGKIN2ER7LBNVKOCCWN7') {
             return getTransactionWithReplacedAccountData(transactionStellarUri, d);
         }
+        const sourceAccount = await d.Server.loadAccount(transaction.source);
+        const { account } = d.session;
+
+        if (sourceAccount.signers.indexOf(account.account_id) === -1) {
+            throw new Error('Transaction does not require a signature of your account');
+        }
 
         if (transaction.sequence === '0') {
-            try {
-                const account = await d.Server.loadAccount(transaction.source);
-                transactionStellarUri.addReplacement({
-                    id: 'SEQ',
-                    path: 'seqNum',
-                    hint: 'sequence number',
-                });
-                return transactionStellarUri.replace({
-                    SEQ: new BigNumber(account.sequence).plus(1),
-                }).getTransaction();
-            } catch (e) {
-                console.log(e);
-                throw new Error('Error loading the sequence number for source account');
-            }
+            transactionStellarUri.addReplacement({
+                id: 'SEQ',
+                path: 'seqNum',
+                hint: 'sequence number',
+            });
+            return transactionStellarUri.replace({
+                SEQ: new BigNumber(sourceAccount.sequence).plus(1),
+            }).getTransaction();
         }
         return transaction;
     }
