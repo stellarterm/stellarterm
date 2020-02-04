@@ -71,30 +71,24 @@
     padding-bottom: 36px;
   }
 
+.InfoBlockWithHoverDescription_icon-with-text{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-size: 14px;
+    font-weight: normal;
+    color: #9aa6ac;
+}
+
 .InfoBlockWithHoverDescription{
     position: relative;
+    height: 24px;
 
     img{
         width: 24px;
         height: 24px;
         cursor: help;
-    }
-
-
-    .InfoBlockWithHoverDescription_icon-with-text{
-        img {
-            width: 24px;
-            height: 24px;
-            margin-right: 3px;
-        }
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        font-size: 14px;
-        font-weight: normal;
-        color: #9aa6ac;
-        cursor: help;
-        padding-bottom: 5px;
+        margin-right: 3px;
     }
 
     .InfoBlockWithHoverDescription-popup{
