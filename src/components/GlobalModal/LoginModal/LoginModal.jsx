@@ -27,10 +27,8 @@ export default class LoginModal extends React.Component {
 
         switch (state) {
         case 'in':
-            setTimeout(() => {
-                submit.cancel();
-                Sep7Handler(this.props.d);
-            }, 100);
+            submit.cancel();
+            Sep7Handler(this.props.d);
             break;
         case 'unfunded':
             d.modal.handlers.cancel();
