@@ -2,12 +2,12 @@
     {
         "image": "signup-manage",
         "title": "Manage Stellar account",
-        "desc": "Fast access to your Stellar account. Discover new tokens and market pairs, place orders and send funds using memorable addresses in just a few clicks.\n"
+        "desc": "Fast access to your Stellar account. Discover new tokens \n and market pairs, place orders and send funds using memorable addresses in just a few clicks.\n"
     },
     {
         "image": "signup-security",
-        "title": "Hardware and multisig wallets \n",
-        "desc": "Keep your crypto assets safe and protected. StellarTerm features full support of Ledger hardware wallets and multisignature Stellar accounts."
+        "title": "Hardware and multisig wallets",
+        "desc": "Keep your crypto assets safe and protected. \n StellarTerm features full support of Ledger hardware wallets \n and multisignature Stellar accounts."
     },
     {
         "image": "signup-trading",

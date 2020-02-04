@@ -72,12 +72,12 @@ export default class SignUpGenerateKeyPair extends React.Component {
                                 <CopyButton text={secretKey} onlyIcon />
                             </div>
                             <div className="SignUpGenerateKeyPair_actions">
-                                <div className="InfoBlockWithHoverDescription">
-                                    <div className="InfoBlockWithHoverDescription_icon-with-text">
+                                <div className="InfoBlockWithHoverDescription_icon-with-text">
+                                    <div className="InfoBlockWithHoverDescription">
                                         <img src={images['icon-info-gray']} alt="i" />
-                                        <span>Account generation security notes</span>
+                                        <SignUpSecurityNotes />
                                     </div>
-                                    <SignUpSecurityNotes />
+                                    <span>Account generation security notes</span>
                                 </div>
                                 <span
                                     onClick={() => this.handleGenerate()}

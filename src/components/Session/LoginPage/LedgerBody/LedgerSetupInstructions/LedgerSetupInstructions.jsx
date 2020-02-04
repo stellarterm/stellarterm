@@ -5,7 +5,12 @@ export default () => (
     <div className="LoginPage_instructions">
         <p className="LoginPage__title">Setup instructions</p>
         <ol>
-            <li>Get a Ledger device and connect it to your computer.</li>
+            <li>
+                Get a Ledger device and connect it to your computer.
+                <div className="LoginPage_instructions-image">
+                    <img src={images['ledger-nano-s-buttons']} alt="ledger" width="409" />
+                </div>
+            </li>
             <li>
                 Set up your Ledger device by following instructions on the Ledger site:{' '}
                 <a
@@ -14,9 +19,6 @@ export default () => (
                     rel="nofollow noopener noreferrer">
                     https://www.ledger.com/start/
                 </a>
-                <div className="LoginPage_instructions-image">
-                    <img src={images['ledger-nano-s-buttons']} alt="ledger" width="409" />
-                </div>
             </li>
 
             <li>
