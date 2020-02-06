@@ -1,0 +1,50 @@
+.LedgerLoginLink{
+    width: 980px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    background-color: #ffffff;
+    margin: 0 auto 27px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    padding: 23px 25px 21px 29px;
+    cursor: pointer;
+    transition: all 0.15s ease-in;
+    text-decoration: none;
+
+    &.narrow{
+        width: 477px;
+    }
+
+    &:hover{
+        background-color: #fbfbfc;
+        padding: 23px 20px 21px 29px;
+    }
+
+    .LedgerLoginLink_wrap {
+        display: flex;
+        flex-direction: row;
+
+        .LedgerLoginLink_logo {
+            padding: 5px 24px 7px 0;
+            border-right: solid 1px #f4f4f5;
+            display: flex;
+            align-items: center;
+        }
+
+        .LedgerLoginLink_description {
+            margin-left: 16px;
+            display: flex;
+            flex-direction: column;
+            font-size: 14px;
+            font-weight: normal;
+            color: #9aa6ac;
+
+            .LedgerLoginLink_description-title {
+                font-size: 18px;
+                color: #1c2e3e;
+            }
+        }
+    }
+}

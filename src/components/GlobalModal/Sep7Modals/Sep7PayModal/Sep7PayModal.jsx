@@ -177,7 +177,7 @@ export default class Sep7PayModal extends React.Component {
                     <TransactionAuthorBlock domain={originDomain} />
                     <AccountModalBlock d={d} />
                     {error &&
-                        <div className="Sep7PayModal_error">
+                        <div className="ErrorTransactionBlock">
                             <img src={images['icon-circle-fail']} alt="fail" />
                             <span>{ErrorHandler(error, 'payment')}</span>
                         </div>}

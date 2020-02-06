@@ -1,0 +1,162 @@
+.SignUpGenerateKeyPair{
+    margin: 38px auto 0;
+    width: 944px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    background-color: #ffffff;
+    color: #9aa6ac;
+
+    .SignUpGenerateKeyPair_padding {
+        padding: 23px 32px 30px 35px;
+    }
+
+    .SignUpGenerateKeyPair_header {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .SignUpGenerateKeyPair_titles {
+        display: flex;
+        flex-direction: column;
+        max-width: 572px;
+        font-size: 14px;
+        font-weight: normal;
+
+
+        .LoginPage__title {
+            margin-bottom: 9px;
+        }
+    }
+
+    .SignUpGenerateKeyPair_generate-block {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: normal;
+
+        .SignUpGenerateKeyPair_block-left {
+            color: #1c2e3e;
+            width: 65%;
+            margin-right: 30px;
+
+            .SignUpGenerateKeyPair_label {
+                display: block;
+                margin-top: 20px;
+                margin-bottom: 3px;
+            }
+
+            .SignUpGenerateKeyPair_generate-block-key {
+                width: 100%;
+                height: 55px;
+                display: flex;
+                flex-direction: row;
+                justify-content: space-between;
+                border-radius: 2px;
+                border: solid 1px #d7e0e4;
+
+                .SignUpGenerateKeyPair_generate-block-key-wrap {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+
+                    .SignUpGenerateKeyPair_generate-block-image {
+                        width: 52px;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    .SignUpGenerateKeyPair_identicon {
+                        width: 32px;
+                        height: 32px;
+                        border: solid 2px #d7e0e4;
+                        border-radius: 50%;
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+                }
+
+            }
+        }
+
+        .SignUpGenerateKeyPair_block-right {
+            width: 32%;
+            line-height: normal;
+        }
+
+        .SignUpGenerateKeyPair_desc-title {
+            color: #1c2e3e;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            margin-top: 20px;
+            margin-bottom: 3px;
+            max-width: 160px;
+
+            &.SignUpGenerateKeyPair_desc-title-backup{
+                margin-top: 5px;
+            }
+
+            img{
+                margin-right: 5px;
+            }
+        }
+
+        .SignUpGenerateKeyPair_desc-content{
+            margin-bottom: 26px;
+        }
+
+        .s-button {
+            margin-top: 20px;
+            height: 52px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 300;
+        }
+
+        .SignUpGenerateKeyPair_actions{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 30px;
+        }
+
+    }
+
+
+    .SignUpGenerateKeyPair_confirm-block{
+        border-top: 1px solid #d7e0e480;
+        padding: 35px 32px 20px 35px;
+
+        .SignUpGenerateKeyPair_accept{
+            width: 100%;
+            height: 52px;
+            border-radius: 2px;
+            background-color: #f0faf1;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding-left: 20px;
+            font-size: 13px;
+            font-weight: 300;
+            color: #505558;
+            cursor: pointer;
+
+            input{
+                cursor: pointer;
+                margin-right: 15px;
+            }
+        }
+
+    }
+}
+
+.SignUpGenerateKeyPair_header-back {
+    cursor: pointer;
+}
