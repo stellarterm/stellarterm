@@ -66,6 +66,8 @@ export default class MarketsHistory extends React.Component {
     getHistoryTable() {
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const { trades } = this.state;
+        const rowHeight = 30;
+        const tableHeight = trades.length > 20 ? 600 : trades.length * rowHeight;
 
         return (
             <div className="MarketTable">
@@ -93,13 +95,13 @@ export default class MarketsHistory extends React.Component {
                     </div>
                 </div>
 
-                <div className="MarketTable_table" style={{ height: 600 }}>
+                <div className="MarketTable_table" style={{ height: tableHeight }}>
                     <AutoSizer>
                         {({ height, width }) => (
                             <List
                                 width={width}
                                 height={height}
-                                rowHeight={30}
+                                rowHeight={rowHeight}
                                 rowCount={trades.length}
                                 rowRenderer={({ key, index, style }) => {
                                     prevPrice = index === trades.length - 1
