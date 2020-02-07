@@ -7,6 +7,7 @@ import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorB
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
+import Sep7GetBuiltTx from '../Sep7GetBuiltTx/Sep7GetBuiltTx';
 
 const images = require('./../../../../images');
 
@@ -43,18 +44,18 @@ export default class Sep7ChangeTrustModal extends React.Component {
         const { txDetails } = this.props;
         const { xdr, originDomain } = txDetails;
         const tx = new StellarSdk.Transaction(xdr);
-        const { type, value } = StellarSdk.Memo.fromXDRObject(tx._memo);
-        const memoType = type && `MEMO_${type.toUpperCase()}`;
+        const { value } = StellarSdk.Memo.fromXDRObject(tx._memo);
         const memo = value && value.toString();
         const [operation] = tx.operations;
         const { limit, line } = operation;
 
-        return { line, limit, memo, memoType, originDomain };
+        return { line, limit, memo, originDomain };
     }
 
-    getButtons(asset, limit, memo) {
+    getButtons() {
         const { submit, d } = this.props;
         const { state } = d.session;
+        const { pending } = this.state;
         if (state !== 'in') {
             return null;
         }
@@ -70,9 +71,9 @@ export default class Sep7ChangeTrustModal extends React.Component {
                 </button>
                 <button
                     disabled={this.state.pending}
-                    onClick={() => this.handleSubmit(asset, limit, memo)}
+                    onClick={() => this.handleSubmit()}
                     className="s-button">
-                    Confirm{this.state.pending && <Ellipsis />}
+                    Confirm{pending && <Ellipsis />}
                 </button>
             </div>
         );
@@ -110,18 +111,17 @@ export default class Sep7ChangeTrustModal extends React.Component {
         }
     }
 
-    async handleSubmit(asset, limit, memo) {
+    async handleSubmit() {
         this.setState({ pending: true });
-        const { code, issuer } = asset;
-        const { d, submit } = this.props;
+        const { d, submit, txDetails } = this.props;
 
         if (d.session.authType === 'ledger') {
             submit.cancel();
         }
 
-        const bssResult = parseFloat(limit) === 0 ?
-            await d.session.handlers.removeTrust(code, issuer, memo) :
-            await d.session.handlers.addTrust(code, issuer, memo);
+        const tx = await Sep7GetBuiltTx(txDetails, d);
+
+        const bssResult = await d.session.handlers.signSubmit(tx);
 
         if (bssResult.status === 'await_signers') {
             submit.cancel();
@@ -145,8 +145,8 @@ export default class Sep7ChangeTrustModal extends React.Component {
     render() {
         const { submit, d } = this.props;
         const { account } = d.session;
-        const { line, limit, memo, memoType, originDomain } = this.getTransactionDetails();
-        const buttons = this.getButtons(line, limit, memo && { memo, memoType });
+        const { line, limit, memo, originDomain } = this.getTransactionDetails();
+        const buttons = this.getButtons();
         const { desc, conditions, loaded, error } = this.state;
         const balance = account && account.getBalance(line);
 
