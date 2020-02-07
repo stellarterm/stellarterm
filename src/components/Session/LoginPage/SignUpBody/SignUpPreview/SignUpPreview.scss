@@ -1,0 +1,121 @@
+.SignUpPreview{
+    margin: 45px auto 0;
+    width: 477px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    background-color: #ffffff;
+    padding: 35px 35px 17px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+
+    .slide-left {
+        -webkit-animation: slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        animation: slide-left 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+
+    .slide-right {
+        -webkit-animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+        animation: slide-right 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+
+    @keyframes slide-left {
+        0% {
+            -webkit-transform: translateX(500px);
+            transform: translateX(500px);
+        }
+        100% {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+    }
+
+    @-webkit-keyframes slide-left {
+        0% {
+            -webkit-transform: translateX(500px);
+            transform: translateX(500px);
+        }
+        100% {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+    }
+
+    @keyframes slide-right {
+        0% {
+            -webkit-transform: translateX(-500px);
+            transform: translateX(-500px);
+        }
+        100% {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+    }
+
+    @-webkit-keyframes slide-right {
+        0% {
+            -webkit-transform: translateX(-500px);
+            transform: translateX(-500px);
+        }
+        100% {
+            -webkit-transform: translateX(0);
+            transform: translateX(0);
+        }
+    }
+
+
+    .SignUpPreview_slide{
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-height: 330px;
+
+        .SignUpPreview_slide-image{
+            margin-bottom: 7px;
+        }
+
+        .SignUpPreview_slide-title{
+            font-size: 30px;
+            font-weight: normal;
+            color: #1c2e3e;
+            margin-bottom: 9px;
+        }
+
+        .SignUpPreview_slide-desc{
+            font-size: 14px;
+            font-weight: normal;
+            color: #9aa6ac;
+            text-align: center;
+            white-space: pre-line;
+        }
+    }
+    .SignUpPreview_slide-dots{
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 35px;
+
+        .SignUpPreview_slide-dot{
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background-color: #f1f9ff;
+            margin: 0 5px;
+            cursor: pointer;
+
+            &.active{
+                background-color: #b6d2f7;
+            }
+        }
+    }
+
+    .LoginPage__signupInvite{
+        margin-left: 0;
+    }
+
+    .s-button{
+        width: 100%;
+        height: 52px;
+        margin-bottom: 17px;
+    }
+}

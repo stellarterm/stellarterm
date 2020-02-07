@@ -51,16 +51,27 @@ export default class OfferMakerOverview extends React.Component {
     }
 
     render() {
-        const login = this.props.d.session.state === 'in';
+        const { state } = this.props.d.session;
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const isBuy = this.props.side === 'buy';
         const capitalizedSide = isBuy ? 'Buy' : 'Sell';
 
-        if (!login) {
+        if (state === 'out') {
             return (
                 <div className="OfferMakerOverview_login">
                     <span className="offer_message">
-                        <Link to="/account/">Log in</Link> or <Link to="/signup/">Sign up</Link> to create an offer
+                        <a onClick={() => this.props.d.modal.handlers.activate('LoginModal')}>Log in</a>
+                        {' '}or <Link to="/signup/">Create new account</Link> to create an offer
+                    </span>
+                </div>
+            );
+        }
+
+        if (state === 'unfunded') {
+            return (
+                <div className="OfferMakerOverview_login">
+                    <span className="offer_message">
+                        <Link to="/account/">Activate your Stellar account to trade</Link>
                     </span>
                 </div>
             );

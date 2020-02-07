@@ -1,0 +1,101 @@
+.Markets_History {
+    display: flex;
+
+    .island__sub__division {
+        margin: 0;
+        border-right: solid 1px #dfe0e1;
+
+        .island__paddedContent {
+            padding: 0 18px 16px 18px;
+        }
+
+        .island__sub__division__title {
+            text-align: left;
+            margin: 1.5em 1em;
+            font-weight: normal;
+        }
+
+        .MarketTable {
+            width: 100%;
+            font-size: 14px;
+
+            .row-short {
+                flex: 0.35 !important;
+            }
+
+            .row-left {
+                text-align: left !important;
+                padding-left: 1em!important;
+            }
+
+            .row-right {
+                text-align: right !important;
+                padding-right: 1em!important;
+            }
+
+            .row-left,
+            .row-right {
+                flex: 1;
+                padding: 5px 0;
+                align-items: center;
+            }
+
+            .MarketTable_header {
+                display: flex;
+                text-align: right;
+
+                .header_text {
+                    font-weight: bold;
+                }
+
+                .pair_small {
+                    font-weight: 300;
+                    font-style: normal;
+                    color: #b8bbbc;
+                }
+
+                .MarketTable_header_item {
+                    text-align: left;
+                }
+            }
+
+            .MarketTable_table {
+                width: 100%;
+                position: relative;
+
+                & .ReactVirtualized__List:focus {
+                    outline: none !important;
+                }
+
+                .MarketTable_row {
+                    display: flex;
+                    width: 100%;
+                    border-top: solid 1px rgba(0, 0, 0, 0.05);
+
+                    .MarketTable_row_item {
+                        .publicKey_icon {
+                            img {
+                                height: 14px;
+                                width: 14px;
+                            }
+                        }
+
+                        .trade_Side {
+                            img {
+                                margin-right: 3px;
+                            }
+                        }
+
+                        .trade_up {
+                            color: #58d37d;
+                        }
+
+                        .trade_down {
+                            color: #ff415b;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

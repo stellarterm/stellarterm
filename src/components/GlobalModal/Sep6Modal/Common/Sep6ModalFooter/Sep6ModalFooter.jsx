@@ -83,7 +83,7 @@ export default class Sep6ModalFooter extends React.Component {
         ) : (
             <div className="Action_buttons">
                 <button
-                    className="btn_cancel"
+                    className="s-btn_cancel"
                     disabled={isLoading || isPending}
                     onClick={() => {
                         window.history.pushState({}, null, '/');

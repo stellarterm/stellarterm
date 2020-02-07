@@ -21,8 +21,7 @@ export default function SessionContent(props) {
                 <Route exact path="/account/" render={prop => <SessionAccount {...prop} d={d} />} />
                 <Route exact path="/account/addTrust/" render={prop => <Trust {...prop} d={d} />} />
                 <Route
-                    exact
-                    path="/account/send/"
+                    path="/account/send"
                     render={prop => <Send {...prop} d={d} />} />
                 <Route
                     exact
@@ -36,6 +35,7 @@ export default function SessionContent(props) {
                     path="/account/activity/"
                     render={prop => <Activity {...prop} d={d} />} />
                 <Redirect from="/ledger/" to="/account/" />
+                <Redirect from="/signup/" to="/account/" />
                 <Route render={() => <NotFound />} />
             </Switch>
         </React.Fragment>

@@ -3,6 +3,7 @@ import _ from 'lodash';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../lib/Driver';
 import AcceptTerms from '../../Common/AcceptTerms';
+import images from '../../../../../images';
 
 export default class LedgerForm extends React.Component {
     constructor(props) {
@@ -36,22 +37,29 @@ export default class LedgerForm extends React.Component {
 
         if (setupLedgerError) {
             return (
-                <div className="s-alert s-alert--alert">
-                    Connected to Ledger but returned an error: <br />
-                    <strong>
-                        {setupLedgerError === 'Ledger device: UNKNOWN_ERROR (0x6804)'
-                            ? 'Ledger locked after idle timeout. Please unlock your device.'
-                            : setupLedgerError}
-                    </strong>
+                <div className="ErrorTransactionBlock">
+                    <img src={images['icon-circle-fail']} alt="fail" />
+                    <span>
+                        Connected to Ledger but returned an error:
+                        <br />
+                        <strong>
+                            {setupLedgerError === 'Ledger device: UNKNOWN_ERROR (0x6804)'
+                                ? 'Ledger locked after idle timeout. Please unlock your device.'
+                                : setupLedgerError}
+                        </strong>
+                    </span>
                 </div>
             );
         }
         if (setupError) {
             return (
-                <div className="s-alert s-alert--alert">
-                    Unable to contact network.Please check your internet connection and allow connections to
-                    horizon.stellar.org. Maybe an adblocker or plugin (such as Privacy Badger) is preventing the client
-                    from communicating with the network.
+                <div className="ErrorTransactionBlock">
+                    <img src={images['icon-circle-fail']} alt="fail" />
+                    <span>
+                        Unable to contact network.Please check your internet connection and allow connections to
+                         horizon.stellar.org. Maybe an adblocker or plugin (such as Privacy Badger) is preventing
+                         the client from communicating with the network.
+                    </span>
                 </div>
             );
         }
@@ -65,20 +73,20 @@ export default class LedgerForm extends React.Component {
 
         if (!ledgerAdvanced) {
             return (
-                <a className="LoginPage__activateCustomPath" onClick={() => this.enableAdvanced()}>
+                <a onClick={() => this.enableAdvanced()}>
                     Advanced: Use custom BIP32 path
                 </a>
             );
         }
 
         return (
-            <label className="LoginPage__customPath" htmlFor="bip32Path">
-                Path: <span className="LoginPage__customPath__surrounding">{"44'/148'/"}</span>
+            <label htmlFor="bip32Path" className="LoginPage__bip32Path">
+                Path: <span className="">{"44'/148'/"}</span>
                 <input
                     style={inputWidthStyle}
                     name="bip32Path"
                     type="text"
-                    className="s-inputGroup__item LoginPage__customPath__input"
+                    className="LoginPage__bip32PathInput"
                     value={bip32Path}
                     onChange={e => this.handleBip32PathInput(e)}
                     autoFocus
@@ -88,7 +96,7 @@ export default class LedgerForm extends React.Component {
                         e.target.value = '';
                         e.target.value = content;
                     }} />
-                <span className="LoginPage__customPath__surrounding">{"'"}</span>
+                <span>{"'"}</span>
             </label>
         );
     }
@@ -98,14 +106,15 @@ export default class LedgerForm extends React.Component {
         const customPath = this.renderCustomPath();
 
         return (
-            <div className="LoginPage__form">
+            <div className="LoginPage__greenBox">
                 <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
-
                 <form onSubmit={e => this.proceedWithLedger(e)}>
-                    <div className="s-inputGroup LoginPage__inputGroup">
+                    <div className="LoginPage__submitWrap">
                         {ledgerErrorMessage}
                         <AcceptTerms loginButtonText={'Sign in with Ledger'} />
-                        {customPath}
+                        <div className="LoginPage__customPath">
+                            {customPath}
+                        </div>
                     </div>
                 </form>
             </div>

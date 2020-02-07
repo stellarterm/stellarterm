@@ -35,14 +35,14 @@ export default class PairPicker extends React.Component {
             counterWithLumenLastTrade: undefined,
             lastChangesDirection: '',
         };
+        this.unsub = this.props.d.ticker.event.sub(() => {
+            this.forceUpdate();
+        });
     }
 
     componentDidMount() {
         this._mounted = true;
         this.getLastTrades();
-        this.unsub = this.props.d.ticker.event.sub(() => {
-            this.forceUpdate();
-        });
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -182,13 +182,13 @@ export default class PairPicker extends React.Component {
 
         return (
             <div className="PairPicker_marketsTable-content">
-                <span>{lastPrice} {counterAssetCode}</span>
+                <span>{lastPrice.toFixed(7)} {counterAssetCode}</span>
                 <span>{lastUsdView}</span>
                 <span className={noChanges ? '' : changesClassName}>
                     <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24}%</span>
                 </span>
-                <span>{price24high} {counterAssetCode}</span>
-                <span>{price24low} {counterAssetCode}</span>
+                <span>{price24high.toFixed(7)} {counterAssetCode}</span>
+                <span>{price24low.toFixed(7)} {counterAssetCode}</span>
                 <span>{millify(volume24)} {counterAssetCode}</span>
             </div>
         );

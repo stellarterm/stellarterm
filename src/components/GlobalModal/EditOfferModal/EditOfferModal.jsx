@@ -69,13 +69,13 @@ export default class EditOfferModal extends React.Component {
                             <span
                                 className="EditOfferModal_switch-description-button"
                                 onClick={() => this.revertOffer()}>
-                                    <img src={images['icon-swap-green']} alt="swap" />
-                                    <span>Swap pair and view as {side === 'sell' ? 'buy' : 'sell'} offer</span>
+                                <img src={images['icon-swap-green']} alt="swap" />
+                                <span>Swap pair and view as {side === 'sell' ? 'buy' : 'sell'} offer</span>
                             </span>
                         </div>
-                        <div className="EditOfferModal_info">
+                        <div className="InfoBlockWithHoverDescription">
                             <img src={images['icon-info-gray']} alt="i" />
-                            <div className="EditOfferModal_info-popup">
+                            <div className="InfoBlockWithHoverDescription-popup">
                                 SDEX allows you to trade any market pair, so you can exchange any assets between each
                                  other, e.g. ABC to XYZ (or vice versa). For pending orders we don’t know whether you
                                  tried to buy ABC or sell XYZ. That’s why you can swap sides and view each order as a

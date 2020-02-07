@@ -22,6 +22,8 @@ import Sep7ErrorModal from './Sep7Modals/Sep7ErrorModal/Sep7ErrorModal';
 import Sep7ChangeTrustModal from './Sep7Modals/Sep7ChangeTrustModal/Sep7ChangeTrustModal';
 import EditOfferModal from './EditOfferModal/EditOfferModal';
 import CancelOffersModal from './CancelOffersModal/CancelOffersModal';
+import LoginModal from './LoginModal/LoginModal';
+import SecretPhraseSetup from './SecretPhraseSetup/SecretPhraseSetup';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -50,43 +52,43 @@ export default class GlobalModal extends React.Component {
             let laboratoryContent;
             if (d.session.account.inflation_destination === 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW') {
                 laboratoryContent = (
-                        <div className="GlobalModal__content">
-                            <a
-                                href={`https://www.stellar.org/laboratory/#txsigner?xdr=
+                    <div className="GlobalModal__content">
+                        <a
+                            href={`https://www.stellar.org/laboratory/#txsigner?xdr=
                               ${encodeURI(modal.inputData.toEnvelope().toXDR('base64'))}&network=public`}
-                                target="_blank"
-                                rel="nofollow noopener noreferrer">
+                            target="_blank"
+                            rel="nofollow noopener noreferrer">
                                 View in Stellar Laboratory
-                            </a>
-                        </div>
-                    );
+                        </a>
+                    </div>
+                );
             }
             // To get tx xdr: modal.inputData.toEnvelope().toXDR('base64')
             body = (
-                    <div className="GlobalModal">
-                        <div className="GlobalModal__header">Sign transaction</div>
-                        <div className="GlobalModal__content">
-                            <TransactionDetails tx={modal.inputData} />
-                        </div>
-                        {laboratoryContent}
-                        <div className="GlobalModal__navigation">
-                            <button
-                                className="s-button s-button--light"
-                                onClick={() => {
-                                    d.modal.handlers.cancel();
-                                }}>
-                                Cancel
-                            </button>
-                            <button
-                                className="s-button"
-                                onClick={() => {
-                                    d.modal.handlers.finish();
-                                }}>
-                                Sign
-                            </button>
-                        </div>
+                <div className="GlobalModal">
+                    <div className="GlobalModal__header">Sign transaction</div>
+                    <div className="GlobalModal__content">
+                        <TransactionDetails tx={modal.inputData} />
                     </div>
-                );
+                    {laboratoryContent}
+                    <div className="GlobalModal__navigation">
+                        <button
+                            className="s-btn_cancel"
+                            onClick={() => {
+                                d.modal.handlers.cancel();
+                            }}>
+                                Cancel
+                        </button>
+                        <button
+                            className="s-button"
+                            onClick={() => {
+                                d.modal.handlers.finish();
+                            }}>
+                                Sign
+                        </button>
+                    </div>
+                </div>
+            );
             break;
         }
         case 'signWithLedger':
@@ -128,8 +130,14 @@ export default class GlobalModal extends React.Component {
         case 'CancelOffersModal':
             body = <CancelOffersModal submit={d.modal.handlers} offersData={modal.inputData} d={d} />;
             break;
+        case 'SecretPhraseSetup':
+            body = <SecretPhraseSetup submit={d.modal.handlers} update={modal.inputData} d={d} />;
+            break;
         case 'Sep6Modal':
             body = <Sep6Modal d={d} data={modal.inputData} />;
+            break;
+        case 'LoginModal':
+            body = <LoginModal submit={d.modal.handlers} d={d} />;
             break;
         default:
             body = (
@@ -137,7 +145,7 @@ export default class GlobalModal extends React.Component {
                     <div className="GlobalModal__content">Error: missing modal {modal.modalName}</div>
                     <div className="GlobalModal__navigation">
                         <button
-                            className="s-button s-button--light"
+                            className="s-btn_cancel"
                             onClick={() => {
                                 d.modal.handlers.cancel();
                             }}>

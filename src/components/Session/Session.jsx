@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import LoginPage from './LoginPage/LoginPage';
 import Driver from '../../lib/Driver';
 import SessionActivate from './SessionActivate/SessionActivate';
@@ -21,12 +20,13 @@ export default class Session extends React.Component {
     }
 
     render() {
+        const { props } = this;
         const { d, urlParts } = this.props;
         const { state, unfundedAccountId, inflationDone } = d.session;
 
         switch (state) {
         case 'out':
-            return <LoginPage d={d} urlParts={urlParts} />;
+            return <LoginPage {...props} d={d} urlParts={urlParts} />;
         case 'unfunded':
             return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} />;
         case 'loading':

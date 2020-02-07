@@ -85,7 +85,10 @@
                     display: flex;
                     flex-direction: row;
                     text-decoration: none;
-                    margin-right: 20px;
+
+                    &:first-child {
+                        margin-right: 20px;
+                    }
 
                     img{
                         height: 24px;
