@@ -136,7 +136,7 @@ export default class TrustButton extends React.Component {
             errorPopup =
                 (<span>
                     Not enough lumens. See the{' '}
-                    <Link to="/account/" onClick={e => this.constructor.goToLink(e)}>
+                    <Link to="/account#reserved" onClick={e => this.constructor.goToLink(e)}>
                         minimum balance section
                     </Link>
                 </span>);

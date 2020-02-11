@@ -5,6 +5,23 @@ import Driver from '../../../../../lib/Driver';
 import Validate from '../../../../../lib/Validate';
 
 export default class SendDest extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            errorMsg: this.getErrorMessage(),
+        };
+    }
+
+    onChangeDest(e) {
+        this.setState({ errorMsg: null });
+        this.props.d.send.updateDestination(e.target.value);
+    }
+
+    onFocusLeave() {
+        this.setState({ errorMsg: this.getErrorMessage() });
+    }
+
     getErrorMessage() {
         const { federationNotFound, destInput, accountId } = this.props.d.send;
         const isDestFederation = Validate.address(destInput).ready;
@@ -28,15 +45,20 @@ export default class SendDest extends React.Component {
     }
 
     getInputNotice() {
-        const { federationAddress, accountId, destInput } = this.props.d.send;
+        const {
+            accountId,
+            destInput,
+            federationAddress,
+            federationNotFound,
+            federationResolving } = this.props.d.send;
 
         if (!federationAddress) { return null; }
 
         const identiconImg = createStellarIdenticon(accountId).toDataURL();
-        const isDestFederation = Validate.address(destInput).ready;
+        const isDestFederation = Validate.address(destInput).ready && !federationNotFound && !federationResolving;
         const isDestPublicKey = Validate.publicKey(destInput).ready;
 
-        return (
+        return isDestFederation || isDestPublicKey ? (
             <div className="field_description">
                 <span>resolved to </span>
                 <img src={identiconImg} alt="identicon" className="identicon_resolved" />
@@ -45,13 +67,11 @@ export default class SendDest extends React.Component {
                     {isDestPublicKey ? federationAddress : null}
                 </span>
             </div>
-        );
+        ) : null;
     }
 
     render() {
-        const { destInput, updateDestination } = this.props.d.send;
-        const errorMsg = this.getErrorMessage();
-        const inputNotice = this.getInputNotice();
+        const { errorMsg } = this.state;
 
         return (
             <div className="Send_input_block">
@@ -60,14 +80,15 @@ export default class SendDest extends React.Component {
 
                 <input
                     autoFocus
-                    value={destInput}
-                    onChange={e => updateDestination(e.target.value)}
+                    value={this.props.d.send.destInput}
+                    onChange={e => this.onChangeDest(e)}
+                    onBlur={() => this.onFocusLeave()}
                     maxLength="56"
                     type="text"
                     name="recipient"
                     placeholder="Enter Stellar or federation address" />
 
-                {inputNotice}
+                {this.getInputNotice()}
             </div>
         );
     }
