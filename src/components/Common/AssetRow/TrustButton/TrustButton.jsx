@@ -58,9 +58,10 @@ export default class TrustButton extends React.Component {
                         this.addDataToLocalStorage();
                     })
                     .catch((error) => {
-                        const { data } = error.response;
+                        const { response } = error;
+                        const { data } = response || '';
                         let errorType = 'unknown';
-                        if (data.extras &&
+                        if (data && data.extras &&
                             data.extras.result_codes.operations &&
                             data.extras.result_codes.operations[0] === 'op_low_reserve') {
                             errorType = 'lowReserve';
