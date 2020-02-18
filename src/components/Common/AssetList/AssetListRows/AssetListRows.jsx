@@ -38,7 +38,7 @@ export default class AssetListRows extends React.Component {
 
         return (
             <React.Fragment>
-                <div className="asset_cell">
+                <div className="asset_cell price-xlm">
                     {isNativeXlm ? Printify.lightenZeros('1.0000000') : priceXLM}
                     {Printify.lighten(' XLM')}
                 </div>
@@ -125,20 +125,8 @@ export default class AssetListRows extends React.Component {
     }
 
     render() {
-        const { ticker, d } = this.props;
-        const Xlm = ticker.data.assets.find(asset => asset.id === 'XLM-native');
-
         return (
             <React.Fragment>
-                <Link
-                    to={`/exchange/${Xlm.topTradePairSlug}`}
-                    className="AssetList_asset">
-                    <div className="asset_assetCard">
-                        <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
-                    </div>
-                    {AssetListRows.getAssetRow(Xlm, true, ticker)}
-                </Link>
-
                 {this.sortAssets(this.state.assets).map(asset => asset.assetRow)}
             </React.Fragment>
         );
