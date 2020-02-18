@@ -2,6 +2,7 @@ import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
+import TrezorConnect from 'trezor-connect';
 import FastAverageColor from 'fast-average-color';
 import directory from 'stellarterm-directory';
 import MagicSpoon from '../MagicSpoon';
@@ -23,7 +24,7 @@ export default function Send(driver) {
         this.unfundedAccountId = '';
         this.inflationDone = false;
         this.account = null; // MagicSpoon.Account instance
-        this.authType = ''; // '', 'secret', 'ledger', 'pubkey'
+        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor'
         this.jwtToken = null;
         this.userFederation = '';
         this.promisesForMyltipleLoading = {};
@@ -90,7 +91,8 @@ export default function Send(driver) {
 
     // Ping the Ledger device to see if it is connected
     this.pingLedger = (singlePing) => {
-        let brakePing = singlePing || false;
+        this.brakePing = singlePing || false;
+
         Transport.create()
             .then(transport => new AppStellar(transport))
             .then(app => app.getAppConfiguration())
@@ -107,13 +109,13 @@ export default function Send(driver) {
                 }
 
                 const notSupported = error && error.id === 'U2FNotSupported';
-                if (notSupported || brakePing) {
+                if (notSupported || this.brakePing) {
                     return;
                 }
                 // Could not connect to ledger, retry...
                 this.pingLedger();
             });
-        return (() => { brakePing = true; });
+        return (() => { this.brakePing = true; });
     };
 
     this.handlers = {
@@ -129,6 +131,17 @@ export default function Send(driver) {
                 authType: 'pubkey',
             });
         },
+        logInWithTrezor: async bip32Path => TrezorConnect.stellarGetAddress({ path: bip32Path, showOnTrezor: false })
+            .then((result) => {
+                if (result.success) {
+                    const keypair = StellarSdk.Keypair.fromPublicKey(result.payload.address);
+                    return this.handlers.logIn(keypair, {
+                        authType: 'trezor',
+                        bip32Path,
+                    });
+                }
+                throw new Error(result.payload.error);
+            }),
         logInWithLedger: async (bip32Path) => {
             try {
                 const transport = await Transport.create();
@@ -173,6 +186,7 @@ export default function Send(driver) {
 
                 this.state = 'in';
                 this.authType = opts.authType;
+                this.bip32Path = opts.bip32Path;
 
                 const inflationDoneDestinations = {
                     GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW: true,
@@ -206,7 +220,6 @@ export default function Send(driver) {
                 this.event.trigger();
             }
         },
-
         // Using buildSignSubmit is the preferred way to go. It handles sequence numbers correctly.
         // If you use sign, you have to pay attention to sequence numbers
         // because js-stellar-sdk's .build() updates it magically
@@ -252,6 +265,12 @@ export default function Send(driver) {
                     }
                     return modalResult;
                 });
+            } else if (this.authType === 'trezor') {
+                const signedTx = await this.account.signWithTrezor(tx);
+                return {
+                    status: 'finish',
+                    signedTx,
+                };
             }
             return driver.modal.handlers.activate('sign', tx).then(async (modalResult) => {
                 if (modalResult.status === 'finish') {
@@ -316,7 +335,11 @@ export default function Send(driver) {
                     };
                 }
             } catch (e) {
-                console.log(e);
+                this.account.decrementSequence();
+                return {
+                    status: 'finish',
+                    serverResult: Promise.reject(e),
+                };
             }
 
             if (result.status !== 'finish') {

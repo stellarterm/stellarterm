@@ -1,5 +1,5 @@
 @import "./SecretPhrase/SecretPhrase";
-@import "LedgerBody/LedgerLoginLink/LedgerLoginLink";
+@import "Common/HardwareWalletLoginLink/HardwareWalletLoginLink";
 @import "SignUpBody/SignUpBody";
 
 .LoginPage_row-content{
@@ -242,6 +242,7 @@
 
     .LoginPage_instructions {
         margin-right: 75px;
+        min-width: 558px;
 
         p {
             margin-bottom: 0;
@@ -265,6 +266,9 @@
                 strong{
                   color: #1c2e3e;
                 }
+            }
+            .without-order-number{
+                list-style-type: none;
             }
         }
 
