@@ -32,7 +32,7 @@ export default class AssetListRows extends React.Component {
                 <span className={`change${changePercent < 0 ? 'Negative' : 'Positive'}`}>
                     {changePercent.toFixed(2)}%
                 </span>
-            ) : '-';
+            ) : '0.00%';
 
         const tradeLink = asset.topTradePairSlug ? <span className="tradeLink">trade</span> : null;
 
@@ -90,6 +90,13 @@ export default class AssetListRows extends React.Component {
     }
 
     sortAssets(allAssets) {
+        allAssets.forEach((item) => {
+            if (!item.change24h) {
+                // eslint-disable-next-line no-param-reassign
+                item.change24h = 0;
+            }
+        });
+
         const { sortBy, sortType, limit, showLowTradable } = this.props;
         const ascDescType = new Map([[true, 'asc'], [false, 'desc']]);
         const isAscSort = sortType !== null ? ascDescType.get(sortType) : '';
