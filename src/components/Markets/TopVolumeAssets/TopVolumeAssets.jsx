@@ -82,6 +82,7 @@ export default class TopVolumeAssets extends React.Component {
                     <div className="asset_cell">
                         {viewChangeXLM}
                     </div>
+                    <div className="asset_cell" />
                 </Link>
                 {sortedAssets.map((item) => {
                     const changes = (((item.close / item.open) - 1) * 100).toFixed(2);
