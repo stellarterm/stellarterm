@@ -37,11 +37,6 @@ export default class Exchange extends React.Component {
         this.unsubSession = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
-        this.ubsubHistory = this.props.history.listen(() => {
-            if (this.props.history.action === 'POP') {
-                this.getTradePair();
-            }
-        });
 
         this.state = {
             wrongUrl: false,
@@ -54,6 +49,11 @@ export default class Exchange extends React.Component {
         };
         this._handleKeyUp = this._handleKeyUp.bind(this);
         this._escExitFullscreen = this._escExitFullscreen.bind(this);
+        this.ubsubHistory = this.props.history.listen(() => {
+            if (this.props.history.action === 'POP') {
+                this.getTradePair();
+            }
+        });
     }
 
     componentDidMount() {

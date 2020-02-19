@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SignUpPreview from './SignUpPreview/SignUpPreview';
-import LedgerLoginLink from '../LedgerBody/LedgerLoginLink/LedgerLoginLink';
+import HardwareWalletLoginLink from '../Common/HardwareWalletLoginLink/HardwareWalletLoginLink';
 import SignUpGenerateKeyPair from './SignUpGenerateKeyPair/SignUpGenerateKeyPair';
 import LoginPageBody from '../LoginPageBody/LoginPageBody';
 import Driver from '../../../../lib/Driver';
@@ -23,7 +23,8 @@ export default class SignUpBody extends React.Component {
                     <div className="SignUpBody">
                         <SignUpPreview nextStep={() => this.setSignUpStep('generateKeyPair')} />
                     </div>
-                    <LedgerLoginLink narrow />
+                    <HardwareWalletLoginLink narrow wallet={'ledger'} />
+                    <HardwareWalletLoginLink narrow wallet={'trezor'} />
                 </React.Fragment>
             );
         }

@@ -72,6 +72,10 @@ export default function Sep7Handler(driver) {
         return;
     }
 
+    // Supported:
+    // 1) Payment transactions with amount (donate is not supported now)
+    // 2) TX transactions (payment and changeTrust)
+
     const txDetails = parseStellarUri(urlParsed.tx);
     const { operation } = txDetails;
     txDetails.verifySignature()
