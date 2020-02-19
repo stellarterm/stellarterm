@@ -35,7 +35,7 @@ export default class Session extends React.Component {
             if (!inflationDone) {
                 return <SessionWelcome d={d} />;
             }
-            return <SessionContent d={d} />;
+            return <SessionContent {...props} d={d} />;
         default:
             break;
         }
