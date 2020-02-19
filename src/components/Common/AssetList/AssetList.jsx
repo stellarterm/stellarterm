@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import images from '../../../images';
 import Loading from '../Loading/Loading';
 import Ellipsis from '../Ellipsis/Ellipsis';
 import AssetListRows from './AssetListRows/AssetListRows';
-import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import TopVolumeAssets from '../../Markets/TopVolumeAssets/TopVolumeAssets';
 
 
@@ -93,7 +91,6 @@ export default class AssetList extends React.Component {
 
         const { d, limit, showLowTradable, fromStellarTicker } = this.props;
         const { sortBy, sortType } = this.state;
-        const Xlm = d.ticker.data.assets.find(asset => asset.id === 'XLM-native');
 
         return (
             <div className="AssetList">
@@ -104,14 +101,6 @@ export default class AssetList extends React.Component {
                     {this.generateRowTitle('Volume (24h)', 'volume24h')}
                     {this.generateRowTitle('Change (24h)', 'change24h')}
                 </div>
-                <Link
-                    to={`/exchange/${Xlm.topTradePairSlug}`}
-                    className="AssetList_asset">
-                    <div className="asset_assetCard">
-                        <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
-                    </div>
-                    {AssetListRows.getAssetRow(Xlm, true, d.ticker)}
-                </Link>
                 {!fromStellarTicker ? (
                     <AssetListRows
                         d={d}

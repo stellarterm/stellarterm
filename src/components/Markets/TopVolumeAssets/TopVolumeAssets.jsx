@@ -32,18 +32,57 @@ export default class TopVolumeAssets extends React.Component {
         const { d } = this.props;
 
         if (stellarMarketsData.length === 0 || !d.ticker.ready) {
-            return <div className="AssetList_load">Loading data from Stellar Ticker<Ellipsis /></div>;
+            return (
+                <div className="AssetList_asset AssetList_load">
+                    <div className="AssetList_load-content">
+                        Loading data from Stellar Ticker<Ellipsis />
+                    </div>
+                    {Array.from({ length: 5 }, (item, index) => <div key={index} />)}
+                </div>
+            );
         }
 
-        const { USD_XLM } = d.ticker.data._meta.externalPrices;
+        const { USD_XLM, USD_XLM_change: changeXLM } = d.ticker.data._meta.externalPrices;
+
+        const volumeXLM = stellarMarketsData.reduce((acc, item) => acc + item.baseVolume, 0);
         const topVolumeAssets = stellarMarketsData
             .sort((a, b) => (b.baseVolume - a.baseVolume))
             .filter(item => (item.baseVolume * USD_XLM > minUSDValue));
 
+        const viewChangeXLM =
+            changeXLM !== undefined && changeXLM !== null ? (
+                <span className={`change${changeXLM < 0 ? 'Negative' : 'Positive'}`}>
+                    {changeXLM.toFixed(2)}%
+                </span>
+            ) : '-';
+
         const sortedAssets = this.getSortedAssets(topVolumeAssets);
+        const Xlm = d.ticker.data.assets.find(asset => asset.id === 'XLM-native');
 
         return (
             <React.Fragment>
+                <Link
+                    to={`/exchange/${Xlm.topTradePairSlug}`}
+                    className="AssetList_asset">
+                    <div className="asset_assetCard">
+                        <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
+                    </div>
+                    <div className="asset_cell price-xlm">
+                        {Printify.lightenZeros('1.0000000')} {Printify.lighten(' XLM')}
+                    </div>
+                    <div className="asset_cell">
+                        ${Printify.lightenZeros((USD_XLM).toString(), niceNumDecimals(USD_XLM))}
+                    </div>
+                    <div className="asset_cell">
+                        ${(volumeXLM * USD_XLM).toLocaleString('en-US', {
+                            minimumFractionDigits: 0,
+                            maximumFractionDigits: 0,
+                        })}
+                    </div>
+                    <div className="asset_cell">
+                        {viewChangeXLM}
+                    </div>
+                </Link>
                 {sortedAssets.map((item) => {
                     const changes = (((item.close / item.open) - 1) * 100).toFixed(2);
                     const changesClass = +changes >= 0 ? 'changePositive' : 'changeNegative';
@@ -60,7 +99,8 @@ export default class TopVolumeAssets extends React.Component {
                                     issuer={item.counterAssetIssuer} />
                             </div>
                             <div className="asset_cell price-xlm">
-                                {Printify.lightenZeros((item.close).toString(), niceNumDecimals(item.close))} XLM
+                                {Printify.lightenZeros((item.close).toString(), niceNumDecimals(item.close))}
+                                {Printify.lighten(' XLM')}
                             </div>
                             <div className="asset_cell">
                                 ${Printify.lightenZeros((item.close * USD_XLM).toString(),
@@ -134,5 +174,5 @@ export default class TopVolumeAssets extends React.Component {
 TopVolumeAssets.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     sortType: PropTypes.bool,
-    sortBy: PropTypes.oneOf('assetName', 'priceXLM', 'priceUSD', 'volume24h', 'change24h'),
+    sortBy: PropTypes.oneOf(['assetName', 'priceXLM', 'priceUSD', 'volume24h', 'change24h']),
 };
