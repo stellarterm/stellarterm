@@ -125,8 +125,18 @@ export default class AssetListRows extends React.Component {
     }
 
     render() {
+        const { d } = this.props;
+        const Xlm = d.ticker.data.assets.find(asset => asset.id === 'XLM-native');
         return (
             <React.Fragment>
+                <Link
+                    to={`/exchange/${Xlm.topTradePairSlug}`}
+                    className="AssetList_asset">
+                    <div className="asset_assetCard">
+                        <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
+                    </div>
+                    {this.constructor.getAssetRow(Xlm, true, d.ticker)}
+                </Link>
                 {this.sortAssets(this.state.assets).map(asset => asset.assetRow)}
             </React.Fragment>
         );
