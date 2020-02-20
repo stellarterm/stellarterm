@@ -128,7 +128,10 @@ export default class AssetCardHelper extends React.Component {
             logoPadding = !!image;
             color = this.state.loadedAssetData.color || color;
         }
-
+        // if the average color of the icon is white then for a better view we make the border color black
+        if (color === '#ffffff') {
+            color = '#000000';
+        }
         return ({
             asset,
             logo,

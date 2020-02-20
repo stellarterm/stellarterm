@@ -71,6 +71,36 @@
             .tradeLink {
                 border-bottom: 1px dotted $s-color-neutral5;
             }
+            &.price-xlm{
+                min-width: 180px;
+            }
+        }
+        &.AssetList_load{
+            .AssetList_load-content{
+                display: block;
+                padding: 10px 8px 10px;
+            }
+            div{
+                display: table-cell;
+                &:nth-child(1){
+                    width: 300px;
+                }
+                &:nth-child(2){
+                    width: 191px;
+                }
+                &:nth-child(3){
+                    width: 129px;
+                }
+                &:nth-child(4){
+                    width: 144px;
+                }
+                &:nth-child(5){
+                    width: 144px;
+                }
+                &:nth-child(6){
+                    width: 72px;
+                }
+            }
         }
     }
 }
@@ -88,36 +118,74 @@
 }
 
 .AssetList_Header {
-    padding: 12px 18px;
-    border-bottom: 1px solid $s-color-neutral8;
-
+    padding: 0 18px;
+    border-bottom: 1px solid #dedfe0;
+    background-color: #f4f4f5;
     display: flex;
     justify-content: space-between;
+    align-items: center;
 
-    .ListHeader_Title {
-        font-size: 18px;
-        font-weight: normal;
+    .AssetList_Tabs {
+        display: flex;
+        flex-direction: row;
+
+        .ListHeader_Title {
+            font-size: 18px;
+            font-weight: 300;
+            margin-right: 35px;
+            padding: 12px 0;
+            cursor: pointer;
+            color: #505558;
+            opacity: 0.7;
+
+            &.active {
+                opacity: 1;
+                border-bottom: 2px solid #86d38c;
+            }
+        }
     }
-
     .ListHeader_lowTradable {
         display: flex;
         align-items: center;
         font-size: 13px;
         padding-left: 0.5em;
         cursor: pointer;
+        position: relative;
 
         &:hover {
             background-color: rgba(104, 200, 111, 0.1);
+            .custom-checkbox {
+                border: solid 1px #68c86f;
+            }
         }
 
         &:active {
             background-color: rgba(104, 200, 111, 0.15);
         }
 
-        .checkbox_lowTradable {
-            cursor: pointer;
-            font-size: 18px;
-            margin: 0 0.5em;
+        & input[type="checkbox"] {
+            visibility: hidden;
+            position: absolute;
+        }
+        .custom-checkbox {
+            width: 15px;
+            height: 15px;
+            border-radius: 2px;
+            background-color: #fff;
+            border: solid 1px #bdbfc0;
+            margin: 0 7px;
+        }
+
+        & input[type="checkbox"]:checked ~ .custom-checkbox{
+            border: solid 1px #68c86f;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            img{
+                width: 9px;
+                height: 9px;
+            }
         }
     }
 }

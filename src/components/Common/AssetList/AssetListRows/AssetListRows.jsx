@@ -32,13 +32,13 @@ export default class AssetListRows extends React.Component {
                 <span className={`change${changePercent < 0 ? 'Negative' : 'Positive'}`}>
                     {changePercent.toFixed(2)}%
                 </span>
-            ) : '-';
+            ) : '0.00%';
 
         const tradeLink = asset.topTradePairSlug ? <span className="tradeLink">trade</span> : null;
 
         return (
             <React.Fragment>
-                <div className="asset_cell">
+                <div className="asset_cell price-xlm">
                     {isNativeXlm ? Printify.lightenZeros('1.0000000') : priceXLM}
                     {Printify.lighten(' XLM')}
                 </div>
@@ -90,6 +90,13 @@ export default class AssetListRows extends React.Component {
     }
 
     sortAssets(allAssets) {
+        allAssets.forEach((item) => {
+            if (!item.change24h) {
+                // eslint-disable-next-line no-param-reassign
+                item.change24h = 0;
+            }
+        });
+
         const { sortBy, sortType, limit, showLowTradable } = this.props;
         const ascDescType = new Map([[true, 'asc'], [false, 'desc']]);
         const isAscSort = sortType !== null ? ascDescType.get(sortType) : '';
@@ -125,9 +132,8 @@ export default class AssetListRows extends React.Component {
     }
 
     render() {
-        const { ticker, d } = this.props;
-        const Xlm = ticker.data.assets.find(asset => asset.id === 'XLM-native');
-
+        const { d } = this.props;
+        const Xlm = d.ticker.data.assets.find(asset => asset.id === 'XLM-native');
         return (
             <React.Fragment>
                 <Link
@@ -136,9 +142,8 @@ export default class AssetListRows extends React.Component {
                     <div className="asset_assetCard">
                         <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
                     </div>
-                    {AssetListRows.getAssetRow(Xlm, true, ticker)}
+                    {this.constructor.getAssetRow(Xlm, true, d.ticker)}
                 </Link>
-
                 {this.sortAssets(this.state.assets).map(asset => asset.assetRow)}
             </React.Fragment>
         );

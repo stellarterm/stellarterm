@@ -5,6 +5,8 @@ import images from '../../../images';
 import Loading from '../Loading/Loading';
 import Ellipsis from '../Ellipsis/Ellipsis';
 import AssetListRows from './AssetListRows/AssetListRows';
+import TopVolumeAssets from '../../Markets/TopVolumeAssets/TopVolumeAssets';
+
 
 export default class AssetList extends React.Component {
     constructor(props) {
@@ -21,8 +23,21 @@ export default class AssetList extends React.Component {
         };
     }
 
+    componentDidUpdate(prevProps) {
+        if (this.props.fromStellarTicker !== prevProps.fromStellarTicker) {
+            this.resetSort();
+        }
+    }
+
     componentWillUnmount() {
         this.dTicker.event.unlisten(this.listenId);
+    }
+
+    resetSort() {
+        this.setState({
+            sortBy: 'volume24h',
+            sortType: false,
+        });
     }
 
     handleSorting(sortName) {
@@ -33,7 +48,7 @@ export default class AssetList extends React.Component {
                 sortBy: sortName,
                 sortType: true,
             });
-        } else if (sortBy !== null && sortBy !== sortName) {
+        } else if (sortBy !== sortName) {
             this.setState({
                 sortBy: sortName,
                 sortType: true,
@@ -74,7 +89,7 @@ export default class AssetList extends React.Component {
             return loadingMarket;
         }
 
-        const { d, limit, showLowTradable } = this.props;
+        const { d, limit, showLowTradable, fromStellarTicker } = this.props;
         const { sortBy, sortType } = this.state;
 
         return (
@@ -86,13 +101,17 @@ export default class AssetList extends React.Component {
                     {this.generateRowTitle('Volume (24h)', 'volume24h')}
                     {this.generateRowTitle('Change (24h)', 'change24h')}
                 </div>
-                <AssetListRows
-                    d={d}
-                    ticker={d.ticker}
-                    limit={limit}
-                    sortBy={sortBy}
-                    sortType={sortType}
-                    showLowTradable={showLowTradable} />
+                {!fromStellarTicker ? (
+                    <AssetListRows
+                        d={d}
+                        ticker={d.ticker}
+                        limit={limit}
+                        sortBy={sortBy}
+                        sortType={sortType}
+                        showLowTradable={showLowTradable} />
+                ) : (
+                    <TopVolumeAssets d={d} sortBy={sortBy} sortType={sortType} />
+                )}
             </div>
         );
     }
@@ -102,4 +121,5 @@ AssetList.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     limit: PropTypes.number,
     showLowTradable: PropTypes.bool,
+    fromStellarTicker: PropTypes.bool,
 };

@@ -31,13 +31,17 @@ export const endpoints = {
         url: 'accounts/',
         baseUrl: EnvConsts.STELLAR_GUARD_URL,
     },
+    stellarTickerGraphQL: {
+        url: 'graphql',
+        baseUrl: EnvConsts.STELLAR_TICKER,
+    },
 };
 
 function getUrlParams(params) {
     return params !== undefined
         ? Object.keys(params)
-              .map(key => `${key}=${encodeURIComponent(params[key])}`)
-              .join('&')
+            .map(key => `${key}=${encodeURIComponent(params[key])}`)
+            .join('&')
         : null;
 }
 
