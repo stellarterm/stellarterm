@@ -16,7 +16,7 @@ export default class TrezorBody extends React.Component {
         super(props);
         TrezorConnect.manifest({
             email: 'support@stellarterm.com',
-            appUrl: 'http://stellarterm.com',
+            appUrl: 'https://stellarterm.com',
         });
 
         this.state = {
@@ -182,4 +182,3 @@ TrezorBody.propTypes = {
     history: PropTypes.objectOf(PropTypes.any),
     modal: PropTypes.bool,
 };
-
