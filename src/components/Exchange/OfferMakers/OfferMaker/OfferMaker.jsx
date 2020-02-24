@@ -9,7 +9,7 @@ import ErrorHandler from '../../../../lib/ErrorHandler';
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
     static getErrorType(error) {
-        if (!error.data ||
+        if (!error || !error.data ||
             !error.data.extras ||
             !error.data.extras.result_codes ||
             !error.data.extras.result_codes.operations) {

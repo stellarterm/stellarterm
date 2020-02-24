@@ -1,4 +1,4 @@
-.LedgerLoginLink{
+.HardwareWalletLoginLink{
     width: 980px;
     border-radius: 4px;
     box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
@@ -22,18 +22,18 @@
         padding: 23px 20px 21px 29px;
     }
 
-    .LedgerLoginLink_wrap {
+    .HardwareWalletLoginLink_wrap {
         display: flex;
         flex-direction: row;
 
-        .LedgerLoginLink_logo {
+        .HardwareWalletLoginLink_logo {
             padding: 5px 24px 7px 0;
             border-right: solid 1px #f4f4f5;
             display: flex;
             align-items: center;
         }
 
-        .LedgerLoginLink_description {
+        .HardwareWalletLoginLink_description {
             margin-left: 16px;
             display: flex;
             flex-direction: column;
@@ -41,7 +41,7 @@
             font-weight: normal;
             color: #9aa6ac;
 
-            .LedgerLoginLink_description-title {
+            .HardwareWalletLoginLink_description-title {
                 font-size: 18px;
                 color: #1c2e3e;
             }

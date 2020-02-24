@@ -4,7 +4,9 @@ import directory from 'stellarterm-directory';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
+import TrezorConnect from 'trezor-connect';
 import Stellarify from '../lib/Stellarify';
+import TransformTrezorTransaction from './TransformTrezorTransaction';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
@@ -12,11 +14,22 @@ import Stellarify from '../lib/Stellarify';
 // should ever use the spoon.
 
 const fee = 10000;
+const _hexToByteArray = (str) => {
+    const result = [];
+    let hex = str;
+    while (hex.length >= 2) {
+        result.push(parseInt(hex.substring(0, 2), 16));
+        hex = hex.substring(2, hex.length);
+    }
+    return new Uint8Array(result);
+};
+
 
 const MagicSpoon = {
     async Account(Server, keypair, opts, onUpdate) {
         const sdkAccount = await Server.loadAccount(keypair.publicKey());
         this.bip32Path = opts.bip32Path;
+        this.authType = opts.authType;
 
         sdkAccount.signWithLedger = (transaction) => {
             console.log('Sending to Ledger to sign');
@@ -33,6 +46,24 @@ const MagicSpoon = {
                 .catch((error) => {
                     console.error(error);
                     return Promise.reject(error);
+                });
+        };
+
+        sdkAccount.signWithTrezor = (tx) => {
+            console.log('Sending to Trezor to sign');
+            const params = TransformTrezorTransaction(this.bip32Path, tx);
+
+            return TrezorConnect.stellarSignTransaction(params)
+                .then((result) => {
+                    if (result.success) {
+                        const signature = _hexToByteArray(result.payload.signature);
+                        const hint = keypair.signatureHint();
+                        const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
+                        tx.signatures.push(decorated);
+
+                        return tx;
+                    }
+                    return Promise.reject(result.payload);
                 });
         };
 
@@ -378,12 +409,30 @@ const MagicSpoon = {
         const bigOptsAmount = new BigNumber(opts.amount).toPrecision(15);
 
         console.log(`Creating *BUY* offer at price ${opts.price}`);
+        console.log(this.authType);
 
         const sdkBuying = opts.baseBuying; // ex: lumens
         const sdkSelling = opts.counterSelling; // ex: USD
         const sdkPrice = new BigNumber(bigOptsPrice);
         const sdkAmount = new BigNumber(bigOptsAmount);
         const offerId = opts.offerId || 0; // 0 for new offer
+
+        // create offer as ManageSellOffer for Ledger and Trezor devices
+        // because manageBuyOffer is unsupported yet
+        // https://github.com/LedgerHQ/ledger-app-stellar/
+        // https://github.com/trezor/connect
+        if (this.authType === 'ledger' || this.authType === 'trezor') {
+            const operationOpts = {
+                buying: sdkBuying,
+                selling: sdkSelling,
+                amount: new BigNumber(bigOptsAmount).times(bigOptsPrice).toFixed(7),
+                price: new BigNumber(1).dividedBy(bigOptsPrice),
+                offerId,
+            };
+            return new StellarSdk.TransactionBuilder(spoonAccount, { fee })
+                .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
+                .setTimeout(0);
+        }
 
         const operationOpts = {
             buying: sdkBuying,

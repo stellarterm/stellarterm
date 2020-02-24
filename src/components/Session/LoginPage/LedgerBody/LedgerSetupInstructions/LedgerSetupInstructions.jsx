@@ -12,21 +12,22 @@ export default () => (
                 </div>
             </li>
             <li>
-                Set up your Ledger device by following instructions on the Ledger site:{' '}
+                Set up your Ledger device by following{' '}
                 <a
                     href="https://www.ledger.com/start/"
                     target="_blank"
                     rel="nofollow noopener noreferrer">
-                    https://www.ledger.com/start/
+                    instructions
                 </a>
+                {' '}on the Ledger website.
             </li>
 
             <li>
-                Install the Ledger Live app on your computer:{' '}
-                <br />
+                Install the{' '}
                 <a href="https://shop.ledger.com/pages/ledger-live" target="_blank" rel="nofollow noopener noreferrer">
-                    https://shop.ledger.com/pages/ledger-live
+                    Ledger Live
                 </a>
+                {' '}app on your computer.
             </li>
 
             <li>

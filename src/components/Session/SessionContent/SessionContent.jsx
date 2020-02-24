@@ -35,6 +35,7 @@ export default function SessionContent(props) {
                     path="/account/activity/"
                     render={prop => <Activity {...prop} d={d} />} />
                 <Redirect from="/ledger/" to="/account/" />
+                <Redirect from="/trezor/" to="/account/" />
                 <Redirect from="/signup/" to="/account/" />
                 <Route render={() => <NotFound />} />
             </Switch>

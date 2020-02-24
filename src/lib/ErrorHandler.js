@@ -1,4 +1,7 @@
 function getErrorCode(error) {
+    if (error.error) {
+        return error.error;
+    }
     if (!error.response) {
         return error.toString();
     }
