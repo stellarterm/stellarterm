@@ -206,6 +206,7 @@ export default class Send {
         this.memoRequired = false;
         this.memoContentLocked = false;
         this.federationNotFound = false;
+        this.federationResolving = false;
 
         if (Validate.publicKey(this.destInput).ready) {
             this.accountId = this.destInput;
@@ -385,7 +386,7 @@ export default class Send {
             ? this.d.session.account.maxLumenSpend()
             : this.getMaxAssetSpend(targetBalance);
         const notEnoughAsset = Number(this.amountToSend) > Number(maxAssetSpend);
-
+        console.log(this.federationResolving)
         if (
             destinationIsEmpty ||
             notValidDestination ||

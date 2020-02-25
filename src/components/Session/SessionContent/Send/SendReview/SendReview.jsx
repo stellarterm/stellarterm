@@ -36,6 +36,8 @@ export default class SendReview extends React.Component {
         const memoTitle = memoType.replace(/_/g, ' ').toLowerCase();
         const memoTitleText = memoTitle.charAt(0).toUpperCase() + memoTitle.slice(1);
 
+        const isLedger = this.props.d.session.authType === 'ledger';
+
         return (
             <div className="Send_block">
                 <div className="Send_title">
@@ -95,14 +97,14 @@ export default class SendReview extends React.Component {
                 <div className="Send_button_block">
                     <button
                         className="s-btn_cancel"
-                        disabled={isPending}
+                        disabled={isPending && !isLedger}
                         onClick={() => clickBackToSend()}>
                         Back
                     </button>
 
                     <button
                         className="s-button"
-                        disabled={isPending}
+                        disabled={isPending && !isLedger}
                         onClick={() => this.onClickSubmit()}>
                         {state === 'pending' ? <div className="nk-spinner" /> : 'Submit transaction'}
                     </button>
