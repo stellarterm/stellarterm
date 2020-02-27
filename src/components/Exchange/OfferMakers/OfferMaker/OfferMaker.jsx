@@ -103,12 +103,12 @@ export default class OfferMaker extends React.Component {
         const state = {};
 
         // Initialize price
-        if (this.props.side === 'buy' && this.props.d.orderbook.data.bids.length > 0) {
-            state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString();
+        if (this.props.side === 'buy' && this.props.d.orderbook.data.asks.length > 0) {
+            state.price = new BigNumber(this.props.d.orderbook.data.asks[0].price).toString();
             // Get rid of extra 0s
         } else if (this.props.d.orderbook.data.asks.length > 0) {
             // Proptypes validation makes sure this is sell
-            state.price = new BigNumber(this.props.d.orderbook.data.asks[0].price).toString();
+            state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString();
             // Get rid of extra 0s
         }
 
