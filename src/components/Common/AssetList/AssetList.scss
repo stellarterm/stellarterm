@@ -52,8 +52,11 @@
 
         .asset_assetCard {
             padding: 8px;
-            width: 300px;
             display: table-cell;
+
+            .AssetCardMain{
+                width: 300px;
+            }
         }
         .asset_cell {
             text-align: right;
