@@ -1,4 +1,4 @@
-[![Travis CI status](https://travis-ci.org/stellarterm/stellarterm.svg?branch=master)](https://travis-ci.org/stellarterm/stellarterm)
+[![Build Status](https://travis-ci.org/stellarterm/stellarterm.svg?branch=master)](https://travis-ci.org/stellarterm/stellarterm)
 
 # StellarTerm ecosystem - [client](https://stellarterm.com/) | [api](https://github.com/stellarterm/stellarterm-api) | [directory](https://github.com/stellarterm/stellarterm-directory)
 
