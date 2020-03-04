@@ -8,27 +8,14 @@ import LedgerSetupInstructions from './LedgerSetupInstructions/LedgerSetupInstru
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
 import HiddenDescription from '../Common/HiddenDescription';
 import images from './../../../../images';
-
+import {
+    isChrome,
+    isWindowsOS,
+    browserU2FSupport,
+    isHttpConnectionUsed,
+} from '../../../../lib/BrowserSupport';
 
 export default class LedgerBody extends React.Component {
-    static browserIsGoogleChrome() {
-        // Checking for Google Chrome 1-71+ or Opera
-        return !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime);
-    }
-
-    static browserU2FSupport() {
-        // Checking for u2f support (for Firefox)
-        return !!window.u2f;
-    }
-
-    static isHttpConnectionUsed() {
-        return window.location.protocol === 'http:';
-    }
-
-    static isWindowsOS() {
-        return (window.navigator.platform === 'Win32' || window.navigator.platform === 'Win64');
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -37,35 +24,27 @@ export default class LedgerBody extends React.Component {
     }
 
     componentDidMount() {
-        const isWindowsOS = this.constructor.isWindowsOS();
-        if (!isWindowsOS) {
+        if (!isWindowsOS()) {
             this.brakePing = this.props.d.session.pingLedger();
         }
     }
 
     componentWillUnmount() {
-        const isWindowsOS = this.constructor.isWindowsOS();
-        if (!isWindowsOS) {
-            this.brakePing();
-        }
+        if (!isWindowsOS()) { this.brakePing(); }
     }
 
     render() {
         const { d, modal } = this.props;
         const { showInstructions } = this.state;
         const ledgerConnected = d.session.ledgerConnected;
-        const isSupported = this.constructor.browserU2FSupport();
-        const isNotChrome = !this.constructor.browserIsGoogleChrome();
-        const isHttp = this.constructor.isHttpConnectionUsed();
-        const isWindowsOS = this.constructor.isWindowsOS();
         let loginForm;
 
-        if (isNotChrome && !isSupported) {
+        if (!isChrome() && !browserU2FSupport()) {
             loginForm = <LedgerAlert alertType={'useChrome'} />;
-        } else if (isHttp) {
+        } else if (isHttpConnectionUsed()) {
             loginForm = <LedgerAlert alertType={'useHttps'} />;
         } else if (!ledgerConnected) {
-            loginForm = <LedgerAlert alertType={'searching'} isWindowsOS={isWindowsOS} d={d} />;
+            loginForm = <LedgerAlert alertType={'searching'} d={d} />;
         } else if (ledgerConnected) {
             loginForm = <LedgerForm d={d} />;
         }
