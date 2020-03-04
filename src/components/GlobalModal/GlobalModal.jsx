@@ -6,7 +6,6 @@ import MultisigEnableStep2
     from './../Session/SessionContent/Multisig/MultisigDisabled/MultisigEnableStep2/MultisigEnableStep2';
 import MultisigEnableStep3
     from './../Session/SessionContent/Multisig/MultisigDisabled/MultisigEnableStep3/MultisigEnableStep3';
-
 import MultisigDisableModal
     from './../Session/SessionContent/Multisig/MultisigEnabled/MultisigDisableModal/MultisigDisableModal';
 import MultisigSetRequiredSigners
@@ -24,6 +23,7 @@ import EditOfferModal from './EditOfferModal/EditOfferModal';
 import CancelOffersModal from './CancelOffersModal/CancelOffersModal';
 import LoginModal from './LoginModal/LoginModal';
 import SecretPhraseSetup from './SecretPhraseSetup/SecretPhraseSetup';
+import BrowserModal from './BrowserModal/BrowserModal';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -138,6 +138,9 @@ export default class GlobalModal extends React.Component {
             break;
         case 'LoginModal':
             body = <LoginModal submit={d.modal.handlers} d={d} />;
+            break;
+        case 'BrowserModal':
+            body = <BrowserModal submit={d.modal.handlers} d={d} />;
             break;
         default:
             body = (

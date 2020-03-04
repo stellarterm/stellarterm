@@ -2,10 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
 import Driver from '../../../../../lib/Driver';
+import { isWindowsOS } from '../../../../../lib/BrowserSupport';
 
 export default function LedgerAlert(props) {
     let ledgerAlert;
-    const { isWindowsOS, d } = props;
+    const { d } = props;
 
     switch (props.alertType) {
     case 'useChrome':
@@ -31,13 +32,13 @@ export default function LedgerAlert(props) {
     case 'searching':
         ledgerAlert = (
             <React.Fragment>
-                {!isWindowsOS && <p className="LoginPage__form--title">
+                {!isWindowsOS() && <p className="LoginPage__form--title">
                         Scanning for Ledger Wallet connection
                     <Ellipsis />
                 </p>}
                 <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
                 <p>If it still does not show up, restart your Ledger, and refresh this webpage.</p>
-                {isWindowsOS &&
+                {isWindowsOS() &&
                         <button
                             onClick={() => d.session.pingLedger(true)}
                             className="s-button">Check Ledger connection</button>}
@@ -53,6 +54,5 @@ export default function LedgerAlert(props) {
 
 LedgerAlert.propTypes = {
     alertType: PropTypes.string.isRequired,
-    isWindowsOS: PropTypes.bool,
     d: PropTypes.instanceOf(Driver),
 };

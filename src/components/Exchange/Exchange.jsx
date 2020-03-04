@@ -19,13 +19,12 @@ import images from '../../images';
 import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
 import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
+import { isIE, isEdge } from '../../lib/BrowserSupport';
 
 const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
 const LINE = 'lineChart';
 const keyF = 70;
-const isMicrosoftBrowser = document.documentMode || /Edge/.test(window.navigator.userAgent);
-const isIE = /MSIE|Trident/.test(window.navigator.userAgent);
 
 export default class Exchange extends React.Component {
     constructor(props) {
@@ -110,6 +109,8 @@ export default class Exchange extends React.Component {
                 onClick={() => this.getChartScreenshot()} />
         );
 
+        const isMicrosoftBrowser = isIE() || isEdge();
+
         return (
             <div className="island__header tabs_Switcher">
                 <div className="switch_Tabs">
@@ -192,7 +193,7 @@ export default class Exchange extends React.Component {
     }
 
     _handleKeyUp({ keyCode }) {
-        if (keyCode === keyF && screenfull.enabled && !isIE) {
+        if (keyCode === keyF && screenfull.enabled && !isIE()) {
             this.toggleFullScreen();
         }
     }
