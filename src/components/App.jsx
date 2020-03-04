@@ -89,7 +89,7 @@ class TermApp extends React.Component {
     render() {
         const { d } = this.props;
 
-        if ((!isIE() || isEdge()) && localStorage.getItem('hide-browser-popup') !== 'true') {
+        if ((isIE() || isEdge()) && localStorage.getItem('hide-browser-popup') !== 'true') {
             this.props.d.modal.handlers.activate('BrowserModal');
         }
 
