@@ -7,6 +7,7 @@ import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
 import Stellarify from '../lib/Stellarify';
 import TransformTrezorTransaction from './TransformTrezorTransaction';
+import ErrorHandler from './ErrorHandler';
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
@@ -349,11 +350,11 @@ const MagicSpoon = {
                 MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(({ records }) => {
                     this.marketTradesHistory = records;
                     this.ready = true;
-                    onUpdate();
+                    onUpdate(() => {});
                 });
             });
 
-        Server.orderbook(baseBuying, counterSelling).stream({
+        const closeFunc = Server.orderbook(baseBuying, counterSelling).stream({
             onmessage: (res) => {
                 let updated = false;
                 if (!_.isEqual(this.bids, res.bids)) {
@@ -365,12 +366,16 @@ const MagicSpoon = {
                     updated = true;
                 }
                 if (updated) {
-                    onUpdate();
+                    onUpdate(closeFunc);
                 }
             },
         });
-        // TODO: Orderbook streamclosing
     },
+
+    closeOrderbookStreaming(Server) {
+        Server.orderbook.close();
+    },
+
     async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, LIMIT) {
         const limit = LIMIT || 100;
         const START_TIME = 1514764800; // 01/01/2018
@@ -382,8 +387,7 @@ const MagicSpoon = {
             .call()
             .then(res => res)
             .catch((error) => {
-                // TODO: Throw to global stellar error handler
-                console.error(error);
+                console.error(ErrorHandler(error));
             });
     },
     pairTrades(Server, baseBuying, counterSelling, LIMIT) {

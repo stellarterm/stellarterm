@@ -11,6 +11,14 @@
     height: calc(100% - 87px);
     display: flex;
     align-items: center;
+    justify-content: center;
+
+    .nk-spinner {
+        width: 50px;
+        height: 50px;
+        border: 3px solid rgba(134, 211, 140, 0.3);
+        border-left: 3px solid #86d38c;
+    }
 }
 
 .chart_Msg_Container_fullscreen {
