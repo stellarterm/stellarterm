@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as StellarSdk from 'stellar-sdk';
-import millify from 'millify';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import AssetPair from '../../Common/AssetPair/AssetPair';
 import MagicSpoon from '../../../lib/MagicSpoon';
+import { getReadableNumber } from '../LightweightChart/ConverterOHLC';
+import { niceRound } from '../../../lib/Format';
 
 const RESOLUTION_MINUTE = 60;
 // 24 hour = 96 section of 15 min;
@@ -23,7 +24,7 @@ export default class PairPicker extends React.Component {
         }
         const startPeriodIndex = last24HourTrades.length - 1;
         const startPrice = parseFloat(last24HourTrades[startPeriodIndex].open);
-        const finishPrice = parseFloat(lastMinutesTrade.records[0].open);
+        const finishPrice = parseFloat(lastMinutesTrade.records[0].close);
         return (((finishPrice / startPrice) - 1) * 100).toFixed(2);
     }
 
@@ -86,7 +87,7 @@ export default class PairPicker extends React.Component {
                 status: 'no_trades',
             };
         }
-        const lastPrice = parseFloat(lastMinutesTrade.records[0].open);
+        const lastPrice = parseFloat(lastMinutesTrade.records[0].close);
         const changes24 = this.constructor.get24ChangesPercent(this.state);
 
         const { volume24, price24high, price24low } = last24HourTrades
@@ -101,7 +102,7 @@ export default class PairPicker extends React.Component {
 
         const counterWithLumenLastTradeOpen =
             (counterWithLumenLastTrade !== 'notRequired' && counterWithLumenLastTrade.records.length) ?
-                counterWithLumenLastTrade.records[0].open : 0;
+                counterWithLumenLastTrade.records[0].close : 0;
 
         const convertedLastPriceToXLM = counterWithLumenLastTrade === 'notRequired' ?
             lastPrice :
@@ -178,18 +179,18 @@ export default class PairPicker extends React.Component {
 
         const noChanges = changes24 === '0.00';
         const changesClassName = (changes24 >= 0) ? 'positive' : 'negative';
-        const lastUsdView = lastUsdPrice !== 0 ? `$${lastUsdPrice.toFixed(7)}` : '—';
+        const lastUsdView = lastUsdPrice !== 0 ? `$${niceRound(lastUsdPrice.toFixed(7))}` : '—';
 
         return (
             <div className="PairPicker_marketsTable-content">
-                <span>{lastPrice.toFixed(7)} {counterAssetCode}</span>
+                <span>{getReadableNumber(lastPrice)} {counterAssetCode}</span>
                 <span>{lastUsdView}</span>
                 <span className={noChanges ? '' : changesClassName}>
                     <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24}%</span>
                 </span>
-                <span>{price24high.toFixed(7)} {counterAssetCode}</span>
-                <span>{price24low.toFixed(7)} {counterAssetCode}</span>
-                <span>{millify(volume24)} {counterAssetCode}</span>
+                <span>{getReadableNumber(price24high)} {counterAssetCode}</span>
+                <span>{getReadableNumber(price24low)} {counterAssetCode}</span>
+                <span>{getReadableNumber(volume24)} {counterAssetCode}</span>
             </div>
         );
     }
@@ -211,8 +212,8 @@ export default class PairPicker extends React.Component {
                 </div>
                 <div className="PairPicker_marketsTable">
                     <div className="PairPicker_marketsTable-header">
-                        <span>Last price</span>
-                        <span>Last USD price</span>
+                        <span>Last Price</span>
+                        <span>Last USD Price</span>
                         <span>24h changes </span>
                         <span>24h High</span>
                         <span>24h Low</span>
