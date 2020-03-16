@@ -8,19 +8,29 @@ import SendMemo from './SendMemo';
 export default class SendSetup extends React.Component {
     constructor(props) {
         super(props);
+
         this.listenId = this.props.d.send.event.listen(() => {
             this.forceUpdate();
+        });
+
+        this.ubsubHistory = this.props.routeHistory.listen(() => {
+            if (this.props.routeHistory.action !== 'POP') {
+                return;
+            }
+
+            try {
+                this.props.d.send.pickAssetToSend(this.getAssetFromUrl());
+            } catch (e) {
+                console.error(e);
+            }
         });
     }
 
     componentDidMount() {
-        this.props.d.send.fetchSelfAssets();
-        const urlParams = new URLSearchParams(window.location.search);
-        const noAssetParam = urlParams.get('asset') === null;
-        const assetToSend = noAssetParam ? this.props.d.send.choosenSlug : urlParams.get('asset');
-
+        const slug = this.getAssetFromUrl();
         try {
-            this.props.d.send.pickAssetToSend(assetToSend);
+            window.history.pushState({}, null, `/account/send?asset=${slug}`);
+            this.props.d.send.pickAssetToSend(slug);
         } catch (e) {
             console.error(e);
         }
@@ -28,6 +38,14 @@ export default class SendSetup extends React.Component {
 
     componentWillUnmount() {
         this.props.d.send.event.unlisten(this.listenId);
+        this.ubsubHistory();
+    }
+
+    getAssetFromUrl() {
+        this.props.d.send.fetchSelfAssets();
+        const urlParams = new URLSearchParams(window.location.search);
+        const noAssetParam = urlParams.get('asset') === null;
+        return noAssetParam ? this.props.d.send.choosenSlug : urlParams.get('asset');
     }
 
     render() {
@@ -67,4 +85,5 @@ export default class SendSetup extends React.Component {
 
 SendSetup.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    routeHistory: PropTypes.objectOf(PropTypes.any),
 };
