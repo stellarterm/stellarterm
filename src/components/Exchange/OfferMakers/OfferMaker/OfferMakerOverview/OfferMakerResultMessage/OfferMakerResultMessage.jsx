@@ -42,7 +42,7 @@ export default function OfferMakerResultMessage(props) {
                             rel="nofollow noopener noreferrer">
                         minimum balance
                         </a>
-                        . For more info, see <Link to="/account/">
+                        . For more info, see <Link to="/account#reserved">
                         the minimum balance section</Link> of the account page.
                         <br />
                         <br />

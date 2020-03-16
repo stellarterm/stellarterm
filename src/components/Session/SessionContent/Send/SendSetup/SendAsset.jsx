@@ -14,6 +14,7 @@ export default class SendAsset extends React.Component {
 
         this.state = {
             isOpenList: false,
+            errorMsg: this.getErrorMessage(),
             selectedSlug: this.props.d.send.choosenSlug,
         };
 
@@ -31,17 +32,33 @@ export default class SendAsset extends React.Component {
         document.removeEventListener('mousedown', this.handleClickOutside, false);
     }
 
+    onChangeAmount(e) {
+        this.setState({ errorMsg: null });
+        this.props.d.send.updateAmountValue(e.target.value);
+    }
+
+    onFocusLeave() {
+        this.setState({ errorMsg: this.getErrorMessage() });
+    }
+
+    onClickAvailable(amount) {
+        this.props.d.send.updateAmountValue(amount);
+        this.setState({ errorMsg: this.getErrorMessage() });
+    }
+
     onClickAssetDropdown(slug) {
-        const { pickAssetToSend } = this.props.d.send;
+        const { pickAssetToSend, choosenSlug } = this.props.d.send;
+
+        if (slug && slug !== choosenSlug) {
+            window.history.pushState({}, null, `/account/send?asset=${slug}`);
+            pickAssetToSend(slug);
+        }
 
         this.setState({
             isOpenList: !this.state.isOpenList,
+            errorMsg: this.getErrorMessage(),
             selectedSlug: slug || this.state.selectedSlug,
         });
-
-        if (slug) {
-            pickAssetToSend(slug);
-        }
     }
 
 
@@ -84,6 +101,34 @@ export default class SendAsset extends React.Component {
                 {isOpenList ? <div className="dropdown_list">{assetsRow}</div> : null}
             </div>
         );
+    }
+
+    getErrorMessage() {
+        const { amountToSend, assetToSend } = this.props.d.send;
+        const maxAssetSpend = this.getMaxAssetSpend().toFixed(7);
+        const amountValid = Validate.amount(amountToSend);
+
+        if (amountValid === false) {
+            return 'Amount is invalid';
+        } else if (Number(amountToSend) > Number(maxAssetSpend)) {
+            return `Not enough ${assetToSend.asset.code}`;
+        }
+        return null;
+    }
+
+    getMaxAssetSpend() {
+        const { d } = this.props;
+        const { getAsset } = d.send;
+        const { asset } = d.send.assetToSend;
+        const { account } = d.session;
+
+        const currentAsset = getAsset();
+        const isXlmNative = asset.isNative();
+        const targetBalance = isXlmNative ? account.maxLumenSpend() : account.getBalance(currentAsset);
+        const reservedBalance = account.getReservedBalance(currentAsset);
+
+        return parseFloat(targetBalance) > parseFloat(reservedBalance) ?
+            (targetBalance - reservedBalance) : 0;
     }
 
     getReservedMessage() {
@@ -145,46 +190,31 @@ export default class SendAsset extends React.Component {
 
     render() {
         const { d } = this.props;
-        const { amountToSend, updateAmountValue, getAsset } = d.send;
-        const { asset } = d.send.assetToSend;
+        const { errorMsg } = this.state;
+        const { amountToSend, getAsset, availableAssets, choosenSlug } = d.send;
         const { account } = d.session;
-
         const currentAsset = getAsset();
-        const isXlmNative = asset.isNative();
-        const targetBalance = isXlmNative ? account.maxLumenSpend() : account.getBalance(currentAsset);
-        const reservedBalance = account.getReservedBalance(currentAsset);
+        const maxAssetSpend = this.getMaxAssetSpend().toFixed(7);
 
-        const maxAssetSpend = parseFloat(targetBalance) > parseFloat(reservedBalance) ?
-            (targetBalance - reservedBalance) : 0;
-
-        const amountValid = Validate.amount(amountToSend);
-
-        let amountErrorMsg;
-
-        if (amountValid === false) {
-            amountErrorMsg = 'Amount is invalid';
-        } else if (Number(amountToSend) > Number(maxAssetSpend)) {
-            amountErrorMsg = `Not enough ${asset.code}`;
-        }
-
-        const isDestAcceptAsset = d.send.availableAssets[d.send.choosenSlug].sendable;
+        const isDestAcceptAsset = availableAssets[choosenSlug].sendable;
 
         return (
             <div className="Input_flexed_block">
                 <div className="Send_input_block">
                     <label htmlFor="inputSendAmount">Amount</label>
-                    {amountErrorMsg ? (
+                    {errorMsg ? (
                         <div className="invalidValue_popup">
-                            {amountErrorMsg}
+                            {errorMsg}
                         </div>
                     ) : null}
 
                     <input
-                        name="inputSendAmount"
                         type="text"
+                        name="inputSendAmount"
+                        placeholder="Enter amount"
                         value={amountToSend}
-                        onChange={e => updateAmountValue(e.target.value)}
-                        placeholder="Enter amount" />
+                        onChange={e => this.onChangeAmount(e)}
+                        onBlur={() => this.onFocusLeave()} />
 
                     <div className="field_description">
                         {this.getReservedMessage()}
@@ -207,7 +237,7 @@ export default class SendAsset extends React.Component {
 
                     {account.getBalance(currentAsset) !== null ? (
                         <div className="asset_balance">Available:&nbsp;
-                            <span className="asset_amount" onClick={() => updateAmountValue(maxAssetSpend.toString())}>
+                            <span className="asset_amount" onClick={() => this.onClickAvailable(maxAssetSpend)}>
                                 {maxAssetSpend}
                             </span>
                         </div>

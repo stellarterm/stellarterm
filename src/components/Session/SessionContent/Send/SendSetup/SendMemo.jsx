@@ -27,7 +27,6 @@ export default class SendMemo extends React.Component {
         };
     }
 
-
     componentDidMount() {
         document.addEventListener('mousedown', this.handleClickOutside, false);
     }
