@@ -192,13 +192,9 @@ export default class AssetDropDown extends React.Component {
     }
 
     openList() {
-        if (this.props.clear) {
-            this.props.clear();
-            this.setState({ termAsset: this.props.asset });
-        }
+        this.setState({ termAsset: this.props.asset, inputCode: '' });
         if (this.state.termAsset && this.state.isOpenList) {
             this.onUpdate(this.state.termAsset);
-            this.setState({ inputCode: '' });
         }
         this.setState({
             isOpenList: !this.state.isOpenList,
@@ -224,15 +220,16 @@ export default class AssetDropDown extends React.Component {
     }
 
     render() {
-        const arrowClassName = this.state.isOpenList ? 'AssetDropDown__arrowUp' : 'AssetDropDown__arrowDown';
-        const assetDropDownClassName = this.state.isOpenList ? 'AssetDropDown_isOpen' : null;
+        const { isOpenList } = this.state;
+        const arrowClassName = isOpenList ? 'AssetDropDown__arrowUp' : 'AssetDropDown__arrowDown';
+        const assetDropDownClassName = isOpenList ? 'AssetDropDown_isOpen' : null;
 
         return (
             <div
                 className="island__sub__division AssetDropDown__card"
                 ref={(node) => { this.node = node; }}>
                 <div>
-                    {this.props.asset ?
+                    {(this.props.asset && !isOpenList) ?
                         <div className="AssetDropDown__full" onClick={() => this.openList()}>
                             <AssetCardMain
                                 d={this.props.d}
@@ -284,5 +281,4 @@ AssetDropDown.propTypes = {
     asset: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     exception: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     onUpdate: PropTypes.func,
-    clear: PropTypes.func,
 };

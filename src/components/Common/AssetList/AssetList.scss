@@ -46,6 +46,15 @@
         display: table-row;
         text-decoration: none;
 
+        &.AssetList_head-asset{
+            background-color: #eee;
+            border: 1px solid #000;
+
+            &:hover {
+                background: #eee;
+            }
+        }
+
         &:hover {
             background: #fbfbfc;
         }
@@ -56,6 +65,13 @@
 
             .AssetCardMain{
                 width: 300px;
+            }
+
+            .AssetDropDown__card{
+                width: 300px;
+                .AssetCardMain{
+                    width: 100%;
+                }
             }
         }
         .asset_cell {

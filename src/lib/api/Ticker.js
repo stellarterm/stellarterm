@@ -54,18 +54,25 @@ export default class Ticker {
                 setTimeout(() => this.loadWithAttempts(promiseFunction, message, nextAttempt), 1000);
             });
     }
-    static loadStellarMarketsData(baseAssetCode, baseAssetIssuer, numHoursAgo) {
+    static loadStellarMarketsData({
+        baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer,
+    }) {
         const headers = { 'Content-Type': 'application/json' };
-        const stellarTickerGraphQLParams = `{ markets(
-            numHoursAgo: ${numHoursAgo}, 
-            baseAssetCode: "${baseAssetCode}", 
-            baseAssetIssuer: "${baseAssetIssuer}") ` +
-            '{ ' +
+        const stellarTickerGraphQLParams =
+            `{ markets(
+            ${numHoursAgo ? `numHoursAgo: ${numHoursAgo},` : ''}
+            ${counterAssetCode ? `counterAssetCode: "${counterAssetCode}",` : ''}
+            ${counterAssetIssuer ? `counterAssetIssuer: "${counterAssetIssuer}",` : ''}
+            ${baseAssetCode ? `baseAssetCode: "${baseAssetCode}",` : ''}
+            ${baseAssetIssuer ? `baseAssetIssuer: "${baseAssetIssuer}"` : ''}) { ` +
             'tradePair ' +
             'baseVolume ' +
+            'counterVolume ' +
             'change ' +
             'close ' +
             'open ' +
+            'baseAssetCode ' +
+            'baseAssetIssuer ' +
             'counterAssetCode ' +
             'counterAssetIssuer} }';
 
