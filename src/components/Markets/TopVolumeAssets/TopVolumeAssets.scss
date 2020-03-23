@@ -1,0 +1,115 @@
+.TopVolume{
+    .TopVolume_header{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 16px;
+        font-weight: bold;
+        border-bottom: 1px solid #f9f9fa;
+
+        .TopVolume_cell{
+            cursor: pointer;
+
+            &:hover{
+                background-color: #d8d8d81a;
+            }
+            &.withoutSort{
+                cursor: unset;
+                &:hover{
+                    background-color: #fff;
+                }
+            }
+            img.up {
+                transition: 0.2s;
+            }
+            img.down {
+                transition: 0.2s;
+                transform: rotate(180deg);
+            }
+        }
+    }
+
+    .TopVolume_loader{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 80px;
+
+        .nk-spinner{
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(134, 211, 140, 0.3);
+            border-left: 3px solid #86d38c;
+        }
+    }
+
+    .TopVolume_empty{
+        display: flex;
+        height: 80px;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: bold;
+
+        &.error{
+            color: #ff415b;
+        }
+    }
+
+    .TopVolume_row{
+        display: flex;
+        flex-direction: row;
+        border-bottom: 1px solid #f9f9fa;
+        cursor: pointer;
+        text-decoration: none;
+
+        &:hover{
+            background-color: #d8d8d81a;
+        }
+    }
+
+    .TopVolume_cell{
+        display: flex;
+        padding: 15px 20px 13px;
+        flex: 1;
+        align-items: center;
+        overflow: hidden;
+        white-space: nowrap;
+
+        .changeArrow{
+            margin-left: 8px;
+        }
+
+        &.right {
+            justify-content: flex-end;
+            flex: 0.7;
+        }
+
+        .changePositive{
+            color: #56a15c;
+        }
+
+        .changeNegative{
+            color: #f92828;
+        }
+
+        .TopVolume_cell-column{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: flex-start;
+            line-height: normal;
+
+            .TopVolume_cell-value{
+                font-size: 14px;
+                font-weight: normal;
+            }
+
+            .TopVolume_cell-value-usd{
+                font-size: 12px;
+                font-weight: 300;
+                opacity: 0.6;
+            }
+        }
+    }
+}
