@@ -16,6 +16,7 @@ export default class AssetCardInRow extends AssetCardHelper {
         if (color) {
             backgroundStyle.background = hexToRGBA(color, 0.08);
             borderStyle.borderColor = color;
+            borderStyle.borderRadius = 2;
         }
 
         const assetSymbol = asset.code[0];
@@ -30,7 +31,6 @@ export default class AssetCardInRow extends AssetCardHelper {
         const template = ReactDOMServer.renderToStaticMarkup(unknownLogo);
         const div = document.createElement('div');
         div.innerHTML = template;
-
 
         return (
             <div className="AssetCardInRow">
