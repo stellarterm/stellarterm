@@ -214,7 +214,7 @@ export default class PairPicker extends React.Component {
                     <div className="PairPicker_marketsTable-header">
                         <span>Last Price</span>
                         <span>Last USD Price</span>
-                        <span>24h changes </span>
+                        <span>24h Changes </span>
                         <span>24h High</span>
                         <span>24h Low</span>
                         <span>24h Volume</span>
