@@ -10,6 +10,7 @@ import Multisig from './Multisig/Multisig';
 import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
 import NotFound from '../../NotFound/NotFound';
 import Activity from './Activity/Activity';
+import SepTransactions from './SepTransactions/SepTransactions';
 
 export default function SessionContent(props) {
     const d = props.d;
@@ -34,6 +35,10 @@ export default function SessionContent(props) {
                 <Route
                     path="/account/activity/"
                     render={prop => <Activity {...prop} d={d} />} />
+                <Route
+                    exact
+                    path="/account/transactions/"
+                    render={prop => <SepTransactions {...prop} d={d} />} />
                 <Redirect from="/ledger/" to="/account/" />
                 <Redirect from="/trezor/" to="/account/" />
                 <Redirect from="/signup/" to="/account/" />
