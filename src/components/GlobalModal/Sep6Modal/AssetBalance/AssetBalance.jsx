@@ -19,12 +19,12 @@ export default function AssetBalance(props) {
         .getSortedBalances()
         .find(balance => balance.code === asset.code && balance.issuer === asset.issuer).balance;
 
-    const assetUsdPrice = _.find(d.ticker.data.assets, {
+    const directoryAsset = _.find(d.ticker.data.assets, {
         code: asset.code,
         issuer: asset.issuer,
-    }).price_USD;
+    });
 
-    const usdBalance = (parseFloat(assetBalance) * assetUsdPrice).toFixed(2);
+    const usdBalance = directoryAsset ? `$${(parseFloat(assetBalance) * directoryAsset.price_USD).toFixed(2)}` : '';
 
     const descriptionSpan = isDeposit
         ? <span>Deposit native {asset.code} to get {asset.code} ({domainLink}) asset issued on Stellar</span>
@@ -42,7 +42,7 @@ export default function AssetBalance(props) {
                     <span className="assetBalance">
                         {assetBalance} {asset.code}
                     </span>
-                    <span className="usdBalance">${usdBalance}</span>
+                    <span className="usdBalance">{usdBalance}</span>
                 </div>
             </div>
 
@@ -57,5 +57,5 @@ AssetBalance.propTypes = {
     isDeposit: PropTypes.bool.isRequired,
     isConfirmModal: PropTypes.bool,
     d: PropTypes.instanceOf(Driver).isRequired,
-    asset: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])).isRequired,
+    asset: PropTypes.objectOf(PropTypes.any).isRequired,
 };

@@ -1,0 +1,94 @@
+.Activity {
+    .Activity-table-body {
+        overflow-y: auto;
+    }
+
+    .Sep_transactions {
+        .AssetRowContainer {
+            margin: 0;
+        }
+    }
+
+    .sep-transaction-row,
+    .load-more-row {
+        cursor: pointer;
+        min-height: 41px;
+
+        &:hover {
+            background-color: #f6f6f6;
+        }
+    }
+
+    .sep-transaction-row {
+        .Activity-table-cell {
+            .deposit_icon,
+            .withdraw_icon {
+                margin-right: 8px;
+            }
+
+            .deposit_icon {
+                transform: rotate(180deg);
+            }
+
+            .withdraw_icon {
+                transform: rotate(-90deg);
+            }
+
+            span::first-letter {
+                text-transform: uppercase;
+            }
+        }
+    }
+
+    .Activity_wrap {
+        .Activity-table {
+            font-size: 14px;
+            font-weight: normal;
+            line-height: normal;
+            color: #9aa6ac;
+
+            .transaction-row-error,
+            .error-span {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .transaction-row-error {
+                padding: 55px 23px;
+
+                .error-span {
+                    img {
+                        padding-right: 10px;
+                    }
+                }
+            }
+
+            .Activity-table-row {
+                .flex-end {
+                    justify-content: flex-end;
+
+                    &:last-child {
+                        padding-right: 25px;
+                    }
+                }
+            }
+
+            .load-more-row {
+                padding: 0;
+
+                .Activity-table-cell {
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    color: #505558;
+                }
+            }
+
+            .Activity-table-row.head {
+                font-size: 16px;
+                color: #505558;
+            }
+        }
+    }
+}

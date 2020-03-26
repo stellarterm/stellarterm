@@ -1,0 +1,121 @@
+@import "../Common/Sep24ModalFooter/Sep24ModalFooter";
+
+.Sep24Modal {
+    .Sep24Modal_content {
+        @mixin normal_text {
+            font-size: 16px;
+            font-weight: normal;
+            line-height: normal;
+        }
+
+        .content_description {
+            @include normal_text;
+            margin: 1.2em 0;
+
+            &:first-child {
+                margin: 0 0 1.2em 0;
+            }
+        }
+
+        .content_main {
+            padding: 1em;
+            overflow-y: scroll;
+            background-color: rgba(244, 244, 245, 0.2);
+            border: solid 1px rgba(189, 191, 192, 0.2);
+            border-radius: 2px;
+            margin-top: 1em;
+
+            .loader_container {
+                .nk-spinner {
+                    border: 3px solid rgba(134, 211, 140, 0.3);
+                    border-left: 3px solid #86d38c;
+                }
+            }
+
+            .content_block {
+                margin-bottom: 1.5em;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                .content_title {
+                    @include normal_text;
+                    display: flex;
+                    align-items: center;
+
+                    img {
+                        height: 24px;
+                        margin-right: 1em;
+                    }
+                }
+
+                .content_text {
+                    @include normal_text;
+                    margin-top: 0.4em;
+                    display: flex;
+                    align-items: center;
+                    font-weight: 300;
+
+                    img {
+                        width: 24px;
+                        height: 24px;
+                        margin-right: 0.4em;
+                    }
+                }
+            }
+
+            .flow_text_block {
+                border-bottom: 1px solid rgba(189, 191, 192, 0.2);
+                padding-bottom: 1em;
+                margin-bottom: 1em;
+            }
+
+            .extra_info {
+                .content_text {
+                    text-transform: capitalize;
+                    white-space: pre-line;
+                }
+            }
+        }
+
+        .content_error {
+            border: solid 1px #ff4961 !important;
+            background-color: rgba(246, 197, 197, 0.25) !important;
+            padding: 1em;
+
+            .sep24_requestError {
+                display: flex;
+                align-items: center;
+                font-weight: normal;
+
+                img {
+                    height: 24px;
+                    margin-right: 1em;
+                }
+
+                span {
+                    overflow: auto;
+                }
+
+                span::first-letter {
+                    text-transform: uppercase;
+                }
+            }
+        }
+
+        .content_main + .content_error,
+        .content_error + .content-main,
+        .content_error + .Modal_footer {
+            margin-top: 1em;
+        }
+
+        .content_description + .content_main {
+            margin-top: 0;
+        }
+
+        .content_error + .Modal_footer {
+            padding: 0;
+        }
+    }
+}
