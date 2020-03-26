@@ -1,0 +1,19 @@
+.transaction_Info {
+    .more_Info {
+        position: relative;
+        display: flex;
+        justify-content: flex-end;
+
+        a {
+            position: fixed;
+        }
+    }
+
+    .content_block {
+        .content_text {
+            span::first-letter {
+                text-transform: uppercase;
+            }
+        }
+    }
+}
