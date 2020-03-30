@@ -29,7 +29,7 @@ export function createLightChart(element, cursorMode) {
         },
         timeScale: {
             rightOffset: 10,
-            fixLeftEdge: true,
+            fixLeftEdge: false,
             lockVisibleTimeRangeOnResize: true,
             rightBarStaysOnScroll: true,
             borderVisible: true,

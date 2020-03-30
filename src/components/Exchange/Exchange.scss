@@ -64,10 +64,29 @@
     }
 
     .fullscreen_Block {
-        .screenshot-btn {
-            height: 21px;
-            width: auto;
+        .actionBtn {
+            display: flex;
+            position: relative;
             margin-right: 1em;
+
+            &:last-child {
+                margin-right: 0;
+            }
+
+            &:hover {
+                .btnHint {
+                    display: block;
+                }
+
+                img {
+                    transform: scale(1.15);
+                }
+            }
+        }
+
+        .screenshot-btn {
+            height: 23px;
+            width: auto;
         }
 
         img {
@@ -78,6 +97,37 @@
 
             &:hover {
                 transform: scale(1.15);
+            }
+        }
+
+        .btnHint {
+            .keySpan {
+                border-radius: 2px;
+                border: solid 1px #ffffff;
+                padding: 2px 0.5em;
+            }
+
+            display: none;
+            width: max-content;
+            right: -10px;
+            top: 35px;
+            z-index: 11;
+            color: #fff;
+            padding: 0.3em 0.75em;
+            font-size: 16px;
+            position: absolute;
+            transition: 0.25s ease-in-out;
+            border-radius: 4px;
+            background: rgba(2, 18, 67, 0.78);
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+            &::after {
+                content: "";
+                position: absolute;
+                right: 13px;
+                top: -16px;
+                border: 8px solid transparent;
+                border-bottom: 8px solid rgba(2, 18, 67, 0.78);
             }
         }
     }
