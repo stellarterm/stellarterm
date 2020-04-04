@@ -1,12 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Driver from '../../../../../lib/Driver';
 import Validate from '../../../../../lib/Validate';
 import images from '../../../../../images';
 import AssetCardSeparateLogo from '../../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
-import AppPopover from '../../../../Common/AppPopover/AppPopover';
+import ReservedPopover from '../../../../Common/AppPopover/ReservedPopover';
 
 export default class SendAsset extends React.Component {
     constructor(props) {
@@ -131,67 +130,10 @@ export default class SendAsset extends React.Component {
             (targetBalance - reservedBalance) : 0;
     }
 
-    getReservedMessage() {
-        const { d } = this.props;
-        const { asset } = d.send.assetToSend;
-        const { account } = d.session;
-
-        const currentAsset = d.send.getAsset();
-        const targetBalance = account.getBalance(currentAsset);
-        if (parseFloat(targetBalance) === 0) { return null; }
-
-        const isXlmNative = asset.isNative();
-        const reserveData = account.explainReserve();
-        const { totalReservedXLM, reserveItems } = reserveData;
-        const reservedAmount = isXlmNative ? totalReservedXLM : account.getReservedBalance(currentAsset);
-        const isNoTrustline = reservedAmount === null;
-
-        if (isNoTrustline) { return null; }
-
-        const reservedRows = reserveItems.map(({ reserveType, typeCount, reservedXLM }) => (
-            <div className="reserved_item" key={`${reserveType}-${typeCount}`}>
-                <span>
-                    {reserveType} {typeCount === 0 ? '' : `(${typeCount})`}
-                </span>
-                <span>{reservedXLM} XLM</span>
-            </div>
-        ));
-
-        return (
-            <React.Fragment>
-                <AppPopover
-                    content={
-                        isXlmNative ? (
-                            <div className="reserve_table">
-                                <div className="reserved_item reserved_item_bold">
-                                    <span>Reserved</span>
-                                    <span>{reservedAmount} XLM</span>
-                                </div>
-                                {reservedRows}
-                                <Link to="/account#reserved" className="reserved_link">
-                                    More information
-                                    <img className="icon_arrow" src={images['icon-arrow-right']} alt="arrow" />
-                                </Link>
-                            </div>
-                        ) : (
-                            <React.Fragment>
-                                <p><strong>{reservedAmount} {asset.code}</strong> reserved in active offers</p>
-                                <Link to="/account/activity/" className="reserved_link">
-                                    More information
-                                    <img className="icon_arrow" src={images['icon-arrow-right']} alt="arrow" />
-                                </Link>
-                            </React.Fragment>
-                        )
-                    } />
-                <div>{reservedAmount} {asset.code} are reserved in your wallet by Stellar network</div>
-            </React.Fragment>
-        );
-    }
-
     render() {
         const { d } = this.props;
         const { errorMsg } = this.state;
-        const { amountToSend, getAsset, availableAssets, choosenSlug } = d.send;
+        const { amountToSend, assetToSend, getAsset, availableAssets, choosenSlug } = d.send;
         const { account } = d.session;
         const currentAsset = getAsset();
         const maxAssetSpend = this.getMaxAssetSpend().toFixed(7);
@@ -217,7 +159,7 @@ export default class SendAsset extends React.Component {
                         onBlur={() => this.onFocusLeave()} />
 
                     <div className="field_description">
-                        {this.getReservedMessage()}
+                        <ReservedPopover d={d} asset={assetToSend.asset} />
                     </div>
                 </div>
 
