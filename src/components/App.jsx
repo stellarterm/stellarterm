@@ -26,7 +26,8 @@ window.React = React;
 const mountNode = document.getElementById('app');
 
 // const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.org';
-const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.lobstr.co';
+// const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.lobstr.co';
+const DEFAULT_HORIZON_SERVER = 'https://horizon-test.th13f.live/';
 
 const network = {
     horizonUrl: DEFAULT_HORIZON_SERVER,

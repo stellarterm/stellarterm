@@ -304,7 +304,8 @@ const MagicSpoon = {
         // We won't miss any offers assuming that the user only updates their offers through the client
         // with just one window open at a time
         sdkAccount.updateOffers = () =>
-            Server.offers('accounts', keypair.publicKey())
+            Server.offers()
+                .forAccount(keypair.publicKey())
                 .limit(200) // TODO: Keep iterating through next() to show more than 100 offers
                 .order('desc')
                 .call()
