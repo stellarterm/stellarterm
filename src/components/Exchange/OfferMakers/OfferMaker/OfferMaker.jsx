@@ -325,15 +325,18 @@ export default class OfferMaker extends React.Component {
         const value = (maxOffer).toFixed(7).toString();
 
         const availableView = (
-            <div
-                className="OfferMaker_balance"
-                onClick={(e) => {
-                    e.preventDefault();
-                    this.touchedOffer = true;
-                    this.updateState(inputType, value, minValue, inputType, maxOffer);
-                }}>
-                <span>Available:</span>
-                <span>{maxOfferView} {targetAsset.code}</span>
+            <div className="OfferMaker_container">
+                <div
+                    className="OfferMaker_balance"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        this.touchedOffer = true;
+                        this.updateState(inputType, value, minValue, inputType, maxOffer);
+                    }}>
+
+                    <span>Available:</span>
+                    <span>{maxOfferView} {targetAsset.code}</span>
+                </div>
 
                 <ReservedPopover
                     onlyIcon

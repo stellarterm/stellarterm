@@ -10,17 +10,12 @@
         text-decoration: none;
     }
 
-    .OfferMaker_balance {
+    .OfferMaker_container {
         display: flex;
-        cursor: pointer;
-
-        span:first-child {
-            opacity: 0.5;
-            margin-right: 5px;
-        }
 
         .InfoHover_block {
             .App_popover {
+                cursor: default;
                 font-weight: lighter;
                 opacity: 0.9;
                 left: auto;
@@ -74,6 +69,16 @@
                     right: 5px;
                 }
             }
+        }
+    }
+
+    .OfferMaker_balance {
+        display: flex;
+        cursor: pointer;
+
+        span:first-child {
+            opacity: 0.5;
+            margin-right: 5px;
         }
     }
 }
