@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../lib/Driver';
 import AssetList from '../Common/AssetList/AssetList';
 import CustomPairMenu from './CustomPairMenu/CustomPairMenu';
@@ -7,6 +8,7 @@ import CustomMarketPicker from './CustomMarketPicker/CustomMarketPicker';
 import SearchByAnchor from '../Common/SearchByAnchor/SearchByAnchor';
 
 import images from '../../images';
+import AssetDropDown from '../Common/AssetPair/AssetDropDown/AssetDropDown';
 
 export default class Markets extends React.Component {
     constructor(props) {
@@ -14,12 +16,13 @@ export default class Markets extends React.Component {
         this.state = {
             zeroAssetsVisible: false,
             fromStellarTicker: false,
+            baseAsset: StellarSdk.Asset.native(),
         };
     }
 
     render() {
         const { d } = this.props;
-        const { zeroAssetsVisible, fromStellarTicker } = this.state;
+        const { zeroAssetsVisible, fromStellarTicker, baseAsset } = this.state;
 
         return (
             <div>
@@ -38,7 +41,7 @@ export default class Markets extends React.Component {
                                 <div
                                     onClick={() => this.setState({ fromStellarTicker: true })}
                                     className={`ListHeader_Title ${fromStellarTicker ? 'active' : ''}`}>
-                                    Top volume assets
+                                    Top volume markets
                                 </div>
                             </div>
                             {!fromStellarTicker && (
@@ -57,8 +60,22 @@ export default class Markets extends React.Component {
                                     </span>
                                 </div>
                             )}
+                            {fromStellarTicker &&
+                                <div className="ListHeader_dropdown">
+                                    <span>Base asset:</span>
+                                    <AssetDropDown
+                                        d={d}
+                                        compactSize
+                                        asset={baseAsset}
+                                        onUpdate={asset => this.setState({ baseAsset: asset })} />
+                                </div>
+                            }
                         </div>
-                        <AssetList d={d} showLowTradable={zeroAssetsVisible} fromStellarTicker={fromStellarTicker} />
+                        <AssetList
+                            d={d}
+                            showLowTradable={zeroAssetsVisible}
+                            fromStellarTicker={fromStellarTicker}
+                            baseAsset={baseAsset} />
                         <div className="AssetListFooter">
                             StellarTerm does not endorse any of these issuers. They are here for informational purposes
                             only.

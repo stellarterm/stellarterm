@@ -30,10 +30,10 @@ export default class AssetCardInRow extends AssetCardHelper {
         const template = ReactDOMServer.renderToStaticMarkup(unknownLogo);
         const div = document.createElement('div');
         div.innerHTML = template;
-
+        const { border } = this.props;
 
         return (
-            <div className="AssetCardInRow">
+            <div className={`AssetCardInRow ${border ? 'AssetCardInRow_border' : ''}`}>
                 {logo === 'unknown' && logo !== 'load' ? (
                     unknownLogo
                 ) : (
@@ -61,4 +61,5 @@ AssetCardInRow.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     code: PropTypes.string.isRequired,
     issuer: PropTypes.string,
+    border: PropTypes.bool,
 };

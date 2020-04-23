@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../lib/Driver';
 import images from '../../../images';
 import Loading from '../Loading/Loading';
@@ -89,19 +90,19 @@ export default class AssetList extends React.Component {
             return loadingMarket;
         }
 
-        const { d, limit, showLowTradable, fromStellarTicker } = this.props;
+        const { d, limit, showLowTradable, fromStellarTicker, baseAsset } = this.props;
         const { sortBy, sortType } = this.state;
 
         return (
-            <div className="AssetList">
-                <div className="AssetList_head_row">
-                    {this.generateRowTitle('Asset', 'assetName')}
-                    {this.generateRowTitle('Price', 'priceXLM')}
-                    {this.generateRowTitle('Price (USD)', 'priceUSD')}
-                    {this.generateRowTitle('Volume (24h)', 'volume24h')}
-                    {this.generateRowTitle('Change (24h)', 'change24h')}
-                </div>
-                {!fromStellarTicker ? (
+            !fromStellarTicker ? (
+                <div className="AssetList">
+                    <div className="AssetList_head_row">
+                        {this.generateRowTitle('Asset', 'assetName')}
+                        {this.generateRowTitle('Price', 'priceXLM')}
+                        {this.generateRowTitle('Price (USD)', 'priceUSD')}
+                        {this.generateRowTitle('Volume (24h)', 'volume24h')}
+                        {this.generateRowTitle('Change (24h)', 'change24h')}
+                    </div>
                     <AssetListRows
                         d={d}
                         ticker={d.ticker}
@@ -109,10 +110,10 @@ export default class AssetList extends React.Component {
                         sortBy={sortBy}
                         sortType={sortType}
                         showLowTradable={showLowTradable} />
-                ) : (
-                    <TopVolumeAssets d={d} sortBy={sortBy} sortType={sortType} />
-                )}
-            </div>
+                </div>
+            ) : (
+                <TopVolumeAssets d={d} sortBy={sortBy} sortType={sortType} baseAsset={baseAsset} />
+            )
         );
     }
 }
@@ -122,4 +123,5 @@ AssetList.propTypes = {
     limit: PropTypes.number,
     showLowTradable: PropTypes.bool,
     fromStellarTicker: PropTypes.bool,
+    baseAsset: PropTypes.instanceOf(StellarSdk.Asset),
 };
