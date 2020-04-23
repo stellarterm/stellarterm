@@ -1,12 +1,12 @@
 import moment from 'moment';
 import UTCTimeString from './UtcTimeString/UtcTimeString';
-import { fillWithZeros } from './ConverterOHLC';
+import { getReadableNumber } from './ConverterOHLC';
 
 const canvasTopOffset = 80;
 const moreCanvasWidth = 30;
 const imagePadding = 15;
 
-function drawChartData(ctx, w, h, pairName, timeFrameInMin, trade) {
+function drawChartData(ctx, w, h, pairName, timeFrameInMin, trade, volume) {
     const creationTime = moment(new Date()).format('MMMM DD YYYY');
     const creationDateString = `Created with StellarTerm.com, ${creationTime}, ${UTCTimeString.getUtcString()} `;
     const pxOffsetFromTime = timeFrameInMin > 60 ? 180 : 150;
@@ -37,8 +37,7 @@ function drawChartData(ctx, w, h, pairName, timeFrameInMin, trade) {
     ctx.font = '900 21px Source Sans Pro';
     ctx.fillText(`${pairName}, ${timeFrameInMin}`, 15, 56);
 
-    const ohlcString = `O:  ${fillWithZeros(trade.open)}  H:  ${fillWithZeros(trade.high)}  L:  ${fillWithZeros(trade.low)}  C:  ${fillWithZeros(trade.close)}`;
-    ctx.fillStyle = '#999999';
+    const ohlcString = `O:  ${getReadableNumber(trade.open)}  H:  ${getReadableNumber(trade.high)}  L:  ${getReadableNumber(trade.low)}  C:  ${getReadableNumber(trade.close)}  V:  ${getReadableNumber(volume.value)}`;    ctx.fillStyle = '#999999';
     ctx.fillText(ohlcString, pxOffsetFromTime, 56);
 
     ctx.font = 'bold 32px Source Sans Pro';
@@ -46,7 +45,7 @@ function drawChartData(ctx, w, h, pairName, timeFrameInMin, trade) {
     ctx.fillText('StellarTerm', w - 180, 48);
 }
 
-export default function exportChartPng(canvas, imageName, pairName, timeFrameInMin, trade) {
+export default function exportChartPng(canvas, imageName, pairName, timeFrameInMin, trade, volume) {
     const oldCanvas = canvas.toDataURL('image/png');
     const chart = new Image();
     chart.src = oldCanvas;
@@ -57,14 +56,12 @@ export default function exportChartPng(canvas, imageName, pairName, timeFrameInM
         const ctx = canvas.getContext('2d');
 
         ctx.drawImage(chart, imagePadding, canvasTopOffset);
-        drawChartData(ctx, canvas.width, canvas.height, pairName, timeFrameInMin, trade);
+        drawChartData(ctx, canvas.width, canvas.height, pairName, timeFrameInMin, trade, volume);
 
         const screenshotPng = canvas.toDataURL('image/png');
         const downloadLink = document.createElement('a');
         downloadLink.href = screenshotPng;
         downloadLink.download = imageName;
-        document.body.appendChild(downloadLink);
         downloadLink.click();
-        document.body.removeChild(downloadLink);
     };
 }
