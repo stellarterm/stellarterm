@@ -172,6 +172,13 @@ export default class TopVolumeAssets extends React.Component {
     }
 
     getTableHeader() {
+        const { loadingData, stellarMarketsData } = this.state;
+        const { d } = this.props;
+
+        if (loadingData || !d.ticker.ready || stellarMarketsData.length === 0) {
+            return null;
+        }
+
         const headerCells = [
             { title: 'Counter asset', sortField: 'assetName' },
             { title: 'Base asset', sortField: 'withoutSort' },
