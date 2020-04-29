@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../lib/Driver';
 import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
 import ErrorHandler from '../../../../lib/ErrorHandler';
+import ReservedPopover from '../../../Common/AppPopover/ReservedPopover';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
@@ -308,6 +309,10 @@ export default class OfferMaker extends React.Component {
             ? <span>Buy <b>{baseAssetName}</b></span>
             : <span>Sell <b>{baseAssetName}</b></span>;
 
+        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
+        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
+        const minValue = 0.0000001;
+
         const targetAsset = isBuy ? counterSelling : baseBuying;
         // amount of edited offer
         const amountOfEditedOffer =
@@ -315,29 +320,36 @@ export default class OfferMaker extends React.Component {
 
         // balance without amount of open offers
         const maxOffer = login ? this.calculateMaxOffer(targetAsset) : 0;
-
         const maxOfferView = (Math.floor((maxOffer + amountOfEditedOffer) * 10000000) / 10000000).toFixed(7);
+        const inputType = isBuy ? 'total' : 'amount';
+        const value = (maxOffer).toFixed(7).toString();
+
         const availableView = (
-            <div className="OfferMaker_balance">
-                <span>Available: </span>
-                <span>{maxOfferView} {targetAsset.code}</span>
+            <div className="OfferMaker_container">
+                <div
+                    className="OfferMaker_balance"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        this.touchedOffer = true;
+                        this.updateState(inputType, value, minValue, inputType, maxOffer);
+                    }}>
+
+                    <span>Available:</span>
+                    <span>{maxOfferView} {targetAsset.code}</span>
+                </div>
+
+                <ReservedPopover
+                    onlyIcon
+                    d={this.props.d}
+                    asset={new StellarSdk.Asset(targetAsset.code, targetAsset.issuer)} />
             </div>
         );
-
-        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
-        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
-        const minValue = 0.0000001;
-
 
         return (
             <div>
                 <div className="OfferMaker_title">
                     <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
-                    {(login && !hasTrustNeeded) &&
-                        (existingOffer ?
-                            availableView :
-                            <Link to="/account/">{availableView}</Link>)
-                    }
+                    {(login && !hasTrustNeeded) ? availableView : null}
                 </div>
                 <form onSubmit={e => this.handleSubmit(e)}>
                     <table className="OfferMaker_table">
