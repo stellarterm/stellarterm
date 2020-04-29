@@ -1,7 +1,5 @@
-import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import { isStellarUri, parseStellarUri } from '@stellarguard/stellar-uri';
-import Driver from '../../../lib/Driver';
 
 
 function checkReplaceFields(replacements, driver) {
@@ -53,7 +51,7 @@ function processOperations(operations, driver, txDetails) {
 }
 
 
-export default function Sep7Handler(driver) {
+export default async function Sep7Handler(driver) {
     // Supported browsers: Opera, Chrome, Firefox
 
     if (!window.navigator.registerProtocolHandler) {
@@ -71,46 +69,41 @@ export default function Sep7Handler(driver) {
     if (!isStellarUri(urlParsed.tx)) {
         return;
     }
+    try {
+        const txDetails = parseStellarUri(urlParsed.tx);
+        const { operation } = txDetails;
+        const isVerified = await txDetails.verifySignature();
+        if (!isVerified) {
+            driver.modal.handlers.activate('Sep7ErrorModal',
+                'Security warning: signature of this transaction request is not valid!');
+            return;
+        }
 
-    const txDetails = parseStellarUri(urlParsed.tx);
-    const { operation } = txDetails;
-    txDetails.verifySignature()
-        .then((isVerified) => {
-            if (!isVerified) {
-                driver.modal.handlers.activate('Sep7ErrorModal',
-                    'Security warning: signature of this transaction request is not valid!');
-                return;
-            }
+        const isPayOperation = operation === 'pay';
+        if (isPayOperation && !txDetails.amount) {
+            driver.modal.handlers.activate('Sep7ErrorModal',
+                'Payment operations without specified amount are not supported yet');
+            return;
+        }
 
-            const isPayOperation = operation === 'pay';
-            if (isPayOperation && !txDetails.amount) {
-                driver.modal.handlers.activate('Sep7ErrorModal',
-                    'Payment operations without specified amount are not supported yet');
-                return;
-            }
+        if (isPayOperation) {
+            driver.modal.handlers.activate('Sep7PayModal', txDetails);
+            return;
+        }
 
-            if (isPayOperation) {
-                driver.modal.handlers.activate('Sep7PayModal', txDetails);
-                return;
-            }
 
-            try {
-                const { xdr } = txDetails;
-                const replacements = txDetails.getReplacements();
-                const transaction = new StellarSdk.Transaction(xdr);
+        const { xdr } = txDetails;
+        const replacements = txDetails.getReplacements();
+        const transaction = new StellarSdk.Transaction(xdr);
 
-                if (!checkReplaceFields(replacements, driver)) {
-                    return;
-                }
+        if (!checkReplaceFields(replacements, driver)) {
+            return;
+        }
 
-                const { operations } = transaction;
-                processOperations(operations, driver, txDetails);
-            } catch (e) {
-                driver.modal.handlers.activate('Sep7ErrorModal',
-                    'Error: Could not parse transaction request URI!');
-            }
-        });
+        const { operations } = transaction;
+        processOperations(operations, driver, txDetails);
+    } catch (e) {
+        driver.modal.handlers.activate('Sep7ErrorModal',
+            'Error: Could not parse transaction request URI!');
+    }
 }
-Sep7Handler.propTypes = {
-    driver: PropTypes.instanceOf(Driver).isRequired,
-};
