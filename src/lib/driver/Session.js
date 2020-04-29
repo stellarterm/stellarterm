@@ -753,14 +753,7 @@ export default function Send(driver) {
             return bssResult;
         },
         logout: () => {
-            try {
-                this.account.clearKeypair();
-                delete this.account;
-                init();
-                window.location.reload();
-            } catch (e) {
-                window.location.reload();
-            }
+            window.location.reload();
         },
         addUnknownAssetData: () => {
             const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
