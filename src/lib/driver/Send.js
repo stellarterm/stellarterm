@@ -20,6 +20,7 @@ export default class Send {
         this.accountId = '';
         this.targetAccount = null;
         this.destInput = '';
+        this.destinationName = '';
         this.federationResolving = false;
         this.federationAddress = '';
 
@@ -28,6 +29,7 @@ export default class Send {
         this.assetToSend = {};
         this.availableAssets = {};
 
+        this.sep29MemoRequired = false;
         this.memoRequired = false;
         this.memoType = 'none'; // 'none' | 'MEMO_ID' |'MEMO_TEXT' | 'MEMO_HASH' | 'MEMO_RETURN'
         this.memoContent = '';
@@ -71,6 +73,15 @@ export default class Send {
                 this.calculateAvailableAssets();
                 this.event.trigger();
             }
+
+            account.data({ key: 'config.memo_required' }).then(({ value }) => {
+                const decodedMemoRequirement = new Buffer(value, 'base64').toString();
+                this.sep29MemoRequired = decodedMemoRequirement === '1';
+                this.event.trigger();
+            }).catch(() => {
+                this.sep29MemoRequired = false;
+                this.event.trigger();
+            });
 
             if (account.home_domain) {
                 StellarSdk.StellarTomlResolver.resolve(account.home_domain).then((toml) => {
@@ -203,12 +214,15 @@ export default class Send {
         this.destInput = value;
         // Reset the defaults
         this.accountId = '';
+        this.destinationName = '';
         this.federationAddress = '';
-        if (this.destInput === '' || (this.memoContentLocked && this.memoRequired)) {
+
+        if ((this.memoContent === '' && this.destInput === '') || (this.memoContentLocked && this.memoRequired)) {
             this.memoType = 'none';
             this.memoContent = '';
         }
         this.memoRequired = false;
+        this.sep29MemoRequired = false;
         this.memoContentLocked = false;
         this.federationNotFound = false;
         this.federationResolving = false;
@@ -218,6 +232,8 @@ export default class Send {
             // Check for memo requirements in the destination
             if (Object.prototype.hasOwnProperty.call(directory.destinations, this.accountId)) {
                 const destination = directory.destinations[this.accountId];
+                this.destinationName = `[${destination.name}]`;
+
                 if (destination.requiredMemoType) {
                     this.memoContent = '';
                     this.memoRequired = true;
@@ -382,7 +398,8 @@ export default class Send {
             !Validate.address(this.destInput).ready;
 
         const notValidAmount = !Validate.amount(this.amountToSend);
-        const notValidMemo = this.memoType !== 'none' && !Validate.memo(this.memoContent, this.memoType).ready;
+        const notValidMemo = (this.memoRequired && this.memoType !== 'none' && !Validate.memo(this.memoContent, this.memoType).ready)
+            || ((this.sep29MemoRequired && this.memoType === 'none') || !Validate.memo(this.memoContent, this.memoType).ready);
         const destNoTrustline = !this.availableAssets[this.choosenSlug].sendable;
 
         const isXlmNative = this.getAsset(this.assetToSend).isNative();
