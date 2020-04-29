@@ -51,7 +51,7 @@ export default class AssetList extends React.Component {
         } else if (sortBy !== sortName) {
             this.setState({
                 sortBy: sortName,
-                sortType: true,
+                sortType: false,
             });
         } else {
             this.setState({
@@ -71,7 +71,7 @@ export default class AssetList extends React.Component {
                     <img
                         src={images['sort-arrow-act']}
                         alt="sortBy"
-                        className={this.state.sortType !== true ? 'revert' : ''} />
+                        className={this.state.sortType === true ? 'revert' : ''} />
                 )}
             </div>
         );
