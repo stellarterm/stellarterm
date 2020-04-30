@@ -81,7 +81,7 @@ export default class OfferMaker extends React.Component {
                 onClick={(e) => {
                     e.preventDefault();
                     this.touchedOffer = true;
-                    this.updateState(inputType, value, minValue, inputType, maxOffer);
+                    this.updateState(inputType, value, minValue, maxOffer);
                 }}
                 disabled={parseFloat(maxOffer) === 0}
                 className={`cancel-button ${this.state[inputType] === value && 'active'}`}>{percent}%</button>
@@ -129,7 +129,7 @@ export default class OfferMaker extends React.Component {
         return state;
     }
 
-    updateState(item, value, minValue, targetInputType, maxOffer) {
+    updateState(item, value, minValue, maxOffer) {
         const state = Object.assign(this.state, {
             // Reset messages
             successMessage: '',
@@ -164,6 +164,7 @@ export default class OfferMaker extends React.Component {
             }
             const hasInvalidPrecision = (state.price < minValue) || (state.amount < minValue)
                 || (state.total < minValue);
+            const targetInputType = this.props.side === 'buy' ? 'total' : 'amount';
             const isInsufficient = parseFloat(state[targetInputType]) > parseFloat(maxOffer);
 
             state.valid = !hasInvalidPrecision && !isInsufficient;
@@ -264,7 +265,7 @@ export default class OfferMaker extends React.Component {
                             value={this.state[inputType]}
                             onFocus={() => { this.touchedOffer = true; }}
                             onChange={e =>
-                                this.updateState(inputType, e.target.value, minValue, targetInputType, maxOffer)}
+                                this.updateState(inputType, e.target.value, minValue, maxOffer)}
                             placeholder="" />
                         <div className="offer_input_group_tag">{assetName}</div>
                         <div className="invalidValue_popup">
@@ -322,7 +323,6 @@ export default class OfferMaker extends React.Component {
         const maxOffer = login ? this.calculateMaxOffer(targetAsset) : 0;
         const maxOfferView = (Math.floor((maxOffer + amountOfEditedOffer) * 10000000) / 10000000).toFixed(7);
         const inputType = isBuy ? 'total' : 'amount';
-        const value = (maxOffer).toFixed(7).toString();
 
         const availableView = (
             <div className="OfferMaker_container">
@@ -331,7 +331,7 @@ export default class OfferMaker extends React.Component {
                     onClick={(e) => {
                         e.preventDefault();
                         this.touchedOffer = true;
-                        this.updateState(inputType, value, minValue, inputType, maxOffer);
+                        this.updateState(inputType, maxOfferView, minValue, maxOfferView);
                     }}>
 
                     <span>Available:</span>
