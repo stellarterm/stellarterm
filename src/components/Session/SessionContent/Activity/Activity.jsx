@@ -41,15 +41,12 @@ export default class Activity extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.loadHistory();
+    }
+
     componentDidUpdate() {
-        if (window.location.pathname !== '/account/activity/' && (this.state.history.length === 0)
-            && !this.state.historyLoading) {
-            this.getHistory();
-        }
-        if (window.location.pathname === '/account/activity/payments/' && (this.state.paymentHistory.length === 0)
-            && !this.state.paymentHistoryLoading) {
-            this.getPaymentHistory();
-        }
+        this.loadHistory();
     }
 
     getHistory() {
@@ -72,6 +69,17 @@ export default class Activity extends React.Component {
                 paymentHistoryLoading: false,
             });
         });
+    }
+
+    loadHistory() {
+        if (window.location.pathname !== '/account/activity/' && (this.state.history.length === 0)
+            && !this.state.historyLoading) {
+            this.getHistory();
+        }
+        if (window.location.pathname === '/account/activity/payments/' && (this.state.paymentHistory.length === 0)
+            && !this.state.paymentHistoryLoading) {
+            this.getPaymentHistory();
+        }
     }
 
     loadMore(next, historyType) {

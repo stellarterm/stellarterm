@@ -69,6 +69,7 @@ export default async function Sep7Handler(driver) {
     if (!isStellarUri(urlParsed.tx)) {
         return;
     }
+
     try {
         const txDetails = parseStellarUri(urlParsed.tx);
         const { operation } = txDetails;
@@ -106,4 +107,5 @@ export default async function Sep7Handler(driver) {
         driver.modal.handlers.activate('Sep7ErrorModal',
             'Error: Could not parse transaction request URI!');
     }
+
 }

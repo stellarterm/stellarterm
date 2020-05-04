@@ -54,8 +54,6 @@ if (window.location.pathname === '/testnet') {
     }
 }
 
-StellarSdk.Network.use(new StellarSdk.Network(network.networkPassphrase));
-
 const driver = new Driver({
     network,
 });
@@ -68,6 +66,7 @@ const parseUrl = (href) => {
 class TermApp extends React.Component {
     constructor(props) {
         super(props);
+        this.d = props.d;
 
         this.state = {
             // The url is the hash cleaned up

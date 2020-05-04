@@ -38,7 +38,7 @@ export default class Markets extends React.Component {
                                 <div
                                     onClick={() => this.setState({ fromStellarTicker: true })}
                                     className={`ListHeader_Title ${fromStellarTicker ? 'active' : ''}`}>
-                                    Top volume assets
+                                    Top volume markets
                                 </div>
                             </div>
                             {!fromStellarTicker && (

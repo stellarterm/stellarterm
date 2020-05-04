@@ -121,12 +121,10 @@ export default class Send {
             this.assetToSend = this.availableAssets['XLM-native'];
             return;
         }
-
         const senderTrusts = {};
         const receiverTrusts = {};
         const sendableAssets = {};
         const unSendableAssets = {};
-
         _.each(this.d.session.account.balances, (balance) => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
@@ -145,7 +143,6 @@ export default class Send {
                 senderTrusts[slug] = true;
             }
         });
-
         _.each(this.targetAccount.balances, (balance) => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
@@ -155,7 +152,6 @@ export default class Send {
             // We don't really care about the usecase of sending to issuer.
             receiverTrusts[slug] = true;
         });
-
         _.each(this.targetAccount.balances, (balance) => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
@@ -174,7 +170,6 @@ export default class Send {
                 // Asset can't be sent.
             }
         });
-
         // Show stuff the recipient doesn't trust
         _.each(this.d.session.account.balances, (balance) => {
             const asset = Stellarify.asset(balance);

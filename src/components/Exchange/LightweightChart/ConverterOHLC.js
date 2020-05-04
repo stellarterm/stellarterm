@@ -87,7 +87,7 @@ export function aggregationToOhlc(trades, timeFrame) {
 
     const ohlsTrades = trades
         .map(trade => ({
-            time: (new Date(trade.timestamp).getTime() / 1000) + dynamicTradeOffset,
+            time: (new Date(parseFloat(trade.timestamp)).getTime() / 1000) + dynamicTradeOffset,
             close: parseFloat(trade.close),
             // Fix for linechart ^1.0.2
             // value: parseFloat(trade.close),

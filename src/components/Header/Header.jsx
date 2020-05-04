@@ -10,11 +10,11 @@ import Driver from '../../lib/Driver';
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            showPopup: '',
-            currentPath: window.location.pathname,
-        };
 
+        this.state = {
+            currentPath: window.location.pathname,
+            showPopup: '',
+        };
         this.listenId = this.props.d.session.event.listen(() => {
             this.forceUpdate();
         });
@@ -125,7 +125,8 @@ class Header extends React.Component {
 
     checkAccountTab(url) {
         const { currentPath } = this.state;
-        return url === '/account/' && (currentPath.includes('ledger') || currentPath.includes('signup'));
+        return url === '/account/' &&
+            (currentPath.includes('ledger') || currentPath.includes('signup') || currentPath.includes('trezor'));
     }
 
     createHeaderTab(url, text) {
@@ -144,7 +145,6 @@ class Header extends React.Component {
     render() {
         const accountBlock = this.getAccountBlock();
         return (
-
             <div className="Header_main" id="stellarterm_header">
                 {this.getNetworkBar()}
 
