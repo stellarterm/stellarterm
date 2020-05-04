@@ -17,7 +17,7 @@ export default class ActivityPaymentsHistory extends React.Component {
         return history.filter(item => (PAYMENTS_TYPES.includes(item.type)));
     }
 
-    static getOperationTypeAndAddress(type, account, account_id, funder, from, to) {
+    static getOperationTypeAndAddress(type, account, account_id, funder, from, to, into) {
         switch (type) {
         case 'create_account':
             return ({
@@ -25,8 +25,8 @@ export default class ActivityPaymentsHistory extends React.Component {
                 address: (account === account_id) ? funder : account,
             });
         case 'account_merge': return ({
-            opType: 'Account merged',
-            address: account,
+            opType: (account === account_id) ? 'Account merged to' : 'Account merged',
+            address: (account === account_id) ? into : account,
         });
         case 'payment': return ({
             opType: (to === account_id) ?
@@ -51,18 +51,19 @@ export default class ActivityPaymentsHistory extends React.Component {
         const { account_id } = this.props.d.session.account;
         const { allHistory } = this.props;
         const { account, funder, created_at, starting_balance,
-            amount, to, from, asset_code, asset_issuer, transaction_hash, type, paging_token } = historyItem;
+            amount, to, from, asset_code, asset_issuer, transaction_hash, type, paging_token, into } = historyItem;
 
         const { time, date } = formatDate(created_at);
         const { opType, address } =
-            this.constructor.getOperationTypeAndAddress(type, account, account_id, funder, from, to);
+            this.constructor.getOperationTypeAndAddress(type, account, account_id, funder, from, to, into);
         const canvas = createStellarIdenticon(address);
         const renderedIcon = canvas.toDataURL();
         const viewAddress = address && `${address.substr(0, 18)}...${address.substr(-12, 12)}`;
 
         const asset = asset_issuer ? new StellarSdk.Asset(asset_code, asset_issuer) : new StellarSdk.Asset.native();
 
-        const itemFromCommonHistory = allHistory.find(item => item.paging_token.indexOf(paging_token) === 0);
+        const itemFromCommonHistory = allHistory.find(item =>
+            (item.paging_token.indexOf(paging_token) === 0 && item.amount));
 
         const viewAmount = amount || starting_balance
             || (itemFromCommonHistory && itemFromCommonHistory.amount);
@@ -81,7 +82,7 @@ export default class ActivityPaymentsHistory extends React.Component {
                     <AssetCardInRow d={this.props.d} code={asset.code} issuer={asset.issuer} />
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(viewAmount)}
+                    {Printify.lightenZeros(viewAmount || '')}
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <a
