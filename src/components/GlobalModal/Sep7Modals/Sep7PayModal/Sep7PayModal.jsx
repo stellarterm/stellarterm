@@ -28,7 +28,7 @@ export default class Sep7PayModal extends React.Component {
             };
         }
         const { xdr } = txDetails;
-        const tx = new StellarSdk.Transaction(xdr);
+        const tx = new StellarSdk.Transaction(xdr, window.networkPassphrase);
         const { type, value } = StellarSdk.Memo.fromXDRObject(tx._memo);
         const memoType = type && `MEMO_${type.toUpperCase()}`;
         const memo = value && value.toString();
