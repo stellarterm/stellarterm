@@ -1,12 +1,11 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import Driver from '../../../../../lib/Driver';
 import Validate from '../../../../../lib/Validate';
 import images from '../../../../../images';
 import AssetCardSeparateLogo from '../../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
-import AppPopover from '../../../../Common/AppPopover/AppPopover';
+import ReservedPopover from '../../../../Common/AppPopover/ReservedPopover';
 
 export default class SendAsset extends React.Component {
     constructor(props) {
@@ -14,6 +13,7 @@ export default class SendAsset extends React.Component {
 
         this.state = {
             isOpenList: false,
+            errorMsg: this.getErrorMessage(),
             selectedSlug: this.props.d.send.choosenSlug,
         };
 
@@ -31,17 +31,33 @@ export default class SendAsset extends React.Component {
         document.removeEventListener('mousedown', this.handleClickOutside, false);
     }
 
+    onChangeAmount(e) {
+        this.setState({ errorMsg: null });
+        this.props.d.send.updateAmountValue(e.target.value);
+    }
+
+    onFocusLeave() {
+        this.setState({ errorMsg: this.getErrorMessage() });
+    }
+
+    onClickAvailable(amount) {
+        this.props.d.send.updateAmountValue(amount);
+        this.setState({ errorMsg: this.getErrorMessage() });
+    }
+
     onClickAssetDropdown(slug) {
-        const { pickAssetToSend } = this.props.d.send;
+        const { pickAssetToSend, choosenSlug } = this.props.d.send;
+
+        if (slug && slug !== choosenSlug) {
+            window.history.pushState({}, null, `/account/send?asset=${slug}`);
+            pickAssetToSend(slug);
+        }
 
         this.setState({
             isOpenList: !this.state.isOpenList,
+            errorMsg: this.getErrorMessage(),
             selectedSlug: slug || this.state.selectedSlug,
         });
-
-        if (slug) {
-            pickAssetToSend(slug);
-        }
     }
 
 
@@ -86,66 +102,22 @@ export default class SendAsset extends React.Component {
         );
     }
 
-    getReservedMessage() {
-        const { d } = this.props;
-        const { asset } = d.send.assetToSend;
-        const { account } = d.session;
+    getErrorMessage() {
+        const { amountToSend, assetToSend } = this.props.d.send;
+        const maxAssetSpend = this.getMaxAssetSpend().toFixed(7);
+        const amountValid = Validate.amount(amountToSend);
 
-        const currentAsset = d.send.getAsset();
-        const targetBalance = account.getBalance(currentAsset);
-        if (parseFloat(targetBalance) === 0) { return null; }
-
-        const isXlmNative = asset.isNative();
-        const reserveData = account.explainReserve();
-        const { totalReservedXLM, reserveItems } = reserveData;
-        const reservedAmount = isXlmNative ? totalReservedXLM : account.getReservedBalance(currentAsset);
-        const isNoTrustline = reservedAmount === null;
-
-        if (isNoTrustline) { return null; }
-
-        const reservedRows = reserveItems.map(({ reserveType, typeCount, reservedXLM }) => (
-            <div className="reserved_item" key={`${reserveType}-${typeCount}`}>
-                <span>
-                    {reserveType} {typeCount === 0 ? '' : `(${typeCount})`}
-                </span>
-                <span>{reservedXLM} XLM</span>
-            </div>
-        ));
-
-        return (
-            <React.Fragment>
-                <AppPopover
-                    content={
-                        isXlmNative ? (
-                            <div className="reserve_table">
-                                <div className="reserved_item reserved_item_bold">
-                                    <span>Reserved</span>
-                                    <span>{reservedAmount} XLM</span>
-                                </div>
-                                {reservedRows}
-                                <Link to="/account#reserved" className="reserved_link">
-                                    More information
-                                    <img className="icon_arrow" src={images['icon-arrow-right']} alt="arrow" />
-                                </Link>
-                            </div>
-                        ) : (
-                            <React.Fragment>
-                                <p><strong>{reservedAmount} {asset.code}</strong> reserved in active offers</p>
-                                <Link to="/account/activity/" className="reserved_link">
-                                    More information
-                                    <img className="icon_arrow" src={images['icon-arrow-right']} alt="arrow" />
-                                </Link>
-                            </React.Fragment>
-                        )
-                    } />
-                <div>{reservedAmount} {asset.code} are reserved in your wallet by Stellar network</div>
-            </React.Fragment>
-        );
+        if (amountValid === false) {
+            return 'Amount is invalid';
+        } else if (Number(amountToSend) > Number(maxAssetSpend)) {
+            return `Not enough ${assetToSend.asset.code}`;
+        }
+        return null;
     }
 
-    render() {
+    getMaxAssetSpend() {
         const { d } = this.props;
-        const { amountToSend, updateAmountValue, getAsset } = d.send;
+        const { getAsset } = d.send;
         const { asset } = d.send.assetToSend;
         const { account } = d.session;
 
@@ -154,40 +126,40 @@ export default class SendAsset extends React.Component {
         const targetBalance = isXlmNative ? account.maxLumenSpend() : account.getBalance(currentAsset);
         const reservedBalance = account.getReservedBalance(currentAsset);
 
-        const maxAssetSpend = parseFloat(targetBalance) > parseFloat(reservedBalance) ?
+        return parseFloat(targetBalance) > parseFloat(reservedBalance) ?
             (targetBalance - reservedBalance) : 0;
+    }
 
-        const amountValid = Validate.amount(amountToSend);
+    render() {
+        const { d } = this.props;
+        const { errorMsg } = this.state;
+        const { amountToSend, assetToSend, getAsset, availableAssets, choosenSlug } = d.send;
+        const { account } = d.session;
+        const currentAsset = getAsset();
+        const maxAssetSpend = this.getMaxAssetSpend().toFixed(7);
 
-        let amountErrorMsg;
-
-        if (amountValid === false) {
-            amountErrorMsg = 'Amount is invalid';
-        } else if (Number(amountToSend) > Number(maxAssetSpend)) {
-            amountErrorMsg = `Not enough ${asset.code}`;
-        }
-
-        const isDestAcceptAsset = d.send.availableAssets[d.send.choosenSlug].sendable;
+        const isDestAcceptAsset = availableAssets[choosenSlug].sendable;
 
         return (
             <div className="Input_flexed_block">
                 <div className="Send_input_block">
                     <label htmlFor="inputSendAmount">Amount</label>
-                    {amountErrorMsg ? (
+                    {errorMsg ? (
                         <div className="invalidValue_popup">
-                            {amountErrorMsg}
+                            {errorMsg}
                         </div>
                     ) : null}
 
                     <input
-                        name="inputSendAmount"
                         type="text"
+                        name="inputSendAmount"
+                        placeholder="Enter amount"
                         value={amountToSend}
-                        onChange={e => updateAmountValue(e.target.value)}
-                        placeholder="Enter amount" />
+                        onChange={e => this.onChangeAmount(e)}
+                        onBlur={() => this.onFocusLeave()} />
 
                     <div className="field_description">
-                        {this.getReservedMessage()}
+                        <ReservedPopover d={d} asset={assetToSend.asset} />
                     </div>
                 </div>
 
@@ -207,7 +179,7 @@ export default class SendAsset extends React.Component {
 
                     {account.getBalance(currentAsset) !== null ? (
                         <div className="asset_balance">Available:&nbsp;
-                            <span className="asset_amount" onClick={() => updateAmountValue(maxAssetSpend.toString())}>
+                            <span className="asset_amount" onClick={() => this.onClickAvailable(maxAssetSpend)}>
                                 {maxAssetSpend}
                             </span>
                         </div>

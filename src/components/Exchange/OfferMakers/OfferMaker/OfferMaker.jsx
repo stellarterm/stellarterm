@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../lib/Driver';
 import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
 import ErrorHandler from '../../../../lib/ErrorHandler';
+import ReservedPopover from '../../../Common/AppPopover/ReservedPopover';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
@@ -21,10 +22,14 @@ export default class OfferMaker extends React.Component {
     constructor(props) {
         super(props);
         this.initialized = false;
+        this.touchedOffer = Boolean(this.props.existingOffer);
 
         this.orderbookUnsub = this.props.d.orderbook.event.sub((data) => {
             if (data && data.pickPrice) {
+                this.touchedOffer = true;
                 this.updateState('price', data.pickPrice);
+            } else if (!this.touchedOffer) {
+                this.updateState('price', this.getPriceFromOrderbook());
             }
         });
         this.sessionUnsub = this.props.d.session.event.sub((event) => {
@@ -75,11 +80,25 @@ export default class OfferMaker extends React.Component {
             <button
                 onClick={(e) => {
                     e.preventDefault();
+                    this.touchedOffer = true;
                     this.updateState(inputType, value, minValue, inputType, maxOffer);
                 }}
                 disabled={parseFloat(maxOffer) === 0}
                 className={`cancel-button ${this.state[inputType] === value && 'active'}`}>{percent}%</button>
         );
+    }
+
+    getPriceFromOrderbook() {
+        if (this.props.side === 'buy' && this.props.d.orderbook.data.asks.length > 0) {
+            return new BigNumber(this.props.d.orderbook.data.asks[0].price).toString();
+            // Get rid of extra 0s
+        } else if (this.props.d.orderbook.data.bids.length > 0) {
+            // Proptypes validation makes sure this is sell
+            return new BigNumber(this.props.d.orderbook.data.bids[0].price).toString();
+            // Get rid of extra 0s
+        }
+
+        return '0';
     }
 
     setInitialState() {
@@ -103,14 +122,7 @@ export default class OfferMaker extends React.Component {
         const state = {};
 
         // Initialize price
-        if (this.props.side === 'buy' && this.props.d.orderbook.data.bids.length > 0) {
-            state.price = new BigNumber(this.props.d.orderbook.data.bids[0].price).toString();
-            // Get rid of extra 0s
-        } else if (this.props.d.orderbook.data.asks.length > 0) {
-            // Proptypes validation makes sure this is sell
-            state.price = new BigNumber(this.props.d.orderbook.data.asks[0].price).toString();
-            // Get rid of extra 0s
-        }
+        state.price = this.getPriceFromOrderbook();
 
         state.errorType = '';
 
@@ -250,6 +262,7 @@ export default class OfferMaker extends React.Component {
                             name={inputType}
                             maxLength="20"
                             value={this.state[inputType]}
+                            onFocus={() => { this.touchedOffer = true; }}
                             onChange={e =>
                                 this.updateState(inputType, e.target.value, minValue, targetInputType, maxOffer)}
                             placeholder="" />
@@ -296,6 +309,10 @@ export default class OfferMaker extends React.Component {
             ? <span>Buy <b>{baseAssetName}</b></span>
             : <span>Sell <b>{baseAssetName}</b></span>;
 
+        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
+        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
+        const minValue = 0.0000001;
+
         const targetAsset = isBuy ? counterSelling : baseBuying;
         // amount of edited offer
         const amountOfEditedOffer =
@@ -303,29 +320,36 @@ export default class OfferMaker extends React.Component {
 
         // balance without amount of open offers
         const maxOffer = login ? this.calculateMaxOffer(targetAsset) : 0;
-
         const maxOfferView = (Math.floor((maxOffer + amountOfEditedOffer) * 10000000) / 10000000).toFixed(7);
+        const inputType = isBuy ? 'total' : 'amount';
+        const value = (maxOffer).toFixed(7).toString();
+
         const availableView = (
-            <div className="OfferMaker_balance">
-                <span>Available: </span>
-                <span>{maxOfferView} {targetAsset.code}</span>
+            <div className="OfferMaker_container">
+                <div
+                    className="OfferMaker_balance"
+                    onClick={(e) => {
+                        e.preventDefault();
+                        this.touchedOffer = true;
+                        this.updateState(inputType, value, minValue, inputType, maxOffer);
+                    }}>
+
+                    <span>Available:</span>
+                    <span>{maxOfferView} {targetAsset.code}</span>
+                </div>
+
+                <ReservedPopover
+                    onlyIcon
+                    d={this.props.d}
+                    asset={new StellarSdk.Asset(targetAsset.code, targetAsset.issuer)} />
             </div>
         );
-
-        // The smallest asset amount unit is one ten-millionth: 1/10000000 or 0.0000001.
-        // https://www.stellar.org/developers/guides/concepts/assets.html#amount-precision-and-representation
-        const minValue = 0.0000001;
-
 
         return (
             <div>
                 <div className="OfferMaker_title">
                     <h3 className="island__sub__division__title island__sub__division__title--left">{title}</h3>
-                    {(login && !hasTrustNeeded) &&
-                        (existingOffer ?
-                            availableView :
-                            <Link to="/account/">{availableView}</Link>)
-                    }
+                    {(login && !hasTrustNeeded) ? availableView : null}
                 </div>
                 <form onSubmit={e => this.handleSubmit(e)}>
                     <table className="OfferMaker_table">

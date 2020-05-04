@@ -9,6 +9,7 @@ import SendSuccess from './SendSuccess/SendSuccess';
 export default class Send extends React.Component {
     constructor(props) {
         super(props);
+
         this.listenId = this.props.d.send.event.listen(() => {
             this.forceUpdate();
         });
@@ -24,7 +25,7 @@ export default class Send extends React.Component {
         let sendActionBlock = <SendError d={d} />;
 
         if (state === 'setup') {
-            sendActionBlock = <SendSetup d={d} />;
+            sendActionBlock = <SendSetup routeHistory={this.props.history} d={d} />;
         } else if (state === 'review' || state === 'pending') {
             sendActionBlock = <SendReview d={d} />;
         } else if (state === 'success') {
@@ -47,4 +48,5 @@ export default class Send extends React.Component {
 
 Send.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    history: PropTypes.objectOf(PropTypes.any),
 };

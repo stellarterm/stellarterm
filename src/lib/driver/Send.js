@@ -20,6 +20,7 @@ export default class Send {
         this.accountId = '';
         this.targetAccount = null;
         this.destInput = '';
+        this.federationResolving = false;
         this.federationAddress = '';
 
         this.amountToSend = '';
@@ -84,10 +85,21 @@ export default class Send {
                         });
                 });
             }
+        }).then(() => {
+            this.allFieldsValid = this.validateAllFields();
+            this.event.trigger();
         }).catch(() => { });
     }
 
     fetchSelfAssets() {
+        const isEnteredValidAddress = Validate.publicKey(this.destInput).ready ||
+            Validate.address(this.destInput).ready;
+
+        if (isEnteredValidAddress) {
+            this.loadTargetAccountDetails();
+            return;
+        }
+
         _.each(this.d.session.account.balances, (balance) => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
@@ -199,6 +211,7 @@ export default class Send {
         this.memoRequired = false;
         this.memoContentLocked = false;
         this.federationNotFound = false;
+        this.federationResolving = false;
 
         if (Validate.publicKey(this.destInput).ready) {
             this.accountId = this.destInput;
@@ -217,6 +230,8 @@ export default class Send {
             const destInput = this.destInput;
             const targetDomain = destInput.split('*')[1];
             const federationDomain = targetDomain === 'stellarterm.com' ? EnvConsts.HOME_DOMAIN : targetDomain;
+            this.federationResolving = true;
+
             StellarSdk.FederationServer.createForDomain(federationDomain)
                 .then(federationServer => federationServer.resolveAddress(this.destInput))
                 .then((federationRecord) => {
@@ -252,8 +267,11 @@ export default class Send {
                         this.memoContent = federationRecord.memo;
                         this.memoContentLocked = true;
                     }
-                    this.event.trigger();
+
+                    this.federationResolving = false;
+                    this.allFieldsValid = this.validateAllFields();
                     this.loadTargetAccountDetails();
+                    this.event.trigger();
                 })
                 .catch((error) => {
                     // stellar.toml does not exist or it does not contain information about federation server.
@@ -300,7 +318,6 @@ export default class Send {
     }
 
     pickAssetToSend(slug) {
-        window.history.pushState({}, null, `/account/send?asset=${slug}`);
         if (!Validate.publicKey(this.accountId).ready) {
             this.availableAssets[slug] = {
                 asset: Stellarify.parseAssetSlug(slug),
@@ -378,6 +395,7 @@ export default class Send {
         if (
             destinationIsEmpty ||
             notValidDestination ||
+            this.federationResolving ||
             this.federationNotFound ||
             notValidAmount ||
             notEnoughAsset ||

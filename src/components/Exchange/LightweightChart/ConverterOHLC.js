@@ -17,6 +17,22 @@ export function fillWithZeros(value) {
     return fractionNumber.length <= ZEROS_NUMBER ? value.toFixed(ZEROS_NUMBER) : value;
 }
 
+export function getReadableNumber(volume) {
+    let readableVolume = fillWithZeros(volume);
+
+    if (volume > 1000) {
+        readableVolume = `${(volume / 1000).toFixed(3)}K`;
+    }
+    if (volume > 1000000) {
+        readableVolume = `${(volume / 1000000).toFixed(2)}M`;
+    }
+    if (volume < 1000) {
+        readableVolume = volume.toFixed(7);
+    }
+
+    return readableVolume;
+}
+
 export function getVolumeData(trades, { baseBuying, counterSelling }) {
     return trades.map((trade) => {
         // Displays XLM volume, if traded to xlm, else used base_volume
@@ -73,6 +89,8 @@ export function aggregationToOhlc(trades, timeFrame) {
         .map(trade => ({
             time: (new Date(parseFloat(trade.timestamp)).getTime() / 1000) + dynamicTradeOffset,
             close: parseFloat(trade.close),
+            // Fix for linechart ^1.0.2
+            // value: parseFloat(trade.close),
             open: parseFloat(trade.open),
             high: parseFloat(trade.high),
             low: parseFloat(trade.low),

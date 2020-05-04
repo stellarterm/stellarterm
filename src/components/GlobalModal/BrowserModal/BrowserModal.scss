@@ -1,0 +1,66 @@
+.BrowserModal {
+    background-color: #fff;
+    width: 612px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    a {
+        text-decoration: none;
+        color: #69c76f;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .BrowserModal_content {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+
+        img {
+            width: 60px;
+            height: 60px;
+        }
+
+        .browser_title {
+            color: #1c2e3e;
+            font-size: 16px;
+            font-weight: normal;
+            margin: 0.8em 0;
+        }
+
+        .browser_description {
+            color: #9aa6ac;
+            line-height: normal;
+            font-weight: normal;
+            font-size: 14px;
+            margin: 0;
+        }
+
+        .browser_footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2.4em;
+
+            .checkbox_block {
+                cursor: pointer;
+
+                span {
+                    margin-left: 1em;
+                    color: #505558;
+                    font-size: 13px;
+                    opacity: 0.8;
+                    font-weight: lighter;
+                }
+            }
+
+            .s-button {
+                padding: 13px 30px;
+                font-weight: normal;
+            }
+        }
+    }
+}

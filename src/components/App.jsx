@@ -19,8 +19,8 @@ import Session from './Session/Session';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import Driver from '../lib/Driver';
+import { isIE, isEdge } from '../lib/BrowserSupport';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
-
 
 window.React = React;
 const mountNode = document.getElementById('app');
@@ -69,6 +69,7 @@ class TermApp extends React.Component {
     constructor(props) {
         super(props);
         this.d = props.d;
+
         this.state = {
             // The url is the hash cleaned up
             url: parseUrl(window.location.pathname),
@@ -87,6 +88,12 @@ class TermApp extends React.Component {
     }
 
     render() {
+        const { d } = this.props;
+
+        if ((isIE() || isEdge()) && localStorage.getItem('hide-browser-popup') !== 'true') {
+            this.props.d.modal.handlers.activate('BrowserModal');
+        }
+
         return (
             <BrowserRouter>
                 <div>
@@ -98,15 +105,15 @@ class TermApp extends React.Component {
 
                 <ErrorBoundary>
                     <div className="AppStretch">
-                        <GlobalModal d={this.props.d} />
+                        <GlobalModal d={d} />
                         <div className="AppStretch AppContainer">
                             <div>
-                                <Header d={this.props.d} network={network} />
+                                <Header d={d} network={network} />
                                 <Switch>
                                     <Route
                                         exact
                                         path="/"
-                                        render={props => <HomePage {...props} driver={this.props.d} />} />
+                                        render={props => <HomePage {...props} driver={d} />} />
                                     <Route path="/download/" component={Download} />
                                     <Route
                                         path="/testnet/"
@@ -115,26 +122,26 @@ class TermApp extends React.Component {
                                     <Route path="/terms-of-use/" component={TermsOfUse} />
                                     <Route
                                         path="/account/"
-                                        render={props => <Session {...props} d={this.props.d} urlParts={'account'} />} />
+                                        render={props => <Session {...props} d={d} urlParts={'account'} />} />
                                     <Route
                                         path="/ledger/"
-                                        render={props => <Session {...props} d={this.props.d} urlParts={'ledger'} />} />
+                                        render={props => <Session {...props} d={d} urlParts={'ledger'} />} />
                                     <Route
                                         path="/trezor/"
                                         render={props => <Session {...props} d={this.props.d} urlParts={'trezor'} />} />
                                     <Route
                                         path="/signup/"
-                                        render={props => <Session {...props} d={this.props.d} urlParts={'signup'} />} />
+                                        render={props => <Session {...props} d={d} urlParts={'signup'} />} />
                                     <Route
                                         path="/markets"
-                                        render={props => <Markets {...props} d={this.props.d} />} />
+                                        render={props => <Markets {...props} d={d} />} />
                                     <Route
                                         path="/exchange"
-                                        render={props => <Exchange {...props} d={this.props.d} />} />
+                                        render={props => <Exchange {...props} d={d} />} />
 
                                     <Route component={NotFound} />
                                 </Switch>
-                                <PopupAlert d={this.props.d} />
+                                <PopupAlert d={d} />
                             </div>
                             <Footer />
                         </div>

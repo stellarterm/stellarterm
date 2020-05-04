@@ -36,7 +36,6 @@ export default class SessionAccountMenu extends React.Component {
                         <nav className="subNav__nav">
                             <Link
                                 className="subNav__nav__item"
-                                to="/account/"
                                 onClick={() => { this.props.d.session.handlers.logout(); }}>
                                 <span>Log out</span>
                             </Link>
