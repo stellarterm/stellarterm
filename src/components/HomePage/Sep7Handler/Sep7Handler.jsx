@@ -101,7 +101,7 @@ export default function Sep7Handler(driver) {
             try {
                 const { xdr } = txDetails;
                 const replacements = txDetails.getReplacements();
-                const transaction = new StellarSdk.Transaction(xdr, window.networkPassphrase);
+                const transaction = new StellarSdk.Transaction(xdr, driver.Server.networkPassphrase);
 
                 if (!checkReplaceFields(replacements, driver)) {
                     return;

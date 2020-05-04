@@ -41,9 +41,9 @@ export default class Sep7ChangeTrustModal extends React.Component {
     }
 
     getTransactionDetails() {
-        const { txDetails } = this.props;
+        const { txDetails, d } = this.props;
         const { xdr, originDomain } = txDetails;
-        const tx = new StellarSdk.Transaction(xdr, window.networkPassphrase);
+        const tx = new StellarSdk.Transaction(xdr, d.Server.networkPassphrase);
         const { value } = StellarSdk.Memo.fromXDRObject(tx._memo);
         const memo = value && value.toString();
         const [operation] = tx.operations;
