@@ -434,7 +434,7 @@ const MagicSpoon = {
                 offerId,
             };
             return new StellarSdk.TransactionBuilder(spoonAccount,
-                { fee, networkPassphrase: window.networkPassphrase })
+                { fee, networkPassphrase: Server.networkPassphrase })
                 .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
                 .setTimeout(0);
         }
@@ -447,7 +447,7 @@ const MagicSpoon = {
             offerId,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: window.networkPassphrase })
+            { fee, networkPassphrase: Server.networkPassphrase })
             .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
             .setTimeout(0);
     },
@@ -472,7 +472,7 @@ const MagicSpoon = {
             offerId,
         };
         return new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: window.networkPassphrase })
+            { fee, networkPassphrase: Server.networkPassphrase })
             .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
             .setTimeout(0);
     },
@@ -481,7 +481,7 @@ const MagicSpoon = {
         // sendPayment will detect if the account is a new account. If so, then it will
         // be a createAccount operation
         let transaction = new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: window.networkPassphrase });
+            { fee, networkPassphrase: Server.networkPassphrase });
         try {
             // We need to check the activation of the destination,
             // if the account is not activated, it will be created in catch with createAccount
@@ -518,10 +518,10 @@ const MagicSpoon = {
 
         return transaction;
     },
-    buildTxSetOptions(spoonAccount, opts) {
+    buildTxSetOptions(Server, spoonAccount, opts) {
         const options = Array.isArray(opts) ? opts : [opts];
         let transaction = new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: window.networkPassphrase });
+            { fee, networkPassphrase: Server.networkPassphrase });
 
         options.forEach((option) => {
             transaction = transaction.addOperation(StellarSdk.Operation.setOptions(option));
@@ -543,7 +543,7 @@ const MagicSpoon = {
             limit: sdkLimit,
         };
         let transaction = new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: window.networkPassphrase })
+            { fee, networkPassphrase: Server.networkPassphrase })
             .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
             .setTimeout(0);
 
@@ -563,7 +563,7 @@ const MagicSpoon = {
         }
 
         const transaction = new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: window.networkPassphrase });
+            { fee, networkPassphrase: Server.networkPassphrase });
         offers.forEach((offer) => {
             transaction.addOperation(StellarSdk.Operation.manageSellOffer({
                 buying: parseAsset(offer.buying),
