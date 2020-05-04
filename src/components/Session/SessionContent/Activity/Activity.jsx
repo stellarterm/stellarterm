@@ -20,8 +20,15 @@ export const formatDate = (timestamp) => {
         minute: '2-digit',
         hour12: false,
     });
+    const [hours, minutes] = time.split(':');
+
+    if (+hours < 24) {
+        return { time, date };
+    }
+
+    const formattedHours = `0${hours - 24}`.slice(-2);
     return {
-        time,
+        time: `${formattedHours}:${minutes}`,
         date,
     };
 };
