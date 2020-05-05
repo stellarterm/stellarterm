@@ -21,7 +21,7 @@ export default class Send {
         this.targetAccount = null;
         this.destInput = '';
         this.destinationName = '';
-        this.federationResolving = false;
+        this.requestIsPending = false;
         this.federationAddress = '';
 
         this.amountToSend = '';
@@ -66,6 +66,11 @@ export default class Send {
             return;
         }
 
+        // This is made for case, when config sep29 request is pending, its block sending without memo
+        this.requestIsPending = true;
+        this.allFieldsValid = this.validateAllFields();
+        this.event.trigger();
+
         this.d.Server.loadAccount(this.accountId).then((account) => {
             if (account.id === this.accountId) {
                 // Prevent race conditions using this check
@@ -74,16 +79,7 @@ export default class Send {
                 this.event.trigger();
             }
 
-            account.data({ key: 'config.memo_required' }).then(({ value }) => {
-                const decodedMemoRequirement = new Buffer(value, 'base64').toString();
-                this.sep29MemoRequired = decodedMemoRequirement === '1';
-                this.event.trigger();
-            }).catch(() => {
-                this.sep29MemoRequired = false;
-                this.event.trigger();
-            });
-
-            if (account.home_domain) {
+            if (account.home_domain && this.federationAddress === '') {
                 StellarSdk.StellarTomlResolver.resolve(account.home_domain).then((toml) => {
                     if (!toml.FEDERATION_SERVER) {
                         return;
@@ -96,10 +92,20 @@ export default class Send {
                         });
                 });
             }
-        }).then(() => {
+            return account;
+        }).then(account => account.data({ key: 'config.memo_required' },
+        )).then(({ value }) => {
+            const decodedMemoRequirement = new Buffer(value, 'base64').toString();
+            this.sep29MemoRequired = decodedMemoRequirement === '1';
+            this.requestIsPending = false;
             this.allFieldsValid = this.validateAllFields();
             this.event.trigger();
-        }).catch(() => { });
+        }).catch(() => {
+            this.requestIsPending = false;
+            this.sep29MemoRequired = false;
+            this.allFieldsValid = this.validateAllFields();
+            this.event.trigger();
+        });
     }
 
     fetchSelfAssets() {
@@ -225,7 +231,7 @@ export default class Send {
         this.sep29MemoRequired = false;
         this.memoContentLocked = false;
         this.federationNotFound = false;
-        this.federationResolving = false;
+        this.requestIsPending = false;
 
         if (Validate.publicKey(this.destInput).ready) {
             this.accountId = this.destInput;
@@ -246,7 +252,7 @@ export default class Send {
             const destInput = this.destInput;
             const targetDomain = destInput.split('*')[1];
             const federationDomain = targetDomain === 'stellarterm.com' ? EnvConsts.HOME_DOMAIN : targetDomain;
-            this.federationResolving = true;
+            this.requestIsPending = true;
 
             StellarSdk.FederationServer.createForDomain(federationDomain)
                 .then(federationServer => federationServer.resolveAddress(this.destInput))
@@ -254,7 +260,7 @@ export default class Send {
                     if (destInput !== this.destInput) {
                         return;
                     }
-                    this.federationAddress = this.destInput;
+                    this.federationAddress = federationRecord.stellar_address;
                     if (!Validate.publicKey(federationRecord.account_id).ready) {
                         throw new Error('Invalid account_id from federation response');
                     }
@@ -276,7 +282,6 @@ export default class Send {
                         default:
                             throw new Error('Invalid memo_type from federation response');
                         }
-                        console.log(federationRecord);
                         this.memoRequired = true;
                     }
                     if (federationRecord.memo) {
@@ -284,7 +289,7 @@ export default class Send {
                         this.memoContentLocked = true;
                     }
 
-                    this.federationResolving = false;
+                    this.requestIsPending = false;
                     this.allFieldsValid = this.validateAllFields();
                     this.loadTargetAccountDetails();
                     this.event.trigger();
@@ -398,8 +403,8 @@ export default class Send {
             !Validate.address(this.destInput).ready;
 
         const notValidAmount = !Validate.amount(this.amountToSend);
-        const notValidMemo = (this.memoRequired && this.memoType !== 'none' && !Validate.memo(this.memoContent, this.memoType).ready)
-            || ((this.sep29MemoRequired && this.memoType === 'none') || !Validate.memo(this.memoContent, this.memoType).ready);
+        const notValidMemoType = this.memoType === 'none' && (this.memoRequired || this.sep29MemoRequired);
+        const notValidMemoContent = this.memoType !== 'none' && !Validate.memo(this.memoContent, this.memoType).ready;
         const destNoTrustline = !this.availableAssets[this.choosenSlug].sendable;
 
         const isXlmNative = this.getAsset(this.assetToSend).isNative();
@@ -412,11 +417,12 @@ export default class Send {
         if (
             destinationIsEmpty ||
             notValidDestination ||
-            this.federationResolving ||
+            this.requestIsPending ||
             this.federationNotFound ||
             notValidAmount ||
             notEnoughAsset ||
-            notValidMemo ||
+            notValidMemoType ||
+            notValidMemoContent ||
             destNoTrustline) {
             return false;
         }
@@ -429,8 +435,10 @@ export default class Send {
         this.destInput = '';
         this.accountId = '';
         this.amountToSend = '';
+        this.destinationName = '';
 
         this.memoRequired = false;
+        this.sep29MemoRequired = false;
         this.memoType = 'none';
         this.memoContent = '';
 
