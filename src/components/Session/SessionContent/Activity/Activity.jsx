@@ -11,7 +11,7 @@ import ActivityTrustlinesHistory from './ActivityTrustlinesHistory/ActivityTrust
 import NotFound from '../../../NotFound/NotFound';
 
 export const ROW_HEIGHT = 47;
-export const TABLE_MAX_HEIGHT = window.innerHeight - 470;
+export const TABLE_MAX_HEIGHT = Math.max(window.innerHeight - 470, 376);
 export const SCROLL_WIDTH = 17;
 export const formatDate = (timestamp) => {
     const date = new Date(timestamp).toLocaleDateString();
