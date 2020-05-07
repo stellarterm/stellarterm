@@ -16,11 +16,12 @@ export default class AssetActionButtons extends React.Component {
         };
     }
 
-    onSep6Click(isDeposit) {
+    onSepClick(isDeposit) {
         const { d, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
+        const isSep24 = directoryAsset !== null && directoryAsset.sep24 === true;
 
-        d.modal.handlers.activate('Sep6Modal', {
+        d.modal.handlers.activate(`Sep${isSep24 ? '24' : '6'}Modal`, {
             isDeposit,
             asset: directoryAsset,
         });
@@ -38,7 +39,7 @@ export default class AssetActionButtons extends React.Component {
                 href={`https://lobstr.co/buy-crypto${targetAddressParam}`}
                 target="_blank" rel="nofollow noopener noreferrer">
                 <div className="actionBtn">
-                    <div className="btnHint btnHint_buyLumens">Buy lumens</div>
+                    <div className="btnHint btnHint_wide">Buy lumens</div>
                     <img className="actionBtn_icon" src={images['icon-deposit']} alt="withdraw" />
                 </div>
             </a>
@@ -54,17 +55,27 @@ export default class AssetActionButtons extends React.Component {
 
         const containerClass = `ActionBtns_container ${onlyIcons ? 'hide_ActionText' : ''}`;
 
+        const assetSlug = Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer));
+
         return (
             <div className={containerClass}>
+                {isDepositEnabled || isWithdrawEnabled ? (
+                    <Link to={`transactions?asset=${assetSlug}`}>
+                        <div className="actionBtn">
+                            <div className="btnHint btnHint_wide">Transfer history</div>
+                            <img className="actionBtn_icon" src={images['icon-transactions']} alt="transfer-history" />
+                        </div>
+                    </Link>
+                ) : null}
                 {isDepositEnabled ? (
-                    <div className="actionBtn" onClick={() => this.onSep6Click(true)}>
+                    <div className="actionBtn" onClick={() => this.onSepClick(true)}>
                         <div className="btnHint">Deposit</div>
                         <img className="actionBtn_icon" src={images['icon-deposit']} alt="deposit" />
                     </div>
                 ) : null}
 
                 {isWithdrawEnabled ? (
-                    <div className="actionBtn" onClick={() => this.onSep6Click(false)}>
+                    <div className="actionBtn" onClick={() => this.onSepClick(false)}>
                         <div className="btnHint">Withdraw</div>
                         <img className="actionBtn_icon" src={images['icon-withdraw']} alt="withdraw" />
                     </div>

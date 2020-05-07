@@ -36,11 +36,12 @@ export default class AssetRow extends React.Component {
             );
         }
 
+        const messageText = this.props.hideMessage ? '' : `${this.props.asset.getCode()} accepted`;
         return (
             <TrustButton
                 d={this.props.d}
                 asset={this.props.asset}
-                message={`${this.props.asset.getCode()} accepted`}
+                message={messageText}
                 currency={this.props.currency}
                 color={this.state.color}
                 host={this.props.host} />
@@ -102,4 +103,5 @@ AssetRow.propTypes = {
         image: PropTypes.string,
         host: PropTypes.string,
     }),
+    hideMessage: PropTypes.bool,
 };

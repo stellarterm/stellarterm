@@ -121,7 +121,7 @@ Sep6Form.propTypes = {
     onUpdateForm: PropTypes.func.isRequired,
     d: PropTypes.instanceOf(Driver).isRequired,
     assetInfo: PropTypes.objectOf(PropTypes.any),
-    asset: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])).isRequired,
+    asset: PropTypes.objectOf(PropTypes.any).isRequired,
     min: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     max: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     feeFixed: PropTypes.number.isRequired,
