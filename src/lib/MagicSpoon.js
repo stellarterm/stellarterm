@@ -310,15 +310,13 @@ const MagicSpoon = {
                 .order('desc')
                 .call()
                 .then((res) => {
-                    const hasNullDate = res.records.find(offer => offer.last_modified_time === null);
-                    if (hasNullDate) {
-                        return null;
-                    }
-                    const newOffers = {};
-                    _.each(res.records, (offer) => {
-                        newOffers[offer.id] = offer;
-                    });
-                    sdkAccount.offers = newOffers;
+                    sdkAccount.offers = res.records.reduce((acc, offer) => {
+                        acc[offer.id] = offer;
+                        if (offer.last_modified_time === null) {
+                            acc[offer.id].last_modified_time = new Date();
+                        }
+                        return acc;
+                    }, {});
                     onUpdate();
                     return null;
                 });
