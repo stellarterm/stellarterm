@@ -92,12 +92,16 @@ export default class Send {
                         });
                 });
             }
+
             return account;
-        }).then(account => account.data({ key: 'config.memo_required' },
-        )).then(({ value }) => {
-            const decodedMemoRequirement = new Buffer(value, 'base64').toString();
-            this.sep29MemoRequired = decodedMemoRequirement === '1';
-            this.requestIsPending = false;
+        }).then((account) => {
+            const memoFlag = account.data_attr['config.memo_required'];
+            // Sep0029 check for required memo
+            if (memoFlag && new Buffer(memoFlag, 'base64').toString() === '1') {
+                this.sep29MemoRequired = true;
+                this.requestIsPending = false;
+            }
+
             this.allFieldsValid = this.validateAllFields();
             this.event.trigger();
         }).catch(() => {
