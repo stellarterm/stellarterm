@@ -82,7 +82,7 @@ export default class Send {
             if (account.home_domain && this.federationAddress === '') {
                 StellarSdk.StellarTomlResolver.resolve(account.home_domain).then((toml) => {
                     if (!toml.FEDERATION_SERVER) {
-                        return;
+                        return account;
                     }
 
                     request.get(`${getUrlWithParams(toml.FEDERATION_SERVER, { q: account.id, type: 'id' })}`, {})
@@ -99,9 +99,9 @@ export default class Send {
             // Sep0029 check for required memo
             if (memoFlag && new Buffer(memoFlag, 'base64').toString() === '1') {
                 this.sep29MemoRequired = true;
-                this.requestIsPending = false;
             }
 
+            this.requestIsPending = false;
             this.allFieldsValid = this.validateAllFields();
             this.event.trigger();
         }).catch(() => {
