@@ -493,7 +493,7 @@ const MagicSpoon = {
                         amount: opts.amount,
                     }),
                 )
-                .setTimeout(0);
+                .setTimeout(Server.transactionTimeout);
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error(
