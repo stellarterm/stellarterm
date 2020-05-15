@@ -193,9 +193,12 @@
 
                     .AssetCardSeparateLogo_details-row {
                         max-width: 160px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                    }
+                }
+
+                .dropdown_item {
+                    .AssetCardSeparateLogo_details-row {
+                        max-width: 180px;
                     }
                 }
 
@@ -210,6 +213,12 @@
                     height: 55px;
                     width: 100%;
                     padding: 0 15px;
+
+                    .AssetCardSeparateLogo_details-row {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
 
                     .dropdown_arrow {
                         width: 24px;

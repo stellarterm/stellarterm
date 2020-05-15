@@ -24,7 +24,7 @@ function getTransactionWithReplacedAccountData(transactionStellarUri, d) {
 export default async function Sep7GetBuiltTx(txDetails, d) {
     const { xdr } = txDetails;
     const replacements = txDetails.getReplacements();
-    const transaction = new StellarSdk.Transaction(xdr, window.networkPassphrase);
+    const transaction = new StellarSdk.Transaction(xdr, d.Server.networkPassphrase);
     const transactionStellarUri = TransactionStellarUri.forTransaction(transaction);
     if (!replacements.length) {
         if (transaction.source === 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF' ||
@@ -34,7 +34,7 @@ export default async function Sep7GetBuiltTx(txDetails, d) {
         const sourceAccount = await d.Server.loadAccount(transaction.source);
         const { account } = d.session;
 
-        if (sourceAccount.signers.indexOf(account.account_id) === -1) {
+        if (!sourceAccount.signers.find(signer => (signer.key === account.account_id))) {
             throw new Error('Transaction does not require a signature of your account');
         }
 
