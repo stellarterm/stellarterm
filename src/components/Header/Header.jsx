@@ -1,7 +1,7 @@
 /* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, NavLink, withRouter } from 'react-router-dom';
 import isElectron from 'is-electron';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../images';
@@ -123,22 +123,12 @@ class Header extends React.Component {
         setTimeout(() => this.setState({ showPopup: '' }), 1000);
     }
 
-    checkAccountTab(url) {
+    checkAccountTab() {
         const { currentPath } = this.state;
-        return url === '/account/' && (currentPath.includes('ledger') || currentPath.includes('signup'));
-    }
-
-    createHeaderTab(url, text) {
-        const { currentPath } = this.state;
-        const isTheSameTab = currentPath.includes(url);
-        const isAccountTab = this.checkAccountTab(url);
-        const currentTabClass = isTheSameTab || isAccountTab ? 'is-current' : '';
-
-        return (
-            <Link to={url} className={`Nav_link ${currentTabClass}`}>
-                <span>{text}</span>
-            </Link>
-        );
+        return currentPath.includes('account')
+                || currentPath.includes('ledger')
+                || currentPath.includes('trezor')
+                || currentPath.includes('signup');
     }
 
     render() {
@@ -151,14 +141,21 @@ class Header extends React.Component {
                 <div className="so-back Header_background">
                     <div className="so-chunk Header">
                         <nav className="Header_nav">
-                            <Link className="Nav_logo" to={'/'}>
+                            <NavLink className="Nav_logo" to={'/'}>
                                 StellarTerm
-                            </Link>
-                            {this.createHeaderTab('/exchange/', 'Exchange')}
-                            {this.createHeaderTab('/markets/', 'Markets')}
+                            </NavLink>
+                            <NavLink to="/exchange/" className="Nav_link" activeClassName="is-current">Exchange</NavLink>
+                            <NavLink to="/markets/" className="Nav_link" activeClassName="is-current">Markets</NavLink>
                             {this.getBuyCryptoLobsterLink()}
-                            {this.createHeaderTab('/account/', 'Account')}
-                            {!isElectron() ? this.createHeaderTab('/download/', 'Download') : null}
+                            <NavLink
+                                to="/account/"
+                                className={`Nav_link ${this.checkAccountTab() ? 'is-current' : ''}`}>Account</NavLink>
+                            {!isElectron()
+                                ? <NavLink
+                                    to="/download/"
+                                    className="Nav_link"
+                                    activeClassName="is-current">Download</NavLink>
+                                : null}
                         </nav>
 
                         {accountBlock}
