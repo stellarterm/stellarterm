@@ -247,7 +247,7 @@ export default class AssetDropDown extends React.Component {
                                 className="AssetDropDown__search"
                                 type="text"
                                 onChange={e => this.handleInput(e)}
-                                onKeyUp={e => this.setActiveCardIndex(e)}
+                                onKeyDown={e => this.setActiveCardIndex(e)}
                                 value={this.state.inputCode}
                                 placeholder="Type asset code or domain name" />
                         </div>

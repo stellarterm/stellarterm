@@ -12,7 +12,7 @@ export default class AssetCardList extends React.Component {
 
     scrollToMyRef() {
         if (this.activeRef) {
-            this.activeRef.scrollIntoView({ block: 'center', behavior: 'smooth' });
+            this.activeRef.scrollIntoView({ block: 'nearest', behavior: 'auto' });
         }
     }
 
@@ -34,14 +34,14 @@ export default class AssetCardList extends React.Component {
                         this.activeRef = node;
                     } : null}
                     onClick={() => this.handleChoose(asset)}>
-                        <AssetCardMain
-                            d={d}
-                            code={asset.code}
-                            issuer={asset.issuer}
-                            host={host}
-                            currency={currency.image ? currency : null}
-                            boxy
-                            noborder={index !== activeCardIndex} />
+                    <AssetCardMain
+                        d={d}
+                        code={asset.code}
+                        issuer={asset.issuer}
+                        host={host}
+                        currency={currency.image ? currency : null}
+                        boxy
+                        noborder={index !== activeCardIndex} />
                 </div>
             );
         });
