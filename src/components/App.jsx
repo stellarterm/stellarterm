@@ -85,6 +85,14 @@ class TermApp extends React.Component {
             },
             false,
         );
+
+        // Alert for logged user before reload page
+        window.onbeforeunload = (e) => {
+            const { state } = this.props.d.session;
+            if (state === 'in' || state === 'unfunded') {
+                e.returnValue = 'You will be logged out after reload!';
+            }
+        };
     }
 
     render() {
