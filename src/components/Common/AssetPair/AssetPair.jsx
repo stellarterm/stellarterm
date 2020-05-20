@@ -35,7 +35,6 @@ export default class AssetPair extends React.Component {
                         }}
                         d={d}
                         asset={this.state[assetType]}
-                        clear={() => this.clearAsset(assetType)}
                         exception={exception} />
                 ) : (
                     <AssetCardMain
@@ -69,10 +68,6 @@ export default class AssetPair extends React.Component {
         this.props.d.orderbook.handlers.setOrderbook(base, counter);
         window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(base, counter)}`);
         window.scrollTo(0, 0);
-    }
-
-    clearAsset(assetType) {
-        this.setState({ [assetType]: null });
     }
 
     swap() {

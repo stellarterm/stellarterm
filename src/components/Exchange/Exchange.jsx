@@ -257,7 +257,7 @@ export default class Exchange extends React.Component {
     }
 
     render() {
-        if (this.state.wrongUrl) { return <NotFound isExchange404 />; }
+        if (this.state.wrongUrl) { return <NotFound pageName="exchange" />; }
 
         if (!this.props.d.orderbook.data.ready) {
             return this.state.fullscreenMode ? (

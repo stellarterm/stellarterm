@@ -1,18 +1,107 @@
 @import "./AssetCardList/AssetCardList";
 
 .AssetDropDown__card{
-  width: 100%;
-  height: 52px;
-  margin: 0;
-  text-align: center;
-  align-items: center;
-  line-height: 52px;
-  border-top: none;
-  position: relative;
+    width: 100%;
+    height: 52px;
+    margin: 0;
+    text-align: center;
+    align-items: center;
+    line-height: 52px;
+    border-top: none;
+    position: relative;
+
+    &.AssetDropDown_isOpen{
+        .AssetDropDown__empty{
+            border-bottom: none;
+            border-radius: 2px 2px 0 0;
+        }
+
+        .AssetDropDown__arrow{
+            transform: rotate(180deg);
+        }
+    }
+
+    &.AssetDropDown__compactSize{
+        width: 190px;
+        height: 30px;
+        padding: 0 6px;
+        border-radius: 2px;
+        border: solid 1px #dfe0e1;
+        background-color: #fff;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        flex: unset;
+        line-height: 30px;
+
+        & > div {
+            width: 100%;
+        }
+
+        &.AssetDropDown_isOpen{
+            border-bottom: none;
+            border-radius: 2px 2px 0 0;
+        }
+
+
+        .AssetDropDown__arrow{
+            top: 6px;
+            width: 16px;
+            height: 16px;
+
+            &.load{
+                top: 9px;
+                height: 8px;
+                width: 8px;
+            }
+        }
+
+        .AssetDropDown__full{
+            width: 100%;
+        }
+
+        .AssetDropDown__empty{
+            height: 30px;
+            width: 100%;
+            border: none;
+            line-height: 30px;
+            font-size: 14px;
+            padding: 0;
+        }
+
+        .AssetDropDown__search{
+            height: 26px;
+            width: 100%;
+        }
+
+        .AssetCardList{
+            top: 28px;
+            width: 190px;
+            border-color: #dfe0e1;
+            left: -1px;
+            padding-bottom: 0;
+            overflow-x: hidden;
+
+            .AssetCardInRow_domain:hover{
+                background-color: unset;
+            }
+
+            .AssetCardList_card{
+                padding: 10px 5px;
+
+                &:hover{
+                    background-color: #d7e0e41A;
+                }
+            }
+
+            .AssetCardList_card-active{
+                background-color: #d7e0e433;
+            }
+        }
+    }
 }
 .AssetDropDown__full{
-  cursor: pointer;
-
+    cursor: pointer;
 
     .AssetCardMain__content {
         width: 70%;
@@ -20,21 +109,16 @@
 }
 
 .AssetDropDown__empty{
-  height: 52px;
-  text-align: left;
-  padding: 0 16px;
+    height: 52px;
+    text-align: left;
+    padding: 0 16px;
 
-  border: 1px solid rgb(189, 191, 192);
-  -webkit-border-radius: 3px;
-  -moz-border-radius: 3px;
-  border-radius: 3px;
-  font-weight: 300;
-  font-size: 16px;
-}
-
-.AssetDropDown_isOpen{
-  border-bottom: none;
-  border-radius: 2px 2px 0 0;
+    border: 1px solid rgb(189, 191, 192);
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    font-weight: 300;
+    font-size: 16px;
 }
 
 .AssetDropDown__search{
@@ -44,25 +128,15 @@
     outline:none;
 }
 
-.AssetDropDown__arrowDown{
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  position: absolute;
-  right: 5px;
-  top: 15px;
-  transition: 0.15s;
-}
-
-.AssetDropDown__arrowUp{
-  cursor: pointer;
-  width: 24px;
-  height: 24px;
-  position: absolute;
-  right: 5px;
-  top: 15px;
-  transform: rotate(180deg);
-  transition: 0.15s;
+.AssetDropDown__arrow {
+    cursor: pointer;
+    z-index: 3;
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    right: 5px;
+    top: 15px;
+    transition: 0.15s;
 
     &.load{
         height: 10px;

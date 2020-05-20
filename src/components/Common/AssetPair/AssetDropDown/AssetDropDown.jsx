@@ -8,6 +8,7 @@ import Driver from '../../../../lib/Driver';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import AssetCardList from './AssetCardList/AssetCardList';
 import images from '../../../../images';
+import AssetCardInRow from '../../AssetCard/AssetCardInRow/AssetCardInRow';
 
 const ENTER = 13;
 const ARROW_UP = 38;
@@ -192,13 +193,9 @@ export default class AssetDropDown extends React.Component {
     }
 
     openList() {
-        if (this.props.clear) {
-            this.props.clear();
-            this.setState({ termAsset: this.props.asset });
-        }
+        this.setState({ termAsset: this.props.asset, inputCode: '' });
         if (this.state.termAsset && this.state.isOpenList) {
             this.onUpdate(this.state.termAsset);
-            this.setState({ inputCode: '' });
         }
         this.setState({
             isOpenList: !this.state.isOpenList,
@@ -224,22 +221,29 @@ export default class AssetDropDown extends React.Component {
     }
 
     render() {
-        const arrowClassName = this.state.isOpenList ? 'AssetDropDown__arrowUp' : 'AssetDropDown__arrowDown';
-        const assetDropDownClassName = this.state.isOpenList ? 'AssetDropDown_isOpen' : null;
+        const { isOpenList } = this.state;
+        const { compactSize } = this.props;
+        const isOpenClass = isOpenList ? 'AssetDropDown_isOpen' : '';
+        const isCompactClass = compactSize ? 'AssetDropDown__compactSize' : '';
 
         return (
             <div
-                className="island__sub__division AssetDropDown__card"
+                className={`island__sub__division AssetDropDown__card ${isCompactClass} ${isOpenClass}`}
                 ref={(node) => { this.node = node; }}>
                 <div>
-                    {this.props.asset ?
+                    {(this.props.asset && !isOpenList) ?
                         <div className="AssetDropDown__full" onClick={() => this.openList()}>
-                            <AssetCardMain
-                                d={this.props.d}
-                                code={this.props.asset.code}
-                                issuer={this.props.asset.issuer} />
+                            {compactSize ?
+                                <AssetCardInRow
+                                    d={this.props.d}
+                                    code={this.props.asset.code}
+                                    issuer={this.props.asset.issuer} /> :
+                                <AssetCardMain
+                                    d={this.props.d}
+                                    code={this.props.asset.code}
+                                    issuer={this.props.asset.issuer} />}
                         </div> :
-                        <div className={`AssetDropDown__empty ${assetDropDownClassName}`}>
+                        <div className="AssetDropDown__empty">
                             <input
                                 autoFocus={this.state.isFocused}
                                 key={this.state.isFocused}
@@ -249,24 +253,25 @@ export default class AssetDropDown extends React.Component {
                                 onChange={e => this.handleInput(e)}
                                 onKeyUp={e => this.setActiveCardIndex(e)}
                                 value={this.state.inputCode}
-                                placeholder="Type asset code or domain name" />
+                                placeholder={compactSize ? 'Type code or domain' : 'Type asset code or domain name'} />
                         </div>
                     }
                     {this.state.loading ?
                         <div>
                             <img
                                 src={images['icon-circle-preloader-gif']}
-                                className="AssetDropDown__arrowUp load"
+                                className="AssetDropDown__arrow load"
                                 alt="load" />
                         </div> :
                         <img
                             src={images.dropdown}
                             alt="▼"
-                            className={arrowClassName}
+                            className="AssetDropDown__arrow"
                             onClick={() => this.openList()} />}
                 </div>
                 {this.state.isOpenList ?
                     <AssetCardList
+                        compactSize={compactSize}
                         d={this.props.d}
                         host={this.state.currencies.length ? this.state.inputCode : null}
                         onUpdate={(asset) => { this.onUpdate(asset); }}
@@ -284,5 +289,5 @@ AssetDropDown.propTypes = {
     asset: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     exception: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     onUpdate: PropTypes.func,
-    clear: PropTypes.func,
+    compactSize: PropTypes.bool,
 };
