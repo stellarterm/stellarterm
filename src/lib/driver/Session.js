@@ -613,7 +613,7 @@ export default function Send(driver) {
             return request
                 .get(endpointUrl, { headers })
                 .then((resChallenge) => {
-                    const tx = new StellarSdk.Transaction(resChallenge.transaction, window.networkPassphrase);
+                    const tx = new StellarSdk.Transaction(resChallenge.transaction, driver.Server.networkPassphrase);
                     return this.handlers.sign(tx);
                 })
                 .then((tx) => {

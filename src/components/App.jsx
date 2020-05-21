@@ -54,8 +54,6 @@ if (window.location.pathname === '/testnet') {
     }
 }
 
-window.networkPassphrase = network.networkPassphrase;
-
 const driver = new Driver({
     network,
 });
