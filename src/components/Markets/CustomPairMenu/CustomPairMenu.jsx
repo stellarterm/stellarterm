@@ -25,7 +25,6 @@ export default class CustomPairMenu extends React.Component {
                 onUpdate={(asset) => {
                     this.stateUpdate(assetType, asset);
                 }}
-                clear={() => this.stateUpdate(assetType, null)}
                 asset={this.state[assetType]}
                 exception={exception} />
         );

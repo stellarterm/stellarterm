@@ -6,29 +6,45 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 50px;
-        width: 50px;
-        margin-right: 13px;
-
-        img{
-            height: 40px;
-            width: 40px;
-        }
-
     }
 
     .AssetCardSeparateLogo_details{
         display: flex;
         flex-direction: column;
+        justify-content: center;
         font-weight: 300;
+        width: 80%;
 
         .AssetCardSeparateLogo_details-row{
-            & > span:first-child{
-                font-weight: 600;
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+
+            .AssetCardSeparateLogo_code {
+                font-weight: normal;
                 margin-right: 3px;
             }
+
+            &.inColumn{
+                flex-direction: column;
+                line-height: normal;
+
+                .AssetCardSeparateLogo_code{
+                    font-size: 14px;
+                    line-height: 16px;
+                }
+
+                .AssetCardSeparateLogo_domain {
+                    font-size: 12px;
+                    line-height: 14px;
+                    opacity: 0.6;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            }
         }
-        & > span{
+        .AssetCardSeparateLogo_issuer {
             opacity: 0.5;
         }
     }
