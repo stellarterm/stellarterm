@@ -73,6 +73,7 @@ export default class SendAsset extends React.Component {
 
                 <AssetCardSeparateLogo
                     d={this.props.d}
+                    logoSize={35}
                     code={availability.asset.getCode()}
                     issuer={availability.asset.getIssuer()}
                     noIssuer />
@@ -88,6 +89,7 @@ export default class SendAsset extends React.Component {
                 <div className="dropdown_selected" onClick={() => this.onClickAssetDropdown()}>
                     <AssetCardSeparateLogo
                         d={this.props.d}
+                        logoSize={35}
                         code={assetToSend.asset.getCode()}
                         issuer={assetToSend.asset.getIssuer()}
                         noIssuer />

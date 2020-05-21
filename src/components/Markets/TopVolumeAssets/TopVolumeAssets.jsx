@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Link } from 'react-router-dom';
+import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../lib/Driver';
-import AssetCardMain from '../../Common/AssetCard/AssetCardMain/AssetCardMain';
-import Ellipsis from '../../Common/Ellipsis/Ellipsis';
-import Printify from '../../../lib/Printify';
-import { niceNumDecimals } from '../../../lib/Format';
+import images from '../../../images';
+import NotFound from '../../NotFound/NotFound';
+import TopVolumeAssetList from './TopVolumeAssetList/TopVolumeAssetList';
 
 
 export default class TopVolumeAssets extends React.Component {
@@ -13,167 +12,197 @@ export default class TopVolumeAssets extends React.Component {
         super(props);
         this.state = {
             stellarMarketsData: [],
-            minUSDValue: 1,
+            minUSDValue: 0,
+            loadingData: false,
+            assetCode: 'XLM',
+            assetIssuer: null,
+            sortDirection: 'up',
+            sortField: 'volume24h',
+            loadingDataError: false,
         };
     }
+
     componentDidMount() {
-        this.getStellarMarketsData();
+        if (this.props.baseAsset) {
+            this.getStellarMarketsData();
+        }
     }
 
-    getStellarMarketsData() {
-        this.props.d.ticker.constructor.loadStellarMarketsData('XLM', 'native', 24)
-            .then(res => this.setState({
-                stellarMarketsData: res.data.markets,
+    componentDidUpdate(prevProps) {
+        if (!prevProps.baseAsset
+            || prevProps.baseAsset.code !== this.props.baseAsset.code
+            || prevProps.baseAsset.issuer !== this.props.baseAsset.issuer) {
+            this.getStellarMarketsData();
+            this.resetSort();
+        }
+    }
+
+    async getStellarMarketsData() {
+        if (this.currentRequestCanceller) {
+            this.currentRequestCanceller();
+        }
+        this.setState({ loadingData: true, loadingDataError: false });
+        const { code: assetCode, issuer: assetIssuer } = this.props.baseAsset;
+        // Ticker doesn't revert pairs, we need to check asset as a base and as a counter
+
+        try {
+            const baseResponse = await this.loadStellarMarketsData({
+                baseAssetCode: assetCode, baseAssetIssuer: assetIssuer || 'native', numHoursAgo: 24,
+            });
+
+            const counterResponse = await this.loadStellarMarketsData({
+                counterAssetCode: assetCode, counterAssetIssuer: assetIssuer || 'native', numHoursAgo: 24,
+            });
+
+            const isBaseLumen = new StellarSdk.Asset(assetCode, assetIssuer).isNative();
+            const lastLumenTrade = isBaseLumen
+                ? null
+                : await this.loadStellarMarketsData({
+                    baseAssetCode: 'XLM',
+                    baseAssetIssuer: 'native',
+                    counterAssetCode: assetCode,
+                    counterAssetIssuer: assetIssuer,
+                    numHoursAgo: 168,
+                });
+            const lastLumenPrice = (lastLumenTrade && lastLumenTrade.data && lastLumenTrade.data.markets.length)
+                ? lastLumenTrade.data.markets[0].close
+                : 0;
+
+            const revertedCounterResponse = counterResponse.data.markets.map(market => ({
+                counterAssetCode: market.baseAssetCode,
+                counterAssetIssuer: market.baseAssetIssuer === 'native' ? null : market.baseAssetIssuer,
+                baseVolume: market.counterVolume,
+                open: (1 / market.open).toFixed(7),
+                close: (1 / market.close).toFixed(7),
             }));
+
+            const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse];
+            this.setState({
+                stellarMarketsData: combinedMarketsData,
+                lastLumenPrice,
+                loadingData: false,
+            });
+        } catch (e) {
+            if (e.name === 'AbortError') {
+                console.log('Previous response was cancelled!');
+                return;
+            }
+            this.setState({
+                loadingData: false,
+                loadingDataError: true,
+            });
+        }
     }
 
-    getAssetList() {
-        const { stellarMarketsData, minUSDValue } = this.state;
+    getTableHeader() {
+        const { loadingData, stellarMarketsData } = this.state;
         const { d } = this.props;
 
-        if (stellarMarketsData.length === 0 || !d.ticker.ready) {
-            return (
-                <div className="AssetList_asset AssetList_load">
-                    <div className="AssetList_load-content">
-                        Loading data from Stellar Ticker<Ellipsis />
+        if (loadingData || !d.ticker.ready || stellarMarketsData.length === 0) {
+            return null;
+        }
+
+        const headerCells = [
+            { title: 'Counter asset', sortField: 'assetName' },
+            { title: 'Base asset', sortField: 'withoutSort' },
+            { title: 'Price', sortField: 'priceXLM' },
+            { title: 'Volume (24h)', sortField: 'volume24h' },
+            { title: 'Change (24h)', sortField: 'change24h', align: 'right' },
+        ];
+
+        return headerCells.map((headerCell) => {
+            if (headerCell.sortField === 'withoutSort') {
+                return (
+                    <div className={`TopVolume_cell withoutSort ${headerCell.align}`} key={headerCell.title}>
+                        <span>{headerCell.title}</span>
                     </div>
-                    {Array.from({ length: 5 }, (item, index) => <div key={index} />)}
+                );
+            }
+
+            return (
+                <div
+                    className={`TopVolume_cell ${headerCell.align}`}
+                    onClick={() => this.handleSort(headerCell.sortField)}
+                    key={headerCell.title}>
+
+                    <span>{headerCell.title}</span>
+                    {this.state.sortField !== headerCell.sortField ?
+                        <img src={images['sort-arrow']} alt="sortBy" /> :
+                        <img
+                            src={images['sort-arrow-act']}
+                            alt="sortBy"
+                            className={this.state.sortDirection} />
+                    }
+                </div>
+            );
+        });
+    }
+
+    loadStellarMarketsData(params) {
+        const { request, cancel } = this.props.d.ticker.constructor.loadStellarMarketsData(params);
+        this.currentRequestCanceller = cancel;
+        return request;
+    }
+
+    resetSort() {
+        this.setState({
+            sortDirection: 'up',
+            sortField: 'volume24h',
+        });
+    }
+
+    handleSort(sortField) {
+        if (sortField !== this.state.sortField) {
+            this.setState({
+                sortField,
+                sortDirection: 'up',
+            });
+            return;
+        }
+        this.setState({
+            sortDirection: this.state.sortDirection === 'up' ? 'down' : 'up',
+        });
+    }
+
+    render() {
+        const { d, baseAsset } = this.props;
+        const {
+            stellarMarketsData, loadingData, lastLumenPrice, sortField, sortDirection, loadingDataError,
+        } = this.state;
+
+        if (!baseAsset) {
+            return <NotFound withoutWrapper pageName="markets" />;
+        }
+
+        if (loadingDataError) {
+            return (
+                <div className="TopVolume">
+                    <div className="TopVolume_empty error">
+                        Error loading data from the ticker
+                    </div>
                 </div>
             );
         }
 
-        const { USD_XLM, USD_XLM_change: changeXLM } = d.ticker.data._meta.externalPrices;
-
-        const volumeXLM = stellarMarketsData.reduce((acc, item) => acc + item.baseVolume, 0);
-        const topVolumeAssets = stellarMarketsData
-            .sort((a, b) => (b.baseVolume - a.baseVolume))
-            .filter(item => (item.baseVolume * USD_XLM > minUSDValue));
-
-        const viewChangeXLM =
-            changeXLM !== undefined && changeXLM !== null ? (
-                <span className={`change${changeXLM < 0 ? 'Negative' : 'Positive'}`}>
-                    {changeXLM.toFixed(2)}%
-                </span>
-            ) : '-';
-
-        const sortedAssets = this.getSortedAssets(topVolumeAssets);
-        const Xlm = d.ticker.data.assets.find(asset => asset.id === 'XLM-native');
+        const header = this.getTableHeader();
 
         return (
-            <React.Fragment>
-                <Link
-                    to={`/exchange/${Xlm.topTradePairSlug}`}
-                    className="AssetList_asset">
-                    <div className="asset_assetCard">
-                        <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
-                    </div>
-                    <div className="asset_cell price-xlm">
-                        {Printify.lightenZeros('1.0000000')} {Printify.lighten(' XLM')}
-                    </div>
-                    <div className="asset_cell">
-                        ${Printify.lightenZeros((USD_XLM).toString(), niceNumDecimals(USD_XLM))}
-                    </div>
-                    <div className="asset_cell">
-                        ${(volumeXLM * USD_XLM).toLocaleString('en-US', {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 0,
-                        })}
-                    </div>
-                    <div className="asset_cell">
-                        {viewChangeXLM}
-                    </div>
-                    <div className="asset_cell" />
-                </Link>
-                {sortedAssets.map((item) => {
-                    const changes = (((item.close / item.open) - 1) * 100).toFixed(2);
-                    const changesClass = +changes >= 0 ? 'changePositive' : 'changeNegative';
-                    return (
-                        <Link
-                            key={item.counterAssetCode + item.counterAssetIssuer}
-                            to={`/exchange/${item.counterAssetCode}-${item.counterAssetIssuer}/XLM-native`}
-                            className="AssetList_asset">
-
-                            <div className="asset_assetCard">
-                                <AssetCardMain
-                                    d={d}
-                                    code={item.counterAssetCode}
-                                    issuer={item.counterAssetIssuer} />
-                            </div>
-                            <div className="asset_cell price-xlm">
-                                {Printify.lightenZeros((item.close).toString(), niceNumDecimals(item.close))}
-                                {Printify.lighten(' XLM')}
-                            </div>
-                            <div className="asset_cell">
-                                ${Printify.lightenZeros((item.close * USD_XLM).toString(),
-                                    niceNumDecimals(item.close * USD_XLM))}
-                            </div>
-                            <div className="asset_cell">
-                                ${(item.baseVolume * USD_XLM).toLocaleString('en-US', {
-                                    minimumFractionDigits: 0,
-                                    maximumFractionDigits: 0,
-                                })}
-                            </div>
-                            <div className="asset_cell">
-                                <span className={changes !== '0.00' ? changesClass : ''}>
-                                    {changes} %
-                                </span>
-                            </div>
-                            <div className="asset_cell">
-                                <span className="tradeLink">trade</span>
-                            </div>
-
-                        </Link>);
-                })}
-            </React.Fragment>
-        );
-    }
-
-    getSortedAssets(assets) {
-        const { sortBy } = this.props;
-        switch (sortBy) {
-        case 'assetName':
-            return this.sortByField(assets, 'counterAssetCode', 'string');
-        case 'priceXLM':
-            return this.sortByField(assets, 'close', 'number');
-        case 'priceUSD':
-            return this.sortByField(assets, 'close', 'number');
-        case 'volume24h':
-            return this.sortByField(assets, 'baseVolume', 'number');
-        case 'change24h':
-            return this.sortByPercent(assets);
-        default:
-            return assets;
-        }
-    }
-
-    sortByField(array, sortField, sortValueType) {
-        const { sortType } = this.props;
-        if (sortValueType === 'string') {
-            return array.sort((a, b) => (sortType ?
-                (a[sortField].localeCompare(b[sortField])) :
-                (b[sortField].localeCompare(a[sortField]))));
-        }
-        if (sortValueType === 'number') {
-            return array.sort((a, b) => (sortType ? (a[sortField] - b[sortField]) : (b[sortField] - a[sortField])));
-        }
-
-        throw new Error('Unknown sort value type');
-    }
-
-    sortByPercent(array) {
-        const { sortType } = this.props;
-        return array.sort((a, b) => (sortType ?
-            (((a.close / a.open) - 1) - ((b.close / b.open) - 1)) :
-            (((b.close / b.open) - 1) - ((a.close / a.open) - 1))));
-    }
-
-    render() {
-        const assetList = this.getAssetList();
-        return <React.Fragment>{assetList}</React.Fragment>;
+            <div className="TopVolume">
+                <div className="TopVolume_header">
+                    {header}
+                </div>
+                <TopVolumeAssetList
+                    d={d}
+                    baseAsset={baseAsset}
+                    stellarMarketsData={stellarMarketsData}
+                    loadingData={loadingData}
+                    lastLumenPrice={lastLumenPrice}
+                    sortField={sortField}
+                    sortDirection={sortDirection} />
+            </div>);
     }
 }
 TopVolumeAssets.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    sortType: PropTypes.bool,
-    sortBy: PropTypes.oneOf(['assetName', 'priceXLM', 'priceUSD', 'volume24h', 'change24h']),
+    baseAsset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
 };

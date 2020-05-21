@@ -41,9 +41,9 @@ export default class Sep7ChangeTrustModal extends React.Component {
     }
 
     getTransactionDetails() {
-        const { txDetails } = this.props;
+        const { txDetails, d } = this.props;
         const { xdr, originDomain } = txDetails;
-        const tx = new StellarSdk.Transaction(xdr, window.networkPassphrase);
+        const tx = new StellarSdk.Transaction(xdr, d.Server.networkPassphrase);
         const { value } = StellarSdk.Memo.fromXDRObject(tx._memo);
         const memo = value && value.toString();
         const [operation] = tx.operations;
@@ -119,26 +119,25 @@ export default class Sep7ChangeTrustModal extends React.Component {
             submit.cancel();
         }
 
-        const tx = await Sep7GetBuiltTx(txDetails, d);
+        try {
+            const tx = await Sep7GetBuiltTx(txDetails, d);
 
-        const bssResult = await d.session.handlers.signSubmit(tx);
+            const bssResult = await d.session.handlers.signSubmit(tx);
 
-        if (bssResult.status === 'await_signers') {
-            submit.cancel();
-            window.history.pushState({}, null, '/');
-        }
-        if (bssResult.status === 'finish') {
-            bssResult.serverResult
-                .then(() => {
-                    submit.cancel();
-                    window.history.pushState({}, null, '/');
-                })
-                .catch((e) => {
-                    this.setState({
-                        error: e,
-                        pending: false,
-                    });
-                });
+            if (bssResult.status === 'await_signers') {
+                submit.cancel();
+                window.history.pushState({}, null, '/');
+            }
+            if (bssResult.status === 'finish') {
+                await bssResult.serverResult;
+                submit.cancel();
+                window.history.pushState({}, null, '/');
+            }
+        } catch (e) {
+            this.setState({
+                error: e,
+                pending: false,
+            });
         }
     }
 

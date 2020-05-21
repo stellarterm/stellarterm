@@ -33,4 +33,23 @@ function patch(url, options) {
     return request('PATCH', url, options);
 }
 
-export { get, post, patch };
+function requestWithCancel(method, url, options) {
+    const controller = new window.AbortController();
+    const { signal } = controller;
+
+    const fetchOptions = Object.assign({ method }, options, { signal });
+    const fetchPromise = fetch(url, fetchOptions)
+        .then(checkStatus)
+        .then(response => response.json());
+
+    return {
+        request: fetchPromise,
+        cancel: () => controller.abort(),
+    };
+}
+
+function postWithCancel(url, options) {
+    return requestWithCancel('POST', url, options);
+}
+
+export { get, post, patch, postWithCancel };

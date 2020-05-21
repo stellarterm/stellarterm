@@ -179,7 +179,7 @@ export default class PairPicker extends React.Component {
 
         const noChanges = changes24 === '0.00';
         const changesClassName = (changes24 >= 0) ? 'positive' : 'negative';
-        const lastUsdView = lastUsdPrice !== 0 ? `$${niceRound(lastUsdPrice.toFixed(7))}` : '—';
+        const lastUsdView = lastUsdPrice !== 0 ? `$${niceRound(lastUsdPrice)}` : '—';
 
         return (
             <div className="PairPicker_marketsTable-content">

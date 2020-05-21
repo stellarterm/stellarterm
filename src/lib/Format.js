@@ -26,7 +26,9 @@ exports.niceNumDecimals = function niceNumDecimals(input) {
 };
 
 exports.niceRound = function niceRound(input) {
-    return _.round(input, exports.niceNumDecimals(input));
+    return input < 0.000001
+        ? _.round(input, exports.niceNumDecimals(input)).toFixed(7)
+        : _.round(input, exports.niceNumDecimals(input));
 };
 
 // Input a date object and output a formatted date object for display purposes
