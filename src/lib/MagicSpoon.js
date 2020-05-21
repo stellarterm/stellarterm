@@ -310,15 +310,13 @@ const MagicSpoon = {
                 .order('desc')
                 .call()
                 .then((res) => {
-                    const hasNullDate = res.records.find(offer => offer.last_modified_time === null);
-                    if (hasNullDate) {
-                        return null;
-                    }
-                    const newOffers = {};
-                    _.each(res.records, (offer) => {
-                        newOffers[offer.id] = offer;
-                    });
-                    sdkAccount.offers = newOffers;
+                    sdkAccount.offers = res.records.reduce((acc, offer) => {
+                        acc[offer.id] = offer;
+                        if (offer.last_modified_time === null) {
+                            acc[offer.id].last_modified_time = new Date();
+                        }
+                        return acc;
+                    }, {});
                     onUpdate();
                     return null;
                 });
@@ -436,7 +434,7 @@ const MagicSpoon = {
             return new StellarSdk.TransactionBuilder(spoonAccount,
                 { fee, networkPassphrase: Server.networkPassphrase })
                 .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
-                .setTimeout(0);
+                .setTimeout(Server.transactionTimeout);
         }
 
         const operationOpts = {
@@ -449,7 +447,7 @@ const MagicSpoon = {
         return new StellarSdk.TransactionBuilder(spoonAccount,
             { fee, networkPassphrase: Server.networkPassphrase })
             .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
-            .setTimeout(0);
+            .setTimeout(Server.transactionTimeout);
     },
 
     buildTxCreateSellOffer(Server, spoonAccount, opts) {
@@ -474,7 +472,7 @@ const MagicSpoon = {
         return new StellarSdk.TransactionBuilder(spoonAccount,
             { fee, networkPassphrase: Server.networkPassphrase })
             .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
-            .setTimeout(0);
+            .setTimeout(Server.transactionTimeout);
     },
 
     async buildTxSendPayment(Server, spoonAccount, opts) {
@@ -495,7 +493,7 @@ const MagicSpoon = {
                         amount: opts.amount,
                     }),
                 )
-                .setTimeout(0);
+                .setTimeout(Server.transactionTimeout);
         } catch (e) {
             if (!opts.asset.isNative()) {
                 throw new Error(
@@ -509,7 +507,7 @@ const MagicSpoon = {
                         startingBalance: opts.amount,
                     }),
                 )
-                .setTimeout(0);
+                .setTimeout(Server.transactionTimeout);
         }
 
         if (opts.memo) {
@@ -528,7 +526,7 @@ const MagicSpoon = {
         });
         // DONT call .build()
 
-        return transaction.setTimeout(0);
+        return transaction.setTimeout(Server.transactionTimeout);
     },
     buildTxChangeTrust(Server, spoonAccount, opts) {
         let sdkLimit;
@@ -545,7 +543,7 @@ const MagicSpoon = {
         let transaction = new StellarSdk.TransactionBuilder(spoonAccount,
             { fee, networkPassphrase: Server.networkPassphrase })
             .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
-            .setTimeout(0);
+            .setTimeout(Server.transactionTimeout);
 
         if (opts.memo) {
             transaction = transaction.addMemo(Stellarify.memo(opts.memo.memoType, opts.memo.memo));
@@ -573,7 +571,7 @@ const MagicSpoon = {
                 offerId: offer.id,
             }));
         });
-        return transaction.setTimeout(0);
+        return transaction.setTimeout(Server.transactionTimeout);
         // DONT call .build()
     },
 

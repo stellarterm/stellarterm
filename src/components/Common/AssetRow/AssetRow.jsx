@@ -68,7 +68,7 @@ export default class AssetRow extends React.Component {
                 longIssuer
                 color={this.state.color}
                 currency={this.props.currency}
-
+                boxy
                 host={this.props.host} />) : (
             <AssetCardMain
                 d={this.props.d}

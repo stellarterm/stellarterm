@@ -140,6 +140,7 @@
             cursor: pointer;
             color: #505558;
             opacity: 0.7;
+            text-decoration: none;
 
             &.active {
                 opacity: 1;
@@ -189,6 +190,17 @@
                 width: 9px;
                 height: 9px;
             }
+        }
+    }
+
+    .ListHeader_dropdown{
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        color: #505558;
+
+        & > span{
+            margin-right: 8px;
         }
     }
 }
