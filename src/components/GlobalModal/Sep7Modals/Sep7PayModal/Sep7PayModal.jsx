@@ -13,7 +13,22 @@ import Sep7GetBuiltTx from '../Sep7GetBuiltTx/Sep7GetBuiltTx';
 const images = require('./../../../../images');
 
 export default class Sep7PayModal extends React.Component {
-    static getPaymentDetails(txDetails) {
+    constructor(props) {
+        super(props);
+        this.state = {
+            error: '',
+            pending: false,
+        };
+        this.listenId = this.props.d.session.event.listen(() => {
+            this.forceUpdate();
+        });
+    }
+
+    componentWillUnmount() {
+        this.props.d.session.event.unlisten(this.listenId);
+    }
+
+    getPaymentDetails(txDetails) {
         if (txDetails.operation === 'pay') {
             const { assetCode, assetIssuer, amount, destination, memo, memoType } = txDetails;
             const asset = (assetCode && assetIssuer) ?
@@ -28,27 +43,13 @@ export default class Sep7PayModal extends React.Component {
             };
         }
         const { xdr } = txDetails;
-        const tx = new StellarSdk.Transaction(xdr, window.networkPassphrase);
+        const { d } = this.props;
+        const tx = new StellarSdk.Transaction(xdr, d.Server.networkPassphrase);
         const { type, value } = StellarSdk.Memo.fromXDRObject(tx._memo);
         const memoType = type && `MEMO_${type.toUpperCase()}`;
         const memo = value && value.toString();
         const [operation] = tx.operations;
         return Object.assign({}, operation, { memoType, memo });
-    }
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            error: '',
-            pending: false,
-        };
-        this.listenId = this.props.d.session.event.listen(() => {
-            this.forceUpdate();
-        });
-    }
-
-    componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
     }
 
     getButtons() {
@@ -78,7 +79,7 @@ export default class Sep7PayModal extends React.Component {
     }
 
     getPaymentTx(txDetails, d) {
-        const { asset, amount, destination, memo, memoType } = this.constructor.getPaymentDetails(txDetails);
+        const { asset, amount, destination, memo, memoType } = this.getPaymentDetails(txDetails);
         let type = memoType || 'MEMO_TEXT';
         if (type.toUpperCase() !== type) {
             type = `MEMO_${type.toUpperCase()}`;
@@ -132,7 +133,7 @@ export default class Sep7PayModal extends React.Component {
         const { state, account } = d.session;
         const { originDomain } = txDetails;
 
-        const { asset, amount, destination, memo } = this.constructor.getPaymentDetails(txDetails);
+        const { asset, amount, destination, memo } = this.getPaymentDetails(txDetails);
 
         const balance = account && (asset.isNative() ? account.maxLumenSpend() : account.getBalance(asset));
         const available = state !== 'in' ?

@@ -15,6 +15,7 @@ function Driver(driverOpts) {
     this.Server = new StellarSdk.Server(driverOpts.network.horizonUrl);
     this.Server.serverUrl = driverOpts.network.horizonUrl;
     this.Server.transactionTimeout = 60 * 60 * 24 * 30;
+    this.Server.networkPassphrase = driverOpts.network.networkPassphrase;
 
     this.ticker = new Ticker();
     this.session = new Session(this);

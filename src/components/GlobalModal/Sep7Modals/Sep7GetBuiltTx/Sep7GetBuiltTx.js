@@ -24,7 +24,7 @@ function getTransactionWithReplacedAccountData(transactionStellarUri, d) {
 export default async function Sep7GetBuiltTx(txDetails, d) {
     const { xdr } = txDetails;
     const replacements = txDetails.getReplacements();
-    const transaction = new StellarSdk.Transaction(xdr, window.networkPassphrase);
+    const transaction = new StellarSdk.Transaction(xdr, d.Server.networkPassphrase);
     const transactionStellarUri = TransactionStellarUri.forTransaction(transaction);
     if (!replacements.length) {
         if (transaction.source === 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF' ||
