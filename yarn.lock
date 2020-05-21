@@ -9130,10 +9130,10 @@ stellar-base@^1.0.2:
   optionalDependencies:
     sodium-native "^2.3.0"
 
-stellar-base@^2.1.4:
-  version "2.1.9"
-  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-2.1.9.tgz#2249a84e317a1cacdf7554642f13340f0a9387f2"
-  integrity sha512-W8oURWgIBn+JZZwo+ClYNdLQ6NOR0i7Lf6U8rljicU3rNrcVKgLp+0A/lOLIxyDA6W0mbVR/1zEgR2v19kTgkw==
+stellar-base@^3.0.0:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-3.0.2.tgz#09083c8f2eb68eddb820504d3b19576da0632c31"
+  integrity sha512-ZZji4go8gRT932OTuUSggohWWuRIs11C99ShokoIurmWPwh0NsvkxN2cBxfEfQi/TdiO1/DiteCzz7w233AfXA==
   dependencies:
     base32.js "^0.1.0"
     bignumber.js "^4.0.0"
@@ -9152,10 +9152,10 @@ stellar-identicon-js@^1.0.0:
   dependencies:
     html-webpack-plugin "^3.2.0"
 
-stellar-sdk@4.1.0:
-  version "4.1.0"
-  resolved "https://registry.yarnpkg.com/stellar-sdk/-/stellar-sdk-4.1.0.tgz#02cd231dbebbda3605eb11a3e159b3b9fb0b6958"
-  integrity sha512-/U4KW+7+DMqmnbYuV7XDbm3dEBApiUIry1PGJOQJl02kcOSFxR2rkpKOJWwbEiJHw2DRJsl5BOzPco4xDK7/aw==
+stellar-sdk@5.0.2:
+  version "5.0.2"
+  resolved "https://registry.yarnpkg.com/stellar-sdk/-/stellar-sdk-5.0.2.tgz#8b26c46e6cde0b628b523ad73d35af465e0e70c8"
+  integrity sha512-nnRxfaLhITrjhfA+8zbjElhfoBr6WU7RslRE4pLcZf3jcO3wcE6W9i8m43lf0FJFYUQdc9fY+IYtFc/AOhnxYA==
   dependencies:
     "@types/eventsource" "^1.1.2"
     "@types/node" ">= 8"
@@ -9168,7 +9168,7 @@ stellar-sdk@4.1.0:
     eventsource "^1.0.7"
     lodash "^4.17.11"
     randombytes "^2.1.0"
-    stellar-base "^2.1.4"
+    stellar-base "^3.0.0"
     toml "^2.3.0"
     tslib "^1.10.0"
     urijs "^1.19.1"
@@ -9207,7 +9207,7 @@ stellar-sdk@^1.0.2:
 
 "stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git":
   version "1.0.0"
-  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#29462565b3261af75cc1a206f4700c84d9949ec3"
+  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#12c5a2490ba2775391fe1f74ca1911cb89376e99"
 
 stream-browserify@^2.0.0:
   version "2.0.2"
