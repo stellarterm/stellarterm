@@ -72,10 +72,11 @@ export default class SendDest extends React.Component {
 
     render() {
         const { errorMsg } = this.state;
+        const recipientName = this.props.d.send.destinationName;
 
         return (
             <div className="Send_input_block">
-                <label htmlFor="recipient">Recipient</label>
+                <label htmlFor="recipient">Recipient {recipientName}</label>
                 {errorMsg ? <div className="invalidValue_popup">{errorMsg}</div> : null}
 
                 <input

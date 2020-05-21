@@ -11,7 +11,7 @@ import ActivityTrustlinesHistory from './ActivityTrustlinesHistory/ActivityTrust
 import NotFound from '../../../NotFound/NotFound';
 
 export const ROW_HEIGHT = 47;
-export const TABLE_MAX_HEIGHT = window.innerHeight - 470;
+export const TABLE_MAX_HEIGHT = Math.max(window.innerHeight - 470, 376);
 export const SCROLL_WIDTH = 17;
 export const formatDate = (timestamp) => {
     const date = new Date(timestamp).toLocaleDateString();
@@ -20,8 +20,15 @@ export const formatDate = (timestamp) => {
         minute: '2-digit',
         hour12: false,
     });
+    const [hours, minutes] = time.split(':');
+
+    if (+hours < 24) {
+        return { time, date };
+    }
+
+    const formattedHours = `0${hours - 24}`.slice(-2);
     return {
-        time,
+        time: `${formattedHours}:${minutes}`,
         date,
     };
 };
@@ -41,15 +48,12 @@ export default class Activity extends React.Component {
         };
     }
 
+    componentDidMount() {
+        this.loadHistory();
+    }
+
     componentDidUpdate() {
-        if (window.location.pathname !== '/account/activity/' && (this.state.history.length === 0)
-            && !this.state.historyLoading) {
-            this.getHistory();
-        }
-        if (window.location.pathname === '/account/activity/payments/' && (this.state.paymentHistory.length === 0)
-            && !this.state.paymentHistoryLoading) {
-            this.getPaymentHistory();
-        }
+        this.loadHistory();
     }
 
     getHistory() {
@@ -72,6 +76,17 @@ export default class Activity extends React.Component {
                 paymentHistoryLoading: false,
             });
         });
+    }
+
+    loadHistory() {
+        if (window.location.pathname !== '/account/activity/' && (this.state.history.length === 0)
+            && !this.state.historyLoading) {
+            this.getHistory();
+        }
+        if (window.location.pathname === '/account/activity/payments/' && (this.state.paymentHistory.length === 0)
+            && !this.state.paymentHistoryLoading) {
+            this.getPaymentHistory();
+        }
     }
 
     loadMore(next, historyType) {

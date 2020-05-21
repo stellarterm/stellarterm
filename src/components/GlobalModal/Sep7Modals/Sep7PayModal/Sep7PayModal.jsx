@@ -28,7 +28,7 @@ export default class Sep7PayModal extends React.Component {
             };
         }
         const { xdr } = txDetails;
-        const tx = new StellarSdk.Transaction(xdr);
+        const tx = new StellarSdk.Transaction(xdr, window.networkPassphrase);
         const { type, value } = StellarSdk.Memo.fromXDRObject(tx._memo);
         const memoType = type && `MEMO_${type.toUpperCase()}`;
         const memo = value && value.toString();
@@ -115,17 +115,9 @@ export default class Sep7PayModal extends React.Component {
                 window.history.pushState({}, null, '/');
             }
             if (bssResult.status === 'finish') {
-                bssResult.serverResult
-                    .then(() => {
-                        submit.cancel();
-                        window.history.pushState({}, null, '/');
-                    })
-                    .catch((e) => {
-                        this.setState({
-                            error: e,
-                            pending: false,
-                        });
-                    });
+                await bssResult.serverResult;
+                submit.cancel();
+                window.history.pushState({}, null, '/');
             }
         } catch (e) {
             this.setState({

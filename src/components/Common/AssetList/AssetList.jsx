@@ -5,7 +5,6 @@ import images from '../../../images';
 import Loading from '../Loading/Loading';
 import Ellipsis from '../Ellipsis/Ellipsis';
 import AssetListRows from './AssetListRows/AssetListRows';
-import TopVolumeAssets from '../../Markets/TopVolumeAssets/TopVolumeAssets';
 
 
 export default class AssetList extends React.Component {
@@ -21,12 +20,6 @@ export default class AssetList extends React.Component {
             sortBy: 'volume24h',
             sortType: false, // false: 'desc', true 'asc'
         };
-    }
-
-    componentDidUpdate(prevProps) {
-        if (this.props.fromStellarTicker !== prevProps.fromStellarTicker) {
-            this.resetSort();
-        }
     }
 
     componentWillUnmount() {
@@ -51,7 +44,7 @@ export default class AssetList extends React.Component {
         } else if (sortBy !== sortName) {
             this.setState({
                 sortBy: sortName,
-                sortType: true,
+                sortType: false,
             });
         } else {
             this.setState({
@@ -71,7 +64,7 @@ export default class AssetList extends React.Component {
                     <img
                         src={images['sort-arrow-act']}
                         alt="sortBy"
-                        className={this.state.sortType !== true ? 'revert' : ''} />
+                        className={this.state.sortType === true ? 'revert' : ''} />
                 )}
             </div>
         );
@@ -89,29 +82,25 @@ export default class AssetList extends React.Component {
             return loadingMarket;
         }
 
-        const { d, limit, showLowTradable, fromStellarTicker } = this.props;
+        const { d, limit, showLowTradable } = this.props;
         const { sortBy, sortType } = this.state;
 
         return (
             <div className="AssetList">
                 <div className="AssetList_head_row">
                     {this.generateRowTitle('Asset', 'assetName')}
-                    {this.generateRowTitle('Price (XLM)', 'priceXLM')}
+                    {this.generateRowTitle('Price', 'priceXLM')}
                     {this.generateRowTitle('Price (USD)', 'priceUSD')}
                     {this.generateRowTitle('Volume (24h)', 'volume24h')}
                     {this.generateRowTitle('Change (24h)', 'change24h')}
                 </div>
-                {!fromStellarTicker ? (
-                    <AssetListRows
-                        d={d}
-                        ticker={d.ticker}
-                        limit={limit}
-                        sortBy={sortBy}
-                        sortType={sortType}
-                        showLowTradable={showLowTradable} />
-                ) : (
-                    <TopVolumeAssets d={d} sortBy={sortBy} sortType={sortType} />
-                )}
+                <AssetListRows
+                    d={d}
+                    ticker={d.ticker}
+                    limit={limit}
+                    sortBy={sortBy}
+                    sortType={sortType}
+                    showLowTradable={showLowTradable} />
             </div>
         );
     }
@@ -121,5 +110,4 @@ AssetList.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     limit: PropTypes.number,
     showLowTradable: PropTypes.bool,
-    fromStellarTicker: PropTypes.bool,
 };

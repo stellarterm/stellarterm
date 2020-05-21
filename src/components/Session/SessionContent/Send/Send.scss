@@ -193,9 +193,12 @@
 
                     .AssetCardSeparateLogo_details-row {
                         max-width: 160px;
-                        white-space: nowrap;
-                        overflow: hidden;
-                        text-overflow: ellipsis;
+                    }
+                }
+
+                .dropdown_item {
+                    .AssetCardSeparateLogo_details-row {
+                        max-width: 180px;
                     }
                 }
 
@@ -211,6 +214,12 @@
                     width: 100%;
                     padding: 0 15px;
 
+                    .AssetCardSeparateLogo_details-row {
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                    }
+
                     .dropdown_arrow {
                         width: 24px;
                         height: 100%;
@@ -221,45 +230,6 @@
 
                     .arrow_reverse {
                         transform: rotate(180deg);
-                    }
-
-                    .AssetCardSeparateLogo {
-                        .AssetCardMain_logo_load {
-                            margin-right: 13px;
-                        }
-
-                        .AssetCardSeparateLogo_logo,
-                        .AssetCardMain_logo_load,
-                        .AssetCard_unknown_logo {
-                            height: 35px;
-                            width: 35px;
-
-                            img {
-                                height: 29px;
-                                width: 29px;
-                            }
-
-                            .Unknown_circle {
-                                height: 80%;
-                                width: 80%;
-                                font-size: 14px;
-                            }
-                        }
-
-                        .AssetCardSeparateLogo_details {
-                            justify-content: center;
-
-                            .AssetCardSeparateLogo_details-row {
-                                & > span:first-child {
-                                    font-size: 14px;
-                                }
-
-                                & > span:last-child {
-                                    font-size: 12px;
-                                    opacity: 0.6;
-                                }
-                            }
-                        }
                     }
                 }
 

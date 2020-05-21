@@ -2,7 +2,7 @@ import directory from 'stellarterm-directory';
 import req from './req';
 import Event from '../Event';
 import * as EnvConsts from '../../env-consts';
-import { post } from './request';
+import { postWithCancel } from './request';
 import { getEndpoint } from './endpoints';
 
 const MAX_ATTEMPTS = 120;
@@ -54,22 +54,29 @@ export default class Ticker {
                 setTimeout(() => this.loadWithAttempts(promiseFunction, message, nextAttempt), 1000);
             });
     }
-    static loadStellarMarketsData(baseAssetCode, baseAssetIssuer, numHoursAgo) {
+    static loadStellarMarketsData({
+        baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer,
+    }) {
         const headers = { 'Content-Type': 'application/json' };
-        const stellarTickerGraphQLParams = `{ markets(
-            numHoursAgo: ${numHoursAgo}, 
-            baseAssetCode: "${baseAssetCode}", 
-            baseAssetIssuer: "${baseAssetIssuer}") ` +
-            '{ ' +
+        const stellarTickerGraphQLParams =
+            `{ markets(
+            ${numHoursAgo ? `numHoursAgo: ${numHoursAgo},` : ''}
+            ${counterAssetCode ? `counterAssetCode: "${counterAssetCode}",` : ''}
+            ${counterAssetIssuer ? `counterAssetIssuer: "${counterAssetIssuer}",` : ''}
+            ${baseAssetCode ? `baseAssetCode: "${baseAssetCode}",` : ''}
+            ${baseAssetIssuer ? `baseAssetIssuer: "${baseAssetIssuer}"` : ''}) { ` +
             'tradePair ' +
             'baseVolume ' +
+            'counterVolume ' +
             'change ' +
             'close ' +
             'open ' +
+            'baseAssetCode ' +
+            'baseAssetIssuer ' +
             'counterAssetCode ' +
             'counterAssetIssuer} }';
 
         const body = JSON.stringify({ query: stellarTickerGraphQLParams });
-        return post(getEndpoint('stellarTickerGraphQL'), { headers, body });
+        return postWithCancel(getEndpoint('stellarTickerGraphQL'), { headers, body });
     }
 }

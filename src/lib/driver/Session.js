@@ -488,7 +488,7 @@ export default function Send(driver) {
                     medThreshold: newThreshold,
                     highThreshold: newThreshold,
                 };
-                const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
+                const tx = MagicSpoon.buildTxSetOptions(driver.Server, this.account, signerData);
                 return this.handlers.buildSignSubmit(tx);
             }
             const signerData = {
@@ -510,11 +510,11 @@ export default function Send(driver) {
                     },
                 };
 
-                const txMarker = MagicSpoon.buildTxSetOptions(this.account, [signerData, markerData]);
+                const txMarker = MagicSpoon.buildTxSetOptions(driver.Server, this.account, [signerData, markerData]);
                 return this.handlers.buildSignSubmit(txMarker);
             }
 
-            const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
+            const tx = MagicSpoon.buildTxSetOptions(driver.Server, this.account, signerData);
             return this.handlers.buildSignSubmit(tx);
         },
 
@@ -540,7 +540,7 @@ export default function Send(driver) {
                 highThreshold: 0,
             };
             if (signers.length === 2) {
-                const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
+                const tx = MagicSpoon.buildTxSetOptions(driver.Server, this.account, signerData);
                 return this.handlers.buildSignSubmit(tx);
             }
             if (signers.length === 3) {
@@ -552,7 +552,7 @@ export default function Send(driver) {
                 );
 
                 if (!hasVaultMarker && !hasGuardMarker) {
-                    const tx = MagicSpoon.buildTxSetOptions(this.account, signerData);
+                    const tx = MagicSpoon.buildTxSetOptions(driver.Server, this.account, signerData);
                     return this.handlers.buildSignSubmit(tx);
                 }
 
@@ -567,7 +567,7 @@ export default function Send(driver) {
                         weight: 0,
                     },
                 };
-                const txMarker = MagicSpoon.buildTxSetOptions(this.account, [signerData, markerData]);
+                const txMarker = MagicSpoon.buildTxSetOptions(driver.Server, this.account, [signerData, markerData]);
                 return this.handlers.buildSignSubmit(txMarker);
             }
             if (signers.length >= 4) {
@@ -589,7 +589,7 @@ export default function Send(driver) {
                     medThreshold: newThreshold,
                     highThreshold: newThreshold,
                 };
-                const txMarker = MagicSpoon.buildTxSetOptions(this.account, [newSignerData]);
+                const txMarker = MagicSpoon.buildTxSetOptions(driver.Server, this.account, [newSignerData]);
                 return this.handlers.buildSignSubmit(txMarker);
             }
 
@@ -603,7 +603,7 @@ export default function Send(driver) {
                 medThreshold: newThreshold,
                 highThreshold: newThreshold,
             };
-            const txMarker = MagicSpoon.buildTxSetOptions(this.account, [options]);
+            const txMarker = MagicSpoon.buildTxSetOptions(driver.Server, this.account, [options]);
             return this.handlers.buildSignSubmit(txMarker);
         },
 
@@ -613,7 +613,7 @@ export default function Send(driver) {
             return request
                 .get(endpointUrl, { headers })
                 .then((resChallenge) => {
-                    const tx = new StellarSdk.Transaction(resChallenge.transaction);
+                    const tx = new StellarSdk.Transaction(resChallenge.transaction, window.networkPassphrase);
                     return this.handlers.sign(tx);
                 })
                 .then((tx) => {
@@ -661,7 +661,7 @@ export default function Send(driver) {
 
             try {
                 // Setting homeDomain for user
-                const tx = MagicSpoon.buildTxSetOptions(this.account, homeDomain);
+                const tx = MagicSpoon.buildTxSetOptions(driver.Server, this.account, homeDomain);
                 await this.handlers.buildSignSubmit(tx);
             } catch (error) {
                 console.log(error);
@@ -683,7 +683,7 @@ export default function Send(driver) {
             const inflationDestination = {
                 inflationDest: destination,
             };
-            const txBuilder = MagicSpoon.buildTxSetOptions(this.account, inflationDestination);
+            const txBuilder = MagicSpoon.buildTxSetOptions(driver.Server, this.account, inflationDestination);
             return await this.handlers.buildSignSubmit(txBuilder);
         },
         voteContinue: async () => {
@@ -753,14 +753,7 @@ export default function Send(driver) {
             return bssResult;
         },
         logout: () => {
-            try {
-                this.account.clearKeypair();
-                delete this.account;
-                init();
-                window.location.reload();
-            } catch (e) {
-                window.location.reload();
-            }
+            window.location.reload();
         },
         addUnknownAssetData: () => {
             const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];

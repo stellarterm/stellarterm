@@ -15,8 +15,13 @@ export default class CopyButton extends React.Component {
         setTimeout(() => this.setState({ copyPopup: false }), 2000);
     }
 
-    copyTx(tx) {
-        window.navigator.clipboard.writeText(tx);
+    copy(str) {
+        const el = document.createElement('textarea');
+        el.value = str;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
         this.showPopup();
     }
 
@@ -27,7 +32,7 @@ export default class CopyButton extends React.Component {
         const copyBtnText = btnText || 'COPY';
 
         return (
-            <div className="CopyButton" onClick={() => this.copyTx(text)}>
+            <div className="CopyButton" onClick={() => this.copy(text)}>
                 <div className={`CopyButton__popup ${copyPopupVisibilityClass} ${copyPopupPositionClass}`}>
                     Copied to clipboard
                 </div>
