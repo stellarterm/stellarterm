@@ -14,7 +14,7 @@ export default () => (
             </a>
             {' '}or{' '}
             <a
-                href="https://github.com/stellarterm/stellarterm.github.io/"
+                href="https://github.com/stellarterm/stellarterm-desktop-client/releases"
                 target="_blank"
                 rel="nofollow noopener noreferrer">
                 download from GitHub
