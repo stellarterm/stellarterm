@@ -44,7 +44,7 @@ export default class Sep24ModalContent extends React.Component {
 
         if (this.state.transaction) {
             this.getTransferServer(asset.domain)
-                .then(() => this.checkForJwt())
+                .then(() => this.initSep24())
                 .then(() => this.fetchTransaction())
                 .catch(({ data }) => {
                     this.setState({
@@ -70,7 +70,7 @@ export default class Sep24ModalContent extends React.Component {
                         }.`,
                     });
                 }
-                return this.checkForJwt();
+                return this.initSep24();
             })
             .then((res) => {
                 this.setState({
@@ -101,13 +101,14 @@ export default class Sep24ModalContent extends React.Component {
             });
     }
 
-    checkForJwt() {
+    initSep24() {
         const { d, asset, isDeposit } = this.props;
         const { requestParams, transaction } = this.state;
 
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
         const isLedgerJwtNeeded = d.session.authType === 'ledger' && this.jwtToken === null;
+        const isLedgerJwtRecieved = d.session.authType === 'ledger' && this.jwtToken !== null;
 
         // Reopen ledger popup for jwt auth, if needed
         if (isLedgerJwtNeeded) {
@@ -120,8 +121,13 @@ export default class Sep24ModalContent extends React.Component {
                     asset,
                     jwtToken: token,
                 };
-                return null;
             });
+        }
+
+        // If ledger auth, and jwt already recieved, init sep24
+        if (isLedgerJwtRecieved) {
+            if (transaction) { return this.fetchTransaction(); }
+            return sep24Request(this.TRANSFER_SERVER_SEP0024, isDeposit, this.jwtToken, requestParams);
         }
 
         // Else init sep24 transaction

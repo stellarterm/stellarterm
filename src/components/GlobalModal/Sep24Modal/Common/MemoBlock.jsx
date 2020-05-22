@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default function MemoBlock(props) {
     const { memo, memoType, isDeposit } = props;
 
-    const transactionType = isDeposit ? 'Deposit' : 'Withdraw';
+    const transactionType = isDeposit ? 'Deposit' : 'Withdrawal';
     return (
         <React.Fragment>
             {memo ? (
