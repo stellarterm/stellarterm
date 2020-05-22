@@ -39,6 +39,7 @@ export default class SepTransactions extends React.Component {
             asset,
             isDeposit,
             transaction,
+            jwtToken: this.jwtToken,
         });
     }
 

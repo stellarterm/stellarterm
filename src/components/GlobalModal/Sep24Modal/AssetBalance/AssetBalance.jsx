@@ -21,7 +21,10 @@ export default class AssetBalance extends React.Component {
             issuer: asset.issuer,
         });
 
-        return directoryAsset ? `$${(parseFloat(assetBalance) * directoryAsset.price_USD).toFixed(2)}` : '';
+        if (assetBalance && directoryAsset && directoryAsset.price_USD !== undefined) {
+            return `$${(parseFloat(assetBalance) * directoryAsset.price_USD).toFixed(2)}`;
+        }
+        return '';
     }
 
     render() {
