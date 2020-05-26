@@ -110,7 +110,7 @@ export default class Sep24ModalFooter extends React.Component {
 
                     <button
                         className="s-button"
-                        disabled={isAnyError || isLoading}
+                        disabled={isAnyError || isLoading || isPending}
                         onClick={() => this.sendWithdrawAsset()}>
                         {isPending ? <div className="nk-spinner" /> : 'Withdraw'}
                     </button>
