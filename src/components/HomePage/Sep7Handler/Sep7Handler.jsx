@@ -54,14 +54,13 @@ function processOperations(operations, driver, txDetails) {
 export default async function Sep7Handler(driver) {
     // Supported browsers: Opera, Chrome, Firefox
 
-    if (!window.navigator.registerProtocolHandler) {
+    if (!window.navigator || window.navigator.registerProtocolHandler) {
         console.warn('Your browser does not support the Stellar-protocol: SEP-0007. ' +
             'Use Chrome, Opera or Firefox to open web+stellar links');
-        return;
+    } else {
+        // Enable stellarUri in browser
+        window.navigator.registerProtocolHandler('web+stellar', `${window.location.origin}?tx=%s`, 'stellarUri');
     }
-
-    // Enable stellarUri in browser
-    window.navigator.registerProtocolHandler('web+stellar', `${window.location.origin}?tx=%s`, 'stellarUri');
 
     // Check is StellarUri
     const urlParsed = [...new window.URLSearchParams(window.location.search).entries()].reduce((sum, [key, val]) =>

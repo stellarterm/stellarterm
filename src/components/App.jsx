@@ -36,7 +36,7 @@ const network = {
     isCustom: false,
 };
 
-if (window.location.hash.indexOf('#') === 0) {
+if (!window.location.pathname.includes('index.html') && window.location.hash.indexOf('#') === 0) {
     window.location.replace(window.location.hash.substr(1));
 }
 
