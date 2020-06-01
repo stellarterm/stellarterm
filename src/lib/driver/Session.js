@@ -614,13 +614,15 @@ export default function Send(driver) {
             return this.handlers.buildSignSubmit(txMarker);
         },
 
-        getJwtToken: (endpointUrl) => {
+        getJwtToken: (endpointUrl, networkPassphrase) => {
             const headers = { 'Content-Type': 'application/json' };
 
+            // Gets current network if network param is not provided
+            const selectedNetwork = networkPassphrase || driver.Server.networkPassphrase;
             return request
                 .get(endpointUrl, { headers })
                 .then((resChallenge) => {
-                    const tx = new StellarSdk.Transaction(resChallenge.transaction, driver.Server.networkPassphrase);
+                    const tx = new StellarSdk.Transaction(resChallenge.transaction, selectedNetwork);
                     return this.handlers.sign(tx);
                 })
                 .then((tx) => {

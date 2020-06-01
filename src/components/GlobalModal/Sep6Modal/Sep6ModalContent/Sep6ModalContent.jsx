@@ -6,7 +6,7 @@ import images from '../../../../images';
 import Driver from '../../../../lib/Driver';
 import Sep6ModalFooter from '../Common/Sep6ModalFooter/Sep6ModalFooter';
 import Sep6Form from './Sep6Form/Sep6Form';
-import { getTransferServer, getTransferServerInfo, sep6Request } from '../../../../lib/Sep6Utils';
+import { getTransferServer, getTransferServerInfo, sep6Request } from '../../../../lib/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
 import ErrorHandler from '../../../../lib/ErrorHandler';
 
@@ -26,6 +26,7 @@ export default class Sep6ModalContent extends React.Component {
         this.jwtToken = this.props.jwtToken;
         this.TRANSFER_SERVER = null;
         this.WEB_AUTH_URL = null;
+        this.NETWORK_PASSPHRASE = null;
 
         this.state = {
             isLoading: true,
@@ -44,9 +45,10 @@ export default class Sep6ModalContent extends React.Component {
         const { asset, isDeposit } = this.props;
 
         getTransferServer(asset.domain)
-            .then(({ TRANSFER_SERVER, WEB_AUTH_URL }) => {
+            .then(({ TRANSFER_SERVER, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
                 this.TRANSFER_SERVER = TRANSFER_SERVER;
                 this.WEB_AUTH_URL = WEB_AUTH_URL;
+                this.NETWORK_PASSPHRASE = NETWORK_PASSPHRASE;
             })
             .then(() => getTransferServerInfo(this.TRANSFER_SERVER))
             .then(transferInfo => (isDeposit ? transferInfo.deposit : transferInfo.withdraw))
@@ -184,7 +186,7 @@ export default class Sep6ModalContent extends React.Component {
         if (isLedgerJwtNeeded) {
             d.modal.handlers.finish();
 
-            return d.session.handlers.getJwtToken(jwtEndpointUrl).then((token) => {
+            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
                 d.modal.nextModalName = 'Sep6Modal';
                 d.modal.nextModalData = {
                     isDeposit,
@@ -196,7 +198,7 @@ export default class Sep6ModalContent extends React.Component {
         }
 
         if (this.jwtToken === null) {
-            return d.session.handlers.getJwtToken(jwtEndpointUrl).then((token) => {
+            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
                 this.jwtToken = token;
                 return this.getSep6Request(transferAssetInfo);
             });
@@ -282,5 +284,5 @@ Sep6ModalContent.propTypes = {
     jwtToken: PropTypes.string,
     isDeposit: PropTypes.bool.isRequired,
     d: PropTypes.instanceOf(Driver).isRequired,
-    asset: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])).isRequired,
+    asset: PropTypes.objectOf(PropTypes.any).isRequired,
 };

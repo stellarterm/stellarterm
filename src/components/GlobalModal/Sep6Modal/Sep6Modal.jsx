@@ -6,6 +6,7 @@ import Sep6ModalContent from './Sep6ModalContent/Sep6ModalContent';
 import AssetBalance from './AssetBalance/AssetBalance';
 import Sep6ModalConfirm from './Sep6ModalConfirm/Sep6ModalConfirm';
 import WithdrawCompleted from './WithdrawCompleted/WithdrawCompleted';
+import TransactionContent from '../Sep24Modal/TransactionContent/TransactionContent';
 
 export default class Sep6Modal extends React.Component {
     constructor(props) {
@@ -53,6 +54,19 @@ export default class Sep6Modal extends React.Component {
         const { isDeposit, isWithdrawCompleted } = this.state;
         const { data, d } = this.props;
 
+        const sep6Content = isWithdrawCompleted ? this.getWithdrawCompletedContent() : this.getMainModalContent();
+        const mainContent = data.transaction ? (
+            <div className="Sep6Modal_content">
+                <div className="content_main">
+                    <TransactionContent
+                        d={d}
+                        isDeposit={isDeposit}
+                        asset={data.asset}
+                        transaction={data.transaction} />
+                </div>
+            </div>
+        ) : sep6Content;
+
         return (
             <div className="Sep6Modal">
                 <div className="Modal_header">
@@ -68,7 +82,7 @@ export default class Sep6Modal extends React.Component {
                         }} />
                 </div>
 
-                {isWithdrawCompleted ? this.getWithdrawCompletedContent() : this.getMainModalContent()}
+                {mainContent}
             </div>
         );
     }

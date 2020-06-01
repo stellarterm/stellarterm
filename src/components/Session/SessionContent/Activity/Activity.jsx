@@ -175,7 +175,6 @@ export default class Activity extends React.Component {
                                 history={history}
                                 loading={historyLoading} />} />
 
-
                     <Route render={() => <NotFound withoutWrapper />} />
                 </Switch>
             </div>
