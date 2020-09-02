@@ -6,6 +6,7 @@ import LedgerBody from './LedgerBody/LedgerBody';
 import LoginPageBody from './LoginPageBody/LoginPageBody';
 import HardwareWalletLoginLink from './Common/HardwareWalletLoginLink/HardwareWalletLoginLink';
 import TrezorBody from './TrezorBody/TrezorBody';
+import LyraBody from './LyraBody/LyraBody';
 
 
 export default function LoginPage(props) {
@@ -46,6 +47,18 @@ export default function LoginPage(props) {
             </div>
         );
         break;
+    case 'lyra':
+        pageBody = (
+            <div className="so-back islandBack islandBack--t">
+                <div className="island">
+                    <div className="LoginPage">
+                        <LyraBody {...props} d={props.d} />
+                    </div>
+                </div>
+            </div>
+        );
+        break;
+
     case 'signup':
         pageBody = <SignUpBody d={props.d} />;
         break;
@@ -58,6 +71,7 @@ export default function LoginPage(props) {
             {pageBody}
             {rootAddress === 'account' &&
                 <React.Fragment>
+                    <HardwareWalletLoginLink wallet={'lyra'} />
                     <HardwareWalletLoginLink wallet={'ledger'} />
                     <HardwareWalletLoginLink wallet={'trezor'} />
                 </React.Fragment>}

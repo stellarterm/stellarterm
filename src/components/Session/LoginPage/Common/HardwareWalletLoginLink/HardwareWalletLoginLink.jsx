@@ -7,18 +7,26 @@ const HARDWARE_WALLET_DATA = {
     ledger: {
         link: '/ledger/',
         capitalizedName: 'Ledger',
+        capitalizedFullName: 'Ledger device',
         logo: 'ledger-logo-main',
     },
     trezor: {
         link: '/trezor/',
         capitalizedName: 'Trezor',
+        capitalizedFullName: 'Trezor device',
         logo: 'trezor-mini',
+    },
+    lyra: {
+        link: '/lyra/',
+        capitalizedName: 'Lyra',
+        capitalizedFullName: 'Lyra extension',
+        logo: 'lyra',
     },
 };
 export default function HardwareWalletLoginLink(props) {
     const { narrow } = props;
     // eslint-disable-next-line react/prop-types
-    const { link, capitalizedName, logo } = HARDWARE_WALLET_DATA[props.wallet];
+    const { link, capitalizedName, capitalizedFullName, logo } = HARDWARE_WALLET_DATA[props.wallet];
     return (
         <Link to={link} className={`HardwareWalletLoginLink ${narrow ? 'narrow' : ''}`}>
             <div className="HardwareWalletLoginLink_wrap">
@@ -27,7 +35,7 @@ export default function HardwareWalletLoginLink(props) {
                 </div>
                 <div className="HardwareWalletLoginLink_description">
                     <span className="HardwareWalletLoginLink_description-title">Log in with {capitalizedName}</span>
-                    <span>Use StellarTerm to access your account on {capitalizedName} device</span>
+                    <span>Use StellarTerm to access your account on {capitalizedFullName}</span>
                 </div>
             </div>
             <img src={images['icon-arrow-right-green-small']} alt=">" />
@@ -36,5 +44,5 @@ export default function HardwareWalletLoginLink(props) {
 }
 HardwareWalletLoginLink.propTypes = {
     narrow: PropTypes.bool,
-    wallet: PropTypes.oneOf(['ledger', 'trezor']).isRequired,
+    wallet: PropTypes.oneOf(['ledger', 'trezor', 'lyra']).isRequired,
 };

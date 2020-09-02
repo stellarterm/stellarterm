@@ -4,6 +4,7 @@ import Driver from '../../../../lib/Driver';
 import LoginPageBody from '../../../Session/LoginPage/LoginPageBody/LoginPageBody';
 import LedgerBody from '../../../Session/LoginPage/LedgerBody/LedgerBody';
 import TrezorBody from '../../../Session/LoginPage/TrezorBody/TrezorBody';
+import LyraBody from '../../../Session/LoginPage/LyraBody/LyraBody';
 
 export default class LoginModalBlock extends React.Component {
     constructor(props) {
@@ -23,6 +24,7 @@ export default class LoginModalBlock extends React.Component {
         const isSecret = openTab === 'secret';
         const isLedger = openTab === 'ledger';
         const isTrezor = openTab === 'trezor';
+        const isLyra = openTab === 'lyra';
         const viewTitle = title &&
             (<div className="LoginModalBlock_header">
                 <span>{title}</span>
@@ -36,6 +38,11 @@ export default class LoginModalBlock extends React.Component {
                         onClick={() => this.handleChoose('secret')}
                         className={isSecret ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}>
                         <span>Secret key</span>
+                    </div>
+                    <div
+                        onClick={() => this.handleChoose('lyra')}
+                        className={isTrezor ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}>
+                        <span>Lyra</span>
                     </div>
                     <div
                         onClick={() => this.handleChoose('ledger')}
@@ -52,6 +59,7 @@ export default class LoginModalBlock extends React.Component {
                     {isSecret && <LoginPageBody d={d} modal />}
                     {isLedger && <LedgerBody d={d} modal />}
                     {isTrezor && <TrezorBody d={d} modal />}
+                    {isLyra && <LyraBody d={d} modal />}
                 </div>
             </div>
         );
