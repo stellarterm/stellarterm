@@ -40,7 +40,7 @@ if (!window.location.pathname.includes('index.html') && window.location.hash.ind
     window.location.replace(window.location.hash.substr(1));
 }
 
-if (window.location.pathname === '/testnet') {
+if (window.location.pathname === '/testnet' || window.location.pathname === '/testnet/') {
     network.isDefault = false;
     network.isTestnet = true;
     network.horizonUrl = 'https://horizon-testnet.stellar.org';
@@ -135,6 +135,9 @@ class TermApp extends React.Component {
                                     <Route
                                         path="/trezor/"
                                         render={props => <Session {...props} d={this.props.d} urlParts={'trezor'} />} />
+                                    <Route
+                                        path="/lyra/"
+                                        render={props => <Session {...props} d={this.props.d} urlParts={'lyra'} />} />
                                     <Route
                                         path="/signup/"
                                         render={props => <Session {...props} d={d} urlParts={'signup'} />} />

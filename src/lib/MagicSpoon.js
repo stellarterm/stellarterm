@@ -5,6 +5,7 @@ import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
+import { signTransaction } from '@stellar/lyra-api';
 import Stellarify from '../lib/Stellarify';
 import TransformTrezorTransaction from './TransformTrezorTransaction';
 import ErrorHandler from './ErrorHandler';
@@ -66,6 +67,20 @@ const MagicSpoon = {
                     }
                     return Promise.reject(result.payload);
                 });
+        };
+
+        sdkAccount.signWithLyra = async (tx) => {
+            console.log('Signing with Lyra extension');
+            const result = await signTransaction({ transactionXdr: tx.toEnvelope().toXDR('base64') });
+            if (result.signedTransaction) {
+                const { signatures } = new StellarSdk.Transaction(result.signedTransaction,
+                    Server.networkPassphrase);
+                const { hint, signature } = signatures[0]._attributes;
+                const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
+                tx.signatures.push(decorated);
+                return tx;
+            }
+            return Promise.reject(result.error);
         };
 
         sdkAccount.signWithSecret = (transaction) => {
@@ -346,7 +361,8 @@ const MagicSpoon = {
                 this.baseBuying = baseBuying;
                 this.counterSelling = counterSelling;
 
-                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(({ records }) => {
+                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then((result) => {
+                    const { records } = result || [];
                     this.marketTradesHistory = records;
                     this.ready = true;
                     onUpdate(() => {});

@@ -41,6 +41,7 @@ export default function SessionContent(props) {
                     render={prop => <SepTransactions {...prop} d={d} />} />
                 <Redirect from="/ledger/" to="/account/" />
                 <Redirect from="/trezor/" to="/account/" />
+                <Redirect from="/lyra/" to="/account/" />
                 <Redirect from="/signup/" to="/account/" />
                 <Route render={() => <NotFound />} />
             </Switch>
