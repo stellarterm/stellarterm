@@ -16,11 +16,11 @@ const HARDWARE_WALLET_DATA = {
         capitalizedFullName: 'Trezor device',
         logo: 'trezor-mini',
     },
-    lyra: {
-        link: '/lyra/',
-        capitalizedName: 'Lyra',
-        capitalizedFullName: 'Lyra extension',
-        logo: 'lyra',
+    freighter: {
+        link: '/freighter/',
+        capitalizedName: 'Freighter',
+        capitalizedFullName: 'Freighter extension',
+        logo: 'freighter-logo',
     },
 };
 export default function HardwareWalletLoginLink(props) {
@@ -44,5 +44,5 @@ export default function HardwareWalletLoginLink(props) {
 }
 HardwareWalletLoginLink.propTypes = {
     narrow: PropTypes.bool,
-    wallet: PropTypes.oneOf(['ledger', 'trezor', 'lyra']).isRequired,
+    wallet: PropTypes.oneOf(['ledger', 'trezor', 'freighter']).isRequired,
 };

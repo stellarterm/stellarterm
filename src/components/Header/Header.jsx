@@ -129,7 +129,7 @@ class Header extends React.Component {
             (currentPath.includes('ledger')
                 || currentPath.includes('signup')
                 || currentPath.includes('trezor')
-                || currentPath.includes('lyra'));
+                || currentPath.includes('freighter'));
     }
 
     createHeaderTab(url, text) {
