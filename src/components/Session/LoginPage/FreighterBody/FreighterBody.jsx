@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { isConnected } from '@stellar/lyra-api';
+import { isConnected } from '@stellar/freighter-api';
 import images from '../../../../images';
 import HiddenDescription from '../Common/HiddenDescription';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
@@ -9,13 +9,13 @@ import { isChrome } from '../../../../lib/BrowserSupport';
 import AcceptTerms from '../Common/AcceptTerms';
 
 
-const LyraBody = ({ history, d, modal }) => {
+const FreighterBody = ({ history, d, modal }) => {
     const [loginError, setLoginError] = useState('');
 
-    const loginWithLyra = (event) => {
+    const loginWithFreighter = (event) => {
         event.preventDefault();
         setLoginError('');
-        d.session.handlers.logInWithLyra()
+        d.session.handlers.logInWithFreighter()
             .catch(e => setLoginError(e));
     };
 
@@ -33,27 +33,27 @@ const LyraBody = ({ history, d, modal }) => {
         return null;
     };
 
-    const getLyraLoginForm = () => {
+    const getFreighterLoginForm = () => {
         if (!isChrome()) {
             return (
                 <p className="LoginPage__form--title browser-support">
-                    Lyra extension is available in chrome only
+                    Freighter extension is available in chrome only
                 </p>
             );
         }
         if (!isConnected()) {
             return (
                 <p className="LoginPage__form--title browser-support">
-                    Lyra extension is not installed
+                    Freighter extension is not installed
                 </p>
             );
         }
         const loginErrorView = renderLoginError();
         return (
-            <form onSubmit={loginWithLyra}>
+            <form onSubmit={loginWithFreighter}>
                 <div className="LoginPage__submitWrap">
                     {loginErrorView}
-                    <AcceptTerms loginButtonText={'Sign in with Lyra'} />
+                    <AcceptTerms loginButtonText={'Sign in with Freighter'} />
                 </div>
             </form>
         );
@@ -62,7 +62,7 @@ const LyraBody = ({ history, d, modal }) => {
     if (modal) {
         return (
             <div className="LoginPage__body LoginPage__popup">
-                <div className="LoginPage__greenBox">{getLyraLoginForm()}</div>
+                <div className="LoginPage__greenBox">{getFreighterLoginForm()}</div>
             </div>
         );
     }
@@ -83,12 +83,12 @@ const LyraBody = ({ history, d, modal }) => {
                     <div className="LoginPage__header">
                         <div className="LoginPage__header-wrap">
                             <span className="LoginPage__title">Access your account</span>
-                            <span className="LoginPage__intro">Use StellarTerm with your Lyra extension</span>
+                            <span className="LoginPage__intro">Use StellarTerm with your Freighter extension</span>
                         </div>
-                        <img src={images.lyra} alt="trezor" width="40" />
+                        <img src={images['freighter-logo-main']} alt="freighter" height="66" />
                     </div>
                     <div className="LoginPage__greenBox">
-                        {getLyraLoginForm()}
+                        {getFreighterLoginForm()}
                     </div>
                 </div>
                 <SecretPhrase d={d} />
@@ -97,9 +97,9 @@ const LyraBody = ({ history, d, modal }) => {
     );
 };
 
-export default LyraBody;
+export default FreighterBody;
 
-LyraBody.propTypes = {
+FreighterBody.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     history: PropTypes.objectOf(PropTypes.any),
     modal: PropTypes.bool,

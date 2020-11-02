@@ -3,7 +3,7 @@ import * as StellarSdk from 'stellar-sdk';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from 'trezor-connect';
-import { getPublicKey } from '@stellar/lyra-api';
+import { getPublicKey } from '@stellar/freighter-api';
 import FastAverageColor from 'fast-average-color';
 import directory from 'stellarterm-directory';
 import isElectron from 'is-electron';
@@ -26,7 +26,7 @@ export default function Send(driver) {
         this.unfundedAccountId = '';
         this.inflationDone = false;
         this.account = null; // MagicSpoon.Account instance
-        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'lyra'
+        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'freighter'
         this.jwtToken = null;
         this.userFederation = '';
         this.promisesForMyltipleLoading = {};
@@ -133,15 +133,16 @@ export default function Send(driver) {
                 authType: 'pubkey',
             });
         },
-        logInWithLyra: async () => {
-            const { publicKey, error } = await getPublicKey();
-            if (error) {
-                throw error;
+        logInWithFreighter: async () => {
+            try {
+                const publicKey = await getPublicKey();
+                const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
+                return this.handlers.logIn(keypair, {
+                    authType: 'freighter',
+                });
+            } catch (e) {
+                throw e;
             }
-            const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
-            return this.handlers.logIn(keypair, {
-                authType: 'lyra',
-            });
         },
         logInWithTrezor: async bip32Path => TrezorConnect.stellarGetAddress({ path: bip32Path, showOnTrezor: false })
             .then((result) => {
@@ -289,8 +290,8 @@ export default function Send(driver) {
                     status: 'finish',
                     signedTx,
                 };
-            } else if (this.authType === 'lyra') {
-                const signedTx = await this.account.signWithLyra(tx);
+            } else if (this.authType === 'freighter') {
+                const signedTx = await this.account.signWithFreighter(tx);
                 return {
                     status: 'finish',
                     signedTx,

@@ -136,8 +136,8 @@ class TermApp extends React.Component {
                                         path="/trezor/"
                                         render={props => <Session {...props} d={this.props.d} urlParts={'trezor'} />} />
                                     <Route
-                                        path="/lyra/"
-                                        render={props => <Session {...props} d={this.props.d} urlParts={'lyra'} />} />
+                                        path="/freighter/"
+                                        render={props => <Session {...props} d={this.props.d} urlParts={'freighter'} />} />
                                     <Route
                                         path="/signup/"
                                         render={props => <Session {...props} d={d} urlParts={'signup'} />} />
