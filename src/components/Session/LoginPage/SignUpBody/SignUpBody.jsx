@@ -23,6 +23,7 @@ export default class SignUpBody extends React.Component {
                     <div className="SignUpBody">
                         <SignUpPreview nextStep={() => this.setSignUpStep('generateKeyPair')} />
                     </div>
+                    <HardwareWalletLoginLink narrow wallet={'freighter'} />
                     <HardwareWalletLoginLink narrow wallet={'ledger'} />
                     <HardwareWalletLoginLink narrow wallet={'trezor'} />
                 </React.Fragment>

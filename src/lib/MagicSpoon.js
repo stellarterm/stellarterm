@@ -5,6 +5,7 @@ import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
+import { signTransaction } from '@stellar/freighter-api';
 import Stellarify from '../lib/Stellarify';
 import TransformTrezorTransaction from './TransformTrezorTransaction';
 import ErrorHandler from './ErrorHandler';
@@ -66,6 +67,21 @@ const MagicSpoon = {
                     }
                     return Promise.reject(result.payload);
                 });
+        };
+
+        sdkAccount.signWithFreighter = async (tx) => {
+            console.log('Signing with Freighter extension');
+            try {
+                const result = await signTransaction(tx.toEnvelope().toXDR('base64'));
+                const { signatures } = new StellarSdk.Transaction(result, Server.networkPassphrase);
+                const hint = signatures[0].hint();
+                const signature = signatures[0].signature();
+                const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
+                tx.signatures.push(decorated);
+                return tx;
+            } catch (e) {
+                return Promise.reject(e);
+            }
         };
 
         sdkAccount.signWithSecret = (transaction) => {
@@ -346,7 +362,8 @@ const MagicSpoon = {
                 this.baseBuying = baseBuying;
                 this.counterSelling = counterSelling;
 
-                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(({ records }) => {
+                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then((result) => {
+                    const { records } = result || [];
                     this.marketTradesHistory = records;
                     this.ready = true;
                     onUpdate(() => {});

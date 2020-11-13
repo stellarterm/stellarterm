@@ -34,11 +34,11 @@ export default class SessionAccountMenu extends React.Component {
                             </nav>
                         }
                         <nav className="subNav__nav">
-                            <Link
+                            <a
                                 className="subNav__nav__item"
                                 onClick={() => { this.props.d.session.handlers.logout(); }}>
                                 <span>Log out</span>
-                            </Link>
+                            </a>
                         </nav>
                     </div>
                 </div>
