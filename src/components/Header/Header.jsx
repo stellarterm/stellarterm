@@ -126,7 +126,10 @@ class Header extends React.Component {
     checkAccountTab(url) {
         const { currentPath } = this.state;
         return url === '/account/' &&
-            (currentPath.includes('ledger') || currentPath.includes('signup') || currentPath.includes('trezor'));
+            (currentPath.includes('ledger')
+                || currentPath.includes('signup')
+                || currentPath.includes('trezor')
+                || currentPath.includes('freighter'));
     }
 
     createHeaderTab(url, text) {
