@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Fragment, useState } from 'react';
 import PropTypes from 'prop-types';
 import { isConnected } from '@stellar/freighter-api';
 import images from '../../../../images';
@@ -43,9 +43,18 @@ const FreighterBody = ({ history, d, modal }) => {
         }
         if (!isConnected()) {
             return (
-                <p className="LoginPage__form--title browser-support">
-                    Freighter extension is not installed
-                </p>
+                <Fragment>
+                    <p className="LoginPage__form--title browser-support">
+                        Freighter extension is not installed
+                    </p>
+                    <a
+                        className="LoginPage__link"
+                        target="_blank"
+                        rel="nofollow noopener noreferrer"
+                        href="https://chrome.google.com/webstore/detail/freighter/bcacfldlkkdogcmkkibnjlakofdplcbk">
+                        Install Freighter
+                    </a>
+                </Fragment>
             );
         }
         const loginErrorView = renderLoginError();
