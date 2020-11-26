@@ -37,7 +37,9 @@ const FreighterBody = ({ history, d, modal }) => {
         if (!isChrome()) {
             return (
                 <p className="LoginPage__form--title browser-support">
-                    Freighter extension is available in chrome only
+                    Freighter extension is not supported by your browser.
+                    <br />
+                    Please use Google Chrome.
                 </p>
             );
         }
@@ -45,7 +47,7 @@ const FreighterBody = ({ history, d, modal }) => {
             return (
                 <Fragment>
                     <p className="LoginPage__form--title browser-support">
-                        Freighter extension is not installed
+                        Freighter extension is not installed.
                     </p>
                     <a
                         className="LoginPage__link"
