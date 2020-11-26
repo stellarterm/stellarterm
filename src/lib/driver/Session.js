@@ -322,13 +322,14 @@ export default function Send(driver) {
             const tx = txBuilder.build();
             return this.handlers.signSubmit(tx);
         },
-        signSubmit: async (tx) => {
+        signSubmit: async (transaction) => {
             let result = {
                 status: 'cancel',
             };
             try {
-                const signResult = await this.handlers.sign(tx);
+                const signResult = await this.handlers.sign(transaction);
                 if (signResult.status === 'finish') {
+                    const tx = signResult.signedTx;
                     const threshold = this.handlers.getTransactionThreshold(tx);
                     const thresholdValue = this.account.thresholds[threshold];
                     const masterWeight = this.account.signers
