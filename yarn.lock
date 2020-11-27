@@ -9331,10 +9331,10 @@ stellar-base@^1.0.2:
   optionalDependencies:
     sodium-native "^2.3.0"
 
-stellar-base@^3.0.0:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-3.0.4.tgz#9f9b183921886c326609c37b701a725320e5e004"
-  integrity sha512-aSa5T7/y+jYmgdpyZKwvc13u1pR4MLI7yaDMaVV7tGp98lFcvd1F37QlZXf0j5QS7NVVpXWZ5iDmftZcjx2Euw==
+stellar-base@^4.0.0:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/stellar-base/-/stellar-base-4.0.3.tgz#03a55fd8ebbd32804d94e87f41bdc56af2a6747b"
+  integrity sha512-Tf1Ko86j4CgUtaiTC6H6qPZ97EziXN6SVokH4FGv5+XvBhFg4V+u9ySMlgPjFbHQumplkHiw8JQx1IZRHnrT3A==
   dependencies:
     base32.js "^0.1.0"
     bignumber.js "^4.0.0"
@@ -9353,10 +9353,10 @@ stellar-identicon-js@^1.0.0:
   dependencies:
     html-webpack-plugin "^3.2.0"
 
-stellar-sdk@5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/stellar-sdk/-/stellar-sdk-5.0.2.tgz#8b26c46e6cde0b628b523ad73d35af465e0e70c8"
-  integrity sha512-nnRxfaLhITrjhfA+8zbjElhfoBr6WU7RslRE4pLcZf3jcO3wcE6W9i8m43lf0FJFYUQdc9fY+IYtFc/AOhnxYA==
+stellar-sdk@7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/stellar-sdk/-/stellar-sdk-7.0.0.tgz#9f4a8fbd5bd6c9be180872b13d1e0b6ada3ef5c8"
+  integrity sha512-90hGtqs4W79CFs2SoRtlNC03LysbSZa0UI/msEckQstFnuDzfTxh0GXaN/9EU9OmCE9F13hCIb+E/LBLlPNeHg==
   dependencies:
     "@types/eventsource" "^1.1.2"
     "@types/node" ">= 8"
@@ -9369,7 +9369,7 @@ stellar-sdk@5.0.2:
     eventsource "^1.0.7"
     lodash "^4.17.11"
     randombytes "^2.1.0"
-    stellar-base "^3.0.0"
+    stellar-base "^4.0.0"
     toml "^2.3.0"
     tslib "^1.10.0"
     urijs "^1.19.1"
