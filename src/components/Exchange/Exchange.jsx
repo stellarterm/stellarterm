@@ -175,8 +175,9 @@ export default class Exchange extends React.Component {
             return;
         }
         if (!this.props.d.orderbook.data.ready) {
-            const baseBuying = new StellarSdk.Asset('USD', 'GDUKMGUGDZQK6YHYA5Z6AY2G4XDSZPSZ3SW5UN3ARVMO6QSRDWP5YLEX');
-            const counterSelling = StellarSdk.Asset.native();
+            const baseBuying = StellarSdk.Asset.native();
+            const counterSelling = new StellarSdk.Asset('USDC', 'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN');
+
             this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
             window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
             return;
