@@ -5,11 +5,6 @@ import { getUrlWithParams } from './api/endpoints';
 
 const headers = {};
 
-export async function getJwtTokenUrl(WEB_AUTH_URL, accountId) {
-    const params = { account: accountId };
-    return getUrlWithParams(WEB_AUTH_URL, params);
-}
-
 export async function getTransferServer(domain) {
     const {
         TRANSFER_SERVER,
@@ -39,7 +34,7 @@ export async function getTransferServerInfo(TRANSFER_SERVER) {
     const params = {};
 
     return request
-        .get(`${getUrlWithParams(anchorRequestUrl, params)}`, { headers })
+        .get(`${getUrlWithParams(anchorRequestUrl, params)}`)
         .then(res => res)
         .catch(res => res.data);
 }
@@ -89,7 +84,7 @@ export async function getTransactions(TRANSFER_SERVER, requestParams, jwt, isSep
         .catch(res => res.data);
 }
 
-export async function getTransaction(TRANSFER_SERVER, requestParams, jwt, isSep24) {
+export async function getTransaction(TRANSFER_SERVER, requestParams, jwt) {
     const anchorRequestUrl = `${TRANSFER_SERVER}transaction`;
     const jwtString = `Bearer ${jwt}`;
     headers.Authorization = jwtString;

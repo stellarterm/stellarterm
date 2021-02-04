@@ -24,6 +24,9 @@ function resultError(errorMessage) {
 }
 
 const Validate = {
+  isBase64(string) { 
+    return /^([0-9a-zA-Z+/]{4})*(([0-9a-zA-Z+/]{2}==)|([0-9a-zA-Z+/]{3}=))?$/.test(string);
+  },
   assetCode(input) {
     return _.isString(input) && input.match(/^[a-zA-Z0-9]+$/g) && input.length > 0 && input.length < 12;
   },
