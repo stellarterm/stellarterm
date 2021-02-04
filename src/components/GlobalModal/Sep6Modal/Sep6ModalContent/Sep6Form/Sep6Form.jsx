@@ -11,7 +11,12 @@ export default class Sep6Form extends React.Component {
 
         this.state = {
             assetInfo: this.props.assetInfo,
-            withdrawParams: { asset_code: this.props.asset.code, account: this.props.d.session.account.accountId() },
+            withdrawParams: {
+                wallet_name: 'StellarTerm',
+                wallet_url: 'https://stellarterm.com',
+                asset_code: this.props.asset.code,
+                account: this.props.d.session.account.accountId(),
+            },
         };
     }
 

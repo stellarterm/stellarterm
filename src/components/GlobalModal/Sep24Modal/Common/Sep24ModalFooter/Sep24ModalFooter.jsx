@@ -6,6 +6,7 @@ import Driver from '../../../../../lib/Driver';
 import MagicSpoon from '../../../../../lib/MagicSpoon';
 import ErrorHandler from '../../../../../lib/ErrorHandler';
 import images from '../../../../../images';
+import Validate from '../../../../../lib/Validate';
 
 export default class Sep24ModalFooter extends React.Component {
     constructor(props) {
@@ -140,11 +141,17 @@ export default class Sep24ModalFooter extends React.Component {
 
         const { d, asset, transaction } = this.props;
         const memoType = transaction.withdraw_memo_type && `MEMO_${transaction.withdraw_memo_type.toUpperCase()}`;
-        const memo = transaction.withdraw_memo && transaction.withdraw_memo.toString();
+        let memo = transaction.withdraw_memo && transaction.withdraw_memo.toString();
 
         let type = memoType || 'MEMO_TEXT';
         if (type.toUpperCase() !== type) {
             type = `MEMO_${type.toUpperCase()}`;
+        }
+
+        // If returned base64 memo, encode it to stellar memo (BRL token)
+        if (memoType === 'MEMO_HASH' && Validate.isBase64(memo)) {
+            const buff = Buffer.from(memo, 'base64');
+            memo = buff.toString('hex');
         }
 
         const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {

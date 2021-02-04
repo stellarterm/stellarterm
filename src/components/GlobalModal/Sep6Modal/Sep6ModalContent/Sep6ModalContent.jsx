@@ -35,6 +35,8 @@ export default class Sep6ModalContent extends React.Component {
             isFormError: false,
             response: {},
             requestParams: {
+                wallet_name: 'StellarTerm',
+                wallet_url: 'https://stellarterm.com',
                 asset_code: this.props.asset.code,
                 account: this.props.d.session.account.accountId(),
             },
@@ -42,13 +44,13 @@ export default class Sep6ModalContent extends React.Component {
     }
 
     componentDidMount() {
-        const { asset, isDeposit } = this.props;
+        const { asset, isDeposit, d } = this.props;
 
         getTransferServer(asset.domain)
             .then(({ TRANSFER_SERVER, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
                 this.TRANSFER_SERVER = TRANSFER_SERVER;
                 this.WEB_AUTH_URL = WEB_AUTH_URL;
-                this.NETWORK_PASSPHRASE = NETWORK_PASSPHRASE;
+                this.NETWORK_PASSPHRASE = NETWORK_PASSPHRASE || d.Server.networkPassphrase;
             })
             .then(() => getTransferServerInfo(this.TRANSFER_SERVER))
             .then(transferInfo => (isDeposit ? transferInfo.deposit : transferInfo.withdraw))

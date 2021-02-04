@@ -29,6 +29,8 @@ export default class Sep24ModalContent extends React.Component {
             transaction: this.props.transaction,
             windowClosed: false,
             requestParams: {
+                wallet_name: 'StellarTerm',
+                wallet_url: 'https://stellarterm.com',
                 asset_code: this.props.asset.code,
                 account: this.props.d.session.account.accountId(),
             },
@@ -146,7 +148,7 @@ export default class Sep24ModalContent extends React.Component {
             this.state.transaction.status === 'completed';
         // Poll transactions anchor endpoint, if transaction is between 2 ending statuses
 
-        getTransaction(this.TRANSFER_SERVER_SEP0024, transactionParams, this.jwtToken, true)
+        getTransaction(this.TRANSFER_SERVER_SEP0024, transactionParams, this.jwtToken)
             .then(({ transaction }) => {
                 clearTimeout(this.pollingTimeout);
                 this.setState({ transaction });
