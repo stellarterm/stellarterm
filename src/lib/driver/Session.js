@@ -707,6 +707,19 @@ export default function Send(driver) {
                 .catch(e => e.data);
         },
 
+        fundByFriendBot: (testnetPubKey) => {
+            const headers = { 'Content-Type': 'application/json' };
+            const params = { addr: testnetPubKey };
+
+            return request
+                .get(`${getEndpoint('friendbotFunding', params)}`, { headers })
+                .then((res) => {
+                    const responseJSON = res.json();
+                    console.log(responseJSON)
+                })
+                .catch(e => e.data);
+        },
+
         setInflation: async (destination) => {
             const inflationDestination = {
                 inflationDest: destination,

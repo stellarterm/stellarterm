@@ -21,14 +21,14 @@ export default class Session extends React.Component {
 
     render() {
         const { props } = this;
-        const { d, urlParts } = this.props;
+        const { d, urlParts, isTestnet } = this.props;
         const { state, unfundedAccountId, inflationDone } = d.session;
 
         switch (state) {
         case 'out':
             return <LoginPage {...props} d={d} urlParts={urlParts} />;
         case 'unfunded':
-            return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} />;
+            return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} isTestnet={isTestnet} />;
         case 'loading':
             return <SessionLoading />;
         case 'in':
@@ -46,4 +46,5 @@ export default class Session extends React.Component {
 Session.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     urlParts: PropTypes.string,
+    isTestnet: PropTypes.bool,
 };

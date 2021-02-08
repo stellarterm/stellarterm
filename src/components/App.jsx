@@ -26,13 +26,13 @@ window.React = React;
 const mountNode = document.getElementById('app');
 
 // const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.org';
-const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.lobstr.co';
+const DEFAULT_HORIZON_SERVER = 'https://horizon-testnet.stellar.org';
 
 const network = {
     horizonUrl: DEFAULT_HORIZON_SERVER,
-    networkPassphrase: StellarSdk.Networks.PUBLIC,
-    isDefault: true, // If it's default, then we don't show a notice bar at the top
-    isTestnet: false,
+    networkPassphrase: StellarSdk.Networks.TESTNET,
+    isDefault: false, // If it's default, then we don't show a notice bar at the top
+    isTestnet: true,
     isCustom: false,
 };
 
@@ -128,7 +128,7 @@ class TermApp extends React.Component {
                                     <Route path="/terms-of-use/" component={TermsOfUse} />
                                     <Route
                                         path="/account/"
-                                        render={props => <Session {...props} d={d} urlParts={'account'} />} />
+                                        render={props => <Session {...props} d={d} urlParts={'account'} isTestnet={network.isTestnet} />} />
                                     <Route
                                         path="/ledger/"
                                         render={props => <Session {...props} d={d} urlParts={'ledger'} />} />
