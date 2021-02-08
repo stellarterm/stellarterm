@@ -10,7 +10,7 @@ import isElectron from 'is-electron';
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
-import { getEndpoint } from '../api/endpoints';
+import { getEndpoint, getUrlWithParams } from '../api/endpoints';
 
 
 export default function Send(driver) {
@@ -712,11 +712,7 @@ export default function Send(driver) {
             const params = { addr: testnetPubKey };
 
             return request
-                .get(`${getEndpoint('friendbotFunding', params)}`, { headers })
-                .then((res) => {
-                    const responseJSON = res.json();
-                    console.log(responseJSON)
-                })
+                .get(`${getUrlWithParams('https://friendbot.stellar.org', params)}`, { headers })
                 .catch(e => e.data);
         },
 

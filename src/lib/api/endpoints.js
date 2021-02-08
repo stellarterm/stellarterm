@@ -35,10 +35,6 @@ export const endpoints = {
         url: 'graphql',
         baseUrl: EnvConsts.STELLAR_TICKER,
     },
-    friendbotFunding: {
-        url: '',
-        baseUrl: EnvConsts.TESTNET_FRIENDBOT,
-    },
 };
 
 function getUrlParams(params) {
