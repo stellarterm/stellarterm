@@ -75,12 +75,13 @@ export default class TransactionContent extends React.Component {
 
         return (
             <div className="transaction_Info">
-                <div className="more_Info">
-                    <a href={more_info_url} target="_blank" rel="nofollow noopener noreferrer">
-                        <img title="More info" src={images['icon-info']} alt="i" />
-                    </a>
-                </div>
-
+                {more_info_url && (
+                    <div className="more_Info">
+                        <a href={more_info_url} target="_blank" rel="nofollow noopener noreferrer">
+                            <img title="More info" src={images['icon-info']} alt="i" />
+                        </a>
+                    </div>
+                )}
                 {this.constructor.getInfoBlock('Type', kind)}
                 {this.constructor.getInfoBlock('Status', readableStatus)}
                 {started_at ? this.constructor.getInfoBlock('Started time', startDate) : null}
