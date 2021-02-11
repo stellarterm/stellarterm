@@ -220,7 +220,7 @@ export default function Send(driver) {
                     this.event.trigger();
                     return;
                 }
-                if (e.response) {
+                if (e.message !== 'Network Error') {
                     this.state = 'unfunded';
                     this.unfundedAccountId = keypair.publicKey();
                     setTimeout(() => {
