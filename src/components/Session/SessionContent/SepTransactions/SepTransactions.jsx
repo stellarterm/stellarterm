@@ -110,6 +110,14 @@ export default class SepTransactions extends React.Component {
             .then(() => getTransferServerInfo(this.TRANSFER_SERVER))
             .then((info) => {
                 asset.info = info;
+                if (asset.sep24) {
+                    return this.checkForJwt(asset);
+                }
+
+                if (info.transactions.enabled && !info.transactions.authentication_required) {
+                    return this.checkForJwt(asset, true);
+                }
+
                 if (!info.transactions.enabled) {
                     this.setState({
                         sepAsset: asset,
@@ -241,7 +249,7 @@ export default class SepTransactions extends React.Component {
         );
     }
 
-    checkForJwt(asset) {
+    checkForJwt(asset, noAuth) {
         const { d } = this.props;
         const requestParams = {
             asset_code: asset.code,
@@ -254,7 +262,7 @@ export default class SepTransactions extends React.Component {
 
         return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
             this.jwtToken = token;
-            return getTransactions(this.TRANSFER_SERVER, requestParams, this.jwtToken, asset.sep24);
+            return getTransactions(this.TRANSFER_SERVER, requestParams, this.jwtToken, asset.sep24, noAuth);
         });
     }
 

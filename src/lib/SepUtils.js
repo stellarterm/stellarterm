@@ -3,12 +3,7 @@ import * as StellarSdk from 'stellar-sdk';
 import * as request from './api/request';
 import { getUrlWithParams } from './api/endpoints';
 
-const headers = {};
-
-export async function getJwtTokenUrl(WEB_AUTH_URL, accountId) {
-    const params = { account: accountId };
-    return getUrlWithParams(WEB_AUTH_URL, params);
-}
+let headers = {};
 
 export async function getTransferServer(domain) {
     const {
@@ -39,7 +34,7 @@ export async function getTransferServerInfo(TRANSFER_SERVER) {
     const params = {};
 
     return request
-        .get(`${getUrlWithParams(anchorRequestUrl, params)}`, { headers })
+        .get(`${getUrlWithParams(anchorRequestUrl, params)}`)
         .then(res => res)
         .catch(res => res.data);
 }
@@ -76,11 +71,12 @@ export async function sep24Request(TRANSFER_SERVER, isDeposit, jwt, requestParam
         .catch(res => res.data);
 }
 
-export async function getTransactions(TRANSFER_SERVER, requestParams, jwt, isSep24) {
+export async function getTransactions(TRANSFER_SERVER, requestParams, jwt, isSep24, noAuth) {
     const anchorRequestUrl = `${TRANSFER_SERVER}transactions`;
     const jwtString = `Bearer ${jwt}`;
     headers.Authorization = jwtString;
 
+    if (noAuth) { headers = {}; }
     if (isSep24) { delete requestParams.account; }
 
     return request
@@ -89,7 +85,7 @@ export async function getTransactions(TRANSFER_SERVER, requestParams, jwt, isSep
         .catch(res => res.data);
 }
 
-export async function getTransaction(TRANSFER_SERVER, requestParams, jwt, isSep24) {
+export async function getTransaction(TRANSFER_SERVER, requestParams, jwt) {
     const anchorRequestUrl = `${TRANSFER_SERVER}transaction`;
     const jwtString = `Bearer ${jwt}`;
     headers.Authorization = jwtString;
