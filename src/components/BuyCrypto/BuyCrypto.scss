@@ -1,0 +1,48 @@
+@import "BuyCryptoStatic/BuyCryptoStatic";
+
+.BuyCrypto_wrapper {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 72px - 117px); // minus header height, minus footer height
+    flex-direction: column;
+
+    .BuyCrypto_main {
+        display: flex;
+        flex-direction: row;
+        padding: 74px 0;
+        align-items: center;
+        justify-content: center;
+
+        .BuyCrypto_main-text-block {
+            margin-right: 45px;
+            max-width: 467px;
+
+            .BuyCrypto_title {
+                font-size: 42px;
+                font-weight: 300;
+                color: #324351;
+                margin-bottom: 16px;
+            }
+
+            .BuyCrypto_description {
+                font-size: 14px;
+                color: #324351;
+                font-weight: normal;
+            }
+        }
+
+        .BuyCrypto_form {
+            width: 466px;
+            height: 348px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+        }
+    }
+}
+
+
+
+
+
+

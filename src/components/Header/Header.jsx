@@ -8,6 +8,22 @@ import images from '../../images';
 import Driver from '../../lib/Driver';
 
 class Header extends React.Component {
+    static getBuyCryptoLobsterLink() {
+        return (
+            <div className="Nav_link buy_crypto">
+                <span>Buy crypto </span>
+                <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
+                <img src={images.dropdown} alt="" />
+                <div className="buy_crypto-links">
+                    <Link className="buy_crypto-link" to="/buy-crypto">Buy Bitcoin</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto">Buy Ethereum</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto">Buy Lumens</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto">Buy other crypto</Link>
+                </div>
+            </div>
+        );
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -30,23 +46,6 @@ class Header extends React.Component {
 
     componentWillUnmount() {
         this.props.d.session.event.unlisten(this.listenId);
-    }
-
-    getBuyCryptoLobsterLink() {
-        const { account, unfundedAccountId } = this.props.d.session;
-        const accountID = account === null ? unfundedAccountId : account.accountId();
-        const targetAddressParam = `?target_address=${accountID}`;
-
-        return (
-            <a
-                className={'Nav_link buy_crypto'}
-                href={`https://lobstr.co/buy-crypto${targetAddressParam}`}
-                target="_blank"
-                rel="nofollow noopener noreferrer">
-                <span>Buy Lumens </span>
-                <img src={images['icon-visa-mc']} alt="credit-card" />
-            </a>
-        );
     }
 
     getNetworkBar() {
@@ -160,7 +159,7 @@ class Header extends React.Component {
                             </Link>
                             {this.createHeaderTab('/exchange/', 'Exchange')}
                             {this.createHeaderTab('/markets/', 'Markets')}
-                            {this.getBuyCryptoLobsterLink()}
+                            {Header.getBuyCryptoLobsterLink()}
                             {this.createHeaderTab('/account/', 'Account')}
                             {!isElectron() ? this.createHeaderTab('/download/', 'Download') : null}
                         </nav>

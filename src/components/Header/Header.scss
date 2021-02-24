@@ -63,11 +63,42 @@
                     display: flex;
                     justify-content: center;
                     align-items: center;
+                    position: relative;
 
-                    img {
+                    .cards_logo {
                         margin-left: 0.5em;
                         height: 15px;
                         width: 52px;
+                    }
+
+                    .buy_crypto-links {
+                        display: none;
+                        position: absolute;
+                        left: 0;
+                        top: 100%;
+                        width: 100%;
+                        background-color: #fff;
+                        z-index: 11;
+                        flex-direction: column;
+                        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+                    }
+
+                    .buy_crypto-link {
+                        padding: 12px 22px;
+                        cursor: pointer;
+                        font-size: 14px;
+                        color: #324351;
+                        width: 100%;
+
+                        &:hover {
+                            background-color: #eee;
+                        }
+                    }
+
+                    &:hover {
+                        .buy_crypto-links {
+                            display: flex;
+                        }
                     }
                 }
             }
