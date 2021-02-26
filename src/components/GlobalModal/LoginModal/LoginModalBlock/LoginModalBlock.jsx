@@ -41,7 +41,7 @@ export default class LoginModalBlock extends React.Component {
                     </div>
                     <div
                         onClick={() => this.handleChoose('freighter')}
-                        className={isTrezor ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}>
+                        className={isFreighter ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}>
                         <span>Freighter</span>
                     </div>
                     <div

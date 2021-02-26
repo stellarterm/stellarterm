@@ -12,6 +12,7 @@ export default function MultisigSubmitModal(props) {
             <div className="MultisigSubmitModal__content">
                 <img
                     src={images[signer.logo]}
+                    height={signer.logo === 'lobstr-logo' ? 85 : 130}
                     className="MultisigSubmitModal__logo"
                     alt={signer.title} />
                 <span>Transaction has been sent to {signer.title}</span>

@@ -35,6 +35,7 @@ export default function SessionContent(props) {
                     path="/account/transactions/"
                     render={prop => <SepTransactions {...prop} d={d} />} />
                 <Redirect from="/ledger/" to="/account/" />
+                <Redirect from="/lobstr/" to="/account/" />
                 <Redirect from="/trezor/" to="/account/" />
                 <Redirect from="/freighter/" to="/account/" />
                 <Redirect from="/signup/" to="/account/" />

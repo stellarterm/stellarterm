@@ -1,5 +1,8 @@
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
+import WalletConnect from '@walletconnect/client';
+import QRCodeModal from '@walletconnect/qrcode-modal';
+import * as Utils from '@walletconnect/utils';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from 'trezor-connect';
@@ -22,10 +25,11 @@ export default function Send(driver) {
 
         this.setupLedgerError = null; // Could connect but couldn't reach address
         this.ledgerConnected = false;
+        this.connector = null;
 
         this.unfundedAccountId = '';
         this.account = null; // MagicSpoon.Account instance
-        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'freighter'
+        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'freighter', 'lobstr'
         this.jwtToken = null;
         this.userFederation = '';
         this.promisesForMyltipleLoading = {};
@@ -147,6 +151,46 @@ export default function Send(driver) {
                 authType: 'pubkey',
             });
         },
+        loginWithLobstr: async () => {
+            localStorage.removeItem('walletconnect');
+            this.connector = new WalletConnect({
+                bridge: 'https://bridge.walletconnect.org',
+                qrcodeModal: QRCodeModal,
+            });
+
+            // Check if connection is already established
+            if (!this.connector.connected) {
+                // create new session
+                this.connector.createSession();
+            }
+
+            // Subscribe to connection events
+            this.connector.on('connect', (error, payload) => {
+                if (error) {
+                    throw error;
+                }
+
+                // Get provided accounts and chainId
+                const { accounts, chainId } = payload.params[0];
+
+                const accountId = accounts[0];
+
+                const keypair = StellarSdk.Keypair.fromPublicKey(accountId);
+                return this.handlers.logIn(keypair, {
+                    authType: 'lobstr',
+                });
+            });
+
+            this.connector.on('disconnect', (error, payload) => {
+                if (error) {
+                    throw error;
+                }
+
+                if (this.connector) {
+                    this.handlers.logout();
+                }
+            });
+        },
         logInWithFreighter: async () => {
             try {
                 const publicKey = await getPublicKey();
@@ -266,6 +310,22 @@ export default function Send(driver) {
                     status: 'finish',
                     signedTx: tx,
                 };
+            } else if (this.authType === 'lobstr') {
+                const xdr = tx.toEnvelope().toXDR('base64');
+
+                const msg = [
+                    Utils.convertUtf8ToHex(xdr),
+                    '0xbc28ea04101f03ea7a94c1379bc3ab32e65e62d3',
+                ];
+
+                this.connector.signPersonalMessage(msg);
+
+                this.account.incrementSequenceNumber();
+
+                return driver.modal.handlers.activate('multisig', {
+                    title: 'LOBSTR App',
+                    logo: 'lobstr-logo',
+                }).then(() => ({ status: 'await_signers' }));
             } else if (this.authType === 'ledger') {
                 console.log(tx);
                 return driver.modal.handlers.activate('signWithLedger', tx).then(async (modalResult) => {
@@ -762,9 +822,13 @@ export default function Send(driver) {
         },
         logout: () => {
             try {
-                if (!isElectron()) {
+                if (!isElectron() && this.authType !== 'lobstr') {
                     window.location.reload();
                     return;
+                }
+                if (this.authType === 'lobstr' && this.connector) {
+                    this.connector.killSession({ message: 'Logout' });
+                    this.connector = null;
                 }
                 if (this.account) {
                     this.account.clearKeypair();
