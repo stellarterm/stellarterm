@@ -5,6 +5,7 @@ import LoginPageBody from '../../../Session/LoginPage/LoginPageBody/LoginPageBod
 import LedgerBody from '../../../Session/LoginPage/LedgerBody/LedgerBody';
 import TrezorBody from '../../../Session/LoginPage/TrezorBody/TrezorBody';
 import FreighterBody from '../../../Session/LoginPage/FreighterBody/FreighterBody';
+import WalletConnectBody from '../../../Session/LoginPage/WalletConnectBody/WalletConnectBody';
 
 export default class LoginModalBlock extends React.Component {
     constructor(props) {
@@ -22,6 +23,7 @@ export default class LoginModalBlock extends React.Component {
         const { d, title } = this.props;
         const { openTab } = this.state;
         const isSecret = openTab === 'secret';
+        const isWalletConnect = openTab === 'wallet-connect';
         const isLedger = openTab === 'ledger';
         const isTrezor = openTab === 'trezor';
         const isFreighter = openTab === 'freighter';
@@ -36,27 +38,38 @@ export default class LoginModalBlock extends React.Component {
                 <div className="LoginModalBlock_menu">
                     <div
                         onClick={() => this.handleChoose('secret')}
-                        className={isSecret ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}>
+                        className={isSecret ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}
+                    >
                         <span>Secret key</span>
                     </div>
                     <div
+                        onClick={() => this.handleChoose('wallet-connect')}
+                        className={isWalletConnect ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}
+                    >
+                        <span>WalletConnect</span>
+                    </div>
+                    <div
                         onClick={() => this.handleChoose('freighter')}
-                        className={isTrezor ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}>
+                        className={isFreighter ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}
+                    >
                         <span>Freighter</span>
                     </div>
                     <div
                         onClick={() => this.handleChoose('ledger')}
-                        className={isLedger ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}>
+                        className={isLedger ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}
+                    >
                         <span>Ledger</span>
                     </div>
                     <div
                         onClick={() => this.handleChoose('trezor')}
-                        className={isTrezor ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}>
+                        className={isTrezor ? 'LoginModalBlock_menu_item active' : 'LoginModalBlock_menu_item'}
+                    >
                         <span>Trezor</span>
                     </div>
                 </div>
                 <div className="LoginModalBlock_login_body">
                     {isSecret && <LoginPageBody d={d} modal />}
+                    {isWalletConnect && <WalletConnectBody d={d} modal />}
                     {isLedger && <LedgerBody d={d} modal />}
                     {isTrezor && <TrezorBody d={d} modal />}
                     {isFreighter && <FreighterBody d={d} modal />}

@@ -12,7 +12,7 @@ export default class AcceptTerms extends React.Component {
     }
 
     render() {
-        const { withSignUpLink, loginButtonText, funcOnSubmit } = this.props;
+        const { withSignUpLink, loginButtonText, funcOnSubmit, loading } = this.props;
         return (
             <React.Fragment>
                 <label className="LoginPage__accept" htmlFor="inputAcceptCheckbox">
@@ -39,14 +39,18 @@ export default class AcceptTerms extends React.Component {
                     </span>
                 </label>
 
-                <div>
-                    <input
-                        type="submit"
+                <div className="LoginPage_controls">
+                    <button
                         className="LoginPage__button"
+                        type="submit"
                         onClick={funcOnSubmit}
-                        value={loginButtonText}
                         disabled={!this.state.termsAccepted}
-                    />
+                    >
+                        {loginButtonText}
+                        {loading &&
+                            <div className="nk-spinner" />
+                        }
+                    </button>
                     {withSignUpLink && (
                         <span className="LoginPage__signupInvite">
                             Don&#39;t have an account? <Link to="/signup/">Create new account</Link>
@@ -62,4 +66,5 @@ AcceptTerms.propTypes = {
     funcOnSubmit: PropTypes.func,
     loginButtonText: PropTypes.string.isRequired,
     withSignUpLink: PropTypes.bool,
+    loading: PropTypes.bool,
 };

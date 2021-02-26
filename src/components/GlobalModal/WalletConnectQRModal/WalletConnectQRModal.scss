@@ -1,0 +1,53 @@
+.WalletConnectQRModal {
+    background-color: #fff;
+    width: 612px;
+    max-height: 100%;
+    overflow-y: auto;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    .WalletConnectQRModal_content {
+        padding: 31px 34px 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .WalletConnectQRModal_title {
+            font-size: 18px;
+            font-weight: normal;
+            color: #505558;
+            margin-bottom: 10px;
+        }
+
+        .WalletConnectQRModal_description {
+            font-size: 14px;
+            font-weight: normal;
+            color: #9aa6ac;
+            margin-bottom: 10px;
+        }
+
+        .WalletConnectQRModal_link {
+            font-size: 14px;
+            font-weight: normal;
+            color: #68c86f;
+            cursor: pointer;
+            margin-bottom: 35px;
+            text-decoration: none;
+        }
+
+        .WalletConnectQRModal_qr {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            border: 1px solid #f2f2f2;
+            background-color: #fdfdfd;
+            border-radius: 4px;
+            padding: 48px 0 40px;
+        }
+    }
+
+    .WalletConnectQRModal_copy {
+        margin-top: 26px;
+    }
+}

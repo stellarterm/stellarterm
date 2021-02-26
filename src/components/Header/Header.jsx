@@ -5,6 +5,8 @@ import isElectron from 'is-electron';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../images';
 import Driver from '../../lib/Driver';
+import AppPopover from '../Common/AppPopover/AppPopover';
+import { SESSION_STATE } from '../../lib/constants';
 
 class Header extends React.Component {
     constructor(props) {
@@ -14,7 +16,7 @@ class Header extends React.Component {
             currentPath: window.location.pathname,
         };
 
-        this.listenId = this.props.d.session.event.listen(() => {
+        this.unlisten = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
     }
@@ -28,7 +30,7 @@ class Header extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
+        this.unlisten();
     }
 
     getBuyCryptoLobsterLink() {
@@ -83,9 +85,10 @@ class Header extends React.Component {
 
     getAccountBlock() {
         const { state, account, userFederation, unfundedAccountId } = this.props.d.session;
+        const hasMetadata = Boolean(this.props.d.walletConnectService.appMeta);
         const { showPopup } = this.state;
 
-        if (state === 'out') {
+        if (state === SESSION_STATE.OUT) {
             return (
                 <div className="Header_login">
                     <Link className="Header_login-button" to="/signup/">
@@ -99,7 +102,7 @@ class Header extends React.Component {
                 </div>
             );
         }
-        if (state === 'loading') {
+        if (state === SESSION_STATE.LOADING) {
             return null;
         }
         const fullFederation = `${userFederation}*stellarterm.com`;
@@ -127,6 +130,20 @@ class Header extends React.Component {
                 <div className="Header_account-icon">
                     <img src={renderedIcon} alt="icon" />
                 </div>
+                {hasMetadata &&
+                    <AppPopover
+                        hoverArea={
+                            <div className="Header_app-icon">
+                                <img src={this.props.d.walletConnectService.appMeta.icons[0]} alt="" />
+                            </div>
+                        }
+                        content={
+                            <span>
+                                Account connected with WalletConnect
+                            </span>
+                        }
+                    />
+                }
             </div>
         );
     }

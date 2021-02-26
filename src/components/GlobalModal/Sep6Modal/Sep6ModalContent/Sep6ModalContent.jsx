@@ -9,12 +9,12 @@ import Sep6Form from './Sep6Form/Sep6Form';
 import { getTransferServerInfo, sep6Request } from '../../../../lib/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
 import ErrorHandler from '../../../../lib/ErrorHandler';
-
 import FeeBlock from '../Common/FeeBlock';
 import ExtraInfoBlock from '../Common/ExtraInfoBlock';
 import EstimatedTime from '../Common/EstimatedTIme';
 import MinMaxAmount from '../Common/MinMaxAmount';
 import KycFrame from './KycFrame/KycFrame';
+import { AUTH_TYPE } from '../../../../lib/constants';
 
 const kycStatusTypes = new Set(['denied', 'pending']);
 
@@ -184,7 +184,7 @@ export default class Sep6ModalContent extends React.Component {
 
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
-        const isLedgerJwtNeeded = d.session.authType === 'ledger' && this.jwtToken === null;
+        const isLedgerJwtNeeded = d.session.authType === AUTH_TYPE.LEDGER && this.jwtToken === null;
 
         if (isLedgerJwtNeeded) {
             d.modal.handlers.finish();

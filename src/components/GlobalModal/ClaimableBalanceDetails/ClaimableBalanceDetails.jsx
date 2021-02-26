@@ -10,6 +10,7 @@ import { formatDate } from '../../Session/SessionContent/Activity/Activity';
 import AssetCardInRow from '../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import ErrorHandler from '../../../lib/ErrorHandler';
 import AppPopover from '../../Common/AppPopover/AppPopover';
+import { AUTH_TYPE, SESSION_STATE } from '../../../lib/constants';
 
 const MOMENT_FORMAT = 'DD/MM/YYYY HH:mm';
 
@@ -19,7 +20,7 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
     const [error, setError] = useState(null);
 
     const { account, state } = d.session;
-    const isActivatedAccount = state === 'in';
+    const isActivatedAccount = state === SESSION_STATE.IN;
 
     const { accountId } = d.claimableBalances;
 
@@ -78,7 +79,7 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
     const buttonText = isActivatedAccount ? activeButtonText : 'Activate account to claim';
 
     const claim = balanceId => {
-        const isLedger = d.session.authType === 'ledger';
+        const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
         if (isLedger) {
             submit.cancel();
         }

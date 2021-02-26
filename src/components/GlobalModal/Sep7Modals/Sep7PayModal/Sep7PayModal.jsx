@@ -2,17 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../lib/Driver';
-import MagicSpoon from '../../../../lib/MagicSpoon';
 import ErrorHandler from './../../../../lib/ErrorHandler';
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
 import AssetCardInRow from '../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import Sep7GetBuiltTx from '../Sep7GetBuiltTx/Sep7GetBuiltTx';
+import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../../../../lib/constants';
 
 const images = require('./../../../../images');
 
 export default class Sep7PayModal extends React.Component {
+    static clearUri() {
+        window.history.pushState({}, null, '/');
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -55,7 +59,7 @@ export default class Sep7PayModal extends React.Component {
     getButtons() {
         const { submit, d } = this.props;
         const { state } = d.session;
-        if (state !== 'in') {
+        if (state !== SESSION_STATE.IN) {
             return null;
         }
         return (
@@ -65,60 +69,66 @@ export default class Sep7PayModal extends React.Component {
                     onClick={() => {
                         window.history.pushState({}, null, '/');
                         submit.cancel();
-                    }}>
+                    }}
+                >
                     Cancel
                 </button>
                 <button
                     disabled={this.state.pending}
                     onClick={() => this.handlePayment()}
-                    className="s-button">
+                    className="s-button"
+                >
                     Confirm{this.state.pending && <Ellipsis />}
                 </button>
             </div>
         );
     }
 
-    getPaymentTx(txDetails, d) {
-        const { asset, amount, destination, memo, memoType } = this.getPaymentDetails(txDetails);
-        let type = memoType || 'MEMO_TEXT';
-        if (type.toUpperCase() !== type) {
-            type = `MEMO_${type.toUpperCase()}`;
-        }
-        return MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
-            destination,
-            asset,
-            amount,
-            memo: (memo) ? {
-                type,
-                content: memo,
-            } : undefined,
-        });
-    }
-
     async handlePayment() {
         try {
             this.setState({ pending: true });
             const { d, submit, txDetails } = this.props;
-            if (d.session.authType === 'ledger') {
+            const { authType } = d.session;
+            if (authType === AUTH_TYPE.LEDGER) {
                 submit.cancel();
             }
             const isPay = txDetails.operation === 'pay';
-            const tx = isPay ?
-                await this.getPaymentTx(txDetails, d) :
-                await Sep7GetBuiltTx(txDetails, d);
 
-            const bssResult = isPay ?
-                await d.session.handlers.buildSignSubmit(tx) :
-                await d.session.handlers.signSubmit(tx);
+            let bssResult;
 
-            if (bssResult.status === 'await_signers') {
-                submit.cancel();
-                window.history.pushState({}, null, '/');
+            if (isPay) {
+                const { asset, amount, destination, memo, memoType } = this.getPaymentDetails(txDetails);
+                let type = memoType || 'MEMO_TEXT';
+                if (type.toUpperCase() !== type) {
+                    type = `MEMO_${type.toUpperCase()}`;
+                }
+
+                const sendMemo = (memo) ? {
+                    type,
+                    content: memo,
+                } : undefined;
+
+                bssResult = await d.session.handlers.send({
+                    destination,
+                    asset,
+                    amount,
+                }, sendMemo);
+            } else {
+                const tx = await Sep7GetBuiltTx(txDetails, d);
+                bssResult = await d.session.handlers.signSubmit(tx);
             }
-            if (bssResult.status === 'finish') {
+
+            if (bssResult.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
+                this.constructor.clearUri();
+            }
+            if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
+                submit.cancel();
+                this.constructor.clearUri();
+            }
+            if (bssResult.status === TX_STATUS.FINISH) {
                 await bssResult.serverResult;
                 submit.cancel();
-                window.history.pushState({}, null, '/');
+                this.constructor.clearUri();
             }
         } catch (e) {
             this.setState({
@@ -136,7 +146,7 @@ export default class Sep7PayModal extends React.Component {
         const { asset, amount, destination, memo } = this.getPaymentDetails(txDetails);
 
         const balance = account && (asset.isNative() ? account.maxLumenSpend() : account.getBalance(asset));
-        const available = state !== 'in' ?
+        const available = state !== SESSION_STATE.IN ?
             'Login required' :
             `${(Math.floor((balance - account.getReservedBalance(asset)) * 10000000) / 10000000).toFixed(7)} ${asset.code}`;
         const buttons = this.getButtons();
@@ -152,7 +162,8 @@ export default class Sep7PayModal extends React.Component {
                         onClick={() => {
                             submit.cancel();
                             window.history.pushState({}, null, '/');
-                        }} />
+                        }}
+                    />
                 </div>
                 <div className="Sep7PayModal_content">
                     <div className="Sep7PayModal_details">

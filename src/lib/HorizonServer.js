@@ -1,6 +1,7 @@
 import * as StellarSdk from 'stellar-sdk';
 import Event from './Event';
 import { get } from './api/request';
+import { SESSION_STATE } from './constants';
 
 
 export const HORIZON_SERVER_EVENTS = {
@@ -172,7 +173,7 @@ export default class HorizonServer {
         this.driver.Server.isTestnet = false;
         this.driver.Server.isDefault = true;
 
-        if (this.driver.session.state === 'in') {
+        if (this.driver.session.state === SESSION_STATE.IN) {
             this.driver.session.account.restartAccountStream(this.driver.Server);
 
             this.driver.accountEvents.restartAccountEventsListening(

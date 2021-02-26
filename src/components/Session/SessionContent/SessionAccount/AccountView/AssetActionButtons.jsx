@@ -7,6 +7,12 @@ import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 import Stellarify from '../../../../../lib/Stellarify';
 import { getTransferDomain, checkAssetSettings, getTransferServer } from '../../../../../lib/SepUtils';
+import { AUTH_TYPE } from '../../../../../lib/constants';
+
+const UNSUPPORTED_JWT_AUTH_TYPES = new Map([
+    [AUTH_TYPE.WALLET_CONNECT, 'WalletConnect'],
+    [AUTH_TYPE.TREZOR, 'Trezor'],
+]);
 
 export default class AssetActionButtons extends React.Component {
     static getBuyLumensLink(isXLMNative) {
@@ -33,6 +39,9 @@ export default class AssetActionButtons extends React.Component {
     }
 
     async onSepClick(isDeposit) {
+        if (!this.checkIsJWTSupported(isDeposit ? 'Deposits' : 'Withdrawals')) {
+            return;
+        }
         const { d, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
 
@@ -58,6 +67,9 @@ export default class AssetActionButtons extends React.Component {
     }
 
     async onHistoryClick() {
+        if (!this.checkIsJWTSupported('History')) {
+            return;
+        }
         const { d, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
 
@@ -70,6 +82,20 @@ export default class AssetActionButtons extends React.Component {
         const assetSlug = Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer));
 
         this.props.history.push(`transactions?asset=${assetSlug}&anchorDomain=${output.domain}`);
+    }
+
+    checkIsJWTSupported(type) {
+        const { authType } = this.props.d.session;
+        const isJWTUnsupported = UNSUPPORTED_JWT_AUTH_TYPES.has(authType);
+
+        if (isJWTUnsupported) {
+            this.props.d.toastService.error(
+                `${type} not available`,
+                `Deposits and withdrawals are not available with ${UNSUPPORTED_JWT_AUTH_TYPES.get(authType)} at the moment`,
+            );
+        }
+
+        return !isJWTUnsupported;
     }
 
     render() {

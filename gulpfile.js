@@ -14,6 +14,7 @@ const $ = {
 };
 const browserify = require('browserify');
 const watchify = require('watchify');
+const babelify = require('babelify');
 const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
 const browserSyncSpa = require('browser-sync-middleware-spa');
@@ -37,34 +38,34 @@ const reload = browserSync.reload;
 gulp.task('default', ['clean', 'configEnv', 'developApi', 'buildImages', 'watch']);
 
 // Clean
-gulp.task('clean', (cb) => {
+gulp.task('clean', cb => {
     cb(del.sync(['dist']));
 });
 
 // Styles
 gulp.task('styles', () => gulp.src('./src/components/App.scss')
-        .pipe($.sass().on('error', $.sass.logError))
-        .pipe(gulp.dest('./dist/css')));
+    .pipe($.sass().on('error', $.sass.logError))
+    .pipe(gulp.dest('./dist/css')));
 
 
 gulp.task('minifyImages', () =>
-        gulp
-            .src('./images/*')
-            .pipe(
-                imagemin([
-                    imagemin.gifsicle({ interlaced: true }),
-                    imagemin.jpegtran({ progressive: true }),
-                    imagemin.optipng({ optimizationLevel: 5 }),
-                    imagemin.svgo({
-                        plugins: [{ removeViewBox: false }],
-                    }),
-                ]),
-            )
-            .pipe(gulp.dest('./images/')),
+    gulp
+        .src('./images/*')
+        .pipe(
+            imagemin([
+                imagemin.gifsicle({ interlaced: true }),
+                imagemin.jpegtran({ progressive: true }),
+                imagemin.optipng({ optimizationLevel: 5 }),
+                imagemin.svgo({
+                    plugins: [{ removeViewBox: false }],
+                }),
+            ]),
+        )
+        .pipe(gulp.dest('./images/')),
 );
 
 // Images (For big images that get turned into base64)
-gulp.task('encodeImages', (cb) => {
+gulp.task('encodeImages', cb => {
     let imagesCollection = fs.readdirSync('./images/').reduce((collection, fileName) => {
         const [name, extension] = fileName.split('.');
         const isVectorImg = extension === 'svg';
@@ -81,14 +82,14 @@ gulp.task('encodeImages', (cb) => {
     fs.writeFile('./src/images.js', imagesCollection, cb);
 });
 
-gulp.task('buildImages', (done) => {
+gulp.task('buildImages', done => {
     runSequence('minifyImages', 'encodeImages', () => {
         done();
     });
 });
 
 // Build time config only for CUSTOM builds of StellarTerm
-gulp.task('customConfig', (cb) => {
+gulp.task('customConfig', cb => {
     let configFile = '\n// This file generated during the gulp build process.\n';
     configFile += 'window.stCustomConfig = ';
 
@@ -137,7 +138,7 @@ function getEnvironment() {
     return ENV;
 }
 
-gulp.task('configEnv', (cb) => {
+gulp.task('configEnv', cb => {
     const ENV = getEnvironment();
     const envData = config[ENV];
     const envConfig = Object
@@ -147,7 +148,7 @@ gulp.task('configEnv', (cb) => {
 });
 
 // Build time information
-gulp.task('buildInfo', (cb) => {
+gulp.task('buildInfo', cb => {
     let buildInfo = '\n// This file generated during the gulp build process.\n';
     buildInfo += 'window.stBuildInfo = ';
 
@@ -166,8 +167,11 @@ gulp.task('buildInfo', (cb) => {
 
 // browserify
 const bundler = watchify(browserify({
-    entries: ['./src/components/App.jsx'],
-    extensions: ['.jsx'],
+    entries: [
+        './src/components/App.jsx',
+        './node_modules/lightweight-charts',
+    ],
+    extensions: ['.jsx', '.js'],
     debug: true,
     insertGlobals: true,
     cache: {},
@@ -178,10 +182,12 @@ const bundler = watchify(browserify({
             return '';
         },
     },
-}));
+}).transform(babelify.configure({
+    presets: ['@babel/preset-env', '@babel/preset-react'],
+})));
 const rebundle = () => bundler.bundle()
     // log errors if they happen
-    .on('error', (e) => {
+    .on('error', e => {
         console.log(e.stack);
     })
     .pipe(source('app.js'))
@@ -190,7 +196,7 @@ const rebundle = () => bundler.bundle()
         reload();
     });
 bundler.on('update', rebundle);
-bundler.on('log', (e) => {
+bundler.on('log', e => {
     console.log(e);
 });
 gulp.task('scripts', rebundle);
@@ -219,14 +225,14 @@ gulp.task('watch', baseTasks, () => {
     gulp.watch(['src/**/*.scss'], ['css-reload']);
 });
 
-const bsReload = (done) => {
+const bsReload = done => {
     browserSync.reload();
     done();
 };
 
 const { tickerDataGenerator } = require('stellarterm-api');
 
-gulp.task('developApi', (cb) => {
+gulp.task('developApi', cb => {
     const env = getEnvironment();
 
     if (env !== 'local') {
@@ -237,7 +243,7 @@ gulp.task('developApi', (cb) => {
     const opts = {};
     opts.ignoreLog = true;
     tickerDataGenerator(opts)
-        .then((tickerData) => {
+        .then(tickerData => {
             if (!fs.existsSync('./dist/api')) {
                 fs.mkdirSync('./dist/api');
             }
@@ -258,7 +264,7 @@ gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
 // Build production site.
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
     .pipe(babel({
-        presets: ['@babel/env'],
+        presets: ['@babel/preset-env'],
     }))
     .pipe($.uglify())
     .pipe(gulp.dest('dist/scripts')));

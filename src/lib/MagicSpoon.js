@@ -7,7 +7,6 @@ import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
 import { signTransaction } from '@stellar/freighter-api';
-import Stellarify from '../lib/Stellarify';
 import TransformTrezorTransaction from './TransformTrezorTransaction';
 import ErrorHandler from './ErrorHandler';
 
@@ -16,7 +15,6 @@ import ErrorHandler from './ErrorHandler';
 // It's in the same file as the driver because the driver is the only one that
 // should ever use the spoon.
 
-const fee = 10000;
 const PERIOD_24H = 86400;
 
 const _hexToByteArray = str => {
@@ -193,9 +191,6 @@ const MagicSpoon = {
                         sdkAccount.thresholds = res.thresholds;
                     }
 
-                    // We shouldn't pull latest sequence number.
-                    // It'll only go out of sync if user is using the account in two places
-
                     if (updated) {
                         onUpdate();
                     }
@@ -210,10 +205,10 @@ const MagicSpoon = {
             accountEventsClose = startAccountStream(server);
         };
 
-        sdkAccount.decrementSequence = () => {
-            sdkAccount._baseAccount.sequence = sdkAccount._baseAccount.sequence.sub(1);
-            window.s = sdkAccount._baseAccount.sequence;
-            sdkAccount.sequence = sdkAccount._baseAccount.sequence.toString();
+        sdkAccount.updateSequence = async () => {
+            const newAccount = await this.Server.loadAccount(keypair.publicKey());
+            sdkAccount.sequence = newAccount.sequence;
+            sdkAccount._baseAccount = new StellarSdk.Account(newAccount.id, newAccount.sequence);
         };
 
         sdkAccount.refresh = async () => {
@@ -463,208 +458,6 @@ const MagicSpoon = {
             .catch(error => {
                 console.error(error);
             });
-    },
-    // opts.baseBuying -- StellarSdk.Asset (example: XLM)
-    // opts.counterSelling -- StellarSdk.Asset (example: USD)
-    // opts.price -- Exchange ratio selling/buying
-    // opts.amount -- Here, it's relative to the base (JS-sdk does: Total amount selling)
-    // opts.type -- String of either 'buy' or 'sell' (relative to base currency)
-    // opts.offerId - for edit existing offer
-    buildTxCreateBuyOffer(Server, spoonAccount, opts) {
-        const bigOptsPrice = new BigNumber(opts.price).toPrecision(15);
-        const bigOptsAmount = new BigNumber(opts.amount).toPrecision(15);
-
-        console.log(`Creating *BUY* offer at price ${opts.price}`);
-
-        const sdkBuying = opts.baseBuying; // ex: lumens
-        const sdkSelling = opts.counterSelling; // ex: USD
-        const sdkPrice = new BigNumber(bigOptsPrice);
-        const sdkAmount = new BigNumber(bigOptsAmount);
-        const offerId = opts.offerId || 0; // 0 for new offer
-
-        // create offer as ManageSellOffer for Ledger and Trezor devices
-        // because manageBuyOffer is unsupported yet
-        // https://github.com/LedgerHQ/ledger-app-stellar/
-        // https://github.com/trezor/connect
-        if (this.authType === 'ledger' || this.authType === 'trezor') {
-            const operationOpts = {
-                buying: sdkBuying,
-                selling: sdkSelling,
-                amount: new BigNumber(bigOptsAmount).times(bigOptsPrice).toFixed(7),
-                price: new BigNumber(1).dividedBy(bigOptsPrice),
-                offerId,
-            };
-            return new StellarSdk.TransactionBuilder(spoonAccount, { fee, networkPassphrase: Server.networkPassphrase })
-                .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
-                .setTimeout(Server.transactionTimeout);
-        }
-
-        const operationOpts = {
-            buying: sdkBuying,
-            selling: sdkSelling,
-            buyAmount: String(sdkAmount),
-            price: String(sdkPrice),
-            offerId,
-        };
-        return new StellarSdk.TransactionBuilder(spoonAccount, { fee, networkPassphrase: Server.networkPassphrase })
-            .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
-            .setTimeout(Server.transactionTimeout);
-    },
-
-    buildTxCreateSellOffer(Server, spoonAccount, opts) {
-        const bigOptsPrice = new BigNumber(opts.price).toPrecision(15);
-        const bigOptsAmount = new BigNumber(opts.amount).toPrecision(15);
-
-        console.log(`Creating *SELL* offer at price ${opts.price}`);
-
-        const sdkBuying = opts.counterSelling; // ex: USD
-        const sdkSelling = opts.baseBuying; // ex: lumens
-        const sdkPrice = new BigNumber(bigOptsPrice);
-        const sdkAmount = new BigNumber(bigOptsAmount);
-        const offerId = opts.offerId || 0; // 0 for new offer
-
-        const operationOpts = {
-            buying: sdkBuying,
-            selling: sdkSelling,
-            amount: String(sdkAmount),
-            price: String(sdkPrice),
-            offerId,
-        };
-        return new StellarSdk.TransactionBuilder(spoonAccount, { fee, networkPassphrase: Server.networkPassphrase })
-            .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
-            .setTimeout(Server.transactionTimeout);
-    },
-
-    async buildTxSendPayment(Server, spoonAccount, opts) {
-        // sendPayment will detect if the account is a new account. If so, then it will
-        // be a createAccount operation
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
-            fee,
-            networkPassphrase: Server.networkPassphrase,
-        });
-        try {
-            // We need to check the activation of the destination,
-            // if the account is not activated, it will be created in catch with createAccount
-            await Server.loadAccount(opts.destination);
-
-            transaction = transaction
-                .addOperation(
-                    StellarSdk.Operation.payment({
-                        destination: opts.destination,
-                        asset: opts.asset,
-                        amount: opts.amount,
-                    }),
-                )
-                .setTimeout(Server.transactionTimeout);
-        } catch (e) {
-            if (!opts.asset.isNative()) {
-                throw new Error('Destination account does not exist. To create it, you must send at least 1 XLM.');
-            }
-            transaction = transaction
-                .addOperation(
-                    StellarSdk.Operation.createAccount({
-                        destination: opts.destination,
-                        startingBalance: opts.amount,
-                    }),
-                )
-                .setTimeout(Server.transactionTimeout);
-        }
-
-        if (opts.memo) {
-            transaction = transaction.addMemo(Stellarify.memo(opts.memo.type, opts.memo.content));
-        }
-
-        return transaction;
-    },
-    buildTxSetOptions(Server, spoonAccount, opts) {
-        const options = Array.isArray(opts) ? opts : [opts];
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
-            fee,
-            networkPassphrase: Server.networkPassphrase,
-        });
-
-        options.forEach(option => {
-            transaction = transaction.addOperation(StellarSdk.Operation.setOptions(option));
-        });
-        // DON'T call .build()
-
-        return transaction.setTimeout(Server.transactionTimeout);
-    },
-    buildTxChangeTrust(Server, spoonAccount, opts) {
-        let sdkLimit;
-        if (typeof opts.limit === 'string' || opts.limit instanceof String) {
-            sdkLimit = opts.limit;
-        } else if (opts.limit !== undefined) {
-            throw new Error('changeTrust opts.limit must be a string');
-        }
-
-        const operationOpts = {
-            asset: opts.asset,
-            limit: sdkLimit,
-        };
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
-            fee,
-            networkPassphrase: Server.networkPassphrase,
-        })
-            .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
-            .setTimeout(Server.transactionTimeout);
-
-        if (opts.memo) {
-            transaction = transaction.addMemo(Stellarify.memo(opts.memo.memoType, opts.memo.memo));
-        }
-
-        return transaction;
-        // DON'T call .build()
-    },
-    buildTxClaimClaimableBalance(Server, spoonAccount, id, asset, withAddTrust, withBumpSequence) {
-        const transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
-            fee,
-            networkPassphrase: Server.networkPassphrase,
-        });
-
-        if (withAddTrust) {
-            transaction.addOperation(StellarSdk.Operation.changeTrust({ asset }));
-        }
-
-        // fix for ledger
-        if (!withAddTrust && withBumpSequence) {
-            transaction.addOperation(StellarSdk.Operation.bumpSequence({
-                bumpTo: spoonAccount.sequence,
-                source: spoonAccount.id,
-            }));
-        }
-
-        transaction
-            .addOperation(StellarSdk.Operation.claimClaimableBalance({ balanceId: id }))
-            .setTimeout(Server.transactionTimeout);
-
-        return transaction;
-    },
-    buildTxRemoveOffer(Server, spoonAccount, opts) {
-        const offers = Array.isArray(opts) ? opts : [opts];
-        function parseAsset(asset) {
-            return asset.asset_type === 'native'
-                ? StellarSdk.Asset.native()
-                : new StellarSdk.Asset(asset.asset_code, asset.asset_issuer);
-        }
-
-        const transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
-            fee,
-            networkPassphrase: Server.networkPassphrase,
-        });
-        offers.forEach(offer => {
-            transaction.addOperation(
-                StellarSdk.Operation.manageSellOffer({
-                    buying: parseAsset(offer.buying),
-                    selling: parseAsset(offer.selling),
-                    amount: '0',
-                    price: '1',
-                    offerId: offer.id,
-                }),
-            );
-        });
-        return transaction.setTimeout(Server.transactionTimeout);
-        // DON'T call .build()
     },
 
     overwrite(buffer) {

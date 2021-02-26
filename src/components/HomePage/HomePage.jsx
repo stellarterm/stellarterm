@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import Driver from '../../lib/Driver';
 import AssetList from '../Common/AssetList/AssetList';
 import Sep7Handler from './Sep7Handler/Sep7Handler';
+import { SESSION_STATE } from '../../lib/constants';
 
 
 export default class HomePage extends React.Component {
@@ -24,7 +25,7 @@ export default class HomePage extends React.Component {
 
     renderHomePageActions() {
         const state = this.props.driver.session.state;
-        if (state !== 'out') { return ''; }
+        if (state !== SESSION_STATE.OUT) { return ''; }
 
         const signUpLinkClass = 'HomePage__lead__actions__sign-up-button HomePage__lead__actions__button s-button';
         return (
@@ -39,7 +40,6 @@ export default class HomePage extends React.Component {
     render() {
         return (
             <div>
-
                 <div className="HomePage__black">
                     <div className="so-back">
                         <div className="HomePage__lead">

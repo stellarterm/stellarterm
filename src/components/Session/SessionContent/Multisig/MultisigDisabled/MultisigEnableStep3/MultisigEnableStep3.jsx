@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
 import Ellipsis from './../../../../../Common/Ellipsis/Ellipsis';
 import ErrorHandler from '../../../../../../lib/ErrorHandler';
+import { AUTH_TYPE } from '../../../../../../lib/constants';
 
 const images = require('../../../../../../images');
 
@@ -22,7 +23,7 @@ export default class MultisigEnableStep3 extends React.Component {
             pending: true,
             addingError: '',
         });
-        if (d.session.authType === 'ledger') {
+        if (d.session.authType === AUTH_TYPE.LEDGER) {
             this.props.submit.cancel();
         }
         try {
@@ -70,13 +71,15 @@ export default class MultisigEnableStep3 extends React.Component {
                     <button
                         className="cancel-button"
                         disabled={pending}
-                        onClick={() => submit.cancel()}>
+                        onClick={() => submit.cancel()}
+                    >
                             Cancel
                     </button>
                     <button
                         className="s-button"
                         disabled={pending}
-                        onClick={() => this.addSigner(signerData, d)}>
+                        onClick={() => this.addSigner(signerData, d)}
+                    >
                             Continue{pending && <Ellipsis />}
                     </button>
                 </div>

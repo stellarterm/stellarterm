@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Driver from '../../../../lib/Driver';
+import { SESSION_STATE } from '../../../../lib/constants';
 
 export default class SessionAccountMenu extends React.Component {
     static createMenuTab(url, text, active) {
@@ -30,7 +31,7 @@ export default class SessionAccountMenu extends React.Component {
     render() {
         const { d } = this.props;
         const { account, state } = d.session;
-        const openOffersCount = state === 'in' && Object.values(account.offers).length;
+        const openOffersCount = state === SESSION_STATE.IN && Object.values(account.offers).length;
 
         const { pendingClaimableBalancesCount } = d.claimableBalances;
 

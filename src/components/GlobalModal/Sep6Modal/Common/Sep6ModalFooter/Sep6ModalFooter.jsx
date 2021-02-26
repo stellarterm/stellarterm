@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../../lib/Driver';
-import MagicSpoon from '../../../../../lib/MagicSpoon';
 import ErrorHandler from '../../../../../lib/ErrorHandler';
 import images from '../../../../../images';
+import { AUTH_TYPE, TX_STATUS } from '../../../../../lib/constants';
 
 export default class Sep6ModalFooter extends React.Component {
     constructor(props) {
@@ -118,19 +118,20 @@ export default class Sep6ModalFooter extends React.Component {
             type = `MEMO_${type.toUpperCase()}`;
         }
 
-        const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
+        const sendOpts = {
             destination: sendData.account_id,
             asset: new StellarSdk.Asset(asset.code, asset.issuer),
             amount: sendData.amount,
-            memo: memo
-                ? {
-                    type,
-                    content: memo,
-                }
-                : undefined,
-        });
+        };
 
-        if (d.session.authType === 'ledger') {
+        const sendMemo = memo
+            ? {
+                type,
+                content: memo,
+            }
+            : undefined;
+
+        if (d.session.authType === AUTH_TYPE.LEDGER) {
             d.modal.handlers.finish();
             d.modal.nextModalName = 'Sep6Modal';
             d.modal.nextModalData = {
@@ -141,17 +142,17 @@ export default class Sep6ModalFooter extends React.Component {
                 withdrawCompleted: true,
                 transferServer: this.props.transferServer,
             };
-            d.session.handlers.buildSignSubmit(tx);
+            d.session.handlers.send(sendOpts, sendMemo);
             return null;
         }
 
-        const bssResult = await d.session.handlers.buildSignSubmit(tx);
-        if (bssResult.status === 'await_signers') {
+        const bssResult = await d.session.handlers.send(sendOpts, sendMemo);
+        if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
             d.modal.handlers.cancel();
             window.history.pushState({}, null, '/');
         }
 
-        if (bssResult.status === 'finish') {
+        if (bssResult.status === TX_STATUS.FINISH) {
             bssResult.serverResult
                 .then(() => {
                     this.setState({
