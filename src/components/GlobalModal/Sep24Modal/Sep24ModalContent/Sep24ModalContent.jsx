@@ -45,7 +45,7 @@ export default class Sep24ModalContent extends React.Component {
         const { asset, isDeposit } = this.props;
 
         if (this.state.transaction) {
-            this.getTransferServer(asset.domain)
+            this.getTransferServer(asset)
                 .then(() => this.initSep24())
                 .then(() => this.fetchTransaction())
                 .catch(({ data }) => {
@@ -57,7 +57,7 @@ export default class Sep24ModalContent extends React.Component {
             return null;
         }
 
-        this.getTransferServer(asset.domain)
+        this.getTransferServer(asset)
             .then(() => getTransferServerInfo(this.TRANSFER_SERVER_SEP0024))
             .then(transferInfo => (isDeposit ? transferInfo.deposit : transferInfo.withdraw))
             .then((info) => {
@@ -94,8 +94,8 @@ export default class Sep24ModalContent extends React.Component {
         window.removeEventListener('message', this.callbackHandler, false);
     }
 
-    getTransferServer(domain) {
-        return getTransferServer(domain)
+    getTransferServer(asset) {
+        return getTransferServer(asset)
             .then(({ TRANSFER_SERVER_SEP0024, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
                 this.TRANSFER_SERVER_SEP0024 = TRANSFER_SERVER_SEP0024;
                 this.WEB_AUTH_URL = WEB_AUTH_URL;
