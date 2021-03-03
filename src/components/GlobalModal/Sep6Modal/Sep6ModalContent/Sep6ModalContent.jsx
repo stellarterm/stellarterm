@@ -46,7 +46,7 @@ export default class Sep6ModalContent extends React.Component {
     componentDidMount() {
         const { asset, isDeposit, d } = this.props;
 
-        getTransferServer(asset.domain)
+        getTransferServer(asset)
             .then(({ TRANSFER_SERVER, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
                 this.TRANSFER_SERVER = TRANSFER_SERVER;
                 this.WEB_AUTH_URL = WEB_AUTH_URL;
