@@ -73,12 +73,6 @@ export default {
             'Transfers the native balance (the amount of XLM an account holds) to another account and removes the source account from the ledger.',
         docsUrl: 'https://www.stellar.org/developers/learn/concepts/list-of-operations.html#account-merge',
     },
-    inflation: {
-        name: 'inflation',
-        label: 'Inflation',
-        helpNote: 'Runs the weekly inflation',
-        docsUrl: 'https://www.stellar.org/developers/learn/concepts/list-of-operations.html#inflation',
-    },
     manageData: {
         name: 'manageData',
         label: 'Manage Data',

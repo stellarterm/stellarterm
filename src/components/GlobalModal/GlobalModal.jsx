@@ -51,19 +51,6 @@ export default class GlobalModal extends React.Component {
         switch (modal.modalName) {
         case 'sign': {
             let laboratoryContent;
-            if (d.session.account.inflation_destination === 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW') {
-                laboratoryContent = (
-                    <div className="GlobalModal__content">
-                        <a
-                            href={`https://www.stellar.org/laboratory/#txsigner?xdr=
-                              ${encodeURI(modal.inputData.toEnvelope().toXDR('base64'))}&network=public`}
-                            target="_blank"
-                            rel="nofollow noopener noreferrer">
-                                View in Stellar Laboratory
-                        </a>
-                    </div>
-                );
-            }
             // To get tx xdr: modal.inputData.toEnvelope().toXDR('base64')
             body = (
                 <div className="GlobalModal">

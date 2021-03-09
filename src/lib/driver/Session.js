@@ -24,7 +24,6 @@ export default function Send(driver) {
         this.ledgerConnected = false;
 
         this.unfundedAccountId = '';
-        this.inflationDone = false;
         this.account = null; // MagicSpoon.Account instance
         this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'freighter'
         this.jwtToken = null;
@@ -202,14 +201,6 @@ export default function Send(driver) {
                 this.authType = opts.authType;
                 this.bip32Path = opts.bip32Path;
 
-                const inflationDoneDestinations = {
-                    GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW: true,
-                };
-
-                if (inflationDoneDestinations[this.account.inflation_destination]) {
-                    this.inflationDone = true;
-                }
-
                 // Functions of session after sign in
                 this.handlers.addUnknownAssetData();
                 driver.history.listenNewTransactions(driver.Server, this.account.account_id);
@@ -245,19 +236,6 @@ export default function Send(driver) {
         // The reason this doesn't take in a TransactionBuilder so we can call build() here is that there
         // are cases when we want to paste in a raw transaction and sign that
         sign: async (tx) => {
-            if (this.account.inflation_destination === 'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW') {
-                console.log(
-                    'Signing tx\nhash:',
-                    tx.hash().toString('hex'),
-                    `\nsequence: ${tx.sequence}`,
-                    `\n\n${tx.toEnvelope().toXDR('base64')}`,
-                );
-                console.log(
-                    `https://www.stellar.org/laboratory/#txsigner?xdr=${encodeURIComponent(
-                        tx.toEnvelope().toXDR('base64'),
-                    )}&network=public`,
-                );
-            }
             if (this.authType === 'secret') {
                 this.account.signWithSecret(tx);
                 console.log('Signed tx\nhash:', tx.hash().toString('hex'), `\n\n${tx.toEnvelope().toXDR('base64')}`);
@@ -705,27 +683,6 @@ export default function Send(driver) {
                     this.userFederation = res.stellar_address.split('*')[0];
                 })
                 .catch(e => e.data);
-        },
-
-        setInflation: async (destination) => {
-            const inflationDestination = {
-                inflationDest: destination,
-            };
-            const txBuilder = MagicSpoon.buildTxSetOptions(driver.Server, this.account, inflationDestination);
-            return await this.handlers.buildSignSubmit(txBuilder);
-        },
-        voteContinue: async () => {
-            const bssResult = await this.handlers.setInflation(
-                'GDCHDRSDOBRMSUDKRE2C4U4KDLNEATJPIHHR2ORFL5BSD56G4DQXL4VW',
-            );
-            if (bssResult.status === 'finish' || bssResult.status === 'await_signers') {
-                this.inflationDone = true;
-                this.event.trigger();
-            }
-        },
-        noThanks: () => {
-            this.inflationDone = true;
-            this.event.trigger();
         },
         addTrust: async (code, issuer, memo) => {
             // We only add max trust line
