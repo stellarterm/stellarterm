@@ -209,7 +209,6 @@ const MagicSpoon = {
         sdkAccount.refresh = async () => {
             const newAccount = await Server.loadAccount(keypair.publicKey());
             sdkAccount.applyNewBalances(newAccount.balances);
-            sdkAccount.inflation_destination = newAccount.inflation_destination;
             sdkAccount.subentry_count = newAccount.subentry_count;
             sdkAccount.home_domain = newAccount.home_domain;
             sdkAccount.applyNewSigners(newAccount.signers);
