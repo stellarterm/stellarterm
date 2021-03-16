@@ -4,7 +4,6 @@ import LoginPage from './LoginPage/LoginPage';
 import Driver from '../../lib/Driver';
 import SessionActivate from './SessionActivate/SessionActivate';
 import SessionLoading from './SessionLoading/SessionLoading';
-import SessionWelcome from './SessionWelcome/SessionWelcome';
 import SessionContent from './SessionContent/SessionContent';
 
 export default class Session extends React.Component {
@@ -22,7 +21,7 @@ export default class Session extends React.Component {
     render() {
         const { props } = this;
         const { d, urlParts } = this.props;
-        const { state, unfundedAccountId, inflationDone } = d.session;
+        const { state, unfundedAccountId } = d.session;
 
         switch (state) {
         case 'out':
@@ -32,9 +31,6 @@ export default class Session extends React.Component {
         case 'loading':
             return <SessionLoading />;
         case 'in':
-            if (!inflationDone) {
-                return <SessionWelcome d={d} />;
-            }
             return <SessionContent {...props} d={d} />;
         default:
             break;
