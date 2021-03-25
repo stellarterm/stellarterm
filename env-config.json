@@ -6,7 +6,8 @@
         "HOME_URL": "https://staging--hopeful-brahmagupta-343062.netlify.com/",
         "HOME_DOMAIN": "staging.stellarterm.com",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
-        "STELLAR_TICKER": "https://ticker.stellar.org/v1/"
+        "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     },
     "production": {
         "API_URL": "https://api.stellarterm.com/v1/",
@@ -15,7 +16,8 @@
         "HOME_URL": "https://stellarterm.com/",
         "HOME_DOMAIN": "stellarterm.com",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
-        "STELLAR_TICKER": "https://ticker.stellar.org/v1/"
+        "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     },
     "local": {
         "API_URL": "https://localhost:3000/api/v1/",
@@ -24,6 +26,7 @@
         "HOME_URL": "https://localhost:3000/",
         "HOME_DOMAIN": "localhost:3000",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
-        "STELLAR_TICKER": "https://ticker.stellar.org/v1/"
+        "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     }
 }
