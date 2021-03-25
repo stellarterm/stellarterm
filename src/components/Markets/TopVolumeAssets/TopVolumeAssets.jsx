@@ -139,7 +139,11 @@ export default class TopVolumeAssets extends React.Component {
     }
 
     loadStellarMarketsData(params) {
-        const { request, cancel } = this.props.d.ticker.constructor.loadStellarMarketsData(params);
+        const { request, cancel } =
+            this.props.d.ticker.constructor.loadStellarMarketsData(
+                Object.assign({}, params, { isTestnet: this.props.d.Server.isTestnet },
+                ),
+            );
         this.currentRequestCanceller = cancel;
         return request;
     }
