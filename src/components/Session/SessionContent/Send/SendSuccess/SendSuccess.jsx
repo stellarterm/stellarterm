@@ -23,7 +23,7 @@ export default function SendSuccess(props) {
                     target="_blank"
                     rel="noopener noreferrer"
                     title="StellarExpert"
-                    href={`https://stellar.expert/explorer/public/tx/${txId}`}>
+                    href={`https://stellar.expert/explorer/${d.Server.isTestnet ? 'testnet' : 'public'}/tx/${txId}`}>
                     <img src={images['icon-info']} alt="info" />
                 </a>
             </div>
