@@ -14,8 +14,9 @@ BigNumber.config({ EXPONENTIAL_AT: 100 });
 function Driver(driverOpts) {
     this.Server = new StellarSdk.Server(driverOpts.network.horizonUrl);
     this.Server.serverUrl = driverOpts.network.horizonUrl;
-    this.Server.networkPassphrase = driverOpts.network.networkPassphrase;
     this.Server.transactionTimeout = 60 * 60 * 24 * 30;
+    this.Server.networkPassphrase = driverOpts.network.networkPassphrase;
+    this.Server.isTestnet = driverOpts.network.isTestnet;
 
     this.ticker = new Ticker();
     this.session = new Session(this);

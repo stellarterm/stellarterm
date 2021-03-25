@@ -124,3 +124,13 @@
         }
     }
 }
+
+.testnet-unfunded {
+    display: flex;
+    flex-direction: column;
+    padding: 2em;
+
+    .s-button {
+        width: fit-content;
+    }
+}
