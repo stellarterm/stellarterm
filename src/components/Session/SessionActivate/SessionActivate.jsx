@@ -12,6 +12,24 @@ import images from '../../../images';
 export default function SessionActivate(props) {
     const { unfundedAccountId } = props;
 
+    if (props.d.Server.isTestnet) {
+        return (
+            <div className="so-back islandBack islandBack--t">
+                <div className="island">
+                    <div className="testnet-unfunded">
+                        <div className="titleDesc">Account activation required</div>
+                        <a
+                            href="https://www.stellar.org/laboratory/#account-creator?network=test"
+                            className="s-button" target="_blank"
+                            rel="nofollow noopener noreferrer">
+                            Use the Friendbot to get some test lumens
+                        </a>
+                    </div>
+                </div>
+            </div>
+        );
+    }
+
     return (
         <ErrorBoundary>
             <Redirect to={'/account/'} />

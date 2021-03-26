@@ -160,6 +160,7 @@ export default class Activity extends React.Component {
                         path="/account/activity/signers/"
                         render={() =>
                             <ActivitySignersHistory
+                                d={d}
                                 history={history}
                                 isFull={historyIsFull}
                                 loadMore={() => this.loadMore(this.state.historyNext, 'history')}
