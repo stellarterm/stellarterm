@@ -84,7 +84,7 @@ class TermApp extends React.Component {
         window.addEventListener(
             'hashchange',
             (e) => {
-                if (e.newURL.indexOf(TESTNET_URL) !== -1) {
+                if (e.newURL.indexOf('testnet') !== -1) {
                     window.location.reload();
                 }
                 this.setState({ url: parseUrl(e.newURL) });
