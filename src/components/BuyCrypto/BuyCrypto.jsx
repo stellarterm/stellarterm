@@ -8,6 +8,27 @@ import Driver from '../../lib/Driver';
 import BuyCryptoStatic from './BuyCryptoStatic/BuyCryptoStatic';
 import CurrencyDropdown from './CurrencyDropdown/CurrencyDropdown';
 
+/**
+ * Return true, if string is valid float number with precision
+ * @param {number} amount - Amount to validate
+ * @param {number} precision - precision to validate
+ * @returns {boolean} True, if valid number (ex) 1, 1.00, 20.55400
+ */
+const isValidToPrecision = (amount, precision) => {
+    const regExpStr = Number(precision) === 0 ? '^\\d+$' : `^\\d+([.,]\\d{1,${precision}})?$`;
+    const regExp = new RegExp(regExpStr);
+    return regExp.test(amount.toString());
+};
+
+/**
+ * Return true, if string should be set to input without recalculate
+ * @param {string} amount string to validate
+ * @param {number} precision of crypto code after .
+ * @returns {boolean} True, if ex ("", "1.", "."), if precision 0, ex (1, 20, 50)
+ */
+const isNoRecalculateNeeded = (amount, precision) =>
+    precision && amount.length !== 1 && amount.slice(-1) === '.' && amount.split('.').length === 2;
+
 const getMoonpayInputError = (amount, { name, min_amount, max_amount }) => {
     let inputError = '';
     if (!amount) {
@@ -58,23 +79,24 @@ export default class BuyCrypto extends React.Component {
         await this.initMoonpay();
     }
 
-    // componentDidUpdate() {
-    //     const { selectedCrypto } = this.state;
+    componentDidUpdate(prevProps) {
+        const { selectedCrypto, isPending } = this.state;
 
-    //     try {
-    //         const urlCryptoCode = new URLSearchParams(window.location.search).get('code');
+        if (prevProps.location.search !== window.location.search) {
+            try {
+                const urlCryptoCode = new URLSearchParams(window.location.search).get('code');
 
-    //         const isCurrencyUpdateNeeded = selectedCrypto && urlCryptoCode && urlCryptoCode !== selectedCrypto.code;
+                const isCurrencyUpdateNeeded =
+                    !isPending && selectedCrypto && urlCryptoCode && urlCryptoCode !== selectedCrypto.code;
 
-    //         if (isCurrencyUpdateNeeded) {
-    //             this.setState({
-    //                 selectedCrypto: this.state.crypto.find(crypto => crypto.code === urlCryptoCode.toUpperCase()),
-    //             });
-    //         }
-    //     } catch (e) {
-    //         console.log(e);
-    //     }
-    // }
+                if (isCurrencyUpdateNeeded) {
+                    this.setCrypto(this.state.crypto.find(crypto => crypto.code === urlCryptoCode.toUpperCase()));
+                }
+            } catch (e) {
+                console.log(e);
+            }
+        }
+    }
 
     getMoonpayStatus() {
         return request
@@ -178,12 +200,8 @@ export default class BuyCrypto extends React.Component {
             });
     }
 
-    setCurrency(selectedCurrency) {
-        this.setState({
-            selectedCurrency,
-            currencyAmount: selectedCurrency.min_amount,
-        });
-        this.changeCurrencyAmount(selectedCurrency.min_amount);
+    setCurrency(newCurrency) {
+        this.changeCurrencyAmount(newCurrency.min_amount, newCurrency);
     }
 
     setCrypto(selectedCrypto) {
@@ -199,7 +217,7 @@ export default class BuyCrypto extends React.Component {
             await this.getMoonpayCurrencies().then(availableCurrencies => {
                 this.setCurrency(availableCurrencies.find(currency => currency.is_default));
             });
-            await this.getMoonpayCrypto().then(async availableCrypto => {
+            await this.getMoonpayCrypto().then(availableCrypto => {
                 const urlCryptoCode = new URLSearchParams(window.location.search).get('code');
 
                 if (urlCryptoCode) {
@@ -220,30 +238,58 @@ export default class BuyCrypto extends React.Component {
         this.getMoonpayQuote();
     }
 
-    changeCurrencyAmount(amount) {
-        const { cryptoPrices, selectedCurrency, selectedCrypto } = this.state;
+    changeCurrencyAmount(amount, selectedCurrency) {
+        let newState;
+        const { cryptoPrices, selectedCrypto } = this.state;
 
         const stringAmount = amount.toString().replace(/,/g, '.');
+        const isValidAmount = isValidToPrecision(amount, selectedCurrency.precision);
 
-        this.setState({
-            currencyAmount: stringAmount,
-            cryptoAmount: (Number(stringAmount) / cryptoPrices[selectedCurrency.code]).toFixed(
-                selectedCrypto.precision,
-            ),
-        });
+        if (!stringAmount) {
+            newState = { currencyAmount: stringAmount, cryptoAmount: stringAmount, selectedCurrency };
+        }
+
+        if (isNoRecalculateNeeded(stringAmount, selectedCurrency.precision)) {
+            newState = { currencyAmount: stringAmount, selectedCurrency };
+        }
+
+        if (isValidAmount) {
+            newState = {
+                selectedCurrency,
+                currencyAmount: stringAmount,
+                cryptoAmount: (Number(stringAmount) / cryptoPrices[selectedCurrency.code]).toFixed(
+                    selectedCrypto.precision,
+                ),
+            };
+        }
+
+        this.setState(Object.assign(this.state, newState));
     }
 
     changeCryptoAmount(amount) {
-        const { cryptoPrices, selectedCurrency } = this.state;
-
+        let newState;
+        const { cryptoPrices, selectedCurrency, selectedCrypto } = this.state;
         const stringAmount = amount.toString().replace(/,/g, '.');
+        const isValidAmount = isValidToPrecision(amount, selectedCrypto.precision);
 
-        this.setState({
-            cryptoAmount: stringAmount,
-            currencyAmount: (Number(stringAmount) * cryptoPrices[selectedCurrency.code]).toFixed(
-                selectedCurrency.precision,
-            ),
-        });
+        if (!stringAmount) {
+            newState = { currencyAmount: stringAmount, cryptoAmount: stringAmount };
+        }
+
+        if (isNoRecalculateNeeded(stringAmount, selectedCrypto.precision)) {
+            newState = { cryptoAmount: stringAmount };
+        }
+
+        if (isValidAmount) {
+            newState = {
+                cryptoAmount: stringAmount,
+                currencyAmount: (Number(stringAmount) * cryptoPrices[selectedCurrency.code]).toFixed(
+                    selectedCurrency.precision,
+                ),
+            };
+        }
+
+        this.setState(Object.assign(this.state, newState));
     }
 
     renderMoonpayForm() {
@@ -282,6 +328,8 @@ export default class BuyCrypto extends React.Component {
 
         const labelText = errorText || limitsLabel;
 
+        const isSubmitDisabled = isPending || errorText || !currencyAmount || !cryptoAmount;
+
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
                 <label htmlFor="currencyInput">
@@ -296,7 +344,7 @@ export default class BuyCrypto extends React.Component {
                         className="Moonpay_input"
                         value={currencyAmount}
                         maxLength={20}
-                        onChange={e => this.changeCurrencyAmount(e.target.value)}
+                        onChange={e => this.changeCurrencyAmount(e.target.value, this.state.selectedCurrency)}
                         placeholder={`Amount in ${selectedCurrency.code} you pay`}
                     />
 
@@ -333,7 +381,7 @@ export default class BuyCrypto extends React.Component {
                         <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
                     </div>
 
-                    <button type="submit" className="s-button" disabled={isPending}>
+                    <button type="submit" className="s-button" disabled={isSubmitDisabled}>
                         Buy {selectedCrypto && selectedCrypto.code.toUpperCase()}
                     </button>
                 </div>

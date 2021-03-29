@@ -20,8 +20,8 @@ class Header extends React.Component {
                     <Link className="buy_crypto-link" to="/buy-crypto?code=btc">
                         Buy Bitcoin
                     </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=btc">
-                        Buy Bitcoin
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=eth">
+                        Buy Ethereum
                     </Link>
                     <Link className="buy_crypto-link" to="/buy-crypto?code=ltc">
                         Buy Litecoin
