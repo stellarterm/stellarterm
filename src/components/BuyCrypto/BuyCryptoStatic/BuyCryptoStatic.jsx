@@ -43,9 +43,7 @@ const BuyCryptoStatic = () => (
 
             <div className="BuyCrypto_fact">
                 <img src={images['icon-tick-small']} alt="" />
-                <span>
-                        Verification typically takes about 30 minutes
-                </span>
+                <span>Verification typically takes about 30 minutes</span>
             </div>
 
             <div className="BuyCrypto_fact">
@@ -58,12 +56,15 @@ const BuyCryptoStatic = () => (
                 <span>One-time KYC verification (passport, phone number) may be required by the provider</span>
             </div>
 
-
-            <a href="https://support.moonpay.com/" target="_blank" rel="noopener noreferrer" className="BuyCrypto_read-more">
+            <a
+                href="https://support.moonpay.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="BuyCrypto_read-more"
+            >
                 Read more
                 <img src={images['icon-arrow-right-green-small']} alt="" />
             </a>
-
         </div>
     </div>
 );

@@ -1,5 +1,4 @@
 import _ from 'lodash';
-
 import * as EnvConsts from '../../env-consts';
 
 export const endpoints = {
@@ -35,13 +34,37 @@ export const endpoints = {
         url: 'graphql',
         baseUrl: EnvConsts.STELLAR_TICKER,
     },
+    moonpayStatus: {
+        url: 'moonpay/status',
+        baseUrl: EnvConsts.MOONPAY_API_URL,
+    },
+    moonpayCurrencies: {
+        url: 'v2/moonpay/currencies',
+        baseUrl: EnvConsts.MOONPAY_API_URL,
+    },
+    moonpayCrypto: {
+        url: 'v2/moonpay/crypto-currencies/',
+        baseUrl: EnvConsts.MOONPAY_API_URL,
+    },
+    moonpayCryptoPrice: {
+        url: 'moonpay/price/stellarterm/',
+        baseUrl: EnvConsts.MOONPAY_API_URL,
+    },
+    moonpayQuote: {
+        url: 'moonpay/quote/stellarterm/',
+        baseUrl: EnvConsts.MOONPAY_API_URL,
+    },
+    moonpayTransaction: {
+        url: 'moonpay/transaction/stellarterm/',
+        baseUrl: EnvConsts.MOONPAY_API_URL,
+    },
 };
 
 function getUrlParams(params) {
     return params !== undefined
         ? Object.keys(params)
-            .map(key => `${key}=${encodeURIComponent(params[key])}`)
-            .join('&')
+              .map(key => `${key}=${encodeURIComponent(params[key])}`)
+              .join('&')
         : null;
 }
 
