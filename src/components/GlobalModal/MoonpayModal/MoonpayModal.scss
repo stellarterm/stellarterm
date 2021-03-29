@@ -1,0 +1,75 @@
+.MoonpayModal {
+    background-color: #fff;
+    width: 524px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    a {
+        text-decoration: none;
+        color: #69c76f;
+
+        &:hover {
+            text-decoration: underline;
+        }
+    }
+
+    .MoonpayModal_content {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+
+        .moonpay_title {
+            color: #505558;
+            font-size: 14px;
+            font-weight: normal;
+            margin: 0;
+        }
+
+        .order_details {
+            margin: 32px 0;
+            padding: 24px;
+            border-radius: 5px;
+            border: solid 1px #bdbfc033;
+            background-color: #f4f4f533;
+
+            .details_row {
+                display: flex;
+                justify-content: space-between;
+
+                &:not(:last-child) {
+                    margin-bottom: 16px;
+                }
+
+                .details_desc {
+                    font-size: 14px;
+                    font-weight: normal;
+                    line-height: normal;
+                    color: #9aa6ac;
+                }
+
+                .details_data {
+                    font-size: 16px;
+                    font-weight: normal;
+                    line-height: normal;
+                }
+            }
+        }
+
+        .moonpay_description {
+            color: #aaadae;
+            margin-top: 32px;
+            font-size: 14px;
+            font-weight: normal;
+            line-height: normal;
+            margin: 0;
+        }
+
+        .s-button {
+            font-weight: normal;
+            padding: 13px 30px;
+            margin-top: 32px;
+            height: 52px;
+        }
+    }
+}

@@ -1,4 +1,5 @@
-@import "BuyCryptoStatic/BuyCryptoStatic";
+@import 'BuyCryptoStatic/BuyCryptoStatic';
+@import 'CurrencyDropdown/CurrencyDropdown';
 
 .BuyCrypto_wrapper {
     display: flex;
@@ -37,12 +38,95 @@
             background-color: #fff;
             border-radius: 4px;
             box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+            .Loader_wrapper {
+                @include flex-center;
+                height: 100%;
+
+                .nk-spinner {
+                    width: 50px;
+                    height: 50px;
+                    border: 3px solid rgba(134, 211, 140, 0.3);
+                    border-left: 3px solid #86d38c;
+                }
+            }
+
+            .Moonpay_input {
+                position: relative;
+                width: 100%;
+                height: 55px;
+                overflow: hidden;
+                font-weight: normal;
+                text-overflow: ellipsis;
+                border-radius: 0;
+                border: solid 1px #d7e0e4;
+                padding: 0 20px;
+
+                &::placeholder {
+                    font-size: 14px;
+                    font-weight: normal;
+                    opacity: 0.5;
+                }
+            }
+
+            form {
+                padding: 38px 40px;
+
+                .label_withMargin {
+                    margin-top: 24px;
+                }
+
+                label {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 14px;
+                    font-weight: normal;
+                    margin-bottom: 6px;
+
+                    .label_info {
+                        color: #9aa6ac;
+                    }
+
+                    .label_error {
+                        @include errorText;
+                    }
+                }
+
+                .Input_block_wrapper {
+                    display: flex;
+
+                    input {
+                        width: 60%;
+                    }
+
+                    .Currency_dropdown {
+                        width: 160px;
+                    }
+                }
+            }
+
+            .form_footer {
+                @include flex-center;
+                justify-content: space-between;
+                margin-top: 32px;
+
+                .visa_mc_wrapper {
+                    @include flex-center;
+                    font-size: 14px;
+                    font-weight: normal;
+                    color: #9aa6ac;
+
+                    img {
+                        margin-left: 5px;
+                        height: 21px;
+                    }
+                }
+
+                .s-button {
+                    height: 52px;
+                    width: 160px;
+                }
+            }
         }
     }
 }
-
-
-
-
-
-
