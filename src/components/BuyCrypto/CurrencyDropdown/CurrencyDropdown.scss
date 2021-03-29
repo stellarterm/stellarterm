@@ -1,121 +1,145 @@
-.Currency_dropdown {
-    display: flex;
-    border: solid 1px #d7e0e4;
-    position: relative;
-    border-left: none;
-    max-height: 55px;
-    cursor: pointer;
-
-    .currency_icon {
-        width: 29px;
-        height: 29px;
-    }
-
-    .dropdown_selected {
-        position: relative;
-
-        .AssetCardSeparateLogo_details-row {
-            max-width: 160px;
-        }
-    }
-
-    .dropdown_item {
-        .AssetCardSeparateLogo_details-row {
-            max-width: 180px;
-        }
-    }
-
-    .dropdown_selected,
-    .dropdown_item {
-        cursor: pointer;
-        transition: 0.1s ease;
-        border: 1px solid transparent;
-        display: flex;
-        align-items: center;
-        font-size: 14px;
-        height: 55px;
-        width: 100%;
-        padding: 0 15px;
-
-        .AssetCardSeparateLogo_details-row {
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-
-        .dropdown_arrow {
-            width: 24px;
-            height: 100%;
-            position: absolute;
-            right: 10px;
-            transition: 0.15s;
-        }
-
-        .arrow_reverse {
-            transform: rotate(180deg);
-        }
-    }
-
-    .dropdown_list {
-        z-index: 10;
-        position: absolute;
-        overflow-y: auto;
-        width: 386px;
-        max-height: 470px;
-        border: solid 1px #d7e0e4;
-        border-top: none;
-        background: #fff;
-        top: 54px;
-        right: -1px;
-
-        .dropdown_item {
-            &:hover {
-                background: rgba(215, 224, 228, 0.2);
-            }
-        }
-    }
-
-    .token_block_wrapper {
-        display: flex;
-        align-items: center;
-
-        .name_wrapper {
+.BuyCrypto_form {
+    .Input_block_wrapper {
+        .Currency_dropdown {
             display: flex;
-            flex-direction: column;
-            margin-left: 8px;
+            border: solid 1px #d7e0e4;
+            position: relative;
+            border-left: none;
+            max-height: 55px;
+            cursor: pointer;
 
-            .code_small,
-            .name_small {
-                @include textEllipsis;
-                line-height: 1em;
-                width: 70px;
+            .search_field {
+                position: absolute;
+                width: 386px;
+                right: -1px;
+                top: -1px;
+
+                .search_input {
+                    width: 100%;
+                }
+
+                .close_button {
+                    position: absolute;
+                    z-index: 1;
+                    right: 0;
+                    padding: 15px;
+                }
             }
 
-            .code_small {
+            .dropdown_selected {
+                position: relative;
+            }
+
+            .dropdown_selected,
+            .dropdown_item {
+                cursor: pointer;
+                transition: 0.1s ease;
+                border: 1px solid transparent;
+                display: flex;
+                align-items: center;
                 font-size: 14px;
-                font-weight: normal;
-            }
-
-            .name_small {
-                font-size: 12px;
-                opacity: 0.6;
-            }
-        }
-    }
-
-    .full_Width {
-        width: 100%;
-
-        .name_wrapper {
-            .code_small,
-            .name_small {
+                height: 55px;
                 width: 100%;
-            }
-        }
+                padding: 0 15px;
 
-        .selected_crypto_check {
-            right: 12px;
-            position: absolute;
+                .dropdown_arrow {
+                    width: 24px;
+                    height: 100%;
+                    position: absolute;
+                    right: 10px;
+                    transition: 0.15s;
+                }
+
+                .arrow_reverse {
+                    transform: rotate(180deg);
+                }
+            }
+
+            .dropdown_list {
+                z-index: 10;
+                position: absolute;
+                overflow-y: auto;
+                width: 386px;
+                max-height: 470px;
+                border: solid 1px #d7e0e4;
+                border-top: none;
+                background: #fff;
+                top: 54px;
+                right: -1px;
+
+                .dropdown_item {
+                    width: 100%;
+                    height: 40px;
+
+                    &:hover {
+                        background: rgba(215, 224, 228, 0.2);
+                    }
+
+                    .token_block_wrapper {
+                        .currency_icon {
+                            width: 20px;
+                            height: 20px;
+                        }
+
+                        .name_wrapper {
+                            display: flex;
+                            flex-direction: row;
+                            margin-left: 8px;
+
+                            .code_small,
+                            .name_small {
+                                width: auto;
+                                margin-left: 8px;
+                            }
+                        }
+
+                        .selected_crypto_check {
+                            right: 12px;
+                            position: absolute;
+                        }
+                    }
+                }
+
+                .not_found {
+                    &:hover {
+                        cursor: default;
+                        background: none;
+                    }
+                }
+            }
+
+            .token_block_wrapper {
+                display: flex;
+                align-items: center;
+
+                .currency_icon {
+                    width: 29px;
+                    height: 29px;
+                }
+
+                .name_wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 8px;
+
+                    .code_small,
+                    .name_small {
+                        @include textEllipsis;
+                        line-height: 1em;
+                        width: 70px;
+                    }
+
+                    .code_small {
+                        font-size: 14px;
+                        font-weight: normal;
+                    }
+
+                    .name_small {
+                        font-size: 12px;
+                        opacity: 0.6;
+                    }
+                }
+            }
         }
     }
 }

@@ -53,7 +53,7 @@
 
             .Moonpay_input {
                 position: relative;
-                width: 100%;
+                width: 60%;
                 height: 55px;
                 overflow: hidden;
                 font-weight: normal;
@@ -94,10 +94,6 @@
 
                 .Input_block_wrapper {
                     display: flex;
-
-                    input {
-                        width: 60%;
-                    }
 
                     .Currency_dropdown {
                         width: 160px;

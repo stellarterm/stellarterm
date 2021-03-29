@@ -2,13 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
 
+const INITIAL_STATE = {
+    isOpenList: false,
+    searchValue: '',
+};
+
 export default class CurrencyDropdown extends React.Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            isOpenList: false,
-        };
+        this.state = INITIAL_STATE;
 
         this.handleClickOutside = e => {
             if (this.node.contains(e.target)) {
@@ -35,12 +38,22 @@ export default class CurrencyDropdown extends React.Component {
         }
     }
 
+    handleSearch(value) {
+        this.setState({
+            searchValue: value,
+        });
+    }
+
+    clickSearchCloseBtn() {
+        this.setState(INITIAL_STATE);
+    }
+
     render() {
         const { currencies, selectedToken } = this.props;
-        const { isOpenList } = this.state;
+        const { isOpenList, searchValue } = this.state;
 
         const tokenWithIcon = token => (
-            <div className="token_block_wrapper full_Width">
+            <div className="token_block_wrapper">
                 <img className="currency_icon" src={token.icon} alt={token.name} />
                 <div className="name_wrapper">
                     <span className="code_small">{token.code}</span>
@@ -52,11 +65,47 @@ export default class CurrencyDropdown extends React.Component {
             </div>
         );
 
-        const tokensList = currencies.map(token => (
-            <div className="dropdown_item" key={token.id} onClick={() => this.onClickAssetDropdown(token)}>
-                {tokenWithIcon(token)}
+        const searchField = (
+            <div className="search_field">
+                <input
+                    name="currencyInput"
+                    type="text"
+                    autoFocus
+                    autoComplete="off"
+                    className="Moonpay_input search_input"
+                    value={searchValue}
+                    maxLength={30}
+                    onChange={e => this.handleSearch(e.target.value)}
+                    placeholder="Type currency name or ticker"
+                />
+                <img
+                    className="close_button"
+                    src={images['icon-close']}
+                    alt="X"
+                    onClick={() => this.clickSearchCloseBtn()}
+                />
             </div>
-        ));
+        );
+
+        const filteredTokens = currencies.filter(
+            currency =>
+                currency.code.toLowerCase().includes(searchValue.toLowerCase()) ||
+                currency.name.toLowerCase().includes(searchValue.toLowerCase()),
+        );
+
+        const tokensList = filteredTokens.length ? (
+            filteredTokens.map(token => (
+                <div className="dropdown_item" key={token.id} onClick={() => this.onClickAssetDropdown(token)}>
+                    {tokenWithIcon(token)}
+                </div>
+            ))
+        ) : (
+            <div className="dropdown_item not_found">
+                Nothing found for {'"'}
+                {searchValue}
+                {'"'}
+            </div>
+        );
 
         const arrowClassName = `dropdown_arrow ${isOpenList ? 'arrow_reverse' : ''}`;
 
@@ -78,7 +127,12 @@ export default class CurrencyDropdown extends React.Component {
                     <img src={images.dropdown} alt="▼" className={arrowClassName} />
                 </div>
 
-                {isOpenList ? <div className="dropdown_list">{tokensList}</div> : null}
+                {isOpenList ? (
+                    <React.Fragment>
+                        {searchField}
+                        <div className="dropdown_list">{tokensList}</div>
+                    </React.Fragment>
+                ) : null}
             </div>
         );
     }
