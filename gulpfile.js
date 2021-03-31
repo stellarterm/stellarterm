@@ -134,6 +134,9 @@ function getEnvironment() {
         console.warn('No COIN_MARKET_CUP_KEY found. Can not use local environment. Staging env will be used');
         return 'staging';
     }
+    if (ENV === 'development') {
+        return 'production';
+    }
     return ENV;
 }
 
