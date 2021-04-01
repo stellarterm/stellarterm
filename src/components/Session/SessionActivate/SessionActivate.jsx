@@ -10,7 +10,7 @@ import Driver from '../../../lib/Driver';
 import images from '../../../images';
 
 export default function SessionActivate(props) {
-    const { unfundedAccountId, isTestnet, d } = props;
+    const { unfundedAccountId, d } = props;
 
     if (props.d.Server.isTestnet) {
         return (
@@ -18,12 +18,9 @@ export default function SessionActivate(props) {
                 <div className="island">
                     <div className="testnet-unfunded">
                         <div className="titleDesc">Account activation required</div>
-                        <a
-                            href="https://www.stellar.org/laboratory/#account-creator?network=test"
-                            className="s-button" target="_blank"
-                            rel="nofollow noopener noreferrer">
-                            Use the Friendbot to get some test lumens
-                        </a>
+                        <button className="s-button" onClick={() => d.session.handlers.fundByFriendBot(unfundedAccountId)}>
+                            Request funds from Friendbot
+                        </button>
                     </div>
                 </div>
             </div>
@@ -61,72 +58,51 @@ export default function SessionActivate(props) {
                             </div>
                         </div>
 
-                        {isTestnet ? (
-                            <div className="card_container">
-                                <button className="s-button" onClick={() => d.session.handlers.fundByFriendBot(unfundedAccountId)}>
-                                    Request funds from friendbot
-                                </button>
-                            </div>
-                        ) : (
-                            <div className="card_container">
-                                <p className="titleDesc">
-                                    Buy lmens with VISA or Mastercard
-                                </p>
-                                <div className="green_card">
-                                    <div className="buyXLM_block">
-                                        <div className="block_container">
-                                            <img src={images['icon-fastClock']} alt="fast" />
-                                        </div>
-
-                                        <div className="block_container">
-                                            <div className="buyTitle">Fast & Easy</div>
-                                            <div className="buyDesc">
-                                                Lumens reach your account in 10-30 minutes on average
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="buyXLM_block">
-                                        <div className="block_container">
-                                            <img src={images['icon-lock']} alt="fast" />
-                                        </div>
-
-                                        <div className="block_container">
-                                            <div className="buyTitle">Secure</div>
-                                            <div className="buyDesc">
-                                                Payment processor complies with PCI SAQ when storing, processing and
-                                                transmitting cardholder data
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="buyXLM_block">
-                                        <div className="block_container">
-                                            <img src={images['icon-circle-success']} alt="fast" />
-                                        </div>
-
-                                        <div className="block_container">
-                                            <div className="buyTitle">Convenient</div>
-                                            <div className="buyDesc">
-                                                Deposit XLM to your account using Visa or MasterCard credit card
-                                            </div>
-                                        </div>
+                        <div className="card_container">
+                            <p className="titleDesc">
+                                Buy lmens with VISA or Mastercard
+                            </p>
+                            <div className="green_card">
+                                <div className="buyXLM_block">
+                                    <div className="block_container">
+                                        <img src={images['icon-fastClock']} alt="fast" />
                                     </div>
 
-                                    {isTestnet ? (
-                                        <button className="s-button" onClick={() => d.session.handlers.fundByFriendBot(unfundedAccountId)}>
-                                            Request testnet fund
-                                        </button>
-                                    ) : (
-                                        <a
-                                            href={`https://lobstr.co/buy-crypto?target_address=${unfundedAccountId}`}
-                                            className="s-button"
-                                            target="_blank"
-                                            rel="nofollow noopener noreferrer">
-                                            Buy XLM
-                                        </a>
-                                    )}
+                                    <div className="block_container">
+                                        <div className="buyTitle">Fast & Easy</div>
+                                        <div className="buyDesc">
+                                            Lumens reach your account in 10-30 minutes on average
+                                        </div>
+                                    </div>
                                 </div>
+                                <div className="buyXLM_block">
+                                    <div className="block_container">
+                                        <img src={images['icon-lock']} alt="fast" />
+                                    </div>
+
+                                    <div className="block_container">
+                                        <div className="buyTitle">Secure</div>
+                                        <div className="buyDesc">
+                                            Payment processor complies with PCI SAQ when storing, processing and
+                                            transmitting cardholder data
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="buyXLM_block">
+                                    <div className="block_container">
+                                        <img src={images['icon-circle-success']} alt="fast" />
+                                    </div>
+
+                                    <div className="block_container">
+                                        <div className="buyTitle">Convenient</div>
+                                        <div className="buyDesc">
+                                            Deposit XLM to your account using Visa or MasterCard credit card
+                                        </div>
+                                    </div>
+                                </div>     
                             </div>
-                        )}
+                        </div>
+                        
                     </div>
                 </div>
             </div>
@@ -137,5 +113,4 @@ export default function SessionActivate(props) {
 SessionActivate.propTypes = {
     unfundedAccountId: PropTypes.string.isRequired,
     d: PropTypes.instanceOf(Driver).isRequired,
-    isTestnet: PropTypes.bool,
 };
