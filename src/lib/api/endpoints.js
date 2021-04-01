@@ -35,6 +35,10 @@ export const endpoints = {
         url: 'graphql',
         baseUrl: EnvConsts.STELLAR_TICKER,
     },
+    stellarTestnetTickerGraphQL: {
+        url: 'graphql',
+        baseUrl: EnvConsts.STELLAR_TICKER_TESTNET,
+    },
 };
 
 function getUrlParams(params) {

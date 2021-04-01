@@ -101,7 +101,7 @@ export default class SepTransactions extends React.Component {
         if (!asset) { return { notFound: true }; }
 
         // Then attempt to fetch user transactions for selected acnhor
-        getTransferServer(asset.domain)
+        getTransferServer(asset)
             .then(({ TRANSFER_SERVER_SEP0024, TRANSFER_SERVER, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
                 this.TRANSFER_SERVER = TRANSFER_SERVER_SEP0024 || TRANSFER_SERVER;
                 this.WEB_AUTH_URL = WEB_AUTH_URL;

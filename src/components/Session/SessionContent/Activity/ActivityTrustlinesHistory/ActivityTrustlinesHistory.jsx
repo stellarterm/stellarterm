@@ -10,9 +10,9 @@ import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from './../Act
 const TRUSTLINE_TYPES = ['trustline_removed', 'trustline_created', 'trustline_updated'];
 
 export default class ActivityTrustlinesHistory extends React.Component {
-    static async goToStellarExpert(operation) {
+    static async goToStellarExpert(operation, isTestnet) {
         const { transaction_hash } = await operation();
-        window.open(`https://stellar.expert/explorer/public/tx/${transaction_hash}`, '_blank');
+        window.open(`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${transaction_hash}`, '_blank');
     }
 
     static filterHistoryByTrustlines(history) {
@@ -53,7 +53,7 @@ export default class ActivityTrustlinesHistory extends React.Component {
         }
     }
 
-    getTrustlinesHistoryRow(historyItem, key, style) {
+    getTrustlinesHistoryRow(historyItem, key, style, isTestnet) {
         const { created_at, asset_code, asset_issuer, type, operation } = historyItem;
         const { time, date } = formatDate(created_at);
         const { viewType } = this.constructor.getViewType(type);
@@ -73,7 +73,7 @@ export default class ActivityTrustlinesHistory extends React.Component {
                         title="StellarExpert"
                         src={images['icon-info']}
                         alt="i"
-                        onClick={() => { this.constructor.goToStellarExpert(operation).then(); }} />
+                        onClick={() => { this.constructor.goToStellarExpert(operation, isTestnet).then(); }} />
                 </div>
             </div>
         );
@@ -81,7 +81,7 @@ export default class ActivityTrustlinesHistory extends React.Component {
 
 
     render() {
-        const { history, loading } = this.props;
+        const { history, loading, d } = this.props;
         const trustlineHistory = this.constructor.filterHistoryByTrustlines(history);
 
         if (!loading && trustlineHistory.length === 0) {
@@ -137,7 +137,7 @@ export default class ActivityTrustlinesHistory extends React.Component {
                                             rowRenderer={
                                                 ({ key, index, style }) =>
                                                     this.getTrustlinesHistoryRow(
-                                                        trustlineHistory[index], key, style)} />
+                                                        trustlineHistory[index], key, style, d.Server.isTestnet)} />
                                     )}
                                 </InfiniteLoader>
                             )}
