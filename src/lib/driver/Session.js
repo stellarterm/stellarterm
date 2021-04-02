@@ -158,9 +158,17 @@ export default function Send(driver) {
             try {
                 const transport = await Transport.create();
                 const ledgerApp = new AppStellar(transport);
-                const connectionResult = await ledgerApp.getPublicKey(bip32Path);
+                const { publicKey } = await ledgerApp.getPublicKey(bip32Path);
+
+                if (!publicKey || publicKey === 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF') {
+                    throw new Error('Could not access your Ledger account. Make sure your Ledger connection is active ' +
+                        'or update the device firmware version. Contact the support at support@stellarterm.com if ' +
+                        'the issue persists.');
+                }
+
                 this.setupLedgerError = null;
-                const keypair = StellarSdk.Keypair.fromPublicKey(connectionResult.publicKey);
+
+                const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
                 return this.handlers.logIn(keypair, {
                     authType: 'ledger',
                     bip32Path,
