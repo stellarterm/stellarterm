@@ -55,7 +55,7 @@ export default class Ticker {
             });
     }
     static loadStellarMarketsData({
-        baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer,
+        baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer, isTestnet,
     }) {
         const headers = { 'Content-Type': 'application/json' };
         const stellarTickerGraphQLParams =
@@ -77,6 +77,6 @@ export default class Ticker {
             'counterAssetIssuer} }';
 
         const body = JSON.stringify({ query: stellarTickerGraphQLParams });
-        return postWithCancel(getEndpoint('stellarTickerGraphQL'), { headers, body });
+        return postWithCancel(getEndpoint(isTestnet ? 'stellarTestnetTickerGraphQL' : 'stellarTickerGraphQL'), { headers, body });
     }
 }

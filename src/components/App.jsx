@@ -26,8 +26,8 @@ import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
 window.React = React;
 const mountNode = document.getElementById('app');
 
-// const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.org';
-const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.lobstr.co';
+const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.org';
+// const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.lobstr.co';
 
 const network = {
     horizonUrl: DEFAULT_HORIZON_SERVER,
@@ -37,15 +37,23 @@ const network = {
     isCustom: false,
 };
 
+const TESTNET_URL = '/testnet';
+
 if (!window.location.pathname.includes('index.html') && window.location.hash.indexOf('#') === 0) {
-    window.location.replace(window.location.hash.substr(1));
+    window.location.replace(
+        window.location.pathname +
+        (window.location.pathname[window.location.pathname.length - 1] === '/' ? '' : '/') +
+        window.location.hash.substr(1));
 }
 
-if (window.location.pathname === '/testnet' || window.location.pathname === '/testnet/') {
+if (window.location.pathname.includes(TESTNET_URL)) {
     network.isDefault = false;
     network.isTestnet = true;
     network.horizonUrl = 'https://horizon-testnet.stellar.org';
     network.networkPassphrase = StellarSdk.Networks.TESTNET;
+
+    const reg = new RegExp(`(.+)${TESTNET_URL}$`);
+    window.history.replaceState({}, '', window.location.pathname.replace(reg, '$1'));
 } else if (window.stCustomConfig.horizonUrl) {
     network.isDefault = false;
     network.isCustom = true;
@@ -77,7 +85,7 @@ class TermApp extends React.Component {
         window.addEventListener(
             'hashchange',
             (e) => {
-                if (e.newURL.indexOf('/testnet') !== -1) {
+                if (e.newURL.includes('testnet')) {
                     window.location.reload();
                 }
                 this.setState({ url: parseUrl(e.newURL) });

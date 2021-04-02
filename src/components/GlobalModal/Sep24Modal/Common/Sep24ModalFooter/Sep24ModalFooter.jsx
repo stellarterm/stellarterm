@@ -217,7 +217,7 @@ export default class Sep24ModalFooter extends React.Component {
         const { asset } = this.props;
         const { isError, errorMsg } = this.state;
         const selectedAnchor = directory.getAnchor(asset.domain);
-        const supportMail = selectedAnchor.support;
+        const supportMail = asset.customTransferSupport || selectedAnchor.support;
 
         return (
             <React.Fragment>

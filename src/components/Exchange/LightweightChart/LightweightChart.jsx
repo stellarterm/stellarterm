@@ -90,6 +90,19 @@ export default class LightweightChart extends React.Component {
         if (fullHistoryLoaded) { return; }
 
         handlers.getTrades(timeFrame, 100).then((res) => {
+            if (!res) {
+                this.setState({
+                    isLoadingInit: false,
+                    [timeFrame]: {
+                        trades: [],
+                        volumes: [],
+                        nextTrades: null,
+                        fullHistoryLoaded: true,
+                    },
+                });
+                return;
+            }
+
             const fullLoaded = res.records.length === 0;
             const convertedTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
             const convertedVolume = converterOHLC.getVolumeData(convertedTrades, data);

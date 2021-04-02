@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "setup": "yarn install",
-    "start": "NODE_ENV=local; ./node_modules/.bin/gulp",
+    "start": "./node_modules/.bin/gulp",
     "lint": "./node_modules/.bin/eslint .",
     "lint-fix": "./node_modules/.bin/eslint . --fix",
     "hash": "cd dist; openssl dgst -sha256 index.html",
@@ -43,7 +43,7 @@
     "react-virtualized": "^9.21.1",
     "screenfull": "^4.2.1",
     "stellar-identicon-js": "^1.0.0",
-    "stellar-sdk": "7.0.0",
+    "stellar-sdk": "8.0.0",
     "stellarterm-api": "git+https://github.com/stellarterm/stellarterm-api.git",
     "stellarterm-directory": "git+https://github.com/stellarterm/stellarterm-directory.git",
     "trezor-connect": "^8.1.1",

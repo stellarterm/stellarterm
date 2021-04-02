@@ -5,13 +5,14 @@ import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from './../Activity';
+import Driver from '../../../../../lib/Driver';
 
 const SIGNERS_TYPES = ['signer_removed', 'signer_created', 'signer_updated', 'account_thresholds_updated'];
 
 export default class ActivitySignersHistory extends React.Component {
-    static async goToStellarExpert(operation) {
+    static async goToStellarExpert(operation, isTestnet) {
         const { transaction_hash } = await operation();
-        window.open(`https://stellar.expert/explorer/public/tx/${transaction_hash}`, '_blank');
+        window.open(`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${transaction_hash}`, '_blank');
     }
 
     static filterHistoryBySigners(history) {
@@ -59,7 +60,7 @@ export default class ActivitySignersHistory extends React.Component {
         }
     }
 
-    getSignerHistoryRow(historyItem, key, style) {
+    getSignerHistoryRow(historyItem, key, style, isTestnet) {
         const { created_at, type, operation,
             low_threshold, med_threshold, high_threshold, public_key, weight } = historyItem;
         const { time, date } = formatDate(created_at);
@@ -89,14 +90,14 @@ export default class ActivitySignersHistory extends React.Component {
                         title="StellarExpert"
                         src={images['icon-info']}
                         alt="i"
-                        onClick={() => { this.constructor.goToStellarExpert(operation).then(); }} />
+                        onClick={() => { this.constructor.goToStellarExpert(operation, isTestnet).then(); }} />
                 </div>
             </div>
         );
     }
 
     render() {
-        const { history, loading } = this.props;
+        const { history, loading, d } = this.props;
         const signersHistory = this.constructor.filterHistoryBySigners(history);
 
         const listHeight = ROW_HEIGHT * signersHistory.length;
@@ -143,7 +144,13 @@ export default class ActivitySignersHistory extends React.Component {
                                             rowCount={signersHistory.length}
                                             rowRenderer={
                                                 ({ key, index, style }) =>
-                                                    this.getSignerHistoryRow(signersHistory[index], key, style)} />)}
+                                                    this.getSignerHistoryRow(
+                                                        signersHistory[index],
+                                                        key,
+                                                        style,
+                                                        d.Server.isTestnet,
+                                                    )} />
+                                    )}
                                 </InfiniteLoader>
                             )}
                         </AutoSizer>
@@ -154,6 +161,7 @@ export default class ActivitySignersHistory extends React.Component {
     }
 }
 ActivitySignersHistory.propTypes = {
+    d: PropTypes.instanceOf(Driver).isRequired,
     history: PropTypes.arrayOf(PropTypes.any),
     loading: PropTypes.bool,
     loadMore: PropTypes.func,

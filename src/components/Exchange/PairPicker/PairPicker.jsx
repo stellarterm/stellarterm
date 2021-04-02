@@ -141,6 +141,15 @@ export default class PairPicker extends React.Component {
         if (!this._mounted) {
             return;
         }
+
+        if (!lastTradesWithStep15min) {
+            this.setState({
+                last24HourTrades: [],
+                lastMinutesTrade: {},
+                counterWithLumenLastTrade: {},
+            });
+            return;
+        }
         const last24HourTrades = lastTradesWithStep15min.records
             .filter(record => ((new Date() - record.timestamp) < PERIOD));
 

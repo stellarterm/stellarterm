@@ -118,7 +118,7 @@ export default class MarketsHistory extends React.Component {
 
     render() {
         const { trades } = this.state;
-        const noMarketTrades = trades.length === 0;
+        const noMarketTrades = !trades || trades.length === 0;
 
         const marketsTitleText = `Market trades history ${noMarketTrades ? 'is empty' : ''}`;
 

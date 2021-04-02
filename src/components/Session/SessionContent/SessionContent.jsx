@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
-import Inflation from './Inflation/Inflation';
 import Trust from './Trust/Trust';
 import Send from './Send/Send';
 import SessionAccount from './SessionAccount/SessionAccount';
@@ -24,10 +23,6 @@ export default function SessionContent(props) {
                 <Route
                     path="/account/send"
                     render={prop => <Send {...prop} d={d} />} />
-                <Route
-                    exact
-                    path="/account/settings/"
-                    render={prop => <Inflation {...prop} d={d} />} />
                 <Route
                     exact
                     path="/account/multisig/"

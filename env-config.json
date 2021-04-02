@@ -7,7 +7,8 @@
         "HOME_DOMAIN": "staging.stellarterm.com",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
         "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
-        "MOONPAY_API_URL": "https://staging.lobstr.co/api/"
+        "MOONPAY_API_URL": "https://staging.lobstr.co/api/",
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     },
     "production": {
         "API_URL": "https://api.stellarterm.com/v1/",
@@ -17,7 +18,8 @@
         "HOME_DOMAIN": "stellarterm.com",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
         "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
-        "MOONPAY_API_URL": "https://lobstr.co/api/"
+        "MOONPAY_API_URL": "https://lobstr.co/api/",
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     },
     "local": {
         "API_URL": "https://localhost:3000/api/v1/",
@@ -27,6 +29,7 @@
         "HOME_DOMAIN": "localhost:3000",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
         "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
-        "MOONPAY_API_URL": "https://staging.lobstr.co/api/"
+        "MOONPAY_API_URL": "https://staging.lobstr.co/api/",
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     }
 }

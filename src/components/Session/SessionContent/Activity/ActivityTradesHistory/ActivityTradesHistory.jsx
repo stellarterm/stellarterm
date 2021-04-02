@@ -12,9 +12,9 @@ import Printify from '../../../../../lib/Printify';
 
 
 export default class ActivityTradesHistory extends React.Component {
-    static async goToStellarExpert(operation) {
+    static async goToStellarExpert(operation, isTestnet) {
         const op = await operation();
-        window.open(`https://stellar.expert/explorer/public/tx/${op.transaction_hash}`, '_blank');
+        window.open(`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${op.transaction_hash}`, '_blank');
     }
 
     static filterHistoryByTrade(history) {
@@ -82,7 +82,7 @@ export default class ActivityTradesHistory extends React.Component {
                         title="StellarExpert"
                         src={images['icon-info']}
                         alt="i"
-                        onClick={() => { this.constructor.goToStellarExpert(operation).then(); }} />
+                        onClick={() => { this.constructor.goToStellarExpert(operation, d.Server.isTestnet).then(); }} />
                 </div>
             </div>
         );

@@ -47,7 +47,7 @@ export default class ActivityPaymentsHistory extends React.Component {
         }
     }
 
-    getPaymentsHistoryRow(historyItem, key, style) {
+    getPaymentsHistoryRow(historyItem, key, style, isTestnet) {
         const { account_id } = this.props.d.session.account;
         const { allHistory } = this.props;
         const { account, funder, created_at, starting_balance,
@@ -86,7 +86,7 @@ export default class ActivityPaymentsHistory extends React.Component {
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <a
-                        href={`https://stellar.expert/explorer/public/tx/${transaction_hash}`}
+                        href={`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${transaction_hash}`}
                         target="_blank"
                         rel="noopener noreferrer">
                         <img title="StellarExpert" src={images['icon-info']} alt="i" />
@@ -98,7 +98,7 @@ export default class ActivityPaymentsHistory extends React.Component {
 
 
     render() {
-        const { history, loading } = this.props;
+        const { history, loading, d } = this.props;
         const paymentHistory = this.constructor.filterPaymentsHistory(history);
 
         const listHeight = ROW_HEIGHT * paymentHistory.length;
@@ -146,7 +146,11 @@ export default class ActivityPaymentsHistory extends React.Component {
                                             rowCount={paymentHistory.length}
                                             rowRenderer={
                                                 ({ key, index, style }) =>
-                                                    this.getPaymentsHistoryRow(paymentHistory[index], key, style)} />
+                                                    this.getPaymentsHistoryRow(
+                                                        paymentHistory[index],
+                                                        key,
+                                                        style,
+                                                        d.Server.isTestnet)} />
                                     )}
                                 </InfiniteLoader>
                             )}

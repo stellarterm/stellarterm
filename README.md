@@ -19,7 +19,7 @@ It is currently under active development and is not yet finished. See it in acti
 ## StellarTerm client custom network
 
 ### Testnet
-To use the testnet, simply add `#testnet` to the url to activate it. To exit, refresh the page where the url is not `#testnet`.
+To use the testnet, simply add `#testnet` or `/testnet` to the url to activate it. To exit, refresh the page where the url is not `/testnet`.
 
 ### Custom horizon builds
 Some developers may want to use StellarTerm pointed to a custom horizon server or even a custom network. To do this, you must build StellarTerm locally.

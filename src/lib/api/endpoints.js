@@ -57,6 +57,9 @@ export const endpoints = {
     moonpayTransaction: {
         url: 'moonpay/transaction/stellarterm/',
         baseUrl: EnvConsts.MOONPAY_API_URL,
+    stellarTestnetTickerGraphQL: {
+        url: 'graphql',
+        baseUrl: EnvConsts.STELLAR_TICKER_TESTNET,
     },
 };
 

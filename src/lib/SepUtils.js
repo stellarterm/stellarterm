@@ -5,7 +5,9 @@ import { getUrlWithParams } from './api/endpoints';
 
 let headers = {};
 
-export async function getTransferServer(domain) {
+export async function getTransferServer(asset) {
+    const domain = asset.customTransferDomain || asset.domain;
+
     const {
         TRANSFER_SERVER,
         TRANSFER_SERVER_SEP0024,
