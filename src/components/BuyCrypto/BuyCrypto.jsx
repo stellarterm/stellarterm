@@ -5,29 +5,29 @@ import { getEndpoint } from '../../lib/api/endpoints';
 import * as request from '../../lib/api/request';
 import images from '../../images';
 import Driver from '../../lib/Driver';
+import { isValidToPrecision, isNoRecalculateNeeded } from '../../lib/Format';
 import BuyCryptoStatic from './BuyCryptoStatic/BuyCryptoStatic';
 import CurrencyDropdown from './CurrencyDropdown/CurrencyDropdown';
 
 /**
- * Return true, if string is valid float number with precision
- * @param {number} amount - Amount to validate
- * @param {number} precision - precision to validate
- * @returns {boolean} True, if valid number (ex) 1, 1.00, 20.55400
+ * Return object with popular/nonPopular arrays of currencies
+ * @param {Array} currencies currencies/crypto from moonpay
+ * @returns {Object} {popular/nonPopular} currencies/crypto arrays
  */
-const isValidToPrecision = (amount, precision) => {
-    const regExpStr = Number(precision) === 0 ? '^\\d+$' : `^\\d+([.,]\\d{1,${precision}})?$`;
-    const regExp = new RegExp(regExpStr);
-    return regExp.test(amount.toString());
-};
+const getSortedCurrencies = currencies => {
+    const nonPopularCurrencies = [];
+    const popularCurrencies = currencies
+        .map(currency => {
+            if (currency.is_popular) {
+                return currency;
+            }
+            nonPopularCurrencies.push(currency);
+            return null;
+        })
+        .filter(el => el !== null);
 
-/**
- * Return true, if string should be set to input without recalculate
- * @param {string} amount string to validate
- * @param {number} precision of crypto code after .
- * @returns {boolean} True, if ex ("", "1.", "."), if precision 0, ex (1, 20, 50)
- */
-const isNoRecalculateNeeded = (amount, precision) =>
-    precision && amount.length !== 1 && amount.slice(-1) === '.' && amount.split('.').length === 2;
+    return { popular: popularCurrencies, nonPopular: nonPopularCurrencies };
+};
 
 const getMoonpayInputError = (amount, { name, min_amount, max_amount }) => {
     let inputError = '';
@@ -93,20 +93,16 @@ export default class BuyCrypto extends React.Component {
                     this.setCrypto(this.state.crypto.find(crypto => crypto.code === urlCryptoCode.toUpperCase()));
                 }
             } catch (e) {
+                // eslint-disable-next-line no-console
                 console.log(e);
             }
         }
     }
 
     getMoonpayStatus() {
-        return request
-            .get(getEndpoint('moonpayStatus'))
-            .then(({ MOONPAY_ENABLED }) => {
-                this.setState({ isEnabled: MOONPAY_ENABLED });
-            })
-            .catch(e => {
-                this.setState({ error: e });
-            });
+        return request.get(getEndpoint('moonpayStatus')).catch(e => {
+            this.setState({ error: e });
+        });
     }
 
     getMoonpayCurrencies() {
@@ -131,24 +127,6 @@ export default class BuyCrypto extends React.Component {
             })
             .catch(e => {
                 this.setState({ error: e });
-            });
-    }
-
-    getMoonpayCryptoPrice(crypto) {
-        this.setState({ selectedCrypto: crypto, isPending: true });
-
-        const { selectedCurrency, availableCurrencies } = this.state;
-        const params = { currency_code: crypto.code.toLowerCase() };
-
-        return request
-            .get(getEndpoint('moonpayCryptoPrice', params))
-            .then(res => {
-                this.setState({ cryptoPrices: res, isPending: false });
-                const defaultCurrency = selectedCurrency || availableCurrencies.find(currency => currency.isDefault);
-                this.setCurrency(defaultCurrency);
-            })
-            .catch(e => {
-                this.setState({ error: e, isPending: false });
             });
     }
 
@@ -189,7 +167,7 @@ export default class BuyCrypto extends React.Component {
             base_currency_amount: currencyAmount,
             currency_code: selectedCrypto.code,
             currency_amount: cryptoAmount,
-            target_address: accountID,
+            target_address: selectedCrypto.code === 'XLM' ? accountID : 'null',
         };
 
         return request
@@ -205,7 +183,21 @@ export default class BuyCrypto extends React.Component {
     }
 
     setCrypto(selectedCrypto) {
-        return this.getMoonpayCryptoPrice(selectedCrypto);
+        this.setState({ selectedCrypto, isPending: true });
+
+        const { selectedCurrency, availableCurrencies } = this.state;
+        const params = { currency_code: selectedCrypto.code.toLowerCase() };
+
+        return request
+            .get(getEndpoint('moonpayCryptoPrice', params))
+            .then(res => {
+                this.setState({ cryptoPrices: res, isPending: false });
+                const defaultCurrency = selectedCurrency || availableCurrencies.find(currency => currency.isDefault);
+                this.setCurrency(defaultCurrency);
+            })
+            .catch(e => {
+                this.setState({ error: e, isPending: false });
+            });
     }
 
     async initMoonpay() {
@@ -213,19 +205,20 @@ export default class BuyCrypto extends React.Component {
         try {
             let defaultCrypto;
 
-            await this.getMoonpayStatus();
-            await this.getMoonpayCurrencies().then(availableCurrencies => {
-                this.setCurrency(availableCurrencies.find(currency => currency.is_default));
-            });
-            await this.getMoonpayCrypto().then(availableCrypto => {
-                const urlCryptoCode = new URLSearchParams(window.location.search).get('code');
+            const { MOONPAY_ENABLED } = await this.getMoonpayStatus();
+            this.setState({ isEnabled: MOONPAY_ENABLED });
 
-                if (urlCryptoCode) {
-                    defaultCrypto = availableCrypto.find(crypto => crypto.code === urlCryptoCode.toUpperCase());
-                } else {
-                    defaultCrypto = availableCrypto.find(crypto => crypto.is_default);
-                }
-            });
+            const availableCurrencies = await this.getMoonpayCurrencies();
+            this.setCurrency(availableCurrencies.find(currency => currency.is_default));
+
+            const availableCrypto = await this.getMoonpayCrypto();
+            const urlCryptoCode = new URLSearchParams(window.location.search).get('code');
+
+            if (urlCryptoCode) {
+                defaultCrypto = availableCrypto.find(crypto => crypto.code === urlCryptoCode.toUpperCase());
+            } else {
+                defaultCrypto = availableCrypto.find(crypto => crypto.is_default);
+            }
 
             await this.setCrypto(defaultCrypto);
         } catch (e) {
@@ -330,6 +323,9 @@ export default class BuyCrypto extends React.Component {
 
         const isSubmitDisabled = isPending || errorText || !currencyAmount || !cryptoAmount;
 
+        const sortedCurrencies = getSortedCurrencies(currencies);
+        const sortedCrypto = getSortedCurrencies(crypto);
+
         return (
             <form onSubmit={e => this.handleSubmit(e)}>
                 <label htmlFor="currencyInput">
@@ -340,6 +336,7 @@ export default class BuyCrypto extends React.Component {
                     <input
                         name="currencyInput"
                         type="text"
+                        autoFocus
                         autoComplete="off"
                         className="Moonpay_input"
                         value={currencyAmount}
@@ -349,7 +346,8 @@ export default class BuyCrypto extends React.Component {
                     />
 
                     <CurrencyDropdown
-                        currencies={currencies}
+                        popularCurrencies={sortedCurrencies.popular}
+                        nonPopularCurrencies={sortedCurrencies.nonPopular}
                         selectedToken={selectedCurrency}
                         changeFunc={token => this.setCurrency(token)}
                     />
@@ -364,15 +362,21 @@ export default class BuyCrypto extends React.Component {
                         autoComplete="off"
                         className="Moonpay_input"
                         value={cryptoAmount}
-                        maxLength={56}
+                        maxLength={20}
                         onChange={e => this.changeCryptoAmount(e.target.value)}
                         placeholder={`Amount in ${selectedCrypto.code} you get`}
                     />
 
                     <CurrencyDropdown
-                        currencies={crypto}
+                        popularCurrencies={sortedCrypto.popular}
+                        nonPopularCurrencies={sortedCrypto.nonPopular}
                         selectedToken={selectedCrypto}
-                        changeFunc={token => this.setCrypto(token)}
+                        changeFunc={token => {
+                            const params = new URLSearchParams(window.location.search);
+                            params.set('code', token.code);
+                            window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+                            this.setCrypto(token);
+                        }}
                     />
                 </div>
                 <div className="form_footer">
@@ -400,8 +404,8 @@ export default class BuyCrypto extends React.Component {
                             Buy crypto assets <br /> with VISA or Mastercard
                         </div>
                         <div className="BuyCrypto_description">
-                            With StellarTerm, you can easily buy Lumens, Bitcoin, Ethereum, Ripple and other
-                            cryptocurrencies using US Dollars or Euro
+                            StellarTerm is a trusted place where you can easily buy Lumens and other cryptocurrencies
+                            with your credit or debit card
                         </div>
                     </div>
 

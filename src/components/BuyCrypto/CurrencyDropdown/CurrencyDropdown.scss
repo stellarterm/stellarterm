@@ -14,15 +14,24 @@
                 right: -1px;
                 top: -1px;
 
+                .search_icon,
+                .close_button {
+                    position: absolute;
+                    padding: 15px;
+                    z-index: 10;
+                }
+
+                .search_icon {
+                    left: 0;
+                }
+
                 .search_input {
+                    padding: 0 50px;
                     width: 100%;
                 }
 
                 .close_button {
-                    position: absolute;
-                    z-index: 1;
                     right: 0;
-                    padding: 15px;
                 }
             }
 
@@ -56,7 +65,7 @@
             }
 
             .dropdown_list {
-                z-index: 10;
+                z-index: 5;
                 position: absolute;
                 overflow-y: auto;
                 width: 386px;
@@ -66,6 +75,20 @@
                 background: #fff;
                 top: 54px;
                 right: -1px;
+
+                .dropdown_selected_item {
+                    border-left: 2px solid #69c76f;
+                }
+
+                .popular_separator {
+                    padding: 16px;
+                    font-size: 10px;
+                    font-weight: 300;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 1.2px;
+                    color: #8b95a9;
+                }
 
                 .dropdown_item {
                     width: 100%;

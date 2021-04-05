@@ -72,8 +72,7 @@ export default class MoonpayModal extends React.Component {
                     <p className="moonpay_description">
                         You will be redirected to moonpay.io. Services relating to credit card payments are provided by
                         Moonpay, which is a separate platform owned by a third party. StellarTerm does not assume any
-                        responsibility for any loss or damage caused by the use of the credit card payment service. By
-                        proceeding further, you accept this disclaimer.
+                        responsibility for any loss or damage caused by the use of the credit card payment service.
                     </p>
 
                     <button

@@ -7,33 +7,6 @@ import images from '../../images';
 import Driver from '../../lib/Driver';
 
 class Header extends React.Component {
-    static getBuyCryptoLobsterLink() {
-        return (
-            <div className="Nav_link buy_crypto">
-                <span>Buy crypto </span>
-                <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
-                <img src={images.dropdown} alt="" />
-                <div className="buy_crypto-links">
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=xlm">
-                        Buy Lumens
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=btc">
-                        Buy Bitcoin
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=eth">
-                        Buy Ethereum
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=ltc">
-                        Buy Litecoin
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto">
-                        Buy other crypto
-                    </Link>
-                </div>
-            </div>
-        );
-    }
-
     constructor(props) {
         super(props);
         this.state = {
@@ -56,6 +29,37 @@ class Header extends React.Component {
 
     componentWillUnmount() {
         this.props.d.session.event.unlisten(this.listenId);
+    }
+
+    getBuyCryptoLobsterLink() {
+        const buyCryptoUrl = '/buy-crypto';
+        const isTheSameTab = this.state.currentPath.includes(buyCryptoUrl);
+        const currentTabClass = isTheSameTab ? 'is-current' : '';
+
+        return (
+            <div className={`Nav_link buy_crypto ${currentTabClass}`}>
+                <span>Buy crypto </span>
+                <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
+                <img src={images.dropdown} alt="" />
+                <div className="buy_crypto-links">
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=xlm">
+                        Buy Stellar Lumens
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=btc">
+                        Buy Bitcoin
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=eth">
+                        Buy Ethereum
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=ltc">
+                        Buy Litecoin
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto">
+                        Buy other crypto
+                    </Link>
+                </div>
+            </div>
+        );
     }
 
     getNetworkBar() {
@@ -171,7 +175,7 @@ class Header extends React.Component {
                             </Link>
                             {this.createHeaderTab('/exchange/', 'Exchange')}
                             {this.createHeaderTab('/markets/', 'Markets')}
-                            {Header.getBuyCryptoLobsterLink()}
+                            {this.getBuyCryptoLobsterLink()}
                             {this.createHeaderTab('/account/', 'Account')}
                             {!isElectron() ? this.createHeaderTab('/download/', 'Download') : null}
                         </nav>

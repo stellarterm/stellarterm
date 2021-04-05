@@ -48,32 +48,18 @@ export default class CurrencyDropdown extends React.Component {
         this.setState(INITIAL_STATE);
     }
 
-    render() {
-        const { currencies, selectedToken } = this.props;
-        const { isOpenList, searchValue } = this.state;
-
-        const tokenWithIcon = token => (
-            <div className="token_block_wrapper">
-                <img className="currency_icon" src={token.icon} alt={token.name} />
-                <div className="name_wrapper">
-                    <span className="code_small">{token.code}</span>
-                    <span className="name_small">{token.name}</span>
-                </div>
-                {selectedToken.code === token.code && (
-                    <img className="selected_crypto_check" src={images['icon-tick-small']} alt="" />
-                )}
-            </div>
-        );
-
-        const searchField = (
+    renderSearchField() {
+        return (
             <div className="search_field">
+                <img className="search_icon" src={images['icon-search']} alt="search" />
+
                 <input
                     name="currencyInput"
                     type="text"
                     autoFocus
                     autoComplete="off"
                     className="Moonpay_input search_input"
-                    value={searchValue}
+                    value={this.state.searchValue}
                     maxLength={30}
                     onChange={e => this.handleSearch(e.target.value)}
                     placeholder="Type currency name or ticker"
@@ -86,24 +72,68 @@ export default class CurrencyDropdown extends React.Component {
                 />
             </div>
         );
+    }
 
-        const filteredTokens = currencies.filter(
-            currency =>
-                currency.code.toLowerCase().includes(searchValue.toLowerCase()) ||
-                currency.name.toLowerCase().includes(searchValue.toLowerCase()),
-        );
-
-        const tokensList = filteredTokens.length ? (
-            filteredTokens.map(token => (
-                <div className="dropdown_item" key={token.id} onClick={() => this.onClickAssetDropdown(token)}>
-                    {tokenWithIcon(token)}
+    renderTokenWithIcon(token) {
+        const isSelectedToken = this.props.selectedToken.code === token.code;
+        return (
+            <div
+                className={`dropdown_item ${isSelectedToken ? 'dropdown_selected_item' : ''}`}
+                key={token.id}
+                onClick={() => this.onClickAssetDropdown(token)}
+            >
+                <div className="token_block_wrapper">
+                    <img className="currency_icon" src={token.icon} alt={token.name} />
+                    <div className="name_wrapper">
+                        <span className="code_small">{token.code}</span>
+                        <span className="name_small">{token.name}</span>
+                    </div>
+                    {isSelectedToken && (
+                        <img className="selected_crypto_check" src={images['icon-tick-small']} alt="" />
+                    )}
                 </div>
-            ))
-        ) : (
-            <div className="dropdown_item not_found">
-                Nothing found for {'"'}
-                {searchValue}
-                {'"'}
+            </div>
+        );
+    }
+
+    render() {
+        const { popularCurrencies, nonPopularCurrencies, selectedToken } = this.props;
+        const { isOpenList, searchValue } = this.state;
+
+        const filterTokens = tokens =>
+            tokens.filter(
+                currency =>
+                    currency.code.toLowerCase().includes(searchValue.toLowerCase()) ||
+                    currency.name.toLowerCase().includes(searchValue.toLowerCase()),
+            );
+
+        const filteredPopularTokens = filterTokens(popularCurrencies);
+        const filteredNonPopularTokens = filterTokens(nonPopularCurrencies);
+
+        const tokensList = (
+            <div className="dropdown_list">
+                {filteredPopularTokens.length || filteredNonPopularTokens.length ? (
+                    <React.Fragment>
+                        {filteredPopularTokens.length ? (
+                            <React.Fragment>
+                                <div className="popular_separator">Popular currencies</div>
+                                {filteredPopularTokens.map(token => this.renderTokenWithIcon(token))}
+                            </React.Fragment>
+                        ) : null}
+                        {filteredNonPopularTokens.length ? (
+                            <React.Fragment>
+                                <div className="popular_separator">All currencies</div>
+                                {filteredNonPopularTokens.map(token => this.renderTokenWithIcon(token))}
+                            </React.Fragment>
+                        ) : null}
+                    </React.Fragment>
+                ) : (
+                    <div className="dropdown_item not_found">
+                        Nothing found for {'"'}
+                        {searchValue}
+                        {'"'}
+                    </div>
+                )}
             </div>
         );
 
@@ -129,8 +159,8 @@ export default class CurrencyDropdown extends React.Component {
 
                 {isOpenList ? (
                     <React.Fragment>
-                        {searchField}
-                        <div className="dropdown_list">{tokensList}</div>
+                        {this.renderSearchField()}
+                        {tokensList}
                     </React.Fragment>
                 ) : null}
             </div>
@@ -140,7 +170,10 @@ export default class CurrencyDropdown extends React.Component {
 
 CurrencyDropdown.propTypes = {
     selectedToken: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool])),
-    currencies: PropTypes.arrayOf(
+    popularCurrencies: PropTypes.arrayOf(
+        PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool])),
+    ),
+    nonPopularCurrencies: PropTypes.arrayOf(
         PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool])),
     ),
     changeFunc: PropTypes.func.isRequired,
