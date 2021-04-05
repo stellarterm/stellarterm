@@ -43,11 +43,17 @@ export default function Send(driver) {
     };
 
     this.addKnownAssetData = () => {
-        const knownAssetsData = JSON.parse(localStorage.getItem('knownAssetsData')) || [];
-        const { time } = knownAssetsData.find(item => Object.prototype.hasOwnProperty.call(item, 'time')) || '';
+        const knownAssetsData = JSON.parse(localStorage.getItem('knownAssetsData')) || {};
+        const { time, directoryBuild, assets: localStorageAssets = [] } = knownAssetsData;
         const periodUpdate = 14 * 24 * 60 * 60 * 1000;
 
-        if (knownAssetsData.length && ((new Date() - new Date(time)) < periodUpdate)) {
+        const frontendDirectoryBuild = directory.getBuildId();
+
+        if (
+            localStorageAssets.length &&
+            ((new Date() - new Date(time)) < periodUpdate) &&
+            Number(directoryBuild) === frontendDirectoryBuild
+        ) {
             this.addKnownAssetDataCalled = true;
             return Promise.resolve();
         }
@@ -84,7 +90,16 @@ export default function Send(driver) {
         }, Promise.resolve([]));
 
         return chainPromise.then((res) => {
-            localStorage.setItem('knownAssetsData', JSON.stringify([...res, { time: new Date() }]));
+            localStorage.setItem(
+                'knownAssetsData',
+                JSON.stringify(
+                    {
+                        time: new Date(),
+                        directoryBuild: frontendDirectoryBuild,
+                        assets: res,
+                    },
+                ),
+            );
             this.addKnownAssetDataCalled = true;
         });
     };
