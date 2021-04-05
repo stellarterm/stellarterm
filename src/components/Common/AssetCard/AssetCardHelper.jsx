@@ -65,12 +65,17 @@ export default class AssetCardHelper extends React.Component {
     }
 
     getKnownAssetDataFromLocalStorage(asset, anchor) {
-        const knownAssetsData = JSON.parse(localStorage.getItem('knownAssetsData')) || [];
-        if (!knownAssetsData.length && !this.props.d.session.addKnownAssetDataCalled) {
+        const knownAssetsData = JSON.parse(localStorage.getItem('knownAssetsData')) || {};
+        const { assets = [] } = knownAssetsData;
+
+        if (
+            !assets.length &&
+            !this.props.d.session.addKnownAssetDataCalled
+        ) {
             this.props.d.session.addKnownAssetDataPromise.then(() => this.forceUpdate());
             return anchor;
         }
-        const knownAsset = knownAssetsData.find(item => (
+        const knownAsset = assets.find(item => (
             item.code === asset.code && item.issuer === asset.issuer
         ));
 
