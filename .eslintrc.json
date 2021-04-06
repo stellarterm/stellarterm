@@ -1,27 +1,39 @@
 {
-  "extends": "airbnb",
-  "globals": {
-    "window": true,
-    "document": true,
-    "localStorage": true,
-    "fetch": true
-  },
-  "rules": {
-    "max-len": ["error", {
-      "code": 120,
-      "ignoreStrings": true,
-      "ignoreTemplateLiterals": true,
-      "ignoreUrls": true
-    }],
-    "react/require-default-props": 0,
-    "react/jsx-indent": 0,
-    "react/jsx-indent-props": ["error", 4],
-    "react/jsx-closing-bracket-location": ["error", "after-props"],
-    "jsx-a11y/no-static-element-interactions": 0,
-    "indent": ["error", 4],
-    "new-cap": "warn",
-    "no-underscore-dangle": "off",
-    "semi": "error",
-    "curly": ["error", "all"]
-  }
+    "extends": ["airbnb"],
+    "globals": {
+        "window": true,
+        "document": true,
+        "localStorage": true,
+        "fetch": true
+    },
+    "rules": {
+        "max-len": [
+            "error",
+            {
+                "code": 120,
+                "ignoreStrings": true,
+                "ignoreTemplateLiterals": true,
+                "ignoreUrls": true
+            }
+        ],
+        "linebreak-style": ["error", "unix"],
+        "quotes": ["error", "single"],
+        "react/require-default-props": 0,
+        "react/prefer-stateless-function": 1,
+        "react/jsx-indent": 0,
+        "react/jsx-indent-props": ["error", 4],
+        "arrow-parens": ["warn", "as-needed"],
+        "jsx-a11y/no-static-element-interactions": 0,
+        "lines-between-class-members": 0,
+        "new-cap": "warn",
+        "no-underscore-dangle": "off",
+        "no-unexpected-multiline": "error",
+        "semi": "error",
+        "indent": ["warn", 4, { "MemberExpression": 1, "SwitchCase": 1 }],
+        "curly": ["error", "all"],
+        "no-cond-assign": ["error", "always"],
+        "prefer-const": 1,
+        "import/first": 1,
+        "import/order": 1
+    }
 }

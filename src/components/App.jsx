@@ -18,6 +18,7 @@ import ReloadToTestnet from './ReloadToTestnet/ReloadToTestnet';
 import Session from './Session/Session';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
+import BuyCrypto from './BuyCrypto/BuyCrypto';
 import Driver from '../lib/Driver';
 import { isIE, isEdge } from '../lib/BrowserSupport';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
@@ -155,6 +156,10 @@ class TermApp extends React.Component {
                                     <Route
                                         path="/exchange"
                                         render={props => <Exchange {...props} d={d} />} />
+
+                                    <Route
+                                        path="/buy-crypto"
+                                        render={props => <BuyCrypto {...props} d={d} />} />
 
                                     <Route component={NotFound} />
                                 </Switch>

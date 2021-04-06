@@ -1,13 +1,29 @@
-@import "./ErrorBoundary/ErrorBoundary";
-@import "./SearchByAnchor/SearchByAnchor";
-@import "./AssetRow/AssetRow";
-@import "./CopyButton/CopyButton";
-@import "AssetCard/AssetCardMain/AssetCardMain";
-@import "AssetCard/AssetCardInRow/AssetCardInRow";
-@import "AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo";
-@import "./AssetPair/AssetPair";
-@import "./AssetList/AssetList";
-@import "./Ellipsis/Ellipsis";
-@import "./Loading/Loading";
-@import "./Generic/Generic";
-@import "./AppPopover/AppPopover";
+@import './ErrorBoundary/ErrorBoundary';
+@import './SearchByAnchor/SearchByAnchor';
+@import './AssetRow/AssetRow';
+@import './CopyButton/CopyButton';
+@import 'AssetCard/AssetCardMain/AssetCardMain';
+@import 'AssetCard/AssetCardInRow/AssetCardInRow';
+@import 'AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
+@import './AssetPair/AssetPair';
+@import './AssetList/AssetList';
+@import './Ellipsis/Ellipsis';
+@import './Loading/Loading';
+@import './Generic/Generic';
+@import './AppPopover/AppPopover';
+
+@mixin textEllipsis {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@mixin breakWord {
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
+
+@mixin errorText {
+    color: #fe6d74;
+}

@@ -1,0 +1,157 @@
+@import 'BuyCryptoStatic/BuyCryptoStatic';
+@import 'CurrencyDropdown/CurrencyDropdown';
+
+.BuyCrypto_wrapper {
+    display: flex;
+    width: 100%;
+    min-height: calc(100vh - 72px - 117px); // minus header height, minus footer height
+    flex-direction: column;
+
+    .BuyCrypto_main {
+        display: flex;
+        flex-direction: row;
+        padding: 74px 0;
+        align-items: center;
+        justify-content: center;
+
+        .BuyCrypto_main-text-block {
+            margin-right: 45px;
+            max-width: 467px;
+
+            .BuyCrypto_title {
+                font-size: 42px;
+                font-weight: 300;
+                color: #324351;
+                margin-bottom: 16px;
+            }
+
+            .BuyCrypto_description {
+                font-size: 14px;
+                color: #324351;
+                font-weight: normal;
+            }
+        }
+
+        .BuyCrypto_form {
+            width: 466px;
+            height: 348px;
+            background-color: #fff;
+            border-radius: 4px;
+            box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+            .Loader_wrapper {
+                @include flex-center;
+                height: 100%;
+
+                .nk-spinner {
+                    width: 50px;
+                    height: 50px;
+                    border: 3px solid rgba(134, 211, 140, 0.3);
+                    border-left: 3px solid #86d38c;
+                }
+            }
+
+            .Moonpay_input {
+                position: relative;
+                width: 60%;
+                height: 55px;
+                overflow: hidden;
+                font-weight: normal;
+                text-overflow: ellipsis;
+                border-radius: 0;
+                border: solid 1px #d7e0e4;
+                padding: 0 20px;
+
+                &::placeholder {
+                    font-size: 14px;
+                    font-weight: normal;
+                    opacity: 0.5;
+                }
+            }
+
+            form {
+                padding: 38px 40px;
+
+                .label_withMargin {
+                    margin-top: 24px;
+                }
+
+                label {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 14px;
+                    font-weight: normal;
+                    margin-bottom: 6px;
+
+                    .label_info {
+                        color: #9aa6ac;
+                    }
+
+                    .label_error {
+                        @include errorText;
+                    }
+                }
+
+                .Input_block_wrapper {
+                    display: flex;
+
+                    .Currency_dropdown {
+                        width: 160px;
+                    }
+                }
+            }
+
+            .form_footer {
+                @include flex-center;
+                justify-content: space-between;
+                margin-top: 32px;
+
+                .visa_mc_wrapper {
+                    @include flex-center;
+                    font-size: 14px;
+                    font-weight: normal;
+                    color: #9aa6ac;
+
+                    img {
+                        margin-left: 5px;
+                        height: 21px;
+                    }
+                }
+
+                .s-button {
+                    height: 52px;
+                    width: 160px;
+                }
+            }
+
+            .error_msg_block {
+                @include flex-center;
+                flex-direction: column;
+                height: 100%;
+                padding: 40px;
+
+                .error_title {
+                    font-size: 18px;
+                    font-weight: normal;
+                    line-height: normal;
+                    margin: 8px 0;
+                }
+
+                .error_text {
+                    font-size: 16px;
+                    font-weight: 300;
+                    line-height: normal;
+                    text-align: center;
+                    color: #9aa6ac;
+                }
+
+                .s-btn_cancel {
+                    margin-top: 36px;
+                    width: 120px;
+                    padding: 13px;
+                    background-color: #ffffff;
+                }
+            }
+        }
+    }
+}
