@@ -1,4 +1,3 @@
-/* eslint-disable react/no-did-update-set-state */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
@@ -33,19 +32,33 @@ class Header extends React.Component {
     }
 
     getBuyCryptoLobsterLink() {
-        const { account, unfundedAccountId } = this.props.d.session;
-        const accountID = account === null ? unfundedAccountId : account.accountId();
-        const targetAddressParam = `?target_address=${accountID}`;
+        const buyCryptoUrl = '/buy-crypto';
+        const isTheSameTab = this.state.currentPath.includes(buyCryptoUrl);
+        const currentTabClass = isTheSameTab ? 'is-current' : '';
 
         return (
-            <a
-                className={'Nav_link buy_crypto'}
-                href={`https://lobstr.co/buy-crypto${targetAddressParam}`}
-                target="_blank"
-                rel="nofollow noopener noreferrer">
-                <span>Buy Lumens </span>
-                <img src={images['icon-visa-mc']} alt="credit-card" />
-            </a>
+            <div className={`Nav_link buy_crypto ${currentTabClass}`}>
+                <span>Buy crypto </span>
+                <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
+                <img src={images.dropdown} alt="" />
+                <div className="buy_crypto-links">
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=xlm">
+                        Buy Stellar Lumens
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=btc">
+                        Buy Bitcoin
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=eth">
+                        Buy Ethereum
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=ltc">
+                        Buy Litecoin
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto">
+                        Buy other crypto
+                    </Link>
+                </div>
+            </div>
         );
     }
 
@@ -94,18 +107,19 @@ class Header extends React.Component {
         const viewPublicKey = `${accountId.substr(0, 5)}...${accountId.substr(-5, 5)}`;
         const canvas = createStellarIdenticon(accountId);
         const renderedIcon = canvas.toDataURL();
+
         return (
             <div className="Header_account">
                 <div className="Header_account-info CopyButton">
-                    <span
-                        className="federation"
-                        onClick={() => this.handleCopy('federationPopup', fullFederation)}>
+                    <span className="federation" onClick={() => this.handleCopy('federationPopup', fullFederation)}>
                         {userFederation}
                     </span>
                     <span
                         className="public-key"
-                        onClick={() => this.handleCopy(!userFederation ?
-                            'federationPopup' : 'publicKeyPopup', accountId)}>
+                        onClick={() =>
+                            this.handleCopy(!userFederation ? 'federationPopup' : 'publicKeyPopup', accountId)
+                        }
+                    >
                         {viewPublicKey}
                     </span>
                     <div className={`CopyButton__popup ${showPopup}`}>Copied to clipboard</div>
@@ -125,11 +139,13 @@ class Header extends React.Component {
 
     checkAccountTab(url) {
         const { currentPath } = this.state;
-        return url === '/account/' &&
-            (currentPath.includes('ledger')
-                || currentPath.includes('signup')
-                || currentPath.includes('trezor')
-                || currentPath.includes('freighter'));
+        return (
+            url === '/account/' &&
+            (currentPath.includes('ledger') ||
+                currentPath.includes('signup') ||
+                currentPath.includes('trezor') ||
+                currentPath.includes('freighter'))
+        );
     }
 
     createHeaderTab(url, text) {
@@ -148,7 +164,6 @@ class Header extends React.Component {
     render() {
         const accountBlock = this.getAccountBlock();
         return (
-
             <div className="Header_main" id="stellarterm_header">
                 {this.getNetworkBar()}
 

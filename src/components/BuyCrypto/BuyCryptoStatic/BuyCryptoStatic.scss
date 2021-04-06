@@ -1,0 +1,90 @@
+.BuyCrypto_static {
+    background-color: #fff;
+    margin-top: auto;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding: 56px 0;
+
+    .BuyCrypto_main-advantages {
+        display: flex;
+        flex-direction: column;
+
+        .BuyCrypto_advantage {
+            display: flex;
+            flex-direction: row;
+            align-items: flex-start;
+            margin-right: 47px;
+            margin-bottom: 24px;
+
+            .BuyCrypto_advantage-logo {
+                margin-right: 9px;
+            }
+
+            .BuyCrypto_advantage-text {
+                max-width: 260px;
+
+                .BuyCrypto_advantage-title {
+                    font-size: 16px;
+                    font-weight: 600;
+                    color: #1c2e3e;
+                    margin-bottom: 6px;
+                }
+
+                .BuyCrypto_advantage-description {
+                    font-size: 14px;
+                    font-weight: normal;
+                    color: #9aa6ac;
+                }
+            }
+        }
+    }
+
+    .BuyCrypto_facts {
+        width: 629px;
+        padding: 42px 31px 42px 32px;
+        border-radius: 5px;
+        border: solid 1px #bdbfc033;
+        background-color: #f4f4f533;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+
+        .BuyCrypto_fact {
+            max-width: 262px;
+            display: flex;
+            flex-direction: row;
+            font-size: 14px;
+            font-weight: normal;
+            color: #9aa6ac;
+
+            img {
+                height: 24px;
+                width: 24px;
+                margin-right: 8px;
+                align-items: flex-start;
+            }
+        }
+
+        .BuyCrypto_read-more {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: #69c76f;
+            font-size: 14px;
+            font-weight: normal;
+            cursor: pointer;
+            text-decoration: none;
+            margin-left: 32px;
+
+            &:hover {
+                text-decoration: underline;
+            }
+
+            img {
+                width: 16px;
+            }
+        }
+    }
+}

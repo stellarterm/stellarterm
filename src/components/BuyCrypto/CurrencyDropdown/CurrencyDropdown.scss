@@ -1,0 +1,168 @@
+.BuyCrypto_form {
+    .Input_block_wrapper {
+        .Currency_dropdown {
+            display: flex;
+            border: solid 1px #d7e0e4;
+            position: relative;
+            border-left: none;
+            max-height: 55px;
+            cursor: pointer;
+
+            .search_field {
+                position: absolute;
+                width: 386px;
+                right: -1px;
+                top: -1px;
+
+                .search_icon,
+                .close_button {
+                    position: absolute;
+                    padding: 15px;
+                    z-index: 10;
+                }
+
+                .search_icon {
+                    left: 0;
+                }
+
+                .search_input {
+                    padding: 0 50px;
+                    width: 100%;
+                }
+
+                .close_button {
+                    right: 0;
+                }
+            }
+
+            .dropdown_selected {
+                position: relative;
+            }
+
+            .dropdown_selected,
+            .dropdown_item {
+                cursor: pointer;
+                transition: 0.1s ease;
+                border: 1px solid transparent;
+                display: flex;
+                align-items: center;
+                font-size: 14px;
+                height: 55px;
+                width: 100%;
+                padding: 0 15px;
+
+                .dropdown_arrow {
+                    width: 24px;
+                    height: 100%;
+                    position: absolute;
+                    right: 10px;
+                    transition: 0.15s;
+                }
+
+                .arrow_reverse {
+                    transform: rotate(180deg);
+                }
+            }
+
+            .dropdown_list {
+                z-index: 5;
+                position: absolute;
+                overflow-y: auto;
+                width: 386px;
+                max-height: 470px;
+                border: solid 1px #d7e0e4;
+                border-top: none;
+                background: #fff;
+                top: 54px;
+                right: -1px;
+
+                .dropdown_selected_item {
+                    border-left: 2px solid #69c76f;
+                }
+
+                .popular_separator {
+                    padding: 16px;
+                    font-size: 10px;
+                    font-weight: 300;
+                    line-height: normal;
+                    text-transform: uppercase;
+                    letter-spacing: 1.2px;
+                    color: #8b95a9;
+                }
+
+                .dropdown_item {
+                    width: 100%;
+                    height: 40px;
+
+                    &:hover {
+                        background: rgba(215, 224, 228, 0.2);
+                    }
+
+                    .token_block_wrapper {
+                        .currency_icon {
+                            width: 20px;
+                            height: 20px;
+                        }
+
+                        .name_wrapper {
+                            display: flex;
+                            flex-direction: row;
+                            margin-left: 8px;
+
+                            .code_small,
+                            .name_small {
+                                width: auto;
+                                margin-left: 8px;
+                            }
+                        }
+
+                        .selected_crypto_check {
+                            right: 12px;
+                            position: absolute;
+                        }
+                    }
+                }
+
+                .not_found {
+                    &:hover {
+                        cursor: default;
+                        background: none;
+                    }
+                }
+            }
+
+            .token_block_wrapper {
+                display: flex;
+                align-items: center;
+
+                .currency_icon {
+                    width: 29px;
+                    height: 29px;
+                }
+
+                .name_wrapper {
+                    display: flex;
+                    flex-direction: column;
+                    margin-left: 8px;
+
+                    .code_small,
+                    .name_small {
+                        @include textEllipsis;
+                        line-height: 120%;
+                        width: 70px;
+                    }
+
+                    .code_small {
+                        font-size: 14px;
+                        font-weight: normal;
+                    }
+
+                    .name_small {
+                        font-size: 12px;
+                        opacity: 0.6;
+                    }
+                }
+            }
+        }
+    }
+}
