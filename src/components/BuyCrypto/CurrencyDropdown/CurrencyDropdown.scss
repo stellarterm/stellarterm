@@ -148,7 +148,7 @@
                     .code_small,
                     .name_small {
                         @include textEllipsis;
-                        line-height: 1em;
+                        line-height: 120%;
                         width: 70px;
                     }
 
