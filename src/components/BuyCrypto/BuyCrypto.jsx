@@ -24,6 +24,12 @@ const INITIAL_STATE = {
 };
 
 export default class BuyCrypto extends React.Component {
+    static changeUrlCodeParam(code) {
+        const params = new URLSearchParams(window.location.search);
+        params.set('code', code);
+        window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
+    }
+
     /**
      * Return object with popular/nonPopular arrays of currencies
      * @param {Array} currencies currencies/crypto from moonpay
@@ -169,6 +175,7 @@ export default class BuyCrypto extends React.Component {
         return request
             .get(getEndpoint('moonpayCryptoPrice', params))
             .then(res => {
+                this.constructor.changeUrlCodeParam(selectedCrypto.code);
                 this.setState({ cryptoPrices: res, isPending: false });
                 const defaultCurrency = selectedCurrency || availableCurrencies.find(currency => currency.isDefault);
                 this.changeCurrencyAmount(defaultCurrency.min_amount, defaultCurrency);
@@ -197,10 +204,16 @@ export default class BuyCrypto extends React.Component {
                 defaultCrypto = availableCrypto.find(crypto => crypto.is_default);
             }
 
+            if (!defaultCrypto && availableCrypto.length) {
+                defaultCrypto = availableCrypto[0];
+            } else {
+                throw new Error('No cryptocurrencies founded!');
+            }
+
             this.setState({ currencies: availableCurrencies, crypto: availableCrypto });
             await this.setCrypto(defaultCrypto);
         } catch (e) {
-            this.setState({ isPending: false });
+            this.setState({ error: e, isPending: false });
         }
     }
 
@@ -350,9 +363,6 @@ export default class BuyCrypto extends React.Component {
                         nonPopularCurrencies={sortedCrypto.nonPopular}
                         selectedToken={selectedCrypto}
                         changeFunc={token => {
-                            const params = new URLSearchParams(window.location.search);
-                            params.set('code', token.code);
-                            window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
                             this.setCrypto(token);
                         }}
                     />
