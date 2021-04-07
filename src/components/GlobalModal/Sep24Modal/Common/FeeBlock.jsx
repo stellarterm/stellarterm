@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import Printify from '../../../../lib/Printify';
 
 export default function FeeBlock(props) {
-    const { feeFixed, feePercent, assetCode, amountForFee, isDeposit } = props;
+    const { feeFixed, feePercent, assetCode, assetAnchor, amountForFee, isDeposit } = props;
     const isNoFee = feeFixed === 0 && feePercent === 0;
     const isfixedFee = feeFixed !== 0 && feePercent === 0;
     const isPercentFee = feeFixed === 0 && feePercent !== 0;
     const isBothFee = feeFixed !== 0 && feePercent !== 0;
+
+    const assetName = isDeposit ? (assetAnchor || assetCode) : assetCode;
 
     const amountProvided = amountForFee !== undefined;
     let feeText;
@@ -16,24 +18,24 @@ export default function FeeBlock(props) {
     if (isNoFee) {
         feeText = 'No fee';
     } else if (isfixedFee) {
-        feeText = `${feeFixed} ${assetCode}`;
-        totalFee = `${feeFixed} ${assetCode}`;
+        feeText = `${feeFixed} ${assetName}`;
+        totalFee = `${feeFixed} ${assetName}`;
     } else if (isPercentFee) {
         feeText = `${feePercent}%`;
         totalFee = amountProvided ? (
             <div>
                 {Printify.lightenZeros(((parseFloat(amountForFee) / 100) * feePercent).toFixed(7))}{' '}
-                {assetCode}
+                {assetName}
             </div>
         ) : (
             feeText
         );
     } else if (isBothFee) {
-        feeText = `${feeFixed} ${assetCode} + ${feePercent}%`;
+        feeText = `${feeFixed} ${assetName} + ${feePercent}%`;
         totalFee = amountProvided ? (
             <div>
                 {Printify.lightenZeros((((parseFloat(amountForFee) / 100) * feePercent) + feeFixed).toFixed(7))}{' '}
-                {assetCode}
+                {assetName}
             </div>
         ) : (
             feeText
@@ -67,6 +69,7 @@ FeeBlock.propTypes = {
     feeFixed: PropTypes.number.isRequired,
     feePercent: PropTypes.number.isRequired,
     assetCode: PropTypes.string.isRequired,
+    assetAnchor: PropTypes.string,
     amountForFee: PropTypes.number,
     isDeposit: PropTypes.bool,
 };

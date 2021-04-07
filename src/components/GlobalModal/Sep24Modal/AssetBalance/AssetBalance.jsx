@@ -40,9 +40,14 @@ export default class AssetBalance extends React.Component {
         const assetBalance = this.getAssetBalance();
         const usdBalance = this.getUsdBalance(assetBalance);
 
-        const descriptionSpan = isDeposit
-            ? <span>Deposit native {asset.code} to get {asset.code} ({domainLink}) asset issued on Stellar</span>
-            : <span>Withdraw {asset.code} ({domainLink}) Stellar asset to get native {asset.code}</span>;
+        const descriptionSpan = isDeposit ?
+            (<span>
+                Deposit native {asset.anchor_asset || asset.code} to get {asset.code} ({domainLink}) asset
+                issued on Stellar
+            </span>) :
+            (<span>
+                Withdraw {asset.code} ({domainLink}) Stellar asset to get native {asset.anchor_asset || asset.code}
+            </span>);
 
         const descriptionConfirm = isDeposit
             ? <span>Please review the deposit details before sending funds.</span>
