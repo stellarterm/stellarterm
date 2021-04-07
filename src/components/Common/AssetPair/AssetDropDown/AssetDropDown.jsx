@@ -50,7 +50,7 @@ export default class AssetDropDown extends React.Component {
             loading: false,
         };
 
-        this.handleClickOutside = (e) => {
+        this.handleClickOutside = e => {
             if (this.node.contains(e.target)) {
                 return;
             }
@@ -124,14 +124,14 @@ export default class AssetDropDown extends React.Component {
         const { account } = this.props.d.session;
         const { code, issuer } = this.props.exception || '';
         const { inputCode, currencies } = this.state;
+        const inputCodeLowerCased = inputCode.toLowerCase();
 
         const unknownAssets = (account && account.getSortedBalances({ onlyUnknown: true })) || [];
         const filteredUnknownAssets = unknownAssets
-            .filter(asset => (
-                (asset.code.indexOf(inputCode.toUpperCase()) > -1) ||
-                (asset.code.indexOf(inputCode.toLowerCase()) > -1) ||
-                (this.constructor.getDomainForUnknownAsset(asset).indexOf(inputCode.toLowerCase()) > -1)
-            ));
+            .filter(asset =>
+                asset.code.toLowerCase().includes(inputCodeLowerCased) ||
+                this.constructor.getDomainForUnknownAsset(asset).toLowerCase().includes(inputCodeLowerCased),
+            );
 
         const filteredCurrencies = currencies.filter(currency => (
             !assets.find(asset => ((asset.code === currency.code) && (asset.issuer === currency.issuer))) &&
@@ -141,18 +141,18 @@ export default class AssetDropDown extends React.Component {
 
         const isExceptionNative = this.props.exception && this.props.exception.isNative();
 
-        return assets
-            .filter((asset) => {
+        const filteredDirectoryAssets = assets
+            .filter(asset => {
                 const { unlisted } = directory.getAssetByAccountId(asset.code, asset.issuer) || {};
                 return (
                     !unlisted &&
-                    ((asset.code.indexOf(inputCode.toUpperCase()) > -1) ||
-                        (asset.domain.indexOf(inputCode.toLowerCase()) > -1))
+                    (asset.code.toLowerCase().includes(inputCodeLowerCased) ||
+                        asset.domain.toLowerCase().includes(inputCodeLowerCased))
                 );
-            })
-            .concat(filteredUnknownAssets)
-            .concat(filteredCurrencies)
-            .filter((asset) => {
+            });
+
+        return [...filteredDirectoryAssets, ...filteredUnknownAssets, ...filteredCurrencies]
+            .filter(asset => {
                 const isAssetNative = new StellarSdk.Asset(asset.code, asset.issuer).isNative();
                 return (
                     ((asset.code !== code) || (asset.issuer !== issuer)) &&
@@ -229,7 +229,8 @@ export default class AssetDropDown extends React.Component {
         return (
             <div
                 className={`island__sub__division AssetDropDown__card ${isCompactClass} ${isOpenClass}`}
-                ref={(node) => { this.node = node; }}>
+                ref={node => { this.node = node; }}
+            >
                 <div>
                     {(this.props.asset && !isOpenList) ?
                         <div className="AssetDropDown__full" onClick={() => this.openList()}>
@@ -237,11 +238,13 @@ export default class AssetDropDown extends React.Component {
                                 <AssetCardInRow
                                     d={this.props.d}
                                     code={this.props.asset.code}
-                                    issuer={this.props.asset.issuer} /> :
+                                    issuer={this.props.asset.issuer}
+                                /> :
                                 <AssetCardMain
                                     d={this.props.d}
                                     code={this.props.asset.code}
-                                    issuer={this.props.asset.issuer} />}
+                                    issuer={this.props.asset.issuer}
+                                />}
                         </div> :
                         <div className="AssetDropDown__empty">
                             <input
@@ -253,7 +256,8 @@ export default class AssetDropDown extends React.Component {
                                 onChange={e => this.handleInput(e)}
                                 onKeyUp={e => this.setActiveCardIndex(e)}
                                 value={this.state.inputCode}
-                                placeholder={compactSize ? 'Type code or domain' : 'Type asset code or domain name'} />
+                                placeholder={compactSize ? 'Type code or domain' : 'Type asset code or domain name'}
+                            />
                         </div>
                     }
                     {this.state.loading ?
@@ -261,22 +265,25 @@ export default class AssetDropDown extends React.Component {
                             <img
                                 src={images['icon-circle-preloader-gif']}
                                 className="AssetDropDown__arrow load"
-                                alt="load" />
+                                alt="load"
+                            />
                         </div> :
                         <img
                             src={images.dropdown}
                             alt="▼"
                             className="AssetDropDown__arrow"
-                            onClick={() => this.openList()} />}
+                            onClick={() => this.openList()}
+                        />}
                 </div>
                 {this.state.isOpenList ?
                     <AssetCardList
                         compactSize={compactSize}
                         d={this.props.d}
                         host={this.state.currencies.length ? this.state.inputCode : null}
-                        onUpdate={(asset) => { this.onUpdate(asset); }}
+                        onUpdate={asset => { this.onUpdate(asset); }}
                         assetsList={this.getFilteredAssets()}
-                        activeCardIndex={this.state.activeCardIndex} /> :
+                        activeCardIndex={this.state.activeCardIndex}
+                    /> :
                     null
                 }
             </div>
