@@ -15,6 +15,8 @@ import AssetRow from '../../../Common/AssetRow/AssetRow';
 const TRANSACTIONS_LIMIT = 10;
 const ROW_HEIGHT = 41;
 
+const HISTORY_EMPTY = 'no history';
+
 export default class SepTransactions extends React.Component {
     constructor(props) {
         super(props);
@@ -133,7 +135,7 @@ export default class SepTransactions extends React.Component {
                 this.setState({
                     sepAsset: asset,
                     isLoading: false,
-                    errorMsg: transactions.length === 0 ? 'You have not made any deposits or withdrawals of this asset.' : this.state.errorMsg,
+                    errorMsg: transactions.length === 0 ? HISTORY_EMPTY : this.state.errorMsg,
                 });
             })
             .catch(() => {
@@ -173,7 +175,8 @@ export default class SepTransactions extends React.Component {
                     <div
                         key={transaction.id}
                         className="Activity-table-row sep-transaction-row"
-                        onClick={() => this.onClickTransaction(sepAsset, transaction)}>
+                        onClick={() => this.onClickTransaction(sepAsset, transaction)}
+                    >
 
                         <div className="Activity-table-cell flex5">
                             <span>{moment(new Date(started_at)).format('MMMM D YYYY, HH:mm')}</span>
@@ -236,8 +239,14 @@ export default class SepTransactions extends React.Component {
                 {errorMsg || !transactionsContent ? (
                     <div className="transaction-row-error">
                         <span className="error-span">
-                            <img src={images['icon-circle-fail']} alt="failed" />
-                            {errorMsg}
+                            {
+                                errorMsg === HISTORY_EMPTY ?
+                                    <span>You have not made any deposits or withdrawals of this asset.</span> :
+                                    <React.Fragment>
+                                        <img src={images['icon-circle-fail']} alt="failed" />
+                                        {errorMsg}
+                                    </React.Fragment>
+                            }
                         </span>
                     </div>
                 ) : null}
@@ -280,7 +289,8 @@ export default class SepTransactions extends React.Component {
                             <AssetRow
                                 d={this.props.d}
                                 hideMessage
-                                asset={new StellarSdk.Asset(sepAsset.code, sepAsset.issuer)} />
+                                asset={new StellarSdk.Asset(sepAsset.code, sepAsset.issuer)}
+                            />
                         </div>
                     )}
 
@@ -307,7 +317,8 @@ export default class SepTransactions extends React.Component {
 
                                 <div
                                     className="Activity-table-body"
-                                    style={{ minHeight: `${minHeight}px` }}>
+                                    style={{ minHeight: `${minHeight}px` }}
+                                >
                                     {this.getTranactionRow()}
                                 </div>
                             </React.Fragment>
