@@ -9319,7 +9319,7 @@ stellar-sdk@8.0.0:
 
 "stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git":
   version "1.0.0"
-  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#ff97ac2e3b2b66670fb9f219c2d49e68a8ba11d0"
+  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#f8c800f1160d25254ff10e394ba30e52ea3d931e"
 
 stream-browserify@^2.0.0:
   version "2.0.2"

@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import _ from 'lodash';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
 import Driver from '../../../../lib/Driver';
@@ -54,13 +53,13 @@ export default class Sep24ModalContent extends React.Component {
                         reqErrorMsg: (data && data.error) ? data.error : this.state.reqErrorMsg,
                     });
                 });
-            return null;
+            return;
         }
 
         this.getTransferServer(asset)
             .then(() => getTransferServerInfo(this.TRANSFER_SERVER_SEP0024))
             .then(transferInfo => (isDeposit ? transferInfo.deposit : transferInfo.withdraw))
-            .then((info) => {
+            .then(info => {
                 const transferAssetInfo = info[asset.code];
                 this.assetInfo = transferAssetInfo;
 
@@ -74,7 +73,7 @@ export default class Sep24ModalContent extends React.Component {
                 }
                 return this.initSep24();
             })
-            .then((res) => {
+            .then(res => {
                 this.setState({
                     isLoading: false,
                     transaction: res,
@@ -116,8 +115,7 @@ export default class Sep24ModalContent extends React.Component {
         if (isLedgerJwtNeeded) {
             d.modal.handlers.finish();
 
-            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
-
+            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
                 d.modal.nextModalName = 'Sep24Modal';
                 d.modal.nextModalData = {
                     isDeposit,
@@ -134,7 +132,7 @@ export default class Sep24ModalContent extends React.Component {
         }
 
         // Else init sep24 transaction
-        return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
+        return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
             this.jwtToken = token;
             if (transaction) { return token; }
             return sep24Request(this.TRANSFER_SERVER_SEP0024, isDeposit, this.jwtToken, requestParams);
@@ -161,7 +159,7 @@ export default class Sep24ModalContent extends React.Component {
 
                 return transaction;
             })
-            .catch((res) => {
+            .catch(res => {
                 clearTimeout(this.pollingTimeout);
                 this.setState({ reqErrorMsg: (res && res.error) ? res.error : 'Unknown error' });
             });
@@ -221,7 +219,8 @@ export default class Sep24ModalContent extends React.Component {
                 transaction={transaction}
                 noActionBtn={noActionBtn}
                 windowClosed={windowClosed}
-                openAnchorWindow={() => this.openAnchorWindow()} />
+                openAnchorWindow={() => this.openAnchorWindow()}
+            />
         );
 
         if ((isAnyError || assetDisabled) && !isLoading) {
@@ -281,7 +280,8 @@ export default class Sep24ModalContent extends React.Component {
                             d={d}
                             isDeposit={isDeposit}
                             asset={asset}
-                            transaction={transaction} />
+                            transaction={transaction}
+                        />
                     ) : (
                         <React.Fragment>
                             <div className="content_block flow_text_block">
@@ -292,13 +292,17 @@ export default class Sep24ModalContent extends React.Component {
                                 feeFixed={parseFloat(this.assetInfo.fee_fixed) || 0}
                                 feePercent={parseFloat(this.assetInfo.fee_percent) || 0}
                                 assetCode={asset.code}
-                                isDeposit={isDeposit} />
+                                assetAnchor={asset.anchor_asset}
+                                isDeposit={isDeposit}
+                            />
 
                             <MinMaxAmount
                                 minLimit={this.assetInfo.min_amount || ''}
                                 maxLimit={this.assetInfo.max_amount || ''} a
                                 assetCode={asset.code}
-                                isDeposit={isDeposit} />
+                                assetAnchor={asset.anchor_asset}
+                                isDeposit={isDeposit}
+                            />
                         </React.Fragment>
                     )}
                 </div>
