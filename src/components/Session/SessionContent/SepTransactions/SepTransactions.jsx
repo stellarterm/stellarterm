@@ -15,7 +15,7 @@ import AssetRow from '../../../Common/AssetRow/AssetRow';
 const TRANSACTIONS_LIMIT = 10;
 const ROW_HEIGHT = 41;
 
-const HISTORY_EMPTY = 'no history';
+const HISTORY_EMPTY = 'You have not made any deposits or withdrawals of this asset.';
 
 export default class SepTransactions extends React.Component {
     constructor(props) {
@@ -57,7 +57,7 @@ export default class SepTransactions extends React.Component {
         this.setState({ isLoading: true });
 
         getTransactions(this.TRANSFER_SERVER, requestParams, this.jwtToken, sep24)
-            .then((res) => {
+            .then(res => {
                 const newAssetState = this.state.sepAsset;
                 newAssetState.transactions = transactions.concat(res.transactions);
 
@@ -67,10 +67,10 @@ export default class SepTransactions extends React.Component {
                     fullLoaded: res.transactions.length === 0,
                 });
             })
-            .catch((res) => {
+            .catch(res => {
                 this.setState({
                     isLoading: false,
-                    errorMsg: (res && res.error) ? res.error : this.state.errorMsg,
+                    errorMsg: res && res.error ? res.error : this.state.errorMsg,
                 });
             });
     }
@@ -88,7 +88,8 @@ export default class SepTransactions extends React.Component {
         }
 
         let asset = _.find(directory.assets, {
-            code: parsedAsset.code, issuer: parsedAsset.issuer,
+            code: parsedAsset.code,
+            issuer: parsedAsset.issuer,
         });
         if ((asset.deposit || asset.withdraw) && parsedAsset) {
             const reservedAmount = account.getReservedBalance(parsedAsset);
@@ -100,9 +101,11 @@ export default class SepTransactions extends React.Component {
             });
         }
 
-        if (!asset) { return { notFound: true }; }
+        if (!asset) {
+            return { notFound: true };
+        }
 
-        // Then attempt to fetch user transactions for selected acnhor
+        // Then attempt to fetch user transactions for selected anchor
         getTransferServer(asset)
             .then(({ TRANSFER_SERVER_SEP0024, TRANSFER_SERVER, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
                 this.TRANSFER_SERVER = TRANSFER_SERVER_SEP0024 || TRANSFER_SERVER;
@@ -110,7 +113,7 @@ export default class SepTransactions extends React.Component {
                 this.NETWORK_PASSPHRASE = NETWORK_PASSPHRASE;
             })
             .then(() => getTransferServerInfo(this.TRANSFER_SERVER))
-            .then((info) => {
+            .then(info => {
                 asset.info = info;
                 if (asset.sep24) {
                     return this.checkForJwt(asset);
@@ -135,7 +138,6 @@ export default class SepTransactions extends React.Component {
                 this.setState({
                     sepAsset: asset,
                     isLoading: false,
-                    errorMsg: transactions.length === 0 ? HISTORY_EMPTY : this.state.errorMsg,
                 });
             })
             .catch(() => {
@@ -148,28 +150,26 @@ export default class SepTransactions extends React.Component {
         return asset;
     }
 
-    getTranactionRow() {
+    getTransactionRow() {
         const { isLoading, errorMsg, fullLoaded, sepAsset } = this.state;
         const { transactions } = sepAsset;
 
-        const transactionsContent = transactions ? (
-            transactions.map((transaction) => {
-                const {
-                    kind,
-                    status,
-                    started_at,
-                    amount_in,
-                    amount_out,
-                    amount_fee,
-                } = transaction;
+        const transactionsContent = transactions
+            ? transactions.map(transaction => {
+                const { kind, status, started_at, amount_in, amount_out, amount_fee } = transaction;
 
                 const readableStatus = status.replace(/_/g, ' ');
-                const kindIconClassname = kind === 'deposit' ? 'deposit_icon' : 'withdraw_icon';
-                const transactionKindIcon = kind === 'deposit' ? (
-                    <span className={kindIconClassname}><img src={images['icon-trade-up']} alt="up" /></span>
-                ) : (
-                    <span className={kindIconClassname}><img src={images['icon-trade-down']} alt="down" /></span>
-                );
+                const kindIconClassName = kind === 'deposit' ? 'deposit_icon' : 'withdraw_icon';
+                const transactionKindIcon =
+                    kind === 'deposit' ? (
+                        <span className={kindIconClassName}>
+                            <img src={images['icon-trade-up']} alt="up" />
+                        </span>
+                    ) : (
+                        <span className={kindIconClassName}>
+                            <img src={images['icon-trade-down']} alt="down" />
+                        </span>
+                    );
 
                 return (
                     <div
@@ -177,7 +177,6 @@ export default class SepTransactions extends React.Component {
                         className="Activity-table-row sep-transaction-row"
                         onClick={() => this.onClickTransaction(sepAsset, transaction)}
                     >
-
                         <div className="Activity-table-cell flex5">
                             <span>{moment(new Date(started_at)).format('MMMM D YYYY, HH:mm')}</span>
                         </div>
@@ -204,7 +203,8 @@ export default class SepTransactions extends React.Component {
                         </div>
                     </div>
                 );
-            })) : null;
+            })
+            : null;
 
         const loadMoreContent = (
             <div className="Activity-table-row load-more-row" onClick={() => this.onClickLoadMore()}>
@@ -215,9 +215,7 @@ export default class SepTransactions extends React.Component {
                         </span>
                     ) : null}
 
-                    {transactions.length >= TRANSACTIONS_LIMIT && !isLoading ? (
-                        <span>Load more</span>
-                    ) : null }
+                    {transactions.length >= TRANSACTIONS_LIMIT && !isLoading ? <span>Load more</span> : null}
                 </div>
             </div>
         );
@@ -235,18 +233,16 @@ export default class SepTransactions extends React.Component {
                         </div>
                     </div>
                 ) : null}
-
                 {errorMsg || !transactionsContent ? (
                     <div className="transaction-row-error">
                         <span className="error-span">
-                            {
-                                errorMsg === HISTORY_EMPTY ?
-                                    <span>You have not made any deposits or withdrawals of this asset.</span> :
-                                    <React.Fragment>
-                                        <img src={images['icon-circle-fail']} alt="failed" />
-                                        {errorMsg}
-                                    </React.Fragment>
-                            }
+                            {transactions.length === 0 && !errorMsg && <span>{HISTORY_EMPTY}</span>}
+                            {errorMsg && (
+                                <React.Fragment>
+                                    <img src={images['icon-circle-fail']} alt="failed" />
+                                    {errorMsg}
+                                </React.Fragment>
+                            )}
                         </span>
                     </div>
                 ) : null}
@@ -269,7 +265,7 @@ export default class SepTransactions extends React.Component {
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
 
-        return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
+        return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
             this.jwtToken = token;
             return getTransactions(this.TRANSFER_SERVER, requestParams, this.jwtToken, asset.sep24, noAuth);
         });
@@ -315,11 +311,8 @@ export default class SepTransactions extends React.Component {
                                     </div>
                                 ) : null}
 
-                                <div
-                                    className="Activity-table-body"
-                                    style={{ minHeight: `${minHeight}px` }}
-                                >
-                                    {this.getTranactionRow()}
+                                <div className="Activity-table-body" style={{ minHeight: `${minHeight}px` }}>
+                                    {this.getTransactionRow()}
                                 </div>
                             </React.Fragment>
                         )}
