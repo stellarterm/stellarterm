@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import directory from 'stellarterm-directory';
 import _ from 'lodash';
 import { niceNumDecimals } from '../../../../lib/Format';
 import Printify from '../../../../lib/Printify';
 import Ticker from '../../../../lib/api/Ticker';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import Driver from '../../../../lib/Driver';
+import directory from '../../../../lib/driver/Directory';
 
 export default class AssetListRows extends React.Component {
     static getAssetRow(asset, isNativeXlm, ticker) {

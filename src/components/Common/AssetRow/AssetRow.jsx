@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
 import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
+import directory from '../../../lib/driver/Directory';
 import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import TrustButton from './TrustButton/TrustButton';
 import Stellarify from '../../../lib/Stellarify';

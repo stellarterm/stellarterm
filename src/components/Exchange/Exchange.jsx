@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
 import screenfull from 'screenfull';
 import Driver from '../../lib/Driver';
+import directory from '../../lib/driver/Directory';
 import Stellarify from '../../lib/Stellarify';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';

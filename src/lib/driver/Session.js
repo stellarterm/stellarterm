@@ -5,9 +5,9 @@ import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from 'trezor-connect';
 import { getPublicKey } from '@stellar/freighter-api';
 import FastAverageColor from 'fast-average-color';
-import directory from 'stellarterm-directory';
 import isElectron from 'is-electron';
 import MagicSpoon from '../MagicSpoon';
+import directory from './Directory';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
@@ -47,7 +47,7 @@ export default function Send(driver) {
         const { time, directoryBuild, assets: localStorageAssets = [] } = knownAssetsData;
         const periodUpdate = 14 * 24 * 60 * 60 * 1000;
 
-        const frontendDirectoryBuild = directory.getBuildId();
+        const frontendDirectoryBuild = directory.buildId;
 
         if (
             localStorageAssets.length &&

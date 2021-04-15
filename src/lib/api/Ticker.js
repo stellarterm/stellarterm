@@ -1,9 +1,9 @@
-import directory from 'stellarterm-directory';
 import req from './req';
 import Event from '../Event';
 import * as EnvConsts from '../../env-consts';
 import { postWithCancel } from './request';
 import { getEndpoint } from './endpoints';
+import directory from '../driver/Directory';
 
 const MAX_ATTEMPTS = 120;
 const API_DATA = 'ticker.json';
@@ -20,26 +20,18 @@ export default class Ticker {
     }
 
     load() {
-        return this.loadWithAttempts(() => req
-            .getJson(`${EnvConsts.API_URL}${API_DATA}`)
-            .then((tickerData) => {
-                this.ready = true;
-                this.data = tickerData;
-                const tickerDirectoryBuild = this.data._meta.directoryBuild;
-                const frontendDirectoryBuild = directory.getBuildId();
+        return directory.initialize()
+            .then(() => this.loadWithAttempts(() => req
+                .getJson(`${EnvConsts.API_URL}${API_DATA}`)
+                .then((tickerData) => {
+                    this.ready = true;
+                    this.data = tickerData;
 
-                if (tickerDirectoryBuild !== frontendDirectoryBuild) {
-                    console.warn(`${'Stellarterm-directory versions conflict! ' +
-                        'Please, check stellarterm-directory builds in stellarterm frontend application and ' +
-                        'stellarterm-api.\nCurrent versions: \n    stellarterm - '}${frontendDirectoryBuild
-                    }, \n    stellarterm-api - ${tickerDirectoryBuild}`);
-                }
+                    console.log(`Loaded ticker. Data generated ${Math.round((new Date() - (this.data._meta.start * 1000)) / 1000)} seconds ago.`);
 
-                console.log(`Loaded ticker. Data generated ${Math.round((new Date() - (this.data._meta.start * 1000)) / 1000)} seconds ago.`);
-
-                this.event.trigger();
-                setTimeout(() => this.load(), 61 * 5 * 1000); // Refresh every 5 minutes
-            }), 'Unable to load ticker');
+                    this.event.trigger();
+                    setTimeout(() => this.load(), 61 * 5 * 1000); // Refresh every 5 minutes
+                }), 'Unable to load ticker'));
     }
 
     loadWithAttempts(promiseFunction, message = 'Error', attempt) {
@@ -54,9 +46,10 @@ export default class Ticker {
                 setTimeout(() => this.loadWithAttempts(promiseFunction, message, nextAttempt), 1000);
             });
     }
+
     static loadStellarMarketsData({
-        baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer, isTestnet,
-    }) {
+                                      baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer, isTestnet,
+                                  }) {
         const headers = { 'Content-Type': 'application/json' };
         const stellarTickerGraphQLParams =
             `{ markets(
