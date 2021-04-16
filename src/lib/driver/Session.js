@@ -6,11 +6,12 @@ import TrezorConnect from 'trezor-connect';
 import { getPublicKey } from '@stellar/freighter-api';
 import FastAverageColor from 'fast-average-color';
 import isElectron from 'is-electron';
+import directory from 'stellarterm-directory';
 import MagicSpoon from '../MagicSpoon';
-import directory from './Directory';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
+import * as EnvConsts from '../../env-consts';
 
 
 export default function Send(driver) {
@@ -103,7 +104,8 @@ export default function Send(driver) {
             this.addKnownAssetDataCalled = true;
         });
     };
-    this.addKnownAssetDataPromise = directory.initialize().then(() => this.addKnownAssetData());
+    const DATA_URL = EnvConsts.ANCHORS_URL[0] === '/' ? `${window.location.origin}${EnvConsts.ANCHORS_URL}` : EnvConsts.ANCHORS_URL;
+    this.addKnownAssetDataPromise = directory.initialize(DATA_URL).then(() => this.addKnownAssetData());
 
     // Ping the Ledger device to see if it is connected
     this.pingLedger = (singlePing) => {

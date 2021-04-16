@@ -1,7 +1,7 @@
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import BigNumber from 'bignumber.js';
-import directory from '../lib/driver/Directory';
+import directory from 'stellarterm-directory';
 
 const Stellarify = {
   // orderbookDetails(input) {

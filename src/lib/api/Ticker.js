@@ -1,12 +1,13 @@
+import directory from 'stellarterm-directory';
 import req from './req';
 import Event from '../Event';
 import * as EnvConsts from '../../env-consts';
 import { postWithCancel } from './request';
 import { getEndpoint } from './endpoints';
-import directory from '../driver/Directory';
 
 const MAX_ATTEMPTS = 120;
 const API_DATA = 'ticker.json';
+const DATA_URL = EnvConsts.ANCHORS_URL[0] === '/' ? `${window.location.origin}${EnvConsts.ANCHORS_URL}` : EnvConsts.ANCHORS_URL;
 
 export default class Ticker {
     constructor() {
@@ -20,7 +21,7 @@ export default class Ticker {
     }
 
     load() {
-        return directory.initialize()
+        return directory.initialize(DATA_URL)
             .then(() => this.loadWithAttempts(() => req
                 .getJson(`${EnvConsts.API_URL}${API_DATA}`)
                 .then((tickerData) => {
