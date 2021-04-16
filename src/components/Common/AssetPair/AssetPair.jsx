@@ -30,17 +30,19 @@ export default class AssetPair extends React.Component {
             <div className="AssetPair__card">
                 {dropdown ? (
                     <AssetDropDown
-                        onUpdate={(asset) => {
+                        onUpdate={asset => {
                             this.assetUpdate(asset, assetType);
                         }}
                         d={d}
                         asset={this.state[assetType]}
-                        exception={exception} />
+                        exception={exception}
+                    />
                 ) : (
                     <AssetCardMain
                         code={this.props[assetType].getCode()}
                         issuer={this.props[assetType].getIssuer()}
-                        d={d} />
+                        d={d}
+                    />
                 )}
             </div>
         );
@@ -58,7 +60,7 @@ export default class AssetPair extends React.Component {
     }
 
     assetUpdate(asset, assetType) {
-        this.props.d.orderbook.closeOrderbookStream();
+        this.props.d.orderbook.data.closeOrderbookStream();
         this.setState({ [assetType]: asset });
 
         const isBase = assetType === 'baseBuying';
@@ -71,6 +73,7 @@ export default class AssetPair extends React.Component {
     }
 
     swap() {
+        this.props.d.orderbook.data.closeOrderbookStream();
         const { baseBuying, counterSelling } = this.props;
         this.props.d.orderbook.handlers.setOrderbook(counterSelling, baseBuying);
         window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(counterSelling, baseBuying)}`);
@@ -84,10 +87,10 @@ export default class AssetPair extends React.Component {
 
     render() {
         const { row, d, baseBuying, counterSelling, dropdown, swap, fullscreen } = this.props;
-        const assetPairClassname = `AssetPair ${fullscreen ? 'AssetPair_fullscreen' : ''}`;
+        const assetPairClassName = `AssetPair ${fullscreen ? 'AssetPair_fullscreen' : ''}`;
 
         const content = (
-            <div className={assetPairClassname}>
+            <div className={assetPairClassName}>
                 {this.getAssetCard(dropdown, d, 'baseBuying')}
                 {this.getSeparator(swap)}
                 {this.getAssetCard(dropdown, d, 'counterSelling')}

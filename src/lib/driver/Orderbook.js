@@ -7,13 +7,12 @@ export default class Orderbook {
         this.data = {
             ready: false,
         };
-        this.closeOrderbookStream = () => { };
 
         let base;
         let counter;
 
         this.handlers = {
-            pickPrice: (price) => {
+            pickPrice: price => {
                 this.event.trigger({
                     pickPrice: price,
                 });
@@ -29,13 +28,8 @@ export default class Orderbook {
                     return;
                 }
 
-                if (this.data.close) {
-                    this.data.closeOrderbook();
-                }
-
-                this.data = new MagicSpoon.Orderbook(driver.Server, base, counter, (closeFunction) => {
+                this.data = new MagicSpoon.Orderbook(driver.Server, base, counter, () => {
                     this.event.trigger();
-                    this.closeOrderbookStream = closeFunction;
                     driver.session.forceUpdateAccountOffers();
                 });
             },
