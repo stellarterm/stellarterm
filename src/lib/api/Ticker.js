@@ -7,7 +7,7 @@ import { getEndpoint } from './endpoints';
 
 const MAX_ATTEMPTS = 120;
 const API_DATA = 'ticker.json';
-const DATA_URL = EnvConsts.ANCHORS_URL[0] === '/' ? `${window.location.origin}${EnvConsts.ANCHORS_URL}` : EnvConsts.ANCHORS_URL;
+const DATA_URL = EnvConsts.ANCHORS_URL.startsWith('/') ? `${window.location.origin}${EnvConsts.ANCHORS_URL}` : EnvConsts.ANCHORS_URL;
 
 export default class Ticker {
     constructor() {

@@ -12,6 +12,7 @@
         "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     },
     "production": {
+        "ANCHORS_URL": "/anchors/data.json",
         "API_URL": "https://api.stellarterm.com/v1/",
         "LOBSTR_VAULT_URL": "https://vault.lobstr.co/api/",
         "FEDERATION_API_URL": "https://fed.stellarterm.com/",
