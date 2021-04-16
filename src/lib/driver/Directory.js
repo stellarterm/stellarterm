@@ -2,6 +2,7 @@ import req from '../api/req';
 import * as EnvConsts from '../../env-consts';
 
 const MEMO_TYPES = new Set(['MEMO_TEXT', 'MEMO_ID', 'MEMO_HASH', 'MEMO_RETURN']);
+const DATA_URL = EnvConsts.ANCHORS_URL.startsWith('/') ? `${window.location.origin}${EnvConsts.ANCHORS_URL}` : EnvConsts.ANCHORS_URL;
 
 class DirectoryClass {
     constructor() {
@@ -36,7 +37,7 @@ class DirectoryClass {
     initialize() {
         return this.isInitialized ?
             Promise.resolve() :
-            req.getJson(EnvConsts.ANCHORS_URL).then(data => {
+            req.getJson(DATA_URL).then(data => {
                 data.anchors.forEach(anchor => this.addAnchor(anchor));
                 data.destinations.forEach(destination => this.addDestination(destination));
                 this.isInitialized = true;
