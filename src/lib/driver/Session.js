@@ -47,12 +47,12 @@ export default function Send(driver) {
         const { time, directoryBuild, assets: localStorageAssets = [] } = knownAssetsData;
         const periodUpdate = 14 * 24 * 60 * 60 * 1000;
 
-        const frontendDirectoryBuild = directory.buildId;
+        const frontendDirectoryBuild = directory.buildID;
 
         if (
             localStorageAssets.length &&
             ((new Date() - new Date(time)) < periodUpdate) &&
-            Number(directoryBuild) === frontendDirectoryBuild
+            String(directoryBuild) === String(frontendDirectoryBuild)
         ) {
             this.addKnownAssetDataCalled = true;
             return Promise.resolve();
@@ -103,7 +103,7 @@ export default function Send(driver) {
             this.addKnownAssetDataCalled = true;
         });
     };
-    this.addKnownAssetDataPromise = this.addKnownAssetData();
+    this.addKnownAssetDataPromise = directory.initialize().then(() => this.addKnownAssetData());
 
     // Ping the Ledger device to see if it is connected
     this.pingLedger = (singlePing) => {

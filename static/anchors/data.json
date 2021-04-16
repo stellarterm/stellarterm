@@ -1,4 +1,5 @@
 {
+    "buildId": "test-build",
     "anchors": [
         {
             "domain": "ternio.io",

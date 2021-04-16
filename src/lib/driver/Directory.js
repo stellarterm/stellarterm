@@ -11,8 +11,8 @@ class DirectoryClass {
         this.assets = {};
         this.issuers = {};
         this.pairs = {};
-        this.isInitialized = false;
-        this.buildID = 'testBuild';
+        this.initializationRequest = null;
+        this.buildID = '';
 
         // Special anchors aren't really anchors at all!
         this.nativeAnchor = {
@@ -35,13 +35,14 @@ class DirectoryClass {
     }
 
     initialize() {
-        return this.isInitialized ?
-            Promise.resolve() :
-            req.getJson(DATA_URL).then(data => {
+        if (!this.initializationRequest) {
+            this.initializationRequest = req.getJson(DATA_URL).then(data => {
                 data.anchors.forEach(anchor => this.addAnchor(anchor));
                 data.destinations.forEach(destination => this.addDestination(destination));
-                this.isInitialized = true;
+                this.buildID = data.buildId;
             });
+        }
+        return this.initializationRequest;
     }
 
     addAnchor(anchor) {
