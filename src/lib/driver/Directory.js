@@ -1,6 +1,5 @@
-import logos from 'stellarterm-directory/logos/build/logos.json';
-import anchors from 'stellarterm-directory/static/anchors.json';
-import destinations from 'stellarterm-directory/static/destinations.json';
+import req from '../api/req';
+import * as EnvConsts from '../../env-consts';
 
 const MEMO_TYPES = new Set(['MEMO_TEXT', 'MEMO_ID', 'MEMO_HASH', 'MEMO_RETURN']);
 
@@ -18,7 +17,7 @@ class DirectoryClass {
         this.nativeAnchor = {
             name: 'Stellar Network',
             website: 'https://www.stellar.org/lumens/',
-            logo: logos.stellar,
+            logo: '/anchors/logos/stellar.png',
             color: '#000000',
         };
         this.nativeAsset = {
@@ -29,7 +28,7 @@ class DirectoryClass {
 
         this.unknownAnchor = {
             name: 'unknown',
-            logo: logos.unknown,
+            logo: '/anchors/logos/unknown.png',
             assets: {},
         };
     }
@@ -37,13 +36,10 @@ class DirectoryClass {
     initialize() {
         return this.isInitialized ?
             Promise.resolve() :
-            new Promise(resolve => {
-                setTimeout(() => {
-                    anchors.forEach(anchor => this.addAnchor(anchor));
-                    destinations.forEach(destination => this.addDestination(destination));
-                    this.isInitialized = true;
-                    resolve();
-                }, 1500);
+            req.getJson(EnvConsts.ANCHORS_URL).then(data => {
+                data.anchors.forEach(anchor => this.addAnchor(anchor));
+                data.destinations.forEach(destination => this.addDestination(destination));
+                this.isInitialized = true;
             });
     }
 
@@ -58,7 +54,7 @@ class DirectoryClass {
             displayName: anchor.displayName,
             support: anchor.support,
             website: anchor.website,
-            logo: logos[anchor.logo],
+            logo: anchor.logo,
             assets: {},
         };
         if (anchor.color) {
@@ -109,7 +105,7 @@ class DirectoryClass {
             console.error(`Duplicate anchor in directory: ${anchor.domain}`);
             isValid = false;
         }
-        if (logos[anchor.logo] === undefined) {
+        if (!anchor.logo === undefined) {
             console.error(`Missing logo file: ${anchor.logo}`);
             isValid = false;
         }

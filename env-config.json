@@ -1,5 +1,6 @@
 {
     "staging": {
+        "ANCHORS_URL": "/anchors/data.json",
         "API_URL": "https://api-staging.stellarterm.com/v1/",
         "LOBSTR_VAULT_URL": "https://vault-staging.lobstr.co/api/",
         "FEDERATION_API_URL": "https://fed.stellarterm.com/",
@@ -22,6 +23,7 @@
         "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     },
     "local": {
+        "ANCHORS_URL": "https://localhost:3000/anchors/data.json",
         "API_URL": "https://localhost:3000/api/v1/",
         "LOBSTR_VAULT_URL": "https://vault.lobstr.co/api/",
         "FEDERATION_API_URL": "https://fed.stellarterm.com/",

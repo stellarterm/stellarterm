@@ -22,9 +22,7 @@ import BuyCrypto from './BuyCrypto/BuyCrypto';
 import Driver from '../lib/Driver';
 import { isIE, isEdge } from '../lib/BrowserSupport';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
-import directory from '../lib/driver/Directory';
-//
-console.log(directory)
+
 window.React = React;
 const mountNode = document.getElementById('app');
 
