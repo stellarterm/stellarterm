@@ -85,11 +85,5 @@ exports.isNoRecalculateNeeded = function isNoRecalculateNeeded(amount, precision
 exports.get24hChangePercent = function get24hChangePercent(asset, ticker) {
     const isNativeXlm = asset.id === 'XLM-native';
     const changePercent = isNativeXlm ? ticker.data._meta.externalPrices.USD_XLM_change : asset.change24h_USD;
-    let percent = '0.00';
-
-    if (changePercent !== undefined && changePercent !== null) {
-        percent = `${changePercent.toFixed(2)}`;
-    }
-
-    return percent;
+    return (changePercent && changePercent.toFixed(2)) || '0.00';
 };
