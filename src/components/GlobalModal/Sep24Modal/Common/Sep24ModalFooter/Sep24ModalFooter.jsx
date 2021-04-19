@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
+import directory from 'stellarterm-directory';
 import Driver from '../../../../../lib/Driver';
 import MagicSpoon from '../../../../../lib/MagicSpoon';
 import ErrorHandler from '../../../../../lib/ErrorHandler';

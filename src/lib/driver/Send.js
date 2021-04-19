@@ -1,6 +1,6 @@
 import _ from 'lodash';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
+import directory from 'stellarterm-directory';
 import MagicSpoon from '../MagicSpoon';
 import Stellarify from '../Stellarify';
 import Validate from '../Validate';

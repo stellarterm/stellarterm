@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
 import _ from 'lodash';
+import directory from 'stellarterm-directory';
 import Driver from '../../../../../lib/Driver';
 import AssetRow from '../../../../Common/AssetRow/AssetRow';
 
