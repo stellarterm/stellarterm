@@ -38,6 +38,7 @@ export default class Exchange extends React.Component {
         });
         this.ubsubHistory = this.props.history.listen(() => {
             if (this.props.history.action === 'POP') {
+                this.props.d.orderbook.data.closeOrderbookStream();
                 this.getTradePair();
             }
         });

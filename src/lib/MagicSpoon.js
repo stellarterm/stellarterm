@@ -374,8 +374,6 @@ const MagicSpoon = {
         this.closeOrderbookStream = Server.orderbook(baseBuying, counterSelling).stream({
             onmessage: res => {
                 let updated = false;
-                console.log(baseBuying);
-                console.log(counterSelling);
                 if (!_.isEqual(this.bids, res.bids)) {
                     this.bids = res.bids;
                     updated = true;
