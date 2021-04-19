@@ -7,7 +7,6 @@ import { getEndpoint } from './endpoints';
 
 const MAX_ATTEMPTS = 120;
 const API_DATA = 'ticker.json';
-const DATA_URL = EnvConsts.ANCHORS_URL.startsWith('/') ? `${window.location.origin}${EnvConsts.ANCHORS_URL}` : EnvConsts.ANCHORS_URL;
 
 export default class Ticker {
     constructor() {
@@ -21,10 +20,13 @@ export default class Ticker {
     }
 
     load() {
-        return directory.initialize(DATA_URL)
+        return Promise.all([
+            directory.initializeAnchors(EnvConsts.ANCHORS_URL),
+            directory.initializeDestinations(EnvConsts.DESTINATIONS_URL),
+        ])
             .then(() => this.loadWithAttempts(() => req
                 .getJson(`${EnvConsts.API_URL}${API_DATA}`)
-                .then((tickerData) => {
+                .then(tickerData => {
                     this.ready = true;
                     this.data = tickerData;
 
@@ -41,7 +43,7 @@ export default class Ticker {
         }
 
         return promiseFunction()
-            .catch((error) => {
+            .catch(error => {
                 console.log(message, error);
                 const nextAttempt = (attempt || 0) + 1;
                 setTimeout(() => this.loadWithAttempts(promiseFunction, message, nextAttempt), 1000);
@@ -49,8 +51,8 @@ export default class Ticker {
     }
 
     static loadStellarMarketsData({
-                                      baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer, isTestnet,
-                                  }) {
+        baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer, isTestnet,
+    }) {
         const headers = { 'Content-Type': 'application/json' };
         const stellarTickerGraphQLParams =
             `{ markets(
@@ -71,6 +73,9 @@ export default class Ticker {
             'counterAssetIssuer} }';
 
         const body = JSON.stringify({ query: stellarTickerGraphQLParams });
-        return postWithCancel(getEndpoint(isTestnet ? 'stellarTestnetTickerGraphQL' : 'stellarTickerGraphQL'), { headers, body });
+        return postWithCancel(getEndpoint(isTestnet ? 'stellarTestnetTickerGraphQL' : 'stellarTickerGraphQL'), {
+            headers,
+            body,
+        });
     }
 }
