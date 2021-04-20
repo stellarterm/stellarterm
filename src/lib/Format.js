@@ -1,34 +1,31 @@
-import _ from 'lodash';
 import moment from 'moment';
+import _ from 'lodash';
 
 // Shows at least 4 decimal places
 // Never shows 1 because it looks weird.
 exports.niceNumDecimals = function niceNumDecimals(input) {
     if (input >= 2000) {
         return 0;
-    }
-    if (input >= 10) {
+    } else if (input >= 10) {
         return 2;
-    }
-    if (input >= 1) {
+    } else if (input >= 1) {
         return 3;
-    }
-    if (input >= 0.1) {
+    } else if (input >= 0.1) {
         return 4;
-    }
-    if (input >= 0.01) {
+    } else if (input >= 0.01) {
         return 5;
-    }
-    if (input >= 0.001) {
+    } else if (input >= 0.001) {
         return 6;
     }
     return 7;
 };
 
 exports.niceRound = function niceRound(input) {
-    return input < 0.000001
-        ? _.round(input, exports.niceNumDecimals(input)).toFixed(7)
-        : _.round(input, exports.niceNumDecimals(input));
+    const decimal = exports.niceNumDecimals(input);
+    if (decimal === 7) {
+        return parseFloat(input).toFixed(decimal);
+    }
+    return _.round(input, decimal);
 };
 
 // Input a date object and output a formatted date object for display purposes

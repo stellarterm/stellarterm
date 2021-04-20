@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
 import screenfull from 'screenfull';
+import directory from 'stellarterm-directory';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
 import ManageOffers from './ManageOffers/ManageOffers';
@@ -36,11 +36,6 @@ export default class Exchange extends React.Component {
         this.unsubSession = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
-        this.ubsubHistory = this.props.history.listen(() => {
-            if (this.props.history.action === 'POP') {
-                this.getTradePair();
-            }
-        });
 
         this.state = {
             wrongUrl: false,
@@ -53,6 +48,11 @@ export default class Exchange extends React.Component {
         };
         this._handleKeyUp = this._handleKeyUp.bind(this);
         this._escExitFullscreen = this._escExitFullscreen.bind(this);
+        this.ubsubHistory = this.props.history.listen(() => {
+            if (this.props.history.action === 'POP') {
+                this.getTradePair();
+            }
+        });
     }
 
     componentDidMount() {

@@ -1,11 +1,11 @@
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
-import directory from 'stellarterm-directory';
 import Transport from '@ledgerhq/hw-transport-u2f';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
 import { signTransaction } from '@stellar/freighter-api';
+import directory from 'stellarterm-directory';
 import Stellarify from '../lib/Stellarify';
 import TransformTrezorTransaction from './TransformTrezorTransaction';
 import ErrorHandler from './ErrorHandler';

@@ -9,11 +9,11 @@ import Driver from '../../lib/Driver';
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            showPopup: '',
-            currentPath: window.location.pathname,
-        };
 
+        this.state = {
+            currentPath: window.location.pathname,
+            showPopup: '',
+        };
         this.listenId = this.props.d.session.event.listen(() => {
             this.forceUpdate();
         });
