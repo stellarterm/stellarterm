@@ -57,7 +57,7 @@ export default class AssetPair extends React.Component {
     }
 
     assetUpdate(asset, assetType) {
-        this.props.d.orderbook.closeOrderbookStream();
+        this.props.d.orderbook.data.closeOrderbookStream();
         this.setState({ [assetType]: asset });
 
         const isBase = assetType === 'baseBuying';
