@@ -1,55 +1,72 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
 import Driver from '../../../../../lib/Driver';
-import { isWindowsOS } from '../../../../../lib/BrowserSupport';
+import InfoBlock from '../../../../Common/InfoBlock/InfoBlock';
 
-export default function LedgerAlert(props) {
-    let ledgerAlert;
-    const { d } = props;
-
-    switch (props.alertType) {
-    case 'useChrome':
-        ledgerAlert = (
-            <p className="LoginPage__form--title browser-support">
-                    Ledger is not supported on your browser.<br /> Please use Google Chrome,
-                    Opera or Firefox with U2F extension.
-            </p>
-        );
-        break;
-    case 'useHttps':
-        ledgerAlert = (
-            <p className="LoginPage__form--title">
-                    Ledger only works on a https site.
-                <br />
-                    Please use{' '}
-                <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
-                        https://stellarterm.com/
-                </a>
-            </p>
-        );
-        break;
-    case 'searching':
-        ledgerAlert = (
-            <React.Fragment>
-                {!isWindowsOS() && <p className="LoginPage__form--title">
-                        Scanning for Ledger Wallet connection
-                    <Ellipsis />
-                </p>}
-                <p>Please plug in your Ledger and open the Stellar app. Make sure browser support is set to yes.</p>
-                <p>If it still does not show up, restart your Ledger, and refresh this webpage.</p>
-                {isWindowsOS() &&
-                        <button
-                            onClick={() => d.session.pingLedger(true)}
-                            className="s-button">Check Ledger connection</button>}
-            </React.Fragment>
-        );
-        break;
-    default:
-        break;
+export default class LedgerAlert extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            showInstructions: false,
+        };
     }
 
-    return <div className="LoginPage__greenBox">{ledgerAlert}</div>;
+    render() {
+        let content;
+        const { d, alertType } = this.props;
+
+        switch (alertType) {
+            case 'useChrome':
+                content = (
+                    <InfoBlock
+                        type="warning"
+                        withIcon
+                        onlyTitle
+                        title={'Ledger is not supported on your browser. Please use Google Chrome'}
+                    />
+                );
+                break;
+            case 'useHttps':
+                content = (
+                    <InfoBlock type="warning">
+                        <p className="LoginPage__form--title">
+                            Ledger only works on a https site.
+                            <br />
+                            Please use{' '}
+                            <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
+                                https://stellarterm.com/
+                            </a>
+                        </p>
+                    </InfoBlock>
+                );
+                break;
+            case 'searching':
+                content = (
+                    <InfoBlock title="Connect with Ledger">
+                        <p>Make sure your Ledger Wallet is connected with the Stellar application open on it.</p>
+                        <p>If it still does not show up, restart your Ledger, and refresh this webpage.</p>
+                        <button onClick={() => d.session.tryConnectLedger()} className="s-button">
+                            Connect with Ledger
+                        </button>
+                    </InfoBlock>
+                );
+                break;
+            default:
+                break;
+        }
+
+        return (
+            <React.Fragment>
+                {content}
+
+                {d && d.session && d.session.connectLedgerError && (
+                    <InfoBlock inRow type="error" withIcon>
+                        <span>Failed to connect Ledger! Please, try again.</span>
+                    </InfoBlock>
+                )}
+            </React.Fragment>
+        );
+    }
 }
 
 LedgerAlert.propTypes = {

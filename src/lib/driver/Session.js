@@ -20,6 +20,7 @@ export default function Send(driver) {
         this.setupError = false; // Unable to contact network
 
         this.setupLedgerError = null; // Could connect but couldn't reach address
+        this.connectLedgerError = null;
         this.ledgerConnected = false;
 
         this.unfundedAccountId = '';
@@ -105,9 +106,7 @@ export default function Send(driver) {
     this.addKnownAssetDataPromise = this.addKnownAssetData();
 
     // Ping the Ledger device to see if it is connected
-    this.pingLedger = singlePing => {
-        this.brakePing = singlePing || false;
-
+    this.tryConnectLedger = () =>
         TransportWebUSB.create()
             .then(transport => new AppStellar(transport))
             .then(app => app.getAppConfiguration())
@@ -118,22 +117,10 @@ export default function Send(driver) {
                 }
             })
             .catch(error => {
-                if (this.ledgerConnected) {
-                    this.ledgerConnected = false;
-                    this.event.trigger();
-                }
-
-                const notSupported = error && error.id === 'U2FNotSupported';
-                if (notSupported || this.brakePing) {
-                    return;
-                }
-                // Could not connect to ledger, retry...
-                this.pingLedger();
+                this.ledgerConnected = false;
+                this.connectLedgerError = error;
+                this.event.trigger();
             });
-        return () => {
-            this.brakePing = true;
-        };
-    };
 
     this.handlers = {
         logInWithSecret: async secretKey => {

@@ -57,8 +57,8 @@ export default class LedgerForm extends React.Component {
                     <img src={images['icon-circle-fail']} alt="fail" />
                     <span>
                         Unable to contact network.Please check your internet connection and allow connections to
-                         horizon.stellar.org. Maybe an adblocker or plugin (such as Privacy Badger) is preventing
-                         the client from communicating with the network.
+                        horizon.stellar.org. Maybe an adblocker or plugin (such as Privacy Badger) is preventing the
+                        client from communicating with the network.
                     </span>
                 </div>
             );
@@ -72,11 +72,7 @@ export default class LedgerForm extends React.Component {
         const { ledgerAdvanced, bip32Path } = this.state;
 
         if (!ledgerAdvanced) {
-            return (
-                <a onClick={() => this.enableAdvanced()}>
-                    Advanced: Use custom BIP32 path
-                </a>
-            );
+            return <a onClick={() => this.enableAdvanced()}>Advanced: Use custom BIP32 path</a>;
         }
 
         return (
@@ -90,12 +86,13 @@ export default class LedgerForm extends React.Component {
                     value={bip32Path}
                     onChange={e => this.handleBip32PathInput(e)}
                     autoFocus
-                    onFocus={(e) => {
+                    onFocus={e => {
                         // Move the carat to the end
                         const content = e.target.value;
                         e.target.value = '';
                         e.target.value = content;
-                    }} />
+                    }}
+                />
                 <span>{"'"}</span>
             </label>
         );
@@ -112,9 +109,7 @@ export default class LedgerForm extends React.Component {
                     <div className="LoginPage__submitWrap">
                         {ledgerErrorMessage}
                         <AcceptTerms loginButtonText={'Sign in with Ledger'} />
-                        <div className="LoginPage__customPath">
-                            {customPath}
-                        </div>
+                        <div className="LoginPage__customPath">{customPath}</div>
                     </div>
                 </form>
             </div>
