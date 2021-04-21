@@ -39,7 +39,12 @@ export default function BalancesTable(props) {
                     tradeLink = `/exchange/${tickerAsset.topTradePairSlug}`;
                 }
 
-                Object.assign(balance, { tradeLink, balanceUSD, change24h_USD: tickerAsset.change24h_USD });
+                Object.assign(balance, {
+                    tradeLink,
+                    balanceUSD,
+                    change24h_USD: tickerAsset.change24h_USD,
+                    id: tickerAsset.id,
+                });
             } else if (d.ticker.ready && !tickerAsset) {
                 unlistedAssets.push(balance);
                 tradeLink = `/exchange/${balance.code}-${balance.issuer}/XLM-native`;
@@ -55,12 +60,12 @@ export default function BalancesTable(props) {
     const allBalances = sortedByBalance.concat(sortedByUSD).reverse();
 
     const balanceRows = allBalances.map(asset => {
-        const { code, issuer, balance } = asset;
+        const { id, code, issuer, balance } = asset;
         const isNoUSDBalanceData = asset.balanceUSD === undefined;
         const balanceUSD = isNoUSDBalanceData ? null : `$${asset.balanceUSD}`;
 
         return (
-            <tr className="BalancesTable__row" key={code + issuer}>
+            <tr className="BalancesTable__row" key={id}>
                 <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
                     <AssetCardMain code={code} issuer={issuer} d={props.d} />
                 </td>
