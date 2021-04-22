@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import images from '../../../images';
 import Driver from '../../../lib/Driver';
 import Stellarify from '../../../lib/Stellarify';
+import SwitchBtn from '../../Basics/SwitchBtn/SwitchBtn';
 import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import AssetDropDown from './AssetDropDown/AssetDropDown';
 
@@ -52,11 +52,8 @@ export default class AssetPair extends React.Component {
         if (!swap) {
             return <div className="AssetPair__separator" />;
         }
-        return (
-            <div className="AssetPair__swap" onClick={() => this.swap()}>
-                <img src={images.switch} alt="swap" width="20" height="24" />
-            </div>
-        );
+
+        return <SwitchBtn onClickFunc={() => this.swapPair()} />;
     }
 
     assetUpdate(asset, assetType) {
@@ -72,7 +69,7 @@ export default class AssetPair extends React.Component {
         window.scrollTo(0, 0);
     }
 
-    swap() {
+    swapPair() {
         this.props.d.orderbook.data.closeOrderbookStream();
         const { baseBuying, counterSelling } = this.props;
         this.props.d.orderbook.handlers.setOrderbook(counterSelling, baseBuying);
@@ -125,6 +122,7 @@ export default class AssetPair extends React.Component {
         );
     }
 }
+
 AssetPair.propTypes = {
     d: PropTypes.instanceOf(Driver),
     baseBuying: PropTypes.objectOf(PropTypes.string),
