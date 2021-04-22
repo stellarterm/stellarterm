@@ -3,17 +3,21 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import directory from 'stellarterm-directory';
 import _ from 'lodash';
-import { niceNumDecimals } from '../../../../lib/Format';
+import { niceNumDecimals, get24hChangePercent } from '../../../../lib/Format';
 import Printify from '../../../../lib/Printify';
 import Ticker from '../../../../lib/api/Ticker';
+import PercentChange from '../../../Basics/PercentChange/PercentChange';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import Driver from '../../../../lib/Driver';
 
 export default class AssetListRows extends React.Component {
-    static getAssetRow(asset, isNativeXlm, ticker) {
-        const priceUSD = asset.price_USD
-            ? <span>${Printify.lightenZeros(asset.price_USD.toString(), niceNumDecimals(asset.price_USD))}</span>
-            : '-';
+    static getAssetRow(asset, ticker) {
+        const isNativeXlm = asset.id === 'XLM-native';
+        const priceUSD = asset.price_USD ? (
+            <span>${Printify.lightenZeros(asset.price_USD.toString(), niceNumDecimals(asset.price_USD))}</span>
+        ) : (
+            '-'
+        );
 
         const priceXLM = asset.price_XLM
             ? Printify.lightenZeros(asset.price_XLM.toString(), niceNumDecimals(asset.price_XLM))
@@ -26,13 +30,9 @@ export default class AssetListRows extends React.Component {
             })}`
             : '$0';
 
-        const changePercent = isNativeXlm ? ticker.data._meta.externalPrices.USD_XLM_change : asset.change24h_USD;
-        const change24h =
-            changePercent !== undefined && changePercent !== null ? (
-                <span className={`change${changePercent < 0 ? 'Negative' : 'Positive'}`}>
-                    {changePercent.toFixed(2)}%
-                </span>
-            ) : '0.00%';
+        const change24h = (
+            <PercentChange changePercent={get24hChangePercent(asset, ticker)} />
+        );
 
         const tradeLink = asset.topTradePairSlug ? <span className="tradeLink">trade</span> : null;
 
@@ -56,7 +56,7 @@ export default class AssetListRows extends React.Component {
         const { ticker, d } = this.props;
 
         const assets = ticker.data.assets
-            .map((asset) => {
+            .map(asset => {
                 const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
                 const assetIsUndefined = directoryAsset === null || directoryAsset.unlisted;
 
@@ -73,11 +73,12 @@ export default class AssetListRows extends React.Component {
                             <Link
                                 to={`/exchange/${asset.topTradePairSlug}`}
                                 key={`asset-${asset.id}-${asset.code}`}
-                                className="AssetList_asset">
+                                className="AssetList_asset"
+                            >
                                 <div className="asset_assetCard">
                                     <AssetCardMain code={asset.code} issuer={asset.issuer} d={d} />
                                 </div>
-                                {this.constructor.getAssetRow(asset, false, ticker)}
+                                {this.constructor.getAssetRow(asset, ticker)}
                             </Link>
                         ),
                     };
@@ -90,7 +91,7 @@ export default class AssetListRows extends React.Component {
     }
 
     sortAssets(allAssets) {
-        allAssets.forEach((item) => {
+        allAssets.forEach(item => {
             if (!item.change24h) {
                 // eslint-disable-next-line no-param-reassign
                 item.change24h = 0;
@@ -98,12 +99,15 @@ export default class AssetListRows extends React.Component {
         });
 
         const { sortBy, sortType, limit, showLowTradable } = this.props;
-        const ascDescType = new Map([[true, 'asc'], [false, 'desc']]);
+        const ascDescType = new Map([
+            [true, 'asc'],
+            [false, 'desc'],
+        ]);
         const isAscSort = sortType !== null ? ascDescType.get(sortType) : '';
         const halfInfoAssets = [];
         const lowTradableAssets = [];
 
-        const fullInfoAssets = allAssets.filter((asset) => {
+        const fullInfoAssets = allAssets.filter(asset => {
             const isFullUndefined = !asset.priceXLM && !asset.priceUSD && !asset.change24h && !asset.volume24h;
 
             if (asset[sortBy] === undefined || asset[sortBy] === null || isFullUndefined) {
@@ -116,33 +120,30 @@ export default class AssetListRows extends React.Component {
             return asset;
         });
 
-        const fullInfosortedAssets = limit
+        const fullInfoSortedAssets = limit
             ? _.orderBy(fullInfoAssets, 'volume24h', 'desc').slice(0, limit - 1)
             : _.orderBy(fullInfoAssets, sortBy, isAscSort);
 
-        const allAvaliableAssets = _.orderBy(fullInfosortedAssets.concat(lowTradableAssets), sortBy, isAscSort);
+        const allAvailableAssets = _.orderBy(fullInfoSortedAssets.concat(lowTradableAssets), sortBy, isAscSort);
 
-        const allAvaliableSortedAssets = showLowTradable
-            ? allAvaliableAssets.concat(halfInfoAssets)
-            : fullInfosortedAssets;
+        const allAvailableSortedAssets = showLowTradable
+            ? allAvailableAssets.concat(halfInfoAssets)
+            : fullInfoSortedAssets;
 
-        return limit
-            ? _.orderBy(fullInfosortedAssets, sortBy, isAscSort)
-            : allAvaliableSortedAssets;
+        return limit ? _.orderBy(fullInfoSortedAssets, sortBy, isAscSort) : allAvailableSortedAssets;
     }
 
     render() {
-        const { d } = this.props;
-        const Xlm = d.ticker.data.assets.find(asset => asset.id === 'XLM-native');
+        const { d, ticker } = this.props;
+        const xlmAsset = d.ticker.data.assets.find(asset => asset.id === 'XLM-native');
+
         return (
             <React.Fragment>
-                <Link
-                    to={`/exchange/${Xlm.topTradePairSlug}`}
-                    className="AssetList_asset">
+                <Link to={`/exchange/${xlmAsset.topTradePairSlug}`} className="AssetList_asset">
                     <div className="asset_assetCard">
-                        <AssetCardMain code={Xlm.code} issuer={Xlm.issuer} d={d} />
+                        <AssetCardMain code={xlmAsset.code} issuer={xlmAsset.issuer} d={d} />
                     </div>
-                    {this.constructor.getAssetRow(Xlm, true, d.ticker)}
+                    {this.constructor.getAssetRow(xlmAsset, ticker)}
                 </Link>
                 {this.sortAssets(this.state.assets).map(asset => asset.assetRow)}
             </React.Fragment>
