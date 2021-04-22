@@ -13,24 +13,24 @@ export default function SendSuccess(props) {
             <div className="content_title">Additional signatures required</div>
             <div className="content_text">
                 Transaction was signed with your secret key. <br />
-                Sign the transation in the multisig service of your choice and submit it to the network.
+                Sign the transaction in the multisig service of your choice and submit it to the network.
             </div>
         </React.Fragment>
     ) : (
         <React.Fragment>
-            <div className="content_title">Transaction ID
+            <div className="content_title">
+                Transaction ID
                 <a
                     target="_blank"
                     rel="noopener noreferrer"
                     title="StellarExpert"
-                    href={`https://stellar.expert/explorer/${d.Server.isTestnet ? 'testnet' : 'public'}/tx/${txId}`}>
+                    href={`https://stellar.expert/explorer/${d.Server.isTestnet ? 'testnet' : 'public'}/tx/${txId}`}
+                >
                     <img src={images['icon-info']} alt="info" />
                 </a>
             </div>
 
-            <div className="content_text">
-                {txId}
-            </div>
+            <div className="content_text">{txId}</div>
         </React.Fragment>
     );
 
@@ -50,8 +50,7 @@ export default function SendSuccess(props) {
 
                 {!awaitSigners ? (
                     <div className="field_description">
-                        Payment sent to {' '}
-                        <img src={identiconImg} alt="identicon" className="identicon_resolved" />
+                        Payment sent to <img src={identiconImg} alt="identicon" className="identicon_resolved" />
                         <span className="publicKey_resolved">{shortAddress}</span>
                     </div>
                 ) : (
@@ -59,9 +58,7 @@ export default function SendSuccess(props) {
                 )}
 
                 <div className="content_main">
-                    <div className="content_block">
-                        {resultMessage}
-                    </div>
+                    <div className="content_block">{resultMessage}</div>
                 </div>
             </div>
 
