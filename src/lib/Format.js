@@ -75,3 +75,15 @@ exports.isValidToPrecision = function isValidToPrecision(amount, precision) {
 exports.isNoRecalculateNeeded = function isNoRecalculateNeeded(amount, precision) {
     return precision && amount.length !== 1 && amount.slice(-1) === '.' && amount.split('.').length === 2;
 };
+
+/**
+ * Return 24h change of asset price
+ * @param {object} asset complete asset object
+ * @param {object} ticker complete ticker data object
+ * @returns {string} String with percent change of asset 24h price, positive or negative
+ */
+exports.get24hChangePercent = function get24hChangePercent(asset, ticker) {
+    const isNativeXlm = asset.id === 'XLM-native';
+    const changePercent = isNativeXlm ? ticker.data._meta.externalPrices.USD_XLM_change : asset.change24h_USD;
+    return (changePercent && changePercent.toFixed(2)) || '0.00';
+};

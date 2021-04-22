@@ -5,9 +5,8 @@ import { Link } from 'react-router-dom';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 import Printify from '../../../../lib/Printify';
 import { niceNumDecimals } from '../../../../lib/Format';
-import images from '../../../../images';
 import Driver from '../../../../lib/Driver';
-
+import PercentChange from '../../../Basics/PercentChange/PercentChange';
 
 export default class TopVolumeAssetList extends React.Component {
     constructor(props) {
@@ -154,14 +153,7 @@ export default class TopVolumeAssetList extends React.Component {
                                 </div>
                             </div>
                             <div className="TopVolume_cell right">
-                                <span className={changes !== '0.00' ? changesClass : ''}>
-                                    {changes} %
-                                    {changes !== '0.00' &&
-                                    <img
-                                        className="changeArrow"
-                                        src={images[changes > 0 ? 'icon-trade-up' : 'icon-trade-down']} alt="" />
-                                    }
-                                </span>
+                                <PercentChange changePercent={changes} />
                             </div>
                         </Link>);
                 })}

@@ -1,0 +1,19 @@
+.Switch_Button,
+.Switch_Button_small {
+    width: 52px;
+    height: 52px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0.4;
+    transition: 0.15s;
+
+    &:hover {
+        opacity: 1;
+    }
+}
+
+.Switch_Button_small {
+    width: 20px;
+}

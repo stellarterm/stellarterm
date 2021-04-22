@@ -65,12 +65,6 @@
             display: table-cell;
             vertical-align: middle;
 
-            .changePositive {
-                color: $s-color-primary3;
-            }
-            .changeNegative {
-                color: darken($s-color-alert, 5%);
-            }
             .tradeLink {
                 border-bottom: 1px dotted $s-color-neutral5;
             }

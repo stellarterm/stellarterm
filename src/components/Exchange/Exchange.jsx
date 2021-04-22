@@ -3,23 +3,23 @@ import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
 import screenfull from 'screenfull';
+import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
+import { isIE, isEdge } from '../../lib/BrowserSupport';
+import Generic from '../Common/Generic/Generic';
+import AssetPair from '../Common/AssetPair/AssetPair';
+import NotFound from '../NotFound/NotFound';
+import images from '../../images';
+import Ellipsis from '../Common/Ellipsis/Ellipsis';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';
 import PairPicker from './PairPicker/PairPicker';
 import LightweightChart from './LightweightChart/LightweightChart';
 import MarketsHistory from './MarketsHistory/MarketsHistory';
-import Ellipsis from '../Common/Ellipsis/Ellipsis';
-import Generic from '../Common/Generic/Generic';
-import AssetPair from '../Common/AssetPair/AssetPair';
-import NotFound from '../NotFound/NotFound';
-import images from '../../images';
 import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
-import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
-import { isIE, isEdge } from '../../lib/BrowserSupport';
 
 const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
@@ -38,6 +38,7 @@ export default class Exchange extends React.Component {
         });
         this.ubsubHistory = this.props.history.listen(() => {
             if (this.props.history.action === 'POP') {
+                this.props.d.orderbook.data.closeOrderbookStream();
                 this.getTradePair();
             }
         });
@@ -75,7 +76,7 @@ export default class Exchange extends React.Component {
         document.removeEventListener('mozfullscreenchange', this._escExitFullscreen);
         document.removeEventListener('fullscreenchange', this._escExitFullscreen);
         document.removeEventListener('MSFullscreenChange', this._escExitFullscreen);
-        this.props.d.orderbook.closeOrderbookStream();
+        this.props.d.orderbook.data.closeOrderbookStream();
 
         if (this.state.fullscreenMode) {
             this.toggleFullScreen();
@@ -115,7 +116,8 @@ export default class Exchange extends React.Component {
                 className="screenshot-btn"
                 src={images['icon-photo']}
                 alt="Screenshot"
-                onClick={() => this.getChartScreenshot()} />
+                onClick={() => this.getChartScreenshot()}
+            />
         );
 
         const isMicrosoftBrowser = isIE() || isEdge();
@@ -125,19 +127,22 @@ export default class Exchange extends React.Component {
                 <div className="switch_Tabs">
                     <a
                         onClick={() => this.setState({ chartType: 'lineChart' })}
-                        className={chartType === LINE ? 'active_Tab' : ''}>
+                        className={chartType === LINE ? 'active_Tab' : ''}
+                    >
                         <img src={images['icon-lineChart']} alt="line" />
                         <span>Linechart</span>
                     </a>
                     <a
                         onClick={() => this.setState({ chartType: 'candlestickChart' })}
-                        className={chartType === CANDLE ? 'active_Tab' : ''}>
+                        className={chartType === CANDLE ? 'active_Tab' : ''}
+                    >
                         <img src={images['icon-candleChart']} alt="candle" />
                         <span>Candlestick</span>
                     </a>
                     <a
                         onClick={() => this.setState({ chartType: 'barChart' })}
-                        className={chartType === BAR ? 'active_Tab' : ''}>
+                        className={chartType === BAR ? 'active_Tab' : ''}
+                    >
                         <img src={images['icon-barChart']} alt="bar" />
                         <span>Bar chart</span>
                     </a>
@@ -176,7 +181,10 @@ export default class Exchange extends React.Component {
         }
         if (!this.props.d.orderbook.data.ready) {
             const baseBuying = StellarSdk.Asset.native();
-            const counterSelling = new StellarSdk.Asset('USDC', 'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN');
+            const counterSelling = new StellarSdk.Asset(
+                'USDC',
+                'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN',
+            );
 
             this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
             window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
@@ -228,7 +236,7 @@ export default class Exchange extends React.Component {
             let aggregateDepth = 0;
 
             if (baseSlug !== 'XLM-native') {
-                ticker.data.assets.forEach((asset) => {
+                ticker.data.assets.forEach(asset => {
                     if (asset.slug === baseSlug) {
                         aggregateDepth += asset.depth10_USD;
                     }
@@ -236,7 +244,7 @@ export default class Exchange extends React.Component {
             }
 
             if (counterSlug !== 'XLM-native') {
-                ticker.data.assets.forEach((asset) => {
+                ticker.data.assets.forEach(asset => {
                     if (asset.slug === counterSlug) {
                         aggregateDepth += asset.depth10_USD;
                     }
@@ -258,7 +266,9 @@ export default class Exchange extends React.Component {
     }
 
     render() {
-        if (this.state.wrongUrl) { return <NotFound pageName="exchange" />; }
+        if (this.state.wrongUrl) {
+            return <NotFound pageName="exchange" />;
+        }
 
         if (!this.props.d.orderbook.data.ready) {
             return this.state.fullscreenMode ? (
@@ -310,7 +320,8 @@ export default class Exchange extends React.Component {
                         fullscreen={fullscreenMode}
                         d={this.props.d}
                         swap
-                        dropdown />
+                        dropdown
+                    />
                 ) : null}
                 <div className={`so-back islandBack ${fullscreenMode ? 'fullScreenChart' : ''}`}>
                     <div className="island ChartChunk" id="ChartChunk">
@@ -325,10 +336,11 @@ export default class Exchange extends React.Component {
                             scaleMode={scaleMode}
                             fullscreen={fullscreenMode}
                             pairName={pairName}
-                            ref={(instance) => {
+                            ref={instance => {
                                 this.child = instance;
                             }}
-                            onUpdate={(stateName, stateValue) => this.setState({ [stateName]: stateValue })} />
+                            onUpdate={(stateName, stateValue) => this.setState({ [stateName]: stateValue })}
+                        />
                     </div>
                 </div>
                 <div className="so-back islandBack">
@@ -345,12 +357,14 @@ export default class Exchange extends React.Component {
                             <div className="switch_Tabs">
                                 <a
                                     onClick={() => this.setState({ marketType: 'orderbook' })}
-                                    className={isOrderbookTab ? 'active_Tab' : ''}>
+                                    className={isOrderbookTab ? 'active_Tab' : ''}
+                                >
                                     <span>Orderbook</span>
                                 </a>
                                 <a
                                     onClick={() => this.setState({ marketType: 'history' })}
-                                    className={isHistoryTab ? 'active_Tab' : ''}>
+                                    className={isHistoryTab ? 'active_Tab' : ''}
+                                >
                                     <span>Trades history</span>
                                 </a>
                             </div>

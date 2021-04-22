@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
@@ -370,7 +371,7 @@ const MagicSpoon = {
                 });
             });
 
-        const closeFunc = Server.orderbook(baseBuying, counterSelling).stream({
+        this.closeOrderbookStream = Server.orderbook(baseBuying, counterSelling).stream({
             onmessage: res => {
                 let updated = false;
                 if (!_.isEqual(this.bids, res.bids)) {
@@ -382,14 +383,10 @@ const MagicSpoon = {
                     updated = true;
                 }
                 if (updated) {
-                    onUpdate(closeFunc);
+                    onUpdate();
                 }
             },
         });
-    },
-
-    closeOrderbookStreaming(Server) {
-        Server.orderbook.close();
     },
 
     async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, LIMIT) {
@@ -540,7 +537,7 @@ const MagicSpoon = {
         options.forEach(option => {
             transaction = transaction.addOperation(StellarSdk.Operation.setOptions(option));
         });
-        // DONT call .build()
+        // DON'T call .build()
 
         return transaction.setTimeout(Server.transactionTimeout);
     },
@@ -568,7 +565,7 @@ const MagicSpoon = {
         }
 
         return transaction;
-        // DONT call .build()
+        // DON'T call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, opts) {
         const offers = Array.isArray(opts) ? opts : [opts];
@@ -594,7 +591,7 @@ const MagicSpoon = {
             );
         });
         return transaction.setTimeout(Server.transactionTimeout);
-        // DONT call .build()
+        // DON'T call .build()
     },
 
     overwrite(buffer) {

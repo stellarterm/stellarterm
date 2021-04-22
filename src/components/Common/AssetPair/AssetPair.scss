@@ -1,4 +1,4 @@
-@import "./AssetDropDown/AssetDropDown";
+@import './AssetDropDown/AssetDropDown';
 
 .AssetPairRow {
     border-top: 1px solid $s-color-neutral7;
@@ -12,6 +12,7 @@
     align-items: center;
     text-decoration: none;
 }
+
 .AssetPair__separator {
     width: 18px;
     height: 18px;
@@ -26,21 +27,6 @@
 a.AssetPairRow:hover .AssetPair__separator {
     border-top: 1px solid $s-color-primary4;
     border-bottom: 1px solid $s-color-primary4;
-}
-
-.AssetPair__swap {
-    width: 20px;
-    height: 24px;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0.8;
-    transition: 0.15s;
-}
-
-.AssetPair__swap:hover {
-    opacity: 1;
 }
 
 .AssetPair_error {
