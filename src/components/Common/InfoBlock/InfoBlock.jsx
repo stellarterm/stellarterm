@@ -4,41 +4,41 @@ import images from '../../../images';
 
 const BLOCK_TYPES = ['success', 'warning', 'error'];
 const BLOCK_ICONS = new Map([
-    ['success', 'icon-circle-success'],
-    ['warning', 'icon-warning-triangle'],
-    ['error', 'icon-circle-fail'],
+    ['success', '24-icon-success-circle'],
+    ['warning', '24-icon-warning-triangle'],
+    ['error', '24-icon-error-circle'],
 ]);
 
 const InfoBlock = props => {
-    const { type, children, inRow, withIcon, onlyTitle, title } = props;
-    const blockSize = inRow ? 'InfoRow_base' : 'InfoBlock_base';
-    const infoClassName = `${blockSize} Info_${type}`;
+    const { type, children, withIcon, onlyTitle, title } = props;
+    const infoClassName = `InfoBlock_base Info_${type}`;
+    // TODO: add small inRow block [ (icon) Sample text ]
 
     return (
         <div className={infoClassName}>
-            {withIcon && <img className="info_icon" src={images[BLOCK_ICONS.get(type)]} alt={`icon-${type}`} />}
-            {title && <div className="info_title">{title}</div>}
+            <div className="title_wrapper">
+                {withIcon && <img className="info_icon" src={images[BLOCK_ICONS.get(type)]} alt={`icon-${type}`} />}
+                <div className="info_title">{title}</div>
+            </div>
             {onlyTitle ? null : children}
         </div>
     );
 };
 
 InfoBlock.defaultProps = {
-    type: 'success',
-    children: <span>No children components provided</span>,
-    inRow: false,
     withIcon: false,
     onlyTitle: false,
-    title: '',
+    type: 'success',
+    children: <span>No children provided. Use onlyTitle prop or provide children elements.</span>,
+    title: 'Default title',
 };
 
 InfoBlock.propTypes = {
-    children: PropTypes.node.isRequired,
-    type: PropTypes.oneOfType(BLOCK_TYPES),
-    inRow: PropTypes.bool,
     withIcon: PropTypes.bool,
     onlyTitle: PropTypes.bool,
-    title: PropTypes.string,
+    children: PropTypes.node.isRequired,
+    type: PropTypes.oneOfType(BLOCK_TYPES),
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 
 export default InfoBlock;

@@ -18,34 +18,39 @@ export default class LedgerAlert extends React.Component {
         switch (alertType) {
             case 'useChrome':
                 content = (
-                    <InfoBlock
-                        type="warning"
-                        withIcon
-                        onlyTitle
-                        title={'Ledger is not supported on your browser. Please use Google Chrome'}
-                    />
+                    <InfoBlock type="warning" withIcon title="Browser not supported">
+                        <span>
+                            Ledger Wallet is not supported by your browser. <br />
+                            Please use Google Chrome to log in with Ledger.
+                        </span>
+                    </InfoBlock>
                 );
                 break;
             case 'useHttps':
                 content = (
-                    <InfoBlock type="warning">
-                        <p className="LoginPage__form--title">
-                            Ledger only works on a https site.
-                            <br />
-                            Please use{' '}
-                            <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
-                                https://stellarterm.com/
-                            </a>
-                        </p>
-                    </InfoBlock>
+                    <InfoBlock
+                        type="warning"
+                        withIcon
+                        onlyTitle
+                        title={
+                            <span>
+                                Ledger only works on a https site.
+                                <br />
+                                Please use{' '}
+                                <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
+                                    https://stellarterm.com/
+                                </a>
+                            </span>
+                        }
+                    />
                 );
                 break;
             case 'searching':
                 content = (
-                    <InfoBlock title="Connect with Ledger">
+                    <InfoBlock title="Connect your Ledger Wallet">
                         <p>Make sure your Ledger Wallet is connected with the Stellar application open on it.</p>
                         <p>If it still does not show up, restart your Ledger, and refresh this webpage.</p>
-                        <button onClick={() => d.session.tryConnectLedger()} className="s-button">
+                        <button onClick={() => d.session.tryConnectLedger()} className="LoginPage__button">
                             Connect with Ledger
                         </button>
                     </InfoBlock>
@@ -60,8 +65,11 @@ export default class LedgerAlert extends React.Component {
                 {content}
 
                 {d && d.session && d.session.connectLedgerError && (
-                    <InfoBlock inRow type="error" withIcon>
-                        <span>Failed to connect Ledger! Please, try again.</span>
+                    <InfoBlock type="error" withIcon title="Ledger connection error">
+                        <span>
+                            Could not connect to your Ledger Wallet. Make sure you are using a supported browser, have
+                            the latest firmware version installed.
+                        </span>
                     </InfoBlock>
                 )}
             </React.Fragment>

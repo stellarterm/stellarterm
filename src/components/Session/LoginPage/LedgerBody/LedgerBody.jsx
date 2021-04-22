@@ -36,7 +36,6 @@ export default class LedgerBody extends React.Component {
         const { showInstructions, isWebUsbSupported } = this.state;
         const ledgerConnected = d.session.ledgerConnected;
         let loginForm;
-        console.log(this.state);
 
         if (!isWebUsbSupported) {
             loginForm = <LedgerAlert alertType={'useChrome'} />;

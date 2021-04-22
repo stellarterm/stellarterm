@@ -1,26 +1,28 @@
-@import "./SecretPhrase/SecretPhrase";
-@import "Common/HardwareWalletLoginLink/HardwareWalletLoginLink";
-@import "SignUpBody/SignUpBody";
+@import './SecretPhrase/SecretPhrase';
+@import 'Common/HardwareWalletLoginLink/HardwareWalletLoginLink';
+@import 'SignUpBody/SignUpBody';
 
-.LoginPage_row-content{
+.LoginPage_row-content {
     display: flex;
     flex-direction: row;
 }
 
-.LoginPage__title{
+.LoginPage__title {
     font-size: 30px;
     font-weight: normal;
     color: #1c2e3e;
 }
 
-.LoginPage__body{
+.LoginPage__body {
     width: 100%;
     padding: 19px 32px 33px;
 
-    &.LoginPage__popup{
+    .btn-ledger {
+    }
+    &.LoginPage__popup {
         padding: 0;
         .LoginPage__form {
-            p{
+            p {
                 font-size: 16px;
                 font-weight: 300;
                 color: #505558;
@@ -30,31 +32,31 @@
             }
         }
 
-        .LoginPage__accept{
+        .LoginPage__accept {
             background-color: #c3e9c5;
         }
 
-        .LoginPage__greenBox{
+        .LoginPage__greenBox {
             padding: 0;
         }
     }
 
-    .LoginPage__header{
+    .LoginPage__header {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 9px;
 
-        .LoginPage__header-goBack{
+        .LoginPage__header-goBack {
             cursor: pointer;
         }
 
-        .LoginPage__header-wrap{
+        .LoginPage__header-wrap {
             display: flex;
             flex-direction: column;
 
-            .LoginPage__intro{
+            .LoginPage__intro {
                 font-size: 14px;
                 font-weight: normal;
                 color: #9aa6ac;
@@ -62,35 +64,35 @@
         }
     }
 
-    .LoginPage__form{
+    .LoginPage__form {
         width: 100%;
 
-        p{
+        p {
             font-size: 14px;
             font-weight: normal;
             margin-bottom: 5px;
         }
 
-        .LoginPage__intro{
+        .LoginPage__intro {
             color: #9aa6ac;
             margin-bottom: 38px;
         }
 
-        .LoginPage__inputGroup{
+        .LoginPage__inputGroup {
             width: 100%;
             height: 55px;
             position: relative;
 
-            .LoginPage__password{
+            .LoginPage__password {
                 margin-bottom: 18px;
 
-                &::placeholder{
+                &::placeholder {
                     text-transform: uppercase;
                     letter-spacing: 1.5px;
                 }
             }
 
-            .LoginPage__show_icon{
+            .LoginPage__show_icon {
                 position: absolute;
                 cursor: pointer;
                 z-index: 1;
@@ -102,7 +104,7 @@
         }
     }
 
-    .LoginPage__accept{
+    .LoginPage__accept {
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
@@ -130,24 +132,21 @@
         }
     }
 
-    .LoginPage__submitBlock {
-        .LoginPage__button {
-            width: 188px;
-            height: 55px;
-            border-radius: 2px;
-            border: solid 1px #5eb464;
-            background-color: #69c76f;
-            font-size: 16px;
-            font-weight: normal;
-            color: #fff;
-            outline: none;
+    .LoginPage__button {
+        width: 188px;
+        height: 55px;
+        border-radius: 2px;
+        border: solid 1px #5eb464;
+        background-color: #69c76f;
+        font-size: 16px;
+        font-weight: normal;
+        color: #fff;
+        outline: none;
 
-            &:disabled {
-                opacity: 0.5;
-                cursor: not-allowed;
-            }
+        &:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
         }
-
     }
 
     .LoginPage__link {
@@ -156,7 +155,7 @@
     }
 }
 
-.LoginPage_green-link{
+.LoginPage_green-link {
     color: #68c86f;
     font-size: 14px;
     font-weight: normal;
@@ -164,13 +163,13 @@
     cursor: pointer;
 }
 
-.LoginPage__signupInvite{
+.LoginPage__signupInvite {
     margin-left: 29px;
     font-size: 14px;
     font-weight: normal;
     color: #9aa6ac;
 
-    a{
+    a {
         text-decoration: none;
         color: #68c86f;
     }
@@ -186,13 +185,13 @@
     margin-top: 20px;
     margin-bottom: 26px;
 
-    .LoginPage__submitWrap{
+    .LoginPage__submitWrap {
         display: flex;
         flex-direction: row;
         flex-wrap: wrap;
     }
-    
-    .LoginPage__customPath{
+
+    .LoginPage__customPath {
         margin-left: 30px;
         line-height: 55px;
 
@@ -207,21 +206,19 @@
                 outline: none;
             }
         }
-
     }
 
-    .LoginPage__accept{
-        background-color: #c3e9c5;;
+    .LoginPage__accept {
+        background-color: #c3e9c5;
     }
-
 }
 
-.LoginPage__form--title{
+.LoginPage__form--title {
     font-size: 18px;
     font-weight: normal;
 }
 
-.LoginPage__password{
+.LoginPage__password {
     position: relative;
     width: 100%;
     height: 55px;
@@ -231,14 +228,14 @@
     border: solid 1px #d7e0e4;
     padding: 0 50px 0 22px;
 
-    &::placeholder{
+    &::placeholder {
         font-size: 14px;
         font-weight: normal;
         opacity: 0.5;
     }
 }
 
-.LoginPage_instructions-wrap{
+.LoginPage_instructions-wrap {
     display: flex;
     flex-direction: row;
     border-top: 1px solid #f5f5f5;
@@ -252,10 +249,9 @@
 
         p {
             margin-bottom: 0;
-
         }
 
-        a{
+        a {
             color: #7ed085;
         }
 
@@ -264,21 +260,21 @@
             padding: 0;
             list-style-position: inside;
 
-            li{
+            li {
                 margin-top: 10px;
                 margin-bottom: 20px;
                 color: #9aa6ac;
 
-                strong{
-                  color: #1c2e3e;
+                strong {
+                    color: #1c2e3e;
                 }
             }
-            .without-order-number{
+            .without-order-number {
                 list-style-type: none;
             }
         }
 
-        .LoginPage_instructions-image{
+        .LoginPage_instructions-image {
             width: 542px;
             padding: 15px 0;
             border-radius: 2px;
@@ -292,16 +288,15 @@
         }
     }
 
-    .LoginPage_notes{
+    .LoginPage_notes {
         color: #9aa6ac;
         padding-top: 15px;
 
-
-        .LoginPage_notes-title{
+        .LoginPage_notes-title {
             color: #1c2e3e;
         }
 
-        ul{
+        ul {
             list-style-type: none;
             margin-top: 12px;
 
