@@ -15,8 +15,8 @@
   "dependencies": {
     "@babel/core": "^7.4.5",
     "@babel/preset-env": "^7.4.5",
-    "@ledgerhq/hw-app-str": "^5.48.0",
-    "@ledgerhq/hw-transport-u2f": "^5.34.0",
+    "@ledgerhq/hw-app-str": "^5.49.0",
+    "@ledgerhq/hw-transport-webusb": "^5.49.0",
     "@stellar/freighter-api": "1.0.0-beta.0",
     "@stellarguard/stellar-uri": "^1.1.1",
     "awesome-debounce-promise": "2.1.0",

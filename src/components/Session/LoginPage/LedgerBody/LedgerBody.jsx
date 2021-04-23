@@ -1,45 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import Driver from '../../../../lib/Driver';
+import { isHttpConnectionUsed } from '../../../../lib/BrowserSupport';
+import SecretPhrase from '../SecretPhrase/SecretPhrase';
+import HiddenDescription from '../Common/HiddenDescription';
 import LedgerForm from './LedgerForm/LedgerForm';
 import LedgerAlert from './LedgerAlert/LedgerAlert';
 import LedgerSetupNotes from './LedgerSetupNotes/LedgerSetupNotes';
 import LedgerSetupInstructions from './LedgerSetupInstructions/LedgerSetupInstructions';
-import SecretPhrase from '../SecretPhrase/SecretPhrase';
-import HiddenDescription from '../Common/HiddenDescription';
 import images from './../../../../images';
-import {
-    isChrome,
-    isWindowsOS,
-    browserU2FSupport,
-    isHttpConnectionUsed,
-} from '../../../../lib/BrowserSupport';
 
 export default class LedgerBody extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             showInstructions: false,
+            isWebUsbSupported: false,
+            error: '',
         };
     }
 
     componentDidMount() {
-        if (!isWindowsOS()) {
-            this.brakePing = this.props.d.session.pingLedger();
-        }
+        TransportWebUSB.isSupported()
+            .then(isSupported => this.setState({ isWebUsbSupported: isSupported }))
+            .catch(error => this.setState({ error }));
     }
 
     componentWillUnmount() {
-        if (!isWindowsOS()) { this.brakePing(); }
+        this.props.d.session.connectLedgerError = null;
     }
 
     render() {
         const { d, modal } = this.props;
-        const { showInstructions } = this.state;
+        const { showInstructions, isWebUsbSupported } = this.state;
         const ledgerConnected = d.session.ledgerConnected;
         let loginForm;
 
-        if (!isChrome() && !browserU2FSupport()) {
+        if (!isWebUsbSupported) {
             loginForm = <LedgerAlert alertType={'useChrome'} />;
         } else if (isHttpConnectionUsed()) {
             loginForm = <LedgerAlert alertType={'useHttps'} />;
@@ -66,7 +64,8 @@ export default class LedgerBody extends React.Component {
                                 onClick={() => this.props.history.goBack()}
                                 className="LoginPage__header-goBack"
                                 src={images['icon-arrow-left-green-large']}
-                                alt="<" />
+                                alt="<"
+                            />
                             <HiddenDescription />
                         </div>
                         <div className="LoginPage__header">
@@ -77,13 +76,14 @@ export default class LedgerBody extends React.Component {
                             <img src={images['ledger-logo']} alt="ledger" width="133" />
                         </div>
                         {loginForm}
-                        {!showInstructions &&
+                        {!showInstructions && (
                             <span
                                 className="LoginPage_green-link"
-                                onClick={() => this.setState({ showInstructions: true })}>
+                                onClick={() => this.setState({ showInstructions: true })}
+                            >
                                 Show setup instructions
                             </span>
-                        }
+                        )}
                     </div>
                     <SecretPhrase d={d} />
                 </div>
@@ -91,7 +91,8 @@ export default class LedgerBody extends React.Component {
                     <div className="LoginPage_instructions-wrap">
                         <LedgerSetupInstructions />
                         <LedgerSetupNotes />
-                    </div>)}
+                    </div>
+                )}
             </React.Fragment>
         );
     }
