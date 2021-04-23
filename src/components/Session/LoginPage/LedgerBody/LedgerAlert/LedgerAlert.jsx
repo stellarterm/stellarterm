@@ -67,8 +67,8 @@ export default class LedgerAlert extends React.Component {
                 {d && d.session && d.session.connectLedgerError && (
                     <InfoBlock type="error" withIcon title="Ledger connection error">
                         <span>
-                            Could not connect to your Ledger Wallet. Make sure you are using a supported browser, have
-                            the latest firmware version installed.
+                            Could not connect to your Ledger Wallet. Make sure you are using a supported browser and
+                            have the latest firmware version installed. Contact support if the issue persists.
                         </span>
                     </InfoBlock>
                 )}
