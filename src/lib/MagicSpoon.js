@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import Transport from '@ledgerhq/hw-transport-u2f';
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
@@ -35,7 +35,7 @@ const MagicSpoon = {
 
         sdkAccount.signWithLedger = transaction => {
             console.log('Sending to Ledger to sign');
-            return Transport.create()
+            return TransportWebUSB.create()
                 .then(transport => new AppStellar(transport))
                 .then(app => app.signTransaction(this.bip32Path, transaction.signatureBase()))
                 .then(result => {

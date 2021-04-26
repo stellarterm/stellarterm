@@ -13,21 +13,18 @@ export default () => (
             </li>
             <li>
                 Set up your Ledger device by following{' '}
-                <a
-                    href="https://www.ledger.com/start/"
-                    target="_blank"
-                    rel="nofollow noopener noreferrer">
+                <a href="https://www.ledger.com/start/" target="_blank" rel="nofollow noopener noreferrer">
                     instructions
-                </a>
-                {' '}on the Ledger website.
+                </a>{' '}
+                on the Ledger website.
             </li>
 
             <li>
                 Install the{' '}
                 <a href="https://shop.ledger.com/pages/ledger-live" target="_blank" rel="nofollow noopener noreferrer">
                     Ledger Live
-                </a>
-                {' '}app on your computer.
+                </a>{' '}
+                app on your computer.
             </li>
 
             <li>
@@ -39,7 +36,8 @@ export default () => (
                         className="img--noSelect"
                         alt="Stellar app installation inside Ledger Live"
                         width="337"
-                        height="73" />
+                        height="73"
+                    />
                 </div>
             </li>
 
@@ -52,13 +50,9 @@ export default () => (
                         className="img--noSelect"
                         alt="Ledger Nano Pic"
                         width="269"
-                        height="121" />
+                        height="121"
+                    />
                 </div>
-            </li>
-
-            <li>
-                Inside the app, go to <strong>Settings</strong>, then <strong>Browser support</strong>, then select{' '}
-                <strong>{'"Yes"'}</strong> and press both buttons.
             </li>
         </ol>
     </div>
