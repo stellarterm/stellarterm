@@ -1,7 +1,7 @@
 {
     "staging": {
-        "ANCHORS_URL": "https://fed.stellarterm.com/anchors/",
-        "DESTINATIONS_URL": "https://fed.stellarterm.com/destinations/",
+        "ANCHORS_URL": "https://fed-staging.stellarterm.com/issuer_orgs/",
+        "DESTINATIONS_URL": "https://fed-staging.stellarterm.com/destinations/",
         "API_URL": "https://api-staging.stellarterm.com/v1/",
         "LOBSTR_VAULT_URL": "https://vault-staging.lobstr.co/api/",
         "FEDERATION_API_URL": "https://fed.stellarterm.com/",
@@ -13,7 +13,7 @@
         "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     },
     "production": {
-        "ANCHORS_URL": "https://fed.stellarterm.com/anchors/",
+        "ANCHORS_URL": "https://fed.stellarterm.com/issuer_orgs/",
         "DESTINATIONS_URL": "https://fed.stellarterm.com/destinations/",
         "API_URL": "https://api.stellarterm.com/v1/",
         "LOBSTR_VAULT_URL": "https://vault.lobstr.co/api/",
@@ -26,8 +26,8 @@
         "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
     },
     "local": {
-        "ANCHORS_URL": "https://fed.stellarterm.com/anchors/",
-        "DESTINATIONS_URL": "https://fed.stellarterm.com/destinations/",
+        "ANCHORS_URL": "https://fed-staging.stellarterm.com/issuer_orgs/",
+        "DESTINATIONS_URL": "https://fed-staging.stellarterm.com/destinations/",
         "API_URL": "https://localhost:3000/api/v1/",
         "LOBSTR_VAULT_URL": "https://vault.lobstr.co/api/",
         "FEDERATION_API_URL": "https://fed.stellarterm.com/",

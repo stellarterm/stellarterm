@@ -21,7 +21,7 @@ export default class Ticker {
 
     load() {
         return Promise.all([
-            directory.initializeAnchors(EnvConsts.ANCHORS_URL),
+            directory.initializeIssuerOrgs(EnvConsts.ANCHORS_URL),
             directory.initializeDestinations(EnvConsts.DESTINATIONS_URL),
         ])
             .then(() => this.loadWithAttempts(() => req
