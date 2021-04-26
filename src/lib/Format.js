@@ -31,6 +31,10 @@ exports.niceRound = function niceRound(input) {
         : _.round(input, exports.niceNumDecimals(input));
 };
 
+exports.getCurrentYear = function getCurrentYear() {
+    return new Date().getFullYear();
+};
+
 // Input a date object and output a formatted date object for display purposes
 // EX: { time: 11:15 AM, date: 12/07/17}
 exports.niceDate = function niceDate(input) {
