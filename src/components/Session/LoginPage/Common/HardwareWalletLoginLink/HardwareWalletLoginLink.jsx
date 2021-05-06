@@ -22,11 +22,11 @@ const HARDWARE_WALLET_DATA = {
         capitalizedFullName: 'Freighter extension',
         logo: 'freighter-logo',
     },
-    lobstr: {
-        link: '/lobstr/',
-        capitalizedName: 'LOBSTR',
-        capitalizedFullName: 'LOBSTR App',
-        logo: 'lobstr',
+    walletConnect: {
+        link: '/wallet-connect/',
+        capitalizedName: 'Wallet Connect',
+        capitalizedFullName: 'Wallet Connect',
+        logo: 'walletconnect-logo',
     },
 };
 export default function HardwareWalletLoginLink(props) {
@@ -37,7 +37,7 @@ export default function HardwareWalletLoginLink(props) {
         <Link to={link} className={`HardwareWalletLoginLink ${narrow ? 'narrow' : ''}`}>
             <div className="HardwareWalletLoginLink_wrap">
                 <div className="HardwareWalletLoginLink_logo">
-                    <img src={images[logo]} alt={capitalizedName} height="40" />
+                    <img src={images[logo]} alt={capitalizedName} />
                 </div>
                 <div className="HardwareWalletLoginLink_description">
                     <span className="HardwareWalletLoginLink_description-title">Log in with {capitalizedName}</span>
@@ -50,5 +50,5 @@ export default function HardwareWalletLoginLink(props) {
 }
 HardwareWalletLoginLink.propTypes = {
     narrow: PropTypes.bool,
-    wallet: PropTypes.oneOf(['ledger', 'trezor', 'freighter', 'lobstr']).isRequired,
+    wallet: PropTypes.oneOf(['ledger', 'trezor', 'freighter', 'walletConnect']).isRequired,
 };

@@ -1,0 +1,20 @@
+.WalletConnectSignModal {
+    height: fit-content!important;
+}
+
+.WalletConnectSignModal__loading {
+    margin-bottom: 35px!important;
+}
+
+
+.WalletConnectSignModal__state {
+    margin-bottom: 35px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;align-items: center;
+}
+
+.WalletConnectSignModal__result {
+    font-size: 24px;
+    font-weight: bold;
+}

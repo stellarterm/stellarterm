@@ -12,6 +12,14 @@ export default function SessionAccount(props) {
     return (
         <React.Fragment>
             <Generic>
+                {props.d.session.authType === 'wallet-connect' &&
+                <div className="AccountView_app">
+                    <div>App name: {props.d.session.appMeta.name}</div>
+                    <div>App description: {props.d.session.appMeta.description}</div>
+                    <img src={props.d.session.appMeta.icons[0]} alt="" height="50" />
+                </div>
+                }
+
                 <AccountIdBlock accountID={accountID} />
                 <p className="AccountView_text">
                     To receive payments, share your account ID with them (begins with a G) or scan QR code.

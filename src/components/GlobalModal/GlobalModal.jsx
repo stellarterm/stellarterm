@@ -21,6 +21,8 @@ import LoginModal from './LoginModal/LoginModal';
 import SecretPhraseSetup from './SecretPhraseSetup/SecretPhraseSetup';
 import BrowserModal from './BrowserModal/BrowserModal';
 import MoonpayModal from './MoonpayModal/MoonpayModal';
+import WalletConnectLoginModal from './WalletConnectLoginModal/WalletConnectLoginModal';
+import WalletConnectSignModal from './WalletConnectSignModal/WalletConnectSignModal';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -147,6 +149,12 @@ export default class GlobalModal extends React.Component {
                 break;
             case 'BrowserModal':
                 body = <BrowserModal submit={d.modal.handlers} d={d} />;
+                break;
+            case 'WalletConnectLoginModal':
+                body = <WalletConnectLoginModal submit={d.modal.handlers} uri={modal.inputData} />;
+                break;
+            case 'WalletConnectSignModal':
+                body = <WalletConnectSignModal submit={d.modal.handlers} data={modal.inputData} />;
                 break;
             case 'MoonpayModal':
                 body = <MoonpayModal submit={d.modal.handlers} d={d} quote={modal.inputData} />;

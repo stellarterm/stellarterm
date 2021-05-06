@@ -7,18 +7,18 @@ import Driver from '../../../../lib/Driver';
 import AcceptTerms from '../Common/AcceptTerms';
 
 
-const LobstrBody = ({ history, d, modal }) => {
-    const loginWithLobstr = (e) => {
+const WalletConnectBody = ({ history, d, modal }) => {
+    const loginWithWalletConnect = (e) => {
         e.preventDefault();
 
-        d.session.handlers.loginWithLobstr();
+        d.session.handlers.loginWithWalletConnect();
     };
 
-    const getLobstrLoginForm = () => (
-        <form onSubmit={loginWithLobstr}>
+    const getWalletConnectLoginForm = () => (
+        <form onSubmit={loginWithWalletConnect}>
             <div className="LoginPage__submitWrap">
 
-                <AcceptTerms loginButtonText={'Sign in with Lobstr'} />
+                <AcceptTerms loginButtonText={'Sign in'} />
             </div>
         </form>
     );
@@ -26,7 +26,7 @@ const LobstrBody = ({ history, d, modal }) => {
     if (modal) {
         return (
             <div className="LoginPage__body LoginPage__popup">
-                <div className="LoginPage__greenBox">{getLobstrLoginForm()}</div>
+                <div className="LoginPage__greenBox">{getWalletConnectLoginForm()}</div>
             </div>
         );
     }
@@ -46,12 +46,15 @@ const LobstrBody = ({ history, d, modal }) => {
                     <div className="LoginPage__header">
                         <div className="LoginPage__header-wrap">
                             <span className="LoginPage__title">Access your account</span>
-                            <span className="LoginPage__intro">Use StellarTerm with your Lobstr app</span>
+                            <span className="LoginPage__intro">Use StellarTerm with Wallet Connect supported app</span>
                         </div>
-                        <img src={images['lobstr-logo']} alt="lobstr" height="30" />
+                        <div>
+                            <img src={images['walletconnect-logo']} alt="wc" height="20" />
+                            <span style={{ fontSize: 30, fontWeight: 'bold', marginLeft: 10 }}>Wallet Connect</span>
+                        </div>
                     </div>
                     <div className="LoginPage__greenBox">
-                        {getLobstrLoginForm()}
+                        {getWalletConnectLoginForm()}
                     </div>
                 </div>
                 <SecretPhrase d={d} />
@@ -60,9 +63,9 @@ const LobstrBody = ({ history, d, modal }) => {
     );
 };
 
-export default LobstrBody;
+export default WalletConnectBody;
 
-LobstrBody.propTypes = {
+WalletConnectBody.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     history: PropTypes.objectOf(PropTypes.any),
     modal: PropTypes.bool,

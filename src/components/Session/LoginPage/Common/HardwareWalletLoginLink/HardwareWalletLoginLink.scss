@@ -31,6 +31,10 @@
             border-right: solid 1px #f4f4f5;
             display: flex;
             align-items: center;
+            img {
+                height: 40px;
+                width: 40px;
+            }
         }
 
         .HardwareWalletLoginLink_description {
