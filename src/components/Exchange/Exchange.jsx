@@ -279,7 +279,7 @@ export default class Exchange extends React.Component {
         const directoryAsset = directory.getAssetByAccountId(data.baseBuying.code, data.baseBuying.issuer);
 
         let offermakers;
-        if (directoryAsset !== null && directoryAsset.disabled !== undefined) {
+        if (directoryAsset !== null && directoryAsset.disabled) {
             offermakers = (
                 <div className="Exchange__orderbookDisabled">
                     Offer making has been disabled for this pair. You may still cancel your existing offers below.
