@@ -4,18 +4,18 @@ import moment from 'moment';
 import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../lib/Driver';
 import images from '../../../images';
-
-import * as chartOptions from './LightweightChartOptions';
-import * as converterOHLC from './ConverterOHLC';
-import exportChartPng from './CanvasHandler';
-
 import {
     CrosshairMode,
     PriceScaleMode,
 } from '../../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
+import * as chartOptions from './LightweightChartOptions';
+import * as converterOHLC from './ConverterOHLC';
+import exportChartPng from './CanvasHandler';
 import UtcTimeString from './UtcTimeString/UtcTimeString';
 import ChartDataPanel from './ChartDataPanel/ChartDataPanel';
 import FullscreenScrollBlock from './FullscreenScrollBlock/FullscreenScrollBlock';
+
+const AGGREGATIONS_COUNT = 1000;
 
 export default class LightweightChart extends React.Component {
     constructor(props) {
@@ -89,7 +89,10 @@ export default class LightweightChart extends React.Component {
 
         if (fullHistoryLoaded) { return; }
 
-        handlers.getTrades(timeFrame, 100).then((res) => {
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - (timeFrame * AGGREGATIONS_COUNT);
+
+        handlers.getTrades(startDate, endDate, timeFrame, 100).then(res => {
             if (!res) {
                 this.setState({
                     isLoadingInit: false,
@@ -127,7 +130,7 @@ export default class LightweightChart extends React.Component {
         if (fullHistoryLoaded) { return; }
 
         this.setState({ isLoadingNext: true });
-        this.state[timeFrame].nextTrades().then((res) => {
+        this.state[timeFrame].nextTrades().then(res => {
             const fullLoaded = res.records.length === 0;
             const convertedTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
             const convertedVolume = converterOHLC.getVolumeData(convertedTrades, d.orderbook.data);
@@ -158,7 +161,8 @@ export default class LightweightChart extends React.Component {
         return (
             <a
                 className={`timeBtn ${this.props.timeFrame === timeFrame ? 'timeBtn_active' : ''}`}
-                onClick={() => this.onClickTimeFrameBtn(timeFrame)}>
+                onClick={() => this.onClickTimeFrameBtn(timeFrame)}
+            >
                 {btnText}
             </a>
         );
@@ -168,7 +172,8 @@ export default class LightweightChart extends React.Component {
         return (
             <a
                 className={`scaleBtn ${this.props.scaleMode === scaleMode ? 'scaleBtn_active' : ''}`}
-                onClick={() => this.props.onUpdate('scaleMode', scaleMode)}>
+                onClick={() => this.props.onUpdate('scaleMode', scaleMode)}
+            >
                 {text}
             </a>
         );
@@ -197,7 +202,7 @@ export default class LightweightChart extends React.Component {
         this.volumeSeries = this.CHART.addHistogramSeries(chartOptions.getVolumeOptions());
         this.setChartSeries();
 
-        this.CHART.subscribeVisibleTimeRangeChange((param) => {
+        this.CHART.subscribeVisibleTimeRangeChange(param => {
             if (!param || !param.from) { return; }
 
             const lastTradeElement = this.state[this.props.timeFrame].trades[0];
@@ -265,7 +270,8 @@ export default class LightweightChart extends React.Component {
                         timeFrame={this.props.timeFrame}
                         trades={trades}
                         volumes={volumes}
-                        pairName={pairName} />
+                        pairName={pairName}
+                    />
                 ) : null}
 
                 <div className="chart_Msg_Container">

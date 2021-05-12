@@ -33,8 +33,8 @@ export default class Orderbook {
                     driver.session.forceUpdateAccountOffers();
                 });
             },
-            getTrades: (RESOLUTION, LIMIT) =>
-                MagicSpoon.tradeAggregation(driver.Server, base, counter, RESOLUTION, LIMIT),
+            getTrades: (START_DATE, END_DATE, RESOLUTION, LIMIT) =>
+                MagicSpoon.tradeAggregation(driver.Server, base, counter, START_DATE, END_DATE, RESOLUTION, LIMIT),
         };
     }
 }
