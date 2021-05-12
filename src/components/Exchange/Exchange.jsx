@@ -36,6 +36,15 @@ export default class Exchange extends React.Component {
         this.unsubSession = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
+
+        this.isPairSet = false;
+
+        this.unsubTicker = this.props.d.ticker.event.sub(() => {
+            if (!this.isPairSet) {
+                this.getTradePair();
+            }
+        });
+
         this.ubsubHistory = this.props.history.listen(() => {
             if (this.props.history.action === 'POP') {
                 this.getTradePair();
@@ -70,6 +79,7 @@ export default class Exchange extends React.Component {
         this.unsub();
         this.unsubSession();
         this.ubsubHistory();
+        this.unsubTicker();
         document.removeEventListener('keyup', this._handleKeyUp);
         document.removeEventListener('webkitfullscreenchange', this._escExitFullscreen);
         document.removeEventListener('mozfullscreenchange', this._escExitFullscreen);
@@ -115,7 +125,8 @@ export default class Exchange extends React.Component {
                 className="screenshot-btn"
                 src={images['icon-photo']}
                 alt="Screenshot"
-                onClick={() => this.getChartScreenshot()} />
+                onClick={() => this.getChartScreenshot()}
+            />
         );
 
         const isMicrosoftBrowser = isIE() || isEdge();
@@ -125,19 +136,22 @@ export default class Exchange extends React.Component {
                 <div className="switch_Tabs">
                     <a
                         onClick={() => this.setState({ chartType: 'lineChart' })}
-                        className={chartType === LINE ? 'active_Tab' : ''}>
+                        className={chartType === LINE ? 'active_Tab' : ''}
+                    >
                         <img src={images['icon-lineChart']} alt="line" />
                         <span>Linechart</span>
                     </a>
                     <a
                         onClick={() => this.setState({ chartType: 'candlestickChart' })}
-                        className={chartType === CANDLE ? 'active_Tab' : ''}>
+                        className={chartType === CANDLE ? 'active_Tab' : ''}
+                    >
                         <img src={images['icon-candleChart']} alt="candle" />
                         <span>Candlestick</span>
                     </a>
                     <a
                         onClick={() => this.setState({ chartType: 'barChart' })}
-                        className={chartType === BAR ? 'active_Tab' : ''}>
+                        className={chartType === BAR ? 'active_Tab' : ''}
+                    >
                         <img src={images['icon-barChart']} alt="bar" />
                         <span>Bar chart</span>
                     </a>
@@ -161,6 +175,9 @@ export default class Exchange extends React.Component {
     }
 
     getTradePair() {
+        if (!this.props.d.ticker.ready) {
+            return;
+        }
         const { pathname } = window.location;
         const urlParts = pathname.split('/');
         if (urlParts.length === 4) {
@@ -172,6 +189,7 @@ export default class Exchange extends React.Component {
                 console.error(e);
                 this.setState({ wrongUrl: true });
             }
+            this.isPairSet = true;
             return;
         }
         if (!this.props.d.orderbook.data.ready) {
@@ -180,10 +198,12 @@ export default class Exchange extends React.Component {
 
             this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
             window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
+            this.isPairSet = true;
             return;
         }
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
+        this.isPairSet = true;
     }
 
     toggleFullScreen() {
@@ -228,7 +248,7 @@ export default class Exchange extends React.Component {
             let aggregateDepth = 0;
 
             if (baseSlug !== 'XLM-native') {
-                ticker.data.assets.forEach((asset) => {
+                ticker.data.assets.forEach(asset => {
                     if (asset.slug === baseSlug) {
                         aggregateDepth += asset.depth10_USD;
                     }
@@ -236,7 +256,7 @@ export default class Exchange extends React.Component {
             }
 
             if (counterSlug !== 'XLM-native') {
-                ticker.data.assets.forEach((asset) => {
+                ticker.data.assets.forEach(asset => {
                     if (asset.slug === counterSlug) {
                         aggregateDepth += asset.depth10_USD;
                     }
@@ -310,7 +330,8 @@ export default class Exchange extends React.Component {
                         fullscreen={fullscreenMode}
                         d={this.props.d}
                         swap
-                        dropdown />
+                        dropdown
+                    />
                 ) : null}
                 <div className={`so-back islandBack ${fullscreenMode ? 'fullScreenChart' : ''}`}>
                     <div className="island ChartChunk" id="ChartChunk">
@@ -325,10 +346,11 @@ export default class Exchange extends React.Component {
                             scaleMode={scaleMode}
                             fullscreen={fullscreenMode}
                             pairName={pairName}
-                            ref={(instance) => {
+                            ref={instance => {
                                 this.child = instance;
                             }}
-                            onUpdate={(stateName, stateValue) => this.setState({ [stateName]: stateValue })} />
+                            onUpdate={(stateName, stateValue) => this.setState({ [stateName]: stateValue })}
+                        />
                     </div>
                 </div>
                 <div className="so-back islandBack">
@@ -345,12 +367,14 @@ export default class Exchange extends React.Component {
                             <div className="switch_Tabs">
                                 <a
                                     onClick={() => this.setState({ marketType: 'orderbook' })}
-                                    className={isOrderbookTab ? 'active_Tab' : ''}>
+                                    className={isOrderbookTab ? 'active_Tab' : ''}
+                                >
                                     <span>Orderbook</span>
                                 </a>
                                 <a
                                     onClick={() => this.setState({ marketType: 'history' })}
-                                    className={isHistoryTab ? 'active_Tab' : ''}>
+                                    className={isHistoryTab ? 'active_Tab' : ''}
+                                >
                                     <span>Trades history</span>
                                 </a>
                             </div>
