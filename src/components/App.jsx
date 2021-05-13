@@ -1,9 +1,12 @@
+import url from 'url';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import * as StellarSdk from 'stellar-sdk';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import url from 'url';
+import createStellarIdenticon from 'stellar-identicon-js';
 import PropTypes from 'prop-types';
+import Driver from '../lib/Driver';
+import { isIE, isEdge } from '../lib/BrowserSupport';
 import GlobalModal from './GlobalModal/GlobalModal';
 import PopupAlert from './PopupAlert/PopupAlert';
 import NotFound from './NotFound/NotFound';
@@ -19,8 +22,6 @@ import Session from './Session/Session';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import BuyCrypto from './BuyCrypto/BuyCrypto';
-import Driver from '../lib/Driver';
-import { isIE, isEdge } from '../lib/BrowserSupport';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
 
 window.React = React;
@@ -67,12 +68,38 @@ const driver = new Driver({
     network,
 });
 
-const parseUrl = (href) => {
+const parseUrl = href => {
     const hash = url.parse(href).hash;
     return hash === null ? '' : hash.substr(1);
 };
 
 class TermApp extends React.Component {
+    static changeFaviconToIdenticon(accountId) {
+        const identiconImg = createStellarIdenticon(accountId).toDataURL();
+
+        const links = document.getElementsByTagName('link');
+
+        if (!links) {
+            return;
+        }
+
+        // eslint-disable-next-line no-restricted-syntax
+        for (const link of links) {
+            if (link.getAttribute('rel').includes('icon')) {
+                link.href = identiconImg;
+            }
+        }
+    }
+
+    static setDefaultFavicon() {
+        const links = document.getElementsByTagName('link');
+        // eslint-disable-next-line no-restricted-syntax
+        for (const link of links) {
+            if (link.getAttribute('rel').includes('icon')) {
+                link.href = '/favicon.ico';
+            }
+        }
+    }
     constructor(props) {
         super(props);
         this.d = props.d;
@@ -84,7 +111,7 @@ class TermApp extends React.Component {
 
         window.addEventListener(
             'hashchange',
-            (e) => {
+            e => {
                 if (e.newURL.includes('testnet')) {
                     window.location.reload();
                 }
@@ -94,12 +121,30 @@ class TermApp extends React.Component {
         );
 
         // Alert for logged user before reload page
-        window.onbeforeunload = (e) => {
+        window.onbeforeunload = e => {
             const { state } = this.props.d.session;
             if (state === 'in' || state === 'unfunded') {
                 e.returnValue = 'You will be logged out after reload!';
             }
         };
+
+        this.unsub = this.props.d.session.event.sub(() => {
+            switch (this.props.d.session.state) {
+                case 'unfunded': {
+                    const { unfundedAccountId } = this.props.d.session;
+                    this.constructor.changeFaviconToIdenticon(unfundedAccountId);
+                    break;
+                }
+                case 'in': {
+                    const { account_id: accountId } = this.props.d.session.account;
+                    this.constructor.changeFaviconToIdenticon(accountId);
+                    break;
+                }
+                default: {
+                    this.constructor.setDefaultFavicon();
+                }
+            }
+        });
     }
 
     render() {
@@ -128,38 +173,48 @@ class TermApp extends React.Component {
                                     <Route
                                         exact
                                         path="/"
-                                        render={props => <HomePage {...props} driver={d} />} />
+                                        render={props => <HomePage {...props} driver={d} />}
+                                    />
                                     <Route path="/download/" component={Download} />
                                     <Route
                                         path="/testnet/"
-                                        component={network.isTestnet ? TestNetwork : ReloadToTestnet} />
+                                        component={network.isTestnet ? TestNetwork : ReloadToTestnet}
+                                    />
                                     <Route path="/privacy/" component={PrivacyPolicy} />
                                     <Route path="/terms-of-use/" component={TermsOfUse} />
                                     <Route
                                         path="/account/"
-                                        render={props => <Session {...props} d={d} urlParts={'account'} />} />
+                                        render={props => <Session {...props} d={d} urlParts={'account'} />}
+                                    />
                                     <Route
                                         path="/ledger/"
-                                        render={props => <Session {...props} d={d} urlParts={'ledger'} />} />
+                                        render={props => <Session {...props} d={d} urlParts={'ledger'} />}
+                                    />
                                     <Route
                                         path="/trezor/"
-                                        render={props => <Session {...props} d={this.props.d} urlParts={'trezor'} />} />
+                                        render={props => <Session {...props} d={this.props.d} urlParts={'trezor'} />}
+                                    />
                                     <Route
                                         path="/freighter/"
-                                        render={props => <Session {...props} d={this.props.d} urlParts={'freighter'} />} />
+                                        render={props => <Session {...props} d={this.props.d} urlParts={'freighter'} />}
+                                    />
                                     <Route
                                         path="/signup/"
-                                        render={props => <Session {...props} d={d} urlParts={'signup'} />} />
+                                        render={props => <Session {...props} d={d} urlParts={'signup'} />}
+                                    />
                                     <Route
                                         path="/markets"
-                                        render={props => <Markets {...props} d={d} />} />
+                                        render={props => <Markets {...props} d={d} />}
+                                    />
                                     <Route
                                         path="/exchange"
-                                        render={props => <Exchange {...props} d={d} />} />
+                                        render={props => <Exchange {...props} d={d} />}
+                                    />
 
                                     <Route
                                         path="/buy-crypto"
-                                        render={props => <BuyCrypto {...props} d={d} />} />
+                                        render={props => <BuyCrypto {...props} d={d} />}
+                                    />
 
                                     <Route component={NotFound} />
                                 </Switch>
