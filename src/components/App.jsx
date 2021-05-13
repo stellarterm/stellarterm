@@ -186,7 +186,7 @@ class TermApp extends React.Component {
 
                                         <Route component={NotFound} />
                                     </Switch>) :
-                                    <AppLoading text="Directory data loading" />
+                                    <AppLoading text="Loading assets and balances" />
                                 }
                                 <PopupAlert d={d} />
                             </div>
