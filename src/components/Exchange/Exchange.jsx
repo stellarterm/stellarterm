@@ -180,6 +180,7 @@ export default class Exchange extends React.Component {
         }
         const { pathname } = window.location;
         const urlParts = pathname.split('/');
+        this.isPairSet = true;
         if (urlParts.length === 4) {
             try {
                 const baseBuying = Stellarify.parseAssetSlug(urlParts[2]);
@@ -189,7 +190,6 @@ export default class Exchange extends React.Component {
                 console.error(e);
                 this.setState({ wrongUrl: true });
             }
-            this.isPairSet = true;
             return;
         }
         if (!this.props.d.orderbook.data.ready) {
@@ -198,12 +198,10 @@ export default class Exchange extends React.Component {
 
             this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
             window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
-            this.isPairSet = true;
             return;
         }
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
-        this.isPairSet = true;
     }
 
     toggleFullScreen() {
