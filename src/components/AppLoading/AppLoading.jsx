@@ -1,8 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Ellipsis from '../Common/Ellipsis/Ellipsis';
 
 
-export default () => (
+const AppLoading = ({ text }) => (
     <div className="so-back islandBack islandBack--t">
         <div className="island">
             <div className="directory-loading-block">
@@ -10,7 +11,7 @@ export default () => (
                     <div className="nk-spinner" />
                 </div>
                 <div>
-                    Directory data loading
+                    {text}
                     <Ellipsis />
                 </div>
 
@@ -18,3 +19,10 @@ export default () => (
         </div>
     </div>
 );
+
+AppLoading.propTypes = {
+    text: PropTypes.string.isRequired,
+};
+
+export default AppLoading;
+

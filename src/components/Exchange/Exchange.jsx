@@ -8,10 +8,10 @@ import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
 import Ellipsis from '../Common/Ellipsis/Ellipsis';
 import AssetPair from '../Common/AssetPair/AssetPair';
-import Generic from '../Common/Generic/Generic';
 import NotFound from '../NotFound/NotFound';
 import { isIE, isEdge } from '../../lib/BrowserSupport';
 import images from '../../images';
+import AppLoading from '../AppLoading/AppLoading';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';
@@ -278,10 +278,7 @@ export default class Exchange extends React.Component {
                     <Ellipsis />
                 </div>
             ) : (
-                <Generic title="Loading orderbook">
-                    Loading orderbook data from Horizon
-                    <Ellipsis />
-                </Generic>
+                <AppLoading text="Loading orderbook data from Horizon" />
             );
         }
 
