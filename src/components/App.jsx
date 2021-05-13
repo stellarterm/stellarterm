@@ -22,7 +22,7 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import BuyCrypto from './BuyCrypto/BuyCrypto';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
-import DirectoryLoading from './DirectoryLoading/DirectoryLoading';
+import AppLoading from './AppLoading/AppLoading';
 
 window.React = React;
 const mountNode = document.getElementById('app');
@@ -186,7 +186,7 @@ class TermApp extends React.Component {
 
                                         <Route component={NotFound} />
                                     </Switch>) :
-                                    <DirectoryLoading />
+                                    <AppLoading text="Directory data loading" />
                                 }
                                 <PopupAlert d={d} />
                             </div>
