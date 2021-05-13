@@ -36,6 +36,15 @@ export default class Exchange extends React.Component {
         this.unsubSession = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
+
+        this.isPairSet = false;
+
+        this.unsubTicker = this.props.d.ticker.event.sub(() => {
+            if (!this.isPairSet) {
+                this.getTradePair();
+            }
+        });
+
         this.ubsubHistory = this.props.history.listen(() => {
             if (this.props.history.action === 'POP') {
                 this.props.d.orderbook.data.closeOrderbookStream();
@@ -71,6 +80,7 @@ export default class Exchange extends React.Component {
         this.unsub();
         this.unsubSession();
         this.ubsubHistory();
+        this.unsubTicker();
         document.removeEventListener('keyup', this._handleKeyUp);
         document.removeEventListener('webkitfullscreenchange', this._escExitFullscreen);
         document.removeEventListener('mozfullscreenchange', this._escExitFullscreen);
@@ -166,8 +176,12 @@ export default class Exchange extends React.Component {
     }
 
     getTradePair() {
+        if (!this.props.d.ticker.ready) {
+            return;
+        }
         const { pathname } = window.location;
         const urlParts = pathname.split('/');
+        this.isPairSet = true;
         if (urlParts.length === 4) {
             try {
                 const baseBuying = Stellarify.parseAssetSlug(urlParts[2]);
