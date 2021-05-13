@@ -5,21 +5,21 @@ import screenfull from 'screenfull';
 import directory from 'stellarterm-directory';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
+import Ellipsis from '../Common/Ellipsis/Ellipsis';
+import AssetPair from '../Common/AssetPair/AssetPair';
+import Generic from '../Common/Generic/Generic';
+import NotFound from '../NotFound/NotFound';
+import images from '../../images';
+import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
+import { isIE, isEdge } from '../../lib/BrowserSupport';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';
 import PairPicker from './PairPicker/PairPicker';
 import LightweightChart from './LightweightChart/LightweightChart';
 import MarketsHistory from './MarketsHistory/MarketsHistory';
-import Ellipsis from '../Common/Ellipsis/Ellipsis';
-import Generic from '../Common/Generic/Generic';
-import AssetPair from '../Common/AssetPair/AssetPair';
-import NotFound from '../NotFound/NotFound';
-import images from '../../images';
 import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
-import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
-import { isIE, isEdge } from '../../lib/BrowserSupport';
 
 const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
@@ -35,14 +35,6 @@ export default class Exchange extends React.Component {
         });
         this.unsubSession = this.props.d.session.event.sub(() => {
             this.forceUpdate();
-        });
-
-        this.isPairSet = false;
-
-        this.unsubTicker = this.props.d.ticker.event.sub(() => {
-            if (!this.isPairSet) {
-                this.getTradePair();
-            }
         });
 
         this.ubsubHistory = this.props.history.listen(() => {
@@ -79,7 +71,6 @@ export default class Exchange extends React.Component {
         this.unsub();
         this.unsubSession();
         this.ubsubHistory();
-        this.unsubTicker();
         document.removeEventListener('keyup', this._handleKeyUp);
         document.removeEventListener('webkitfullscreenchange', this._escExitFullscreen);
         document.removeEventListener('mozfullscreenchange', this._escExitFullscreen);
@@ -175,12 +166,8 @@ export default class Exchange extends React.Component {
     }
 
     getTradePair() {
-        if (!this.props.d.ticker.ready) {
-            return;
-        }
         const { pathname } = window.location;
         const urlParts = pathname.split('/');
-        this.isPairSet = true;
         if (urlParts.length === 4) {
             try {
                 const baseBuying = Stellarify.parseAssetSlug(urlParts[2]);
