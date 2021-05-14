@@ -7,7 +7,6 @@ import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
 import { signTransaction } from '@stellar/freighter-api';
-import directory from 'stellarterm-directory';
 import Stellarify from '../lib/Stellarify';
 import TransformTrezorTransaction from './TransformTrezorTransaction';
 import ErrorHandler from './ErrorHandler';
