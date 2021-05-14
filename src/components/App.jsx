@@ -22,6 +22,7 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import BuyCrypto from './BuyCrypto/BuyCrypto';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
+import faviconHandler from '../lib/faviconUtils';
 import AppLoading from './AppLoading/AppLoading';
 
 window.React = React;
@@ -111,6 +112,11 @@ class TermApp extends React.Component {
                 e.returnValue = 'You will be logged out after reload!';
             }
         };
+
+        this.unsub = this.props.d.session.event.sub(() => {
+            const { state, unfundedAccountId, account } = this.props.d.session;
+            faviconHandler(state, unfundedAccountId, account);
+        });
     }
 
     render() {
