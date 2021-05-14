@@ -389,12 +389,16 @@ const MagicSpoon = {
         });
     },
 
-    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, LIMIT) {
+    async tradeAggregation(Server, baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION, LIMIT) {
         const limit = LIMIT || 100;
-        const START_TIME = 1514764800; // 01/01/2018
-        const END_TIME = Date.now() + 86400000; // Current time + 1 day
         // TODO: Iteration throught next() with binding to chart scroll
-        return Server.tradeAggregation(baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION * 1000, 0)
+        return Server.tradeAggregation(
+            baseBuying,
+            counterSelling,
+            START_TIME * 1000,
+            ((END_TIME * 1000) + (RESOLUTION * 1000)),
+            RESOLUTION * 1000, 0,
+        )
             .limit(limit)
             .order('desc')
             .call()

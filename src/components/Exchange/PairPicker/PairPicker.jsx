@@ -10,11 +10,10 @@ import { getReadableNumber } from '../LightweightChart/ConverterOHLC';
 import { niceRound } from '../../../lib/Format';
 
 const RESOLUTION_MINUTE = 60;
-// 24 hour = 96 section of 15 min;
 // 15 min = 900 s
 const RESOLUTION_15_MINUTES = 900;
-const LIMIT_15_MINUTES = 96;
-const PERIOD = 86400000;
+// period 24h
+const PERIOD = 86400;
 
 export default class PairPicker extends React.Component {
     static get24ChangesPercent(state) {
@@ -126,15 +125,17 @@ export default class PairPicker extends React.Component {
         const { d } = this.props;
         const { baseBuying, counterSelling } = d.orderbook.data;
         const pairWithoutLumen = !baseBuying.isNative() && !counterSelling.isNative();
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - PERIOD;
 
         const lastTradesWithStep15min =
-            await d.orderbook.handlers.getTrades(RESOLUTION_15_MINUTES, LIMIT_15_MINUTES);
+            await d.orderbook.handlers.getTrades(startDate, endDate, RESOLUTION_15_MINUTES);
 
-        const lastMinutesTrade = await d.orderbook.handlers.getTrades(RESOLUTION_MINUTE, 1);
+        const lastMinutesTrade = await d.orderbook.handlers.getTrades(startDate, endDate, RESOLUTION_MINUTE, 1);
 
         const counterWithLumenLastTrade = pairWithoutLumen ?
             await MagicSpoon.tradeAggregation(d.Server, counterSelling, StellarSdk.Asset.native(),
-                RESOLUTION_MINUTE, 1) :
+                startDate, endDate, RESOLUTION_MINUTE, 1) :
             'notRequired';
 
 
@@ -150,8 +151,7 @@ export default class PairPicker extends React.Component {
             });
             return;
         }
-        const last24HourTrades = lastTradesWithStep15min.records
-            .filter(record => ((new Date() - record.timestamp) < PERIOD));
+        const last24HourTrades = lastTradesWithStep15min.records;
 
         this.setState({
             last24HourTrades,
