@@ -31,7 +31,6 @@ export default class Sep24ModalFooter extends React.Component {
         });
     }
 
-
     getNewModal(dataToModal) {
         const { d } = this.props;
 
@@ -55,9 +54,10 @@ export default class Sep24ModalFooter extends React.Component {
         } = this.props;
         const { isPending } = this.state;
 
-        const cancelBtnText = (transaction &&
-            (transaction.status === 'pending_user_transfer_start' || transaction.status === 'completed')) ?
-            'Close' : 'Cancel';
+        const cancelBtnText =
+            transaction && (transaction.status === 'pending_user_transfer_start' || transaction.status === 'completed')
+                ? 'Close'
+                : 'Cancel';
 
         const cancelButton = (
             <button
@@ -66,33 +66,26 @@ export default class Sep24ModalFooter extends React.Component {
                 onClick={() => {
                     window.history.pushState({}, null, '/');
                     d.modal.handlers.cancel();
-                }}>
+                }}
+            >
                 {cancelBtnText}
             </button>
         );
 
         const finishButton = (
-            <button
-                className="s-button"
-                onClick={() => d.modal.handlers.finish()}>
+            <button className="s-button" onClick={() => d.modal.handlers.finish()}>
                 Done
             </button>
         );
 
         if (isLoading || isAnyError || noActionBtn) {
-            return (
-                <div className="Action_buttons">
-                    {cancelButton}
-                </div>
-            );
+            return <div className="Action_buttons">{cancelButton}</div>;
         }
 
         if (withdrawCompleted) {
             return (
                 <div className="Action_buttons">
-                    <button
-                        className="s-btn_cancel"
-                        onClick={() => this.onClickWithdrawDone()}>
+                    <button className="s-btn_cancel" onClick={() => this.onClickWithdrawDone()}>
                         Back to details
                     </button>
                 </div>
@@ -112,7 +105,8 @@ export default class Sep24ModalFooter extends React.Component {
                     <button
                         className="s-button"
                         disabled={isAnyError || isLoading || isPending}
-                        onClick={() => this.sendWithdrawAsset()}>
+                        onClick={() => this.sendWithdrawAsset()}
+                    >
                         {isPending ? <div className="nk-spinner" /> : 'Withdraw'}
                     </button>
                 </div>
@@ -120,9 +114,7 @@ export default class Sep24ModalFooter extends React.Component {
         }
 
         return isCompleted ? (
-            <div className="Action_buttons">
-                {finishButton}
-            </div>
+            <div className="Action_buttons">{finishButton}</div>
         ) : (
             <div className="Action_buttons">
                 {cancelButton}
@@ -131,7 +123,7 @@ export default class Sep24ModalFooter extends React.Component {
                     <button className="s-button" onClick={() => this.props.openAnchorWindow()}>
                         {windowClosed ? 'Retry' : 'Continue'}
                     </button>
-                ) : null }
+                ) : null}
             </div>
         );
     }
@@ -232,13 +224,21 @@ export default class Sep24ModalFooter extends React.Component {
 
                 <div className="Modal_footer">
                     <div className="transaction_support">
-                        <span>Having issues with your transaction?</span>
-                        <span>
-                            Contact anchor support at{' '}
-                            <a href={`mailto:${supportMail}`} target="_blank" rel="nofollow noopener noreferrer">
-                                {supportMail}
-                            </a>
-                        </span>
+                        {supportMail && (
+                            <React.Fragment>
+                                <span>Having issues with your transaction?</span>
+                                <span>
+                                    Contact anchor support at{' '}
+                                    <a
+                                        href={`mailto:${supportMail}`}
+                                        target="_blank"
+                                        rel="nofollow noopener noreferrer"
+                                    >
+                                        {supportMail}
+                                    </a>
+                                </span>
+                            </React.Fragment>
+                        )}
                     </div>
 
                     {this.getActionButtons()}

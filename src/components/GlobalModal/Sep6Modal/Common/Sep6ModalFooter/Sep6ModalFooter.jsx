@@ -23,7 +23,7 @@ export default class Sep6ModalFooter extends React.Component {
         const { withdrawRequest, asset, isDeposit, requestParams } = this.props;
         this.setState({ isPending: true, isError: false, errorMsg: '' });
 
-        withdrawRequest().then((res) => {
+        withdrawRequest().then(res => {
             const kycStatusTypes = new Set(['denied', 'pending']);
             const isInteractive = res.type === 'interactive_customer_info_needed';
             const isKycError = kycStatusTypes.has(res.status) && res.type === 'customer_info_status';
@@ -88,7 +88,8 @@ export default class Sep6ModalFooter extends React.Component {
                     onClick={() => {
                         window.history.pushState({}, null, '/');
                         d.modal.handlers.cancel();
-                    }}>
+                    }}
+                >
                     Cancel
                 </button>
 
@@ -96,7 +97,8 @@ export default class Sep6ModalFooter extends React.Component {
                     <button
                         className="s-button"
                         disabled={isAnyError || isLoading || neededKyc}
-                        onClick={confirmFunction}>
+                        onClick={confirmFunction}
+                    >
                         {isPending ? <div className="nk-spinner" /> : confirmButtonText}
                     </button>
                 )}
@@ -163,7 +165,7 @@ export default class Sep6ModalFooter extends React.Component {
                         withdrawCompleted: true,
                     });
                 })
-                .catch((e) => {
+                .catch(e => {
                     this.setState({
                         isPending: false,
                         isError: true,
@@ -193,13 +195,21 @@ export default class Sep6ModalFooter extends React.Component {
 
                 <div className="Modal_footer">
                     <div className="transaction_support">
-                        <span>Having issues with your transaction?</span>
-                        <span>
-                            Contact anchor support at{' '}
-                            <a href={`mailto:${supportMail}`} target="_blank" rel="nofollow noopener noreferrer">
-                                {supportMail}
-                            </a>
-                        </span>
+                        {supportMail && (
+                            <React.Fragment>
+                                <span>Having issues with your transaction?</span>
+                                <span>
+                                    Contact anchor support at{' '}
+                                    <a
+                                        href={`mailto:${supportMail}`}
+                                        target="_blank"
+                                        rel="nofollow noopener noreferrer"
+                                    >
+                                        {supportMail}
+                                    </a>
+                                </span>
+                            </React.Fragment>
+                        )}
                     </div>
 
                     {this.getActionButtons()}

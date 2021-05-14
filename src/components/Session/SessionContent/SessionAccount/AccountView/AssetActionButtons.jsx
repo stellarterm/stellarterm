@@ -8,6 +8,21 @@ import images from '../../../../../images';
 import Stellarify from '../../../../../lib/Stellarify';
 
 export default class AssetActionButtons extends React.Component {
+    static getBuyLumensLink(isXLMNative) {
+        if (!isXLMNative) {
+            return null;
+        }
+
+        return (
+            <Link to="/buy-crypto?code=xlm">
+                <div className="actionBtn">
+                    <div className="btnHint btnHint_wide">Buy lumens</div>
+                    <img className="actionBtn_icon" src={images['icon-deposit']} alt="withdraw" />
+                </div>
+            </Link>
+        );
+    }
+
     constructor(props) {
         super(props);
 
@@ -25,25 +40,6 @@ export default class AssetActionButtons extends React.Component {
             isDeposit,
             asset: directoryAsset,
         });
-    }
-
-    getBuyCryptoLobsterLink(isXLMNative) {
-        const { account, unfundedAccountId } = this.props.d.session;
-        const accountID = account === null ? unfundedAccountId : account.accountId();
-        const targetAddressParam = `?target_address=${accountID}`;
-
-        if (!isXLMNative) { return null; }
-
-        return (
-            <a
-                href={`https://lobstr.co/buy-crypto${targetAddressParam}`}
-                target="_blank" rel="nofollow noopener noreferrer">
-                <div className="actionBtn">
-                    <div className="btnHint btnHint_wide">Buy lumens</div>
-                    <img className="actionBtn_icon" src={images['icon-deposit']} alt="withdraw" />
-                </div>
-            </a>
-        );
     }
 
     render() {
@@ -81,12 +77,12 @@ export default class AssetActionButtons extends React.Component {
                     </div>
                 ) : null}
 
-                {this.getBuyCryptoLobsterLink(isXLMNative)}
+                {this.constructor.getBuyLumensLink(isXLMNative)}
 
                 <Link
                     to={`/account/send?asset=${Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer))}`}
-                    onClick={() => this.props.d.send.resetSendForm()}>
-
+                    onClick={() => this.props.d.send.resetSendForm()}
+                >
                     <div className="actionBtn">
                         <div className="btnHint">Send</div>
                         <img className="actionBtn_icon" src={images['icon-send']} alt="send" />

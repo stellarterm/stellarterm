@@ -22,13 +22,11 @@ export default class AcceptTerms extends React.Component {
                         type="checkbox"
                         checked={this.state.termsAccepted}
                         readOnly
-                        onClick={() => this.setState({ termsAccepted: !this.state.termsAccepted })} />
+                        onClick={() => this.setState({ termsAccepted: !this.state.termsAccepted })}
+                    />
                     <span className="LoginPage__accept__label">
                         I accept the{' '}
-                        <Link
-                            to="/terms-of-use/"
-                            className="LoginPage__accept__link"
-                            target="_blank">
+                        <Link to="/terms-of-use/" className="LoginPage__accept__link" target="_blank">
                             Terms of Use
                         </Link>
                         , understand the risks associated with cryptocurrencies, and know that StellarTerm does not
@@ -36,17 +34,19 @@ export default class AcceptTerms extends React.Component {
                     </span>
                 </label>
 
-                <div className="LoginPage__submitBlock">
+                <div>
                     <input
                         type="submit"
                         className="LoginPage__button"
                         onClick={funcOnSubmit}
                         value={loginButtonText}
-                        disabled={!this.state.termsAccepted} />
-                    {withSignUpLink &&
+                        disabled={!this.state.termsAccepted}
+                    />
+                    {withSignUpLink && (
                         <span className="LoginPage__signupInvite">
                             Don&#39;t have an account? <Link to="/signup/">Create new account</Link>
-                        </span>}
+                        </span>
+                    )}
                 </div>
             </React.Fragment>
         );

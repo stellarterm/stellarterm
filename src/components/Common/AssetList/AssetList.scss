@@ -65,12 +65,6 @@
             display: table-cell;
             vertical-align: middle;
 
-            .changePositive {
-                color: $s-color-primary3;
-            }
-            .changeNegative {
-                color: darken($s-color-alert, 5%);
-            }
             .tradeLink {
                 border-bottom: 1px dotted $s-color-neutral5;
             }
@@ -109,7 +103,7 @@
 }
 
 .AssetListFooter {
-    font-size: $s-scale-6;
+    font-size: $s-scale-4;
     text-align: center;
     padding: 12px 18px;
     color: $s-color-neutral5;
