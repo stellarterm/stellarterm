@@ -5,12 +5,13 @@ import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from 'trezor-connect';
 import { getPublicKey } from '@stellar/freighter-api';
 import FastAverageColor from 'fast-average-color';
-import directory from 'stellarterm-directory';
 import isElectron from 'is-electron';
+import directory from 'stellarterm-directory';
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
+import * as EnvConsts from '../../env-consts';
 
 export default function Send(driver) {
     this.event = new Event();
@@ -47,12 +48,12 @@ export default function Send(driver) {
         const { time, directoryBuild, assets: localStorageAssets = [] } = knownAssetsData;
         const periodUpdate = 14 * 24 * 60 * 60 * 1000;
 
-        const frontendDirectoryBuild = directory.getBuildId();
+        const frontendDirectoryBuild = directory.buildID;
 
         if (
             localStorageAssets.length &&
-            new Date() - new Date(time) < periodUpdate &&
-            Number(directoryBuild) === frontendDirectoryBuild
+            ((new Date() - new Date(time)) < periodUpdate) &&
+            String(directoryBuild) === String(frontendDirectoryBuild)
         ) {
             this.addKnownAssetDataCalled = true;
             return Promise.resolve();
@@ -103,7 +104,8 @@ export default function Send(driver) {
             this.addKnownAssetDataCalled = true;
         });
     };
-    this.addKnownAssetDataPromise = this.addKnownAssetData();
+    this.addKnownAssetDataPromise = directory.initializeIssuerOrgs(EnvConsts.ANCHORS_URL)
+        .then(() => this.addKnownAssetData());
 
     // Ping the Ledger device to see if it is connected
     this.tryConnectLedger = () =>

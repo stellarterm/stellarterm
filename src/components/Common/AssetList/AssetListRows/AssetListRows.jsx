@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import directory from 'stellarterm-directory';
 import _ from 'lodash';
+import directory from 'stellarterm-directory';
 import { niceNumDecimals, get24hChangePercent } from '../../../../lib/Format';
 import Printify from '../../../../lib/Printify';
 import Ticker from '../../../../lib/api/Ticker';
