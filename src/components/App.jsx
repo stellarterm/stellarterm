@@ -3,7 +3,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import * as StellarSdk from 'stellar-sdk';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
-import createStellarIdenticon from 'stellar-identicon-js';
 import PropTypes from 'prop-types';
 import Driver from '../lib/Driver';
 import { isIE, isEdge } from '../lib/BrowserSupport';
@@ -23,6 +22,7 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import BuyCrypto from './BuyCrypto/BuyCrypto';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
+import faviconHandler from '../lib/faviconUtils';
 
 window.React = React;
 const mountNode = document.getElementById('app');
@@ -74,32 +74,6 @@ const parseUrl = href => {
 };
 
 class TermApp extends React.Component {
-    static changeFaviconToIdenticon(accountId) {
-        const identiconImg = createStellarIdenticon(accountId).toDataURL();
-
-        const links = document.getElementsByTagName('link');
-
-        if (!links) {
-            return;
-        }
-
-        // eslint-disable-next-line no-restricted-syntax
-        for (const link of links) {
-            if (link.getAttribute('rel').includes('icon')) {
-                link.href = identiconImg;
-            }
-        }
-    }
-
-    static setDefaultFavicon() {
-        const links = document.getElementsByTagName('link');
-        // eslint-disable-next-line no-restricted-syntax
-        for (const link of links) {
-            if (link.getAttribute('rel').includes('icon')) {
-                link.href = '/favicon.ico';
-            }
-        }
-    }
     constructor(props) {
         super(props);
         this.d = props.d;
@@ -129,21 +103,8 @@ class TermApp extends React.Component {
         };
 
         this.unsub = this.props.d.session.event.sub(() => {
-            switch (this.props.d.session.state) {
-                case 'unfunded': {
-                    const { unfundedAccountId } = this.props.d.session;
-                    this.constructor.changeFaviconToIdenticon(unfundedAccountId);
-                    break;
-                }
-                case 'in': {
-                    const { account_id: accountId } = this.props.d.session.account;
-                    this.constructor.changeFaviconToIdenticon(accountId);
-                    break;
-                }
-                default: {
-                    this.constructor.setDefaultFavicon();
-                }
-            }
+            const { state, unfundedAccountId, account } = this.props.d.session;
+            faviconHandler(state, unfundedAccountId, account);
         });
     }
 
