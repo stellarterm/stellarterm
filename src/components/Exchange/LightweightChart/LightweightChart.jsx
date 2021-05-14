@@ -15,7 +15,20 @@ import UtcTimeString from './UtcTimeString/UtcTimeString';
 import ChartDataPanel from './ChartDataPanel/ChartDataPanel';
 import FullscreenScrollBlock from './FullscreenScrollBlock/FullscreenScrollBlock';
 
-const AGGREGATIONS_COUNT = 1000;
+const AGGREGATIONS_DEPS = {
+    // 3 days
+    60: 3 * 24 * 60 * 60,
+    // 1 week
+    300: 7 * 24 * 60 * 60,
+    // 1 month
+    900: 31 * 24 * 60 * 60,
+    // 6 months
+    3600: 6 * 31 * 24 * 60 * 60,
+    // 3 years
+    86400: 3 * 12 * 31 * 24 * 60 * 60,
+    // 5 years
+    604800: 5 * 12 * 31 * 24 * 60 * 60,
+};
 
 export default class LightweightChart extends React.Component {
     constructor(props) {
@@ -90,7 +103,7 @@ export default class LightweightChart extends React.Component {
         if (fullHistoryLoaded) { return; }
 
         const endDate = Math.round(Date.now() / 1000);
-        const startDate = endDate - (timeFrame * AGGREGATIONS_COUNT);
+        const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
 
         handlers.getTrades(startDate, endDate, timeFrame, 100).then(res => {
             if (!res) {
