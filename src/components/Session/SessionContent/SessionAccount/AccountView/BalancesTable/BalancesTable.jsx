@@ -87,7 +87,10 @@ export default function BalancesTable(props) {
         <thead>
             <tr className="BalancesTable__head">
                 {TABLE_HEADERS.map(headerName => (
-                    <td className="BalancesTable__head__cell BalancesTable__row__item--heading BalancesTable__head__asset">
+                    <td
+                        className="BalancesTable__head__cell BalancesTable__row__item--heading BalancesTable__head__asset"
+                        key={headerName}
+                    >
                         {headerName}
                     </td>
                 ))}
