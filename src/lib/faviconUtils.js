@@ -1,28 +1,11 @@
 import createStellarIdenticon from 'stellar-identicon-js';
 
-function changeFaviconToIdenticon(accountId) {
-    const identiconImg = createStellarIdenticon(accountId).toDataURL();
-
-    const links = document.getElementsByTagName('link');
-
-    if (!links) {
-        return;
-    }
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const link of links) {
-        if (link.getAttribute('rel').includes('icon')) {
-            link.href = identiconImg;
-        }
-    }
-}
-
-function setDefaultFavicon() {
+function setFavicon(favicon = '/favicon.ico') {
     const links = document.getElementsByTagName('link');
     // eslint-disable-next-line no-restricted-syntax
     for (const link of links) {
         if (link.getAttribute('rel').includes('icon')) {
-            link.href = '/favicon.ico';
+            link.href = favicon;
         }
     }
 }
@@ -30,16 +13,17 @@ function setDefaultFavicon() {
 export default function faviconHandler(state, unfundedAccountId, account) {
     switch (state) {
         case 'unfunded': {
-            changeFaviconToIdenticon(unfundedAccountId);
+            const identiconImg = createStellarIdenticon(unfundedAccountId).toDataURL();
+            setFavicon(identiconImg);
             break;
         }
         case 'in': {
-            const { account_id: accountId } = account;
-            changeFaviconToIdenticon(accountId);
+            const identiconImg = createStellarIdenticon(account.account_id).toDataURL();
+            setFavicon(identiconImg);
             break;
         }
         default: {
-            setDefaultFavicon();
+            setFavicon();
         }
     }
 }
