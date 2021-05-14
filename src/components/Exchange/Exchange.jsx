@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
 import screenfull from 'screenfull';
+import directory from 'stellarterm-directory';
 import { PriceScaleMode } from '../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
 import Driver from '../../lib/Driver';
 import Stellarify from '../../lib/Stellarify';
-import { isIE, isEdge } from '../../lib/BrowserSupport';
-import Generic from '../Common/Generic/Generic';
+import Ellipsis from '../Common/Ellipsis/Ellipsis';
 import AssetPair from '../Common/AssetPair/AssetPair';
 import NotFound from '../NotFound/NotFound';
 import images from '../../images';
-import Ellipsis from '../Common/Ellipsis/Ellipsis';
+import { isIE, isEdge } from '../../lib/BrowserSupport';
+import AppLoading from '../AppLoading/AppLoading';
+import Generic from '../Common/Generic/Generic';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';
@@ -36,6 +37,7 @@ export default class Exchange extends React.Component {
         this.unsubSession = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
+
         this.ubsubHistory = this.props.history.listen(() => {
             if (this.props.history.action === 'POP') {
                 this.props.d.orderbook.data.closeOrderbookStream();
@@ -277,10 +279,7 @@ export default class Exchange extends React.Component {
                     <Ellipsis />
                 </div>
             ) : (
-                <Generic title="Loading orderbook">
-                    Loading orderbook data from Horizon
-                    <Ellipsis />
-                </Generic>
+                <AppLoading text="Loading orderbook data from Horizon" />
             );
         }
 
@@ -289,7 +288,7 @@ export default class Exchange extends React.Component {
         const directoryAsset = directory.getAssetByAccountId(data.baseBuying.code, data.baseBuying.issuer);
 
         let offermakers;
-        if (directoryAsset !== null && directoryAsset.disabled !== undefined) {
+        if (directoryAsset !== null && directoryAsset.disabled) {
             offermakers = (
                 <div className="Exchange__orderbookDisabled">
                     Offer making has been disabled for this pair. You may still cancel your existing offers below.
