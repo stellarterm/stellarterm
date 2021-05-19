@@ -175,8 +175,8 @@ class Header extends React.Component {
                             </Link>
                             {this.createHeaderTab('/markets/', 'Markets')}
                             {this.createHeaderTab('/exchange/', 'Exchange')}
-                            {this.getBuyCryptoLobsterLink()}
                             {this.createHeaderTab('/account/', 'Account')}
+                            {this.getBuyCryptoLobsterLink()}
                             {!isElectron() ? this.createHeaderTab('/download/', 'Download') : null}
                         </nav>
 
