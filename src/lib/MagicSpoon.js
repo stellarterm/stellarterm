@@ -29,7 +29,8 @@ const _hexToByteArray = str => {
 
 const MagicSpoon = {
     async Account(Server, keypair, opts, onUpdate) {
-        const sdkAccount = await Server.loadAccount(keypair.publicKey());
+        this.Server = Server;
+        const sdkAccount = await this.Server.loadAccount(keypair.publicKey());
         this.bip32Path = opts.bip32Path;
         this.authType = opts.authType;
 
@@ -72,7 +73,7 @@ const MagicSpoon = {
             console.log('Signing with Freighter extension');
             try {
                 const result = await signTransaction(tx.toEnvelope().toXDR('base64'));
-                return new StellarSdk.Transaction(result, Server.networkPassphrase);
+                return new StellarSdk.Transaction(result, this.Server.networkPassphrase);
             } catch (e) {
                 return Promise.reject(e);
             }
@@ -170,7 +171,7 @@ const MagicSpoon = {
             return nativeBalances.concat(knownBalances, unknownBalances);
         };
 
-        const accountEventsClose = Server.accounts()
+        const startAccountStream = (server) => server.accounts()
             .accountId(keypair.publicKey())
             .stream({
                 onmessage: res => {
@@ -199,6 +200,14 @@ const MagicSpoon = {
                 },
             });
 
+        let accountEventsClose = startAccountStream(this.Server);
+
+        sdkAccount.restartAccountStream = (server) => {
+            accountEventsClose();
+            this.Server = server;
+            accountEventsClose = startAccountStream(server);
+        };
+
         sdkAccount.decrementSequence = () => {
             sdkAccount._baseAccount.sequence = sdkAccount._baseAccount.sequence.sub(1);
             window.s = sdkAccount._baseAccount.sequence;
@@ -206,7 +215,7 @@ const MagicSpoon = {
         };
 
         sdkAccount.refresh = async () => {
-            const newAccount = await Server.loadAccount(keypair.publicKey());
+            const newAccount = await this.Server.loadAccount(keypair.publicKey());
             sdkAccount.applyNewBalances(newAccount.balances);
             sdkAccount.subentry_count = newAccount.subentry_count;
             sdkAccount.home_domain = newAccount.home_domain;
@@ -321,7 +330,7 @@ const MagicSpoon = {
         // We won't miss any offers assuming that the user only updates their offers through the client
         // with just one window open at a time
         sdkAccount.updateOffers = () =>
-            Server.offers()
+            this.Server.offers()
                 .forAccount(keypair.publicKey())
                 .limit(200) // TODO: Keep iterating through next() to show more than 100 offers
                 .order('desc')

@@ -1,31 +1,27 @@
 import 'babel-polyfill';
 import BigNumber from 'bignumber.js';
-import * as StellarSdk from 'stellar-sdk';
-
 import Ticker from './api/Ticker';
 import Send from './driver/Send';
-import History from './driver/History';
+import AccountEvents from './driver/AccountEvents';
 import Session from './driver/Session';
 import Orderbook from './driver/Orderbook';
 import Modal from './driver/Modal';
+import ToastService from './driver/ToastService';
+import HorizonServer from './HorizonServer';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
-function Driver(driverOpts) {
-    this.Server = new StellarSdk.Server(driverOpts.network.horizonUrl);
-    this.Server.serverUrl = driverOpts.network.horizonUrl;
-    this.Server.transactionTimeout = 60 * 60 * 24 * 30;
-    this.Server.networkPassphrase = driverOpts.network.networkPassphrase;
-    this.Server.isTestnet = driverOpts.network.isTestnet;
-
+function Driver() {
+    this.horizonServer = new HorizonServer(this);
     this.ticker = new Ticker();
     this.session = new Session(this);
     this.orderbook = new Orderbook(this);
     this.send = new Send(this);
-    this.history = new History(this);
+    this.accountEvents = new AccountEvents(this);
     this.modal = new Modal(this);
+    this.toastService = new ToastService(this);
 
-    window.view = (accountId) => {
+    window.view = accountId => {
         this.session.handlers.logInWithPublicKey(accountId);
     };
 }

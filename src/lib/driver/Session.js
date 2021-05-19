@@ -218,7 +218,7 @@ export default function Send(driver) {
 
                 // Functions of session after sign in
                 this.handlers.addUnknownAssetData();
-                driver.history.listenNewTransactions(driver.Server, this.account.account_id);
+                driver.accountEvents.listenAccountEvents(driver.Server, this.account.account_id);
                 this.event.trigger('login');
             } catch (e) {
                 if (this.brakeUnfundedCheck) {
