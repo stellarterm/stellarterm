@@ -17,6 +17,8 @@ import ErrorHandler from './ErrorHandler';
 // should ever use the spoon.
 
 const fee = 10000;
+const PERIOD_24H = 86400;
+
 const _hexToByteArray = str => {
     const result = [];
     let hex = str;
@@ -406,6 +408,21 @@ const MagicSpoon = {
             .catch(error => {
                 console.error(ErrorHandler(error));
             });
+    },
+    async getLast24hAggregationsWithStep15min(Server, base, counter) {
+        const RESOLUTION_15_MINUTES = 900;
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - PERIOD_24H;
+
+        return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_15_MINUTES, 100);
+    },
+    async getLastMinuteAggregation(Server, base, counter) {
+        const RESOLUTION_MINUTE = 60;
+
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - PERIOD_24H;
+
+        return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_MINUTE, 1);
     },
     pairTrades(Server, baseBuying, counterSelling, LIMIT) {
         const limit = LIMIT || 100;
