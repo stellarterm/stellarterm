@@ -30,7 +30,9 @@ export default function BalancesTable({ d }) {
     const [lumen, ...assets] = balancesList;
 
     const sortedAssets = assets.sort((a, b) =>
-        parseFloat(b.balanceUSD) - parseFloat(a.balanceUSD) || parseFloat(b.balance) - parseFloat(a.balance),
+        (parseFloat(b.balanceUSD === undefined ? -1 : b.balanceUSD) -
+            parseFloat(a.balanceUSD === undefined ? -1 : a.balanceUSD))
+        || parseFloat(b.balance) - parseFloat(a.balance),
     );
 
 
