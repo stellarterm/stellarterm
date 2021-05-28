@@ -63,14 +63,14 @@ class Header extends React.Component {
     }
 
     getNetworkBar() {
-        const { isDefault, horizonUrl, networkPassphrase } = this.props.network;
+        const { isDefault, currentServerUrl, networkPassphrase } = this.props.d.Server;
 
         return !isDefault ? (
             <div className="so-back Header_network">
                 <div className="so-chunk">
                     <div className="Network_bar">
                         <span>
-                            Horizon url: <strong>{horizonUrl}</strong>
+                            Horizon url: <strong>{currentServerUrl}</strong>
                         </span>
                         <span>
                             Network passphrase: <strong>{networkPassphrase}</strong>
@@ -190,13 +190,6 @@ class Header extends React.Component {
 
 Header.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    network: PropTypes.shape({
-        horizonUrl: PropTypes.string,
-        isCustom: PropTypes.bool,
-        isDefault: PropTypes.bool,
-        isTestnet: PropTypes.bool,
-        networkPassphrase: PropTypes.string,
-    }).isRequired,
     location: PropTypes.objectOf(PropTypes.any),
 };
 

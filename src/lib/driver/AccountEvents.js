@@ -1,24 +1,28 @@
-import Event from '../Event';
+import { getOperationToastTemplate } from '../../components/ToastTemplate/AccountEventsTemplates';
 
-export default class History {
+export default class AccountEvents {
     constructor(driver) {
-        this.event = new Event();
         this.driver = driver;
 
-        this.popupHistory = [];
         this.isLoading = false;
-        this.lastOpTime = 0;
+        this.unlistenAccountEvents = null;
     }
 
-    cleanSessionHistory() {
-        this.popupHistory = [];
+    restartAccountEventsListening(Server, publicKey) {
+        if (!this.unlistenAccountEvents) {
+            return;
+        }
+
+        this.unlistenAccountEvents();
+
+        this.listenAccountEvents(Server, publicKey);
     }
 
-    async listenNewTransactions(Server, publicKey) {
+    async listenAccountEvents(Server, publicKey) {
         const lastOperation = await this.getOperations(1);
         this.lastOpTime = new Date(lastOperation.records[0].created_at).getTime();
 
-        Server.effects()
+        this.unlistenAccountEvents = Server.effects()
             .forAccount(publicKey)
             .cursor('now')
             .stream({
@@ -34,15 +38,18 @@ export default class History {
 
         if (this.lastOpTime === new Date(lastOperations.records[0].created_at).getTime()) { return; }
 
-        const opsToShow = lastOperations.records.map((op) => {
+        const opsToShow = lastOperations.records.map(op => {
             const opTime = new Date(op.created_at).getTime();
             if (this.lastOpTime >= opTime) { return null; }
             return op;
         }).filter(op => op !== null);
 
-        this.popupHistory = opsToShow.concat(this.popupHistory);
+        opsToShow.forEach(op => {
+            const template = getOperationToastTemplate(op);
+            this.driver.toastService.successTemplate(template);
+        });
+
         this.lastOpTime = new Date(opsToShow[0].created_at).getTime();
-        this.event.trigger();
     }
 
     async getOperations(opLimit) {
