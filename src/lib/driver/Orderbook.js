@@ -28,10 +28,18 @@ export default class Orderbook {
                     return;
                 }
 
+                if (this.data.closeOrderbookStream) {
+                    this.data.closeOrderbookStream();
+                }
+
                 this.data = new MagicSpoon.Orderbook(driver.Server, base, counter, () => {
                     this.event.trigger();
                     driver.session.forceUpdateAccountOffers();
                 });
+            },
+            stopOrderbook: () => {
+                this.data.ready = false;
+                this.data.closeOrderbookStream();
             },
             getTrades: (START_DATE, END_DATE, RESOLUTION, LIMIT) =>
                 MagicSpoon.tradeAggregation(driver.Server, base, counter, START_DATE, END_DATE, RESOLUTION, LIMIT),

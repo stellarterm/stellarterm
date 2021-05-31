@@ -40,7 +40,6 @@ export default class Exchange extends React.Component {
 
         this.ubsubHistory = this.props.history.listen(() => {
             if (this.props.history.action === 'POP') {
-                this.props.d.orderbook.data.closeOrderbookStream();
                 this.getTradePair();
             }
         });
@@ -78,7 +77,8 @@ export default class Exchange extends React.Component {
         document.removeEventListener('mozfullscreenchange', this._escExitFullscreen);
         document.removeEventListener('fullscreenchange', this._escExitFullscreen);
         document.removeEventListener('MSFullscreenChange', this._escExitFullscreen);
-        this.props.d.orderbook.data.closeOrderbookStream();
+
+        this.props.d.orderbook.handlers.stopOrderbook();
 
         if (this.state.fullscreenMode) {
             this.toggleFullScreen();
