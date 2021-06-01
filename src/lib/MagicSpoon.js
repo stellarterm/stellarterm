@@ -365,12 +365,8 @@ const MagicSpoon = {
                 this.baseBuying = baseBuying;
                 this.counterSelling = counterSelling;
 
-                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(result => {
-                    const { records } = result || [];
-                    this.marketTradesHistory = records;
-                    this.ready = true;
-                    onUpdate(() => {});
-                });
+                this.ready = true;
+                onUpdate();
             });
 
         this.closeOrderbookStream = Server.orderbook(baseBuying, counterSelling).stream({
@@ -388,6 +384,30 @@ const MagicSpoon = {
                     onUpdate();
                 }
             },
+        });
+    },
+
+    LastTrades(Server, baseBuying, counterSelling, onUpdate) {
+        MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(result => {
+            const { records } = result || [];
+            this.marketTradesHistory = records;
+            onUpdate();
+
+            this.closeLastTradesStream = Server.trades()
+                .forAssetPair(baseBuying, counterSelling)
+                .order('asc')
+                .cursor('now')
+                .stream({
+                    onmessage: trade => {
+                        console.log(trade);
+                        this.marketTradesHistory = [trade, ...this.marketTradesHistory];
+                        onUpdate();
+                    },
+                    onerror: error => {
+                        console.log(error);
+                        this.closeLastTradesStream();
+                    },
+                });
         });
     },
 

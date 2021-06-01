@@ -10,17 +10,22 @@ import images from '../../../images';
 let prevPrice = 0;
 
 export default class MarketsHistory extends React.Component {
-    static getAccountRow(publiKey) {
-        const baseAccount = createStellarIdenticon(publiKey).toDataURL();
-        const basePublicKey = publiKey && `${publiKey.substr(0, 6)}...${publiKey.substr(-6, 6)}`;
-        return <span className="publicKey_icon"><img src={baseAccount} alt={publiKey} /> {basePublicKey}</span>;
+    static getAccountRow(publicKey) {
+        const baseAccount = createStellarIdenticon(publicKey).toDataURL();
+        const basePublicKey = publicKey && `${publicKey.substr(0, 6)}...${publicKey.substr(-6, 6)}`;
+        return <span className="publicKey_icon"><img src={baseAccount} alt={publicKey} /> {basePublicKey}</span>;
     }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            trades: this.props.d.orderbook.data.marketTradesHistory,
-        };
+    componentDidMount() {
+        this.unsub = this.props.d.orderbook.event.sub(event => {
+            if (event && event.lastTrades) {
+                this.forceUpdate();
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.unsub();
     }
 
     getRowItems(trade, rowKey, rowStyle) {
@@ -65,7 +70,7 @@ export default class MarketsHistory extends React.Component {
 
     getHistoryTable() {
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
-        const { trades } = this.state;
+        const trades = this.props.d.orderbook.lastTrades.marketTradesHistory;
         const rowHeight = 30;
         const tableHeight = trades.length > 20 ? 600 : trades.length * rowHeight;
 
@@ -108,7 +113,8 @@ export default class MarketsHistory extends React.Component {
                                         ? prevPrice
                                         : (trades[index + 1].price.n / trades[index + 1].price.d).toFixed(7);
                                     return this.getRowItems(trades[index], key, style);
-                                }} />
+                                }}
+                            />
                         )}
                     </AutoSizer>
                 </div>
@@ -117,7 +123,7 @@ export default class MarketsHistory extends React.Component {
     }
 
     render() {
-        const { trades } = this.state;
+        const trades = this.props.d.orderbook.lastTrades.marketTradesHistory;
         const noMarketTrades = !trades || trades.length === 0;
 
         const marketsTitleText = `Market trades history ${noMarketTrades ? 'is empty' : ''}`;

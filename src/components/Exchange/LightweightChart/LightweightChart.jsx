@@ -47,6 +47,14 @@ export default class LightweightChart extends React.Component {
             604800: { trades: [], volumes: [] },
         };
         this.applyChartOptions = this.applyChartOptions.bind(this);
+
+        this.debouncedUpdateLastTrades = Debounce(this.updateLastTrades.bind(this), 700);
+
+        this.unsubLastTrades = this.props.d.orderbook.event.sub(event => {
+            if (event && event.lastTrades) {
+                this.debouncedUpdateLastTrades();
+            }
+        });
     }
 
     componentDidMount() {
@@ -86,14 +94,16 @@ export default class LightweightChart extends React.Component {
         this._mounted = false;
         this.CHART.unsubscribeVisibleTimeRangeChange();
         window.removeEventListener('resize', this.applyChartOptions);
+        this.unsubLastTrades();
     }
 
     onClickTimeFrameBtn(timeFrame) {
-        this.props.onUpdate('timeFrame', timeFrame);
-        if (this.state[timeFrame].trades.length === 0) {
-            this.setState({ isLoadingInit: true });
-            this.getTrades(timeFrame);
+        if (timeFrame === this.props.timeFrame) {
+            return;
         }
+        this.props.onUpdate('timeFrame', timeFrame);
+        this.setState({ isLoadingInit: true });
+        this.getTrades(timeFrame);
     }
 
     getTrades(timeFrame) {
@@ -246,6 +256,50 @@ export default class LightweightChart extends React.Component {
             this.firstVisibleTrade,
             this.firstVisibleVolume,
         );
+    }
+
+    updateLastTrades() {
+        const { timeFrame } = this.props;
+
+        if (!this.state[timeFrame].trades.length || this.state.isLoadingInit) {
+            return;
+        }
+
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
+
+        this.props.d.orderbook.handlers.getTrades(startDate, endDate, timeFrame, 2).then(res => {
+            const { trades, volumes } = this.state[timeFrame];
+
+            const convertedLastTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
+            const convertedLastVolume = converterOHLC.getVolumeData(convertedLastTrades, this.props.d.orderbook.data);
+
+            const [secondLastTrade, lastTrade] = convertedLastTrades;
+            const [secondLastVolume, lastVolume] = convertedLastVolume;
+
+            const secondLastTradeIndex = trades.findIndex(trade => trade.time === secondLastTrade.time);
+            const lastTradeIndex = trades.findIndex(trade => trade.time === lastTrade.time);
+
+            trades[secondLastTradeIndex] = secondLastTrade;
+            volumes[secondLastTradeIndex] = secondLastVolume;
+
+            if (lastTradeIndex !== -1) {
+                trades[lastTradeIndex] = lastTrade;
+                volumes[lastTradeIndex] = lastVolume;
+            } else {
+                trades.push(lastTrade);
+                volumes.push(lastVolume);
+            }
+
+            if (this._mounted) {
+                this.setState({
+                    [timeFrame]: {
+                        trades,
+                        volumes,
+                    },
+                });
+            }
+        });
     }
 
     chartInit() {
