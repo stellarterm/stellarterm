@@ -79,6 +79,8 @@ export default class Exchange extends React.Component {
 
         this.props.d.orderbook.handlers.stopOrderbook();
 
+        this.props.d.orderbook.handlers.stopLastTradesStream();
+
         if (this.state.fullscreenMode) {
             this.toggleFullScreen();
         }
