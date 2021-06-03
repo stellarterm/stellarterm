@@ -49,7 +49,9 @@ export default class Orderbook {
                 });
             },
             stopLastTradesStream: () => {
-                this.lastTrades.closeLastTradesStream();
+                if (this.lastTrades.closeLastTradesStream) {
+                    this.lastTrades.closeLastTradesStream();
+                }
             },
 
             getTrades: (START_DATE, END_DATE, RESOLUTION, LIMIT) =>
