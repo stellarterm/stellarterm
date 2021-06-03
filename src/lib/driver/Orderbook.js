@@ -53,7 +53,9 @@ export default class Orderbook {
                 });
             },
             stopLastTradesStream: () => {
-                this.lastTrades.closeLastTradesStream();
+                if (this.lastTrades.closeLastTradesStream) {
+                    this.lastTrades.closeLastTradesStream();
+                }
             },
             stopOrderbook: () => {
                 this.data.ready = false;
