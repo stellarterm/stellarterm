@@ -399,7 +399,6 @@ const MagicSpoon = {
                 .cursor('now')
                 .stream({
                     onmessage: trade => {
-                        console.log(trade);
                         this.marketTradesHistory = [trade, ...this.marketTradesHistory];
                         onUpdate();
                     },
