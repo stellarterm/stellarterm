@@ -87,7 +87,7 @@ export default class Exchange extends React.Component {
     }
 
     getChartScreenshot() {
-        const chartIsDrawn = this.child.state[this.state.timeFrame].trades.length !== 0;
+        const chartIsDrawn = this.child.state.trades.length !== 0;
 
         if (chartIsDrawn) {
             this.child.getScreenshot();

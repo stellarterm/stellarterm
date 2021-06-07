@@ -38,13 +38,11 @@ export default class LightweightChart extends React.Component {
             pairName: this.props.pairName,
             chartInited: false,
             isLoadingNext: false,
-            isLoadingInit: true,
-            60: { trades: [], volumes: [] },
-            300: { trades: [], volumes: [] },
-            900: { trades: [], volumes: [] },
-            3600: { trades: [], volumes: [] },
-            86400: { trades: [], volumes: [] },
-            604800: { trades: [], volumes: [] },
+            isLoadingInit: false,
+            trades: [],
+            volumes: [],
+            nextTrades: null,
+            fullHistoryLoaded: false,
         };
         this.applyChartOptions = this.applyChartOptions.bind(this);
 
@@ -102,15 +100,20 @@ export default class LightweightChart extends React.Component {
             return;
         }
         this.props.onUpdate('timeFrame', timeFrame);
-        this.setState({ isLoadingInit: true });
+
         this.getTrades(timeFrame);
     }
 
     getTrades(timeFrame) {
-        const { fullHistoryLoaded } = this.state[timeFrame];
-        const { data, handlers } = this.props.d.orderbook;
+        this.setState({
+            isLoadingInit: true,
+            trades: [],
+            volumes: [],
+            nextTrades: null,
+            fullHistoryLoaded: false,
+        });
 
-        if (fullHistoryLoaded) { return; }
+        const { data, handlers } = this.props.d.orderbook;
 
         const endDate = Math.round(Date.now() / 1000);
         const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
@@ -119,12 +122,10 @@ export default class LightweightChart extends React.Component {
             if (!res) {
                 this.setState({
                     isLoadingInit: false,
-                    [timeFrame]: {
-                        trades: [],
-                        volumes: [],
-                        nextTrades: null,
-                        fullHistoryLoaded: true,
-                    },
+                    trades: [],
+                    volumes: [],
+                    nextTrades: null,
+                    fullHistoryLoaded: true,
                 });
                 return;
             }
@@ -135,12 +136,10 @@ export default class LightweightChart extends React.Component {
             if (this._mounted) {
                 this.setState({
                     isLoadingInit: false,
-                    [timeFrame]: {
-                        trades: convertedTrades,
-                        volumes: convertedVolume,
-                        nextTrades: res.next,
-                        fullHistoryLoaded: fullLoaded,
-                    },
+                    trades: convertedTrades,
+                    volumes: convertedVolume,
+                    nextTrades: res.next,
+                    fullHistoryLoaded: fullLoaded,
                 });
             }
         });
@@ -148,36 +147,33 @@ export default class LightweightChart extends React.Component {
 
     getNextTrades() {
         const { timeFrame, d } = this.props;
-        const { fullHistoryLoaded } = this.state[timeFrame];
+        const { fullHistoryLoaded } = this.state;
 
         if (fullHistoryLoaded) { return; }
 
         this.setState({ isLoadingNext: true });
-        this.state[timeFrame].nextTrades().then(res => {
+        this.state.nextTrades().then(res => {
             const fullLoaded = res.records.length === 0;
             const convertedTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
             const convertedVolume = converterOHLC.getVolumeData(convertedTrades, d.orderbook.data);
-            const concatedTrades = [...convertedTrades, ...this.state[timeFrame].trades];
-            const concatedVolumes = [...convertedVolume, ...this.state[timeFrame].volumes];
+            const concatedTrades = [...convertedTrades, ...this.state.trades];
+            const concatedVolumes = [...convertedVolume, ...this.state.volumes];
 
             if (this._mounted) {
                 this.setState({
                     isLoadingNext: false,
-                    [timeFrame]: {
-                        trades: concatedTrades,
-                        volumes: concatedVolumes,
-                        nextTrades: res.next,
-                        fullHistoryLoaded: fullLoaded,
-                    },
+                    trades: concatedTrades,
+                    volumes: concatedVolumes,
+                    nextTrades: res.next,
+                    fullHistoryLoaded: fullLoaded,
                 });
             }
         });
     }
 
     setChartData() {
-        const { timeFrame } = this.props;
-        this.ohlcSeries.setData(this.state[timeFrame].trades);
-        this.volumeSeries.setData(this.state[timeFrame].volumes);
+        this.ohlcSeries.setData(this.state.trades);
+        this.volumeSeries.setData(this.state.volumes);
     }
 
     getTimeFrameBtn(btnText, timeFrame) {
@@ -228,15 +224,15 @@ export default class LightweightChart extends React.Component {
         this.CHART.subscribeVisibleTimeRangeChange(param => {
             if (!param || !param.from) { return; }
 
-            const lastTradeElement = this.state[this.props.timeFrame].trades[0];
-            const tradesIsLoaded = this.state[this.props.timeFrame].trades.length !== 0;
+            const lastTradeElement = this.state.trades[0];
+            const tradesIsLoaded = this.state.trades.length !== 0;
 
             if (tradesIsLoaded && param.from === lastTradeElement.time && !this.state.isLoadingNext) {
                 this.getNextTrades();
             }
             // Sets first visible trade, only for screenshot
-            this.firstVisibleTrade = this.state[this.props.timeFrame].trades.find(trade => trade.time === param.to);
-            this.firstVisibleVolume = this.state[this.props.timeFrame].volumes.find(trade => trade.time === param.to);
+            this.firstVisibleTrade = this.state.trades.find(trade => trade.time === param.to);
+            this.firstVisibleVolume = this.state.volumes.find(trade => trade.time === param.to);
         });
 
         this.setState({ chartInited: true });
@@ -261,7 +257,7 @@ export default class LightweightChart extends React.Component {
     updateLastTrades() {
         const { timeFrame } = this.props;
 
-        if (!this.state[timeFrame].trades.length || this.state.isLoadingInit) {
+        if (!this.state.trades.length || this.state.isLoadingInit) {
             return;
         }
 
@@ -269,7 +265,7 @@ export default class LightweightChart extends React.Component {
         const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
 
         this.props.d.orderbook.handlers.getTrades(startDate, endDate, timeFrame, 2).then(res => {
-            const { trades, volumes, nextTrades, fullHistoryLoaded } = this.state[timeFrame];
+            const { trades, volumes, nextTrades, fullHistoryLoaded } = this.state;
 
             const convertedLastTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
             const convertedLastVolume = converterOHLC.getVolumeData(convertedLastTrades, this.props.d.orderbook.data);
@@ -293,12 +289,10 @@ export default class LightweightChart extends React.Component {
 
             if (this._mounted) {
                 this.setState({
-                    [timeFrame]: {
-                        trades,
-                        volumes,
-                        nextTrades,
-                        fullHistoryLoaded,
-                    },
+                    trades,
+                    volumes,
+                    nextTrades,
+                    fullHistoryLoaded,
                 });
             }
         });
@@ -326,10 +320,10 @@ export default class LightweightChart extends React.Component {
 
     render() {
         const { chartInited, isLoadingInit, pairName } = this.state;
-        const { trades, volumes } = this.state[this.props.timeFrame];
+        const { trades, volumes } = this.state;
         const { fullscreen } = this.props;
         const noDataFounded = trades.length === 0;
-        const showChartControls = chartInited && !isLoadingInit && !noDataFounded;
+        const showChartControls = chartInited && !isLoadingInit;
 
         return (
             <React.Fragment>
