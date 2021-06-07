@@ -227,7 +227,11 @@ export default class LightweightChart extends React.Component {
             const lastTradeElement = this.state.trades[0];
             const tradesIsLoaded = this.state.trades.length !== 0;
 
-            if (tradesIsLoaded && param.from === lastTradeElement.time && !this.state.isLoadingNext) {
+            if (
+                tradesIsLoaded && param.from === lastTradeElement.time &&
+                !this.state.isLoadingNext &&
+                !this.state.isLoadingInit
+            ) {
                 this.getNextTrades();
             }
             // Sets first visible trade, only for screenshot
