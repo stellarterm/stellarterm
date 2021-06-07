@@ -149,7 +149,7 @@ export default class LightweightChart extends React.Component {
         const { timeFrame, d } = this.props;
         const { fullHistoryLoaded } = this.state;
 
-        if (fullHistoryLoaded) { return; }
+        if (fullHistoryLoaded || !this.state.nextTrades) { return; }
 
         this.setState({ isLoadingNext: true });
         this.state.nextTrades().then(res => {
