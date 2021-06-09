@@ -185,15 +185,17 @@ export default class PairPicker extends React.Component {
         }
 
         const noChanges = changes24 === '0.00';
+        const isNaNChanges = changes24 === 'NaN';
         const changesClassName = (changes24 >= 0) ? 'positive' : 'negative';
         const lastUsdView = lastUsdPrice !== 0 ? `$${niceRound(lastUsdPrice)}` : '—';
+        const changes24View = isNaNChanges ? '—' : `${changes24}%`;
 
         return (
             <div className="PairPicker_marketsTable-content">
                 <span>{getReadableNumber(lastPrice)} {counterAssetCode}</span>
                 <span>{lastUsdView}</span>
-                <span className={noChanges ? '' : changesClassName}>
-                    <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24}%</span>
+                <span className={(noChanges || isNaNChanges) ? '' : changesClassName}>
+                    <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24View}</span>
                 </span>
                 <span>{getReadableNumber(price24high)} {counterAssetCode}</span>
                 <span>{getReadableNumber(price24low)} {counterAssetCode}</span>
