@@ -17,6 +17,8 @@ import ErrorHandler from './ErrorHandler';
 // should ever use the spoon.
 
 const fee = 10000;
+const PERIOD_24H = 86400;
+
 const _hexToByteArray = str => {
     const result = [];
     let hex = str;
@@ -363,12 +365,8 @@ const MagicSpoon = {
                 this.baseBuying = baseBuying;
                 this.counterSelling = counterSelling;
 
-                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(result => {
-                    const { records } = result || [];
-                    this.marketTradesHistory = records;
-                    this.ready = true;
-                    onUpdate(() => {});
-                });
+                this.ready = true;
+                onUpdate();
             });
 
         this.closeOrderbookStream = Server.orderbook(baseBuying, counterSelling).stream({
@@ -389,6 +387,29 @@ const MagicSpoon = {
         });
     },
 
+    LastTrades(Server, baseBuying, counterSelling, onUpdate) {
+        MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(result => {
+            const { records } = result || [];
+            this.marketTradesHistory = records;
+            onUpdate();
+
+            this.closeLastTradesStream = Server.trades()
+                .forAssetPair(baseBuying, counterSelling)
+                .order('asc')
+                .cursor('now')
+                .stream({
+                    onmessage: trade => {
+                        this.marketTradesHistory = [trade, ...this.marketTradesHistory];
+                        onUpdate();
+                    },
+                    onerror: error => {
+                        console.log(error);
+                        this.closeLastTradesStream();
+                    },
+                });
+        });
+    },
+
     async tradeAggregation(Server, baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION, LIMIT) {
         const limit = LIMIT || 100;
         // TODO: Iteration throught next() with binding to chart scroll
@@ -406,6 +427,21 @@ const MagicSpoon = {
             .catch(error => {
                 console.error(ErrorHandler(error));
             });
+    },
+    async getLast24hAggregationsWithStep15min(Server, base, counter) {
+        const RESOLUTION_15_MINUTES = 900;
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - PERIOD_24H;
+
+        return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_15_MINUTES, 100);
+    },
+    async getLastMinuteAggregation(Server, base, counter) {
+        const RESOLUTION_MINUTE = 60;
+
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - PERIOD_24H;
+
+        return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_MINUTE, 1);
     },
     pairTrades(Server, baseBuying, counterSelling, LIMIT) {
         const limit = LIMIT || 100;
