@@ -36,6 +36,10 @@ export default class Orderbook {
                     this.lastTrades.closeLastTradesStream();
                 }
 
+                if (this.data.closeOrderbookStream) {
+                    this.data.closeOrderbookStream();
+                }
+
                 this.data = new MagicSpoon.Orderbook(driver.Server, base, counter, () => {
                     this.event.trigger();
                     driver.session.forceUpdateAccountOffers();
@@ -47,6 +51,10 @@ export default class Orderbook {
                 this.lastTrades = new MagicSpoon.LastTrades(driver.Server, baseBuying, counterSelling, () => {
                     this.event.trigger({ lastTrades: true });
                 });
+            },
+            stopOrderbook: () => {
+                this.data.ready = false;
+                this.data.closeOrderbookStream();
             },
             stopLastTradesStream: () => {
                 if (this.lastTrades.closeLastTradesStream) {
