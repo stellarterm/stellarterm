@@ -12,7 +12,6 @@ import NotFound from '../NotFound/NotFound';
 import images from '../../images';
 import { isIE, isEdge } from '../../lib/BrowserSupport';
 import AppLoading from '../AppLoading/AppLoading';
-import Generic from '../Common/Generic/Generic';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';
@@ -80,13 +79,15 @@ export default class Exchange extends React.Component {
         document.removeEventListener('MSFullscreenChange', this._escExitFullscreen);
         this.props.d.orderbook.data.closeOrderbookStream();
 
+        this.props.d.orderbook.handlers.stopLastTradesStream();
+
         if (this.state.fullscreenMode) {
             this.toggleFullScreen();
         }
     }
 
     getChartScreenshot() {
-        const chartIsDrawn = this.child.state[this.state.timeFrame].trades.length !== 0;
+        const chartIsDrawn = this.child.state.trades.length !== 0;
 
         if (chartIsDrawn) {
             this.child.getScreenshot();

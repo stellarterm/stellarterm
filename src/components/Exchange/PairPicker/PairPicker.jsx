@@ -2,18 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as StellarSdk from 'stellar-sdk';
+import Debounce from 'awesome-debounce-promise';
 import Driver from '../../../lib/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import AssetPair from '../../Common/AssetPair/AssetPair';
 import MagicSpoon from '../../../lib/MagicSpoon';
 import { getReadableNumber } from '../LightweightChart/ConverterOHLC';
 import { niceRound } from '../../../lib/Format';
-
-const RESOLUTION_MINUTE = 60;
-// 15 min = 900 s
-const RESOLUTION_15_MINUTES = 900;
-// period 24h
-const PERIOD = 86400;
 
 export default class PairPicker extends React.Component {
     static get24ChangesPercent(state) {
@@ -38,6 +33,14 @@ export default class PairPicker extends React.Component {
         this.unsub = this.props.d.ticker.event.sub(() => {
             this.forceUpdate();
         });
+
+        this.debouncedGetLastTrades = Debounce(this.getLastTrades.bind(this), 700);
+
+        this.unsubLastTrades = this.props.d.orderbook.event.sub(event => {
+            if (event && event.lastTrades) {
+                this.debouncedGetLastTrades();
+            }
+        });
     }
 
     componentDidMount() {
@@ -60,7 +63,6 @@ export default class PairPicker extends React.Component {
     componentWillUnmount() {
         this._mounted = false;
         this.unsub();
-        clearTimeout(this.updateDataTimeout);
     }
 
     setChangesDirection(lastChangesDirection) {
@@ -123,21 +125,20 @@ export default class PairPicker extends React.Component {
 
     async getLastTrades() {
         const { d } = this.props;
-        const { baseBuying, counterSelling } = d.orderbook.data;
+        const { baseBuying, counterSelling, ready } = d.orderbook.data;
+        if (!ready) {
+            return;
+        }
         const pairWithoutLumen = !baseBuying.isNative() && !counterSelling.isNative();
-        const endDate = Math.round(Date.now() / 1000);
-        const startDate = endDate - PERIOD;
 
         const lastTradesWithStep15min =
-            await d.orderbook.handlers.getTrades(startDate, endDate, RESOLUTION_15_MINUTES);
+            await d.orderbook.handlers.getLast24hAggregationsWithStep15min();
 
-        const lastMinutesTrade = await d.orderbook.handlers.getTrades(startDate, endDate, RESOLUTION_MINUTE, 1);
+        const lastMinutesTrade = await d.orderbook.handlers.getLastMinuteAggregation();
 
         const counterWithLumenLastTrade = pairWithoutLumen ?
-            await MagicSpoon.tradeAggregation(d.Server, counterSelling, StellarSdk.Asset.native(),
-                startDate, endDate, RESOLUTION_MINUTE, 1) :
+            await MagicSpoon.getLastMinuteAggregation(d.Server, counterSelling, StellarSdk.Asset.native()) :
             'notRequired';
-
 
         if (!this._mounted) {
             return;
@@ -158,9 +159,6 @@ export default class PairPicker extends React.Component {
             lastMinutesTrade,
             counterWithLumenLastTrade,
         });
-
-        // Update every 15 seconds
-        this.updateDataTimeout = setTimeout(() => this.getLastTrades(), 15000);
     }
 
     getPairMarketsTableContent() {
