@@ -8,30 +8,42 @@ import { niceNumDecimals } from '../../../../lib/Format';
 import Driver from '../../../../lib/Driver';
 import PercentChange from '../../../Basics/PercentChange/PercentChange';
 
+const SHOW_MORE_STEP_SIZE = 30;
+
 export default class TopVolumeAssetList extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             minUSDValue: 0,
+            showMoreStep: SHOW_MORE_STEP_SIZE,
         };
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.sortField !== this.props.sortField
+            || prevProps.sortDirection !== this.props.sortDirection
+            || prevProps.baseAsset !== this.props.baseAsset
+        ) {
+            this.resetShowMoreStep();
+        }
     }
 
     getSortedAssets(assets) {
         const { sortField } = this.props;
         switch (sortField) {
-        case 'assetName':
-            return this.sortByField(assets, 'counterAssetCode', 'string');
-        case 'priceXLM':
-            return this.sortByField(assets, 'close', 'number');
-        case 'priceUSD':
-            return this.sortByField(assets, 'close', 'number');
-        case 'volume24h':
-            return this.sortByField(assets, 'baseVolume', 'number');
-        case 'change24h':
-            return this.sortByPercent(assets);
-        default:
-            return assets;
+            case 'assetName':
+                return this.sortByField(assets, 'counterAssetCode', 'string');
+            case 'priceXLM':
+                return this.sortByField(assets, 'close', 'number');
+            case 'priceUSD':
+                return this.sortByField(assets, 'close', 'number');
+            case 'volume24h':
+                return this.sortByField(assets, 'baseVolume', 'number');
+            case 'change24h':
+                return this.sortByPercent(assets);
+            default:
+                return assets;
         }
     }
 
@@ -58,8 +70,21 @@ export default class TopVolumeAssetList extends React.Component {
             (((b.close / b.open) - 1) - ((a.close / a.open) - 1))));
     }
 
+    increaseShowMoreStep() {
+        const { showMoreStep } = this.state;
+        this.setState({
+            showMoreStep: showMoreStep + SHOW_MORE_STEP_SIZE,
+        });
+    }
+
+    resetShowMoreStep() {
+        this.setState({
+            showMoreStep: SHOW_MORE_STEP_SIZE,
+        });
+    }
+
     render() {
-        const { minUSDValue } = this.state;
+        const { minUSDValue, showMoreStep } = this.state;
         const { d, stellarMarketsData, loadingData, lastLumenPrice, baseAsset } = this.props;
         const { code: assetCode, issuer: assetIssuer } = baseAsset;
 
@@ -90,16 +115,19 @@ export default class TopVolumeAssetList extends React.Component {
 
         const sortedAssets = this.getSortedAssets(topVolumeAssets);
 
+        const trimmedAssets = sortedAssets.slice(0, showMoreStep);
+
         return (
             <React.Fragment>
-                {sortedAssets.map((item) => {
+                {trimmedAssets.map(item => {
                     const changes = (((item.close / item.open) - 1) * 100).toFixed(2);
-                    const changesClass = +changes >= 0 ? 'changePositive' : 'changeNegative';
+
                     return (
                         <Link
                             key={item.counterAssetCode + item.counterAssetIssuer}
                             to={`/exchange/${item.counterAssetCode}-${item.counterAssetIssuer || 'native'}/${assetCode}-${assetIssuer || 'native'}`}
-                            className="TopVolume_row">
+                            className="TopVolume_row"
+                        >
 
                             <div className="TopVolume_cell">
                                 <AssetCardSeparateLogo
@@ -107,7 +135,8 @@ export default class TopVolumeAssetList extends React.Component {
                                     logoSize={30}
                                     d={d}
                                     code={item.counterAssetCode}
-                                    issuer={item.counterAssetIssuer} />
+                                    issuer={item.counterAssetIssuer}
+                                />
                             </div>
                             <div className="TopVolume_cell">
                                 <AssetCardSeparateLogo
@@ -115,7 +144,8 @@ export default class TopVolumeAssetList extends React.Component {
                                     logoSize={30}
                                     d={d}
                                     code={assetCode}
-                                    issuer={assetIssuer} />
+                                    issuer={assetIssuer}
+                                />
                             </div>
                             <div className="TopVolume_cell">
                                 <div className="TopVolume_cell-column">
@@ -157,6 +187,14 @@ export default class TopVolumeAssetList extends React.Component {
                             </div>
                         </Link>);
                 })}
+                {showMoreStep < sortedAssets.length &&
+                    <button
+                        className="s-button"
+                        onClick={() => this.increaseShowMoreStep(sortedAssets.length)}
+                    >
+                        Show more
+                    </button>
+                }
             </React.Fragment>
         );
     }

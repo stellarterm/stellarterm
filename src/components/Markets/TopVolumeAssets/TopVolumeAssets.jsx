@@ -110,7 +110,7 @@ export default class TopVolumeAssets extends React.Component {
             { title: 'Change (24h)', sortField: 'change24h', align: 'right' },
         ];
 
-        return headerCells.map((headerCell) => {
+        return headerCells.map(headerCell => {
             if (headerCell.sortField === 'withoutSort') {
                 return (
                     <div className={`TopVolume_cell withoutSort ${headerCell.align}`} key={headerCell.title}>
@@ -123,7 +123,8 @@ export default class TopVolumeAssets extends React.Component {
                 <div
                     className={`TopVolume_cell ${headerCell.align}`}
                     onClick={() => this.handleSort(headerCell.sortField)}
-                    key={headerCell.title}>
+                    key={headerCell.title}
+                >
 
                     <span>{headerCell.title}</span>
                     {this.state.sortField !== headerCell.sortField ?
@@ -131,7 +132,8 @@ export default class TopVolumeAssets extends React.Component {
                         <img
                             src={images['sort-arrow-act']}
                             alt="sortBy"
-                            className={this.state.sortDirection} />
+                            className={this.state.sortDirection}
+                        />
                     }
                 </div>
             );
@@ -202,7 +204,8 @@ export default class TopVolumeAssets extends React.Component {
                     loadingData={loadingData}
                     lastLumenPrice={lastLumenPrice}
                     sortField={sortField}
-                    sortDirection={sortDirection} />
+                    sortDirection={sortDirection}
+                />
             </div>);
     }
 }
