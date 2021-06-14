@@ -1,7 +1,8 @@
+/* eslint-disable no-console */
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import Transport from '@ledgerhq/hw-transport-u2f';
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
@@ -16,7 +17,9 @@ import ErrorHandler from './ErrorHandler';
 // should ever use the spoon.
 
 const fee = 10000;
-const _hexToByteArray = (str) => {
+const PERIOD_24H = 86400;
+
+const _hexToByteArray = str => {
     const result = [];
     let hex = str;
     while (hex.length >= 2) {
@@ -26,50 +29,48 @@ const _hexToByteArray = (str) => {
     return new Uint8Array(result);
 };
 
-
 const MagicSpoon = {
     async Account(Server, keypair, opts, onUpdate) {
         const sdkAccount = await Server.loadAccount(keypair.publicKey());
         this.bip32Path = opts.bip32Path;
         this.authType = opts.authType;
 
-        sdkAccount.signWithLedger = (transaction) => {
+        sdkAccount.signWithLedger = transaction => {
             console.log('Sending to Ledger to sign');
-            return Transport.create()
+            return TransportWebUSB.create()
                 .then(transport => new AppStellar(transport))
                 .then(app => app.signTransaction(this.bip32Path, transaction.signatureBase()))
-                .then((result) => {
+                .then(result => {
                     const signature = result.signature;
                     const hint = keypair.signatureHint();
                     const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
                     transaction.signatures.push(decorated);
                     return transaction;
                 })
-                .catch((error) => {
+                .catch(error => {
                     console.error(error);
                     return Promise.reject(error);
                 });
         };
 
-        sdkAccount.signWithTrezor = (tx) => {
+        sdkAccount.signWithTrezor = tx => {
             console.log('Sending to Trezor to sign');
             const params = TransformTrezorTransaction(this.bip32Path, tx);
 
-            return TrezorConnect.stellarSignTransaction(params)
-                .then((result) => {
-                    if (result.success) {
-                        const signature = _hexToByteArray(result.payload.signature);
-                        const hint = keypair.signatureHint();
-                        const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
-                        tx.signatures.push(decorated);
+            return TrezorConnect.stellarSignTransaction(params).then(result => {
+                if (result.success) {
+                    const signature = _hexToByteArray(result.payload.signature);
+                    const hint = keypair.signatureHint();
+                    const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
+                    tx.signatures.push(decorated);
 
-                        return tx;
-                    }
-                    return Promise.reject(result.payload);
-                });
+                    return tx;
+                }
+                return Promise.reject(result.payload);
+            });
         };
 
-        sdkAccount.signWithFreighter = async (tx) => {
+        sdkAccount.signWithFreighter = async tx => {
             console.log('Signing with Freighter extension');
             try {
                 const result = await signTransaction(tx.toEnvelope().toXDR('base64'));
@@ -79,7 +80,7 @@ const MagicSpoon = {
             }
         };
 
-        sdkAccount.signWithSecret = (transaction) => {
+        sdkAccount.signWithSecret = transaction => {
             console.log('Signing with local keypair');
             return transaction.sign(keypair);
         };
@@ -89,16 +90,16 @@ const MagicSpoon = {
         // Expects StellarSdk.Asset
         // Returns null if there is no trust
         // Returns string of balance if exists
-        sdkAccount.getBalance = (targetAsset) => {
+        sdkAccount.getBalance = targetAsset => {
             let targetBalance = null;
             if (targetAsset.isNative()) {
-                _.each(sdkAccount.balances, (balance) => {
+                _.each(sdkAccount.balances, balance => {
                     if (balance.asset_type === 'native') {
                         targetBalance = balance.balance;
                     }
                 });
             } else {
-                _.each(sdkAccount.balances, (balance) => {
+                _.each(sdkAccount.balances, balance => {
                     if (
                         balance.asset_code === targetAsset.getCode() &&
                         balance.asset_issuer === targetAsset.getIssuer()
@@ -110,9 +111,9 @@ const MagicSpoon = {
             return targetBalance;
         };
 
-        sdkAccount.getReservedBalance = (targetAsset) => {
+        sdkAccount.getReservedBalance = targetAsset => {
             const isTargetNative = targetAsset.isNative();
-            const asset = sdkAccount.balances.find((item) => {
+            const asset = sdkAccount.balances.find(item => {
                 const isNative = isTargetNative && item.asset_type === 'native';
                 return (
                     isNative ||
@@ -123,7 +124,7 @@ const MagicSpoon = {
             return asset ? parseFloat(asset.selling_liabilities).toFixed(7) : null;
         };
 
-        sdkAccount.isOrderExists = (targetAsset) => {
+        sdkAccount.isOrderExists = targetAsset => {
             const asset = sdkAccount.balances.find(
                 item => item.asset_code === targetAsset.getCode() && item.asset_issuer === targetAsset.getIssuer(),
             );
@@ -133,13 +134,13 @@ const MagicSpoon = {
         };
 
         // Should always return at least one item (which is lumens)
-        sdkAccount.getSortedBalances = (options) => {
+        sdkAccount.getSortedBalances = options => {
             const sortOptions = options || {};
 
             const nativeBalances = [];
             const knownBalances = [];
             const unknownBalances = [];
-            sdkAccount.balances.forEach((sdkBalance) => {
+            sdkAccount.balances.forEach(sdkBalance => {
                 if (sdkBalance.asset_type === 'native') {
                     if (sortOptions.hideNative) {
                         return null;
@@ -174,7 +175,7 @@ const MagicSpoon = {
         const accountEventsClose = Server.accounts()
             .accountId(keypair.publicKey())
             .stream({
-                onmessage: (res) => {
+                onmessage: res => {
                     let updated = false;
                     if (!_.isEqual(sdkAccount.balances, res.balances)) {
                         sdkAccount.balances = res.balances;
@@ -215,7 +216,7 @@ const MagicSpoon = {
             sdkAccount.applyNewThresholds(newAccount.thresholds);
         };
 
-        sdkAccount.applyNewSigners = (newSigners) => {
+        sdkAccount.applyNewSigners = newSigners => {
             let updated = false;
             if (!_.isEqual(sdkAccount.signers, newSigners)) {
                 sdkAccount.signers = newSigners;
@@ -226,7 +227,7 @@ const MagicSpoon = {
             }
         };
 
-        sdkAccount.applyNewThresholds = (newThresholds) => {
+        sdkAccount.applyNewThresholds = newThresholds => {
             let updated = false;
             if (!_.isEqual(sdkAccount.thresholds, newThresholds)) {
                 sdkAccount.thresholds = newThresholds;
@@ -237,7 +238,7 @@ const MagicSpoon = {
             }
         };
 
-        sdkAccount.applyNewBalances = (newBalances) => {
+        sdkAccount.applyNewBalances = newBalances => {
             let updated = false;
             if (!_.isEqual(sdkAccount.balances, newBalances)) {
                 sdkAccount.balances = newBalances;
@@ -255,35 +256,43 @@ const MagicSpoon = {
             const entriesSigners = sdkAccount.signers.length - 1;
             const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers - entriesSigners;
             const inActiveOffers = Number(sdkAccount.getReservedBalance(StellarSdk.Asset.native()));
-            const reserveItems = [{
-                reserveType: 'Base reserve',
-                typeCount: 0,
-                reservedXLM: 1,
-            }, {
-                reserveType: 'Extra',
-                typeCount: 0,
-                reservedXLM: 0.5,
-            }, {
-                reserveType: 'XLM in active offers',
-                typeCount: 0,
-                reservedXLM: inActiveOffers,
-            }, {
-                reserveType: 'Trustlines',
-                typeCount: entriesTrustlines,
-                reservedXLM: entriesTrustlines * 0.5,
-            }, {
-                reserveType: 'Offers',
-                typeCount: entriesOffers,
-                reservedXLM: entriesOffers * 0.5,
-            }, {
-                reserveType: 'Signers',
-                typeCount: entriesSigners,
-                reservedXLM: entriesSigners * 0.5,
-            }, {
-                reserveType: 'Others',
-                typeCount: entriesOthers,
-                reservedXLM: entriesOthers * 0.5,
-            }];
+            const reserveItems = [
+                {
+                    reserveType: 'Base reserve',
+                    typeCount: 0,
+                    reservedXLM: 1,
+                },
+                {
+                    reserveType: 'Extra',
+                    typeCount: 0,
+                    reservedXLM: 0.5,
+                },
+                {
+                    reserveType: 'XLM in active offers',
+                    typeCount: 0,
+                    reservedXLM: inActiveOffers,
+                },
+                {
+                    reserveType: 'Trustlines',
+                    typeCount: entriesTrustlines,
+                    reservedXLM: entriesTrustlines * 0.5,
+                },
+                {
+                    reserveType: 'Offers',
+                    typeCount: entriesOffers,
+                    reservedXLM: entriesOffers * 0.5,
+                },
+                {
+                    reserveType: 'Signers',
+                    typeCount: entriesSigners,
+                    reservedXLM: entriesSigners * 0.5,
+                },
+                {
+                    reserveType: 'Others',
+                    typeCount: entriesOthers,
+                    reservedXLM: entriesOthers * 0.5,
+                },
+            ];
 
             return {
                 reserveItems,
@@ -319,7 +328,7 @@ const MagicSpoon = {
                 .limit(200) // TODO: Keep iterating through next() to show more than 100 offers
                 .order('desc')
                 .call()
-                .then((res) => {
+                .then(res => {
                     sdkAccount.offers = res.records.reduce((acc, offer) => {
                         acc[offer.id] = offer;
                         if (offer.last_modified_time === null) {
@@ -350,22 +359,18 @@ const MagicSpoon = {
         // Initial orderbook load
         Server.orderbook(baseBuying, counterSelling)
             .call()
-            .then((orderbook) => {
+            .then(orderbook => {
                 this.asks = orderbook.asks;
                 this.bids = orderbook.bids;
                 this.baseBuying = baseBuying;
                 this.counterSelling = counterSelling;
 
-                MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then((result) => {
-                    const { records } = result || [];
-                    this.marketTradesHistory = records;
-                    this.ready = true;
-                    onUpdate(() => {});
-                });
+                this.ready = true;
+                onUpdate();
             });
 
-        const closeFunc = Server.orderbook(baseBuying, counterSelling).stream({
-            onmessage: (res) => {
+        this.closeOrderbookStream = Server.orderbook(baseBuying, counterSelling).stream({
+            onmessage: res => {
                 let updated = false;
                 if (!_.isEqual(this.bids, res.bids)) {
                     this.bids = res.bids;
@@ -376,29 +381,67 @@ const MagicSpoon = {
                     updated = true;
                 }
                 if (updated) {
-                    onUpdate(closeFunc);
+                    onUpdate();
                 }
             },
         });
     },
 
-    closeOrderbookStreaming(Server) {
-        Server.orderbook.close();
+    LastTrades(Server, baseBuying, counterSelling, onUpdate) {
+        MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(result => {
+            const { records } = result || [];
+            this.marketTradesHistory = records;
+            onUpdate();
+
+            this.closeLastTradesStream = Server.trades()
+                .forAssetPair(baseBuying, counterSelling)
+                .order('asc')
+                .cursor('now')
+                .stream({
+                    onmessage: trade => {
+                        this.marketTradesHistory = [trade, ...this.marketTradesHistory];
+                        onUpdate();
+                    },
+                    onerror: error => {
+                        console.log(error);
+                        this.closeLastTradesStream();
+                    },
+                });
+        });
     },
 
-    async tradeAggregation(Server, baseBuying, counterSelling, RESOLUTION, LIMIT) {
+    async tradeAggregation(Server, baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION, LIMIT) {
         const limit = LIMIT || 100;
-        const START_TIME = 1514764800; // 01/01/2018
-        const END_TIME = Date.now() + 86400000; // Current time + 1 day
         // TODO: Iteration throught next() with binding to chart scroll
-        return Server.tradeAggregation(baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION * 1000, 0)
+        return Server.tradeAggregation(
+            baseBuying,
+            counterSelling,
+            START_TIME * 1000,
+            ((END_TIME * 1000) + (RESOLUTION * 1000)),
+            RESOLUTION * 1000, 0,
+        )
             .limit(limit)
             .order('desc')
             .call()
             .then(res => res)
-            .catch((error) => {
+            .catch(error => {
                 console.error(ErrorHandler(error));
             });
+    },
+    async getLast24hAggregationsWithStep15min(Server, base, counter) {
+        const RESOLUTION_15_MINUTES = 900;
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - PERIOD_24H;
+
+        return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_15_MINUTES, 100);
+    },
+    async getLastMinuteAggregation(Server, base, counter) {
+        const RESOLUTION_MINUTE = 60;
+
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - PERIOD_24H;
+
+        return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_MINUTE, 1);
     },
     pairTrades(Server, baseBuying, counterSelling, LIMIT) {
         const limit = LIMIT || 100;
@@ -408,7 +451,7 @@ const MagicSpoon = {
             .limit(limit)
             .order('desc')
             .call()
-            .catch((error) => {
+            .catch(error => {
                 console.error(error);
             });
     },
@@ -442,8 +485,7 @@ const MagicSpoon = {
                 price: new BigNumber(1).dividedBy(bigOptsPrice),
                 offerId,
             };
-            return new StellarSdk.TransactionBuilder(spoonAccount,
-                { fee, networkPassphrase: Server.networkPassphrase })
+            return new StellarSdk.TransactionBuilder(spoonAccount, { fee, networkPassphrase: Server.networkPassphrase })
                 .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
                 .setTimeout(Server.transactionTimeout);
         }
@@ -455,8 +497,7 @@ const MagicSpoon = {
             price: String(sdkPrice),
             offerId,
         };
-        return new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: Server.networkPassphrase })
+        return new StellarSdk.TransactionBuilder(spoonAccount, { fee, networkPassphrase: Server.networkPassphrase })
             .addOperation(StellarSdk.Operation.manageBuyOffer(operationOpts))
             .setTimeout(Server.transactionTimeout);
     },
@@ -480,8 +521,7 @@ const MagicSpoon = {
             price: String(sdkPrice),
             offerId,
         };
-        return new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: Server.networkPassphrase })
+        return new StellarSdk.TransactionBuilder(spoonAccount, { fee, networkPassphrase: Server.networkPassphrase })
             .addOperation(StellarSdk.Operation.manageSellOffer(operationOpts))
             .setTimeout(Server.transactionTimeout);
     },
@@ -489,8 +529,10 @@ const MagicSpoon = {
     async buildTxSendPayment(Server, spoonAccount, opts) {
         // sendPayment will detect if the account is a new account. If so, then it will
         // be a createAccount operation
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: Server.networkPassphrase });
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
+            fee,
+            networkPassphrase: Server.networkPassphrase,
+        });
         try {
             // We need to check the activation of the destination,
             // if the account is not activated, it will be created in catch with createAccount
@@ -507,9 +549,7 @@ const MagicSpoon = {
                 .setTimeout(Server.transactionTimeout);
         } catch (e) {
             if (!opts.asset.isNative()) {
-                throw new Error(
-                    'Destination account does not exist. To create it, you must send at least 1 XLM.',
-                );
+                throw new Error('Destination account does not exist. To create it, you must send at least 1 XLM.');
             }
             transaction = transaction
                 .addOperation(
@@ -529,13 +569,15 @@ const MagicSpoon = {
     },
     buildTxSetOptions(Server, spoonAccount, opts) {
         const options = Array.isArray(opts) ? opts : [opts];
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: Server.networkPassphrase });
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
+            fee,
+            networkPassphrase: Server.networkPassphrase,
+        });
 
-        options.forEach((option) => {
+        options.forEach(option => {
             transaction = transaction.addOperation(StellarSdk.Operation.setOptions(option));
         });
-        // DONT call .build()
+        // DON'T call .build()
 
         return transaction.setTimeout(Server.transactionTimeout);
     },
@@ -551,8 +593,10 @@ const MagicSpoon = {
             asset: opts.asset,
             limit: sdkLimit,
         };
-        let transaction = new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: Server.networkPassphrase })
+        let transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
+            fee,
+            networkPassphrase: Server.networkPassphrase,
+        })
             .addOperation(StellarSdk.Operation.changeTrust(operationOpts))
             .setTimeout(Server.transactionTimeout);
 
@@ -561,7 +605,7 @@ const MagicSpoon = {
         }
 
         return transaction;
-        // DONT call .build()
+        // DON'T call .build()
     },
     buildTxRemoveOffer(Server, spoonAccount, opts) {
         const offers = Array.isArray(opts) ? opts : [opts];
@@ -571,19 +615,23 @@ const MagicSpoon = {
                 : new StellarSdk.Asset(asset.asset_code, asset.asset_issuer);
         }
 
-        const transaction = new StellarSdk.TransactionBuilder(spoonAccount,
-            { fee, networkPassphrase: Server.networkPassphrase });
-        offers.forEach((offer) => {
-            transaction.addOperation(StellarSdk.Operation.manageSellOffer({
-                buying: parseAsset(offer.buying),
-                selling: parseAsset(offer.selling),
-                amount: '0',
-                price: '1',
-                offerId: offer.id,
-            }));
+        const transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
+            fee,
+            networkPassphrase: Server.networkPassphrase,
+        });
+        offers.forEach(offer => {
+            transaction.addOperation(
+                StellarSdk.Operation.manageSellOffer({
+                    buying: parseAsset(offer.buying),
+                    selling: parseAsset(offer.selling),
+                    amount: '0',
+                    price: '1',
+                    offerId: offer.id,
+                }),
+            );
         });
         return transaction.setTimeout(Server.transactionTimeout);
-        // DONT call .build()
+        // DON'T call .build()
     },
 
     overwrite(buffer) {

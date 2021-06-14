@@ -7,13 +7,16 @@ export default class Orderbook {
         this.data = {
             ready: false,
         };
-        this.closeOrderbookStream = () => { };
+
+        this.lastTrades = {
+            marketTradesHistory: [],
+        };
 
         let base;
         let counter;
 
         this.handlers = {
-            pickPrice: (price) => {
+            pickPrice: price => {
                 this.event.trigger({
                     pickPrice: price,
                 });
@@ -29,18 +32,45 @@ export default class Orderbook {
                     return;
                 }
 
-                if (this.data.close) {
-                    this.data.closeOrderbook();
+                if (this.lastTrades.closeLastTradesStream) {
+                    this.lastTrades.closeLastTradesStream();
                 }
 
-                this.data = new MagicSpoon.Orderbook(driver.Server, base, counter, (closeFunction) => {
+                if (this.data.closeOrderbookStream) {
+                    this.data.closeOrderbookStream();
+                }
+
+                this.data = new MagicSpoon.Orderbook(driver.Server, base, counter, () => {
                     this.event.trigger();
-                    this.closeOrderbookStream = closeFunction;
                     driver.session.forceUpdateAccountOffers();
                 });
+
+                this.handlers.startLastTradesStream(base, counter);
             },
-            getTrades: (RESOLUTION, LIMIT) =>
-                MagicSpoon.tradeAggregation(driver.Server, base, counter, RESOLUTION, LIMIT),
+            startLastTradesStream: (baseBuying, counterSelling) => {
+                this.lastTrades = new MagicSpoon.LastTrades(driver.Server, baseBuying, counterSelling, () => {
+                    this.event.trigger({ lastTrades: true });
+                });
+            },
+            stopOrderbook: () => {
+                this.data.ready = false;
+                this.data.closeOrderbookStream();
+            },
+            stopLastTradesStream: () => {
+                if (this.lastTrades.closeLastTradesStream) {
+                    this.lastTrades.closeLastTradesStream();
+                }
+            },
+
+            getTrades: (START_DATE, END_DATE, RESOLUTION, LIMIT) =>
+                MagicSpoon.tradeAggregation(driver.Server, base, counter, START_DATE, END_DATE, RESOLUTION, LIMIT),
+
+            getLastMinuteAggregation: () =>
+                MagicSpoon.getLastMinuteAggregation(driver.Server, base, counter),
+
+            getLast24hAggregationsWithStep15min: () =>
+                MagicSpoon.getLast24hAggregationsWithStep15min(driver.Server, base, counter),
+
         };
     }
 }

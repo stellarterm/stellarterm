@@ -1,18 +1,18 @@
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import WalletConnectClient, { CLIENT_EVENTS } from '@walletconnect/client';
-import Transport from '@ledgerhq/hw-transport-u2f';
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from 'trezor-connect';
 import { getPublicKey } from '@stellar/freighter-api';
 import FastAverageColor from 'fast-average-color';
-import directory from 'stellarterm-directory';
 import isElectron from 'is-electron';
+import directory from 'stellarterm-directory';
 import MagicSpoon from '../MagicSpoon';
 import Event from '../Event';
 import * as request from '../api/request';
 import { getEndpoint } from '../api/endpoints';
-
+import * as EnvConsts from '../../env-consts';
 
 export default function Send(driver) {
     this.event = new Event();
@@ -22,6 +22,7 @@ export default function Send(driver) {
         this.setupError = false; // Unable to contact network
 
         this.setupLedgerError = null; // Could connect but couldn't reach address
+        this.connectLedgerError = null;
         this.ledgerConnected = false;
 
         this.unfundedAccountId = '';
@@ -52,12 +53,12 @@ export default function Send(driver) {
         const { time, directoryBuild, assets: localStorageAssets = [] } = knownAssetsData;
         const periodUpdate = 14 * 24 * 60 * 60 * 1000;
 
-        const frontendDirectoryBuild = directory.getBuildId();
+        const frontendDirectoryBuild = directory.buildID;
 
         if (
             localStorageAssets.length &&
             ((new Date() - new Date(time)) < periodUpdate) &&
-            Number(directoryBuild) === frontendDirectoryBuild
+            String(directoryBuild) === String(frontendDirectoryBuild)
         ) {
             this.addKnownAssetDataCalled = true;
             return Promise.resolve();
@@ -67,54 +68,53 @@ export default function Send(driver) {
         const chainPromise = Object.keys(anchors).reduce((chain, anchorDomain) => {
             const { assets } = anchors[anchorDomain];
 
-            return chain.then(newArray => StellarSdk.StellarTomlResolver.resolve(anchorDomain)
-                .then(toml => {
-                    const currencies = toml.CURRENCIES;
-                    const arrayAssets = Object.keys(assets).reduce((acc, assetCode) => {
-                        const assetIssuer = assets[assetCode].split('-')[1];
-                        const currency = currencies.find(cur => (
-                            cur.code === assetCode && cur.issuer === assetIssuer
-                        ));
-                        if (!currency || !currency.image) {
+            return chain.then(newArray =>
+                StellarSdk.StellarTomlResolver.resolve(anchorDomain)
+                    .then(toml => {
+                        const currencies = toml.CURRENCIES;
+                        const arrayAssets = Object.keys(assets).reduce((acc, assetCode) => {
+                            const assetIssuer = assets[assetCode].split('-')[1];
+                            const currency = currencies.find(
+                                cur => cur.code === assetCode && cur.issuer === assetIssuer,
+                            );
+                            if (!currency || !currency.image) {
+                                return acc;
+                            }
+                            acc.push({
+                                code: assetCode,
+                                issuer: assetIssuer,
+                                logo: currency.image,
+                            });
                             return acc;
-                        }
-                        acc.push({
-                            code: assetCode,
-                            issuer: assetIssuer,
-                            logo: currency.image,
-                        });
-                        return acc;
-                    }, []);
+                        }, []);
 
-                    if (arrayAssets.length === 0) {
-                        return newArray;
-                    }
-                    return [...newArray, ...arrayAssets];
-                })
-                .catch(() => newArray));
+                        if (arrayAssets.length === 0) {
+                            return newArray;
+                        }
+                        return [...newArray, ...arrayAssets];
+                    })
+                    .catch(() => newArray),
+            );
         }, Promise.resolve([]));
 
         return chainPromise.then(res => {
             localStorage.setItem(
                 'knownAssetsData',
-                JSON.stringify(
-                    {
-                        time: new Date(),
-                        directoryBuild: frontendDirectoryBuild,
-                        assets: res,
-                    },
-                ),
+                JSON.stringify({
+                    time: new Date(),
+                    directoryBuild: frontendDirectoryBuild,
+                    assets: res,
+                }),
             );
             this.addKnownAssetDataCalled = true;
         });
     };
-    this.addKnownAssetDataPromise = this.addKnownAssetData();
+    this.addKnownAssetDataPromise = directory.initializeIssuerOrgs(EnvConsts.ANCHORS_URL)
+        .then(() => this.addKnownAssetData());
 
     // Ping the Ledger device to see if it is connected
-    this.pingLedger = singlePing => {
-        this.brakePing = singlePing || false;
-
-        Transport.create()
+    this.tryConnectLedger = () =>
+        TransportWebUSB.create()
             .then(transport => new AppStellar(transport))
             .then(app => app.getAppConfiguration())
             .then(() => {
@@ -124,20 +124,10 @@ export default function Send(driver) {
                 }
             })
             .catch(error => {
-                if (this.ledgerConnected) {
-                    this.ledgerConnected = false;
-                    this.event.trigger();
-                }
-
-                const notSupported = error && error.id === 'U2FNotSupported';
-                if (notSupported || this.brakePing) {
-                    return;
-                }
-                // Could not connect to ledger, retry...
-                this.pingLedger();
+                this.ledgerConnected = false;
+                this.connectLedgerError = error;
+                this.event.trigger();
             });
-        return (() => { this.brakePing = true; });
-    };
 
     this.handlers = {
         logInWithSecret: async secretKey => {
@@ -215,8 +205,8 @@ export default function Send(driver) {
                 throw e;
             }
         },
-        logInWithTrezor: async bip32Path => TrezorConnect.stellarGetAddress({ path: bip32Path, showOnTrezor: false })
-            .then(result => {
+        logInWithTrezor: async bip32Path =>
+            TrezorConnect.stellarGetAddress({ path: bip32Path, showOnTrezor: false }).then(result => {
                 if (result.success) {
                     const keypair = StellarSdk.Keypair.fromPublicKey(result.payload.address);
                     return this.handlers.logIn(keypair, {
@@ -228,14 +218,16 @@ export default function Send(driver) {
             }),
         logInWithLedger: async bip32Path => {
             try {
-                const transport = await Transport.create();
+                const transport = await TransportWebUSB.create();
                 const ledgerApp = new AppStellar(transport);
                 const { publicKey } = await ledgerApp.getPublicKey(bip32Path);
 
                 if (!publicKey || publicKey === 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF') {
-                    throw new Error('Could not access your Ledger account. ' +
-                        'Make sure your Ledger is not locked after idle timeout or update the firmware version. ' +
-                        'Contact the support at support@stellarterm.com if the issue persists.');
+                    throw new Error(
+                        'Could not access your Ledger account. ' +
+                            'Make sure your Ledger is not locked after idle timeout or update the firmware version. ' +
+                            'Contact the support at support@stellarterm.com if the issue persists.',
+                    );
                 }
 
                 this.setupLedgerError = null;
@@ -406,10 +398,10 @@ export default function Send(driver) {
                     const tx = signResult.signedTx;
                     const threshold = this.handlers.getTransactionThreshold(tx);
                     const thresholdValue = this.account.thresholds[threshold];
-                    const masterWeight = this.account.signers
-                        .find(signer => signer.key === this.account.account_id).weight;
+                    const masterWeight = this.account.signers.find(signer => signer.key === this.account.account_id)
+                        .weight;
 
-                    if ((driver.session.account.signers.length > 1) && (masterWeight < thresholdValue)) {
+                    if (driver.session.account.signers.length > 1 && masterWeight < thresholdValue) {
                         return this.handlers.sendToSigner(signResult);
                     }
                     console.log('Submitting tx\nhash:', tx.hash().toString('hex'));
@@ -463,8 +455,16 @@ export default function Send(driver) {
 
             const THRESHOLDS = {
                 low_threshold: ['allowTrust', 'inflation', 'bumpSequence'],
-                med_threshold: ['createAccount', 'payment', 'pathPayment', 'createPassiveSellOffer',
-                    'changeTrust', 'manageData', 'manageBuyOffer', 'manageSellOffer'],
+                med_threshold: [
+                    'createAccount',
+                    'payment',
+                    'pathPayment',
+                    'createPassiveSellOffer',
+                    'changeTrust',
+                    'manageData',
+                    'manageBuyOffer',
+                    'manageSellOffer',
+                ],
                 high_threshold: ['accountMerge'],
                 setOptions: ['setOptions'], // med or high
             };
@@ -485,8 +485,10 @@ export default function Send(driver) {
 
                 if (usedThreshold === 'setOptions') {
                     const { masterWeight, lowThreshold, medThreshold, highThreshold, signer } = operation;
-                    usedThreshold = (masterWeight || lowThreshold || medThreshold || highThreshold || signer) ?
-                        'high_threshold' : 'med_threshold';
+                    usedThreshold =
+                        masterWeight || lowThreshold || medThreshold || highThreshold || signer
+                            ? 'high_threshold'
+                            : 'med_threshold';
                 }
 
                 if (usedThreshold === 'low_threshold') {
@@ -519,8 +521,7 @@ export default function Send(driver) {
             const usedKnownSigner = driver.session.account.signers.find(sign => knownSigners[sign.key]);
 
             if (!usedKnownSigner) {
-                setTimeout(() =>
-                    driver.modal.handlers.activate('multisigUnknown', signedTx), 1000);
+                setTimeout(() => driver.modal.handlers.activate('multisigUnknown', signedTx), 1000);
             } else {
                 const signer = knownSigners[usedKnownSigner.key];
                 const body = JSON.stringify({ xdr: signedTx });
@@ -578,7 +579,7 @@ export default function Send(driver) {
                     return Promise.reject('Custom signers weigth');
                 }
                 const currentThreshold = this.account.thresholds.high_threshold;
-                const newThreshold = (currentThreshold + 10);
+                const newThreshold = currentThreshold + 10;
                 const signerData = {
                     signer: {
                         ed25519PublicKey: key,
@@ -676,9 +677,8 @@ export default function Send(driver) {
                 }
                 const currentThreshold = this.account.thresholds.high_threshold;
 
-                const newThreshold = ((signers.length - 2) * 10) > currentThreshold ?
-                    currentThreshold :
-                    ((signers.length - 2) * 10);
+                const newThreshold =
+                    (signers.length - 2) * 10 > currentThreshold ? currentThreshold : (signers.length - 2) * 10;
 
                 const newSignerData = {
                     signer: {
@@ -864,11 +864,11 @@ export default function Send(driver) {
                     return chain;
                 }
 
-                const assetData = unknownAssetsData.find(assetLocalItem => (
-                    assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
-                ));
+                const assetData = unknownAssetsData.find(
+                    assetLocalItem => assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer,
+                );
 
-                if (assetData && ((new Date() - new Date(assetData.time)) < periodUpdate)) {
+                if (assetData && new Date() - new Date(assetData.time) < periodUpdate) {
                     return chain;
                 }
 
@@ -912,8 +912,8 @@ export default function Send(driver) {
                 }
                 const toml = await StellarSdk.StellarTomlResolver.resolve(homeDomain);
 
-                const currency = toml.CURRENCIES.find(cur =>
-                    (cur.code.toUpperCase() === asset.code.toUpperCase() && cur.issuer === asset.issuer),
+                const currency = toml.CURRENCIES.find(
+                    cur => cur.code.toUpperCase() === asset.code.toUpperCase() && cur.issuer === asset.issuer,
                 );
 
                 if (!currency) {
@@ -921,7 +921,7 @@ export default function Send(driver) {
                 }
 
                 const { image, host } = currency;
-                const color = image && await this.handlers.getAverageColor(image, asset.code, homeDomain);
+                const color = image && (await this.handlers.getAverageColor(image, asset.code, homeDomain));
 
                 // Stellarterm used only "image" and "host" fields;
 
@@ -954,7 +954,8 @@ export default function Send(driver) {
             img.src = `${imageUrl}?rnd${Math.random()}`;
             img.crossOrigin = 'Anonymous';
 
-            return fac.getColorAsync(img)
+            return fac
+                .getColorAsync(img)
                 .then(col => col.hex)
                 .catch(() => {
                     console.warn(`Can not calculate background color for ${code} (${domain}). Reason: CORS Policy`);

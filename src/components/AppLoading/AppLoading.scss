@@ -1,0 +1,21 @@
+.directory-loading-block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 32px;
+}
+
+.directory-loader{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+
+    .nk-spinner{
+        width: 40px;
+        height: 40px;
+        border: 3px solid rgba(134, 211, 140, 0.3);
+        border-left: 3px solid #86d38c;
+    }
+}

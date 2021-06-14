@@ -21,11 +21,6 @@ export function isHttpConnectionUsed() {
     return window.location.protocol === 'http:';
 }
 
-export function browserU2FSupport() {
-    // Checking for u2f support
-    return !!window.u2f;
-}
-
 export function isWindowsOS() {
     return (window.navigator.platform === 'Win32' || window.navigator.platform === 'Win64');
 }

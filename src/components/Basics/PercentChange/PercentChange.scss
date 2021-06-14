@@ -1,0 +1,11 @@
+.PercentChange_positive {
+    color: $s-color-primary3;
+}
+
+.PercentChange_negative {
+    color: darken($s-color-alert, 5%);
+}
+
+.PercentChange_arrow {
+    margin-right: 8px;
+}
