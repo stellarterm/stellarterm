@@ -17,7 +17,6 @@ export default class ToastService {
         this.event = new Event();
         this.driver = driver;
         this.activeToasts = [];
-        this.lastOpTime = 0;
     }
 
     clearToasts() {

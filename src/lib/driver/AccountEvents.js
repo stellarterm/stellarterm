@@ -46,7 +46,9 @@ export default class AccountEvents {
 
         opsToShow.forEach(op => {
             const template = getOperationToastTemplate(op);
-            this.driver.toastService.successTemplate(template);
+            if (template) {
+                this.driver.toastService.successTemplate(template);
+            }
         });
 
         this.lastOpTime = new Date(opsToShow[0].created_at).getTime();
