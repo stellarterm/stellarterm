@@ -1,4 +1,7 @@
 .TopVolume{
+    display: flex;
+    flex-direction: column;
+
     .TopVolume_header{
         display: flex;
         flex-direction: row;
@@ -103,5 +106,9 @@
                 opacity: 0.6;
             }
         }
+    }
+
+    .s-button {
+        margin: 20px auto;
     }
 }

@@ -24,7 +24,10 @@ export default class OfferMaker extends React.Component {
         this.initialized = false;
         this.touchedOffer = Boolean(this.props.existingOffer);
 
-        this.orderbookUnsub = this.props.d.orderbook.event.sub((data) => {
+        this.orderbookUnsub = this.props.d.orderbook.event.sub(data => {
+            if (data && data.lastTrades) {
+                return;
+            }
             if (data && data.pickPrice) {
                 this.touchedOffer = true;
                 this.updateState('price', data.pickPrice);
@@ -32,7 +35,7 @@ export default class OfferMaker extends React.Component {
                 this.updateState('price', this.getPriceFromOrderbook());
             }
         });
-        this.sessionUnsub = this.props.d.session.event.sub((event) => {
+        this.sessionUnsub = this.props.d.session.event.sub(event => {
             if (this.state.amount && event === 'login') {
                 this.updateState('amount', this.state.amount);
             }
@@ -78,13 +81,14 @@ export default class OfferMaker extends React.Component {
         const value = ((maxOffer * percent) / 100).toFixed(7).toString();
         return (
             <button
-                onClick={(e) => {
+                onClick={e => {
                     e.preventDefault();
                     this.touchedOffer = true;
                     this.updateState(inputType, value, minValue, maxOffer);
                 }}
                 disabled={parseFloat(maxOffer) === 0}
-                className={`cancel-button ${this.state[inputType] === value && 'active'}`}>{percent}%</button>
+                className={`cancel-button ${this.state[inputType] === value && 'active'}`}
+            >{percent}%</button>
         );
     }
 
@@ -266,7 +270,8 @@ export default class OfferMaker extends React.Component {
                             onFocus={() => { this.touchedOffer = true; }}
                             onChange={e =>
                                 this.updateState(inputType, e.target.value, minValue, maxOffer)}
-                            placeholder="" />
+                            placeholder=""
+                        />
                         <div className="offer_input_group_tag">{assetName}</div>
                         <div className="invalidValue_popup">
                             {errorMessage}
@@ -328,11 +333,12 @@ export default class OfferMaker extends React.Component {
             <div className="OfferMaker_container">
                 <div
                     className="OfferMaker_balance"
-                    onClick={(e) => {
+                    onClick={e => {
                         e.preventDefault();
                         this.touchedOffer = true;
                         this.updateState(inputType, maxOfferView, minValue, maxOfferView);
-                    }}>
+                    }}
+                >
 
                     <span>Available:</span>
                     <span>{maxOfferView} {targetAsset.code}</span>
@@ -341,7 +347,8 @@ export default class OfferMaker extends React.Component {
                 <ReservedPopover
                     onlyIcon
                     d={this.props.d}
-                    asset={new StellarSdk.Asset(targetAsset.code, targetAsset.issuer)} />
+                    asset={new StellarSdk.Asset(targetAsset.code, targetAsset.issuer)}
+                />
             </div>
         );
 
@@ -365,7 +372,8 @@ export default class OfferMaker extends React.Component {
                         d={this.props.d}
                         hasTrustNeeded={this.props.hasTrustNeeded}
                         side={this.props.side}
-                        offerState={this.state} />
+                        offerState={this.state}
+                    />
                 </form>
             </div>
         );

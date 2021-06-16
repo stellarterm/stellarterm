@@ -12,7 +12,6 @@ import NotFound from '../NotFound/NotFound';
 import images from '../../images';
 import { isIE, isEdge } from '../../lib/BrowserSupport';
 import AppLoading from '../AppLoading/AppLoading';
-import Generic from '../Common/Generic/Generic';
 import ManageOffers from './ManageOffers/ManageOffers';
 import OfferTables from './OfferTables/OfferTables';
 import OfferMakers from './OfferMakers/OfferMakers';
@@ -40,7 +39,6 @@ export default class Exchange extends React.Component {
 
         this.ubsubHistory = this.props.history.listen(() => {
             if (this.props.history.action === 'POP') {
-                this.props.d.orderbook.data.closeOrderbookStream();
                 this.getTradePair();
             }
         });
@@ -78,7 +76,10 @@ export default class Exchange extends React.Component {
         document.removeEventListener('mozfullscreenchange', this._escExitFullscreen);
         document.removeEventListener('fullscreenchange', this._escExitFullscreen);
         document.removeEventListener('MSFullscreenChange', this._escExitFullscreen);
-        this.props.d.orderbook.data.closeOrderbookStream();
+
+        this.props.d.orderbook.handlers.stopOrderbook();
+
+        this.props.d.orderbook.handlers.stopLastTradesStream();
 
         if (this.state.fullscreenMode) {
             this.toggleFullScreen();
@@ -86,7 +87,7 @@ export default class Exchange extends React.Component {
     }
 
     getChartScreenshot() {
-        const chartIsDrawn = this.child.state[this.state.timeFrame].trades.length !== 0;
+        const chartIsDrawn = this.child.state.trades.length !== 0;
 
         if (chartIsDrawn) {
             this.child.getScreenshot();

@@ -57,7 +57,6 @@ export default class AssetPair extends React.Component {
     }
 
     assetUpdate(asset, assetType) {
-        this.props.d.orderbook.data.closeOrderbookStream();
         this.setState({ [assetType]: asset });
 
         const isBase = assetType === 'baseBuying';
@@ -70,7 +69,6 @@ export default class AssetPair extends React.Component {
     }
 
     swapPair() {
-        this.props.d.orderbook.data.closeOrderbookStream();
         const { baseBuying, counterSelling } = this.props;
         this.props.d.orderbook.handlers.setOrderbook(counterSelling, baseBuying);
         window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(counterSelling, baseBuying)}`);
