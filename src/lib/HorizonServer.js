@@ -42,7 +42,7 @@ export default class HorizonServer {
         this.event = new Event();
 
         this.customServers = JSON.parse(localStorage.getItem(CUSTOM_HORIZON_SERVERS_LIST_LS) || 'null') || [];
-        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || DEFAULT_SERVERS.stellar.url;
+        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || DEFAULT_SERVERS.lobstr.url;
 
         this.startServer();
     }
@@ -59,7 +59,7 @@ export default class HorizonServer {
         }
 
         if (this.serverList.find(server => server.url === url || `${server.url}/` === url || server.url === `${url}/`)) {
-            throw new Error('This horizon is already exist');
+            throw new Error('This horizon already exists');
         }
 
         this.customServers.push({ name: '', url });
@@ -154,8 +154,8 @@ export default class HorizonServer {
         }
 
         if (this.driver.orderbook.data.ready) {
-            this.driver.orderbook.data.closeOrderbookStream();
-            this.driver.orderbook.data.ready = false;
+            this.driver.orderbook.handlers.stopOrderbook();
+            this.driver.orderbook.handlers.stopLastTradesStream();
         }
 
         localStorage.setItem(ACTIVE_HORIZON_SERVER, url);

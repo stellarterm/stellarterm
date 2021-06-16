@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "setup": "yarn install",
-    "start": "./node_modules/.bin/gulp",
+    "start": "NODE_ENV=production; ./node_modules/.bin/gulp",
     "lint": "./node_modules/.bin/eslint .",
     "lint-fix": "./node_modules/.bin/eslint . --fix",
     "hash": "cd dist; openssl dgst -sha256 index.html",

@@ -52,16 +52,15 @@ export default class Orderbook {
                     this.event.trigger({ lastTrades: true });
                 });
             },
+            stopOrderbook: () => {
+                this.data.ready = false;
+                this.data.closeOrderbookStream();
+            },
             stopLastTradesStream: () => {
                 if (this.lastTrades.closeLastTradesStream) {
                     this.lastTrades.closeLastTradesStream();
                 }
             },
-            stopOrderbook: () => {
-                this.data.ready = false;
-                this.data.closeOrderbookStream();
-            },
-
             getTrades: (START_DATE, END_DATE, RESOLUTION, LIMIT) =>
                 MagicSpoon.tradeAggregation(driver.Server, base, counter, START_DATE, END_DATE, RESOLUTION, LIMIT),
 
