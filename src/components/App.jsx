@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import * as StellarSdk from 'stellar-sdk';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
+import isElectron from 'is-electron';
 import Driver from '../lib/Driver';
 import { isIE, isEdge } from '../lib/BrowserSupport';
 import GlobalModal from './GlobalModal/GlobalModal';
@@ -106,12 +107,14 @@ class TermApp extends React.Component {
         );
 
         // Alert for logged user before reload page
-        window.onbeforeunload = e => {
-            const { state } = this.props.d.session;
-            if (state === 'in' || state === 'unfunded') {
-                e.returnValue = 'You will be logged out after reload!';
-            }
-        };
+        if (!isElectron()) {
+            window.onbeforeunload = e => {
+                const { state } = this.props.d.session;
+                if (state === 'in' || state === 'unfunded') {
+                    e.returnValue = 'You will be logged out after reload!';
+                }
+            };
+        }
 
         this.unsub = this.props.d.session.event.sub(() => {
             const { state, unfundedAccountId, account } = this.props.d.session;
