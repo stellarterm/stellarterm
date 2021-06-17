@@ -10,8 +10,8 @@ export const HORIZON_SERVER_EVENTS = {
 
 
 const DEFAULT_SERVERS = {
-    stellar: { name: 'Stellar horizon', url: 'https://horizon.stellar.org' },
     lobstr: { name: 'LOBSTR horizon', url: 'https://horizon.stellar.lobstr.co' },
+    stellar: { name: 'Stellar horizon', url: 'https://horizon.stellar.org' },
 };
 
 const CUSTOM_HORIZON_SERVERS_LIST_LS = 'customHorizonServersList';

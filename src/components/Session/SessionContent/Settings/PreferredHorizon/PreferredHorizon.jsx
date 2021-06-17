@@ -53,7 +53,7 @@ const PreferredHorizon = ({ d }) => {
     return (
         <div>
             <div className="island">
-                <div className="island__header">Preferred horizon</div>
+                <div className="island__header">Choose your preferred Horizon instance</div>
                 <div className="PreferredHorizon_container">
                     {serverList.map(server => (
                         <div
@@ -67,21 +67,21 @@ const PreferredHorizon = ({ d }) => {
                     ))}
 
                     <div className="PreferredHorizon_card">
-                        <span className="PreferredHorizon_card-title">Custom horizon</span>
+                        <span className="PreferredHorizon_card-title">Add custom Horizon instance</span>
                         <div className="PreferredHorizon_card-form">
                             <input
                                 value={customUrl}
                                 onChange={e => setCustomUrl(e.target.value)}
                                 onKeyUp={onKeyPress}
                                 className="PreferredHorizon_input"
-                                placeholder="Enter custom horizon url"
+                                placeholder="Enter a custom Horizon URL"
                             />
                             <button
                                 className="s-button"
                                 disabled={!customUrl || isLoading}
                                 onClick={() => addCustomServer()}
                             >
-                                ADD
+                                Add
                                 {isLoading && <div className="nk-spinner" />}
                             </button>
                         </div>
