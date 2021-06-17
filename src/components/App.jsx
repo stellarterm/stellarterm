@@ -1,13 +1,13 @@
 import url from 'url';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as StellarSdk from 'stellar-sdk';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import Driver from '../lib/Driver';
 import { isIE, isEdge } from '../lib/BrowserSupport';
+import faviconHandler from '../lib/faviconUtils';
 import GlobalModal from './GlobalModal/GlobalModal';
-import PopupAlert from './PopupAlert/PopupAlert';
+import ToastTemplate from './ToastTemplate/ToastTemplate';
 import NotFound from './NotFound/NotFound';
 import Markets from './Markets/Markets';
 import Download from './Download/Download';
@@ -22,24 +22,10 @@ import Header from './Header/Header';
 import Footer from './Footer/Footer';
 import BuyCrypto from './BuyCrypto/BuyCrypto';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
-import faviconHandler from '../lib/faviconUtils';
 import AppLoading from './AppLoading/AppLoading';
 
 window.React = React;
 const mountNode = document.getElementById('app');
-
-const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.org';
-// const DEFAULT_HORIZON_SERVER = 'https://horizon.stellar.lobstr.co';
-
-const network = {
-    horizonUrl: DEFAULT_HORIZON_SERVER,
-    networkPassphrase: StellarSdk.Networks.PUBLIC,
-    isDefault: true, // If it's default, then we don't show a notice bar at the top
-    isTestnet: false,
-    isCustom: false,
-};
-
-const TESTNET_URL = '/testnet';
 
 if (!window.location.pathname.includes('index.html') && window.location.hash.indexOf('#') === 0) {
     window.location.replace(
@@ -48,26 +34,7 @@ if (!window.location.pathname.includes('index.html') && window.location.hash.ind
         window.location.hash.substr(1));
 }
 
-if (window.location.pathname.includes(TESTNET_URL)) {
-    network.isDefault = false;
-    network.isTestnet = true;
-    network.horizonUrl = 'https://horizon-testnet.stellar.org';
-    network.networkPassphrase = StellarSdk.Networks.TESTNET;
-
-    const reg = new RegExp(`(.+)${TESTNET_URL}$`);
-    window.history.replaceState({}, '', window.location.pathname.replace(reg, '$1'));
-} else if (window.stCustomConfig.horizonUrl) {
-    network.isDefault = false;
-    network.isCustom = true;
-    network.horizonUrl = window.stCustomConfig.horizonUrl;
-    if (window.stCustomConfig.networkPassphrase) {
-        network.networkPassphrase = window.stCustomConfig.networkPassphrase;
-    }
-}
-
-const driver = new Driver({
-    network,
-});
+const driver = new Driver();
 
 const parseUrl = href => {
     const hash = url.parse(href).hash;
@@ -79,7 +46,17 @@ class TermApp extends React.Component {
         super(props);
         this.d = props.d;
 
-        this.isTickerLoaded = false;
+        this.state = {
+            // The url is the hash cleaned up
+            url: parseUrl(window.location.pathname),
+            isTickerLoaded: false,
+        };
+
+        this.unsubscribeSession = this.props.d.session.event.sub(() => {
+            const { state, unfundedAccountId, account } = this.props.d.session;
+            faviconHandler(state, unfundedAccountId, account);
+        });
+
         this.unsubscribeTicker = this.d.ticker.event.sub(() => {
             if (!this.state.isTickerLoaded) {
                 this.setState({
@@ -87,12 +64,6 @@ class TermApp extends React.Component {
                 });
             }
         });
-
-        this.state = {
-            // The url is the hash cleaned up
-            url: parseUrl(window.location.pathname),
-            isTickerLoaded: false,
-        };
 
         window.addEventListener(
             'hashchange',
@@ -112,11 +83,11 @@ class TermApp extends React.Component {
                 e.returnValue = 'You will be logged out after reload!';
             }
         };
+    }
 
-        this.unsub = this.props.d.session.event.sub(() => {
-            const { state, unfundedAccountId, account } = this.props.d.session;
-            faviconHandler(state, unfundedAccountId, account);
-        });
+    componentWillUnmount() {
+        this.unsubscribeSession();
+        this.unsubscribeTicker();
     }
 
     render() {
@@ -141,7 +112,7 @@ class TermApp extends React.Component {
                         <GlobalModal d={d} />
                         <div className="AppStretch AppContainer">
                             <div>
-                                <Header d={d} network={network} />
+                                <Header d={d} />
                                 {isTickerLoaded ? (
                                     <Switch>
                                         <Route
@@ -152,7 +123,7 @@ class TermApp extends React.Component {
                                         <Route path="/download/" component={Download} />
                                         <Route
                                             path="/testnet/"
-                                            component={network.isTestnet ? TestNetwork : ReloadToTestnet}
+                                            component={d.Server.isTestnet ? TestNetwork : ReloadToTestnet}
                                         />
                                         <Route path="/privacy/" component={PrivacyPolicy} />
                                         <Route path="/terms-of-use/" component={TermsOfUse} />
@@ -194,7 +165,7 @@ class TermApp extends React.Component {
                                     </Switch>) :
                                     <AppLoading text="Loading assets and balances" />
                                 }
-                                <PopupAlert d={d} />
+                                <ToastTemplate d={d} />
                             </div>
                             <Footer />
                         </div>
