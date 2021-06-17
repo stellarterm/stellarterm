@@ -55,11 +55,11 @@ export default class HorizonServer {
         const isValid = await this.constructor.checkHorizonServer(url);
 
         if (!isValid) {
-            throw new Error('Invalid horizon address');
+            throw new Error('Invalid Horizon address');
         }
 
         if (this.serverList.find(server => server.url === url || `${server.url}/` === url || server.url === `${url}/`)) {
-            throw new Error('This horizon already exists');
+            throw new Error('This Horizon already exists');
         }
 
         this.customServers.push({ name: '', url });

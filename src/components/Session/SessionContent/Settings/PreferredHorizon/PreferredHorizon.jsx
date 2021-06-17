@@ -31,11 +31,11 @@ const PreferredHorizon = ({ d }) => {
         d.horizonServer.addCustomServer(customUrl)
             .then(() => {
                 setCustomUrl('');
-                d.toastService.success('Success', 'Custom horizon added');
+                d.toastService.success('Success', 'Custom Horizon added');
                 setIsLoading(false);
             })
             .catch(e => {
-                d.toastService.error('Can not add horizon', e.message);
+                d.toastService.error('Can not add Horizon', e.message);
                 setIsLoading(false);
             });
     };
