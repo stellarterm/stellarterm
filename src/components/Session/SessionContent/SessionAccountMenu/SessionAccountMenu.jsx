@@ -31,12 +31,14 @@ export default class SessionAccountMenu extends React.Component {
                                 {this.constructor.createMenuTab('/account/addTrust/', 'Accept assets')}
                                 {this.constructor.createMenuTab('/account/multisig/', 'Multisig')}
                                 {this.constructor.createMenuTab('/account/activity/', 'Activity', qtyOpenOffers)}
+                                {this.constructor.createMenuTab('/account/settings/', 'Settings')}
                             </nav>
                         }
                         <nav className="subNav__nav">
                             <a
                                 className="subNav__nav__item"
-                                onClick={() => { this.props.d.session.handlers.logout(); }}>
+                                onClick={() => { this.props.d.session.handlers.logout(); }}
+                            >
                                 <span>Log out</span>
                             </a>
                         </nav>
