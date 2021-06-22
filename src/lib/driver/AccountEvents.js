@@ -5,22 +5,26 @@ export default class AccountEvents {
         this.driver = driver;
 
         this.isLoading = false;
-        this.initLoading = false;
         this.unlistenAccountEvents = null;
     }
 
+    get streamInitialized() {
+        return Boolean(this.unlistenAccountEvents);
+    }
+
     restartAccountEventsListening(Server, publicKey) {
-        if (!this.unlistenAccountEvents) {
+        if (!this.streamInitialized) {
             return;
         }
 
         this.unlistenAccountEvents();
 
+        this.unlistenAccountEvents = null;
+
         this.listenAccountEvents(Server, publicKey);
     }
 
     async listenAccountEvents(Server, publicKey) {
-        this.initLoading = true;
         const lastOperation = await this.getOperations(1);
         this.lastOpTime = new Date(lastOperation.records[0].created_at).getTime();
 
@@ -30,7 +34,12 @@ export default class AccountEvents {
             .stream({
                 onmessage: () => this.newEffectCallback(),
             });
-        this.initLoading = false;
+    }
+
+    stopListenAccountEvents() {
+        if (this.streamInitialized) {
+            this.unlistenAccountEvents();
+        }
     }
 
     async newEffectCallback() {
