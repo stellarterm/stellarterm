@@ -269,7 +269,7 @@ export default class LightweightChart extends React.Component {
         const endDate = Math.round(Date.now() / 1000);
         const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
 
-        this.props.d.orderbook.handlers.getTrades(startDate, endDate, timeFrame, 3).then(res => {
+        this.props.d.orderbook.handlers.getTrades(startDate, endDate, timeFrame, 20).then(res => {
             const { trades, volumes, nextTrades, fullHistoryLoaded } = this.state;
 
             const convertedLastTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
@@ -280,6 +280,8 @@ export default class LightweightChart extends React.Component {
 
             const [_oldTrade, ...newTrades] = convertedLastTrades;
             const [_oldVolume, ...newVolumes] = convertedLastVolumes;
+
+            trades[firstIndex + 1].close = newTrades[0].open;
 
             const updatedTrades = [...trades.slice(0, firstIndex + 1), ...newTrades];
             const updatedVolumes = [...volumes.slice(0, firstIndex + 1), ...newVolumes];
