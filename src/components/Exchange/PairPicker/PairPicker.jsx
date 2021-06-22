@@ -37,7 +37,7 @@ export default class PairPicker extends React.Component {
         this.debouncedGetLastTrades = Debounce(this.getLastTrades.bind(this), 700);
 
         this.unsubLastTrades = this.props.d.orderbook.event.sub(event => {
-            if (event && event.lastTrades) {
+            if (event && event.lastTrades && !event.lastTradesInit) {
                 this.debouncedGetLastTrades();
             }
         });

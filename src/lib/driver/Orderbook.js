@@ -48,8 +48,8 @@ export default class Orderbook {
                 this.handlers.startLastTradesStream(base, counter);
             },
             startLastTradesStream: (baseBuying, counterSelling) => {
-                this.lastTrades = new MagicSpoon.LastTrades(driver.Server, baseBuying, counterSelling, () => {
-                    this.event.trigger({ lastTrades: true });
+                this.lastTrades = new MagicSpoon.LastTrades(driver.Server, baseBuying, counterSelling, payload => {
+                    this.event.trigger(payload);
                 });
             },
             stopOrderbook: () => {

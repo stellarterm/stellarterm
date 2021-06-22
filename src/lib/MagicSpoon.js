@@ -173,7 +173,7 @@ const MagicSpoon = {
             return nativeBalances.concat(knownBalances, unknownBalances);
         };
 
-        const startAccountStream = (server) => server.accounts()
+        const startAccountStream = server => server.accounts()
             .accountId(keypair.publicKey())
             .stream({
                 onmessage: res => {
@@ -204,7 +204,7 @@ const MagicSpoon = {
 
         let accountEventsClose = startAccountStream(this.Server);
 
-        sdkAccount.restartAccountStream = (server) => {
+        sdkAccount.restartAccountStream = server => {
             accountEventsClose();
             this.Server = server;
             accountEventsClose = startAccountStream(server);
@@ -400,7 +400,7 @@ const MagicSpoon = {
         MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(result => {
             const { records } = result || [];
             this.marketTradesHistory = records;
-            onUpdate();
+            onUpdate({ lastTrades: true, lastTradesInit: true });
 
             this.closeLastTradesStream = Server.trades()
                 .forAssetPair(baseBuying, counterSelling)
@@ -409,7 +409,7 @@ const MagicSpoon = {
                 .stream({
                     onmessage: trade => {
                         this.marketTradesHistory = [trade, ...this.marketTradesHistory];
-                        onUpdate();
+                        onUpdate({ lastTrades: true });
                     },
                     onerror: error => {
                         console.log(error);
