@@ -43,12 +43,17 @@ export default class HorizonServer {
      */
     checkHorizonServer(url) {
         const HTTPS = 'https://';
+        const HTTP = 'http://';
 
         return new Promise(async (resolve, reject) => {
             let trimmedUrl = url.trim();
 
+            if (trimmedUrl.startsWith(HTTP)) {
+                reject('Insecure Horizon server. Horizon address must start with https://');
+            }
+
             if (!trimmedUrl.startsWith(HTTPS)) {
-                reject('Insecure Horizon server. Horizon address must be start with https://');
+                reject('Invalid Horizon address');
             }
 
             trimmedUrl = `${HTTPS}${trimmedUrl.slice(HTTPS.length)
