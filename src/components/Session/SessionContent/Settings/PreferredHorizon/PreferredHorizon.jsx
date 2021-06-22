@@ -62,7 +62,7 @@ const PreferredHorizon = ({ d }) => {
                         >
                             {server.name && <span>{server.name}</span>}
                             <span>{server.url}</span>
-                            <span className="PreferredHorizon_card-radio" />
+                            <div className="PreferredHorizon_card-radio" />
                         </div>
                     ))}
 

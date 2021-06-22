@@ -8,12 +8,18 @@ export default class AccountEvents {
         this.unlistenAccountEvents = null;
     }
 
+    get streamInitialized() {
+        return Boolean(this.unlistenAccountEvents);
+    }
+
     restartAccountEventsListening(Server, publicKey) {
-        if (!this.unlistenAccountEvents) {
+        if (!this.streamInitialized) {
             return;
         }
 
         this.unlistenAccountEvents();
+
+        this.unlistenAccountEvents = null;
 
         this.listenAccountEvents(Server, publicKey);
     }
@@ -28,6 +34,12 @@ export default class AccountEvents {
             .stream({
                 onmessage: () => this.newEffectCallback(),
             });
+    }
+
+    stopListenAccountEvents() {
+        if (this.streamInitialized) {
+            this.unlistenAccountEvents();
+        }
     }
 
     async newEffectCallback() {

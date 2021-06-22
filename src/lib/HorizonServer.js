@@ -21,21 +21,6 @@ const TRANSACTION_TIMEOUT = 60 * 60 * 24 * 30;
 
 
 export default class HorizonServer {
-    /**
-     * Check if the url is a valid horizon server
-     * @param url {string} - horizon url
-     * @returns {boolean} - is a valid horizon
-     */
-    static async checkHorizonServer(url) {
-        try {
-            const serverInfo = await get(url);
-            return serverInfo.network_passphrase === StellarSdk.Networks.PUBLIC;
-        } catch (e) {
-            console.log(e);
-            return false;
-        }
-    }
-
     constructor(driver) {
         this.driver = driver;
 
@@ -51,21 +36,60 @@ export default class HorizonServer {
         return [...Object.values(DEFAULT_SERVERS), ...this.customServers];
     }
 
-    async addCustomServer(url) {
-        const isValid = await this.constructor.checkHorizonServer(url);
+    /**
+     * Check if the url is a valid horizon server
+     * @param url {string} - horizon url
+     * @returns Promise {string} - return horizon url if valid
+     */
+    checkHorizonServer(url) {
+        const HTTPS = 'https://';
+        const HTTP = 'http://';
 
-        if (!isValid) {
-            throw new Error('Invalid Horizon address');
-        }
+        return new Promise(async (resolve, reject) => {
+            let trimmedUrl = url.trim();
 
-        if (this.serverList.find(server => server.url === url || `${server.url}/` === url || server.url === `${url}/`)) {
-            throw new Error('This Horizon already exists');
-        }
+            if (trimmedUrl.startsWith(HTTP)) {
+                reject('Insecure Horizon server. Horizon address must start with https://');
+            }
 
-        this.customServers.push({ name: '', url });
-        localStorage.setItem(CUSTOM_HORIZON_SERVERS_LIST_LS, JSON.stringify(this.customServers));
+            if (!trimmedUrl.startsWith(HTTPS)) {
+                reject('Invalid Horizon address');
+            }
 
-        this.event.trigger(HORIZON_SERVER_EVENTS.newHorizonAdded);
+            trimmedUrl = `${HTTPS}${trimmedUrl.slice(HTTPS.length)
+                .replace(/^[\\\\/]+|[\\\\/]+$/g, '')}`;
+
+            try {
+                const serverInfo = await get(trimmedUrl);
+                const isValid = serverInfo.network_passphrase === StellarSdk.Networks.PUBLIC;
+
+                if (!isValid) {
+                    reject('Invalid Horizon address');
+                }
+
+                if (this.serverList.find(server => server.url === trimmedUrl)) {
+                    reject('This Horizon already exists');
+                }
+
+                resolve(trimmedUrl);
+            } catch (e) {
+                console.log(e);
+                reject('Invalid Horizon address');
+            }
+        });
+    }
+
+    addCustomServer(customUrl) {
+        return this.checkHorizonServer(customUrl)
+            .then(url => {
+                this.customServers.push({ name: '', url });
+                localStorage.setItem(CUSTOM_HORIZON_SERVERS_LIST_LS, JSON.stringify(this.customServers));
+
+                this.event.trigger(HORIZON_SERVER_EVENTS.newHorizonAdded);
+            })
+            .catch(error => {
+                throw new Error(error);
+            });
     }
 
 
@@ -133,7 +157,7 @@ export default class HorizonServer {
      * @returns {void}
      */
     changeHorizon(url) {
-        if (url === this.driver.Server.currentServerUrl) {
+        if (url === this.driver.Server.currentServerUrl || !this.driver.accountEvents.streamInitialized) {
             return;
         }
         this.driver.Server = new StellarSdk.Server(url);

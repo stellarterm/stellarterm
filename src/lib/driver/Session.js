@@ -767,6 +767,7 @@ export default function Send(driver) {
                     return;
                 }
                 if (this.account) {
+                    driver.accountEvents.stopListenAccountEvents();
                     this.account.clearKeypair();
                     delete this.account;
                     init();
