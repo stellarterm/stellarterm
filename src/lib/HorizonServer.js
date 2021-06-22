@@ -79,7 +79,7 @@ export default class HorizonServer {
         });
     }
 
-    async addCustomServer(customUrl) {
+    addCustomServer(customUrl) {
         return this.checkHorizonServer(customUrl)
             .then(url => {
                 this.customServers.push({ name: '', url });
