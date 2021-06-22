@@ -5,7 +5,6 @@ export default class AccountEvents {
         this.driver = driver;
 
         this.isLoading = false;
-        this.initLoading = false;
         this.unlistenAccountEvents = null;
     }
 
