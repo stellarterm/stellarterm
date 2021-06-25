@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
+import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 
 export default function WalletConnectSignModal(props) {
     const [txState, setTxState] = useState('loading');
@@ -8,7 +9,9 @@ export default function WalletConnectSignModal(props) {
     const { data, submit } = props;
 
     data.result
-        .then(() => setTxState('submitted'))
+        .then(() => {
+            setTxState('submitted');
+        })
         .catch(() => setTxState('rejected'));
 
     return (
@@ -27,22 +30,27 @@ export default function WalletConnectSignModal(props) {
 
             <div className="WalletConnectSignModal__state">
                 {txState === 'loading' && (
-                    <div className="nk-spinner-green">
-                        <div className="nk-spinner" />
+                    <div className="WalletConnectSignModal__result">
+                        <span>Status: </span>
+                        <span>Pending<Ellipsis /></span>
                     </div>
                 )}
                 {txState === 'submitted' && (
-                    <React.Fragment>
-                        <div className="WalletConnectSignModal__result">Submitted</div>
-                        <button className="MultisigSubmitModal__button" onClick={() => submit.cancel()}>Ok</button>
-                    </React.Fragment>
+                    <div className="WalletConnectSignModal__result">
+                        <span>Status: </span>
+                        <span>Submitted</span>
+                    </div>
                 )}
                 {txState === 'rejected' && (
-                    <React.Fragment>
-                        <div className="WalletConnectSignModal__result">Rejected</div>
-                        <button className="MultisigSubmitModal__button" onClick={() => submit.cancel()}>Ok</button>
-                    </React.Fragment>
+                    <div className="WalletConnectSignModal__result">
+                        <span>Status: </span>
+                        <span>Cancelled</span>
+                    </div>
                 )}
+
+                <button className="MultisigSubmitModal__button" onClick={() => submit.cancel()}>
+                    {txState === 'loading' ? 'Close' : 'Ok'}
+                </button>
             </div>
         </div>
     );

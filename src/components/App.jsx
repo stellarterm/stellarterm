@@ -110,6 +110,7 @@ class TermApp extends React.Component {
             const { state } = this.props.d.session;
             if (state === 'in' || state === 'unfunded') {
                 e.returnValue = 'You will be logged out after reload!';
+                return 'You have unsaved changes!';
             }
         };
 
@@ -117,6 +118,8 @@ class TermApp extends React.Component {
             const { state, unfundedAccountId, account } = this.props.d.session;
             faviconHandler(state, unfundedAccountId, account);
         });
+
+        this.props.d.session.initWalletConnect();
     }
 
     render() {
