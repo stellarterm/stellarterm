@@ -1,0 +1,110 @@
+.PreferredHorizon_container {
+    display: flex;
+    flex-direction: column;
+    padding: 20px 20px 31px;
+
+    .PreferredHorizon_card-radio {
+        position: absolute;
+        right: 30px;
+        top: 50%;
+        transform: translate(0, -50%);
+        height: 20px;
+        width: 20px;
+        border-radius: 50%;
+        border: 1px solid #dddddd;
+        background-color: #fff;
+    }
+
+    .PreferredHorizon_card {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: flex-start;
+        position: relative;
+        padding: 20px;
+        border-radius: 4px;
+        border: solid 1px #ebeff1;
+        background-color: #f9f9f9;
+        cursor: pointer;
+
+        &:not(:last-child) {
+            margin-bottom: 20px;
+        }
+
+
+
+        span {
+            font-size: 16px;
+            font-weight: 300;
+
+            &:first-child {
+                font-size: 18px;
+                font-weight: normal;
+            }
+        }
+
+        &.active {
+            border: solid 1px #7ed085;
+            background-color: #f0faf1;
+
+            .PreferredHorizon_card-radio {
+                border: 1px solid #5eb464;
+
+                &::after {
+                    position: absolute;
+                    content: '';
+                    height: 10px;
+                    width: 10px;
+                    border: 1px solid #69c76f;
+                    border-radius: 50%;
+                    background-color: #69c76f;
+                    left: 50%;
+                    top: 50%;
+                    transform: translate(-50%, -50%);
+                    box-sizing: content-box;
+                }
+            }
+        }
+
+        .PreferredHorizon_card-title {
+            margin-bottom: 9px;
+        }
+
+        .PreferredHorizon_card-form {
+            width: 100%;
+            display: flex;
+
+            .PreferredHorizon_input {
+                padding-left: 18px;
+                border-radius: 2px;
+                border: solid 1px #d7e0e4;
+                height: 55px;
+                font-size: 14px;
+                font-weight: normal;
+                outline: none;
+                flex: 1;
+                margin-right: 14px;
+
+                &::placeholder {
+                    color: #9aa6ac;
+                }
+            }
+
+            .s-button {
+                width: 126px;
+                display: flex;
+                flex-direction: row;
+                justify-content: center;
+                align-items: center;
+
+                .nk-spinner {
+                    margin-left: 8px;
+                    width: 12px;
+                    height: 12px;
+                    border: 1px solid rgba(256, 256, 256, 0.3);
+                    border-left: 1px solid #fff;
+                }
+            }
+        }
+    }
+}

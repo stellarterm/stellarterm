@@ -13,7 +13,7 @@ import NotFound from '../../../NotFound/NotFound';
 export const ROW_HEIGHT = 47;
 export const TABLE_MAX_HEIGHT = Math.max(window.innerHeight - 470, 376);
 export const SCROLL_WIDTH = 17;
-export const formatDate = (timestamp) => {
+export const formatDate = timestamp => {
     const date = new Date(timestamp).toLocaleDateString();
     const time = new Date(timestamp).toLocaleTimeString('en-US', {
         hour: '2-digit',
@@ -58,7 +58,7 @@ export default class Activity extends React.Component {
 
     getHistory() {
         this.setState({ historyLoading: true });
-        this.props.d.history.getOperations(200).then((history) => {
+        this.props.d.accountEvents.getOperations(200).then(history => {
             this.setState({
                 history: history.records,
                 historyNext: history.next,
@@ -69,7 +69,7 @@ export default class Activity extends React.Component {
 
     getPaymentHistory() {
         this.setState({ paymentHistoryLoading: true });
-        this.props.d.history.getPaymentsHistory(200).then((history) => {
+        this.props.d.accountEvents.getPaymentsHistory(200).then(history => {
             this.setState({
                 paymentHistory: history.records,
                 paymentHistoryNext: history.next,
@@ -94,7 +94,7 @@ export default class Activity extends React.Component {
             return;
         }
         this.setState({ [`${historyType}Loading`]: true });
-        next().then((res) => {
+        next().then(res => {
             if (res.records.length === 0) {
                 this.setState({ [`${historyType}Loading`]: false, [`${historyType}IsFull`]: true });
                 return;
@@ -131,7 +131,8 @@ export default class Activity extends React.Component {
                     <Route
                         exact
                         path="/account/activity/"
-                        render={() => <ActivityOpenOrders openOffers={openOffers} d={d} />} />
+                        render={() => <ActivityOpenOrders openOffers={openOffers} d={d} />}
+                    />
 
                     <Route
                         exact
@@ -142,7 +143,9 @@ export default class Activity extends React.Component {
                                 loadMore={() => this.loadMore(this.state.historyNext, 'history')}
                                 isFull={historyIsFull}
                                 history={history}
-                                loading={historyLoading} />} />
+                                loading={historyLoading}
+                            />}
+                    />
 
                     <Route
                         exact
@@ -153,7 +156,9 @@ export default class Activity extends React.Component {
                                 loadMore={() => this.loadMore(this.state.paymentHistoryNext, 'paymentHistory')}
                                 allHistory={history}
                                 history={paymentHistory}
-                                loading={paymentHistoryLoading} />} />
+                                loading={paymentHistoryLoading}
+                            />}
+                    />
 
                     <Route
                         exact
@@ -164,7 +169,9 @@ export default class Activity extends React.Component {
                                 history={history}
                                 isFull={historyIsFull}
                                 loadMore={() => this.loadMore(this.state.historyNext, 'history')}
-                                loading={historyLoading} />} />
+                                loading={historyLoading}
+                            />}
+                    />
                     <Route
                         exact
                         path="/account/activity/trustlines/"
@@ -174,7 +181,9 @@ export default class Activity extends React.Component {
                                 loadMore={() => this.loadMore(this.state.historyNext, 'history')}
                                 isFull={historyIsFull}
                                 history={history}
-                                loading={historyLoading} />} />
+                                loading={historyLoading}
+                            />}
+                    />
 
                     <Route render={() => <NotFound withoutWrapper />} />
                 </Switch>

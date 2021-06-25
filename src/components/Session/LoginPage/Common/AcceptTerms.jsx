@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import isElectron from 'is-electron';
 
 export default class AcceptTerms extends React.Component {
     constructor(props) {
@@ -26,7 +27,11 @@ export default class AcceptTerms extends React.Component {
                     />
                     <span className="LoginPage__accept__label">
                         I accept the{' '}
-                        <Link to="/terms-of-use/" className="LoginPage__accept__link" target="_blank">
+                        <Link
+                            to="/terms-of-use/"
+                            className="LoginPage__accept__link"
+                            target={isElectron() ? '_self' : '_blank'}
+                        >
                             Terms of Use
                         </Link>
                         , understand the risks associated with cryptocurrencies, and know that StellarTerm does not

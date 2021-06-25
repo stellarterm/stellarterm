@@ -1,6 +1,6 @@
 .PopupAlert {
     overflow-y: auto;
-    max-height: 300px;
+    max-height: calc(100vh - 300px);
     z-index: 10;
     position: fixed;
     bottom: 50px;
@@ -42,6 +42,11 @@
 
         .popup-icon-cell {
             padding-right: 0.7em;
+
+            img {
+                width: 24px;
+                height: 24px;
+            }
         }
 
         .popup-content-cell {
@@ -53,6 +58,10 @@
                 font-size: 18px;
                 color: #505558;
                 font-weight: normal;
+
+                &.error {
+                    color: #ff415b;
+                }
             }
 
             .popup-text {

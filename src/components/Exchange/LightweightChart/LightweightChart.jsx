@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
@@ -49,7 +50,7 @@ export default class LightweightChart extends React.Component {
         this.debouncedUpdateLastTrades = Debounce(this.updateLastTrades.bind(this), 700);
 
         this.unsubLastTrades = this.props.d.orderbook.event.sub(event => {
-            if (event && event.lastTrades) {
+            if (event && event.lastTrades && !event.lastTradesInit) {
                 this.debouncedUpdateLastTrades();
             }
         });
@@ -268,33 +269,27 @@ export default class LightweightChart extends React.Component {
         const endDate = Math.round(Date.now() / 1000);
         const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
 
-        this.props.d.orderbook.handlers.getTrades(startDate, endDate, timeFrame, 2).then(res => {
+        this.props.d.orderbook.handlers.getTrades(startDate, endDate, timeFrame, 20).then(res => {
             const { trades, volumes, nextTrades, fullHistoryLoaded } = this.state;
 
             const convertedLastTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
-            const convertedLastVolume = converterOHLC.getVolumeData(convertedLastTrades, this.props.d.orderbook.data);
+            const convertedLastVolumes = converterOHLC.getVolumeData(convertedLastTrades,
+                this.props.d.orderbook.data);
 
-            const [secondLastTrade, lastTrade] = convertedLastTrades;
-            const [secondLastVolume, lastVolume] = convertedLastVolume;
+            const firstIndex = trades.findIndex(trade => trade.time === convertedLastTrades[0].time);
 
-            const secondLastTradeIndex = trades.findIndex(trade => trade.time === secondLastTrade.time);
-            const lastTradeIndex = trades.findIndex(trade => trade.time === lastTrade.time);
+            const [_oldTrade, ...newTrades] = convertedLastTrades;
+            const [_oldVolume, ...newVolumes] = convertedLastVolumes;
 
-            trades[secondLastTradeIndex] = secondLastTrade;
-            volumes[secondLastTradeIndex] = secondLastVolume;
+            trades[firstIndex + 1].close = newTrades[0].open;
 
-            if (lastTradeIndex !== -1) {
-                trades[lastTradeIndex] = lastTrade;
-                volumes[lastTradeIndex] = lastVolume;
-            } else {
-                trades.push(lastTrade);
-                volumes.push(lastVolume);
-            }
+            const updatedTrades = [...trades.slice(0, firstIndex + 1), ...newTrades];
+            const updatedVolumes = [...volumes.slice(0, firstIndex + 1), ...newVolumes];
 
             if (this._mounted) {
                 this.setState({
-                    trades,
-                    volumes,
+                    trades: updatedTrades,
+                    volumes: updatedVolumes,
                     nextTrades,
                     fullHistoryLoaded,
                 });
