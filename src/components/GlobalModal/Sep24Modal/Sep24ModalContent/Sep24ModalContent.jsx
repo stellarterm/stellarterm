@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import images from '../../../../images';
 import Driver from '../../../../lib/Driver';
 import Sep24ModalFooter from '../Common/Sep24ModalFooter/Sep24ModalFooter';
-import { getTransferServer, getTransferServerInfo, sep24Request, getTransaction } from '../../../../lib/SepUtils';
+import { getTransferServerInfo, sep24Request, getTransaction } from '../../../../lib/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
 import TransactionContent from '../TransactionContent/TransactionContent';
 import FeeBlock from '../Common/FeeBlock';
@@ -17,9 +17,10 @@ export default class Sep24ModalContent extends React.Component {
 
         this.assetInfo = {};
         this.jwtToken = this.props.jwtToken;
-        this.TRANSFER_SERVER_SEP0024 = null;
-        this.WEB_AUTH_URL = null;
-        this.NETWORK_PASSPHRASE = null;
+        this.TRANSFER_SERVER_SEP0024 = this.props.transferServer.TRANSFER_SERVER_SEP0024;
+        this.WEB_AUTH_URL = this.props.transferServer.WEB_AUTH_URL;
+        this.NETWORK_PASSPHRASE = this.props.transferServer.NETWORK_PASSPHRASE;
+        this.SUPPORT = this.props.transferServer.SUPPORT;
 
         this.state = {
             isLoading: !this.props.transaction,
@@ -41,11 +42,9 @@ export default class Sep24ModalContent extends React.Component {
 
     componentDidMount() {
         window.addEventListener('message', this.callbackHandler, false);
-        const { asset, isDeposit } = this.props;
 
         if (this.state.transaction) {
-            this.getTransferServer(asset)
-                .then(() => this.initSep24())
+            this.initSep24()
                 .then(() => this.fetchTransaction())
                 .catch(({ data }) => {
                     this.setState({
@@ -56,8 +55,18 @@ export default class Sep24ModalContent extends React.Component {
             return;
         }
 
-        this.getTransferServer(asset)
-            .then(() => getTransferServerInfo(this.TRANSFER_SERVER_SEP0024))
+        this.createNewTransaction();
+    }
+
+    componentWillUnmount() {
+        clearTimeout(this.pollingTimeout);
+        window.removeEventListener('message', this.callbackHandler, false);
+    }
+
+    createNewTransaction(immediatelyStart) {
+        const { asset, isDeposit } = this.props;
+
+        getTransferServerInfo(this.TRANSFER_SERVER_SEP0024)
             .then(transferInfo => (isDeposit ? transferInfo.deposit : transferInfo.withdraw))
             .then(info => {
                 const transferAssetInfo = info[asset.code];
@@ -70,6 +79,7 @@ export default class Sep24ModalContent extends React.Component {
                             isDeposit ? 'deposits' : 'withdrawals'
                         }.`,
                     });
+                    return null;
                 }
                 return this.initSep24();
             })
@@ -78,6 +88,11 @@ export default class Sep24ModalContent extends React.Component {
                     isLoading: false,
                     transaction: res,
                     reqErrorMsg: (res && res.error) ? res.error : this.state.reqErrorMsg,
+                    windowClosed: false,
+                }, () => {
+                    if (immediatelyStart) {
+                        this.openAnchorWindow();
+                    }
                 });
             })
             .catch(({ data }) => {
@@ -88,28 +103,19 @@ export default class Sep24ModalContent extends React.Component {
             });
     }
 
-    componentWillUnmount() {
-        clearTimeout(this.pollingTimeout);
-        window.removeEventListener('message', this.callbackHandler, false);
-    }
-
-    getTransferServer(asset) {
-        return getTransferServer(asset)
-            .then(({ TRANSFER_SERVER_SEP0024, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
-                this.TRANSFER_SERVER_SEP0024 = TRANSFER_SERVER_SEP0024;
-                this.WEB_AUTH_URL = WEB_AUTH_URL;
-                this.NETWORK_PASSPHRASE = NETWORK_PASSPHRASE;
-            });
-    }
-
     initSep24() {
         const { d, asset, isDeposit } = this.props;
         const { requestParams, transaction } = this.state;
 
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
-        const isLedgerJwtNeeded = d.session.authType === 'ledger' && this.jwtToken === null;
-        const isLedgerJwtRecieved = d.session.authType === 'ledger' && this.jwtToken !== null;
+
+        const isLedgerJwtNeeded = (d.session.authType === 'ledger')
+            && this.jwtToken === null;
+
+        const isLedgerJwtReceived = d.session.authType === 'ledger' && this.jwtToken !== null;
+
+        const isFreighterJwtReceived = d.session.authType === 'freighter' && this.jwtToken !== null;
 
         // Reopen ledger popup for jwt auth, if needed
         if (isLedgerJwtNeeded) {
@@ -121,13 +127,14 @@ export default class Sep24ModalContent extends React.Component {
                     isDeposit,
                     asset,
                     jwtToken: token,
+                    transferServer: this.props.transferServer,
                 };
             });
         }
 
-        // If ledger auth, and jwt already recieved, init sep24
-        if (isLedgerJwtRecieved) {
-            if (transaction) { return this.fetchTransaction(); }
+        // If ledger or Freighter auth, and jwt already recieved, init sep24
+        if (isLedgerJwtReceived || isFreighterJwtReceived) {
+            if (transaction) { return Promise.resolve(); }
             return sep24Request(this.TRANSFER_SERVER_SEP0024, isDeposit, this.jwtToken, requestParams);
         }
 
@@ -187,6 +194,12 @@ export default class Sep24ModalContent extends React.Component {
     }
 
     openAnchorWindow() {
+        if (this.anchorWindow && this.anchorWindow.closed) {
+            this.setState({ transaction: null, isLoading: true });
+            this.anchorWindow = null;
+            this.createNewTransaction(true);
+            return;
+        }
         const { transaction } = this.state;
         const isInfoNeeded = transaction.type === 'interactive_customer_info_needed';
         const urlWithCallback = new URL(transaction.url);
@@ -213,6 +226,7 @@ export default class Sep24ModalContent extends React.Component {
             <Sep24ModalFooter
                 d={d}
                 asset={asset}
+                transferServer={this.props.transferServer}
                 isDeposit={isDeposit}
                 isLoading={isLoading}
                 isAnyError={isAnyError}
@@ -320,4 +334,5 @@ Sep24ModalContent.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     asset: PropTypes.objectOf(PropTypes.any).isRequired,
     transaction: PropTypes.objectOf(PropTypes.any),
+    transferServer: PropTypes.objectOf(PropTypes.any),
 };

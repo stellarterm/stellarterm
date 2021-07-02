@@ -6,12 +6,14 @@ import Sep24ModalContent from './Sep24ModalContent/Sep24ModalContent';
 import WithdrawCompleted from './WithdrawCompleted/WithdrawCompleted';
 
 export default function Sep24Modal(props) {
-    const { isDeposit, withdrawCompleted } = props.data;
     const { data, d } = props;
+    const {
+        isDeposit, withdrawCompleted, asset, amount, transaction, noActionBtn, jwtToken, transferServer,
+    } = data;
 
     const titleText = withdrawCompleted ?
         'Withdrawal initiated' :
-        `${isDeposit ? 'Deposit' : 'Withdraw'} ${data.asset.code} asset`;
+        `${isDeposit ? 'Deposit' : 'Withdraw'} ${asset.code} asset`;
 
     return (
         <div className="Sep24Modal">
@@ -23,24 +25,29 @@ export default function Sep24Modal(props) {
                     onClick={() => {
                         d.modal.handlers.cancel();
                         window.history.pushState({}, null, '/');
-                    }} />
+                    }}
+                />
             </div>
 
             <div className="Sep24Modal_content">
                 {withdrawCompleted ? (
                     <WithdrawCompleted
                         d={d}
-                        asset={data.asset}
-                        withdrawAmount={data.amount}
-                        transaction={data.transaction} />
+                        asset={asset}
+                        transferServer={transferServer}
+                        withdrawAmount={amount}
+                        transaction={transaction}
+                    />
                 ) : (
                     <Sep24ModalContent
                         d={d}
+                        transferServer={transferServer}
                         isDeposit={isDeposit}
-                        asset={data.asset}
-                        noActionBtn={data.noActionBtn}
-                        transaction={data.transaction || null}
-                        jwtToken={data.jwtToken || null} />
+                        asset={asset}
+                        noActionBtn={noActionBtn}
+                        transaction={transaction || null}
+                        jwtToken={jwtToken || null}
+                    />
                 )}
             </div>
         </div>

@@ -21,6 +21,7 @@ import LoginModal from './LoginModal/LoginModal';
 import SecretPhraseSetup from './SecretPhraseSetup/SecretPhraseSetup';
 import BrowserModal from './BrowserModal/BrowserModal';
 import MoonpayModal from './MoonpayModal/MoonpayModal';
+import ChooseTransferServer from './ChooseTransferServer/ChooseTransferServer';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -150,6 +151,9 @@ export default class GlobalModal extends React.Component {
                 break;
             case 'MoonpayModal':
                 body = <MoonpayModal submit={d.modal.handlers} d={d} quote={modal.inputData} />;
+                break;
+            case 'ChooseTransferServer':
+                body = <ChooseTransferServer d={d} submit={d.modal.handlers} data={modal.inputData} />;
                 break;
             default:
                 body = (

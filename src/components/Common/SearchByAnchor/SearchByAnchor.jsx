@@ -86,65 +86,66 @@ export default class SearchByAnchor extends React.Component {
         let assetsAmount;
 
         switch (resolveState) {
-        case 'notfound':
-            assetResults = (
-                <MessageRow isError>
-                    <span>Unable to find currencies for {anchorDomain}</span>
-                </MessageRow>
-            );
-            break;
-        case 'invalid_domain':
-            assetResults = (
-                <MessageRow isError>
-                    <span>Please enter a valid domain name</span>
-                </MessageRow>
-            );
-            break;
-        case 'without_currencies':
-            assetResults = (
-                <MessageRow isError>
-                    <span>No currencies found in the stellar.toml file</span>
-                </MessageRow>
-            );
-            break;
-        case 'pending':
-            assetResults = (
-                <MessageRow>
-                    <span>Loading currencies for {anchorDomain}</span>
-                    <Ellipsis />
-                </MessageRow>
-            );
-            break;
-        case 'found':
-            assetResults = allCurrencies.map((currency) => {
-                const { code, issuer } = currency;
-                const assetIsUndefined = code === undefined || issuer === undefined;
-                const issuerInvalid = !StellarSdk.StrKey.isValidEd25519PublicKey(issuer);
-
-                if (assetIsUndefined || issuerInvalid) {
-                    return null;
-                }
-
-                const asset = Stellarify.assetToml(currency);
-
-                const key = currency.code + currency.issuer;
-                return (
-                    <AssetRow
-                        key={key}
-                        d={this.props.d}
-                        tradeLink={this.props.tradeLink}
-                        asset={asset}
-                        currency={currency}
-                        host={anchorDomain} />
+            case 'notfound':
+                assetResults = (
+                    <MessageRow isError>
+                        <span>Unable to find currencies for {anchorDomain}</span>
+                    </MessageRow>
                 );
-            });
-            assetsAmount = assetResults.filter(asset => asset !== null).length;
-            assetResults = this.props.tradeLink ?
-                <div className="AssetRow_flex3">{assetResults}</div> :
-                <div className="AssetRowContainer">{assetResults}</div>;
-            break;
-        default:
-            break;
+                break;
+            case 'invalid_domain':
+                assetResults = (
+                    <MessageRow isError>
+                        <span>Please enter a valid domain name</span>
+                    </MessageRow>
+                );
+                break;
+            case 'without_currencies':
+                assetResults = (
+                    <MessageRow isError>
+                        <span>No currencies found in the stellar.toml file</span>
+                    </MessageRow>
+                );
+                break;
+            case 'pending':
+                assetResults = (
+                    <MessageRow>
+                        <span>Loading currencies for {anchorDomain}</span>
+                        <Ellipsis />
+                    </MessageRow>
+                );
+                break;
+            case 'found':
+                assetResults = allCurrencies.map(currency => {
+                    const { code, issuer } = currency;
+                    const assetIsUndefined = code === undefined || issuer === undefined;
+                    const issuerInvalid = !StellarSdk.StrKey.isValidEd25519PublicKey(issuer);
+
+                    if (assetIsUndefined || issuerInvalid) {
+                        return null;
+                    }
+
+                    const asset = Stellarify.assetToml(currency);
+
+                    const key = currency.code + currency.issuer;
+                    return (
+                        <AssetRow
+                            key={key}
+                            d={this.props.d}
+                            tradeLink={this.props.tradeLink}
+                            asset={asset}
+                            currency={currency}
+                            host={anchorDomain}
+                        />
+                    );
+                });
+                assetsAmount = assetResults.filter(asset => asset !== null).length;
+                assetResults = this.props.tradeLink ?
+                    <div className="AssetRow_flex3">{assetResults}</div> :
+                    <div className="AssetRowContainer">{assetResults}</div>;
+                break;
+            default:
+                break;
         }
 
         const noAssetsForDomain = assetsAmount !== undefined && assetsAmount === 0;
@@ -168,7 +169,8 @@ export default class SearchByAnchor extends React.Component {
                             value={anchorDomain}
                             onChange={e => this.handleInputFederation(e)}
                             placeholder="Enter the anchor domain name to see issued assets
-                             (e.g. www.anchorusd.com, apay.io, etc)" />
+                             (e.g. ultrastellar.com, apay.io, etc)"
+                        />
                     </label>
                 </div>
                 {assetResults}
