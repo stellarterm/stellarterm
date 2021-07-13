@@ -6,6 +6,7 @@ import directory from 'stellarterm-directory';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 import Stellarify from '../../../../../lib/Stellarify';
+import { checkAssetSettings, getTransferServer } from '../../../../../lib/SepUtils';
 
 export default class AssetActionButtons extends React.Component {
     static getBuyLumensLink(isXLMNative) {
@@ -31,23 +32,40 @@ export default class AssetActionButtons extends React.Component {
         };
     }
 
-    onSepClick(isDeposit) {
+    async onSepClick(isDeposit) {
         const { d, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
-        const isSep24 = directoryAsset !== null && directoryAsset.sep24 === true;
 
-        d.modal.handlers.activate(`Sep${isSep24 ? '24' : '6'}Modal`, {
+        const transferServer = await getTransferServer(directoryAsset, isDeposit ? 'deposit' : 'withdraw', d.modal);
+
+        if (transferServer === 'cancelled') {
+            return;
+        }
+
+        if (!transferServer) {
+            d.toastService.error(
+                `${isDeposit ? 'Deposits' : 'Withdrawals'} not available`,
+                `${asset.code} ${isDeposit ? 'deposits' : 'withdrawals'} not available at the moment. Try back later.`,
+            );
+            return;
+        }
+
+        d.modal.handlers.activate(`Sep${transferServer.IS_SEP24 ? '24' : '6'}Modal`, {
             isDeposit,
             asset: directoryAsset,
+            transferServer,
         });
     }
 
     render() {
         const { onlyIcons, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
-        const isDepositEnabled = directoryAsset !== null && directoryAsset.deposit === true;
-        const isWithdrawEnabled = directoryAsset !== null && directoryAsset.withdraw === true;
+
         const isXLMNative = asset.code === 'XLM' && asset.issuer === null;
+
+        const {
+            isDepositEnabled = false, isWithdrawEnabled = false, isHistoryEnabled = false,
+        } = (directoryAsset && checkAssetSettings(directoryAsset)) || {};
 
         const containerClass = `ActionBtns_container ${onlyIcons ? 'hide_ActionText' : ''}`;
 
@@ -55,7 +73,7 @@ export default class AssetActionButtons extends React.Component {
 
         return (
             <div className={containerClass}>
-                {isDepositEnabled || isWithdrawEnabled ? (
+                {isHistoryEnabled ? (
                     <Link to={`transactions?asset=${assetSlug}`}>
                         <div className="actionBtn">
                             <div className="btnHint btnHint_wide">Transfer history</div>

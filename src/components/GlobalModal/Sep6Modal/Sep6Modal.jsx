@@ -34,7 +34,13 @@ export default class Sep6Modal extends React.Component {
             <div className="Sep6Modal_content">
                 <AssetBalance d={d} asset={data.asset} isDeposit={isDeposit} />
 
-                <Sep6ModalContent d={d} isDeposit={isDeposit} asset={data.asset} jwtToken={data.jwtToken || null} />
+                <Sep6ModalContent
+                    d={d}
+                    isDeposit={isDeposit}
+                    asset={data.asset}
+                    jwtToken={data.jwtToken || null}
+                    transferServer={data.transferServer}
+                />
             </div>
         );
     }
@@ -45,7 +51,13 @@ export default class Sep6Modal extends React.Component {
 
         return (
             <div className="Sep6Modal_content">
-                <WithdrawCompleted d={d} asset={data.asset} isDeposit={isDeposit} withdrawAmount={data.amount} />
+                <WithdrawCompleted
+                    d={d}
+                    asset={data.asset}
+                    isDeposit={isDeposit}
+                    withdrawAmount={data.amount}
+                    transferServer={data.transferServer}
+                />
             </div>
         );
     }
@@ -62,7 +74,8 @@ export default class Sep6Modal extends React.Component {
                         d={d}
                         isDeposit={isDeposit}
                         asset={data.asset}
-                        transaction={data.transaction} />
+                        transaction={data.transaction}
+                    />
                 </div>
             </div>
         ) : sep6Content;
@@ -79,7 +92,8 @@ export default class Sep6Modal extends React.Component {
                         onClick={() => {
                             d.modal.handlers.cancel();
                             window.history.pushState({}, null, '/');
-                        }} />
+                        }}
+                    />
                 </div>
 
                 {mainContent}

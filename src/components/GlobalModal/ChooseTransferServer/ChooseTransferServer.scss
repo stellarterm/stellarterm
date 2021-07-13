@@ -1,0 +1,71 @@
+.ChooseTransferServer {
+    background-color: #fff;
+    width: 612px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    .ChooseTransferServer_content {
+        padding: 30px;
+
+        .ChooseTransferServer_description {
+            font-size: 16px;
+            font-weight: normal;
+            line-height: normal;
+            margin-bottom: 32px;
+        }
+
+        .ChooseTransferServer_anchors {
+            margin-bottom: 32px;
+
+            .ChooseTransferServer_anchor {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                padding-left: 37px;
+                height: 110px;
+                width: 100%;
+                border-radius: 2px;
+                border: solid 1px #ebeff1;
+                background-color: #f9f9f9;
+                cursor: pointer;
+
+                &:not(:last-child) {
+                    margin-bottom: 17px;
+                }
+
+                &.active {
+                    border: solid 1px #7ed085;
+                    background-color: #f0faf1;
+                }
+
+
+                .ChooseTransferServer_anchor-logo {
+                    width: 32px;
+                    height: 32px;
+                    margin-right: 40px;
+                }
+
+                .ChooseTransferServer_anchor-info {
+                    display: flex;
+                    flex-direction: column;
+
+                    .ChooseTransferServer_anchor-title {
+                        font-size: 16px;
+                        font-weight: normal;
+                        line-height: normal;
+                    }
+
+                    .ChooseTransferServer_anchor-description {
+                        font-size: 16px;
+                        font-weight: 300;
+                    }
+                }
+            }
+        }
+
+        .Modal_button-block {
+            margin-bottom: 0;
+            padding-right: 0;
+        }
+    }
+}
