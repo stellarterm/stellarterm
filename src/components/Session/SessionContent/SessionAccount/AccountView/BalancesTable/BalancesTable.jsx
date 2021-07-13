@@ -37,12 +37,13 @@ export default function BalancesTable({ d }) {
 
 
     const balanceRows = [lumen, ...sortedAssets].map(asset => {
-        const { id, code, issuer, balance } = asset;
+        const { code, issuer, balance } = asset;
+
         const isNoUSDBalanceData = asset.balanceUSD === undefined;
         const balanceUSD = isNoUSDBalanceData ? null : `$${asset.balanceUSD}`;
 
         return (
-            <tr className="BalancesTable__row" key={id}>
+            <tr className="BalancesTable__row" key={code + issuer}>
                 <td className="BalancesTable__row__item BalancesTable__row__item--assetCard">
                     <AssetCardMain code={code} issuer={issuer} d={d} />
                 </td>

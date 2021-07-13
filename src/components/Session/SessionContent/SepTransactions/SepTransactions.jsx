@@ -7,10 +7,11 @@ import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
 import Driver from '../../../../lib/Driver';
 import images from '../../../../images';
-import { getTransferServer, getTransferServerInfo, getTransactions } from '../../../../lib/SepUtils';
+import { getTransferServer, getTransferServerInfo, getTransactions, checkAssetSettings } from '../../../../lib/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
 import Stellarify from '../../../../lib/Stellarify';
 import AssetRow from '../../../Common/AssetRow/AssetRow';
+import AppLoading from '../../../AppLoading/AppLoading';
 
 const TRANSACTIONS_LIMIT = 10;
 const ROW_HEIGHT = 41;
@@ -21,6 +22,7 @@ export default class SepTransactions extends React.Component {
     constructor(props) {
         super(props);
 
+        this.transferServer = null;
         this.TRANSFER_SERVER = null;
         this.WEB_AUTH_URL = null;
         this.NETWORK_PASSPHRASE = null;
@@ -29,8 +31,12 @@ export default class SepTransactions extends React.Component {
         this.state = {
             isLoading: true,
             errorMsg: false,
-            sepAsset: this.getUserTransactions(),
+            sepAsset: null,
         };
+    }
+
+    componentDidMount() {
+        this.getUserTransactions();
     }
 
     onClickTransaction(asset, transaction) {
@@ -42,6 +48,7 @@ export default class SepTransactions extends React.Component {
             isDeposit,
             transaction,
             jwtToken: this.jwtToken,
+            transferServer: this.transferServer,
         });
     }
 
@@ -57,7 +64,7 @@ export default class SepTransactions extends React.Component {
         this.setState({ isLoading: true });
 
         getTransactions(this.TRANSFER_SERVER, requestParams, this.jwtToken, sep24)
-            .then((res) => {
+            .then(res => {
                 const newAssetState = this.state.sepAsset;
                 newAssetState.transactions = transactions.concat(res.transactions);
 
@@ -67,7 +74,7 @@ export default class SepTransactions extends React.Component {
                     fullLoaded: res.transactions.length === 0,
                 });
             })
-            .catch((res) => {
+            .catch(res => {
                 this.setState({
                     isLoading: false,
                     errorMsg: (res && res.error) ? res.error : this.state.errorMsg,
@@ -75,7 +82,7 @@ export default class SepTransactions extends React.Component {
             });
     }
 
-    getUserTransactions() {
+    async getUserTransactions() {
         // This func generate state, based on asset from GET params
         const account = this.props.d.session.account;
         const urlParams = new URLSearchParams(window.location.search);
@@ -84,13 +91,17 @@ export default class SepTransactions extends React.Component {
         try {
             parsedAsset = Stellarify.parseAssetSlug(urlParams.get('asset'));
         } catch (e) {
-            return { notFound: true };
+            this.setState({ sepAsset: { notFound: true } });
+            return;
         }
 
         let asset = _.find(directory.assets, {
             code: parsedAsset.code, issuer: parsedAsset.issuer,
         });
-        if ((asset.deposit || asset.withdraw) && parsedAsset) {
+
+        const { isHistoryEnabled } = checkAssetSettings(asset);
+
+        if (isHistoryEnabled && parsedAsset) {
             const reservedAmount = account.getReservedBalance(parsedAsset);
             const userHaveTrustline = reservedAmount !== null;
 
@@ -100,60 +111,90 @@ export default class SepTransactions extends React.Component {
             });
         }
 
-        if (!asset) { return { notFound: true }; }
+        if (!asset) {
+            this.setState({ sepAsset: { notFound: true } });
+            return;
+        }
 
         // Then attempt to fetch user transactions for selected acnhor
-        getTransferServer(asset)
-            .then(({ TRANSFER_SERVER_SEP0024, TRANSFER_SERVER, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
-                this.TRANSFER_SERVER = TRANSFER_SERVER_SEP0024 || TRANSFER_SERVER;
-                this.WEB_AUTH_URL = WEB_AUTH_URL;
-                this.NETWORK_PASSPHRASE = NETWORK_PASSPHRASE;
-            })
-            .then(() => getTransferServerInfo(this.TRANSFER_SERVER))
-            .then((info) => {
-                asset.info = info;
-                if (asset.sep24) {
-                    return this.checkForJwt(asset);
-                }
+        const transferServer = await getTransferServer(asset, 'history', this.props.d.modal);
 
-                if (info.transactions.enabled && !info.transactions.authentication_required) {
-                    return this.checkForJwt(asset, true);
-                }
+        if (transferServer === 'cancelled') {
+            this.props.history.push('/account/');
+            return;
+        }
 
-                if (!info.transactions.enabled) {
-                    this.setState({
-                        sepAsset: asset,
-                        isLoading: false,
-                        errorMsg: 'Transfer history for this asset has been temporarily disabled by the anchor.',
-                    });
-                    return null;
-                }
-                return this.checkForJwt(asset);
-            })
-            .then(({ transactions }) => {
+        if (!transferServer) {
+            this.props.d.toastService.error(
+                'Transfer history not available',
+                `Transfer history for ${asset.code} not available at the moment. Try back later.`,
+            );
+            this.props.history.push('/account/');
+            return;
+        }
+
+        this.transferServer = transferServer;
+        this.TRANSFER_SERVER = transferServer.TRANSFER_SERVER_SEP0024 || transferServer.TRANSFER_SERVER;
+        this.WEB_AUTH_URL = transferServer.WEB_AUTH_URL;
+        this.NETWORK_PASSPHRASE = transferServer.NETWORK_PASSPHRASE;
+
+        try {
+            const transferServerInfo = await getTransferServerInfo(this.TRANSFER_SERVER);
+            asset.info = transferServerInfo;
+
+            if (asset.sep24) {
+                const { transactions } = await this.checkForJwt(asset);
                 asset.transactions = transactions || [];
                 this.setState({
                     sepAsset: asset,
                     isLoading: false,
                     errorMsg: transactions.length === 0 ? HISTORY_EMPTY : this.state.errorMsg,
                 });
-            })
-            .catch(() => {
+                return;
+            }
+
+            if (transferServerInfo.transactions.enabled && !transferServerInfo.transactions.authentication_required) {
+                const { transactions } = await this.checkForJwt(asset, true);
+                asset.transactions = transactions || [];
                 this.setState({
                     sepAsset: asset,
                     isLoading: false,
-                    errorMsg: this.state.errorMsg || 'Transfer history is temporarily unavailable for this asset.',
+                    errorMsg: transactions.length === 0 ? HISTORY_EMPTY : this.state.errorMsg,
                 });
+                return;
+            }
+
+            if (!transferServerInfo.transactions.enabled) {
+                this.setState({
+                    sepAsset: asset,
+                    isLoading: false,
+                    errorMsg: 'Transfer history for this asset has been temporarily disabled by the anchor.',
+                });
+                return;
+            }
+
+            const { transactions } = await this.checkForJwt(asset);
+            asset.transactions = transactions || [];
+            this.setState({
+                sepAsset: asset,
+                isLoading: false,
+                errorMsg: transactions.length === 0 ? HISTORY_EMPTY : this.state.errorMsg,
             });
-        return asset;
+        } catch (e) {
+            this.setState({
+                sepAsset: asset,
+                isLoading: false,
+                errorMsg: this.state.errorMsg || 'Transfer history is temporarily unavailable for this asset.',
+            });
+        }
     }
 
-    getTranactionRow() {
+    getTransactionRow() {
         const { isLoading, errorMsg, fullLoaded, sepAsset } = this.state;
         const { transactions } = sepAsset;
 
         const transactionsContent = transactions ? (
-            transactions.map((transaction) => {
+            transactions.map(transaction => {
                 const {
                     kind,
                     status,
@@ -269,7 +310,7 @@ export default class SepTransactions extends React.Component {
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
 
-        return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
+        return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
             this.jwtToken = token;
             return getTransactions(this.TRANSFER_SERVER, requestParams, this.jwtToken, asset.sep24, noAuth);
         });
@@ -277,6 +318,11 @@ export default class SepTransactions extends React.Component {
 
     render() {
         const { sepAsset, isLoading } = this.state;
+
+        if (!sepAsset) {
+            return <AppLoading text={'Loading transfer history'} />;
+        }
+
         const transactionsCount = sepAsset.transactions.length;
         const minHeight = isLoading && transactionsCount === 0 ? ROW_HEIGHT : '130px';
 
@@ -319,7 +365,7 @@ export default class SepTransactions extends React.Component {
                                     className="Activity-table-body"
                                     style={{ minHeight: `${minHeight}px` }}
                                 >
-                                    {this.getTranactionRow()}
+                                    {this.getTransactionRow()}
                                 </div>
                             </React.Fragment>
                         )}
@@ -332,4 +378,5 @@ export default class SepTransactions extends React.Component {
 
 SepTransactions.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    history: PropTypes.objectOf(PropTypes.any),
 };

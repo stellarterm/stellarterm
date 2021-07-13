@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
-import directory from 'stellarterm-directory';
 import Driver from '../../../../../lib/Driver';
 import MagicSpoon from '../../../../../lib/MagicSpoon';
 import ErrorHandler from '../../../../../lib/ErrorHandler';
@@ -28,6 +27,7 @@ export default class Sep24ModalFooter extends React.Component {
             isDeposit,
             transaction,
             noActionBtn: true,
+            transferServer: this.props.transferServer,
         });
     }
 
@@ -167,6 +167,7 @@ export default class Sep24ModalFooter extends React.Component {
                 isDeposit: false,
                 withdrawCompleted: true,
                 transaction,
+                transferServer: this.props.transferServer,
             };
             d.session.handlers.buildSignSubmit(tx);
             return null;
@@ -193,6 +194,7 @@ export default class Sep24ModalFooter extends React.Component {
                     isDeposit: false,
                     withdrawCompleted: true,
                     transaction,
+                    transferServer: this.props.transferServer,
                 });
             } catch (e) {
                 this.setState({
@@ -206,10 +208,8 @@ export default class Sep24ModalFooter extends React.Component {
     }
 
     render() {
-        const { asset } = this.props;
+        const { transferServer } = this.props;
         const { isError, errorMsg } = this.state;
-        const selectedAnchor = directory.getAnchor(asset.domain);
-        const supportMail = asset.customTransferSupport || selectedAnchor.support;
 
         return (
             <React.Fragment>
@@ -224,17 +224,17 @@ export default class Sep24ModalFooter extends React.Component {
 
                 <div className="Modal_footer">
                     <div className="transaction_support">
-                        {supportMail && (
+                        {transferServer.SUPPORT && (
                             <React.Fragment>
                                 <span>Having issues with your transaction?</span>
                                 <span>
                                     Contact anchor support at{' '}
                                     <a
-                                        href={`mailto:${supportMail}`}
+                                        href={`mailto:${transferServer.SUPPORT}`}
                                         target="_blank"
                                         rel="nofollow noopener noreferrer"
                                     >
-                                        {supportMail}
+                                        {transferServer.SUPPORT}
                                     </a>
                                 </span>
                             </React.Fragment>
@@ -259,4 +259,5 @@ Sep24ModalFooter.propTypes = {
     windowClosed: PropTypes.bool,
     transaction: PropTypes.objectOf(PropTypes.any),
     openAnchorWindow: PropTypes.func,
+    transferServer: PropTypes.objectOf(PropTypes.any),
 };
