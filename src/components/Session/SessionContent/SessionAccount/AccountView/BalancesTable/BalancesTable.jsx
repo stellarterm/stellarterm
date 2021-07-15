@@ -9,7 +9,8 @@ import AssetActionButtons from '../AssetActionButtons';
 import processBalances from './processBalances';
 
 
-export default function BalancesTable({ d }) {
+export default function BalancesTable(props) {
+    const { d } = props;
     const [balancesList, setBalancesList] = useState(null);
 
     useEffect(() => {
@@ -55,7 +56,7 @@ export default function BalancesTable({ d }) {
                     <PercentChange changePercent={get24hChangePercent(asset, d.ticker)} isHidden={isNoUSDBalanceData} />
                 </td>
                 <td>
-                    <AssetActionButtons d={d} asset={asset} onlyIcons />
+                    <AssetActionButtons d={d} asset={asset} onlyIcons {...props} />
                 </td>
             </tr>
         );
