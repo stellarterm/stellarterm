@@ -14,6 +14,7 @@ export default class AccountView extends React.Component {
     }
 
     render() {
+        const { props } = this;
         const { d } = this.props;
 
         return (
@@ -26,7 +27,7 @@ export default class AccountView extends React.Component {
                             receive other assets, you must <Link to="/account/addTrust/">accept</Link> them using the{' '}
                             <strong>Accept assets</strong> tool.
                         </div>
-                        <BalancesTable d={d} />
+                        <BalancesTable d={d} {...props} />
                     </div>
                 </div>
 

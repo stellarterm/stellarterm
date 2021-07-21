@@ -17,7 +17,7 @@ export function checkAssetSettings(asset) {
     };
 }
 
-const getTransferDomain = async (asset, type, modal) => {
+export const getTransferDomain = async (asset, type, modal, transferDomain) => {
     if (!asset.anchors.length) {
         return {
             output: {
@@ -45,17 +45,33 @@ const getTransferDomain = async (asset, type, modal) => {
         };
     }
 
+    if (transferDomain) {
+        const choseAnchor = enabledAnchors.find(anchor => anchor.domain === transferDomain);
+
+        return {
+            output: choseAnchor ? {
+                domain: choseAnchor.domain,
+                support: choseAnchor.support,
+                isSep24: choseAnchor.sep24,
+            } : null,
+        };
+    }
+
     return modal.handlers.activate('ChooseTransferServer', { anchors: enabledAnchors, type, asset });
 };
 
-export async function getTransferServer(asset, type, modal) {
-    const { output } = await getTransferDomain(asset, type, modal);
+export async function getTransferServer(asset, type, modal, transferDomain) {
+    const { output } = await getTransferDomain(asset, type, modal, transferDomain);
 
     if (!output) {
         return 'cancelled';
     }
 
     const { domain, support, isSep24 } = output;
+
+    if (transferDomain && transferDomain !== domain) {
+        return 'cancelled';
+    }
 
     try {
         const {
