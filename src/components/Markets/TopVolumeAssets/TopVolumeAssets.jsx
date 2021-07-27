@@ -29,9 +29,9 @@ export default class TopVolumeAssets extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!prevProps.baseAsset
+        if (this.props.baseAsset && (!prevProps.baseAsset
             || prevProps.baseAsset.code !== this.props.baseAsset.code
-            || prevProps.baseAsset.issuer !== this.props.baseAsset.issuer) {
+            || prevProps.baseAsset.issuer !== this.props.baseAsset.issuer)) {
             this.getStellarMarketsData();
             this.resetSort();
         }
