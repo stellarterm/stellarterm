@@ -11,7 +11,7 @@ import AssetRow from '../AssetRow/AssetRow';
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
 const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-const regexp = new RegExp(pattern);
+const regexp = new RegExp(pattern, 'i');
 
 export default class SearchByAnchor extends React.Component {
     constructor(props) {
