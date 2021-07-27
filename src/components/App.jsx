@@ -77,6 +77,14 @@ class TermApp extends React.Component {
             false,
         );
 
+        window.addEventListener('online', () => {
+            this.d.toastService.success('Connection restored', 'Internet connection has been restored');
+        });
+
+        window.addEventListener('offline', () => {
+            this.d.toastService.error('No connection', 'Internet connection appears to be offline');
+        });
+
         // Alert for logged user before reload page
         if (!isElectron()) {
             window.onbeforeunload = e => {
