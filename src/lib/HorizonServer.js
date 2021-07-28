@@ -157,7 +157,11 @@ export default class HorizonServer {
      * @returns {void}
      */
     changeHorizon(url) {
-        if (url === this.driver.Server.currentServerUrl || !this.driver.accountEvents.streamInitialized) {
+        if (
+            url === this.driver.Server.currentServerUrl ||
+            !this.driver.accountEvents.streamInitialized ||
+            !window.navigator.onLine
+        ) {
             return;
         }
         this.driver.Server = new StellarSdk.Server(url);
