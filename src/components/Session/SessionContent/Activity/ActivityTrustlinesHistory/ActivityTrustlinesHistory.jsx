@@ -5,52 +5,35 @@ import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from './../Activity';
+import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activity';
+import ActivityFromEffectsBase from '../ActivityFromEffectsBase';
 
 const TRUSTLINE_TYPES = ['trustline_removed', 'trustline_created', 'trustline_updated'];
 
-export default class ActivityTrustlinesHistory extends React.Component {
+export default class ActivityTrustlinesHistory extends ActivityFromEffectsBase {
     static async goToStellarExpert(operation, isTestnet) {
         const { transaction_hash } = await operation();
         window.open(`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${transaction_hash}`, '_blank');
     }
 
-    static filterHistoryByTrustlines(history) {
+    static filterEffects(history) {
         return history.filter(item => (TRUSTLINE_TYPES.includes(item.type)));
     }
 
     static getViewType(type) {
         switch (type) {
-        case 'trustline_removed': return ({
-            viewType: (<span className="red">Removed</span>),
-        });
-        case 'trustline_created': return ({
-            viewType: (<span className="green">Created</span>),
-        });
-        case 'trustline_updated': return ({
-            viewType: 'Updated',
-        });
-        default: break;
+            case 'trustline_removed': return ({
+                viewType: (<span className="red">Removed</span>),
+            });
+            case 'trustline_created': return ({
+                viewType: (<span className="green">Created</span>),
+            });
+            case 'trustline_updated': return ({
+                viewType: 'Updated',
+            });
+            default: break;
         }
         return null;
-    }
-
-    componentDidMount() {
-        const history = this.constructor.filterHistoryByTrustlines(this.props.history);
-        if (history.length === 0 && !this.props.isFull && !this.props.loading) {
-            this.props.loadMore();
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.history.length === this.props.history.length) {
-            return;
-        }
-        const prevHistory = this.constructor.filterHistoryByTrustlines(prevProps.history);
-        const currentHistory = this.constructor.filterHistoryByTrustlines(this.props.history);
-        if (prevHistory.length === currentHistory.length) {
-            this.props.loadMore();
-        }
     }
 
     getTrustlinesHistoryRow(historyItem, key, style, isTestnet) {
@@ -73,7 +56,8 @@ export default class ActivityTrustlinesHistory extends React.Component {
                         title="StellarExpert"
                         src={images['icon-info']}
                         alt="i"
-                        onClick={() => { this.constructor.goToStellarExpert(operation, isTestnet).then(); }} />
+                        onClick={() => { this.constructor.goToStellarExpert(operation, isTestnet).then(); }}
+                    />
                 </div>
             </div>
         );
@@ -81,8 +65,9 @@ export default class ActivityTrustlinesHistory extends React.Component {
 
 
     render() {
-        const { history, loading, d } = this.props;
-        const trustlineHistory = this.constructor.filterHistoryByTrustlines(history);
+        const { d } = this.props;
+        const { effectsHistory, loading } = d.effects;
+        const trustlineHistory = this.constructor.filterEffects(effectsHistory);
 
         if (!loading && trustlineHistory.length === 0) {
             return (
@@ -121,11 +106,12 @@ export default class ActivityTrustlinesHistory extends React.Component {
                                 <InfiniteLoader
                                     isRowLoaded={() => {}}
                                     rowCount={trustlineHistory.length}
-                                    loadMoreRows={(e) => {
+                                    loadMoreRows={e => {
                                         if (e.stopIndex + 40 > trustlineHistory.length) {
-                                            this.props.loadMore();
+                                            this.props.d.effects.loadMoreHistory();
                                         }
-                                    }}>
+                                    }}
+                                >
                                     {({ onRowsRendered, registerChild }) => (
                                         <List
                                             width={width}
@@ -137,7 +123,8 @@ export default class ActivityTrustlinesHistory extends React.Component {
                                             rowRenderer={
                                                 ({ key, index, style }) =>
                                                     this.getTrustlinesHistoryRow(
-                                                        trustlineHistory[index], key, style, d.Server.isTestnet)} />
+                                                        trustlineHistory[index], key, style, d.Server.isTestnet)}
+                                        />
                                     )}
                                 </InfiniteLoader>
                             )}
@@ -150,8 +137,4 @@ export default class ActivityTrustlinesHistory extends React.Component {
 }
 ActivityTrustlinesHistory.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    history: PropTypes.arrayOf(PropTypes.any),
-    loading: PropTypes.bool,
-    loadMore: PropTypes.func,
-    isFull: PropTypes.bool,
 };

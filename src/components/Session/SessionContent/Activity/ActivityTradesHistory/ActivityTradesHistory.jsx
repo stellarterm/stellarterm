@@ -7,38 +7,21 @@ import BigNumber from 'bignumber.js';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
-import { formatDate, ROW_HEIGHT, TABLE_MAX_HEIGHT, SCROLL_WIDTH } from './../Activity';
+import { formatDate, ROW_HEIGHT, TABLE_MAX_HEIGHT, SCROLL_WIDTH } from '../Activity';
 import Printify from '../../../../../lib/Printify';
+import ActivityFromEffectsBase from '../ActivityFromEffectsBase';
 
 
-export default class ActivityTradesHistory extends React.Component {
+export default class ActivityTradesHistory extends ActivityFromEffectsBase {
     static async goToStellarExpert(operation, isTestnet) {
         const op = await operation();
         window.open(`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${op.transaction_hash}`, '_blank');
     }
 
-    static filterHistoryByTrade(history) {
+    static filterEffects(history) {
         return history.filter(item => (
             item.type === 'trade' && item.bought_amount !== '0.0000000'
         ));
-    }
-
-    componentDidMount() {
-        const history = this.constructor.filterHistoryByTrade(this.props.history);
-        if (history.length === 0 && !this.props.isFull && !this.props.loading) {
-            this.props.loadMore();
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.history.length === this.props.history.length) {
-            return;
-        }
-        const prevHistory = this.constructor.filterHistoryByTrade(prevProps.history);
-        const currentHistory = this.constructor.filterHistoryByTrade(this.props.history);
-        if (prevHistory.length === currentHistory.length) {
-            this.props.loadMore();
-        }
     }
 
     getTradeHistoryRow(historyItem, key, style) {
@@ -82,15 +65,16 @@ export default class ActivityTradesHistory extends React.Component {
                         title="StellarExpert"
                         src={images['icon-info']}
                         alt="i"
-                        onClick={() => { this.constructor.goToStellarExpert(operation, d.Server.isTestnet).then(); }} />
+                        onClick={() => { this.constructor.goToStellarExpert(operation, d.Server.isTestnet).then(); }}
+                    />
                 </div>
             </div>
         );
     }
 
     render() {
-        const { history, loading } = this.props;
-        const tradeHistory = this.constructor.filterHistoryByTrade(history);
+        const { effectsHistory, loading } = this.props.d.effects;
+        const tradeHistory = this.constructor.filterEffects(effectsHistory);
 
         if (!loading && tradeHistory.length === 0) {
             return (
@@ -130,11 +114,12 @@ export default class ActivityTradesHistory extends React.Component {
                                 <InfiniteLoader
                                     isRowLoaded={() => {}}
                                     rowCount={tradeHistory.length}
-                                    loadMoreRows={(e) => {
+                                    loadMoreRows={e => {
                                         if (e.stopIndex + 40 > tradeHistory.length) {
-                                            this.props.loadMore();
+                                            this.props.d.effects.loadMoreHistory();
                                         }
-                                    }}>
+                                    }}
+                                >
                                     {({ onRowsRendered, registerChild }) => (
                                         <List
                                             width={width}
@@ -145,7 +130,8 @@ export default class ActivityTradesHistory extends React.Component {
                                             rowCount={tradeHistory.length}
                                             rowRenderer={
                                                 ({ key, index, style }) =>
-                                                    this.getTradeHistoryRow(tradeHistory[index], key, style)} />
+                                                    this.getTradeHistoryRow(tradeHistory[index], key, style)}
+                                        />
                                     )}
                                 </InfiniteLoader>
                             )}
@@ -158,8 +144,4 @@ export default class ActivityTradesHistory extends React.Component {
 }
 ActivityTradesHistory.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    history: PropTypes.arrayOf(PropTypes.any),
-    loading: PropTypes.bool,
-    loadMore: PropTypes.func,
-    isFull: PropTypes.bool,
 };

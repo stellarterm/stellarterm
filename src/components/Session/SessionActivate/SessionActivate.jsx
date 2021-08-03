@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 import QRCode from 'qrcode.react';
@@ -8,9 +8,15 @@ import clickToSelect from '../../../lib/clickToSelect';
 import CopyButton from '../../Common/CopyButton/CopyButton';
 import Driver from '../../../lib/Driver';
 import images from '../../../images';
+import ActivityPendingPaymentsHistory from '../SessionContent/PendingPayments/ActivePendingPayments/ActivePendingPayments';
 
 export default function SessionActivate(props) {
+    useEffect(() => {
+        props.d.claimableBalances.getClaimableBalances();
+    }, []);
+
     const { unfundedAccountId } = props;
+    const hasClaimableBalances = Boolean(props.d.claimableBalances.pendingClaimableBalances.length);
 
     if (props.d.Server.isTestnet) {
         return (
@@ -112,6 +118,12 @@ export default function SessionActivate(props) {
                     </div>
                 </div>
             </div>
+            {hasClaimableBalances &&
+                <div className="island Activity no_top_margin">
+                    <ActivityPendingPaymentsHistory d={props.d} />
+                </div>
+            }
+
         </ErrorBoundary>
     );
 }

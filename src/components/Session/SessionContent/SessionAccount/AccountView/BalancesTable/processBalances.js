@@ -8,7 +8,7 @@ const getUnknownAssetData = async ({ code, issuer, balance }, d) => {
     const lastTrade = await MagicSpoon.getLastMinuteAggregation(d.Server, new StellarSdk.Asset(code, issuer),
         StellarSdk.Asset.native());
 
-    if (!lastTrades || !lastTrades.records.length) {
+    if (!lastTrades || !lastTrade || !lastTrades.records.length) {
         return null;
     }
 

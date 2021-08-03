@@ -5,7 +5,9 @@
     margin-bottom: 30px;
     height: 100%;
 
-
+    &.no_top_margin {
+        margin-top: 0;
+    }
 
     .Activity_empty{
         padding: 23px;
@@ -49,7 +51,10 @@
                 display: flex;
                 flex-direction: row;
 
-
+                &--clickable:hover {
+                    background-color: #d7e0e433;
+                    cursor: pointer;
+                }
 
                 .Activity-table-cell{
                     flex: 4.2;
@@ -71,6 +76,15 @@
                             height: 14px;
                             width: 14px;
                         }
+
+                        &.Activity-table-identicon-list {
+                            margin-right: -11px;
+                            background-color: #fff;
+                        }
+                    }
+
+                    .Activity-table-identicon-list-count {
+                        margin-left: 20px;
                     }
 
                     .lightenZeros{

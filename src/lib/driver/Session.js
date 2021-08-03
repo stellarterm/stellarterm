@@ -220,6 +220,8 @@ export default function Send(driver) {
                 this.handlers.addUnknownAssetData();
                 driver.accountEvents.listenAccountEvents(driver.Server, this.account.account_id);
                 this.event.trigger('login');
+
+                driver.claimableBalances.getClaimableBalances();
             } catch (e) {
                 if (this.brakeUnfundedCheck) {
                     this.state = 'out';
@@ -391,6 +393,7 @@ export default function Send(driver) {
                     'manageData',
                     'manageBuyOffer',
                     'manageSellOffer',
+                    'claimClaimableBalance',
                 ],
                 high_threshold: ['accountMerge'],
                 setOptions: ['setOptions'], // med or high
@@ -724,6 +727,11 @@ export default function Send(driver) {
                 memo,
             });
             return await this.handlers.buildSignSubmit(tx);
+        },
+        claimClaimableBalance: (id, asset, withAddTrust) => {
+            const tx = MagicSpoon.buildTxClaimClaimableBalance(driver.Server, this.account, id, asset, withAddTrust);
+
+            return this.handlers.buildSignSubmit(tx);
         },
         createOffer: async (side, opts) => {
             const options = _.assign(opts, {

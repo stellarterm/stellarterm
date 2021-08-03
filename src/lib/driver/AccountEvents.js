@@ -1,8 +1,11 @@
-import { getOperationToastTemplate } from '../../components/ToastTemplate/AccountEventsTemplates';
+import { getOnClickAction, getOperationToastTemplate } from '../../components/ToastTemplate/AccountEventsTemplates';
+import Event from '../Event';
 
 export default class AccountEvents {
     constructor(driver) {
         this.driver = driver;
+
+        this.event = new Event();
 
         this.isLoading = false;
         this.unlistenAccountEvents = null;
@@ -17,7 +20,7 @@ export default class AccountEvents {
             return;
         }
 
-        this.unlistenAccountEvents();
+        this.stopListenAccountEvents();
 
         this.unlistenAccountEvents = null;
 
@@ -25,14 +28,21 @@ export default class AccountEvents {
     }
 
     async listenAccountEvents(Server, publicKey) {
-        const lastOperation = await this.getOperations(1);
+        const lastOperation = await this.driver.effects.getOperations(1);
         this.lastOpTime = new Date(lastOperation.records[0].created_at).getTime();
 
         this.unlistenAccountEvents = Server.effects()
             .forAccount(publicKey)
             .cursor('now')
             .stream({
-                onmessage: () => this.newEffectCallback(),
+                onmessage: res => {
+                    if (res.type === 'claimable_balance_claimant_created' ||
+                        res.type === 'claimable_balance_claimed'
+                    ) {
+                        this.driver.claimableBalances.updateClaimableBalances();
+                    }
+                    this.newEffectCallback();
+                },
             });
     }
 
@@ -43,14 +53,12 @@ export default class AccountEvents {
     }
 
     async newEffectCallback() {
-        if (this.isLoading) { return; }
-        this.isLoading = true;
-        const lastOperations = await this.getOperations(20);
-        this.isLoading = false;
+        const lastOperations = await this.driver.effects.debouncedUpdateLatestEffects();
+        this.driver.payments.debouncedUpdateLatestPayments();
 
-        if (this.lastOpTime === new Date(lastOperations.records[0].created_at).getTime()) { return; }
+        if (this.lastOpTime === new Date(lastOperations[0].created_at).getTime()) { return; }
 
-        const opsToShow = lastOperations.records.map(op => {
+        const opsToShow = lastOperations.map(op => {
             const opTime = new Date(op.created_at).getTime();
             if (this.lastOpTime >= opTime) { return null; }
             return op;
@@ -58,27 +66,14 @@ export default class AccountEvents {
 
         opsToShow.forEach(op => {
             const template = getOperationToastTemplate(op);
+
+            const onClick = getOnClickAction(this.driver, op);
+
             if (template) {
-                this.driver.toastService.successTemplate(template);
+                this.driver.toastService.successTemplate(template, onClick);
             }
         });
 
         this.lastOpTime = new Date(opsToShow[0].created_at).getTime();
-    }
-
-    async getOperations(opLimit) {
-        return this.driver.Server.effects()
-            .forAccount(this.driver.session.account.account_id)
-            .limit(opLimit)
-            .order('desc')
-            .call();
-    }
-
-    async getPaymentsHistory(opLimit) {
-        return this.driver.Server.payments()
-            .forAccount(this.driver.session.account.account_id)
-            .limit(opLimit)
-            .order('desc')
-            .call();
     }
 }
