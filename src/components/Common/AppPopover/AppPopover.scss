@@ -1,5 +1,6 @@
 .InfoHover_block {
     position: relative;
+    display: flex;
 
     img {
         height: 24px;
@@ -9,7 +10,7 @@
     .App_popover {
         position: absolute;
         left: 0;
-        top: 25px;
+        top: calc(100% + 5px);
         z-index: 10;
         width: 280px;
         padding: 15px 20px;
