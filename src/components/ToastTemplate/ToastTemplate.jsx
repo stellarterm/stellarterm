@@ -41,18 +41,25 @@ export default class ToastTemplate extends React.Component {
     }
 
     getToastTemplate(toast, index) {
-        const toastBody = toast.content === TOAST_CONTENT_TYPES.template ? toast.template : (
+        const { content, type, title, text, onClick, template } = toast;
+        const toastBody = content === TOAST_CONTENT_TYPES.template ? template : (
             <React.Fragment>
-                <div className={`popup-title ${toast.type === TOAST_TYPES.error ? 'error' : ''}`}>{toast.title}</div>
-                <div className="popup-text">{toast.text}</div>
+                <div className={`popup-title ${type === TOAST_TYPES.error ? 'error' : ''}`}>{title}</div>
+                <div className="popup-text">{text}</div>
             </React.Fragment>
         );
 
-        const iconName = this.constructor.getIconName(toast.type);
+        const iconName = this.constructor.getIconName(type);
 
         return (
-            <div className="popup-body" key={`toast-${index}`}>
-                <div className={`popup-icon-cell ${toast.type === TOAST_TYPES.error || toast.type === TOAST_TYPES.warning ? 'small' : ''}`}>
+            <div
+                className={`popup-body ${onClick ? 'popup-body-clickable' : ''}`}
+                key={`toast-${index}`}
+                onClick={() => {
+                    if (onClick) { onClick(); }
+                }}
+            >
+                <div className={`popup-icon-cell ${type === TOAST_TYPES.error || type === TOAST_TYPES.warning ? 'small' : ''}`}>
                     <img src={images[iconName]} alt="Ok-icon" />
                 </div>
                 <div className="popup-content-cell">{toastBody}</div>

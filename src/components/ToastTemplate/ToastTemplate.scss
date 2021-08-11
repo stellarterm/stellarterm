@@ -40,6 +40,10 @@
         transition: 0.5s ease-in-out;
         opacity: 1;
 
+        &.popup-body-clickable {
+            cursor: pointer;
+        }
+
         .popup-icon-cell {
             padding-right: 0.7em;
 

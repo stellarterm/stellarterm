@@ -13,11 +13,23 @@ export default function BalancesTable(props) {
     const { d } = props;
     const [balancesList, setBalancesList] = useState(null);
 
-    useEffect(() => {
+    const updateBalances = () => {
         processBalances(d).then(balances => {
             setBalancesList(balances);
         });
+    };
+
+    useEffect(() => {
+        updateBalances();
     }, []);
+
+    useEffect(() => {
+        const unsub = d.session.event.sub(() => {
+            updateBalances();
+        });
+
+        return () => unsub();
+    });
 
 
     if (!balancesList || !d.ticker.ready) {

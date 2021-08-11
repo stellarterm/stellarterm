@@ -12,6 +12,7 @@
 @import "./BrowserModal/BrowserModal";
 @import "./MoonpayModal/MoonpayModal";
 @import "./ChooseTransferServer/ChooseTransferServer";
+@import "ClaimableBalanceDetails/ClaimableBalanceDetails";
 
 .GlobalModalBackdrop {
   // This div fills up the whole screen, relative to where the user is scrolled to

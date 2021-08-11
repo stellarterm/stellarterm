@@ -1,0 +1,40 @@
+.NewClaimableBalancesBanner {
+    display: flex;
+    flex-direction: row;
+    padding-left: 9px;
+    align-items: center;
+
+    img {
+        margin-right: 11px;
+    }
+
+    .NewClaimableBalancesBanner_content {
+        color: #505558;
+        max-width: 422px;
+    }
+
+    .NewClaimableBalancesBanner_title {
+        font-size: 18px;
+        font-weight: normal;
+        margin-bottom: 3px;
+    }
+
+    .NewClaimableBalancesBanner_description {
+        font-size: 16px;
+        font-weight: 300;
+    }
+
+    .NewClaimableBalancesBanner_buttons {
+        margin-left: auto;
+
+        button {
+            height: 52px;
+            width: 162px;
+        }
+
+        .s-button {
+            margin-left: 10px;
+        }
+    }
+
+}
