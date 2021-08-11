@@ -27,7 +27,7 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
 
     const destination = claimants.find(claimant => claimant.destination === accountId);
 
-    const { canClaim, status: type, claimEnd, claimStart } =
+    const { canClaim, isExpired, status: type, claimEnd, claimStart } =
         getNextClaimTime(destination.predicate, Date.now());
 
     let availableTimeTitle;
@@ -166,10 +166,16 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
                             <div className="ClaimableBalanceDetails_predicates-title">
                                 Claim conditions
                             </div>
-                            <div>
-                                You can claim this payment within a time span set by the sender. Once claimed,
-                                the tokens will be credited to your account balance.
-                            </div>
+                            {isExpired ?
+                                <div>
+                                    This payment was not claimed within a time span set by the sender and has expired.
+                                     You can no longer claim this payment.
+                                </div> :
+                                <div>
+                                    You can claim this payment within a time span set by the sender. Once claimed,
+                                    the tokens will be credited to your account balance.
+                                </div>
+                            }
                         </div>
                     </React.Fragment>
                 }
