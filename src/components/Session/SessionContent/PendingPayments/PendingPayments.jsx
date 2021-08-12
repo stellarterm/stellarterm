@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import NotFound from '../../../NotFound/NotFound';
@@ -9,7 +9,17 @@ import HistoryPendingPayments from './HistoryPendingPayments/HistoryPendingPayme
 
 
 const PendingPayments = ({ d }) => {
-    const hasPendingPayments = Boolean(d.claimableBalances.pendingClaimableBalancesCount);
+    const [hasPendingPayments, setHasPendingPayments] =
+        useState(Boolean(d.claimableBalances.pendingClaimableBalancesCount));
+
+    useEffect(() => {
+        const unsub = this.props.d.claimableBalances.event.sub(() => {
+            setHasPendingPayments(Boolean(d.claimableBalances.pendingClaimableBalancesCount));
+        });
+
+        return () => unsub();
+    }, []);
+
 
     return (
         <div className="island Activity">
