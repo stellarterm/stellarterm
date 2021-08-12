@@ -109,7 +109,7 @@ export default class ActivePendingPaymentsHistory extends React.Component {
                 <div className="Activity-table">
                     <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
                         <div className="Activity-table-cell">Date/Time</div>
-                        <div className="Activity-table-cell flex2">Type</div>
+                        <div className="Activity-table-cell flex2">Status</div>
                         <div className="Activity-table-cell flex8">Address</div>
                         <div className="Activity-table-cell">Asset</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Amount</div>
