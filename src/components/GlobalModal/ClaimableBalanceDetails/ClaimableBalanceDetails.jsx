@@ -27,8 +27,22 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
 
     const destination = claimants.find(claimant => claimant.destination === accountId);
 
-    const { canClaim, isExpired, status: type, claimEnd, claimStart } =
+    const { canClaim, isExpired, isConflict, status: type, claimEnd, claimStart } =
         getNextClaimTime(destination.predicate, Date.now());
+
+    let predicatesTitle;
+    let predicatesDescription;
+
+    if (isConflict) {
+        predicatesTitle = 'Conflicting claim conditions';
+        predicatesDescription = 'The time conditions to claim this payment were set incorrectly by the sender. You can not claim this payment.';
+    } else if (isExpired) {
+        predicatesTitle = 'Claim conditions';
+        predicatesDescription = 'This payment was not claimed within a time span set by the sender and has expired. You can no longer claim this payment.';
+    } else {
+        predicatesTitle = 'Claim conditions';
+        predicatesDescription = 'You can claim this payment within a time span set by the sender. Once claimed, the tokens will be credited to your account balance.';
+    }
 
     let availableTimeTitle;
     let availableTime;
@@ -110,7 +124,7 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
             </div>
             <div className="ClaimableBalanceDetails_content">
                 <div className="ClaimableBalanceDetails_content-row">
-                    <div className="ClaimableBalanceDetails_content-row-name">Type</div>
+                    <div className="ClaimableBalanceDetails_content-row-name">Status</div>
                     <div className="ClaimableBalanceDetails_content-row-content">{type}</div>
                 </div>
                 <div className="ClaimableBalanceDetails_content-row">
@@ -154,7 +168,7 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
                         {amount} {assetCode}
                     </div>
                 </div>
-                {availableTimeTitle &&
+                {(availableTimeTitle || isConflict) &&
                     <React.Fragment>
                         <div className="ClaimableBalanceDetails_content-row">
                             <div className="ClaimableBalanceDetails_content-row-name">{availableTimeTitle}</div>
@@ -164,18 +178,9 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
                         </div>
                         <div className="ClaimableBalanceDetails_predicates">
                             <div className="ClaimableBalanceDetails_predicates-title">
-                                Claim conditions
+                                {predicatesTitle}
                             </div>
-                            {isExpired ?
-                                <div>
-                                    This payment was not claimed within a time span set by the sender and has expired.
-                                     You can no longer claim this payment.
-                                </div> :
-                                <div>
-                                    You can claim this payment within a time span set by the sender. Once claimed,
-                                    the tokens will be credited to your account balance.
-                                </div>
-                            }
+                            <div>{predicatesDescription}</div>
                         </div>
                     </React.Fragment>
                 }
