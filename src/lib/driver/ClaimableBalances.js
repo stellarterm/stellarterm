@@ -72,6 +72,7 @@ export default class ClaimableBalances {
                         return canClaim;
                     });
 
+
                 this.lastCanClaimBalance = canClaimClaimableBalances[0];
 
                 if (!this.lastCanClaimBalance || !this.pendingClaimableBalancesCount) {
@@ -88,8 +89,10 @@ export default class ClaimableBalances {
                     )
                 ) {
                     this.hasBanner = true;
-                    this.event.trigger();
+                } else {
+                    this.hasBanner = false;
                 }
+                this.event.trigger();
             });
     }
 
