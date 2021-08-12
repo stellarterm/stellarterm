@@ -2,15 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
+import NotFound from '../../NotFound/NotFound';
 import Trust from './Trust/Trust';
 import Send from './Send/Send';
 import SessionAccount from './SessionAccount/SessionAccount';
 import Multisig from './Multisig/Multisig';
 import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
-import NotFound from '../../NotFound/NotFound';
 import Activity from './Activity/Activity';
 import SepTransactions from './SepTransactions/SepTransactions';
 import Settings from './Settings/Settings';
+import PendingPayments from './PendingPayments/PendingPayments';
 
 export default function SessionContent(props) {
     const d = props.d;
@@ -33,6 +34,10 @@ export default function SessionContent(props) {
                 <Route
                     path="/account/activity/"
                     render={prop => <Activity {...prop} d={d} />}
+                />
+                <Route
+                    path="/account/pending-payments/"
+                    render={prop => <PendingPayments {...prop} d={d} />}
                 />
                 <Route
                     exact

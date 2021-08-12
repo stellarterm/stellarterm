@@ -1,0 +1,104 @@
+.ClaimableBalanceDetails {
+    background-color: #fff;
+    width: 612px;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    .ClaimableBalanceDetails_content {
+        padding: 48px 40px 40px;
+        width: 100%;
+
+        .ClaimableBalanceDetails_content-row {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 25px;
+
+            .App_popover {
+                width: 300px;
+            }
+
+            .ClaimableBalanceDetails_content-row-name {
+                flex: 1;
+                font-size: 14px;
+                font-weight: normal;
+                color: #505558;
+            }
+
+            .ClaimableBalanceDetails_content-row-content {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                flex: 2;
+                font-size: 14px;
+                font-weight: normal;
+                color: #9aa6ac;
+                line-height: 14px;
+            }
+        }
+
+        .ClaimableBalanceDetails_identicon {
+            margin-right: 4px;
+            img {
+                height: 14px;
+                width: 14px;
+            }
+        }
+
+        .ClaimableBalanceDetails_predicates {
+            padding: 20px;
+            border-radius: 6px;
+            border: solid 1px #ebeff1;
+            background-color: #f9f9f9;
+            font-size: 14px;
+            font-weight: normal;
+            color: #9aa6ac;
+        }
+
+        .ClaimableBalanceDetails_predicates-title {
+            color: #505558;
+            margin-bottom: 8px;
+        }
+
+        .ClaimableBalanceDetails_no-trust {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            min-width: 110px;
+
+            img {
+                margin-right: 4px;
+            }
+        }
+    }
+
+    .Modal_button-block {
+        margin-top: 35px;
+        margin-bottom: 0;
+        padding-right: 0;
+    }
+
+    .s-button {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+
+        &.wide {
+            width: 188px;
+        }
+
+        &.extra-wide {
+            width: 200px;
+        }
+
+        .nk-spinner {
+            margin-left: 8px;
+        }
+    }
+
+    .ErrorTransactionBlock {
+        margin-top: 30px;
+    }
+}

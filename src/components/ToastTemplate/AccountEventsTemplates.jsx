@@ -12,10 +12,17 @@ const actionTypes = new Map([
     ['trustline_removed', 'Trustline removed'],
     ['trade', 'Trade completed'],
     ['account_thresholds_updated', 'Number of required signers updated'],
+    ['claimable_balance_claimant_created', 'New pending payment'],
 ]);
 
 const getPaymentBody = (op, titleText) => {
-    const assetCode = op.asset_type === 'native' ? 'XLM' : op.asset_code;
+    let assetCode;
+
+    if (op.asset_type) {
+        assetCode = op.asset_type === 'native' ? 'XLM' : op.asset_code;
+    } else if (op.asset) {
+        assetCode = op.asset === 'native' ? 'XLM' : op.asset.split(':')[0];
+    }
 
     return (
         <React.Fragment>
@@ -94,6 +101,9 @@ export const getOperationToastTemplate = op => {
         case 'account_debited':
             opBody = getPaymentBody(op, titleText);
             break;
+        case 'claimable_balance_claimant_created':
+            opBody = getPaymentBody(op, titleText);
+            break;
         case 'trustline_created':
             opBody = getTrustlineBody(op, titleText);
             break;
@@ -114,5 +124,20 @@ export const getOperationToastTemplate = op => {
     }
 
     return opBody;
+};
+
+export const getOnClickAction = (driver, op) => {
+    switch (op.type) {
+        case 'claimable_balance_claimant_created':
+            return () => {
+                driver.claimableBalances.getClaimableBalance(op.balance_id)
+                    .then(res => {
+                        driver.modal.handlers.activate('ClaimableBalanceDetails', res);
+                    })
+                    .catch(() => {});
+            };
+        default:
+            return null;
+    }
 };
 

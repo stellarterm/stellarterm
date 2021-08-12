@@ -24,16 +24,16 @@ export default class Session extends React.Component {
         const { state, unfundedAccountId } = d.session;
 
         switch (state) {
-        case 'out':
-            return <LoginPage {...props} d={d} urlParts={urlParts} />;
-        case 'unfunded':
-            return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} />;
-        case 'loading':
-            return <SessionLoading />;
-        case 'in':
-            return <SessionContent {...props} d={d} />;
-        default:
-            break;
+            case 'out':
+                return <LoginPage {...props} d={d} urlParts={urlParts} />;
+            case 'unfunded':
+                return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} />;
+            case 'loading':
+                return <SessionLoading />;
+            case 'in':
+                return <SessionContent {...props} d={d} />;
+            default:
+                break;
         }
         return null;
     }

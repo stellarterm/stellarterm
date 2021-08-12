@@ -34,11 +34,12 @@ export default class ToastService {
         this.event.trigger();
     }
 
-    showTemplateToast(type, template) {
+    showTemplateToast(type, template, onClick) {
         this.activeToasts.push({
             content: TOAST_CONTENT_TYPES.template,
             type,
             template,
+            onClick,
         });
 
         this.event.trigger();
@@ -60,7 +61,7 @@ export default class ToastService {
         this.showToast(TOAST_TYPES.info, title, text);
     }
 
-    successTemplate(template) {
-        this.showTemplateToast(TOAST_TYPES.success, template);
+    successTemplate(template, onClick) {
+        this.showTemplateToast(TOAST_TYPES.success, template, onClick);
     }
 }

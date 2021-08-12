@@ -22,6 +22,7 @@ import SecretPhraseSetup from './SecretPhraseSetup/SecretPhraseSetup';
 import BrowserModal from './BrowserModal/BrowserModal';
 import MoonpayModal from './MoonpayModal/MoonpayModal';
 import ChooseTransferServer from './ChooseTransferServer/ChooseTransferServer';
+import ClaimableBalanceDetails from './ClaimableBalanceDetails/ClaimableBalanceDetails';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -154,6 +155,9 @@ export default class GlobalModal extends React.Component {
                 break;
             case 'ChooseTransferServer':
                 body = <ChooseTransferServer d={d} submit={d.modal.handlers} data={modal.inputData} />;
+                break;
+            case 'ClaimableBalanceDetails':
+                body = <ClaimableBalanceDetails d={d} submit={d.modal.handlers} claimableBalance={modal.inputData} />;
                 break;
             default:
                 body = (

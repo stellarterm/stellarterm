@@ -616,6 +616,22 @@ const MagicSpoon = {
         return transaction;
         // DON'T call .build()
     },
+    buildTxClaimClaimableBalance(Server, spoonAccount, id, asset, withAddTrust) {
+        const transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
+            fee,
+            networkPassphrase: Server.networkPassphrase,
+        });
+
+        if (withAddTrust) {
+            transaction.addOperation(StellarSdk.Operation.changeTrust({ asset }));
+        }
+
+        transaction
+            .addOperation(StellarSdk.Operation.claimClaimableBalance({ balanceId: id }))
+            .setTimeout(Server.transactionTimeout);
+
+        return transaction;
+    },
     buildTxRemoveOffer(Server, spoonAccount, opts) {
         const offers = Array.isArray(opts) ? opts : [opts];
         function parseAsset(asset) {
