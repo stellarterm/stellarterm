@@ -16,7 +16,7 @@ const NewClaimableBalancesBanner = ({ d }) => (
         </div>
         <div className="NewClaimableBalancesBanner_buttons">
             <button className="cancel-button" onClick={() => d.claimableBalances.hideBanner()}>Not now</button>
-            <Link to="./pending-payments/">
+            <Link to="/account/pending-payments/">
                 <button onClick={() => d.claimableBalances.hideBanner()} className="s-button">View payments</button>
             </Link>
         </div>

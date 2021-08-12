@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Redirect, Link } from 'react-router-dom';
 import QRCode from 'qrcode.react';
@@ -15,8 +15,18 @@ export default function SessionActivate(props) {
         props.d.claimableBalances.getClaimableBalances();
     }, []);
 
+    const [hasClaimableBalances, setHasClaimableBalances] =
+        useState(Boolean(props.d.claimableBalances.pendingClaimableBalances.length));
+
+    useEffect(() => {
+        const unsub = props.d.claimableBalances.event.sub(() => {
+            setHasClaimableBalances(Boolean(props.d.claimableBalances.pendingClaimableBalances.length));
+        });
+
+        return () => unsub();
+    });
+
     const { unfundedAccountId } = props;
-    const hasClaimableBalances = Boolean(props.d.claimableBalances.pendingClaimableBalances.length);
 
     if (props.d.Server.isTestnet) {
         return (

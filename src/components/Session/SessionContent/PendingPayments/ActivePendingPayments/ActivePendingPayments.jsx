@@ -58,7 +58,7 @@ export default class ActivePendingPaymentsHistory extends React.Component {
                 }}
             >
                 <div className="Activity-table-cell">{date} {time}</div>
-                <div className="Activity-table-cell flex2">{status}</div>
+                <div className="Activity-table-cell flex3">{status}</div>
                 <div className="Activity-table-cell flex8">
                     <div className="Activity-table-identicon">
                         <img src={renderedIcon} alt="id" />
@@ -88,7 +88,11 @@ export default class ActivePendingPaymentsHistory extends React.Component {
         const { loading, pendingClaimableBalances, accountId } = d.claimableBalances;
 
         if (pendingClaimableBalances.length === 0 && !loading) {
-            return (<div className="Activity_empty">You have no pending payments.</div>);
+            return (
+                <div className="Activity_empty">
+                    You have no pending payments available to claim at the moment.
+                </div>
+            );
         }
 
         const listHeight = ROW_HEIGHT * pendingClaimableBalances.length;
@@ -99,7 +103,7 @@ export default class ActivePendingPaymentsHistory extends React.Component {
             <div className="Activity_wrap">
                 <div className="Activity_header">
                     <span>
-                        Pending payments
+                        Claim these payments to receive tokens
                         {loading &&
                         <span className="nk-spinner-small-black">
                             <div className="nk-spinner" />
@@ -109,7 +113,7 @@ export default class ActivePendingPaymentsHistory extends React.Component {
                 <div className="Activity-table">
                     <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
                         <div className="Activity-table-cell">Date/Time</div>
-                        <div className="Activity-table-cell flex2">Status</div>
+                        <div className="Activity-table-cell flex3">Status</div>
                         <div className="Activity-table-cell flex8">Address</div>
                         <div className="Activity-table-cell">Asset</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Amount</div>
