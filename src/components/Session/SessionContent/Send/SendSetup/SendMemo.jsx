@@ -21,7 +21,7 @@ export default class SendMemo extends React.Component {
             selectedType: this.props.d.send.memoType,
         };
 
-        this.handleClickOutside = (e) => {
+        this.handleClickOutside = e => {
             if (this.node.contains(e.target)) { return; }
             this.setState({ isOpenList: false });
         };
@@ -48,6 +48,14 @@ export default class SendMemo extends React.Component {
         }
     }
 
+    onFocus() {
+        if (this.state.selectedType !== 'none') {
+            return;
+        }
+        this.setState({ selectedType: 'MEMO_TEXT' });
+        this.props.d.send.updateMemoType('MEMO_TEXT');
+    }
+
     getMemoDropdown() {
         const { isOpenList } = this.state;
         const { memoRequired, memoType, sep29MemoRequired } = this.props.d.send;
@@ -67,7 +75,8 @@ export default class SendMemo extends React.Component {
                         <img
                             src={images.dropdown}
                             alt="▼"
-                            className={arrowClassName} />
+                            className={arrowClassName}
+                        />
                     </div>
 
                     {isOpenList ? (
@@ -93,25 +102,24 @@ export default class SendMemo extends React.Component {
         let memoPlaceholder;
 
         switch (memoType) {
-        case 'none':
-            memoPlaceholder = 'No memo';
-            break;
-        case 'MEMO_ID':
-            memoPlaceholder = 'Memo ID number';
-            break;
-        case 'MEMO_TEXT':
-            memoPlaceholder = 'Up to 28 bytes of text';
-            break;
-        case 'MEMO_HASH':
-            memoPlaceholder = '64 character hexadecimal encoded string';
-            break;
-        case 'MEMO_RETURN':
-            memoPlaceholder = '64 character hexadecimal encoded string';
-            break;
-        default:
-            break;
+            case 'none':
+                memoPlaceholder = 'No memo';
+                break;
+            case 'MEMO_ID':
+                memoPlaceholder = 'Memo ID number';
+                break;
+            case 'MEMO_TEXT':
+                memoPlaceholder = 'Up to 28 bytes of text';
+                break;
+            case 'MEMO_HASH':
+                memoPlaceholder = '64 character hexadecimal encoded string';
+                break;
+            case 'MEMO_RETURN':
+                memoPlaceholder = '64 character hexadecimal encoded string';
+                break;
+            default:
+                break;
         }
-        const isMemoDisabled = memoType === 'none';
 
         return (
             <React.Fragment>
@@ -120,9 +128,11 @@ export default class SendMemo extends React.Component {
                     name="memo"
                     type="text"
                     value={memoContent}
-                    disabled={memoContentLocked || isMemoDisabled}
+                    disabled={memoContentLocked}
                     onChange={updateMemoContent}
-                    placeholder={memoPlaceholder} />
+                    onFocus={() => this.onFocus()}
+                    placeholder={memoPlaceholder}
+                />
             </React.Fragment>
         );
     }
@@ -138,8 +148,7 @@ export default class SendMemo extends React.Component {
             memoValidationMessage = memoV.message ? memoV.message : null;
         }
 
-        const isDisabledInput = memoType === 'none' || memoContentLocked;
-        const memoInputClass = `Send_input_block ${isDisabledInput ? 'disabled_block' : ''}`;
+        const memoInputClass = `Send_input_block ${memoContentLocked ? 'disabled_block' : ''}`;
         const memoDropdownClass = `Send_dropdown_block ${memoRequired ? 'disabled_block' : ''}`;
 
         return (
@@ -155,7 +164,8 @@ export default class SendMemo extends React.Component {
 
                 <div
                     className={memoDropdownClass}
-                    ref={(node) => { this.node = node; }} >
+                    ref={node => { this.node = node; }}
+                >
                     {this.getMemoDropdown()}
                 </div>
             </div>
