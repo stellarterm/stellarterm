@@ -58,7 +58,11 @@ export default class AssetListRows extends React.Component {
         const assets = ticker.data.assets
             .map(asset => {
                 const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
-                const assetIsUndefined = directoryAsset === null || directoryAsset.unlisted;
+
+                const assetIsUndefined =
+                    directoryAsset === null ||
+                    directoryAsset.unlisted ||
+                    directoryAsset.disabled;
 
                 const isAssetHidden = assetIsUndefined || asset.id === 'XLM-native';
                 return isAssetHidden
