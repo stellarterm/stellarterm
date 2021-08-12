@@ -13,7 +13,7 @@ const PendingPayments = ({ d }) => {
         useState(Boolean(d.claimableBalances.pendingClaimableBalancesCount));
 
     useEffect(() => {
-        const unsub = this.props.d.claimableBalances.event.sub(() => {
+        const unsub = d.claimableBalances.event.sub(() => {
             setHasPendingPayments(Boolean(d.claimableBalances.pendingClaimableBalancesCount));
         });
 
