@@ -48,7 +48,7 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
     let availableTime;
 
     if (claimEnd && claimStart) {
-        availableTimeTitle = 'Available to claim between';
+        availableTimeTitle = 'Available to claim within';
         availableTime = `${claimStart.format(MOMENT_FORMAT)} - ${claimEnd.format(MOMENT_FORMAT)}`;
     } else if (claimEnd && !claimStart) {
         availableTimeTitle = 'Available to claim before';
@@ -100,13 +100,16 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
                 if (!result) {
                     return;
                 }
-                d.toastService.success('Success', 'Payment claimed successfully');
+                d.toastService.success(
+                    'Payment claimed',
+                    `You’ve successfully claimed ${assetCode} tokens.`,
+                );
                 submit.cancel();
             })
             .catch(e => {
                 const errorText = ErrorHandler(e);
                 if (errorText === 'op_does_not_exist') {
-                    d.toastService.error('Claim failed', 'This payment doesn’t exist');
+                    d.toastService.error('Claim failed', 'The payment can no longer be claimed');
                     submit.cancel();
                     d.claimableBalances.getClaimableBalances();
                 }
@@ -118,7 +121,7 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
     return (
         <div className="ClaimableBalanceDetails">
             <div className="Modal_header">
-                <span>Transaction detail</span>
+                <span>Pending payment details</span>
                 <img
                     src={images['icon-close']}
                     alt="X"

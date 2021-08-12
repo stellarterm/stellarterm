@@ -134,13 +134,21 @@ export default class HistoryPendingPayments extends ActivityFromEffectsBase {
 
     render() {
         const { d } = this.props;
-        const { effectsHistory, loading } = d.effects;
+        const { effectsHistory, loading, isFullLoaded } = d.effects;
         const pendingPaymentsHistory = this.constructor.filterEffects(effectsHistory);
         const additionalOps = this.constructor.getAdditionalOperations(effectsHistory);
 
         const listHeight = ROW_HEIGHT * pendingPaymentsHistory.length;
         const maxHeight = Math.min(listHeight, TABLE_MAX_HEIGHT);
         const withScroll = listHeight > TABLE_MAX_HEIGHT;
+
+        if (isFullLoaded && !pendingPaymentsHistory.length) {
+            return (
+                <div className="Activity_empty">
+                    You haven&apos;t received or sent any pending payments yet.
+                </div>
+            );
+        }
 
         return (
             <div className="Activity_wrap">
