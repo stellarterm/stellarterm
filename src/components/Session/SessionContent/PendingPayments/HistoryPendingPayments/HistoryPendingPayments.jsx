@@ -102,7 +102,7 @@ export default class HistoryPendingPayments extends ActivityFromEffectsBase {
         return (
             <div key={key} style={style} className="Activity-table-row">
                 <div className="Activity-table-cell">{date} {time}</div>
-                <div className="Activity-table-cell flex2">{opType}</div>
+                <div className="Activity-table-cell flex3">{opType}</div>
                 <div className="Activity-table-cell flex8">
                     {typeof address === 'string' ?
                         (<React.Fragment>
@@ -164,7 +164,7 @@ export default class HistoryPendingPayments extends ActivityFromEffectsBase {
                 <div className="Activity-table">
                     <div className="Activity-table-row head" style={{ marginRight: withScroll ? SCROLL_WIDTH : 0 }}>
                         <div className="Activity-table-cell">Date/Time</div>
-                        <div className="Activity-table-cell flex2">Type</div>
+                        <div className="Activity-table-cell flex3">Type</div>
                         <div className="Activity-table-cell flex8">Address</div>
                         <div className="Activity-table-cell">Asset</div>
                         <div className="Activity-table_item_right Activity-table-cell flex3">Amount</div>
