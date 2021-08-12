@@ -143,9 +143,9 @@ export default class AssetDropDown extends React.Component {
 
         const filteredDirectoryAssets = assets
             .filter(asset => {
-                const { unlisted } = directory.getAssetByAccountId(asset.code, asset.issuer) || {};
+                const { unlisted, disabled } = directory.getAssetByAccountId(asset.code, asset.issuer) || {};
                 return (
-                    !unlisted &&
+                    !unlisted && !disabled &&
                     (asset.code.toLowerCase().includes(inputCodeLowerCased) ||
                         asset.domain.toLowerCase().includes(inputCodeLowerCased))
                 );
