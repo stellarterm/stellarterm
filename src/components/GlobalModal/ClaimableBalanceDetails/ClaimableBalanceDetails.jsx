@@ -79,7 +79,12 @@ const ClaimableBalanceDetails = ({ d, claimableBalance, submit }) => {
 
     const claim = balanceId => {
         if (d.session.authType === 'ledger') {
+            d.toastService.error(
+                'Claim failed',
+                'Claiming pending payments is not supported by Ledger Wallet at the moment.',
+            );
             submit.cancel();
+            return;
         }
         setLoading(true);
         setError(null);
