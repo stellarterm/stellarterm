@@ -81,17 +81,11 @@ export default class ClaimableBalances {
                     return;
                 }
 
-                if (
-                    !this.lastSeenClaimableBalances ||
+                this.hasBanner = !this.lastSeenClaimableBalances ||
                     !this.lastSeenClaimableBalances[this.accountId] ||
                     (new Date(this.lastSeenClaimableBalances[this.accountId]) <
                         new Date(this.lastCanClaimBalance.last_modified_time)
-                    )
-                ) {
-                    this.hasBanner = true;
-                } else {
-                    this.hasBanner = false;
-                }
+                    );
                 this.event.trigger();
             });
     }
