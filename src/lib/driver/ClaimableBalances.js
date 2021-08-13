@@ -75,7 +75,7 @@ export default class ClaimableBalances {
 
                 this.lastCanClaimBalance = canClaimClaimableBalances[0];
 
-                if (!this.lastCanClaimBalance || !this.pendingClaimableBalancesCount) {
+                if (!this.lastCanClaimBalance) {
                     this.hasBanner = false;
                     this.event.trigger();
                     return;
