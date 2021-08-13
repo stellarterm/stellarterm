@@ -65,33 +65,27 @@ export default class ClaimableBalances {
 
                 const canClaimClaimableBalances = this.pendingClaimableBalances
                     .filter(({ claimants }) => {
-                        const { canClaim } = getNextClaimTime(
+                        const { isExpired, isConflict } = getNextClaimTime(
                             claimants.find(({ destination }) => destination === this.accountId).predicate,
                             Date.now(),
                         );
-                        return canClaim;
+                        return !isExpired && !isConflict;
                     });
 
 
                 this.lastCanClaimBalance = canClaimClaimableBalances[0];
 
-                if (!this.lastCanClaimBalance || !this.pendingClaimableBalancesCount) {
+                if (!this.lastCanClaimBalance) {
                     this.hasBanner = false;
                     this.event.trigger();
                     return;
                 }
 
-                if (
-                    !this.lastSeenClaimableBalances ||
+                this.hasBanner = !this.lastSeenClaimableBalances ||
                     !this.lastSeenClaimableBalances[this.accountId] ||
                     (new Date(this.lastSeenClaimableBalances[this.accountId]) <
                         new Date(this.lastCanClaimBalance.last_modified_time)
-                    )
-                ) {
-                    this.hasBanner = true;
-                } else {
-                    this.hasBanner = false;
-                }
+                    );
                 this.event.trigger();
             });
     }
