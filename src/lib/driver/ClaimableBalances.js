@@ -65,11 +65,11 @@ export default class ClaimableBalances {
 
                 const canClaimClaimableBalances = this.pendingClaimableBalances
                     .filter(({ claimants }) => {
-                        const { canClaim } = getNextClaimTime(
+                        const { isExpired, isConflict } = getNextClaimTime(
                             claimants.find(({ destination }) => destination === this.accountId).predicate,
                             Date.now(),
                         );
-                        return canClaim;
+                        return !isExpired && !isConflict;
                     });
 
 
