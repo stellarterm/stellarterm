@@ -48,14 +48,6 @@ export default class SendMemo extends React.Component {
         }
     }
 
-    onFocus() {
-        if (this.state.selectedType !== 'none') {
-            return;
-        }
-        this.setState({ selectedType: 'MEMO_TEXT' });
-        this.props.d.send.updateMemoType('MEMO_TEXT');
-    }
-
     getMemoDropdown() {
         const { isOpenList } = this.state;
         const { memoRequired, memoType, sep29MemoRequired } = this.props.d.send;
@@ -130,7 +122,6 @@ export default class SendMemo extends React.Component {
                     value={memoContent}
                     disabled={memoContentLocked}
                     onChange={updateMemoContent}
-                    onFocus={() => this.onFocus()}
                     placeholder={memoPlaceholder}
                 />
             </React.Fragment>

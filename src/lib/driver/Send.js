@@ -336,8 +336,15 @@ export default class Send {
         this.event.trigger();
     }
 
-    updateMemoContent(e) {
-        this.memoContent = e.target.value;
+    updateMemoContent({ target }) {
+        const { value } = target;
+        if (value.length && this.memoType === 'none') {
+            this.memoType = 'MEMO_TEXT';
+        }
+        if (!value.length) {
+            this.memoType = 'none';
+        }
+        this.memoContent = value;
         this.allFieldsValid = this.validateAllFields();
         this.event.trigger();
     }
