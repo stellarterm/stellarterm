@@ -7,7 +7,12 @@ import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
 import Driver from '../../../../lib/Driver';
 import images from '../../../../images';
-import { getTransferServer, getTransferServerInfo, getTransactions, checkAssetSettings } from '../../../../lib/SepUtils';
+import {
+    getTransferServer,
+    getTransferServerInfo,
+    getTransactions,
+    checkAssetSettings,
+} from '../../../../lib/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
 import Stellarify from '../../../../lib/Stellarify';
 import AssetRow from '../../../Common/AssetRow/AssetRow';
@@ -117,7 +122,9 @@ export default class SepTransactions extends React.Component {
         }
 
         // Then attempt to fetch user transactions for selected acnhor
-        const transferServer = await getTransferServer(asset, 'history', this.props.d.modal);
+        const transferDomain = urlParams.get('anchorDomain');
+
+        const transferServer = await getTransferServer(asset, 'history', this.props.d.modal, transferDomain);
 
         if (transferServer === 'cancelled') {
             this.props.history.push('/account/');

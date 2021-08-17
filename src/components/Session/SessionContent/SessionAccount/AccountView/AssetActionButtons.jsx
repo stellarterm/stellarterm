@@ -6,7 +6,7 @@ import directory from 'stellarterm-directory';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 import Stellarify from '../../../../../lib/Stellarify';
-import { checkAssetSettings, getTransferServer } from '../../../../../lib/SepUtils';
+import { getTransferDomain, checkAssetSettings, getTransferServer } from '../../../../../lib/SepUtils';
 
 export default class AssetActionButtons extends React.Component {
     static getBuyLumensLink(isXLMNative) {
@@ -57,6 +57,21 @@ export default class AssetActionButtons extends React.Component {
         });
     }
 
+    async onHistoryClick() {
+        const { d, asset } = this.props;
+        const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
+
+        const { output } = await getTransferDomain(directoryAsset, 'history', d.modal);
+
+        if (!output) {
+            return;
+        }
+
+        const assetSlug = Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer));
+
+        this.props.history.push(`transactions?asset=${assetSlug}&anchorDomain=${output.domain}`);
+    }
+
     render() {
         const { onlyIcons, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
@@ -69,17 +84,15 @@ export default class AssetActionButtons extends React.Component {
 
         const containerClass = `ActionBtns_container ${onlyIcons ? 'hide_ActionText' : ''}`;
 
-        const assetSlug = Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer));
-
         return (
             <div className={containerClass}>
                 {isHistoryEnabled ? (
-                    <Link to={`transactions?asset=${assetSlug}`}>
+                    <div onClick={() => this.onHistoryClick()}>
                         <div className="actionBtn">
                             <div className="btnHint btnHint_wide">Transfer history</div>
                             <img className="actionBtn_icon" src={images['icon-transactions']} alt="transfer-history" />
                         </div>
-                    </Link>
+                    </div>
                 ) : null}
                 {isDepositEnabled ? (
                     <div className="actionBtn" onClick={() => this.onSepClick(true)}>
@@ -124,4 +137,5 @@ AssetActionButtons.propTypes = {
     d: PropTypes.instanceOf(Driver),
     onlyIcons: PropTypes.bool,
     asset: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
 };

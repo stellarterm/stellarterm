@@ -36,7 +36,7 @@ export default function SessionAccount(props) {
                 <Federation d={props.d} />
             </Generic>
 
-            <AccountView d={props.d} />
+            <AccountView d={props.d} {...props} />
         </React.Fragment>
     );
 }
