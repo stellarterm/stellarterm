@@ -51,6 +51,7 @@ class TermApp extends React.Component {
             // The url is the hash cleaned up
             url: parseUrl(window.location.pathname),
             isTickerLoaded: false,
+            id: 1,
         };
 
         this.unsubscribeSession = this.props.d.session.event.sub(() => {
@@ -77,6 +78,17 @@ class TermApp extends React.Component {
             false,
         );
 
+        window.addEventListener('online', () => {
+            this.setState({ id: this.state.id + 1 }, () => {
+                this.d.toastService.clearToasts();
+                this.d.toastService.success('Connection restored', 'Internet connection has been restored');
+            });
+        });
+
+        window.addEventListener('offline', () => {
+            this.d.toastService.error('No connection', 'Internet connection appears to be offline');
+        });
+
         // Alert for logged user before reload page
         if (!isElectron()) {
             window.onbeforeunload = e => {
@@ -95,7 +107,7 @@ class TermApp extends React.Component {
 
     render() {
         const { d } = this.props;
-        const { isTickerLoaded } = this.state;
+        const { isTickerLoaded, id } = this.state;
 
         if ((isIE() || isEdge()) && localStorage.getItem('hide-browser-popup') !== 'true') {
             this.props.d.modal.handlers.activate('BrowserModal');
@@ -111,7 +123,7 @@ class TermApp extends React.Component {
                 </div>
 
                 <ErrorBoundary>
-                    <div className="AppStretch">
+                    <div className="AppStretch" key={id}>
                         <GlobalModal d={d} />
                         <div className="AppStretch AppContainer">
                             <div>
