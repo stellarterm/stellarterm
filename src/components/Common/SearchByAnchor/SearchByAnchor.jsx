@@ -11,19 +11,59 @@ import AssetRow from '../AssetRow/AssetRow';
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
 const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-const regexp = new RegExp(pattern);
+const regexp = new RegExp(pattern, 'i');
 
 export default class SearchByAnchor extends React.Component {
     constructor(props) {
         super(props);
+        this.urlSearchParams = new URLSearchParams(window.location.search);
+
         this.state = {
-            anchorDomain: '',
+            anchorDomain: (this.props.withUrlParams && this.urlSearchParams.get('search')) || '',
             allCurrencies: [],
             resolveState: '',
         };
     }
 
+    componentDidMount() {
+        if (!this.props.withUrlParams) {
+            return;
+        }
+
+        if (this.state.anchorDomain) {
+            this.getAssetsFromUrl(this.state.anchorDomain);
+        }
+
+
+        this.unlisten = this.props.history.listen((location, action) => {
+            this.urlSearchParams = new URLSearchParams(location.search);
+
+            if (action === 'POP' && this.urlSearchParams.get('search') !== this.state.anchorDomain) {
+                this.setState({ anchorDomain: this.urlSearchParams.get('search') || '', resolveState: '' });
+                this.getAssetsFromUrl(this.state.anchorDomain);
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        if (this.props.withUrlParams) {
+            this.unlisten();
+        }
+    }
+
     async getAssetsFromUrl(domain) {
+        if (!domain) {
+            return;
+        }
+        if (!regexp.test(domain)) {
+            this.setState({
+                resolveState: 'invalid_domain',
+            });
+            return;
+        }
+
+        this.setState({ resolveState: 'pending' });
+
         try {
             const resolvedAnchor = await resolveAnchor(domain);
             const { anchorDomain } = this.state;
@@ -59,25 +99,22 @@ export default class SearchByAnchor extends React.Component {
 
     handleInputFederation({ target }) {
         const anchorDomain = target.value;
-        if (anchorDomain && !regexp.test(anchorDomain)) {
-            this.setState({
-                allCurrencies: [],
-                resolveState: 'invalid_domain',
-                anchorDomain,
-            });
+
+        this.setState({ anchorDomain, allCurrencies: [], resolveState: '' });
+
+        this.getAssetsFromUrl(anchorDomain);
+
+        if (!this.props.withUrlParams) {
             return;
         }
-        const resolveState = anchorDomain ? 'pending' : '';
-
-        this.setState({
-            allCurrencies: [],
-            resolveState,
-            anchorDomain,
-        });
 
         if (anchorDomain) {
-            this.getAssetsFromUrl(anchorDomain);
+            this.urlSearchParams.set('search', anchorDomain);
+        } else {
+            this.urlSearchParams.delete('search');
         }
+
+        this.props.history.replace(`?${this.urlSearchParams.toString()}`);
     }
 
     render() {
@@ -182,4 +219,6 @@ export default class SearchByAnchor extends React.Component {
 SearchByAnchor.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     tradeLink: PropTypes.bool,
+    history: PropTypes.objectOf(PropTypes.any),
+    withUrlParams: PropTypes.bool,
 };
