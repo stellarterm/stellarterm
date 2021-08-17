@@ -28,7 +28,13 @@ export default class Sep6Modal extends React.Component {
             <div className="Sep6Modal_content">
                 <AssetBalance d={d} asset={data.asset} isDeposit={isDeposit} isConfirmModal />
 
-                <Sep6ModalConfirm d={d} isDeposit={isDeposit} confirmData={confirmData} asset={data.asset} />
+                <Sep6ModalConfirm
+                    d={d}
+                    isDeposit={isDeposit}
+                    confirmData={confirmData}
+                    asset={data.asset}
+                    transferServer={data.transferServer}
+                />
             </div>
         ) : (
             <div className="Sep6Modal_content">
