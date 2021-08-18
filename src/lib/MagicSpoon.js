@@ -622,8 +622,6 @@ const MagicSpoon = {
             networkPassphrase: Server.networkPassphrase,
         });
 
-        console.log(spoonAccount);
-
         if (withAddTrust) {
             transaction.addOperation(StellarSdk.Operation.changeTrust({ asset }));
         }
