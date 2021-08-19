@@ -79,4 +79,16 @@ export default {
         helpNote: 'Sets, modifies, or deletes a Data Entry (name/value pair).',
         docsUrl: 'https://www.stellar.org/developers/learn/concepts/list-of-operations.html#manage-data',
     },
+    claimClaimableBalance: {
+        name: 'claimClaimableBalance',
+        label: 'Claim Claimable Balance',
+        helpNote: 'Claims a ClaimableBalanceEntry and adds the amount of asset on the entry to the source account.',
+        docsUrl: 'https://developers.stellar.org/docs/start/list-of-operations/#claim-claimable-balance',
+    },
+    bumpSequence: {
+        name: 'bumpSequence',
+        label: 'Bump Sequence',
+        helpNote: 'Bumps forward the sequence number of the source account to the given sequence number.',
+        docsUrl: 'https://developers.stellar.org/docs/start/list-of-operations/#bump-sequence',
+    },
 };

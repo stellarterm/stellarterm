@@ -96,6 +96,9 @@ export default class TransactionDetails extends React.Component {
     getOperations() {
         const { tx, d } = this.props;
         return tx.operations.map((op) => {
+            if (op.type === 'bumpSequence') {
+                return null;
+            }
             const attributes = this.constructor.getOperationAttr(op, d);
             const label = this.constructor.getOperationLabel(op);
             const isDeleteOffer = label === 'Delete Offer';

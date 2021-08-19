@@ -728,8 +728,15 @@ export default function Send(driver) {
             });
             return await this.handlers.buildSignSubmit(tx);
         },
-        claimClaimableBalance: (id, asset, withAddTrust) => {
-            const tx = MagicSpoon.buildTxClaimClaimableBalance(driver.Server, this.account, id, asset, withAddTrust);
+        claimClaimableBalance: (id, asset, withAddTrust, withBumpSequence) => {
+            const tx = MagicSpoon.buildTxClaimClaimableBalance(
+                driver.Server,
+                this.account,
+                id,
+                asset,
+                withAddTrust,
+                withBumpSequence,
+            );
 
             return this.handlers.buildSignSubmit(tx);
         },

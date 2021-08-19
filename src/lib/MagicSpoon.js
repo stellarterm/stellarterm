@@ -616,7 +616,7 @@ const MagicSpoon = {
         return transaction;
         // DON'T call .build()
     },
-    buildTxClaimClaimableBalance(Server, spoonAccount, id, asset, withAddTrust) {
+    buildTxClaimClaimableBalance(Server, spoonAccount, id, asset, withAddTrust, withBumpSequence) {
         const transaction = new StellarSdk.TransactionBuilder(spoonAccount, {
             fee,
             networkPassphrase: Server.networkPassphrase,
@@ -624,6 +624,14 @@ const MagicSpoon = {
 
         if (withAddTrust) {
             transaction.addOperation(StellarSdk.Operation.changeTrust({ asset }));
+        }
+
+        // fix for ledger
+        if (!withAddTrust && withBumpSequence) {
+            transaction.addOperation(StellarSdk.Operation.bumpSequence({
+                bumpTo: spoonAccount.sequence,
+                source: spoonAccount.id,
+            }));
         }
 
         transaction
