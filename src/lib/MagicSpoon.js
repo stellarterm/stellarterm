@@ -265,6 +265,9 @@ const MagicSpoon = {
             const entriesSigners = sdkAccount.signers.length - 1;
             const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers - entriesSigners;
             const inActiveOffers = Number(sdkAccount.getReservedBalance(StellarSdk.Asset.native()));
+            const numSponsoring = sdkAccount.num_sponsoring;
+            const numSponsored = sdkAccount.num_sponsored;
+
             const reserveItems = [
                 {
                     reserveType: 'Base reserve',
@@ -297,9 +300,19 @@ const MagicSpoon = {
                     reservedXLM: entriesSigners * 0.5,
                 },
                 {
+                    reserveType: 'Sponsoring for others',
+                    typeCount: numSponsoring,
+                    reservedXLM: numSponsoring * 0.5,
+                },
+                {
                     reserveType: 'Others',
                     typeCount: entriesOthers,
                     reservedXLM: entriesOthers * 0.5,
+                },
+                {
+                    reserveType: 'Sponsored entries',
+                    typeCount: -numSponsored,
+                    reservedXLM: -numSponsored * 0.5,
                 },
             ];
 

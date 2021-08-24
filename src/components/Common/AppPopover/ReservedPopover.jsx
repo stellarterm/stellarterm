@@ -23,7 +23,7 @@ export default function ReservedPopover(props) {
     const reservedRows = reserveItems.map(({ reserveType, typeCount, reservedXLM }) => (
         <div className="reserved_item" key={`${reserveType}-${typeCount}`}>
             <span>
-                {reserveType} {typeCount === 0 ? '' : `(${typeCount})`}
+                {reserveType} {typeCount === 0 ? '' : `(${Math.abs(typeCount)})`}
             </span>
             <span>{reservedXLM} XLM</span>
         </div>
