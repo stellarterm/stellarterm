@@ -19,7 +19,7 @@ export default function ReservedBalance(props) {
         const reserveRow = (
             <div className="reserved_item" key={`${reserveType}-${typeCount}`}>
                 <span>
-                    {reserveType} {typeCount === 0 ? '' : `(${typeCount})`}
+                    {reserveType} {typeCount === 0 ? '' : `(${Math.abs(typeCount)})`}
                 </span>
                 <span className={iconBlockClass}>
                     {reservedXLM} XLM
