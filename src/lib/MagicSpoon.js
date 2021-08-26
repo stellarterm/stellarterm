@@ -300,14 +300,14 @@ const MagicSpoon = {
                     reservedXLM: entriesSigners * 0.5,
                 },
                 {
+                    reserveType: 'Account data',
+                    typeCount: entriesOthers,
+                    reservedXLM: entriesOthers * 0.5,
+                },
+                {
                     reserveType: 'Sponsoring for others',
                     typeCount: numSponsoring,
                     reservedXLM: numSponsoring * 0.5,
-                },
-                {
-                    reserveType: 'Others',
-                    typeCount: entriesOthers,
-                    reservedXLM: entriesOthers * 0.5,
                 },
                 {
                     reserveType: 'Sponsored entries',
