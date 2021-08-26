@@ -339,7 +339,9 @@ const MagicSpoon = {
 
         // Will always be less than or equal to the current balance
         sdkAccount.calculatePaddedReserve = () => {
-            const networkReserve = (2 + sdkAccount.subentry_count) * 0.5;
+            const networkReserve =
+                // eslint-disable-next-line no-mixed-operators
+                (2 + sdkAccount.subentry_count + sdkAccount.numSponsoring - sdkAccount.numSponsored) * 0.5;
             const extra = 0.5;
             return networkReserve + extra;
         };
