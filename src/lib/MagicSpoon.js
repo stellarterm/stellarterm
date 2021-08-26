@@ -180,9 +180,22 @@ const MagicSpoon = {
                     let updated = false;
                     if (!_.isEqual(sdkAccount.balances, res.balances)) {
                         sdkAccount.balances = res.balances;
-                        sdkAccount.subentry_count = res.subentry_count;
                         sdkAccount.updateOffers();
+                        updated = true;
+                    }
 
+                    if (sdkAccount.subentry_count !== res.subentry_count) {
+                        sdkAccount.subentry_count = res.subentry_count;
+                        updated = true;
+                    }
+
+                    if (sdkAccount.num_sponsoring !== res.num_sponsoring) {
+                        sdkAccount.num_sponsoring = res.num_sponsoring;
+                        updated = true;
+                    }
+
+                    if (sdkAccount.num_sponsored !== res.num_sponsored) {
+                        sdkAccount.num_sponsored = res.num_sponsored;
                         updated = true;
                     }
 
@@ -220,6 +233,8 @@ const MagicSpoon = {
             const newAccount = await this.Server.loadAccount(keypair.publicKey());
             sdkAccount.applyNewBalances(newAccount.balances);
             sdkAccount.subentry_count = newAccount.subentry_count;
+            sdkAccount.num_sponsoring = newAccount.num_sponsoring;
+            sdkAccount.num_sponsored = newAccount.num_sponsored;
             sdkAccount.home_domain = newAccount.home_domain;
             sdkAccount.applyNewSigners(newAccount.signers);
             sdkAccount.applyNewThresholds(newAccount.thresholds);
