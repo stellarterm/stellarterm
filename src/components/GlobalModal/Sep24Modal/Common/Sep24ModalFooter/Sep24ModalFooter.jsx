@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../../lib/Driver';
-import MagicSpoon from '../../../../../lib/MagicSpoon';
 import ErrorHandler from '../../../../../lib/ErrorHandler';
 import images from '../../../../../images';
 import Validate from '../../../../../lib/Validate';
@@ -146,17 +145,18 @@ export default class Sep24ModalFooter extends React.Component {
             memo = buff.toString('hex');
         }
 
-        const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
+        const sendOpts = {
             destination: transaction.withdraw_anchor_account,
             asset: new StellarSdk.Asset(asset.code, asset.issuer),
             amount: transaction.amount_in,
-            memo: memo
-                ? {
-                    type,
-                    content: memo,
-                }
-                : undefined,
-        });
+        };
+
+        const sendMemo = memo
+            ? {
+                type,
+                content: memo,
+            }
+            : undefined;
 
         if (d.session.authType === 'ledger') {
             d.modal.handlers.finish();
@@ -169,11 +169,11 @@ export default class Sep24ModalFooter extends React.Component {
                 transaction,
                 transferServer: this.props.transferServer,
             };
-            d.session.handlers.buildSignSubmit(tx);
+            d.session.handlers.send(sendOpts, sendMemo);
             return null;
         }
 
-        const bssResult = await d.session.handlers.buildSignSubmit(tx);
+        const bssResult = await d.session.handlers.send(sendOpts, sendMemo);
 
         if (bssResult.status === 'await_signers') {
             d.modal.handlers.cancel();
