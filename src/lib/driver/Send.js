@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import MagicSpoon from '../MagicSpoon';
 import Stellarify from '../Stellarify';
 import Validate from '../Validate';
 import Event from '../Event';
@@ -71,7 +70,7 @@ export default class Send {
         this.allFieldsValid = this.validateAllFields();
         this.event.trigger();
 
-        this.d.Server.loadAccount(this.accountId).then((account) => {
+        this.d.Server.loadAccount(this.accountId).then(account => {
             if (account.id === this.accountId) {
                 // Prevent race conditions using this check
                 this.targetAccount = account;
@@ -80,13 +79,13 @@ export default class Send {
             }
 
             if (account.home_domain && this.federationAddress === '') {
-                StellarSdk.StellarTomlResolver.resolve(account.home_domain).then((toml) => {
+                StellarSdk.StellarTomlResolver.resolve(account.home_domain).then(toml => {
                     if (!toml.FEDERATION_SERVER) {
                         return account;
                     }
 
                     request.get(`${getUrlWithParams(toml.FEDERATION_SERVER, { q: account.id, type: 'id' })}`, {})
-                        .then((res) => {
+                        .then(res => {
                             this.federationAddress = res.stellar_address;
                             this.event.trigger();
                         });
@@ -94,7 +93,7 @@ export default class Send {
             }
 
             return account;
-        }).then((account) => {
+        }).then(account => {
             const memoFlag = account.data_attr['config.memo_required'];
             // Sep0029 check for required memo
             if (memoFlag && new Buffer(memoFlag, 'base64').toString() === '1') {
@@ -121,7 +120,7 @@ export default class Send {
             return;
         }
 
-        _.each(this.d.session.account.balances, (balance) => {
+        _.each(this.d.session.account.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) { return; }
@@ -146,7 +145,8 @@ export default class Send {
         const receiverTrusts = {};
         const sendableAssets = {};
         const unSendableAssets = {};
-        _.each(this.d.session.account.balances, (balance) => {
+
+        _.each(this.d.session.account.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
@@ -164,7 +164,8 @@ export default class Send {
                 senderTrusts[slug] = true;
             }
         });
-        _.each(this.targetAccount.balances, (balance) => {
+
+        _.each(this.targetAccount.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
@@ -173,7 +174,8 @@ export default class Send {
             // We don't really care about the usecase of sending to issuer.
             receiverTrusts[slug] = true;
         });
-        _.each(this.targetAccount.balances, (balance) => {
+
+        _.each(this.targetAccount.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (Object.prototype.hasOwnProperty.call(senderTrusts, slug)) {
@@ -192,7 +194,7 @@ export default class Send {
             }
         });
         // Show stuff the recipient doesn't trust
-        _.each(this.d.session.account.balances, (balance) => {
+        _.each(this.d.session.account.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
@@ -255,7 +257,7 @@ export default class Send {
 
             StellarSdk.FederationServer.createForDomain(federationDomain)
                 .then(federationServer => federationServer.resolveAddress(this.destInput))
-                .then((federationRecord) => {
+                .then(federationRecord => {
                     if (destInput !== this.destInput) {
                         return;
                     }
@@ -266,20 +268,20 @@ export default class Send {
                     this.accountId = federationRecord.account_id;
                     if (federationRecord.memo_type) {
                         switch (federationRecord.memo_type) {
-                        case 'id':
-                            this.memoType = 'MEMO_ID';
-                            break;
-                        case 'text':
-                            this.memoType = 'MEMO_TEXT';
-                            break;
-                        case 'hash':
-                            this.memoType = 'MEMO_HASH';
-                            break;
-                        case 'return':
-                            this.memoType = 'MEMO_RETURN';
-                            break;
-                        default:
-                            throw new Error('Invalid memo_type from federation response');
+                            case 'id':
+                                this.memoType = 'MEMO_ID';
+                                break;
+                            case 'text':
+                                this.memoType = 'MEMO_TEXT';
+                                break;
+                            case 'hash':
+                                this.memoType = 'MEMO_HASH';
+                                break;
+                            case 'return':
+                                this.memoType = 'MEMO_RETURN';
+                                break;
+                            default:
+                                throw new Error('Invalid memo_type from federation response');
                         }
                         this.memoRequired = true;
                     }
@@ -293,7 +295,7 @@ export default class Send {
                     this.loadTargetAccountDetails();
                     this.event.trigger();
                 })
-                .catch((error) => {
+                .catch(error => {
                     // stellar.toml does not exist or it does not contain information about federation server.
                     if (destInput !== this.destInput) {
                         return;
@@ -377,13 +379,14 @@ export default class Send {
                     content: this.memoContent,
                 };
 
-            const tx = await MagicSpoon.buildTxSendPayment(this.d.Server, this.d.session.account, {
-                destination: this.accountId,
-                asset: this.assetToSend.asset,
-                amount: this.amountToSend,
-                memo: sendMemo,
-            });
-            const bssResult = await this.d.session.handlers.buildSignSubmit(tx);
+            const bssResult = await this.d.session.handlers.send(
+                {
+                    destination: this.accountId,
+                    asset: this.assetToSend.asset,
+                    amount: this.amountToSend,
+                },
+                sendMemo,
+            );
 
             if (bssResult.status === 'finish') {
                 this.state = 'pending';

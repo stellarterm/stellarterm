@@ -185,6 +185,10 @@ export default class OfferMaker extends React.Component {
         if (this.props.d.session.authType === 'ledger') {
             this.props.d.modal.handlers.cancel();
         }
+        if (this._mounted) {
+            this.setState({ buttonState: 'pending' });
+        }
+
         const { price, amount, total, offerId } = this.state;
         const handlers = this.props.d.session.handlers;
         const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total, offerId });
@@ -206,7 +210,6 @@ export default class OfferMaker extends React.Component {
         if (this._mounted) {
             this.setState({
                 valid: false,
-                buttonState: 'pending',
                 amount: '',
                 total: '',
                 successMessage: '',

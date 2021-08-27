@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../lib/Driver';
-import MagicSpoon from '../../../../lib/MagicSpoon';
 import ErrorHandler from './../../../../lib/ErrorHandler';
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
@@ -65,34 +64,19 @@ export default class Sep7PayModal extends React.Component {
                     onClick={() => {
                         window.history.pushState({}, null, '/');
                         submit.cancel();
-                    }}>
+                    }}
+                >
                     Cancel
                 </button>
                 <button
                     disabled={this.state.pending}
                     onClick={() => this.handlePayment()}
-                    className="s-button">
+                    className="s-button"
+                >
                     Confirm{this.state.pending && <Ellipsis />}
                 </button>
             </div>
         );
-    }
-
-    getPaymentTx(txDetails, d) {
-        const { asset, amount, destination, memo, memoType } = this.getPaymentDetails(txDetails);
-        let type = memoType || 'MEMO_TEXT';
-        if (type.toUpperCase() !== type) {
-            type = `MEMO_${type.toUpperCase()}`;
-        }
-        return MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
-            destination,
-            asset,
-            amount,
-            memo: (memo) ? {
-                type,
-                content: memo,
-            } : undefined,
-        });
     }
 
     async handlePayment() {
@@ -103,13 +87,30 @@ export default class Sep7PayModal extends React.Component {
                 submit.cancel();
             }
             const isPay = txDetails.operation === 'pay';
-            const tx = isPay ?
-                await this.getPaymentTx(txDetails, d) :
-                await Sep7GetBuiltTx(txDetails, d);
 
-            const bssResult = isPay ?
-                await d.session.handlers.buildSignSubmit(tx) :
-                await d.session.handlers.signSubmit(tx);
+            let bssResult;
+
+            if (isPay) {
+                const { asset, amount, destination, memo, memoType } = this.getPaymentDetails(txDetails);
+                let type = memoType || 'MEMO_TEXT';
+                if (type.toUpperCase() !== type) {
+                    type = `MEMO_${type.toUpperCase()}`;
+                }
+
+                const sendMemo = (memo) ? {
+                    type,
+                    content: memo,
+                } : undefined;
+
+                bssResult = await d.session.handlers.send({
+                    destination,
+                    asset,
+                    amount,
+                }, sendMemo);
+            } else {
+                const tx = await Sep7GetBuiltTx(txDetails, d);
+                bssResult = await d.session.handlers.signSubmit(tx);
+            }
 
             if (bssResult.status === 'await_signers') {
                 submit.cancel();
@@ -152,7 +153,8 @@ export default class Sep7PayModal extends React.Component {
                         onClick={() => {
                             submit.cancel();
                             window.history.pushState({}, null, '/');
-                        }} />
+                        }}
+                    />
                 </div>
                 <div className="Sep7PayModal_content">
                     <div className="Sep7PayModal_details">
