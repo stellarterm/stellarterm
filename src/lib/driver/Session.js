@@ -792,7 +792,7 @@ export default function Send(driver) {
             });
             let op;
             if (side === 'buy') {
-                op = await buildOpCreateBuyOffer(options);
+                op = await buildOpCreateBuyOffer(options, this.authType);
             } else if (side === 'sell') {
                 op = buildOpCreateSellOffer(options);
             } else {
