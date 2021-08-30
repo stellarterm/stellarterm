@@ -7,7 +7,7 @@ import * as StellarSdk from 'stellar-sdk';
 // opts.amount -- Here, it's relative to the base (JS-sdk does: Total amount selling)
 // opts.type -- String of either 'buy' or 'sell' (relative to base currency)
 // opts.offerId - for edit existing offer
-export function buildOpCreateBuyOffer(opts) {
+export function buildOpCreateBuyOffer(opts, authType) {
     const bigOptsPrice = new BigNumber(opts.price).toPrecision(15);
     const bigOptsAmount = new BigNumber(opts.amount).toPrecision(15);
 
@@ -23,7 +23,7 @@ export function buildOpCreateBuyOffer(opts) {
     // because manageBuyOffer is unsupported yet
     // https://github.com/LedgerHQ/ledger-app-stellar/
     // https://github.com/trezor/connect
-    if (this.authType === 'ledger' || this.authType === 'trezor') {
+    if (authType === 'ledger' || authType === 'trezor') {
         const operationOpts = {
             buying: sdkBuying,
             selling: sdkSelling,
