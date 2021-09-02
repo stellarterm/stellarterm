@@ -191,32 +191,34 @@ export default class OfferMaker extends React.Component {
 
         const { price, amount, total, offerId } = this.state;
         const handlers = this.props.d.session.handlers;
-        const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total, offerId });
 
-        if (signAndSubmit.status === 'await_signers') {
-            this.props.d.modal.handlers.cancel();
+        try {
+            const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total, offerId });
+
+            if (signAndSubmit.status === 'await_signers') {
+                this.props.d.modal.handlers.cancel();
+                if (this._mounted) {
+                    this.setState({
+                        amount: '',
+                        total: '',
+                        valid: false,
+                        buttonState: 'ready',
+                        successMessage: 'Offer was signed with your key. Add additional signatures and submit to the network.',
+                    });
+                }
+            }
+
+            if (signAndSubmit.status !== 'finish') { return; }
             if (this._mounted) {
                 this.setState({
+                    valid: false,
                     amount: '',
                     total: '',
-                    valid: false,
-                    buttonState: 'ready',
-                    successMessage: 'Offer was signed with your key. Add additional signatures and submit to the network.',
+                    successMessage: '',
+                    errorMessage: '',
                 });
             }
-        }
 
-        if (signAndSubmit.status !== 'finish') { return; }
-        if (this._mounted) {
-            this.setState({
-                valid: false,
-                amount: '',
-                total: '',
-                successMessage: '',
-                errorMessage: '',
-            });
-        }
-        try {
             await signAndSubmit.serverResult;
             this.props.d.modal.handlers.cancel();
             if (this._mounted) {
@@ -226,12 +228,16 @@ export default class OfferMaker extends React.Component {
                 });
             }
         } catch (error) {
-            const errorMessage = ErrorHandler(error);
-            const errorType = this.constructor.getErrorType(error.response);
+            if (error) {
+                const errorMessage = ErrorHandler(error);
+                const errorType = this.constructor.getErrorType(error.response);
+                this.setState({
+                    errorMessage,
+                    errorType,
+                });
+            }
             this.setState({
                 buttonState: 'ready',
-                errorMessage,
-                errorType,
             });
         }
     }
