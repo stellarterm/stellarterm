@@ -399,6 +399,8 @@ export default function Send(driver) {
                         status: 'finish',
                         serverResult,
                     };
+                } else {
+                    this.hasPendingTransaction = false;
                 }
             } catch (e) {
                 this.hasPendingTransaction = false;
