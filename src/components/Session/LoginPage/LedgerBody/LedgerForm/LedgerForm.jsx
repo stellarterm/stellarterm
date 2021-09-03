@@ -106,7 +106,7 @@ export default class LedgerForm extends React.Component {
                     <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
                     <form onSubmit={e => this.proceedWithLedger(e)}>
                         <div className="LoginPage__submitWrap">
-                            <AcceptTerms loginButtonText={'Connect with Ledger'} />
+                            <AcceptTerms loginButtonText={'Log in with Ledger'} />
                             <div className="LoginPage__customPath">{customPath}</div>
                         </div>
                     </form>

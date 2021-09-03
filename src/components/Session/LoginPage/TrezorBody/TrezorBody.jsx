@@ -40,7 +40,7 @@ export default class TrezorBody extends React.Component {
             <form onSubmit={e => this.loginWithTrezor(e)}>
                 <div className="LoginPage__submitWrap">
                     {loginError}
-                    <AcceptTerms loginButtonText={'Connect with Trezor'} />
+                    <AcceptTerms loginButtonText={'Log in with Trezor'} />
                     <div className="LoginPage__customPath">
                         {customPath}
                     </div>

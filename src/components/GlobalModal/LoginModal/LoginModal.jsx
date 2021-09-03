@@ -37,7 +37,7 @@ export default class LoginModal extends React.Component {
                     <Redirect to={'/account/'} />
                 );
             case SESSION_STATE.OUT:
-                return (<LoginModalBlock d={d} title={'Please log in to manage Stellar account'} />);
+                return (<LoginModalBlock d={d} title={'Log in to manage Stellar account'} />);
             case SESSION_STATE.LOADING:
                 return (
                     <div className="AccountModalBlock_loading">

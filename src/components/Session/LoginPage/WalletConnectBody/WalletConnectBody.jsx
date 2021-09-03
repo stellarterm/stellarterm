@@ -30,7 +30,7 @@ const WalletConnectBody = ({ history, d, modal }) => {
         <form onSubmit={loginWithWalletConnect}>
             <div className="LoginPage__submitWrap">
 
-                <AcceptTerms loginButtonText={'Connect with WalletConnect'} loading={loading} />
+                <AcceptTerms loginButtonText={'Log in with WalletConnect'} loading={loading} />
             </div>
         </form>
     );
