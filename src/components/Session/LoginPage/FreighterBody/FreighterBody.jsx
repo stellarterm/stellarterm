@@ -65,7 +65,7 @@ const FreighterBody = ({ history, d, modal }) => {
             <form onSubmit={loginWithFreighter}>
                 <div className="LoginPage__submitWrap">
                     {loginErrorView}
-                    <AcceptTerms loginButtonText={'Connect with Freighter'} />
+                    <AcceptTerms loginButtonText={'Log in with Freighter'} />
                 </div>
             </form>
         );
