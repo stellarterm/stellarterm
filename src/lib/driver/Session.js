@@ -24,6 +24,7 @@ import {
     buildOpSendPayment,
     buildOpSetOptions,
 } from '../operationBuilders';
+import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../constants';
 
 const fee = 10000;
 
@@ -31,7 +32,7 @@ export default function Send(driver) {
     this.event = new Event();
 
     const init = () => {
-        this.state = 'out'; // 'out', 'unfunded', 'loading', 'in'
+        this.state = SESSION_STATE.OUT; // 'out', 'unfunded', 'loading', 'in' - SESSION_STATE
         this.setupError = false; // Unable to contact network
 
         this.setupLedgerError = null; // Could connect but couldn't reach address
@@ -40,7 +41,7 @@ export default function Send(driver) {
 
         this.unfundedAccountId = '';
         this.account = null; // MagicSpoon.Account instance
-        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'freighter'
+        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'freighter', 'wallet-connect' - AUTH_TYPE
         this.jwtToken = null;
         this.userFederation = '';
         this.promisesForMyltipleLoading = {};
@@ -144,21 +145,24 @@ export default function Send(driver) {
         logInWithSecret: async secretKey => {
             const keypair = StellarSdk.Keypair.fromSecret(secretKey);
             return this.handlers.logIn(keypair, {
-                authType: 'secret',
+                authType: AUTH_TYPE.SECRET,
             });
         },
         logInWithPublicKey: async accountId => {
             const keypair = StellarSdk.Keypair.fromPublicKey(accountId);
             return this.handlers.logIn(keypair, {
-                authType: 'pubkey',
+                authType: AUTH_TYPE.PUBKEY,
             });
+        },
+        loginWithWalletConnect: async () => {
+            await driver.walletConnectService.login();
         },
         logInWithFreighter: async () => {
             try {
                 const publicKey = await getPublicKey();
                 const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
                 return this.handlers.logIn(keypair, {
-                    authType: 'freighter',
+                    authType: AUTH_TYPE.FREIGHTER,
                 });
             } catch (e) {
                 throw e;
@@ -169,7 +173,7 @@ export default function Send(driver) {
                 if (result.success) {
                     const keypair = StellarSdk.Keypair.fromPublicKey(result.payload.address);
                     return this.handlers.logIn(keypair, {
-                        authType: 'trezor',
+                        authType: AUTH_TYPE.TREZOR,
                         bip32Path,
                     });
                 }
@@ -193,7 +197,7 @@ export default function Send(driver) {
 
                 const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
                 return this.handlers.logIn(keypair, {
-                    authType: 'ledger',
+                    authType: AUTH_TYPE.LEDGER,
                     bip32Path,
                 });
             } catch (error) {
@@ -213,43 +217,54 @@ export default function Send(driver) {
                 return null;
             }
         },
-        logIn: async (keypair, opts) => {
+        logIn: (keypair, opts) => {
             this.setupError = false;
             this.brakeUnfundedCheck = false;
-            if (this.state !== 'unfunded') {
-                this.state = 'loading';
+            if (this.state !== SESSION_STATE.UNFUNDED) {
+                this.state = SESSION_STATE.LOADING;
                 this.event.trigger();
             }
+            this.authType = opts.authType;
+            const cachedAuthType = opts.authType;
 
-            try {
-                this.account = await MagicSpoon.Account(driver.Server, keypair, opts, () => {
-                    this.event.trigger();
-                });
-                // Search for user federation
-                await this.handlers.searchFederation(this.account.accountId());
+            return MagicSpoon.Account(driver.Server, keypair, opts, () => {
+                this.event.trigger();
+            }).then(result => {
+                // if there is no authType, it means that a logout was performed during loading (WalletConnect case)
+                if (this.authType) {
+                    this.account = result;
+                    // Search for user federation
+                    this.handlers.searchFederation(this.account.accountId())
+                        .then(() => {
+                            this.event.trigger();
+                        });
 
-                this.state = 'in';
-                this.authType = opts.authType;
-                this.bip32Path = opts.bip32Path;
+                    this.state = SESSION_STATE.IN;
+                    this.bip32Path = opts.bip32Path;
 
-                // Functions of session after sign in
-                this.handlers.addUnknownAssetData();
-                driver.accountEvents.listenAccountEvents(driver.Server, this.account.account_id);
-                this.event.trigger('login');
+                    // Functions of session after sign in
+                    this.handlers.addUnknownAssetData();
+                    driver.accountEvents.listenAccountEvents(driver.Server, this.account.account_id);
+                    this.event.trigger('login');
 
-                driver.claimableBalances.getClaimableBalances();
-            } catch (e) {
+                    driver.claimableBalances.getClaimableBalances();
+                    return;
+                }
+                if (cachedAuthType === AUTH_TYPE.WALLET_CONNECT) {
+                    driver.walletConnectService.login();
+                }
+            }).catch(e => {
                 if (this.brakeUnfundedCheck) {
-                    this.state = 'out';
+                    this.state = SESSION_STATE.OUT;
                     this.event.trigger();
                     return;
                 }
                 if (e.message !== 'Network Error') {
-                    this.state = 'unfunded';
+                    this.state = SESSION_STATE.UNFUNDED;
                     this.unfundedAccountId = keypair.publicKey();
                     setTimeout(() => {
                         console.log('Checking to see if account has been created yet');
-                        if (this.state === 'unfunded') {
+                        if (this.state === SESSION_STATE.UNFUNDED) {
                             // Avoid race conditions
                             this.handlers.logIn(keypair, opts);
                         }
@@ -258,26 +273,22 @@ export default function Send(driver) {
                     return;
                 }
                 console.log(e);
-                this.state = 'out';
+                this.state = SESSION_STATE.OUT;
                 this.setupError = true;
                 this.event.trigger();
-            }
+            });
         },
-        // Using buildSignSubmit is the preferred way to go. It handles sequence numbers correctly.
-        // If you use sign, you have to pay attention to sequence numbers
-        // because js-stellar-sdk's .build() updates it magically
-        // The reason this doesn't take in a TransactionBuilder so we can call build() here is that there
-        // are cases when we want to paste in a raw transaction and sign that
         sign: async tx => {
-            if (this.authType === 'secret') {
+            if (this.authType === AUTH_TYPE.SECRET) {
                 this.account.signWithSecret(tx);
                 console.log('Signed tx\nhash:', tx.hash().toString('hex'), `\n\n${tx.toEnvelope().toXDR('base64')}`);
                 return {
-                    status: 'finish',
+                    status: TX_STATUS.FINISH,
                     signedTx: tx,
                 };
-            } else if (this.authType === 'ledger') {
-                console.log(tx);
+            } else if (this.authType === AUTH_TYPE.WALLET_CONNECT) {
+                return driver.walletConnectService.signTx(tx);
+            } else if (this.authType === AUTH_TYPE.LEDGER) {
                 return driver.modal.handlers.activate('signWithLedger', tx).then(async modalResult => {
                     if (modalResult.status === 'finish') {
                         console.log(
@@ -289,27 +300,27 @@ export default function Send(driver) {
                             driver.modal.handlers.cancel();
                         }
                         return {
-                            status: 'finish',
+                            status: TX_STATUS.FINISH,
                             signedTx: modalResult.output,
                         };
                     }
                     return modalResult;
                 });
-            } else if (this.authType === 'trezor') {
+            } else if (this.authType === AUTH_TYPE.TREZOR) {
                 const signedTx = await this.account.signWithTrezor(tx);
                 return {
-                    status: 'finish',
+                    status: TX_STATUS.FINISH,
                     signedTx,
                 };
-            } else if (this.authType === 'freighter') {
+            } else if (this.authType === AUTH_TYPE.FREIGHTER) {
                 const signedTx = await this.account.signWithFreighter(tx);
                 return {
-                    status: 'finish',
+                    status: TX_STATUS.FINISH,
                     signedTx,
                 };
             }
             return driver.modal.handlers.activate('sign', tx).then(async modalResult => {
-                if (modalResult.status === 'finish') {
+                if (modalResult.status === TX_STATUS.FINISH) {
                     await this.account.sign(tx);
                     console.log(
                         'Signed tx\nhash:',
@@ -317,7 +328,7 @@ export default function Send(driver) {
                         `\n\n${tx.toEnvelope().toXDR('base64')}`,
                     );
                     return {
-                        status: 'finish',
+                        status: TX_STATUS.FINISH,
                         signedTx: tx,
                     };
                 }
@@ -328,7 +339,7 @@ export default function Send(driver) {
             if (this.hasPendingTransaction) {
                 driver.toastService.error(
                     'Transaction in progress',
-                    'Another transaction is being submitted to the Stellar network',
+                    'Another transaction is currently in progress',
                 );
                 return Promise.reject();
             }
@@ -348,12 +359,9 @@ export default function Send(driver) {
             } else {
                 tx.addOperation(ops);
             }
-
             if (memo) {
                 tx.addMemo(Stellarify.memo(memo.type, memo.content));
             }
-
-
             return this.handlers.signSubmit(tx.build());
         },
         signSubmit: async transaction => {
@@ -361,11 +369,17 @@ export default function Send(driver) {
             // Either returns a cancel or finish with the transaction-in-flight Promise
             // (finish only means modal finished; It does NOT mean the transaction succeeded)
             let result = {
-                status: 'cancel',
+                status: TX_STATUS.CANCEL,
             };
             try {
                 const signResult = await this.handlers.sign(transaction);
-                if (signResult.status === 'finish') {
+                if (signResult.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
+                    this.hasPendingTransaction = false;
+                    return {
+                        status: TX_STATUS.SENT_TO_WALLET_CONNECT,
+                    };
+                }
+                if (signResult.status === TX_STATUS.FINISH) {
                     const tx = signResult.signedTx;
                     const threshold = this.handlers.getTransactionThreshold(tx);
                     const thresholdValue = this.account.thresholds[threshold];
@@ -382,21 +396,21 @@ export default function Send(driver) {
                             this.hasPendingTransaction = false;
                             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'));
                             this.account.refresh();
-                            if (this.authType === 'ledger') {
+                            if (this.authType === AUTH_TYPE.LEDGER) {
                                 driver.modal.handlers.ledgerFinish('closeWithTimeout', 3000);
                             }
                             return transactionResult;
                         })
                         .catch(error => {
                             this.hasPendingTransaction = false;
-                            if (this.authType === 'ledger') {
+                            if (this.authType === AUTH_TYPE.LEDGER) {
                                 driver.modal.handlers.ledgerFinish('error');
                             }
                             console.log('Failed tx\nhash:', tx.hash().toString('hex'));
                             throw error;
                         });
                     result = {
-                        status: 'finish',
+                        status: TX_STATUS.FINISH,
                         serverResult,
                     };
                 } else {
@@ -405,7 +419,7 @@ export default function Send(driver) {
             } catch (e) {
                 this.hasPendingTransaction = false;
                 return {
-                    status: 'finish',
+                    status: TX_STATUS.FINISH,
                     serverResult: Promise.reject(e),
                 };
             }
@@ -507,7 +521,7 @@ export default function Send(driver) {
                     .catch(e => console.error(e));
             }
             return {
-                status: 'await_signers',
+                status: TX_STATUS.AWAIT_SIGNERS,
             };
         },
 
@@ -700,7 +714,7 @@ export default function Send(driver) {
                     return request.post(endpointUrl, { headers, body });
                 })
                 .then(({ token }) => {
-                    if (this.authType === 'ledger') {
+                    if (this.authType === AUTH_TYPE.LEDGER) {
                         driver.modal.handlers.ledgerFinish('closeWithTimeout', 1000);
                     }
                     return token;
@@ -802,7 +816,7 @@ export default function Send(driver) {
             }
 
             const bssResult = await this.handlers.buildSignSubmit(op);
-            if (bssResult.status === 'finish') {
+            if (bssResult.status === TX_STATUS.FINISH) {
                 bssResult.serverResult.then(res => {
                     this.account.updateOffers();
                     return res;
@@ -815,7 +829,7 @@ export default function Send(driver) {
             const ops = buildOpRemoveOffer(offers);
 
             const bssResult = await this.handlers.buildSignSubmit(ops);
-            if (bssResult.status === 'finish') {
+            if (bssResult.status === TX_STATUS.FINISH) {
                 bssResult.serverResult.then(res => {
                     this.account.updateOffers();
                     return res;
@@ -843,23 +857,34 @@ export default function Send(driver) {
         },
         logout: () => {
             try {
-                if (!isElectron()) {
+                if (!isElectron() && this.authType !== AUTH_TYPE.WALLET_CONNECT) {
                     window.location.reload();
                     return;
                 }
-                if (this.account) {
-                    driver.accountEvents.stopListenAccountEvents();
-                    this.account.clearKeypair();
-                    delete this.account;
-                    init();
-                    this.event.trigger();
+
+                if (this.authType === AUTH_TYPE.WALLET_CONNECT) {
+                    driver.walletConnectService.logout();
                 }
-                this.brakeUnfundedCheck = true;
-                init();
-                this.event.trigger();
+                this.handlers.handleLogout();
             } catch (e) {
+                console.log(e);
                 window.location.reload();
             }
+        },
+        handleLogout: () => {
+            if (this.account) {
+                driver.accountEvents.stopListenAccountEvents();
+                this.account.clearKeypair();
+                delete this.account;
+                driver.claimableBalances.resetClaimableBalances();
+                driver.payments.resetPayments();
+                driver.effects.resetEffects();
+                init();
+                this.event.trigger();
+            }
+            this.brakeUnfundedCheck = true;
+            init();
+            this.event.trigger();
         },
         addUnknownAssetData: () => {
             const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];

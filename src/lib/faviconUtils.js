@@ -1,4 +1,5 @@
 import createStellarIdenticon from 'stellar-identicon-js';
+import { SESSION_STATE } from './constants';
 
 function setFavicon(favicon = '/favicon.ico') {
     const links = document.getElementsByTagName('link');
@@ -12,12 +13,12 @@ function setFavicon(favicon = '/favicon.ico') {
 
 export default function faviconHandler(state, unfundedAccountId, account) {
     switch (state) {
-        case 'unfunded': {
+        case SESSION_STATE.UNFUNDED: {
             const identiconImg = createStellarIdenticon(unfundedAccountId).toDataURL();
             setFavicon(identiconImg);
             break;
         }
-        case 'in': {
+        case SESSION_STATE.IN: {
             const identiconImg = createStellarIdenticon(account.account_id).toDataURL();
             setFavicon(identiconImg);
             break;

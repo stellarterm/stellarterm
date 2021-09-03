@@ -199,10 +199,27 @@
                     justify-content: center;
                     border-radius: 50%;
                     border: solid 2px #e1f4e2;
+                    margin-right: -9px;
 
                     img {
                         height: 14px;
                         width: 14px;
+                    }
+                }
+
+                .Header_app-icon {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    border: solid 2px #E1F4E2;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    background-color: #fff;
+
+                    img {
+                        height: 16px;
+                        width: 16px;
                     }
                 }
             }

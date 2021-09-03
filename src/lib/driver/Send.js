@@ -8,6 +8,7 @@ import * as EnvConsts from '../../env-consts';
 import ErrorHandler from '../ErrorHandler';
 import * as request from '../api/request';
 import { getUrlWithParams } from '../api/endpoints';
+import { TX_STATUS } from '../constants';
 
 export default class Send {
     constructor(driver) {
@@ -388,14 +389,17 @@ export default class Send {
                 sendMemo,
             );
 
-            if (bssResult.status === 'finish') {
+            if (bssResult.status === TX_STATUS.FINISH) {
                 this.state = 'pending';
                 this.event.trigger();
                 const result = await bssResult.serverResult;
                 this.txId = result.hash;
                 this.state = 'success';
-            } else if (bssResult.status === 'await_signers') {
+            } else if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
                 this.state = 'success_signers';
+                this.event.trigger();
+            } else if (bssResult.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
+                this.resetSendForm();
                 this.event.trigger();
             }
         } catch (err) {

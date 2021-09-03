@@ -16,7 +16,8 @@ export default () => (
                 <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://wiki.trezor.io/Getting_started_in_5_steps">
+                    href="https://wiki.trezor.io/Getting_started_in_5_steps"
+                >
                     instructions
                 </a>
                 {' '}on the Trezor website.
@@ -26,21 +27,23 @@ export default () => (
                 <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://wallet.trezor.io/#/bridge">
+                    href="https://wallet.trezor.io/#/bridge"
+                >
                     Trezor Bridge
                 </a>
                 {' '}app on your computer. This application allows communication between
                 the Trezor device and supported browsers.
             </li>
             <li>
-                After successfully installing, refresh the page and sign in with your Trezor device.
+                After successfully installing, refresh the page and log in with your Trezor device.
             </li>
             <li className="without-order-number">
                 Additional info about Trezor, you can find on the{' '}
                 <a
                     href="https://trezor.io/"
                     target="_blank"
-                    rel="noopener noreferrer">
+                    rel="noopener noreferrer"
+                >
                     official Trezor website
                 </a>
                 .

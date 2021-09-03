@@ -8,10 +8,15 @@ import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorB
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
 import AssetCardInRow from '../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import Sep7GetBuiltTx from '../Sep7GetBuiltTx/Sep7GetBuiltTx';
+import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../../../../lib/constants';
 
 const images = require('./../../../../images');
 
 export default class Sep7PayModal extends React.Component {
+    static clearUri() {
+        window.history.pushState({}, null, '/');
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -54,7 +59,7 @@ export default class Sep7PayModal extends React.Component {
     getButtons() {
         const { submit, d } = this.props;
         const { state } = d.session;
-        if (state !== 'in') {
+        if (state !== SESSION_STATE.IN) {
             return null;
         }
         return (
@@ -83,7 +88,8 @@ export default class Sep7PayModal extends React.Component {
         try {
             this.setState({ pending: true });
             const { d, submit, txDetails } = this.props;
-            if (d.session.authType === 'ledger') {
+            const { authType } = d.session;
+            if (authType === AUTH_TYPE.LEDGER) {
                 submit.cancel();
             }
             const isPay = txDetails.operation === 'pay';
@@ -112,14 +118,17 @@ export default class Sep7PayModal extends React.Component {
                 bssResult = await d.session.handlers.signSubmit(tx);
             }
 
-            if (bssResult.status === 'await_signers') {
-                submit.cancel();
-                window.history.pushState({}, null, '/');
+            if (bssResult.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
+                this.constructor.clearUri();
             }
-            if (bssResult.status === 'finish') {
+            if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
+                submit.cancel();
+                this.constructor.clearUri();
+            }
+            if (bssResult.status === TX_STATUS.FINISH) {
                 await bssResult.serverResult;
                 submit.cancel();
-                window.history.pushState({}, null, '/');
+                this.constructor.clearUri();
             }
         } catch (e) {
             this.setState({
@@ -137,7 +146,7 @@ export default class Sep7PayModal extends React.Component {
         const { asset, amount, destination, memo } = this.getPaymentDetails(txDetails);
 
         const balance = account && (asset.isNative() ? account.maxLumenSpend() : account.getBalance(asset));
-        const available = state !== 'in' ?
+        const available = state !== SESSION_STATE.IN ?
             'Login required' :
             `${(Math.floor((balance - account.getReservedBalance(asset)) * 10000000) / 10000000).toFixed(7)} ${asset.code}`;
         const buttons = this.getButtons();

@@ -1,0 +1,36 @@
+@import 'LoginLink/LoginLink';
+
+.LoginLinks {
+    width: 980px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+    background-color: #ffffff;
+    margin: 0 auto 27px;
+    padding: 33px 29px 38px;
+
+    &.narrow{
+        width: 477px;
+    }
+
+    .LoginLinks_title {
+        font-size: 18px;
+        font-weight: normal;
+        color: #505558;
+        margin-bottom: 6px;
+    }
+
+    .LoginLinks_description {
+        font-size: 14px;
+        font-weight: normal;
+        color: #9aa6ac;
+        margin-bottom: 54px;
+    }
+
+    .LoginLinks_links {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        gap: 9px;
+    }
+}

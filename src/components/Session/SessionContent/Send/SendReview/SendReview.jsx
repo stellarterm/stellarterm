@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import createStellarIdenticon from 'stellar-identicon-js';
 import Driver from '../../../../../lib/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
+import { AUTH_TYPE } from '../../../../../lib/constants';
 
 export default class SendReview extends React.Component {
     constructor(props) {
@@ -36,7 +37,7 @@ export default class SendReview extends React.Component {
         const memoTitle = memoType.replace(/_/g, ' ').toLowerCase();
         const memoTitleText = memoTitle.charAt(0).toUpperCase() + memoTitle.slice(1);
 
-        const isLedger = this.props.d.session.authType === 'ledger';
+        const isLedger = this.props.d.session.authType === AUTH_TYPE.LEDGER;
 
         return (
             <div className="Send_block">
@@ -87,7 +88,8 @@ export default class SendReview extends React.Component {
                                     <AssetCardInRow
                                         code={assetToSend.asset.code}
                                         issuer={assetToSend.asset.issuer}
-                                        d={this.props.d} />
+                                        d={this.props.d}
+                                    />
                                 </div>
                             </div>
                         </div>
@@ -98,14 +100,16 @@ export default class SendReview extends React.Component {
                     <button
                         className="s-btn_cancel"
                         disabled={isPending && !isLedger}
-                        onClick={() => clickBackToSend()}>
+                        onClick={() => clickBackToSend()}
+                    >
                         Back
                     </button>
 
                     <button
                         className="s-button"
                         disabled={isPending && !isLedger}
-                        onClick={() => this.onClickSubmit()}>
+                        onClick={() => this.onClickSubmit()}
+                    >
                         {state === 'pending' ? <div className="nk-spinner" /> : 'Submit transaction'}
                     </button>
                 </div>

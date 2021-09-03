@@ -7,6 +7,7 @@ import isElectron from 'is-electron';
 import Driver from '../lib/Driver';
 import { isIE, isEdge } from '../lib/BrowserSupport';
 import faviconHandler from '../lib/faviconUtils';
+import { SESSION_STATE } from '../lib/constants';
 import GlobalModal from './GlobalModal/GlobalModal';
 import ToastTemplate from './ToastTemplate/ToastTemplate';
 import NotFound from './NotFound/NotFound';
@@ -93,7 +94,7 @@ class TermApp extends React.Component {
         if (!isElectron()) {
             window.onbeforeunload = e => {
                 const { state } = this.props.d.session;
-                if (state === 'in' || state === 'unfunded') {
+                if (state === SESSION_STATE.IN || state === SESSION_STATE.UNFUNDED) {
                     e.returnValue = 'You will be logged out after reload!';
                 }
             };
@@ -157,6 +158,10 @@ class TermApp extends React.Component {
                                         <Route
                                             path="/freighter/"
                                             render={props => <Session {...props} d={this.props.d} urlParts={'freighter'} />}
+                                        />
+                                        <Route
+                                            path="/wallet-connect/"
+                                            render={props => <Session {...props} d={this.props.d} urlParts={'wallet-connect'} />}
                                         />
                                         <Route
                                             path="/signup/"

@@ -14,6 +14,7 @@ const $ = {
 };
 const browserify = require('browserify');
 const watchify = require('watchify');
+const babelify = require('babelify');
 const source = require('vinyl-source-stream');
 const browserSync = require('browser-sync');
 const browserSyncSpa = require('browser-sync-middleware-spa');
@@ -166,8 +167,11 @@ gulp.task('buildInfo', cb => {
 
 // browserify
 const bundler = watchify(browserify({
-    entries: ['./src/components/App.jsx'],
-    extensions: ['.jsx'],
+    entries: [
+        './src/components/App.jsx',
+        './node_modules/lightweight-charts',
+    ],
+    extensions: ['.jsx', '.js'],
     debug: true,
     insertGlobals: true,
     cache: {},
@@ -178,7 +182,9 @@ const bundler = watchify(browserify({
             return '';
         },
     },
-}));
+}).transform(babelify.configure({
+    presets: ['@babel/preset-env', '@babel/preset-react'],
+})));
 const rebundle = () => bundler.bundle()
     // log errors if they happen
     .on('error', e => {
@@ -258,7 +264,7 @@ gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
 // Build production site.
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
     .pipe(babel({
-        presets: ['@babel/env'],
+        presets: ['@babel/preset-env'],
     }))
     .pipe($.uglify())
     .pipe(gulp.dest('dist/scripts')));

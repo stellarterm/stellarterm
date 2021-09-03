@@ -1,0 +1,69 @@
+.WalletConnectRequestModal {
+    height: unset;
+}
+
+.WalletConnectRequestModal__content {
+    display: flex;
+    flex-direction: column;
+    padding: 35px 34px 30px;
+    width: 100%;
+
+    .WalletConnectRequestModal__title {
+        font-size: 18px;
+        font-weight: normal;
+        color: #505558;
+        margin-bottom: 10px;
+    }
+
+    .WalletConnectRequestModal__description {
+        font-size: 14px;
+        font-weight: normal;
+        color: #9aa6ac;
+        margin-bottom: 30px;
+    }
+
+    .WalletConnectRequestModal__container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #f2f2f2;
+        background-color: #fdfdfd;
+        border-radius: 4px;
+        padding: 25px 0 32px;
+        margin-bottom: 30px;
+
+        .WalletConnectRequestModal__icons {
+            position: relative;
+            margin-bottom: 22px;
+        }
+
+        .WalletConnectRequestModal__logo {
+            height: 80px;
+            width: 80px;
+        }
+
+        .WalletConnectRequestModal__status-icon {
+            height: 31px;
+            width: 31px;
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #fff;
+            border: 5px solid #fff;
+            border-radius: 50%;
+        }
+
+        .WalletConnectRequestModal__status {
+            font-size: 14px;
+            font-weight: normal;
+            color: #505558;
+        }
+    }
+
+    button {
+        margin-left: auto;
+        width: 120px;
+        height: 52px;
+    }
+}

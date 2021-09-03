@@ -1,5 +1,6 @@
 import Event from '../Event';
 import { getAvailableClaimsCount, getNextClaimTime } from '../claimableBalancesHelpers';
+import { SESSION_STATE } from '../constants';
 
 const LAST_SEEN_CLAIMABLE_BALANCE_ALIAS = 'lastSeenClaimableBalance';
 
@@ -29,11 +30,11 @@ export default class ClaimableBalances {
 
     getAccountId() {
         switch (this.driver.session.state) {
-            case 'in': {
+            case SESSION_STATE.IN: {
                 this.accountId = this.driver.session.account.account_id;
                 break;
             }
-            case 'unfunded': {
+            case SESSION_STATE.UNFUNDED: {
                 this.accountId = this.driver.session.unfundedAccountId;
                 break;
             }
@@ -96,17 +97,18 @@ export default class ClaimableBalances {
         }
         this.loading = true;
 
-        this.nextClaimableBalancesRequest().then(result => {
-            this.pendingClaimableBalances = [...this.pendingClaimableBalances, ...result.records];
-            this.pendingClaimableBalancesCount =
-                getAvailableClaimsCount(this.pendingClaimableBalances, this.accountId);
-            this.nextClaimableBalancesRequest = result.next;
-            this.isFullLoaded = result.records.length === 0;
+        this.nextClaimableBalancesRequest()
+            .then(result => {
+                this.pendingClaimableBalances = [...this.pendingClaimableBalances, ...result.records];
+                this.pendingClaimableBalancesCount =
+                    getAvailableClaimsCount(this.pendingClaimableBalances, this.accountId);
+                this.nextClaimableBalancesRequest = result.next;
+                this.isFullLoaded = result.records.length === 0;
 
-            this.loading = false;
+                this.loading = false;
 
-            this.event.trigger();
-        });
+                this.event.trigger();
+            });
     }
 
     updateClaimableBalances() {
@@ -134,5 +136,14 @@ export default class ClaimableBalances {
         this.hasBanner = false;
 
         this.event.trigger();
+    }
+
+    resetClaimableBalances() {
+        this.isFullLoaded = false;
+        this.pendingClaimableBalances = [];
+        this.pendingClaimableBalancesCount = 0;
+        this.nextClaimableBalancesRequest = null;
+        this.lastCanClaimBalance = null;
+        this.hasBanner = false;
     }
 }

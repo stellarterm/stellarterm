@@ -1,5 +1,6 @@
 import BigNumber from 'bignumber.js';
 import * as StellarSdk from 'stellar-sdk';
+import { AUTH_TYPE } from './constants';
 
 // opts.baseBuying -- StellarSdk.Asset (example: XLM)
 // opts.counterSelling -- StellarSdk.Asset (example: USD)
@@ -23,7 +24,7 @@ export function buildOpCreateBuyOffer(opts, authType) {
     // because manageBuyOffer is unsupported yet
     // https://github.com/LedgerHQ/ledger-app-stellar/
     // https://github.com/trezor/connect
-    if (authType === 'ledger' || authType === 'trezor') {
+    if (authType === AUTH_TYPE.LEDGER || authType === AUTH_TYPE.TREZOR) {
         const operationOpts = {
             buying: sdkBuying,
             selling: sdkSelling,

@@ -7,6 +7,7 @@ import directory from 'stellarterm-directory';
 import Driver from '../../../../lib/Driver';
 import ErrorHandler from '../../../../lib/ErrorHandler';
 import images from '../../../../images';
+import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants';
 
 export default class TrustButton extends React.Component {
     static goToLink(e) {
@@ -21,7 +22,8 @@ export default class TrustButton extends React.Component {
                     src={images['icon-circle-preloader-gif']}
                     width="20"
                     height="20"
-                    alt="load" />
+                    alt="load"
+                />
             </div>
         );
     }
@@ -37,27 +39,27 @@ export default class TrustButton extends React.Component {
 
     handleSubmitTrust(event) {
         event.preventDefault();
-        if (this.props.d.session.authType === 'ledger') {
+        if (this.props.d.session.authType === AUTH_TYPE.LEDGER) {
             this.addDataToLocalStorage();
         }
         this.props.d.session.handlers
             .addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
-            .then((bssResult) => {
-                if (bssResult.status === 'await_signers') {
+            .then(({ status, serverResult }) => {
+                if (status === TX_STATUS.AWAIT_SIGNERS || status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
                     this.addDataToLocalStorage();
                 }
-                if (bssResult.status !== 'finish') {
+                if (status !== TX_STATUS.FINISH) {
                     return null;
                 }
 
                 this.setState({ status: 'pending' });
 
-                return bssResult.serverResult
+                return serverResult
                     .then(() => {
                         this.setState({ status: 'ready' });
                         this.addDataToLocalStorage();
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         const { response } = error;
                         const { data } = response || '';
                         let errorType = 'unknown';

@@ -5,6 +5,7 @@ import Driver from '../../../../../lib/Driver';
 import ErrorHandler from '../../../../../lib/ErrorHandler';
 import images from '../../../../../images';
 import Validate from '../../../../../lib/Validate';
+import { AUTH_TYPE, TX_STATUS } from '../../../../../lib/constants';
 
 export default class Sep24ModalFooter extends React.Component {
     constructor(props) {
@@ -158,7 +159,7 @@ export default class Sep24ModalFooter extends React.Component {
             }
             : undefined;
 
-        if (d.session.authType === 'ledger') {
+        if (d.session.authType === AUTH_TYPE.LEDGER) {
             d.modal.handlers.finish();
             d.modal.nextModalName = 'Sep24Modal';
             d.modal.nextModalData = {
@@ -175,12 +176,12 @@ export default class Sep24ModalFooter extends React.Component {
 
         const bssResult = await d.session.handlers.send(sendOpts, sendMemo);
 
-        if (bssResult.status === 'await_signers') {
+        if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
             d.modal.handlers.cancel();
             window.history.pushState({}, null, '/');
         }
 
-        if (bssResult.status === 'finish') {
+        if (bssResult.status === TX_STATUS.FINISH) {
             try {
                 await bssResult.serverResult;
 
