@@ -19,11 +19,12 @@ export default class MultisigEnableStep3 extends React.Component {
 
     async addSigner(signerData, d) {
         const { publicKey, signerProvider } = signerData;
+        const { authType } = d.session;
         this.setState({
             pending: true,
             addingError: '',
         });
-        if (d.session.authType === AUTH_TYPE.LEDGER) {
+        if (authType === AUTH_TYPE.LEDGER) {
             this.props.submit.cancel();
         }
         try {
@@ -32,6 +33,9 @@ export default class MultisigEnableStep3 extends React.Component {
                 result.serverResult.then(() => {
                     d.session.handlers.activateGuardSigner();
                 });
+            }
+            if (authType === AUTH_TYPE.WALLET_CONNECT) {
+                return;
             }
             if (d.session.account.signers.length > 1) {
                 this.props.submit.cancel();

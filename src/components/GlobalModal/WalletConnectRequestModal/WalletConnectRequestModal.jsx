@@ -11,7 +11,7 @@ const TX_STATUS = {
 
 const STATUS_ICONS = {
     [TX_STATUS.PENDING]: 'icon-clock',
-    [TX_STATUS.SUCCESS]: 'icon-circle-success',
+    [TX_STATUS.SUCCESS]: '24-icon-success-circle',
     [TX_STATUS.FAILED]: 'icon-circle-fail',
     [TX_STATUS.AWAIT_SIGNERS]: 'icon-clock',
 };
