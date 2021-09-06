@@ -15,11 +15,16 @@ export default class MultisigSetRequiredSigners extends React.Component {
 
     setRequiredSigners() {
         const { d, submit } = this.props;
-        if (d.session.authType === AUTH_TYPE.LEDGER) {
+        const { authType } = d.session;
+        if (authType === AUTH_TYPE.LEDGER) {
             submit.cancel();
         }
         d.session.handlers.setRequiredSigners(this.state.requiredSigners)
-            .then(() => submit.cancel())
+            .then(() => {
+                if (authType !== AUTH_TYPE.WALLET_CONNECT) {
+                    submit.cancel();
+                }
+            })
             .catch(e => console.log(e));
     }
 

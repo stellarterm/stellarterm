@@ -217,10 +217,11 @@
                     justify-content: center;
                     background-color: #fff;
                     overflow: hidden;
+                    box-sizing: border-box;
 
                     img {
-                        height: 32px;
-                        width: 32px;
+                        height: 34px;
+                        width: 34px;
                     }
                 }
             }
