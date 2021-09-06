@@ -2,29 +2,44 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
 
+const TX_STATUS = {
+    PENDING: 'pending',
+    SUCCESS: 'success',
+    FAILED: 'failed',
+    AWAIT_SIGNERS: 'await_signers',
+};
 
 const STATUS_ICONS = {
-    Pending: 'icon-clock',
-    Success: 'icon-circle-success',
-    Failed: 'icon-circle-fail',
+    [TX_STATUS.PENDING]: 'icon-clock',
+    [TX_STATUS.SUCCESS]: 'icon-circle-success',
+    [TX_STATUS.FAILED]: 'icon-circle-fail',
+    [TX_STATUS.AWAIT_SIGNERS]: 'icon-clock',
 };
 
 const STATUS_TEXT = {
-    Pending: 'Waiting For Confirmation',
-    Success: 'Transaction completed',
-    Failed: 'Transaction Rejected',
+    [TX_STATUS.PENDING]: 'Waiting For Confirmation',
+    [TX_STATUS.SUCCESS]: 'Transaction Completed',
+    [TX_STATUS.FAILED]: 'Transaction Rejected',
+    [TX_STATUS.AWAIT_SIGNERS]: 'Transaction Confirmed. More signatures required to complete',
 };
 
 export default function WalletConnectRequestModal(props) {
-    const [txState, setTxState] = useState('Pending');
+    const [txState, setTxState] = useState(TX_STATUS.PENDING);
 
     const { data, submit } = props;
 
     data.result
-        .then(() => {
-            setTxState('Success');
+        .then(result => {
+            if (!result) {
+                return;
+            }
+            if (result.status === 'success') {
+                setTxState(TX_STATUS.SUCCESS);
+            } else if (result.status === 'pending') {
+                setTxState(TX_STATUS.AWAIT_SIGNERS);
+            }
         })
-        .catch(() => setTxState('Failed'));
+        .catch(() => setTxState(TX_STATUS.FAILED));
 
     return (
         <div className="MultisigSubmitModal WalletConnectRequestModal">
@@ -66,10 +81,13 @@ export default function WalletConnectRequestModal(props) {
                 </div>
 
                 <button
-                    className={txState === 'Success' ? 's-button' : 'cancel-button'}
+                    className={(txState === TX_STATUS.SUCCESS || txState === TX_STATUS.AWAIT_SIGNERS) ?
+                        's-button' :
+                        'cancel-button'
+                    }
                     onClick={() => submit.cancel()}
                 >
-                    {txState === 'Success' ? 'Done' : 'Close'}
+                    {txState === TX_STATUS.SUCCESS ? 'Done' : 'Close'}
                 </button>
             </div>
         </div>

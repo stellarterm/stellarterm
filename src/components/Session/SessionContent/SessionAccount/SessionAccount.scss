@@ -21,10 +21,11 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        overflow: hidden;
 
         img {
-            height: 16px;
-            width: 16px;
+            height: 32px;
+            width: 32px;
         }
     }
 

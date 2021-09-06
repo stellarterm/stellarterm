@@ -111,7 +111,7 @@ export default class WalletConnectService {
         if (status === 'cancel') {
             await this.client.pairing.pending.update(proposal.topic, {
                 outcome: {
-                    reason: { message: 'You canceled the connection' },
+                    reason: { message: 'cancelled' },
                 },
                 status: 'responded',
             });
@@ -181,6 +181,9 @@ export default class WalletConnectService {
             });
         } catch (e) {
             this.appMeta = null;
+            if (e.message === 'cancelled') {
+                return Promise.resolve({ status: 'cancel' });
+            }
             const errorMessage = e.message === 'Session not approved' ?
                 'Connection canceled by the user' :
                 e.message;
@@ -238,9 +241,10 @@ export default class WalletConnectService {
                         xdr,
                     },
                 },
-            }).then(() => {
+            }).then(result => {
                 this.driver.session.account.refresh();
                 this.driver.session.account.updateOffers();
+                return result;
             }),
         });
 
