@@ -4,6 +4,7 @@ import images from '../../../../../images';
 import Driver from '../../../../../lib/Driver';
 import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
 import CopyButton from '../../../../Common/CopyButton/CopyButton';
+import { UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants';
 import FederationInpit from './FederationInput/FederationInput';
 
 export const MIN_FED_LENGTH = 4;
@@ -25,16 +26,16 @@ export default class Federation extends React.Component {
     onKeyPressed(keyCode) {
         const isNewAddress = this.state.address !== this.props.d.session.userFederation;
         switch (keyCode) {
-        case CODE_ENTER:
-            if (isNewAddress) {
-                this.handleBtnSave();
-            }
-            break;
-        case CODE_ESC:
-            this.handleEditToggle();
-            break;
-        default:
-            break;
+            case CODE_ENTER:
+                if (isNewAddress) {
+                    this.handleBtnSave();
+                }
+                break;
+            case CODE_ESC:
+                this.handleEditToggle();
+                break;
+            default:
+                break;
         }
         return null;
     }
@@ -76,7 +77,8 @@ export default class Federation extends React.Component {
                         <FederationInpit
                             address={address}
                             onUpdate={inputValue => this.updateInputValue(inputValue)}
-                            onKeyPressed={keyCode => this.onKeyPressed(keyCode)} />
+                            onKeyPressed={keyCode => this.onKeyPressed(keyCode)}
+                        />
                     </div>
                     <div className="Account_alert_right">{this.getControlButtons()}</div>
                 </div>
@@ -141,7 +143,17 @@ export default class Federation extends React.Component {
     }
 
     handleEditToggle() {
-        const { userFederation } = this.props.d.session;
+        const { userFederation, authType } = this.props.d.session;
+        const isJWTUnsupported = UNSUPPORTED_JWT_AUTH_TYPES.has(authType);
+
+        if (isJWTUnsupported) {
+            this.props.d.toastService.error(
+                'Edit not available',
+                `Federation changes are not available with ${UNSUPPORTED_JWT_AUTH_TYPES.get(authType)} at the moment`,
+            );
+            return;
+        }
+
 
         this.setState({
             isEditing: !this.state.isEditing,
@@ -166,7 +178,7 @@ export default class Federation extends React.Component {
                     reqIsResolved: true,
                 });
             })
-            .catch((e) => {
+            .catch(e => {
                 this.setState({
                     fedError: (e.data && e.data.name)
                         ? e.data.name :

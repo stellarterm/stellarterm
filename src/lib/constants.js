@@ -20,3 +20,8 @@ export const TX_STATUS = {
     AWAIT_SIGNERS: 'await_signers',
     SENT_TO_WALLET_CONNECT: 'sent_to_wallet_connect',
 };
+
+export const UNSUPPORTED_JWT_AUTH_TYPES = new Map([
+    [AUTH_TYPE.WALLET_CONNECT, 'WalletConnect'],
+    [AUTH_TYPE.TREZOR, 'Trezor'],
+]);
