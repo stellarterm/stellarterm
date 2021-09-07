@@ -7,12 +7,7 @@ import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
 import Stellarify from '../../../../../lib/Stellarify';
 import { getTransferDomain, checkAssetSettings, getTransferServer } from '../../../../../lib/SepUtils';
-import { AUTH_TYPE } from '../../../../../lib/constants';
-
-const UNSUPPORTED_JWT_AUTH_TYPES = new Map([
-    [AUTH_TYPE.WALLET_CONNECT, 'WalletConnect'],
-    [AUTH_TYPE.TREZOR, 'Trezor'],
-]);
+import { UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants';
 
 export default class AssetActionButtons extends React.Component {
     static getBuyLumensLink(isXLMNative) {
