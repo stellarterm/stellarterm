@@ -75,7 +75,7 @@ export default class LedgerForm extends React.Component {
 
         return (
             <label htmlFor="bip32Path" className="LoginPage__bip32Path">
-                Path: <span className="">{'44\'/148\'/'}</span>
+                Path: 44&apos;/148&apos;/
                 <input
                     style={inputWidthStyle}
                     name="bip32Path"
