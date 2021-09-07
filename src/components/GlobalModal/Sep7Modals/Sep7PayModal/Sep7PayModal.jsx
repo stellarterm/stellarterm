@@ -84,39 +84,46 @@ export default class Sep7PayModal extends React.Component {
         );
     }
 
+    async getBssResult() {
+        const { d, txDetails } = this.props;
+
+        const isPay = txDetails.operation === 'pay';
+
+        if (isPay) {
+            const { asset, amount, destination, memo, memoType } = this.getPaymentDetails(txDetails);
+            let type = memoType || 'MEMO_TEXT';
+            if (type.toUpperCase() !== type) {
+                type = `MEMO_${type.toUpperCase()}`;
+            }
+
+            const sendMemo = (memo) ? {
+                type,
+                content: memo,
+            } : undefined;
+
+            return d.session.handlers.send({
+                destination,
+                asset,
+                amount,
+            }, sendMemo);
+        }
+
+        const tx = await Sep7GetBuiltTx(txDetails, d);
+        return d.session.handlers.signSubmit(tx);
+    }
+
     async handlePayment() {
+        const { d, submit } = this.props;
+
         try {
             this.setState({ pending: true });
-            const { d, submit, txDetails } = this.props;
+
             const { authType } = d.session;
             if (authType === AUTH_TYPE.LEDGER) {
                 submit.cancel();
             }
-            const isPay = txDetails.operation === 'pay';
 
-            let bssResult;
-
-            if (isPay) {
-                const { asset, amount, destination, memo, memoType } = this.getPaymentDetails(txDetails);
-                let type = memoType || 'MEMO_TEXT';
-                if (type.toUpperCase() !== type) {
-                    type = `MEMO_${type.toUpperCase()}`;
-                }
-
-                const sendMemo = (memo) ? {
-                    type,
-                    content: memo,
-                } : undefined;
-
-                bssResult = await d.session.handlers.send({
-                    destination,
-                    asset,
-                    amount,
-                }, sendMemo);
-            } else {
-                const tx = await Sep7GetBuiltTx(txDetails, d);
-                bssResult = await d.session.handlers.signSubmit(tx);
-            }
+            const bssResult = await this.getBssResult();
 
             if (bssResult.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
                 this.constructor.clearUri();

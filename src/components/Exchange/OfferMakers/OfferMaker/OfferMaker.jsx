@@ -197,7 +197,7 @@ export default class OfferMaker extends React.Component {
         try {
             const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total, offerId });
 
-            if (signAndSubmit.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
+            if (signAndSubmit.status !== TX_STATUS.AWAIT_SIGNERS && signAndSubmit.status !== TX_STATUS.FINISH) {
                 if (this._mounted) {
                     this.setState({
                         amount: '',
@@ -207,6 +207,7 @@ export default class OfferMaker extends React.Component {
                         successMessage: '',
                     });
                 }
+                return;
             }
 
             if (signAndSubmit.status === TX_STATUS.AWAIT_SIGNERS) {
@@ -220,9 +221,9 @@ export default class OfferMaker extends React.Component {
                         successMessage: 'Offer was signed with your key. Add additional signatures and submit to the network.',
                     });
                 }
+                return;
             }
 
-            if (signAndSubmit.status !== TX_STATUS.FINISH) { return; }
             if (this._mounted) {
                 this.setState({
                     valid: false,

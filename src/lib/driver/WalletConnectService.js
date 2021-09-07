@@ -12,18 +12,11 @@ const METADATA = {
     icons: ['https://avatars.githubusercontent.com/u/25021964?s=200&v=4.png'],
 };
 
-const STELLAR_DATA = {
-    CHAIN: {
-        PUNBNET: 'stellar:pubnet',
-        TESTNET: 'stellar:testnet',
-    },
-    METHODS: {
-        SIGN: 'stellar_signAndSubmitXDR',
-    },
-    GET_ALL_METHODS() {
-        return Object.values(this.METHODS);
-    },
+const STELLAR_METHODS = {
+    SIGN: 'stellar_signAndSubmitXDR',
 };
+const TESTNET = 'stellar:testnet';
+const PUBNET = 'stellar:pubnet';
 
 export default class WalletConnectService {
     constructor(driver) {
@@ -172,10 +165,10 @@ export default class WalletConnectService {
                 pairing: pairing ? { topic: pairing.topic } : undefined,
                 permissions: {
                     blockchain: {
-                        chains: [STELLAR_DATA.CHAIN.PUNBNET],
+                        chains: [this.driver.Server.isTestnet ? TESTNET : PUBNET],
                     },
                     jsonrpc: {
-                        methods: STELLAR_DATA.GET_ALL_METHODS(),
+                        methods: Object.values(STELLAR_METHODS),
                     },
                 },
             });
@@ -233,10 +226,10 @@ export default class WalletConnectService {
             logo: this.appMeta.icons[0],
             result: this.client.request({
                 topic: this.session.topic,
-                chainId: STELLAR_DATA.CHAIN.PUNBNET,
+                chainId: this.driver.Server.isTestnet ? TESTNET : PUBNET,
                 request: {
                     jsonrpc: '2.0',
-                    method: STELLAR_DATA.METHODS.SIGN,
+                    method: STELLAR_METHODS.SIGN,
                     params: {
                         xdr,
                     },

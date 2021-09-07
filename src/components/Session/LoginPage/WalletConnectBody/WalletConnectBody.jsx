@@ -12,6 +12,7 @@ const WalletConnectBody = ({ history, d, modal }) => {
     let mounted = true;
 
     useEffect(() => () => {
+        // unmount effect
         mounted = false;
     }, []);
 
