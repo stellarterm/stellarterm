@@ -25,6 +25,7 @@ const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
 const LINE = 'lineChart';
 const keyF = 70;
+const LS_DEFAULT_CHART_TYPE_ALIAS = 'defaultChartType';
 
 export default class Exchange extends React.Component {
     constructor(props) {
@@ -45,7 +46,7 @@ export default class Exchange extends React.Component {
 
         this.state = {
             wrongUrl: false,
-            chartType: 'lineChart',
+            chartType: localStorage.getItem(LS_DEFAULT_CHART_TYPE_ALIAS || 'null') || LINE,
             marketType: 'orderbook',
             fullscreenMode: false,
             showAction: false,
@@ -129,21 +130,21 @@ export default class Exchange extends React.Component {
             <div className="island__header tabs_Switcher">
                 <div className="switch_Tabs">
                     <a
-                        onClick={() => this.setState({ chartType: 'lineChart' })}
+                        onClick={() => this.chooseChartType(LINE)}
                         className={chartType === LINE ? 'active_Tab' : ''}
                     >
                         <img src={images['icon-lineChart']} alt="line" />
                         <span>Linechart</span>
                     </a>
                     <a
-                        onClick={() => this.setState({ chartType: 'candlestickChart' })}
+                        onClick={() => this.chooseChartType(CANDLE)}
                         className={chartType === CANDLE ? 'active_Tab' : ''}
                     >
                         <img src={images['icon-candleChart']} alt="candle" />
                         <span>Candlestick</span>
                     </a>
                     <a
-                        onClick={() => this.setState({ chartType: 'barChart' })}
+                        onClick={() => this.chooseChartType(BAR)}
                         className={chartType === BAR ? 'active_Tab' : ''}
                     >
                         <img src={images['icon-barChart']} alt="bar" />
@@ -195,6 +196,11 @@ export default class Exchange extends React.Component {
         }
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
+    }
+
+    chooseChartType(type) {
+        this.setState({ chartType: type });
+        localStorage.setItem(LS_DEFAULT_CHART_TYPE_ALIAS, type);
     }
 
     toggleFullScreen() {
