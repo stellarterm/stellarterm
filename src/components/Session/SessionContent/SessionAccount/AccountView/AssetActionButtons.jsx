@@ -34,11 +34,12 @@ export default class AssetActionButtons extends React.Component {
     }
 
     async onSepClick(isDeposit) {
-        if (!this.checkIsJWTSupported(isDeposit ? 'Deposits' : 'Withdrawals')) {
-            return;
-        }
         const { d, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
+
+        if (directoryAsset.sep24 && !this.checkIsJWTSupported(isDeposit ? 'Deposits' : 'Withdrawals')) {
+            return;
+        }
 
         const transferServer = await getTransferServer(directoryAsset, isDeposit ? 'deposit' : 'withdraw', d.modal);
 
