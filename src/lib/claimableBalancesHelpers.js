@@ -27,6 +27,10 @@ export const unitePeriods = (periodList1, periodList2) => {
    * @return {Array.<Period>}
    */
 
+    if (periodList1.length === 0 && periodList2.length === 0) {
+        return [];
+    }
+
     const joinedList = [...periodList1, ...periodList2].sort((a, b) => (a.start.isBefore(b.start) ? -1 : 0));
 
     const resultList = [];
