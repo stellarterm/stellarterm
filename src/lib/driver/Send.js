@@ -71,7 +71,7 @@ export default class Send {
         this.allFieldsValid = this.validateAllFields();
         this.event.trigger();
 
-        this.d.Server.loadAccount(this.accountId).then((account) => {
+        this.d.Server.loadAccount(this.accountId).then(account => {
             if (account.id === this.accountId) {
                 // Prevent race conditions using this check
                 this.targetAccount = account;
@@ -80,13 +80,13 @@ export default class Send {
             }
 
             if (account.home_domain && this.federationAddress === '') {
-                StellarSdk.StellarTomlResolver.resolve(account.home_domain).then((toml) => {
+                StellarSdk.StellarTomlResolver.resolve(account.home_domain).then(toml => {
                     if (!toml.FEDERATION_SERVER) {
                         return account;
                     }
 
                     request.get(`${getUrlWithParams(toml.FEDERATION_SERVER, { q: account.id, type: 'id' })}`, {})
-                        .then((res) => {
+                        .then(res => {
                             this.federationAddress = res.stellar_address;
                             this.event.trigger();
                         });
@@ -94,7 +94,7 @@ export default class Send {
             }
 
             return account;
-        }).then((account) => {
+        }).then(account => {
             const memoFlag = account.data_attr['config.memo_required'];
             // Sep0029 check for required memo
             if (memoFlag && new Buffer(memoFlag, 'base64').toString() === '1') {
@@ -121,7 +121,7 @@ export default class Send {
             return;
         }
 
-        _.each(this.d.session.account.balances, (balance) => {
+        _.each(this.d.session.account.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) { return; }
@@ -148,7 +148,7 @@ export default class Send {
         const sendableAssets = {};
         const unSendableAssets = {};
 
-        _.each(this.d.session.account.balances, (balance) => {
+        _.each(this.d.session.account.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
@@ -167,7 +167,7 @@ export default class Send {
             }
         });
 
-        _.each(this.targetAccount.balances, (balance) => {
+        _.each(this.targetAccount.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
@@ -177,7 +177,7 @@ export default class Send {
             receiverTrusts[slug] = true;
         });
 
-        _.each(this.targetAccount.balances, (balance) => {
+        _.each(this.targetAccount.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (Object.prototype.hasOwnProperty.call(senderTrusts, slug)) {
@@ -197,7 +197,7 @@ export default class Send {
         });
 
         // Show stuff the recipient doesn't trust
-        _.each(this.d.session.account.balances, (balance) => {
+        _.each(this.d.session.account.balances, balance => {
             const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
@@ -260,7 +260,7 @@ export default class Send {
 
             StellarSdk.FederationServer.createForDomain(federationDomain)
                 .then(federationServer => federationServer.resolveAddress(this.destInput))
-                .then((federationRecord) => {
+                .then(federationRecord => {
                     if (destInput !== this.destInput) {
                         return;
                     }
@@ -271,20 +271,20 @@ export default class Send {
                     this.accountId = federationRecord.account_id;
                     if (federationRecord.memo_type) {
                         switch (federationRecord.memo_type) {
-                        case 'id':
-                            this.memoType = 'MEMO_ID';
-                            break;
-                        case 'text':
-                            this.memoType = 'MEMO_TEXT';
-                            break;
-                        case 'hash':
-                            this.memoType = 'MEMO_HASH';
-                            break;
-                        case 'return':
-                            this.memoType = 'MEMO_RETURN';
-                            break;
-                        default:
-                            throw new Error('Invalid memo_type from federation response');
+                            case 'id':
+                                this.memoType = 'MEMO_ID';
+                                break;
+                            case 'text':
+                                this.memoType = 'MEMO_TEXT';
+                                break;
+                            case 'hash':
+                                this.memoType = 'MEMO_HASH';
+                                break;
+                            case 'return':
+                                this.memoType = 'MEMO_RETURN';
+                                break;
+                            default:
+                                throw new Error('Invalid memo_type from federation response');
                         }
                         this.memoRequired = true;
                     }
@@ -298,13 +298,14 @@ export default class Send {
                     this.loadTargetAccountDetails();
                     this.event.trigger();
                 })
-                .catch((error) => {
+                .catch(error => {
                     // stellar.toml does not exist or it does not contain information about federation server.
                     if (destInput !== this.destInput) {
                         return;
                     }
                     console.error(error);
                     this.federationNotFound = true;
+                    this.requestIsPending = false;
                     this.allFieldsValid = this.validateAllFields();
                     this.event.trigger();
                 });
