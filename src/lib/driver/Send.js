@@ -303,6 +303,7 @@ export default class Send {
                     }
                     console.error(error);
                     this.federationNotFound = true;
+                    this.requestIsPending = false;
                     this.allFieldsValid = this.validateAllFields();
                     this.event.trigger();
                 });

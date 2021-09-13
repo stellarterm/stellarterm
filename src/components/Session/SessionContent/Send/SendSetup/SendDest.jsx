@@ -50,12 +50,13 @@ export default class SendDest extends React.Component {
             destInput,
             federationAddress,
             federationNotFound,
-            federationResolving } = this.props.d.send;
+            requestIsPending,
+        } = this.props.d.send;
 
         if (!federationAddress) { return null; }
 
         const identiconImg = createStellarIdenticon(accountId).toDataURL();
-        const isDestFederation = Validate.address(destInput).ready && !federationNotFound && !federationResolving;
+        const isDestFederation = Validate.address(destInput).ready && !federationNotFound && !requestIsPending;
         const isDestPublicKey = Validate.publicKey(destInput).ready;
 
         return isDestFederation || isDestPublicKey ? (
@@ -72,22 +73,30 @@ export default class SendDest extends React.Component {
 
     render() {
         const { errorMsg } = this.state;
-        const recipientName = this.props.d.send.destinationName;
+        const { destinationName, requestIsPending } = this.props.d.send;
 
         return (
             <div className="Send_input_block">
-                <label htmlFor="recipient">Recipient {recipientName}</label>
+                <label htmlFor="recipient">Recipient {destinationName}</label>
                 {errorMsg ? <div className="invalidValue_popup">{errorMsg}</div> : null}
 
-                <input
-                    autoFocus
-                    value={this.props.d.send.destInput}
-                    onChange={e => this.onChangeDest(e)}
-                    onBlur={() => this.onFocusLeave()}
-                    maxLength="56"
-                    type="text"
-                    name="recipient"
-                    placeholder="Enter Stellar or federation address" />
+                <div className="Send_dest_input">
+                    <input
+                        autoFocus
+                        value={this.props.d.send.destInput}
+                        onChange={e => this.onChangeDest(e)}
+                        onBlur={() => this.onFocusLeave()}
+                        maxLength="56"
+                        type="text"
+                        name="recipient"
+                        placeholder="Enter Stellar or federation address"
+                    />
+                    {requestIsPending &&
+                        <div className="Send_loader nk-spinner-green">
+                            <div className="nk-spinner" />
+                        </div>
+                    }
+                </div>
 
                 {this.getInputNotice()}
             </div>
