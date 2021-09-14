@@ -158,7 +158,7 @@
             }
         }
 
-        input + .field_description {
+        input + .field_description, .Send_dest_input + .field_description {
             display: flex;
             align-items: center;
             margin-top: 5px;
