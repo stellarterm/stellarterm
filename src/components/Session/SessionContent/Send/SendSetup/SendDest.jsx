@@ -9,17 +9,17 @@ export default class SendDest extends React.Component {
         super(props);
 
         this.state = {
-            errorMsg: this.getErrorMessage(),
+            showError: false,
         };
     }
 
     onChangeDest(e) {
-        this.setState({ errorMsg: null });
+        this.setState({ showError: false });
         this.props.d.send.updateDestination(e.target.value);
     }
 
     onFocusLeave() {
-        this.setState({ errorMsg: this.getErrorMessage() });
+        this.setState({ showError: true });
     }
 
     getErrorMessage() {
@@ -42,6 +42,12 @@ export default class SendDest extends React.Component {
         }
 
         return null;
+    }
+
+    getErrorTooltip() {
+        const message = this.getErrorMessage();
+        if (!message) { return null; }
+        return <div className="invalidValue_popup">{message}</div>;
     }
 
     getInputNotice() {
@@ -72,13 +78,13 @@ export default class SendDest extends React.Component {
     }
 
     render() {
-        const { errorMsg } = this.state;
+        const { showError } = this.state;
         const { destinationName, requestIsPending } = this.props.d.send;
 
         return (
             <div className="Send_input_block">
                 <label htmlFor="recipient">Recipient {destinationName}</label>
-                {errorMsg ? <div className="invalidValue_popup">{errorMsg}</div> : null}
+                {showError && this.getErrorTooltip()}
 
                 <div className="Send_dest_input">
                     <input
