@@ -37,6 +37,10 @@ export default class WalletConnectService {
             relayProvider: 'wss://relay.walletconnect.org',
         });
 
+        // there is a problem with updating the states in wallet connect, a small timeout solves this problem
+        // TODO delete this when it is fixed in the library
+        await new Promise(resolve => { setTimeout(() => resolve(), 500); });
+
         this.listenWalletConnectEvents();
 
         if (!this.client.session.topics.length) {
@@ -173,6 +177,9 @@ export default class WalletConnectService {
                 },
             });
         } catch (e) {
+            if (this.session) {
+                return Promise.resolve({ status: 'cancel' });
+            }
             this.appMeta = null;
             if (e.message === 'cancelled') {
                 return Promise.resolve({ status: 'cancel' });
