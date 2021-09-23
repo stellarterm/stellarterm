@@ -9,17 +9,17 @@ export default class SendDest extends React.Component {
         super(props);
 
         this.state = {
-            errorMsg: this.getErrorMessage(),
+            showError: false,
         };
     }
 
     onChangeDest(e) {
-        this.setState({ errorMsg: null });
+        this.setState({ showError: false });
         this.props.d.send.updateDestination(e.target.value);
     }
 
     onFocusLeave() {
-        this.setState({ errorMsg: this.getErrorMessage() });
+        this.setState({ showError: true });
     }
 
     getErrorMessage() {
@@ -44,18 +44,25 @@ export default class SendDest extends React.Component {
         return null;
     }
 
+    getErrorTooltip() {
+        const message = this.getErrorMessage();
+        if (!message) { return null; }
+        return <div className="invalidValue_popup">{message}</div>;
+    }
+
     getInputNotice() {
         const {
             accountId,
             destInput,
             federationAddress,
             federationNotFound,
-            federationResolving } = this.props.d.send;
+            requestIsPending,
+        } = this.props.d.send;
 
         if (!federationAddress) { return null; }
 
         const identiconImg = createStellarIdenticon(accountId).toDataURL();
-        const isDestFederation = Validate.address(destInput).ready && !federationNotFound && !federationResolving;
+        const isDestFederation = Validate.address(destInput).ready && !federationNotFound && !requestIsPending;
         const isDestPublicKey = Validate.publicKey(destInput).ready;
 
         return isDestFederation || isDestPublicKey ? (
@@ -71,23 +78,31 @@ export default class SendDest extends React.Component {
     }
 
     render() {
-        const { errorMsg } = this.state;
-        const recipientName = this.props.d.send.destinationName;
+        const { showError } = this.state;
+        const { destinationName, requestIsPending } = this.props.d.send;
 
         return (
             <div className="Send_input_block">
-                <label htmlFor="recipient">Recipient {recipientName}</label>
-                {errorMsg ? <div className="invalidValue_popup">{errorMsg}</div> : null}
+                <label htmlFor="recipient">Recipient {destinationName}</label>
+                {showError && this.getErrorTooltip()}
 
-                <input
-                    autoFocus
-                    value={this.props.d.send.destInput}
-                    onChange={e => this.onChangeDest(e)}
-                    onBlur={() => this.onFocusLeave()}
-                    maxLength="56"
-                    type="text"
-                    name="recipient"
-                    placeholder="Enter Stellar or federation address" />
+                <div className="Send_dest_input">
+                    <input
+                        autoFocus
+                        value={this.props.d.send.destInput}
+                        onChange={e => this.onChangeDest(e)}
+                        onBlur={() => this.onFocusLeave()}
+                        maxLength="56"
+                        type="text"
+                        name="recipient"
+                        placeholder="Enter Stellar or federation address"
+                    />
+                    {requestIsPending &&
+                        <div className="Send_loader nk-spinner-green">
+                            <div className="nk-spinner" />
+                        </div>
+                    }
+                </div>
 
                 {this.getInputNotice()}
             </div>

@@ -65,6 +65,26 @@
         }
     }
 
+    .Send_dest_input {
+        position: relative;
+        display: flex;
+        width: 100%;
+
+        input {
+            width: 100%;
+        }
+
+        .Send_loader {
+            position: absolute;
+            right: 10px;
+            z-index: 1;
+            top: 50%;
+            transform: translate(0, -50%);
+        }
+    }
+
+
+
     .Send_title {
         margin-bottom: 2em;
 
@@ -138,7 +158,7 @@
             }
         }
 
-        input + .field_description {
+        input + .field_description, .Send_dest_input + .field_description {
             display: flex;
             align-items: center;
             margin-top: 5px;
