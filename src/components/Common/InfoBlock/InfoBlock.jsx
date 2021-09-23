@@ -37,7 +37,7 @@ InfoBlock.propTypes = {
     withIcon: PropTypes.bool,
     onlyTitle: PropTypes.bool,
     children: PropTypes.node.isRequired,
-    type: PropTypes.oneOfType(BLOCK_TYPES),
+    type: PropTypes.oneOf(BLOCK_TYPES),
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
 };
 

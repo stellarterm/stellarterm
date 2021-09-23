@@ -12,7 +12,7 @@ import AcceptTerms from '../Common/AcceptTerms';
 const FreighterBody = ({ history, d, modal }) => {
     const [loginError, setLoginError] = useState('');
 
-    const loginWithFreighter = (event) => {
+    const loginWithFreighter = event => {
         event.preventDefault();
         setLoginError('');
         d.session.handlers.logInWithFreighter()
@@ -53,7 +53,8 @@ const FreighterBody = ({ history, d, modal }) => {
                         className="LoginPage__link"
                         target="_blank"
                         rel="nofollow noopener noreferrer"
-                        href="https://chrome.google.com/webstore/detail/freighter/bcacfldlkkdogcmkkibnjlakofdplcbk">
+                        href="https://chrome.google.com/webstore/detail/freighter/bcacfldlkkdogcmkkibnjlakofdplcbk"
+                    >
                         Install Freighter
                     </a>
                 </Fragment>
@@ -64,7 +65,7 @@ const FreighterBody = ({ history, d, modal }) => {
             <form onSubmit={loginWithFreighter}>
                 <div className="LoginPage__submitWrap">
                     {loginErrorView}
-                    <AcceptTerms loginButtonText={'Sign in with Freighter'} />
+                    <AcceptTerms loginButtonText={'Log in with Freighter'} />
                 </div>
             </form>
         );
@@ -88,7 +89,8 @@ const FreighterBody = ({ history, d, modal }) => {
                             onClick={() => history.goBack()}
                             className="LoginPage__header-goBack"
                             src={images['icon-arrow-left-green-large']}
-                            alt="<" />
+                            alt="<"
+                        />
                         <HiddenDescription />
                     </div>
                     <div className="LoginPage__header">

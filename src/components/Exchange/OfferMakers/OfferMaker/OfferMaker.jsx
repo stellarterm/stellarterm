@@ -6,6 +6,7 @@ import Driver from '../../../../lib/Driver';
 import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
 import ErrorHandler from '../../../../lib/ErrorHandler';
 import ReservedPopover from '../../../Common/AppPopover/ReservedPopover';
+import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../../../../lib/constants';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
@@ -182,38 +183,57 @@ export default class OfferMaker extends React.Component {
 
     async handleSubmit(event) {
         event.preventDefault();
-        if (this.props.d.session.authType === 'ledger') {
+        const { authType } = this.props.d.session;
+        if (authType === AUTH_TYPE.LEDGER) {
             this.props.d.modal.handlers.cancel();
         }
+        if (this._mounted) {
+            this.setState({ buttonState: 'pending' });
+        }
+
         const { price, amount, total, offerId } = this.state;
         const handlers = this.props.d.session.handlers;
-        const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total, offerId });
 
-        if (signAndSubmit.status === 'await_signers') {
-            this.props.d.modal.handlers.cancel();
+        try {
+            const signAndSubmit = await handlers.createOffer(this.props.side, { price, amount, total, offerId });
+
+            if (signAndSubmit.status !== TX_STATUS.AWAIT_SIGNERS && signAndSubmit.status !== TX_STATUS.FINISH) {
+                if (this._mounted) {
+                    this.setState({
+                        amount: '',
+                        total: '',
+                        valid: false,
+                        buttonState: 'ready',
+                        successMessage: '',
+                    });
+                }
+                return;
+            }
+
+            if (signAndSubmit.status === TX_STATUS.AWAIT_SIGNERS) {
+                this.props.d.modal.handlers.cancel();
+                if (this._mounted) {
+                    this.setState({
+                        amount: '',
+                        total: '',
+                        valid: false,
+                        buttonState: 'ready',
+                        successMessage: 'Offer was signed with your key. Add additional signatures and submit to the network.',
+                    });
+                }
+                return;
+            }
+
             if (this._mounted) {
                 this.setState({
+                    valid: false,
                     amount: '',
                     total: '',
-                    valid: false,
-                    buttonState: 'ready',
-                    successMessage: 'Offer was signed with your key. Add additional signatures and submit to the network.',
+                    successMessage: '',
+                    errorMessage: '',
                 });
             }
-        }
 
-        if (signAndSubmit.status !== 'finish') { return; }
-        if (this._mounted) {
-            this.setState({
-                valid: false,
-                buttonState: 'pending',
-                amount: '',
-                total: '',
-                successMessage: '',
-                errorMessage: '',
-            });
-        }
-        try {
             await signAndSubmit.serverResult;
             this.props.d.modal.handlers.cancel();
             if (this._mounted) {
@@ -223,12 +243,16 @@ export default class OfferMaker extends React.Component {
                 });
             }
         } catch (error) {
-            const errorMessage = ErrorHandler(error);
-            const errorType = this.constructor.getErrorType(error.response);
+            if (error) {
+                const errorMessage = ErrorHandler(error);
+                const errorType = this.constructor.getErrorType(error.response);
+                this.setState({
+                    errorMessage,
+                    errorType,
+                });
+            }
             this.setState({
                 buttonState: 'ready',
-                errorMessage,
-                errorType,
             });
         }
     }
@@ -305,7 +329,7 @@ export default class OfferMaker extends React.Component {
         if (!this.props.d.orderbook.data.ready) {
             return <div>Loading</div>;
         }
-        const login = this.props.d.session.state === 'in';
+        const login = this.props.d.session.state === SESSION_STATE.IN;
         const { hasTrustNeeded, existingOffer } = this.props;
         const isBuy = this.props.side === 'buy';
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;

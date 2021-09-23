@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../../../../lib/Driver';
 import Ellipsis from '../../../../../Common/Ellipsis/Ellipsis';
+import { TX_STATUS } from '../../../../../../lib/constants';
 
 export default class RemoveTrustLink extends React.Component {
     constructor(props) {
@@ -17,7 +18,7 @@ export default class RemoveTrustLink extends React.Component {
         const { code, issuer } = this.props.balance;
 
         this.props.d.session.handlers.removeTrust(code, issuer).then(({ status, serverResult }) => {
-            if (status !== 'finish') {
+            if (status !== TX_STATUS.FINISH) {
                 return null;
             }
 

@@ -9,7 +9,7 @@
     margin-bottom: 15px;
 
     .AccountIdBlock_qrcode{
-        padding: 15px;
+        padding: 7px;
         background: #fff;
         border-right: solid 1px #7ed085;
         border-radius: 4px 0 0 4px;
@@ -19,20 +19,40 @@
         width: 100%;
         display: flex;
         justify-content: space-between;
-        align-items: center;
 
         .AccountIdBlock_content {
-            max-width: 465px;
-            padding: 22px 15px;
-            word-wrap: break-word;
+            padding: 15px 13px 0;
 
             p {
                 font-size: $s-scale-4;
-                margin-bottom: 8px;
+                margin-bottom: 14px;
             }
             strong {
-                font-size: $s-scale-1;
+                font-size: 18px;
+                font-weight: 600;
                 cursor: pointer;
+            }
+
+            .AccountIdBlock_id {
+                display: flex;
+                align-items: center;
+            }
+
+            .AccountIdBlock_identicon {
+                width: 32px;
+                height: 32px;
+                border: solid 2px #e1f4e2;
+                border-radius: 50%;
+                background-color: #fff;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                margin-right: 6px;
+
+                img {
+                    width: 14px;
+                    height: 14px;
+                }
             }
         }
     }

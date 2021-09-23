@@ -7,6 +7,7 @@ import images from './../../../images';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import SecretPhraseModalBlock from './SecretPhraseModalBlock/SecretPhraseModalBlock';
 import Sep7Handler from '../../HomePage/Sep7Handler/Sep7Handler';
+import { SESSION_STATE } from '../../../lib/constants';
 
 
 export default class LoginModal extends React.Component {
@@ -26,25 +27,25 @@ export default class LoginModal extends React.Component {
         const { state } = d.session;
 
         switch (state) {
-        case 'in':
-            submit.cancel();
-            Sep7Handler(this.props.d);
-            break;
-        case 'unfunded':
-            d.modal.handlers.cancel();
-            return (
-                <Redirect to={'/account/'} />
-            );
-        case 'out':
-            return (<LoginModalBlock d={d} title={'Please log in to manage Stellar account'} />);
-        case 'loading':
-            return (
-                <div className="AccountModalBlock_loading">
+            case SESSION_STATE.IN:
+                submit.cancel();
+                Sep7Handler(this.props.d);
+                break;
+            case SESSION_STATE.UNFUNDED:
+                d.modal.handlers.cancel();
+                return (
+                    <Redirect to={'/account/'} />
+                );
+            case SESSION_STATE.OUT:
+                return (<LoginModalBlock d={d} title={'Log in to manage Stellar account'} />);
+            case SESSION_STATE.LOADING:
+                return (
+                    <div className="AccountModalBlock_loading">
                     Contacting network and loading account<Ellipsis />
-                </div>
-            );
-        default:
-            break;
+                    </div>
+                );
+            default:
+                break;
         }
         return null;
     }
@@ -63,7 +64,8 @@ export default class LoginModal extends React.Component {
                         onClick={() => {
                             submit.cancel();
                             Sep7Handler(this.props.d);
-                        }} />
+                        }}
+                    />
                 </div>
                 <SecretPhraseModalBlock d={d} />
                 <div className="LoginModal_content">

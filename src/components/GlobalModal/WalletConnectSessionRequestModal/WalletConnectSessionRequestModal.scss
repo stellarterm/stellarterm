@@ -1,0 +1,48 @@
+.WalletConnectSessionRequestModal {
+    height: unset;
+}
+.WalletConnectSessionRequestModal__content {
+    display: flex;
+    flex-direction: column;
+    padding: 35px 34px 42px;
+    width: 100%;
+
+    .WalletConnectSessionRequestModal__container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #f2f2f2;
+        background-color: #fdfdfd;
+        border-radius: 4px;
+        padding: 71px 0 48px;
+    }
+
+    .WalletConnectSessionRequestModal__title {
+        font-size: 18px;
+        font-weight: normal;
+        color: #505558;
+        margin-bottom: 24px;
+    }
+
+    .WalletConnectSessionRequestModal__icons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 21px;
+
+        img:not(:last-child) {
+            margin-right: 16px;
+        }
+
+        .WalletConnectSessionRequestModal__icon {
+            height: 80px;
+            width: 80px;
+        }
+
+        .WalletConnectSessionRequestModal__arrows {
+            width: 28px;
+            height: 25px;
+        }
+    }
+}

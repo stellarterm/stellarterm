@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
 import Ellipsis from './../../../../../Common/Ellipsis/Ellipsis';
 import ErrorHandler from '../../../../../../lib/ErrorHandler';
+import { AUTH_TYPE } from '../../../../../../lib/constants';
 
 const images = require('../../../../../../images');
 
@@ -18,11 +19,12 @@ export default class MultisigEnableStep3 extends React.Component {
 
     async addSigner(signerData, d) {
         const { publicKey, signerProvider } = signerData;
+        const { authType } = d.session;
         this.setState({
             pending: true,
             addingError: '',
         });
-        if (d.session.authType === 'ledger') {
+        if (authType === AUTH_TYPE.LEDGER) {
             this.props.submit.cancel();
         }
         try {
@@ -31,6 +33,9 @@ export default class MultisigEnableStep3 extends React.Component {
                 result.serverResult.then(() => {
                     d.session.handlers.activateGuardSigner();
                 });
+            }
+            if (authType === AUTH_TYPE.WALLET_CONNECT) {
+                return;
             }
             if (d.session.account.signers.length > 1) {
                 this.props.submit.cancel();
@@ -70,13 +75,15 @@ export default class MultisigEnableStep3 extends React.Component {
                     <button
                         className="cancel-button"
                         disabled={pending}
-                        onClick={() => submit.cancel()}>
+                        onClick={() => submit.cancel()}
+                    >
                             Cancel
                     </button>
                     <button
                         className="s-button"
                         disabled={pending}
-                        onClick={() => this.addSigner(signerData, d)}>
+                        onClick={() => this.addSigner(signerData, d)}
+                    >
                             Continue{pending && <Ellipsis />}
                     </button>
                 </div>

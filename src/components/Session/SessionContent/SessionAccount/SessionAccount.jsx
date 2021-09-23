@@ -18,6 +18,7 @@ export default function SessionAccount(props) {
     }, []);
 
     const accountID = props.d.session.account.accountId();
+    const hasMetadata = Boolean(props.d.walletConnectService.appMeta);
 
     return (
         <React.Fragment>
@@ -28,6 +29,17 @@ export default function SessionAccount(props) {
             }
 
             <Generic noTopPadding={hasBanner}>
+                {hasMetadata &&
+                    <div className="AccountView_app">
+                        <div className="AccountView_app-icon">
+                            <img src={props.d.walletConnectService.appMeta.icons[0]} alt="" />
+                        </div>
+                        <div className="AccountView_app-name">
+                            Account connected with WalletConnect
+                        </div>
+                    </div>
+                }
+
                 <AccountIdBlock accountID={accountID} />
                 <p className="AccountView_text">
                     To receive payments, share your account ID with them (begins with a G) or scan QR code.

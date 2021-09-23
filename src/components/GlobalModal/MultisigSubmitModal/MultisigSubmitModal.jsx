@@ -11,9 +11,10 @@ export default function MultisigSubmitModal(props) {
             </div>
             <div className="MultisigSubmitModal__content">
                 <img
-                    src={images[signer.logo]}
+                    src={images[signer.logo] || signer.logo}
                     className="MultisigSubmitModal__logo"
-                    alt={signer.title} />
+                    alt={signer.title}
+                />
                 <span>Transaction has been sent to {signer.title}</span>
             </div>
             <div className="MultisigSubmitModal__navigation">

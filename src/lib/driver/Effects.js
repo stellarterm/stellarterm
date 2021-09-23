@@ -90,4 +90,11 @@ export default class Effects {
             .order('desc')
             .call();
     }
+
+    resetEffects() {
+        this.isFullLoaded = false;
+        this.loading = false;
+        this.effectsHistory = [];
+        this.nextEffectsHistoryRequest = null;
+    }
 }

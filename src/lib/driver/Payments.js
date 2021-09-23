@@ -89,4 +89,11 @@ export default class Payments {
             .order('desc')
             .call();
     }
+
+    resetPayments() {
+        this.isFullLoaded = false;
+        this.loading = false;
+        this.paymentsHistory = [];
+        this.nextPaymentsHistoryRequest = null;
+    }
 }

@@ -1,4 +1,4 @@
-import 'babel-polyfill';
+import '@babel/polyfill';
 import BigNumber from 'bignumber.js';
 import Ticker from './api/Ticker';
 import Send from './driver/Send';
@@ -11,6 +11,7 @@ import HorizonServer from './HorizonServer';
 import ClaimableBalances from './driver/ClaimableBalances';
 import Effects from './driver/Effects';
 import Payments from './driver/Payments';
+import WalletConnectService from './driver/WalletConnectService';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -23,6 +24,7 @@ function Driver() {
     this.accountEvents = new AccountEvents(this);
     this.modal = new Modal(this);
     this.toastService = new ToastService(this);
+    this.walletConnectService = new WalletConnectService(this);
     this.claimableBalances = new ClaimableBalances(this);
     this.effects = new Effects(this);
     this.payments = new Payments(this);

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/Driver';
+import { AUTH_TYPE } from '../../../../../../lib/constants';
 
 const images = require('../../../../../../images');
-
 
 export default class MultisigSetRequiredSigners extends React.Component {
     constructor(props) {
@@ -15,11 +15,16 @@ export default class MultisigSetRequiredSigners extends React.Component {
 
     setRequiredSigners() {
         const { d, submit } = this.props;
-        if (d.session.authType === 'ledger') {
+        const { authType } = d.session;
+        if (authType === AUTH_TYPE.LEDGER) {
             submit.cancel();
         }
         d.session.handlers.setRequiredSigners(this.state.requiredSigners)
-            .then(() => submit.cancel())
+            .then(() => {
+                if (authType !== AUTH_TYPE.WALLET_CONNECT) {
+                    submit.cancel();
+                }
+            })
             .catch(e => console.log(e));
     }
 
@@ -69,11 +74,13 @@ export default class MultisigSetRequiredSigners extends React.Component {
                         <div className="MultisigSetRequiredSigners_setup-handler">
                             <div
                                 className={requiredSigners === 2 ? 'disabled' : ''}
-                                onClick={() => this.handleChoose('remove')}>-</div>
+                                onClick={() => this.handleChoose('remove')}
+                            >-</div>
                             <div>{requiredSigners}</div>
                             <div
                                 className={requiredSigners === signers.length - 1 ? 'disabled' : ''}
-                                onClick={() => this.handleChoose('add')}>+</div>
+                                onClick={() => this.handleChoose('add')}
+                            >+</div>
                         </div>
                     </div>
                 </div>
@@ -82,7 +89,8 @@ export default class MultisigSetRequiredSigners extends React.Component {
                     <button
                         className="s-button"
                         disabled={noChanges}
-                        onClick={() => this.setRequiredSigners()}>
+                        onClick={() => this.setRequiredSigners()}
+                    >
                         Save
                     </button>
                 </div>

@@ -1,0 +1,114 @@
+.WalletConnectPairingModal {
+    background-color: #fff;
+    width: 612px;
+    max-height: 100%;
+    overflow-y: auto;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    .WalletConnectPairingModal_content {
+        padding: 35px 34px 34px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+
+        .WalletConnectPairingModal_title {
+            font-size: 18px;
+            font-weight: normal;
+            color: #505558;
+            margin-bottom: 23px;
+        }
+
+        .WalletConnectPairingModal_pairing {
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+            border: 1px solid #f2f2f2;
+            background-color: #fdfdfd;
+            padding: 14px 17px;
+            margin-bottom: 25px;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+
+            &:hover {
+                background-color: #fafafa;
+            }
+
+
+            .WalletConnectPairingModal_pairing-icon {
+                height: 56px;
+                width: 56px;
+                margin-right: 10px;
+            }
+
+            .WalletConnectPairingModal_pairing-data {
+                display: flex;
+                flex-direction: column;
+                width: calc(100% - 66px);
+            }
+
+            .WalletConnectPairingModal_pairing-name {
+                font-size: 18px;
+                font-weight: normal;
+                color: #505558;
+                margin-bottom: 3px;
+                position: relative;
+                display: inline-block;
+                width: min-content;
+
+                &.latest::after {
+                    content: 'LAST ADDED';
+                    position: absolute;
+                    left: calc(100% + 5px);
+                    top: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 65px;
+                    height: 17px;
+                    background-color: #69c76f;
+                    border-radius: 3px;
+                    opacity: 0.9;
+                    font-size: 9px;
+                    font-weight: 600;
+                    letter-spacing: 0.6px;
+                    color: #fff;
+                }
+            }
+
+            .WalletConnectPairingModal_pairing-description {
+                font-size: 14px;
+                font-weight: normal;
+                color: #9aa6ac;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .WalletConnectPairingModal_pairing-delete {
+                position: absolute;
+                top: 8px;
+                right: 8px;
+                opacity: 0.2;
+
+                &:hover {
+                    opacity: 1;
+                }
+            }
+        }
+
+        .WalletConnectPairingModal_new {
+            display: flex;
+            align-items: center;
+            color: #86d38c;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+
+            img {
+                margin-right: 5px;
+            }
+        }
+    }
+}

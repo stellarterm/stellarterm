@@ -1,5 +1,5 @@
 @import './SecretPhrase/SecretPhrase';
-@import 'Common/HardwareWalletLoginLink/HardwareWalletLoginLink';
+@import 'Common/LoginLinksBlock/LoginLinks';
 @import 'SignUpBody/SignUpBody';
 
 .LoginPage_row-content {
@@ -132,8 +132,16 @@
         }
     }
 
+    .LoginPage_controls {
+        display: flex;
+        align-items: center;
+    }
+
     .LoginPage__button {
-        width: 188px;
+        width: min-content;
+        white-space: nowrap;
+        min-width: 188px;
+        padding: 0 15px;
         height: 55px;
         border-radius: 2px;
         border: solid 1px #5eb464;
@@ -142,10 +150,17 @@
         font-weight: normal;
         color: #fff;
         outline: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
 
         &:disabled {
             opacity: 0.5;
             cursor: not-allowed;
+        }
+
+        .nk-spinner {
+            margin-left: 10px;
         }
     }
 
@@ -161,6 +176,7 @@
     font-weight: normal;
     border-bottom: 1px dotted #68c86f;
     cursor: pointer;
+    text-decoration: none;
 }
 
 .LoginPage__signupInvite {
@@ -317,4 +333,35 @@
             }
         }
     }
+}
+
+.WalletConnect_logo {
+    display: flex;
+    align-items: center;
+    position: relative;
+    bottom: 14px;
+
+    .LoginLink_lobstr-tooltip {
+        top: calc(100% + 8px);
+        left: -10px;
+
+        &::after {
+            top: unset;
+            bottom: calc(100% + 1px);
+            border-top: none;
+            border-bottom: 8px solid #69c76f;
+            border-left: 8px solid transparent;
+            border-right: 8px solid transparent;
+        }
+    }
+}
+
+.WalletConnect_beta {
+    color: #1c2e3e;
+    opacity: 0.5;
+    font-size: 10px;
+    font-weight: normal;
+    font-style: italic;
+    line-height: 13px;
+    margin-left: 3px;
 }

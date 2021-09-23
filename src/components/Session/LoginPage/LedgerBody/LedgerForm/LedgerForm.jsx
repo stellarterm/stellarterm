@@ -75,7 +75,7 @@ export default class LedgerForm extends React.Component {
 
         return (
             <label htmlFor="bip32Path" className="LoginPage__bip32Path">
-                Path: <span className="">{"44'/148'/"}</span>
+                Path: 44&apos;/148&apos;/
                 <input
                     style={inputWidthStyle}
                     name="bip32Path"
@@ -91,7 +91,7 @@ export default class LedgerForm extends React.Component {
                         e.target.value = content;
                     }}
                 />
-                <span>{"'"}</span>
+                <span>{'\''}</span>
             </label>
         );
     }
@@ -106,7 +106,7 @@ export default class LedgerForm extends React.Component {
                     <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
                     <form onSubmit={e => this.proceedWithLedger(e)}>
                         <div className="LoginPage__submitWrap">
-                            <AcceptTerms loginButtonText={'Sign in with Ledger'} />
+                            <AcceptTerms loginButtonText={'Log in with Ledger'} />
                             <div className="LoginPage__customPath">{customPath}</div>
                         </div>
                     </form>

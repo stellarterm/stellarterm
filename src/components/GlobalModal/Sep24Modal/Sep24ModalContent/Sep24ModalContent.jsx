@@ -10,6 +10,7 @@ import TransactionContent from '../TransactionContent/TransactionContent';
 import FeeBlock from '../Common/FeeBlock';
 import MinMaxAmount from '../Common/MinMaxAmount';
 import AssetBalance from '../AssetBalance/AssetBalance';
+import { AUTH_TYPE } from '../../../../lib/constants';
 
 export default class Sep24ModalContent extends React.Component {
     constructor(props) {
@@ -110,12 +111,12 @@ export default class Sep24ModalContent extends React.Component {
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
 
-        const isLedgerJwtNeeded = (d.session.authType === 'ledger')
+        const isLedgerJwtNeeded = (d.session.authType === AUTH_TYPE.LEDGER)
             && this.jwtToken === null;
 
-        const isLedgerJwtReceived = d.session.authType === 'ledger' && this.jwtToken !== null;
+        const isLedgerJwtReceived = d.session.authType === AUTH_TYPE.LEDGER && this.jwtToken !== null;
 
-        const isFreighterJwtReceived = d.session.authType === 'freighter' && this.jwtToken !== null;
+        const isFreighterJwtReceived = d.session.authType === AUTH_TYPE.FREIGHTER && this.jwtToken !== null;
 
         // Reopen ledger popup for jwt auth, if needed
         if (isLedgerJwtNeeded) {

@@ -5,6 +5,7 @@ import Driver from '../../lib/Driver';
 import SessionActivate from './SessionActivate/SessionActivate';
 import SessionLoading from './SessionLoading/SessionLoading';
 import SessionContent from './SessionContent/SessionContent';
+import { SESSION_STATE } from '../../lib/constants';
 
 export default class Session extends React.Component {
     constructor(props) {
@@ -24,13 +25,13 @@ export default class Session extends React.Component {
         const { state, unfundedAccountId } = d.session;
 
         switch (state) {
-            case 'out':
+            case SESSION_STATE.OUT:
                 return <LoginPage {...props} d={d} urlParts={urlParts} />;
-            case 'unfunded':
+            case SESSION_STATE.UNFUNDED:
                 return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} />;
-            case 'loading':
+            case SESSION_STATE.LOADING:
                 return <SessionLoading />;
-            case 'in':
+            case SESSION_STATE.IN:
                 return <SessionContent {...props} d={d} />;
             default:
                 break;
