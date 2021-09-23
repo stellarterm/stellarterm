@@ -107,7 +107,7 @@ export default class GlobalModal extends React.Component {
                 body = <MultisigSubmitModal signer={modal.inputData} submit={d.modal.handlers} />;
                 break;
             case 'multisigUnknown':
-                body = <MultisigUnknownSubmitModal tx={modal.inputData} submit={d.modal.handlers} />;
+                body = <MultisigUnknownSubmitModal data={modal.inputData} submit={d.modal.handlers} />;
                 break;
             case 'multisigEnableStep1':
                 body = <MultisigEnableStep1 submit={d.modal.handlers} d={modal.inputData} />;
