@@ -83,7 +83,7 @@ export default class AssetDropDown extends React.Component {
     }
 
     onUpdate({ code, issuer }) {
-        this.props.onUpdate(new StellarSdk.Asset(code, issuer));
+        this.props.onUpdate(issuer ? new StellarSdk.Asset(code, issuer) : new StellarSdk.Asset.native());
         this.setState({
             isOpenList: false,
             termAsset: null,
