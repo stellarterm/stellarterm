@@ -21,6 +21,18 @@ export default class Federation extends React.Component {
             address: this.props.d.session.userFederation,
             reqIsResolved: true,
         };
+
+        this.unsub = this.props.d.session.event.sub(() => {
+            if (!this.state.address) {
+                this.setState({
+                    address: this.props.d.session.userFederation,
+                });
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.unsub();
     }
 
     onKeyPressed(keyCode) {
