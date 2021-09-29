@@ -7,19 +7,21 @@ import images from './../../../images';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import SecretPhraseModalBlock from './SecretPhraseModalBlock/SecretPhraseModalBlock';
 import Sep7Handler from '../../HomePage/Sep7Handler/Sep7Handler';
-import { SESSION_STATE } from '../../../lib/constants';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants';
 
 
 export default class LoginModal extends React.Component {
     constructor(props) {
         super(props);
-        this.listenId = this.props.d.session.event.listen(() => {
-            this.forceUpdate();
+        this.unsub = this.props.d.session.event.sub(eventName => {
+            if (eventName === SESSION_EVENTS.LOGIN_EVENT) {
+                this.forceUpdate();
+            }
         });
     }
 
     componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
+        this.unsub();
     }
 
     getLoginContent() {

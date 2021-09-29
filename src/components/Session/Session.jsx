@@ -10,13 +10,13 @@ import { SESSION_STATE } from '../../lib/constants';
 export default class Session extends React.Component {
     constructor(props) {
         super(props);
-        this.listenId = this.props.d.session.event.listen(() => {
+        this.unsub = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
     }
 
     componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
+        this.unsub();
     }
 
     render() {
