@@ -4,13 +4,15 @@ import { Link } from 'react-router-dom';
 import Driver from '../../../lib/Driver';
 import Stellarify from '../../../lib/Stellarify';
 import ManageOfferRow from './ManageOfferRow/ManageOfferRow';
-import { SESSION_STATE } from '../../../lib/constants';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {
         super(props);
-        this.unsub = this.props.d.session.event.sub(() => {
-            this.forceUpdate();
+        this.unsub = this.props.d.session.event.sub(eventName => {
+            if (eventName === SESSION_EVENTS.ACCOUNT_EVENT) {
+                this.forceUpdate();
+            }
         });
     }
 

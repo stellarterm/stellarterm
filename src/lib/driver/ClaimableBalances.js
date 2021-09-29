@@ -1,6 +1,6 @@
 import Event from '../Event';
 import { getAvailableClaimsCount, getNextClaimTime } from '../claimableBalancesHelpers';
-import { SESSION_STATE } from '../constants';
+import { SESSION_EVENTS, SESSION_STATE } from '../constants';
 
 const LAST_SEEN_CLAIMABLE_BALANCE_ALIAS = 'lastSeenClaimableBalance';
 
@@ -23,8 +23,10 @@ export default class ClaimableBalances {
         this.lastSeenClaimableBalances = JSON.parse(localStorage.getItem(LAST_SEEN_CLAIMABLE_BALANCE_ALIAS) || '{}');
         this.hasBanner = false;
 
-        this.driver.session.event.sub(() => {
-            this.getAccountId();
+        this.driver.session.event.sub(eventName => {
+            if (eventName === SESSION_EVENTS.LOGIN_EVENT) {
+                this.getAccountId();
+            }
         });
     }
 

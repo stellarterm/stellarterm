@@ -4,8 +4,8 @@ import images from '../../../../../images';
 import Driver from '../../../../../lib/Driver';
 import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
 import CopyButton from '../../../../Common/CopyButton/CopyButton';
-import { UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants';
-import FederationInpit from './FederationInput/FederationInput';
+import { SESSION_EVENTS, UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants';
+import FederationInput from './FederationInput/FederationInput';
 
 export const MIN_FED_LENGTH = 4;
 export const CODE_ENTER = 13;
@@ -22,10 +22,10 @@ export default class Federation extends React.Component {
             reqIsResolved: true,
         };
 
-        this.unsub = this.props.d.session.event.sub(() => {
-            if (!this.state.address) {
+        this.unsub = this.props.d.session.event.sub((eventName, session) => {
+            if (eventName === SESSION_EVENTS.FEDERATION_SEARCH_EVENT) {
                 this.setState({
-                    address: this.props.d.session.userFederation,
+                    address: session.userFederation,
                 });
             }
         });
@@ -86,7 +86,7 @@ export default class Federation extends React.Component {
                 <div className={alertClass}>
                     <div className="Account_alert_left">
                         <p>New federation address</p>
-                        <FederationInpit
+                        <FederationInput
                             address={address}
                             onUpdate={inputValue => this.updateInputValue(inputValue)}
                             onKeyPressed={keyCode => this.onKeyPressed(keyCode)}

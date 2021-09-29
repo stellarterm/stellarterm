@@ -10,7 +10,7 @@ import { SESSION_STATE } from '../../lib/constants';
 export default class HomePage extends React.Component {
     constructor(props) {
         super(props);
-        this.listenId = this.props.driver.session.event.listen(() => {
+        this.unsub = this.props.driver.session.event.sub(() => {
             this.forceUpdate();
         });
     }
@@ -20,7 +20,7 @@ export default class HomePage extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.driver.session.event.unlisten(this.listenId);
+        this.unsub();
     }
 
     renderHomePageActions() {

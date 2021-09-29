@@ -23,13 +23,13 @@ export default class Sep7PayModal extends React.Component {
             error: '',
             pending: false,
         };
-        this.listenId = this.props.d.session.event.listen(() => {
+        this.unsub = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
     }
 
     componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
+        this.unsub();
     }
 
     getPaymentDetails(txDetails) {

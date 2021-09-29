@@ -24,7 +24,7 @@ import {
     buildOpSendPayment,
     buildOpSetOptions,
 } from '../operationBuilders';
-import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../constants';
+import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../constants';
 
 const fee = 10000;
 
@@ -132,13 +132,13 @@ export default function Send(driver) {
             .then(() => {
                 if (!this.ledgerConnected) {
                     this.ledgerConnected = true;
-                    this.event.trigger();
+                    this.event.trigger(SESSION_EVENTS.LEDGER_EVENT, this);
                 }
             })
             .catch(error => {
                 this.ledgerConnected = false;
                 this.connectLedgerError = error;
-                this.event.trigger();
+                this.event.trigger(SESSION_EVENTS.LEDGER_EVENT, this);
             });
 
     this.handlers = {
@@ -213,7 +213,7 @@ export default function Send(driver) {
                     };
                     this.setupLedgerError = u2fErrorCodes[error.errorCode];
                 }
-                this.event.trigger();
+                this.event.trigger(SESSION_EVENTS.LEDGER_EVENT, this);
                 return null;
             }
         },
@@ -222,13 +222,13 @@ export default function Send(driver) {
             this.brakeUnfundedCheck = false;
             if (this.state !== SESSION_STATE.UNFUNDED) {
                 this.state = SESSION_STATE.LOADING;
-                this.event.trigger();
+                this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
             }
             this.authType = opts.authType;
             const cachedAuthType = opts.authType;
 
             return MagicSpoon.Account(driver.Server, keypair, opts, () => {
-                this.event.trigger();
+                this.event.trigger(SESSION_EVENTS.ACCOUNT_EVENT, this);
             }).then(result => {
                 // if there is no authType, it means that a logout was performed during loading (WalletConnect case)
                 if (this.authType) {
@@ -236,7 +236,7 @@ export default function Send(driver) {
                     // Search for user federation
                     this.handlers.searchFederation(this.account.accountId())
                         .then(() => {
-                            this.event.trigger();
+                            this.event.trigger(SESSION_EVENTS.FEDERATION_SEARCH_EVENT, this);
                         });
 
                     this.state = SESSION_STATE.IN;
@@ -245,7 +245,7 @@ export default function Send(driver) {
                     // Functions of session after sign in
                     this.handlers.addUnknownAssetData();
                     driver.accountEvents.listenAccountEvents(driver.Server, this.account.account_id);
-                    this.event.trigger('login');
+                    this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
 
                     driver.claimableBalances.getClaimableBalances();
                     return;
@@ -256,7 +256,7 @@ export default function Send(driver) {
             }).catch(e => {
                 if (this.brakeUnfundedCheck) {
                     this.state = SESSION_STATE.OUT;
-                    this.event.trigger();
+                    this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
                     return;
                 }
                 if (e.message !== 'Network Error') {
@@ -269,13 +269,13 @@ export default function Send(driver) {
                             this.handlers.logIn(keypair, opts);
                         }
                     }, 5000);
-                    this.event.trigger();
+                    this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
                     return;
                 }
                 console.log(e);
                 this.state = SESSION_STATE.OUT;
                 this.setupError = true;
-                this.event.trigger();
+                this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
             });
         },
         sign: async tx => {
@@ -734,7 +734,7 @@ export default function Send(driver) {
 
             const response = await reqType(getEndpoint('setFederation'), { headers, body });
             this.userFederation = response.name.split('*')[0];
-            this.event.trigger();
+            this.event.trigger(SESSION_EVENTS.FEDERATION_UPDATE_EVENT, this);
             await this.handlers.setHomeDomain();
             return response;
         },
@@ -880,11 +880,11 @@ export default function Send(driver) {
                 driver.payments.resetPayments();
                 driver.effects.resetEffects();
                 init();
-                this.event.trigger();
+                this.event.trigger(SESSION_EVENTS.LOGOUT_EVENT, this);
             }
             this.brakeUnfundedCheck = true;
             init();
-            this.event.trigger();
+            this.event.trigger(SESSION_EVENTS.LOGOUT_EVENT, this);
         },
         addUnknownAssetData: () => {
             const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
@@ -917,7 +917,7 @@ export default function Send(driver) {
 
             chainPromise.then(arr => {
                 localStorage.setItem('unknownAssetsData', JSON.stringify([...unknownAssetsData, ...arr]));
-                this.event.trigger();
+                this.event.trigger(SESSION_EVENTS.ASSETS_DATA_EVENT, this);
             });
         },
 

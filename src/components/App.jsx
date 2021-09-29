@@ -7,7 +7,7 @@ import isElectron from 'is-electron';
 import Driver from '../lib/Driver';
 import { isIE, isEdge } from '../lib/BrowserSupport';
 import faviconHandler from '../lib/faviconUtils';
-import { SESSION_STATE } from '../lib/constants';
+import { SESSION_EVENTS, SESSION_STATE } from '../lib/constants';
 import GlobalModal from './GlobalModal/GlobalModal';
 import ToastTemplate from './ToastTemplate/ToastTemplate';
 import NotFound from './NotFound/NotFound';
@@ -55,9 +55,11 @@ class TermApp extends React.Component {
             id: 1,
         };
 
-        this.unsubscribeSession = this.props.d.session.event.sub(() => {
-            const { state, unfundedAccountId, account } = this.props.d.session;
-            faviconHandler(state, unfundedAccountId, account);
+        this.unsubscribeSession = this.props.d.session.event.sub((eventName, session) => {
+            if (eventName === SESSION_EVENTS.LOGIN_EVENT || eventName === SESSION_EVENTS.LOGOUT_EVENT) {
+                const { state, unfundedAccountId, account } = session;
+                faviconHandler(state, unfundedAccountId, account);
+            }
         });
 
         this.unsubscribeTicker = this.d.ticker.event.sub(() => {

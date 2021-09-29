@@ -7,7 +7,7 @@ import PercentChange from '../../../../../Basics/PercentChange/PercentChange';
 import AssetCardMain from '../../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
 import AssetActionButtons from '../AssetActionButtons';
 import processBalances from './processBalances';
-import { SESSION_STATE } from '../../../../../../lib/constants';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../../../../lib/constants';
 
 
 export default function BalancesTable(props) {
@@ -25,8 +25,8 @@ export default function BalancesTable(props) {
     }, []);
 
     useEffect(() => {
-        const unsub = d.session.event.sub(() => {
-            if (d.session.state === SESSION_STATE.IN) {
+        const unsub = d.session.event.sub(eventName => {
+            if (d.session.state === SESSION_STATE.IN && eventName === SESSION_EVENTS.ACCOUNT_EVENT) {
                 updateBalances();
             }
         });
