@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
-import * as am4core from '@amcharts/amcharts4/core';
-import * as am4charts from '@amcharts/amcharts4/charts';
+import * as amcharts from './amcharts';
 // eslint-disable-next-line camelcase
 import am4themes_frozen from '@amcharts/amcharts4/themes/frozen';
 import React, { useEffect, useRef, useLayoutEffect } from 'react';
@@ -15,50 +14,50 @@ const addChart = (chart, baseBuying, counterSelling) => {
     chart.numberFormatter.numberFormat = '#,###.####';
 
     // Create axes
-    const xAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+    const xAxis = chart.xAxes.push(new amcharts.CategoryAxis());
     xAxis.dataFields.category = 'value';
     // xAxis.renderer.grid.template.location = 0;
     xAxis.renderer.minGridDistance = 100;
     xAxis.title.text = xAxisTitle;
 
-    const yAxis = chart.yAxes.push(new am4charts.ValueAxis());
+    const yAxis = chart.yAxes.push(new amcharts.ValueAxis());
     yAxis.title.text = 'Volume';
 
     // Create series
-    const series = chart.series.push(new am4charts.StepLineSeries());
+    const series = chart.series.push(new amcharts.StepLineSeries());
     series.dataFields.categoryX = 'value';
     series.dataFields.valueY = 'bidsTotalVolume';
     series.strokeWidth = 2;
-    series.stroke = am4core.color('#0f0');
+    series.stroke = amcharts.color('#0f0');
     series.fill = series.stroke;
     series.fillOpacity = 0.1;
     series.tooltipText = `Price: [bold]{categoryX}[/]\nAmount: [bold]{bidsAmount} ${base}[/]\nSum: [bold]{bidsSum} ${counter}[/]\nDepth: [bold]{valueY} ${counter}[/]`;
 
-    const series2 = chart.series.push(new am4charts.StepLineSeries());
+    const series2 = chart.series.push(new amcharts.StepLineSeries());
     series2.dataFields.categoryX = 'value';
     series2.dataFields.valueY = 'asksTotalVolume';
     series2.strokeWidth = 2;
-    series2.stroke = am4core.color('#f00');
+    series2.stroke = amcharts.color('#f00');
     series2.fill = series2.stroke;
     series2.fillOpacity = 0.1;
     series2.tooltipText = `Price: [bold]{categoryX}[/]\nAmount: [bold]{asksAmount} ${base}[/]\nSum: [bold]{asksSum} ${counter}[/]\nTotal volume: [bold]{valueY} ${counter}[/]`;
 
-    const series3 = chart.series.push(new am4charts.ColumnSeries());
+    const series3 = chart.series.push(new amcharts.ColumnSeries());
     series3.dataFields.categoryX = 'value';
     series3.dataFields.valueY = 'bidsSum';
     series3.strokeWidth = 0;
-    series3.fill = am4core.color('#0f0');
+    series3.fill = amcharts.color('#0f0');
     series3.fillOpacity = 0.5;
 
-    const series4 = chart.series.push(new am4charts.ColumnSeries());
+    const series4 = chart.series.push(new amcharts.ColumnSeries());
     series4.dataFields.categoryX = 'value';
     series4.dataFields.valueY = 'asksSum';
     series4.strokeWidth = 0;
-    series4.fill = am4core.color('#f00');
+    series4.fill = amcharts.color('#f00');
     series4.fillOpacity = 0.5;
 
     // Add cursor
-    chart.cursor = new am4charts.XYCursor();
+    chart.cursor = new amcharts.XYCursor();
 };
 
 const processOrderbook = ob => {
@@ -100,9 +99,9 @@ const DepthChart = ({ d }) => {
     const chart = useRef(null);
 
     useLayoutEffect(() => {
-        am4core.useTheme(am4themes_frozen);
+        amcharts.useTheme(am4themes_frozen);
 
-        const chartInstance = am4core.create('chartdiv', am4charts.XYChart);
+        const chartInstance = amcharts.create('chartdiv', amcharts.XYChart);
 
         // ...
         chart.current = chartInstance;

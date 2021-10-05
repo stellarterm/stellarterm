@@ -10,7 +10,7 @@
     "lint": "./node_modules/.bin/eslint .",
     "lint-fix": "./node_modules/.bin/eslint . --fix",
     "hash": "cd dist; openssl dgst -sha256 index.html",
-    "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
+    "production": "NODE_ENV=production; NODE_OPTIONS=--max_old_space_size=8192 ./node_modules/.bin/gulp production"
   },
   "dependencies": {
     "@amcharts/amcharts4": "^4.10.22",
