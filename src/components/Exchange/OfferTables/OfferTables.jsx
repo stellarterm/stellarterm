@@ -10,7 +10,7 @@ export default class OfferTables extends React.Component {
         const offers = isBuy ? orderbook.bids : orderbook.asks;
         let depth = 0;
 
-        return offers.map((offer, index) => {
+        return offers.slice(0, 20).map((offer, index) => {
             if (isBuy) {
                 depth += Number(offer.amount);
             } else {
