@@ -29,14 +29,14 @@ export default class OfferTables extends React.Component {
     static getMaxDepth(orderbook) {
         const { asks, bids } = orderbook;
 
-        const cappedDepthAsks = asks.reduce((acc, ask) => {
+        const cappedDepthAsks = asks.slice(0, 20).reduce((acc, ask) => {
             if (Number(ask.price) / Number(asks[0].price) < 1.2) {
                 return Number(acc) + Number(ask.amount) * Number(ask.price);
             }
             return acc;
         }, 0);
 
-        const cappedDepthBids = bids.reduce((acc, bid) => {
+        const cappedDepthBids = bids.slice(0, 20).reduce((acc, bid) => {
             if (Number(bids[0].price) / Number(bid.price) < 1.2) {
                 return Number(acc) + Number(bid.amount);
             }

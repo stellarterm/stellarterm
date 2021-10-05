@@ -6,13 +6,14 @@
   "private": true,
   "scripts": {
     "setup": "yarn install",
-    "start": "./node_modules/.bin/gulp",
+    "start": "NODE_ENV=production; ./node_modules/.bin/gulp",
     "lint": "./node_modules/.bin/eslint .",
     "lint-fix": "./node_modules/.bin/eslint . --fix",
     "hash": "cd dist; openssl dgst -sha256 index.html",
     "production": "NODE_ENV=production; ./node_modules/.bin/gulp production"
   },
   "dependencies": {
+    "@amcharts/amcharts4": "^4.10.22",
     "@babel/polyfill": "^7.12.1",
     "@ledgerhq/hw-app-str": "^5.49.0",
     "@ledgerhq/hw-transport-webusb": "^5.49.0",
@@ -43,8 +44,8 @@
     "screenfull": "^4.2.1",
     "stellar-identicon-js": "^1.0.0",
     "stellar-sdk": "8.2.4",
-    "stellarterm-api": "git+https://github.com/stellarterm/stellarterm-api.git",
-    "stellarterm-directory": "git+https://github.com/stellarterm/stellarterm-directory.git",
+    "stellarterm-api": "git+https://github.com/stellarterm/stellarterm-api.git#up-node-version",
+    "stellarterm-directory": "git+https://github.com/stellarterm/stellarterm-directory.git#up-node-version",
     "trezor-connect": "^8.1.1",
     "whatwg-fetch": "2.0.4",
     "yargs": "^12.0.5"
@@ -71,8 +72,11 @@
     "vinyl-source-stream": "1.1.2",
     "watchify": "^3.11.1"
   },
+    "resolutions": {
+        "graceful-fs": "^4.2.4"
+    },
   "engines": {
-    "node": "^10.20.1"
+    "node": "^12.18.3"
   },
   "jest": {
     "transform": {
