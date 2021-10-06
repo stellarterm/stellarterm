@@ -5,7 +5,6 @@
     width: 100%;
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
     background: #f4f4f5;
     font-size: 18px;
     padding: 12px 12px 12px 34px;
@@ -14,6 +13,7 @@
         width: 24px;
         height: 24px;
         cursor: pointer;
+        margin-left: auto;
     }
 }
 .Modal_button-block{

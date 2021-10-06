@@ -103,7 +103,7 @@ export default class WalletConnectService {
     async onPairProposal(proposal) {
         const { uri } = proposal.signal.params;
 
-        const { status } = await this.driver.modal.handlers.activate('WalletConnectQRModal', uri);
+        const { status } = await this.driver.modal.handlers.activate('WalletConnectNewPairModal', uri);
 
         if (status === 'cancel') {
             await this.client.pairing.pending.update(proposal.topic, {

@@ -21,7 +21,7 @@ import LoginModal from './LoginModal/LoginModal';
 import SecretPhraseSetup from './SecretPhraseSetup/SecretPhraseSetup';
 import BrowserModal from './BrowserModal/BrowserModal';
 import MoonpayModal from './MoonpayModal/MoonpayModal';
-import WalletConnectQRModal from './WalletConnectQRModal/WalletConnectQRModal';
+import WalletConnectNewPairModal from './WalletConnectNewPairModal/WalletConnectNewPairModal';
 import WalletConnectRequestModal from './WalletConnectRequestModal/WalletConnectRequestModal';
 import WalletConnectPairingModal from './WalletConnectPairingModal/WalletConnectPairingModal';
 import ChooseTransferServer from './ChooseTransferServer/ChooseTransferServer';
@@ -154,8 +154,8 @@ export default class GlobalModal extends React.Component {
             case 'BrowserModal':
                 body = <BrowserModal submit={d.modal.handlers} d={d} />;
                 break;
-            case 'WalletConnectQRModal':
-                body = <WalletConnectQRModal submit={d.modal.handlers} uri={modal.inputData} />;
+            case 'WalletConnectNewPairModal':
+                body = <WalletConnectNewPairModal submit={d.modal.handlers} uri={modal.inputData} />;
                 break;
             case 'WalletConnectPairingModal':
                 body = <WalletConnectPairingModal submit={d.modal.handlers} data={modal.inputData} />;
