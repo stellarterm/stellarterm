@@ -111,4 +111,22 @@
     .s-button {
         margin: 20px auto;
     }
+
+    .star {
+        height: 25px;
+        width: 25px;
+        fill: white;
+        stroke-width: 0.5;
+        stroke: black;
+        cursor: pointer;
+
+        &:hover {
+            fill: lightgrey;
+        }
+
+        &.filled {
+            stroke-width: 0.5;
+            fill: orange;
+        }
+    }
 }

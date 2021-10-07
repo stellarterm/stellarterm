@@ -67,6 +67,7 @@ export default class Ticker {
             'change ' +
             'close ' +
             'open ' +
+            'orderbookStats { bidCount, askCount, bidMax, bidVolume, askMin, askVolume }' +
             'baseAssetCode ' +
             'baseAssetIssuer ' +
             'counterAssetCode ' +

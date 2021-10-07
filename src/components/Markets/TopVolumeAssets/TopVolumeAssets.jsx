@@ -69,14 +69,18 @@ export default class TopVolumeAssets extends React.Component {
                 : 0;
 
             const revertedCounterResponse = counterResponse.data.markets.map(market => ({
+                baseAssetCode: market.counterAssetCode,
+                baseAssetIssuer: market.counterAssetIssuer,
                 counterAssetCode: market.baseAssetCode,
                 counterAssetIssuer: market.baseAssetIssuer === 'native' ? null : market.baseAssetIssuer,
                 baseVolume: market.counterVolume,
                 open: (1 / market.open).toFixed(7),
                 close: (1 / market.close).toFixed(7),
+                orderbookStats: market.orderbookStats,
             }));
 
-            const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse];
+            const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse]
+                .filter(({ orderbookStats }) => orderbookStats.bidCount > 20 && orderbookStats.askCount > 20);
             this.setState({
                 stellarMarketsData: combinedMarketsData,
                 lastLumenPrice,
@@ -87,6 +91,7 @@ export default class TopVolumeAssets extends React.Component {
                 console.log('Previous response was cancelled!');
                 return;
             }
+            console.log(e);
             this.setState({
                 loadingData: false,
                 loadingDataError: true,
@@ -108,6 +113,7 @@ export default class TopVolumeAssets extends React.Component {
             { title: 'Price', sortField: 'priceXLM' },
             { title: 'Volume (24h)', sortField: 'volume24h' },
             { title: 'Change (24h)', sortField: 'change24h', align: 'right' },
+            { title: 'Top', sortField: 'withoutSort', align: 'right' },
         ];
 
         return headerCells.map(headerCell => {
