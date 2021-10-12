@@ -1,6 +1,7 @@
+
 import WalletConnectClient, { CLIENT_EVENTS } from '@walletconnect/client';
 import * as StellarSdk from 'stellar-sdk';
-import { AUTH_TYPE, TX_STATUS } from '../constants';
+import { AUTH_TYPE } from '../constants';
 import Sep7Handler from '../../components/HomePage/Sep7Handler/Sep7Handler';
 
 
@@ -13,7 +14,7 @@ const METADATA = {
 };
 
 const STELLAR_METHODS = {
-    SIGN: 'stellar_signAndSubmitXDR',
+    SIGN: 'stellar_signXDR',
 };
 const TESTNET = 'stellar:testnet';
 const PUBNET = 'stellar:pubnet';
@@ -228,6 +229,14 @@ export default class WalletConnectService {
 
         const xdr = tx.toEnvelope().toXDR('base64');
 
+        let resolver;
+        let rejecter;
+
+        const promise = new Promise(((resolve, reject) => {
+            resolver = resolve;
+            rejecter = reject;
+        }));
+
         this.driver.modal.handlers.activate('WalletConnectRequestModal', {
             title: this.appMeta.name,
             logo: this.appMeta.icons[0],
@@ -241,13 +250,16 @@ export default class WalletConnectService {
                         xdr,
                     },
                 },
-            }).then(result => {
-                this.driver.session.account.refresh();
-                this.driver.session.account.updateOffers();
-                return result;
+            }).then(({ signedXDR }) => {
+                if (this.driver.session.account.signers.length > 1) {
+                    this.driver.modal.handlers.cancel();
+                }
+                resolver(signedXDR);
+            }).catch(e => {
+                rejecter(e);
             }),
         });
 
-        return { status: TX_STATUS.SENT_TO_WALLET_CONNECT };
+        return promise;
     }
 }

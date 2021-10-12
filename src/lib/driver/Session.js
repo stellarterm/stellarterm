@@ -287,7 +287,13 @@ export default function Send(driver) {
                     signedTx: tx,
                 };
             } else if (this.authType === AUTH_TYPE.WALLET_CONNECT) {
-                return driver.walletConnectService.signTx(tx);
+                const signedXDR = await driver.walletConnectService.signTx(tx);
+                const signedTx = new StellarSdk.Transaction(signedXDR, driver.Server.networkPassphrase);
+
+                return {
+                    status: TX_STATUS.FINISH,
+                    signedTx,
+                };
             } else if (this.authType === AUTH_TYPE.LEDGER) {
                 return driver.modal.handlers.activate('signWithLedger', tx).then(async modalResult => {
                     if (modalResult.status === 'finish') {
