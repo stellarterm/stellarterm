@@ -29,15 +29,8 @@ export default function WalletConnectRequestModal(props) {
     const { data, submit } = props;
 
     data.result
-        .then(result => {
-            if (!result) {
-                return;
-            }
-            if (result.status === 'success') {
-                setTxState(TX_STATUS.SUCCESS);
-            } else if (result.status === 'pending') {
-                setTxState(TX_STATUS.AWAIT_SIGNERS);
-            }
+        .then(() => {
+            setTxState(TX_STATUS.SUCCESS);
         })
         .catch(() => setTxState(TX_STATUS.FAILED));
 
