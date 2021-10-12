@@ -50,9 +50,11 @@ export default class SendMemo extends React.Component {
 
     getMemoDropdown() {
         const { isOpenList } = this.state;
-        const { memoRequired, memoType, sep29MemoRequired } = this.props.d.send;
+        const { memoRequired, memoType, sep29MemoRequired, availableAssets, choosenSlug } = this.props.d.send;
 
-        const onclickDropdownFunc = memoRequired ? null : () => this.onClickMemoDropdown();
+        const isDestAcceptAsset = availableAssets[choosenSlug].sendable;
+
+        const onclickDropdownFunc = (memoRequired || !isDestAcceptAsset) ? null : () => this.onClickMemoDropdown();
         const memoNote = memoRequired || sep29MemoRequired ? 'Recipient requires a memo.\n Please make sure it is correct.' : '';
         const memoDropdownText = isOpenList ? 'Choose memo type' : memoTypes.get(memoType);
 
@@ -63,7 +65,9 @@ export default class SendMemo extends React.Component {
                 <label htmlFor="memoDropdownType">Memo type</label>
                 <div className="Send_dropdown">
                     <div className="dropdown_selected" onClick={onclickDropdownFunc}>
-                        <span>{memoRequired ? memoTypes.get(memoType) : memoDropdownText}</span>
+                        {isDestAcceptAsset ?
+                            <span>{memoRequired ? memoTypes.get(memoType) : memoDropdownText}</span> :
+                            <span>{memoTypes.get('none')}</span>}
                         <img
                             src={images.dropdown}
                             alt="▼"
@@ -82,15 +86,21 @@ export default class SendMemo extends React.Component {
                     ) : null}
                 </div>
 
+                {isDestAcceptAsset &&
                 <div className="asset_balance">
                     {memoNote}
-                </div>
+                </div>}
             </React.Fragment>
         );
     }
 
     getMemoInput() {
-        const { updateMemoContent, memoType, memoContent, memoContentLocked } = this.props.d.send;
+        const {
+            updateMemoContent, memoType, memoContent, memoContentLocked, availableAssets, choosenSlug,
+        } = this.props.d.send;
+
+        const isDestAcceptAsset = availableAssets[choosenSlug].sendable;
+
         let memoPlaceholder;
 
         switch (memoType) {
@@ -119,8 +129,8 @@ export default class SendMemo extends React.Component {
                 <input
                     name="memo"
                     type="text"
-                    value={memoContent}
-                    disabled={memoContentLocked}
+                    value={isDestAcceptAsset ? memoContent : ''}
+                    disabled={memoContentLocked || !isDestAcceptAsset}
                     onChange={updateMemoContent}
                     placeholder={memoPlaceholder}
                 />
@@ -130,7 +140,9 @@ export default class SendMemo extends React.Component {
 
     render() {
         const { d } = this.props;
-        const { memoRequired, memoType, memoContent, memoContentLocked } = d.send;
+        const { memoRequired, memoType, memoContent, memoContentLocked, availableAssets, choosenSlug } = d.send;
+
+        const isDestAcceptAsset = availableAssets[choosenSlug].sendable;
 
         let memoValidationMessage;
 
@@ -139,18 +151,20 @@ export default class SendMemo extends React.Component {
             memoValidationMessage = memoV.message ? memoV.message : null;
         }
 
-        const memoInputClass = `Send_input_block ${memoContentLocked ? 'disabled_block' : ''}`;
-        const memoDropdownClass = `Send_dropdown_block ${memoRequired ? 'disabled_block' : ''}`;
+        const memoInputClass = `Send_input_block ${(memoContentLocked || !isDestAcceptAsset) ? 'disabled_block' : ''}`;
+        const memoDropdownClass = `Send_dropdown_block ${(memoRequired || !isDestAcceptAsset) ? 'disabled_block' : ''}`;
 
         return (
             <div className="Input_flexed_block">
                 <div className={memoInputClass}>
-                    {memoValidationMessage ? <div className="invalidValue_popup">Memo is not valid</div> : null}
+                    {(memoValidationMessage && isDestAcceptAsset) ?
+                        <div className="invalidValue_popup">Memo is not valid</div> :
+                        null}
                     {this.getMemoInput()}
 
-                    <div className="field_description">
+                    {isDestAcceptAsset && <div className="field_description">
                         {memoValidationMessage}
-                    </div>
+                    </div>}
                 </div>
 
                 <div

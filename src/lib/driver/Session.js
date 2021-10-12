@@ -20,7 +20,7 @@ import {
     buildOpCreateAccount,
     buildOpCreateBuyOffer,
     buildOpCreateSellOffer,
-    buildOpRemoveOffer,
+    buildOpRemoveOffer, buildOpSendClaimableBalance,
     buildOpSendPayment,
     buildOpSetOptions,
 } from '../operationBuilders';
@@ -450,6 +450,7 @@ export default function Send(driver) {
                     'manageBuyOffer',
                     'manageSellOffer',
                     'claimClaimableBalance',
+                    'createClaimableBalance',
                 ],
                 high_threshold: ['accountMerge'],
                 setOptions: ['setOptions'], // med or high
@@ -854,6 +855,12 @@ export default function Send(driver) {
             }
 
             return this.handlers.buildSignSubmit(op, memo);
+        },
+        sendClaimableBalance: async opts => {
+            const op = buildOpSendClaimableBalance(
+                Object.assign({}, opts, { accountId: this.account.accountId() }),
+            );
+            return this.handlers.buildSignSubmit(op);
         },
         logout: () => {
             try {

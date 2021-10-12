@@ -374,7 +374,7 @@ export default class Send {
         this.event.trigger();
     }
 
-    async submitSendTransaction() {
+    async submitSendTransaction(isClaim) {
         try {
             const sendMemo = this.memoType === 'none'
                 ? undefined
@@ -383,14 +383,22 @@ export default class Send {
                     content: this.memoContent,
                 };
 
-            const bssResult = await this.d.session.handlers.send(
-                {
-                    destination: this.accountId,
-                    asset: this.assetToSend.asset,
-                    amount: this.amountToSend,
-                },
-                sendMemo,
-            );
+            const bssResult = isClaim ?
+                await this.d.session.handlers.sendClaimableBalance(
+                    {
+                        destination: this.accountId,
+                        asset: this.assetToSend.asset,
+                        amount: this.amountToSend,
+                    },
+                ) :
+                await this.d.session.handlers.send(
+                    {
+                        destination: this.accountId,
+                        asset: this.assetToSend.asset,
+                        amount: this.amountToSend,
+                    },
+                    sendMemo,
+                );
 
             if (bssResult.status === TX_STATUS.FINISH) {
                 this.state = 'pending';
@@ -419,9 +427,9 @@ export default class Send {
             !Validate.address(this.destInput).ready;
 
         const notValidAmount = !Validate.amount(this.amountToSend);
-        const notValidMemoType = this.memoType === 'none' && (this.memoRequired || this.sep29MemoRequired);
-        const notValidMemoContent = this.memoType !== 'none' && !Validate.memo(this.memoContent, this.memoType).ready;
-        const destNoTrustline = !this.availableAssets[this.choosenSlug].sendable;
+        const destHasTrustline = this.availableAssets[this.choosenSlug].sendable;
+        const notValidMemoType = destHasTrustline && this.memoType === 'none' && (this.memoRequired || this.sep29MemoRequired);
+        const notValidMemoContent = destHasTrustline && this.memoType !== 'none' && !Validate.memo(this.memoContent, this.memoType).ready;
 
         const isXlmNative = this.getAsset(this.assetToSend).isNative();
         const targetBalance = this.d.session.account.getBalance(this.getAsset());
@@ -438,8 +446,7 @@ export default class Send {
             notValidAmount ||
             notEnoughAsset ||
             notValidMemoType ||
-            notValidMemoContent ||
-            destNoTrustline) {
+            notValidMemoContent) {
             return false;
         }
 

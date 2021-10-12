@@ -4,6 +4,7 @@ import createStellarIdenticon from 'stellar-identicon-js';
 import Driver from '../../../../../lib/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import { AUTH_TYPE } from '../../../../../lib/constants';
+import images from '../../../../../images';
 
 export default class SendReview extends React.Component {
     constructor(props) {
@@ -16,7 +17,9 @@ export default class SendReview extends React.Component {
 
     onClickSubmit() {
         this.setState({ isPending: true });
-        this.props.d.send.submitSendTransaction();
+        const { availableAssets, choosenSlug } = this.props.d.send;
+        const isDestAcceptAsset = availableAssets[choosenSlug].sendable;
+        this.props.d.send.submitSendTransaction(!isDestAcceptAsset);
     }
 
     render() {
@@ -29,6 +32,8 @@ export default class SendReview extends React.Component {
             amountToSend,
             clickBackToSend,
             federationAddress,
+            availableAssets,
+            choosenSlug,
         } = this.props.d.send;
 
         const { isPending } = this.state;
@@ -36,6 +41,8 @@ export default class SendReview extends React.Component {
         const identiconImg = createStellarIdenticon(accountId).toDataURL();
         const memoTitle = memoType.replace(/_/g, ' ').toLowerCase();
         const memoTitleText = memoTitle.charAt(0).toUpperCase() + memoTitle.slice(1);
+
+        const isDestAcceptAsset = availableAssets[choosenSlug].sendable;
 
         const isLedger = this.props.d.session.authType === AUTH_TYPE.LEDGER;
 
@@ -70,7 +77,7 @@ export default class SendReview extends React.Component {
                             </div>
                         ) : null}
 
-                        {memoType !== 'none' && memoContent !== '' ? (
+                        {memoType !== 'none' && memoContent !== '' && isDestAcceptAsset ? (
                             <div className="content_block">
                                 <div className="content_title">{memoTitleText}</div>
                                 <div className="content_text">{memoContent}</div>
@@ -95,6 +102,18 @@ export default class SendReview extends React.Component {
                         </div>
                     </div>
                 </div>
+
+                {!isDestAcceptAsset &&
+                    <div className="field_description warning">
+                        <img src={images['icon-warning-big']} alt="" />
+                        <span>
+                            The recipient has not accepted this asset, so it will be sent as Claimable Balance.{' '}
+                            If the recipient does not accept the payment within 24 hours,
+                            you will be able to return the payment.
+                            You can find your payment in the tab Pending payments
+                        </span>
+                    </div>
+                }
 
                 <div className="Send_button_block">
                     <button

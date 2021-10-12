@@ -84,6 +84,23 @@ export function buildOpCreateAccount(opts) {
     });
 }
 
+export function buildOpSendClaimableBalance(opts) {
+    const DAY_SECONDS_VALUE = 24 * 60 * 60;
+    return StellarSdk.Operation.createClaimableBalance({
+        asset: opts.asset,
+        amount: opts.amount,
+        claimants: [
+            new StellarSdk.Claimant(opts.destination, StellarSdk.Claimant.predicateUnconditional()),
+            new StellarSdk.Claimant(
+                opts.accountId,
+                StellarSdk.Claimant.predicateNot(
+                    StellarSdk.Claimant.predicateBeforeRelativeTime(DAY_SECONDS_VALUE.toString()),
+                ),
+            ),
+        ],
+    });
+}
+
 export function buildOpSetOptions(opts) {
     const options = Array.isArray(opts) ? opts : [opts];
 

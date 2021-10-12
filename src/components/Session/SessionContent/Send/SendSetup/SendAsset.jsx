@@ -171,7 +171,7 @@ export default class SendAsset extends React.Component {
                     ) : (
                         <React.Fragment>
                             <label htmlFor="asset">Asset</label>
-                            <div className="invalidValue_popup">
+                            <div className="invalidValue_popup warning">
                                 Recipient does not accept this asset
                             </div>
                         </React.Fragment>

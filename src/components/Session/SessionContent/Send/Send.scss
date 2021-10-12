@@ -7,6 +7,17 @@
         line-height: 14px;
         color: #9aa6ac;
 
+        &.warning {
+            margin-top: 10px;
+            display: flex;
+            font-weight: bold;
+            align-items: center;
+            color: orange;
+            img {
+                margin-right: 10px;
+            }
+        }
+
         .identicon_resolved {
             height: 14px;
             width: 14px;
@@ -126,6 +137,14 @@
                 bottom: -8px;
                 border: 4px solid transparent;
                 border-top: 4px solid #fe6d74;
+            }
+
+            &.warning {
+                background-color: orange;
+
+                &::after {
+                    border-top: 4px solid orange;
+                }
             }
         }
 
