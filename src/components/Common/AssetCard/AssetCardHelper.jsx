@@ -99,13 +99,6 @@ export default class AssetCardHelper extends React.Component {
         let asset = {};
         if (isXLMNative) {
             asset = directory.nativeAsset;
-        } else if (haveIssuer && this.props.d.session.isDisabledAsset(this.props.code, this.props.issuer)) {
-            return ({
-                asset: { code: this.props.code, issuer: this.props.issuer },
-                logo: 'unknown',
-                domain: 'unknown',
-                color: '#A5A0A7',
-            });
         } else if (haveDomain) {
             asset = directory.getAssetByDomain(this.props.code, this.props.domain);
         } else if (haveIssuer) {
