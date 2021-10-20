@@ -913,10 +913,6 @@ export default function Send(driver) {
                     return chain;
                 }
 
-                if (this.isDisabledAsset(asset.code, asset.issuer)) {
-                    return chain;
-                }
-
                 const assetData = unknownAssetsData.find(
                     assetLocalItem => assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer,
                 );
