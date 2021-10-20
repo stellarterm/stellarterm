@@ -6,7 +6,7 @@ import Driver from '../../../../lib/Driver';
 import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
 import ErrorHandler from '../../../../lib/ErrorHandler';
 import ReservedPopover from '../../../Common/AppPopover/ReservedPopover';
-import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../../../../lib/constants';
+import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../../../../lib/constants';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
@@ -37,7 +37,7 @@ export default class OfferMaker extends React.Component {
             }
         });
         this.sessionUnsub = this.props.d.session.event.sub(event => {
-            if (this.state.amount && event === 'login') {
+            if (this.state.amount && event === SESSION_EVENTS.LOGIN_EVENT) {
                 this.updateState('amount', this.state.amount);
             }
             this.forceUpdate();

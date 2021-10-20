@@ -28,7 +28,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
             loaded: false,
             isLoadInProcess: false,
         };
-        this.listenId = this.props.d.session.event.listen(() => {
+        this.unsub = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
     }
@@ -42,7 +42,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
+        this.unsub();
     }
 
     getTransactionDetails() {

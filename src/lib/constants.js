@@ -1,3 +1,13 @@
+export const SESSION_EVENTS = {
+    LOGIN_EVENT: 'login_event',
+    LOGOUT_EVENT: 'logout_event',
+    FEDERATION_SEARCH_EVENT: 'federation_search_event',
+    FEDERATION_UPDATE_EVENT: 'federation_update_event',
+    LEDGER_EVENT: 'ledger_event',
+    ACCOUNT_EVENT: 'account_event',
+    ASSETS_DATA_EVENT: 'assets_data_event',
+};
+
 export const SESSION_STATE = {
     IN: 'in',
     OUT: 'out',
