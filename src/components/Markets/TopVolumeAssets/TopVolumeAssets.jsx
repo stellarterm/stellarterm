@@ -76,7 +76,11 @@ export default class TopVolumeAssets extends React.Component {
                 close: (1 / market.close).toFixed(7),
             }));
 
-            const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse];
+            const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse]
+                .filter(({ counterAssetCode, counterAssetIssuer, baseAssetCode, baseAssetIssuer }) => (
+                    !this.props.d.session.isDisabledAsset(counterAssetCode, counterAssetIssuer) &&
+                    !this.props.d.session.isDisabledAsset(baseAssetCode, baseAssetIssuer)
+                ));
             this.setState({
                 stellarMarketsData: combinedMarketsData,
                 lastLumenPrice,
@@ -211,5 +215,5 @@ export default class TopVolumeAssets extends React.Component {
 }
 TopVolumeAssets.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    baseAsset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
+    baseAsset: PropTypes.instanceOf(StellarSdk.Asset),
 };

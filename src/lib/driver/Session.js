@@ -46,6 +46,8 @@ export default function Send(driver) {
         this.userFederation = '';
         this.promisesForMyltipleLoading = {};
 
+        this.disabledAssets = new Set();
+
         this.hasPendingTransaction = false;
     };
     init();
@@ -121,8 +123,21 @@ export default function Send(driver) {
             this.addKnownAssetDataCalled = true;
         });
     };
+
+    this.processDisabledAssets = () => {
+        directory.disabledAssets.forEach(asset => {
+            this.disabledAssets.add(`${asset.code.toUpperCase()}-${asset.issuer}`);
+        });
+    };
+
     this.addKnownAssetDataPromise = directory.initializeIssuerOrgs(EnvConsts.ANCHORS_URL)
-        .then(() => this.addKnownAssetData());
+        .then(() => {
+            this.addKnownAssetData();
+            this.processDisabledAssets();
+        });
+
+    this.isDisabledAsset = (code, issuer) => this.disabledAssets.has(`${code.toUpperCase()}-${issuer}`);
+
 
     // Ping the Ledger device to see if it is connected
     this.tryConnectLedger = () =>
@@ -895,6 +910,10 @@ export default function Send(driver) {
             const chainPromise = this.account.balances.reduce((chain, sdkBalance) => {
                 const asset = directory.resolveAssetByAccountId(sdkBalance.asset_code, sdkBalance.asset_issuer);
                 if (asset.domain !== 'unknown' || asset.code === undefined) {
+                    return chain;
+                }
+
+                if (this.isDisabledAsset(asset.code, asset.issuer)) {
                     return chain;
                 }
 
