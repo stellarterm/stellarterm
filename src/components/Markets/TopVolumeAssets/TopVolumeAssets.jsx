@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
+import directory from 'stellarterm-directory';
 import Driver from '../../../lib/Driver';
 import images from '../../../images';
 import NotFound from '../../NotFound/NotFound';
@@ -78,8 +79,8 @@ export default class TopVolumeAssets extends React.Component {
 
             const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse]
                 .filter(({ counterAssetCode, counterAssetIssuer, baseAssetCode, baseAssetIssuer }) => (
-                    !this.props.d.session.isDisabledAsset(counterAssetCode, counterAssetIssuer) &&
-                    !this.props.d.session.isDisabledAsset(baseAssetCode, baseAssetIssuer)
+                    !directory.isDisabledAsset(counterAssetCode, counterAssetIssuer) &&
+                    !directory.isDisabledAsset(baseAssetCode, baseAssetIssuer)
                 ));
             this.setState({
                 stellarMarketsData: combinedMarketsData,

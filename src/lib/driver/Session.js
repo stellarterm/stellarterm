@@ -46,8 +46,6 @@ export default function Send(driver) {
         this.userFederation = '';
         this.promisesForMyltipleLoading = {};
 
-        this.disabledAssets = new Set();
-
         this.hasPendingTransaction = false;
     };
     init();
@@ -124,19 +122,9 @@ export default function Send(driver) {
         });
     };
 
-    this.processDisabledAssets = () => {
-        directory.disabledAssets.forEach(asset => {
-            this.disabledAssets.add(`${asset.code.toUpperCase()}-${asset.issuer}`);
-        });
-    };
 
     this.addKnownAssetDataPromise = directory.initializeIssuerOrgs(EnvConsts.ANCHORS_URL)
-        .then(() => {
-            this.addKnownAssetData();
-            this.processDisabledAssets();
-        });
-
-    this.isDisabledAsset = (code, issuer) => this.disabledAssets.has(`${code.toUpperCase()}-${issuer}`);
+        .then(() => this.addKnownAssetData());
 
 
     // Ping the Ledger device to see if it is connected
