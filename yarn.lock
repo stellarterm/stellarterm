@@ -9456,7 +9456,7 @@ stellar-sdk@8.2.4:
 
 "stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git":
   version "2.0.0"
-  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#b61135a762eba0349b88f5b578c2be60f87c8c87"
+  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#3e6f9a42b763454d3e7f266039649c7767dc96ad"
 
 stream-browserify@^2.0.0:
   version "2.0.2"
