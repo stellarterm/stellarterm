@@ -9441,7 +9441,7 @@ stellar-sdk@8.2.4:
 
 "stellarterm-api@git+https://github.com/stellarterm/stellarterm-api.git#staging":
   version "1.0.0"
-  resolved "git+https://github.com/stellarterm/stellarterm-api.git#75ce3009b1fec4ac1b5dcbad08bcde138da875c3"
+  resolved "git+https://github.com/stellarterm/stellarterm-api.git#65710021774251d9219e48829dac5638f22ad59b"
   dependencies:
     aws-sdk "^2.465.0"
     bluebird "^3.5.0"
