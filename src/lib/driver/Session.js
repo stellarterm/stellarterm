@@ -121,11 +121,8 @@ export default function Send(driver) {
             this.addKnownAssetDataCalled = true;
         });
     };
-
-
     this.addKnownAssetDataPromise = directory.initializeIssuerOrgs(EnvConsts.ANCHORS_URL)
         .then(() => this.addKnownAssetData());
-
 
     // Ping the Ledger device to see if it is connected
     this.tryConnectLedger = () =>
