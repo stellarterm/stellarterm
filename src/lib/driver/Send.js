@@ -121,10 +121,13 @@ export default class Send {
             return;
         }
 
-        _.each(this.d.session.account.balances, balance => {
-            const asset = Stellarify.asset(balance);
+        this.d.session.account.balances.forEach(({ asset_code: assetCode, asset_issuer: assetIssuer }) => {
+            if (!assetIssuer) {
+                return;
+            }
+
+            const asset = new StellarSdk.Asset(assetCode, assetIssuer);
             const slug = Stellarify.assetToSlug(asset);
-            if (asset.isNative()) { return; }
 
             this.availableAssets[slug] = {
                 asset,
@@ -148,8 +151,11 @@ export default class Send {
         const sendableAssets = {};
         const unSendableAssets = {};
 
-        _.each(this.d.session.account.balances, balance => {
-            const asset = Stellarify.asset(balance);
+        this.d.session.account.balances.forEach(({ asset_code: assetCode, asset_issuer: assetIssuer }) => {
+            if (!assetIssuer) {
+                return;
+            }
+            const asset = new StellarSdk.Asset(assetCode, assetIssuer);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
                 return;
@@ -167,8 +173,11 @@ export default class Send {
             }
         });
 
-        _.each(this.targetAccount.balances, balance => {
-            const asset = Stellarify.asset(balance);
+        this.targetAccount.balances.forEach(({ asset_code: assetCode, asset_issuer: assetIssuer }) => {
+            if (!assetIssuer) {
+                return;
+            }
+            const asset = new StellarSdk.Asset(assetCode, assetIssuer);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
                 return;
@@ -177,8 +186,11 @@ export default class Send {
             receiverTrusts[slug] = true;
         });
 
-        _.each(this.targetAccount.balances, balance => {
-            const asset = Stellarify.asset(balance);
+        this.targetAccount.balances.forEach(({ asset_code: assetCode, asset_issuer: assetIssuer }) => {
+            if (!assetIssuer) {
+                return;
+            }
+            const asset = new StellarSdk.Asset(assetCode, assetIssuer);
             const slug = Stellarify.assetToSlug(asset);
             if (Object.prototype.hasOwnProperty.call(senderTrusts, slug)) {
                 sendableAssets[slug] = {
@@ -197,8 +209,11 @@ export default class Send {
         });
 
         // Show stuff the recipient doesn't trust
-        _.each(this.d.session.account.balances, balance => {
-            const asset = Stellarify.asset(balance);
+        this.targetAccount.balances.forEach(({ asset_code: assetCode, asset_issuer: assetIssuer }) => {
+            if (!assetIssuer) {
+                return;
+            }
+            const asset = new StellarSdk.Asset(assetCode, assetIssuer);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
                 return;

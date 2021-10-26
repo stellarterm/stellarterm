@@ -54,7 +54,9 @@ export default class Orderbook {
             },
             stopOrderbook: () => {
                 this.data.ready = false;
-                this.data.closeOrderbookStream();
+                if (this.data.closeOrderbookStream) {
+                    this.data.closeOrderbookStream();
+                }
             },
             stopLastTradesStream: () => {
                 if (this.lastTrades.closeLastTradesStream) {
