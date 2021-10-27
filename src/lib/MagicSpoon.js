@@ -10,6 +10,7 @@ import { signTransaction } from '@stellar/freighter-api';
 import TransformTrezorTransaction from './TransformTrezorTransaction';
 import ErrorHandler from './ErrorHandler';
 
+
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
 // Simplifies the objects to what is necessary. Listens to updates automagically.
 // It's in the same file as the driver because the driver is the only one that
@@ -84,51 +85,45 @@ const MagicSpoon = {
             return transaction.sign(keypair);
         };
 
-        sdkAccount.getLumenBalance = () => sdkAccount.balances[sdkAccount.balances.length - 1].balance;
+        sdkAccount.getLumenBalanceInstance = () => sdkAccount.balances.find(({ asset_type: assetType }) => assetType === 'native');
 
-        // Expects StellarSdk.Asset
-        // Returns null if there is no trust
-        // Returns string of balance if exists
-        sdkAccount.getBalance = targetAsset => {
-            let targetBalance = null;
+        sdkAccount.getAssetBalanceInstance = targetAsset => {
             if (targetAsset.isNative()) {
-                _.each(sdkAccount.balances, balance => {
-                    if (balance.asset_type === 'native') {
-                        targetBalance = balance.balance;
-                    }
-                });
-            } else {
-                _.each(sdkAccount.balances, balance => {
-                    if (
-                        balance.asset_code === targetAsset.getCode() &&
-                        balance.asset_issuer === targetAsset.getIssuer()
-                    ) {
-                        targetBalance = balance.balance;
-                    }
-                });
+                return sdkAccount.getLumenBalanceInstance();
             }
-            return targetBalance;
+
+            const assetBalance = sdkAccount.balances.find(({ asset_code: assetCode, asset_issuer: assetIssuer }) => (
+                assetCode === targetAsset.getCode() && assetIssuer === targetAsset.getIssuer()
+            ));
+
+            return assetBalance || null;
+        };
+
+        sdkAccount.getLumenBalance = () => sdkAccount.getLumenBalanceInstance().balance;
+
+        /**
+         * Returns null if there is no trust
+         * Returns string of balance if exists
+         * @param targetAsset {StellarSdk.Asset}
+         * @returns {string|null}
+         */
+        sdkAccount.getBalance = targetAsset => {
+            const assetBalance = sdkAccount.getAssetBalanceInstance(targetAsset);
+
+            return assetBalance ? assetBalance.balance : null;
         };
 
         sdkAccount.getReservedBalance = targetAsset => {
-            const isTargetNative = targetAsset.isNative();
-            const asset = sdkAccount.balances.find(item => {
-                const isNative = isTargetNative && item.asset_type === 'native';
-                return (
-                    isNative ||
-                    (item.asset_code === targetAsset.getCode() && item.asset_issuer === targetAsset.getIssuer())
-                );
-            });
+            const assetBalance = sdkAccount.getAssetBalanceInstance(targetAsset);
 
-            return asset ? parseFloat(asset.selling_liabilities).toFixed(7) : null;
+            return assetBalance ? parseFloat(assetBalance.selling_liabilities).toFixed(7) : null;
         };
 
         sdkAccount.isOrderExists = targetAsset => {
-            const asset = sdkAccount.balances.find(
-                item => item.asset_code === targetAsset.getCode() && item.asset_issuer === targetAsset.getIssuer(),
-            );
-            return asset
-                ? asset.selling_liabilities !== '0.0000000' || asset.buying_liabilities !== '0.0000000'
+            const assetBalance = sdkAccount.getAssetBalanceInstance(targetAsset);
+
+            return assetBalance
+                ? assetBalance.selling_liabilities !== '0.0000000' || assetBalance.buying_liabilities !== '0.0000000'
                 : false;
         };
 
@@ -140,16 +135,20 @@ const MagicSpoon = {
             const knownBalances = [];
             const unknownBalances = [];
             sdkAccount.balances.forEach(sdkBalance => {
+                if (sdkBalance.asset_type === 'liquidity_pool_shares') {
+                    return;
+                }
                 if (sdkBalance.asset_type === 'native') {
                     if (sortOptions.hideNative) {
-                        return null;
+                        return;
                     }
-                    return nativeBalances.push({
+                    nativeBalances.push({
                         code: 'XLM',
                         issuer: null,
                         balance: sdkBalance.balance,
                         sdkBalance,
                     });
+                    return;
                 }
                 const newBalance = {
                     // Yay shoes :P
@@ -159,9 +158,10 @@ const MagicSpoon = {
                 };
                 const asset = directory.resolveAssetByAccountId(newBalance.code, newBalance.issuer);
                 if (asset.domain === 'unknown') {
-                    return unknownBalances.push(newBalance);
+                    unknownBalances.push(newBalance);
+                    return;
                 }
-                return knownBalances.push(newBalance);
+                knownBalances.push(newBalance);
             });
 
             if (sortOptions.onlyUnknown) {
@@ -270,10 +270,24 @@ const MagicSpoon = {
         };
 
         sdkAccount.explainReserve = () => {
-            const entriesTrustlines = sdkAccount.balances.length - 1;
+            const { entriesTrustlines, entriesLiquidityTrustlines } = sdkAccount.balances.reduce((acc, balance) => {
+                if (balance.asset_issuer) {
+                    acc.entriesTrustlines += 1;
+                    return acc;
+                } else if (balance.asset_type === 'liquidity_pool_shares') {
+                    acc.entriesLiquidityTrustlines += 1;
+                    return acc;
+                }
+                return acc;
+            }, {
+                entriesTrustlines: 0,
+                entriesLiquidityTrustlines: 0,
+            });
+
             const entriesOffers = Object.keys(sdkAccount.offers).length;
             const entriesSigners = sdkAccount.signers.length - 1;
-            const entriesOthers = sdkAccount.subentry_count - entriesTrustlines - entriesOffers - entriesSigners;
+            const entriesOthers = sdkAccount.subentry_count
+                - entriesTrustlines - (entriesLiquidityTrustlines * 2) - entriesOffers - entriesSigners;
             const inActiveOffers = Number(sdkAccount.getReservedBalance(StellarSdk.Asset.native()));
             const numSponsoring = sdkAccount.num_sponsoring;
             const numSponsored = sdkAccount.num_sponsored;
@@ -298,6 +312,11 @@ const MagicSpoon = {
                     reserveType: 'Trustlines',
                     typeCount: entriesTrustlines,
                     reservedXLM: entriesTrustlines * 0.5,
+                },
+                {
+                    reserveType: 'Liquidity pool trustlines',
+                    typeCount: entriesLiquidityTrustlines,
+                    reservedXLM: entriesLiquidityTrustlines * 1,
                 },
                 {
                     reserveType: 'Offers',

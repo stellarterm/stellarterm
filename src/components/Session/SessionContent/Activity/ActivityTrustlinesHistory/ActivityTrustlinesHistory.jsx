@@ -17,7 +17,7 @@ export default class ActivityTrustlinesHistory extends ActivityFromEffectsBase {
     }
 
     static filterEffects(history) {
-        return history.filter(item => (TRUSTLINE_TYPES.includes(item.type)));
+        return history.filter(item => (TRUSTLINE_TYPES.includes(item.type) && item.asset_type !== 'liquidity_pool_shares'));
     }
 
     static getViewType(type) {
