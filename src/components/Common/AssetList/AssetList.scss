@@ -114,6 +114,26 @@
     }
 }
 
+.AssetListFooterAsLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 57px;
+    color: #68c86f;
+    font-size: 14px;
+    font-weight: normal;
+    text-decoration: none;
+    border-top: 1px solid #f4f4f5;
+
+    img {
+        margin-left: 12px;
+    }
+
+    &:hover {
+        background-color: #f4f4f533;
+    }
+}
+
 .AssetList_Header {
     padding: 0 18px;
     border-bottom: 1px solid #dedfe0;

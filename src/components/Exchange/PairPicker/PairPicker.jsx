@@ -9,6 +9,7 @@ import AssetPair from '../../Common/AssetPair/AssetPair';
 import MagicSpoon from '../../../lib/MagicSpoon';
 import { getReadableNumber } from '../LightweightChart/ConverterOHLC';
 import { niceRound } from '../../../lib/Format';
+import images from '../../../images';
 
 export default class PairPicker extends React.Component {
     static get24ChangesPercent(state) {
@@ -231,8 +232,9 @@ export default class PairPicker extends React.Component {
                     {marketsTableContent}
                 </div>
 
-                <Link to="/markets/" className="PairPicker_seeOthers">
-                    <span>See other trading pairs</span>
+                <Link to="/markets/" className="AssetListFooterAsLink">
+                    View other trading pairs
+                    <img src={images['icon-arrow-right-green']} alt="" />
                 </Link>
             </div>
         );
