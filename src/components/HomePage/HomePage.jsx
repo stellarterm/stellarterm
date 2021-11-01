@@ -65,8 +65,8 @@ export default class HomePage extends React.Component {
                 <div className="so-back islandBack HomePage__assetList">
                     <div className="island">
                         <AssetList d={this.props.driver} limit={6} />
-                        <Link to="/markets/" className="AssetListFooter">
-                            View markets
+                        <Link to="/markets/" className="AssetListFooterAsLink">
+                            View more assets on the Markets page
                             <img src={images['icon-arrow-right-green']} alt="" />
                         </Link>
                     </div>
