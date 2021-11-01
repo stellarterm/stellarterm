@@ -103,14 +103,22 @@
 }
 
 .AssetListFooter {
-    font-size: $s-scale-4;
-    text-align: center;
-    padding: 12px 18px;
-    color: $s-color-neutral5;
-    border-top: 1px solid $s-color-neutral8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 57px;
+    color: #68c86f;
+    font-size: 14px;
+    font-weight: normal;
+    text-decoration: none;
+    border-top: 1px solid #f4f4f5;
 
-    a:hover {
-        color: $s-color-neutral3;
+    img {
+        margin-left: 12px;
+    }
+
+    &:hover {
+        background-color: #f4f4f533;
     }
 }
 
