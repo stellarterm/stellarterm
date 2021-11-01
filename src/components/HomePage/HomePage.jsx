@@ -5,6 +5,7 @@ import Driver from '../../lib/Driver';
 import AssetList from '../Common/AssetList/AssetList';
 import Sep7Handler from './Sep7Handler/Sep7Handler';
 import { SESSION_STATE } from '../../lib/constants';
+import images from '../../images';
 
 
 export default class HomePage extends React.Component {
@@ -64,9 +65,10 @@ export default class HomePage extends React.Component {
                 <div className="so-back islandBack HomePage__assetList">
                     <div className="island">
                         <AssetList d={this.props.driver} limit={6} />
-                        <div className="AssetListFooter">
-                            View more assets on the <Link to="/markets/">market list page</Link>.
-                        </div>
+                        <Link to="/markets/" className="AssetListFooter">
+                            View markets
+                            <img src={images['icon-arrow-right-green']} alt="" />
+                        </Link>
                     </div>
                 </div>
 
