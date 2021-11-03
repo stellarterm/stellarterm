@@ -26,7 +26,7 @@ import {
 } from '../operationBuilders';
 import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../constants';
 
-const fee = 10000;
+const fee = '100000';
 
 export default function Send(driver) {
     this.event = new Event();
