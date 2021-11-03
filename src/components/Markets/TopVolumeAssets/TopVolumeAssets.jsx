@@ -72,6 +72,8 @@ export default class TopVolumeAssets extends React.Component {
             const revertedCounterResponse = counterResponse.data.markets.map(market => ({
                 counterAssetCode: market.baseAssetCode,
                 counterAssetIssuer: market.baseAssetIssuer === 'native' ? null : market.baseAssetIssuer,
+                baseAssetCode: market.counterAssetCode,
+                baseAssetIssuer: market.counterAssetIssuer,
                 baseVolume: market.counterVolume,
                 open: (1 / market.open).toFixed(7),
                 close: (1 / market.close).toFixed(7),
@@ -80,7 +82,7 @@ export default class TopVolumeAssets extends React.Component {
             const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse]
                 .filter(({ counterAssetCode, counterAssetIssuer, baseAssetCode, baseAssetIssuer }) => (
                     !directory.isDisabledAsset(counterAssetCode, counterAssetIssuer) &&
-                    !directory.isDisabledAsset(baseAssetCode, baseAssetIssuer)
+                        !directory.isDisabledAsset(baseAssetCode, baseAssetIssuer)
                 ));
             this.setState({
                 stellarMarketsData: combinedMarketsData,
