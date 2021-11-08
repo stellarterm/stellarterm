@@ -51,12 +51,11 @@ export default function BalancesTable(props) {
         || parseFloat(b.balance) - parseFloat(a.balance),
     );
 
-
     const balanceRows = [lumen, ...sortedAssets].map(asset => {
         const { code, issuer, balance } = asset;
 
         const isNoUSDBalanceData = asset.balanceUSD === undefined;
-        const balanceUSD = isNoUSDBalanceData ? null : `$${asset.balanceUSD}`;
+        const balanceUSD = isNoUSDBalanceData ? null : Printify.lightenZeros(asset.balanceUSD.toString(), 2);
 
         return (
             <tr className="BalancesTable__row" key={code + issuer}>
@@ -66,7 +65,9 @@ export default function BalancesTable(props) {
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
                     {Printify.lightenZeros(balance)}
                 </td>
-                <td className="BalancesTable__row__item BalancesTable__row__item--amount">{balanceUSD}</td>
+                <td className="BalancesTable__row__item BalancesTable__row__item--amount">
+                    ${balanceUSD}
+                </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
                     <PercentChange changePercent={get24hChangePercent(asset, d.ticker)} isHidden={isNoUSDBalanceData} />
                 </td>
