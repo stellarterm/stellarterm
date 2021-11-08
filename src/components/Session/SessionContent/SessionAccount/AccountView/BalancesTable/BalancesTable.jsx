@@ -56,6 +56,7 @@ export default function BalancesTable(props) {
 
         const isNoUSDBalanceData = asset.balanceUSD === undefined;
         const balanceUSD = isNoUSDBalanceData ? null : Printify.lightenZeros(asset.balanceUSD.toString(), 2);
+        const balanceUsdView = balanceUSD ? <span>${balanceUSD}</span> : null;
 
         return (
             <tr className="BalancesTable__row" key={code + issuer}>
@@ -66,7 +67,7 @@ export default function BalancesTable(props) {
                     {Printify.lightenZeros(balance)}
                 </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
-                    ${balanceUSD}
+                    {balanceUsdView}
                 </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
                     <PercentChange changePercent={get24hChangePercent(asset, d.ticker)} isHidden={isNoUSDBalanceData} />
