@@ -4,6 +4,7 @@ import createStellarIdenticon from 'stellar-identicon-js';
 import Driver from '../../../../../lib/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import { AUTH_TYPE } from '../../../../../lib/constants';
+import Validate from '../../../../../lib/Validate';
 
 export default class SendReview extends React.Component {
     constructor(props) {
@@ -29,9 +30,12 @@ export default class SendReview extends React.Component {
             amountToSend,
             clickBackToSend,
             federationAddress,
+            destInput,
         } = this.props.d.send;
 
         const { isPending } = this.state;
+
+        const isDestMuxed = Validate.muxedKey(destInput).ready;
 
         const identiconImg = createStellarIdenticon(accountId).toDataURL();
         const memoTitle = memoType.replace(/_/g, ' ').toLowerCase();
@@ -56,12 +60,12 @@ export default class SendReview extends React.Component {
                             <div className="content_text">
                                 <img src={identiconImg} alt="identicon" className="identicon_resolved" />
                                 <span className="publicKey_resolved">
-                                    {accountId}
+                                    {isDestMuxed ? destInput : accountId}
                                 </span>
                             </div>
                         </div>
 
-                        {federationAddress !== '' ? (
+                        {(federationAddress !== '' && !isDestMuxed) ? (
                             <div className="content_block">
                                 <div className="content_title">Recipient&apos;s federation address</div>
                                 <div className="content_text">
