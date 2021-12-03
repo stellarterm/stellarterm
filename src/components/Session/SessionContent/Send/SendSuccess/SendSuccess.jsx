@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import createStellarIdenticon from 'stellar-identicon-js';
 import Driver from '../../../../../lib/Driver';
 import images from '../../../../../images';
+import Validate from '../../../../../lib/Validate';
 
 export default function SendSuccess(props) {
     const { d, awaitSigners } = props;
-    const { txId, resetSendForm, accountId, assetToSend, amountToSend } = d.send;
+    const { txId, resetSendForm, accountId, assetToSend, amountToSend, destInput } = d.send;
 
     const resultMessage = awaitSigners ? (
         <React.Fragment>
@@ -35,7 +36,8 @@ export default function SendSuccess(props) {
     );
 
     const identiconImg = createStellarIdenticon(accountId).toDataURL();
-    const shortAddress = `${accountId.substr(0, 6)}...${accountId.substr(-6, 6)}`;
+    const isDestMuxed = Validate.muxedKey(destInput).ready;
+    const shortAddress = `${(isDestMuxed ? destInput : accountId).substr(0, 6)}...${(isDestMuxed ? destInput : accountId).substr(-6, 6)}`;
 
     return (
         <div className="Send_block">
