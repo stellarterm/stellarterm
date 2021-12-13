@@ -335,7 +335,7 @@ export default function Send(driver) {
                 return modalResult;
             });
         },
-        buildSignSubmit: async (ops, memo) => {
+        buildSignSubmit: async (ops, memo, withMuxing) => {
             if (this.hasPendingTransaction) {
                 driver.toastService.error(
                     'Transaction in progress',
@@ -350,6 +350,7 @@ export default function Send(driver) {
             const tx = new StellarSdk.TransactionBuilder(this.account, {
                 fee,
                 networkPassphrase: driver.Server.networkPassphrase,
+                withMuxing: Boolean(withMuxing),
             }).setTimeout(driver.Server.transactionTimeout);
 
             if (Array.isArray(ops)) {
@@ -841,19 +842,26 @@ export default function Send(driver) {
         // be a createAccount operation
         send: async (opts, memo) => {
             let op;
+            const baseAccount = opts.withMuxing ?
+                StellarSdk.MuxedAccount.fromAddress(opts.destination, '0').baseAccount().accountId()
+                : null;
             try {
                 // We need to check the activation of the destination,
                 // if the account is not activated, it will be created in catch with createAccount
-                await driver.Server.loadAccount(opts.destination);
+                await driver.Server.loadAccount(opts.withMuxing ? baseAccount : opts.destination);
                 op = buildOpSendPayment(opts);
             } catch (e) {
                 if (!opts.asset.isNative()) {
                     throw new Error('Destination account does not exist. To create it, you must send at least 1 XLM.');
                 }
+                if (opts.withMuxing) {
+                    // eslint-disable-next-line no-param-reassign
+                    opts.destination = baseAccount;
+                }
                 op = buildOpCreateAccount(opts);
             }
 
-            return this.handlers.buildSignSubmit(op, memo);
+            return this.handlers.buildSignSubmit(op, memo, opts.withMuxing);
         },
         logout: () => {
             try {

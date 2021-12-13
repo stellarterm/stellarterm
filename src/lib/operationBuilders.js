@@ -74,6 +74,7 @@ export function buildOpSendPayment(opts) {
         destination: opts.destination,
         asset: opts.asset,
         amount: opts.amount,
+        withMuxing: Boolean(opts.withMuxing),
     });
 }
 

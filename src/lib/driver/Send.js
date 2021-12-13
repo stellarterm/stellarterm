@@ -62,7 +62,7 @@ export default class Send {
     }
 
     loadTargetAccountDetails() {
-        if (!Validate.publicKey(this.accountId).ready) {
+        if (!Validate.publicKey(this.accountId).ready && !Validate.muxedKey(this.accountId).ready) {
             return;
         }
 
@@ -114,7 +114,7 @@ export default class Send {
 
     fetchSelfAssets() {
         const isEnteredValidAddress = Validate.publicKey(this.destInput).ready ||
-            Validate.address(this.destInput).ready;
+            Validate.address(this.destInput).ready || Validate.muxedKey(this.destInput).ready;
 
         if (isEnteredValidAddress) {
             this.loadTargetAccountDetails();
@@ -137,7 +137,7 @@ export default class Send {
     }
 
     calculateAvailableAssets() {
-        if (!Validate.publicKey(this.accountId).ready) {
+        if (!Validate.publicKey(this.accountId).ready && !Validate.muxedKey(this.accountId).ready) {
             this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = {
                 asset: new StellarSdk.Asset.native(),
                 sendable: true,
@@ -252,8 +252,10 @@ export default class Send {
         this.federationNotFound = false;
         this.requestIsPending = false;
 
-        if (Validate.publicKey(this.destInput).ready) {
-            this.accountId = this.destInput;
+        if (Validate.publicKey(this.destInput).ready || Validate.muxedKey(this.destInput).ready) {
+            this.accountId = Validate.publicKey(this.destInput).ready
+                ? this.destInput
+                : StellarSdk.MuxedAccount.fromAddress(this.destInput, '0').baseAccount().accountId();
             // Check for memo requirements in the destination
             if (Object.prototype.hasOwnProperty.call(directory.destinations, this.accountId)) {
                 const destination = directory.destinations[this.accountId];
@@ -366,7 +368,7 @@ export default class Send {
     }
 
     pickAssetToSend(slug) {
-        if (!Validate.publicKey(this.accountId).ready) {
+        if (!Validate.publicKey(this.accountId).ready && !Validate.muxedKey(this.accountId).ready) {
             this.availableAssets[slug] = {
                 asset: Stellarify.parseAssetSlug(slug),
                 sendable: true,
@@ -397,12 +399,14 @@ export default class Send {
                     type: this.memoType,
                     content: this.memoContent,
                 };
+            const isMuxed = Validate.muxedKey(this.destInput).ready;
 
             const bssResult = await this.d.session.handlers.send(
                 {
-                    destination: this.accountId,
+                    destination: isMuxed ? this.destInput : this.accountId,
                     asset: this.assetToSend.asset,
                     amount: this.amountToSend,
+                    withMuxing: isMuxed,
                 },
                 sendMemo,
             );
@@ -429,9 +433,12 @@ export default class Send {
 
     validateAllFields() {
         const destinationIsEmpty = this.destInput === '';
+
         const notValidDestination =
             !Validate.publicKey(this.destInput).ready &&
+            !Validate.muxedKey(this.destInput).ready &&
             !Validate.address(this.destInput).ready;
+
 
         const notValidAmount = !Validate.amount(this.amountToSend);
         const notValidMemoType = this.memoType === 'none' && (this.memoRequired || this.sep29MemoRequired);
@@ -445,8 +452,7 @@ export default class Send {
             : this.getMaxAssetSpend(targetBalance);
         const notEnoughAsset = Number(this.amountToSend) > Number(maxAssetSpend);
 
-        if (
-            destinationIsEmpty ||
+        return !(destinationIsEmpty ||
             notValidDestination ||
             this.requestIsPending ||
             this.federationNotFound ||
@@ -454,11 +460,7 @@ export default class Send {
             notEnoughAsset ||
             notValidMemoType ||
             notValidMemoContent ||
-            destNoTrustline) {
-            return false;
-        }
-
-        return true;
+            destNoTrustline);
     }
 
     resetSendForm() {
