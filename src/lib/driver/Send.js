@@ -230,7 +230,6 @@ export default class Send {
         _.each(unSendableAssets, (availability, slug) => {
             this.availableAssets[slug] = availability;
         });
-        console.log(this.availableAssets, unSendableAssets);
     }
 
     updateDestination(value) {
