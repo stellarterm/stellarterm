@@ -207,11 +207,8 @@ export default class Send {
             }
         });
         // Show stuff the recipient doesn't trust
-        this.targetAccount.balances.forEach(({ asset_code: assetCode, asset_issuer: assetIssuer }) => {
-            if (!assetIssuer) {
-                return;
-            }
-            const asset = new StellarSdk.Asset(assetCode, assetIssuer);
+        this.d.session.account.balances.forEach(balance => {
+            const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
             if (asset.isNative()) {
                 return;
