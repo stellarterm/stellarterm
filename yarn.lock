@@ -1170,10 +1170,10 @@
     "@stablelib/random" "^1.0.1"
     "@stablelib/wipe" "^1.0.1"
 
-"@stellar/freighter-api@1.0.0-beta.0":
-  version "1.0.0-beta.0"
-  resolved "https://registry.yarnpkg.com/@stellar/freighter-api/-/freighter-api-1.0.0-beta.0.tgz#08c3f4ebb4d1b8c3e92039242ca5c877814864b4"
-  integrity sha512-wngITwqu9h4yfgqXvJS27VEkrlPh/u6uTDOPI2Ct8pZzde3fVPYGK+42izhGAe5oOvbziZQqHkHIPh+rkl7YHg==
+"@stellar/freighter-api@1.1.2":
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/@stellar/freighter-api/-/freighter-api-1.1.2.tgz#9529352c7e4ac59087e14d16620d69322fca2e76"
+  integrity sha512-2vrPsOn1N3DYTff1763lM1eOy+LNKfkQPH5A3mXlKb3mDUK50wsyM6U03Y1DK/C/9dlMA49FspQ9Es2RF6NpPw==
 
 "@stellarguard/stellar-uri@^1.1.1":
   version "1.1.3"
@@ -2788,9 +2788,9 @@ caniuse-db@^1.0.30000634, caniuse-db@^1.0.30000639:
   integrity sha512-Fa2E9oRfosfhtlR+zbfgdxHgJeMYqlnLBIcMO/tRb5ftTFJ31PG1JSgfyYzfoQw+n+xfk0sH7J2cgB7Rm17+dg==
 
 caniuse-lite@^1.0.30001219:
-  version "1.0.30001241"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001241.tgz#cd3fae47eb3d7691692b406568d7a3e5b23c7598"
-  integrity sha512-1uoSZ1Pq1VpH0WerIMqwptXHNNGfdl7d1cJUFs80CwQ/lVzdhTvsFZCeNFslze7AjsQnb4C85tzclPa1VShbeQ==
+  version "1.0.30001304"
+  resolved "https://registry.npmjs.org/caniuse-lite/-/caniuse-lite-1.0.30001304.tgz"
+  integrity sha512-bdsfZd6K6ap87AGqSHJP/s1V+U6Z5lyrcbBu3ovbCCf8cSYpwTtGrCBObMpJqwxfTbLW6YTIdbb1jEeTelcpYQ==
 
 caseless@~0.12.0:
   version "0.12.0"
