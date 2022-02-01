@@ -210,11 +210,12 @@ export default class Send {
 
         // Show stuff the recipient doesn't trust
         this.d.session.account.balances.forEach(balance => {
-            const asset = Stellarify.asset(balance);
-            const slug = Stellarify.assetToSlug(asset);
-            if (asset.isNative()) {
+            if (!balance.asset_issuer) {
                 return;
             }
+            const asset = Stellarify.asset(balance);
+            const slug = Stellarify.assetToSlug(asset);
+
             if (!Object.prototype.hasOwnProperty.call(sendableAssets, slug) &&
                 !Object.prototype.hasOwnProperty.call(receiverTrusts, slug)) {
                 unSendableAssets[slug] = {
