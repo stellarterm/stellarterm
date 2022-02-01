@@ -209,15 +209,13 @@ export default class Send {
         });
 
         // Show stuff the recipient doesn't trust
-        this.targetAccount.balances.forEach(({ asset_code: assetCode, asset_issuer: assetIssuer }) => {
-            if (!assetIssuer) {
+        this.d.session.account.balances.forEach(balance => {
+            if (!balance.asset_issuer) {
                 return;
             }
-            const asset = new StellarSdk.Asset(assetCode, assetIssuer);
+            const asset = Stellarify.asset(balance);
             const slug = Stellarify.assetToSlug(asset);
-            if (asset.isNative()) {
-                return;
-            }
+
             if (!Object.prototype.hasOwnProperty.call(sendableAssets, slug) &&
                 !Object.prototype.hasOwnProperty.call(receiverTrusts, slug)) {
                 unSendableAssets[slug] = {
