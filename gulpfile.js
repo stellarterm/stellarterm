@@ -184,6 +184,7 @@ const bundler = watchify(browserify({
     },
 }).transform(babelify.configure({
     presets: ['@babel/preset-env', '@babel/preset-react'],
+    compact: true,
 })));
 const rebundle = () => bundler.bundle()
     // log errors if they happen

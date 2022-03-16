@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import Driver from '../../../../lib/Driver';
-import ErrorHandler from '../../../../lib/ErrorHandler';
+import Driver from '../../../../lib/driver/Driver';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import images from '../../../../images';
-import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants';
+import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
 
 export default class TrustButton extends React.Component {
     static goToLink(e) {

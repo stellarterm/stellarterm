@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Debounce from 'awesome-debounce-promise';
 import directory from 'stellarterm-directory';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import AssetCardList from './AssetCardList/AssetCardList';
 import images from '../../../../images';

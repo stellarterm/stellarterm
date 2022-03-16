@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Route, Switch } from 'react-router-dom';
 import NotFound from '../../../NotFound/NotFound';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import ActivityNavMenu from '../Activity/ActivitityNavMenu/ActivityNavMenu';
 import ActivePendingPayments from './ActivePendingPayments/ActivePendingPayments';
 import HistoryPendingPayments from './HistoryPendingPayments/HistoryPendingPayments';

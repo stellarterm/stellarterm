@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import { Link } from 'react-router-dom';
 import directory from 'stellarterm-directory';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import TrustButton from './TrustButton/TrustButton';
-import Stellarify from '../../../lib/Stellarify';
+import Stellarify from '../../../lib/helpers/Stellarify';
 import AssetCardSeparateLogo from '../AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 
 
@@ -44,7 +44,8 @@ export default class AssetRow extends React.Component {
                 message={messageText}
                 currency={this.props.currency}
                 color={this.state.color}
-                host={this.props.host} />
+                host={this.props.host}
+            />
         );
     }
 
@@ -70,14 +71,16 @@ export default class AssetRow extends React.Component {
                 color={this.state.color}
                 currency={this.props.currency}
                 boxy
-                host={this.props.host} />) : (
+                host={this.props.host}
+            />) : (
             <AssetCardMain
                 d={this.props.d}
                 code={this.props.asset.getCode()}
                 issuer={this.props.asset.getIssuer()}
                 color={this.state.color}
                 currency={this.props.currency}
-                host={this.props.host} />);
+                host={this.props.host}
+            />);
 
         return !tradeLink ? (
             <div className="AssetRow">

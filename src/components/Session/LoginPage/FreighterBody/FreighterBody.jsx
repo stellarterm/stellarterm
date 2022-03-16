@@ -4,8 +4,8 @@ import { isConnected } from '@stellar/freighter-api';
 import images from '../../../../images';
 import HiddenDescription from '../Common/HiddenDescription';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
-import Driver from '../../../../lib/Driver';
-import { isChrome } from '../../../../lib/BrowserSupport';
+import Driver from '../../../../lib/driver/Driver';
+import { isChrome } from '../../../../lib/helpers/BrowserSupport';
 import AcceptTerms from '../Common/AcceptTerms';
 
 

@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import images from '../../images';
-import { getCurrentYear } from '../../lib/Format';
+import { getCurrentYear } from '../../lib/helpers/Format';
 
 class Footer extends React.Component {
     constructor(props) {

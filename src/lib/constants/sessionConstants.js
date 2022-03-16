@@ -35,3 +35,5 @@ export const UNSUPPORTED_JWT_AUTH_TYPES = new Map([
     [AUTH_TYPE.WALLET_CONNECT, 'WalletConnect'],
     [AUTH_TYPE.TREZOR, 'Trezor'],
 ]);
+
+export const JWT_TOKEN_MINIMUM_REMAINING_LIFETIME = 15 * 60 * 1000; // 15 minutes

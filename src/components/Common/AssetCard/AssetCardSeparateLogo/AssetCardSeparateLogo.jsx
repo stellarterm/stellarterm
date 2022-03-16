@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOMServer from 'react-dom/server';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import AssetCardHelper from '../AssetCardHelper';
 import Ellipsis from '../../Ellipsis/Ellipsis';
 

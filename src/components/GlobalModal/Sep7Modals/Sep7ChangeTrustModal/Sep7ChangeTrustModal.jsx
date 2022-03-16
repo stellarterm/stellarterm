@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../lib/Driver';
-import ErrorHandler from '../../../../lib/ErrorHandler';
+import Driver from '../../../../lib/driver/Driver';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 import Sep7GetBuiltTx from '../Sep7GetBuiltTx/Sep7GetBuiltTx';
-import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../../../../lib/constants';
+import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
 
 const images = require('./../../../../images');
 

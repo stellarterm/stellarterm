@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import LoginPageBody from '../../../Session/LoginPage/LoginPageBody/LoginPageBody';
 import LedgerBody from '../../../Session/LoginPage/LedgerBody/LedgerBody';
 import TrezorBody from '../../../Session/LoginPage/TrezorBody/TrezorBody';

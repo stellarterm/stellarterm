@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import Sep6ModalFooter from '../Common/Sep6ModalFooter/Sep6ModalFooter';
 
 export default function WithdrawCompleted(props) {

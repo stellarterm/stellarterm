@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import InfoBlock from '../../../../Common/InfoBlock/InfoBlock';
 
 export default class LedgerAlert extends React.Component {

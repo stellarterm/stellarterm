@@ -7,12 +7,12 @@ import { getPublicKey } from '@stellar/freighter-api';
 import FastAverageColor from 'fast-average-color';
 import isElectron from 'is-electron';
 import directory from 'stellarterm-directory';
-import MagicSpoon from '../MagicSpoon';
-import Event from '../Event';
-import * as request from '../api/request';
-import { getEndpoint } from '../api/endpoints';
-import * as EnvConsts from '../../env-consts';
-import Stellarify from '../Stellarify';
+import MagicSpoon from '../../helpers/MagicSpoon';
+import Event from '../../helpers/Event';
+import * as request from '../../api/request';
+import { getEndpoint } from '../../api/endpoints';
+import * as EnvConsts from '../../../env-consts';
+import Stellarify from '../../helpers/Stellarify';
 import {
     buildOpBumpSequence,
     buildOpChangeTrust,
@@ -23,10 +23,19 @@ import {
     buildOpRemoveOffer,
     buildOpSendPayment,
     buildOpSetOptions,
-} from '../operationBuilders';
-import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../constants';
+} from '../../helpers/operationBuilders';
+import {
+    AUTH_TYPE,
+    JWT_TOKEN_MINIMUM_REMAINING_LIFETIME,
+    SESSION_EVENTS,
+    SESSION_STATE,
+    TX_STATUS,
+} from '../../constants/sessionConstants';
+import { CONTENT_TYPE_HEADER } from '../../constants/commonConstants';
 
 const fee = '100000';
+
+const JWT_TOKENS_CACHE = new Map();
 
 export default function Send(driver) {
     this.event = new Event();
@@ -382,15 +391,13 @@ export default function Send(driver) {
                 }
                 if (signResult.status === TX_STATUS.FINISH) {
                     const tx = signResult.signedTx;
-                    const threshold = this.handlers.getTransactionThreshold(tx);
-                    const thresholdValue = this.account.thresholds[threshold];
-                    const masterWeight = this.account.signers.find(signer => signer.key === this.account.account_id)
-                        .weight;
 
-                    if (driver.session.account.signers.length > 1 && masterWeight < thresholdValue) {
+                    if (driver.multisig.isMultisigEnabled && driver.multisig.isMoreSignaturesNeeded(tx)) {
                         this.hasPendingTransaction = false;
-                        return this.handlers.sendToSigner(signResult);
+
+                        return driver.multisig.sendToSigner(tx);
                     }
+
                     console.log('Submitting tx\nhash:', tx.hash().toString('hex'));
                     const serverResult = driver.Server.submitTransaction(tx)
                         .then(transactionResult => {
@@ -426,307 +433,45 @@ export default function Send(driver) {
             }
             return result; // bssResult
         },
-
-        getSignerMarker: key => {
-            const markers = {
-                lobstrVault: 'GA2T6GR7VXXXBETTERSAFETHANSORRYXXXPROTECTEDBYLOBSTRVAULT',
-                stellarGuard: 'GCVHEKSRASJBD6O2Z532LWH4N2ZLCBVDLLTLKSYCSMBLOYTNMEEGUARD',
-            };
-
-            return markers[key];
-        },
-
-        getTransactionThreshold: tx => {
-            const { operations } = tx;
-
-            const THRESHOLDS = {
-                low_threshold: ['allowTrust', 'inflation', 'bumpSequence'],
-                med_threshold: [
-                    'createAccount',
-                    'payment',
-                    'pathPayment',
-                    'createPassiveSellOffer',
-                    'changeTrust',
-                    'manageData',
-                    'manageBuyOffer',
-                    'manageSellOffer',
-                    'claimClaimableBalance',
-                ],
-                high_threshold: ['accountMerge'],
-                setOptions: ['setOptions'], // med or high
-            };
-
-            return operations.reduce((acc, operation) => {
-                const { type } = operation;
-
-                let usedThreshold = Object.keys(THRESHOLDS).reduce((used, key) => {
-                    if (THRESHOLDS[key].includes(type)) {
-                        return key;
-                    }
-                    return used;
-                }, 'unknown');
-
-                if (usedThreshold === 'unknown') {
-                    throw new Error('unknown operation');
-                }
-
-                if (usedThreshold === 'setOptions') {
-                    const { masterWeight, lowThreshold, medThreshold, highThreshold, signer } = operation;
-                    usedThreshold =
-                        masterWeight || lowThreshold || medThreshold || highThreshold || signer
-                            ? 'high_threshold'
-                            : 'med_threshold';
-                }
-
-                if (usedThreshold === 'low_threshold') {
-                    return acc;
-                }
-                if (usedThreshold === 'med_threshold') {
-                    return acc === 'high_threshold' ? acc : usedThreshold;
-                }
-
-                return usedThreshold;
-            }, 'low_threshold');
-        },
-
-        sendToSigner: signResult => {
-            const signedTx = signResult.signedTx.toEnvelope().toXDR('base64');
-
-            const knownSigners = {
-                [this.handlers.getSignerMarker('lobstrVault')]: {
-                    apiUrl: getEndpoint('sendTransactionToVault'),
-                    title: 'LOBSTR Vault',
-                    logo: 'sign-vault',
-                },
-                [this.handlers.getSignerMarker('stellarGuard')]: {
-                    apiUrl: getEndpoint('sendTransactionToGuard'),
-                    title: 'StellarGuard',
-                    logo: 'sign-stellarguard',
-                },
-            };
-
-            const usedKnownSigner = driver.session.account.signers.find(sign => knownSigners[sign.key]);
-
-            if (!usedKnownSigner) {
-                setTimeout(() => driver.modal.handlers.activate('multisigUnknown', {
-                    tx: signedTx,
-                    isTestnet: driver.Server.isTestnet,
-                }), 1000);
-            } else {
-                const signer = knownSigners[usedKnownSigner.key];
-                const body = JSON.stringify({ xdr: signedTx });
-                const headers = { 'Content-Type': 'application/json' };
-                request
-                    .post(signer.apiUrl, { headers, body })
-                    .then(() => driver.modal.handlers.activate('multisig', signer))
-                    .catch(e => console.error(e));
-            }
-            return {
-                status: TX_STATUS.AWAIT_SIGNERS,
-            };
-        },
-
-        isLobstrVaultKey: key => {
-            const headers = { 'Content-Type': 'application/json' };
-            const body = JSON.stringify({ address: key });
-            return request
-                .post(getEndpoint('isVaultSigner'), { headers, body })
-                .then(res => res)
-                .catch(e => console.error(e));
-        },
-
-        isInvalidWeigth: () => {
-            const vaultMarker = this.handlers.getSignerMarker('lobstrVault');
-            const guardMarker = this.handlers.getSignerMarker('stellarGuard');
-            let hasCustomWeigth = false;
-            let markerMiss = true;
-            this.account.signers.forEach(signer => {
-                if (signer.key === vaultMarker || signer.key === guardMarker) {
-                    markerMiss = false;
-                }
-                if (signer.key === vaultMarker && signer.weight !== 1) {
-                    hasCustomWeigth = true;
-                }
-                if (signer.key === guardMarker && signer.weight !== 1) {
-                    hasCustomWeigth = true;
-                }
-                if (signer.key !== vaultMarker && signer.key !== guardMarker && signer.weight !== 10) {
-                    hasCustomWeigth = true;
-                }
-            });
-
-            return hasCustomWeigth || markerMiss;
-        },
-
-        // provider is 'lobstrVault' or 'stellarGuard'
-        addSigner: (key, provider) => {
-            const { signers } = this.account;
-            if (signers.find(signer => signer.key === key)) {
-                return Promise.reject('This key is already used');
-            }
-            if (signers.length > 1) {
-                if (this.handlers.isInvalidWeigth()) {
-                    return Promise.reject('Custom signers weigth');
-                }
-                const currentThreshold = this.account.thresholds.high_threshold;
-                const newThreshold = currentThreshold + 10;
-                const signerData = {
-                    signer: {
-                        ed25519PublicKey: key,
-                        weight: 10,
-                    },
-                    lowThreshold: newThreshold,
-                    medThreshold: newThreshold,
-                    highThreshold: newThreshold,
-                };
-                const op = buildOpSetOptions(signerData);
-                return this.handlers.buildSignSubmit(op);
-            }
-            const signerData = {
-                signer: {
-                    ed25519PublicKey: key,
-                    weight: 10,
-                },
-                masterWeight: 10,
-                lowThreshold: 20,
-                medThreshold: 20,
-                highThreshold: 20,
-            };
-
-            if (provider) {
-                const markerData = {
-                    signer: {
-                        ed25519PublicKey: this.handlers.getSignerMarker(provider),
-                        weight: 1,
-                    },
-                };
-                const op = buildOpSetOptions([signerData, markerData]);
-                return this.handlers.buildSignSubmit(op);
-            }
-
-            const op = buildOpSetOptions(signerData);
-            return this.handlers.buildSignSubmit(op);
-        },
-
-        activateGuardSigner: () => {
-            const guardUrl = getEndpoint('activateGuardSigner') + this.account.account_id.toString();
-            request
-                .post(guardUrl)
-                .then(() => {})
-                .catch(e => console.error(e));
-        },
-
-        removeSigner: key => {
-            const { signers } = this.account;
-
-            const signerData = {
-                signer: {
-                    ed25519PublicKey: key,
-                    weight: 0,
-                },
-                masterWeight: 1,
-                lowThreshold: 0,
-                medThreshold: 0,
-                highThreshold: 0,
-            };
-            if (signers.length === 2) {
-                const op = buildOpSetOptions(signerData);
-                return this.handlers.buildSignSubmit(op);
-            }
-            if (signers.length === 3) {
-                const hasVaultMarker = signers.find(
-                    signer => signer.key === this.handlers.getSignerMarker('lobstrVault'),
-                );
-                const hasGuardMarker = signers.find(
-                    signer => signer.key === this.handlers.getSignerMarker('stellarGuard'),
-                );
-
-                if (!hasVaultMarker && !hasGuardMarker) {
-                    const op = buildOpSetOptions(signerData);
-                    return this.handlers.buildSignSubmit(op);
-                }
-
-                if (this.handlers.isInvalidWeigth()) {
-                    return Promise.reject('Custom signers weigth');
-                }
-
-                const markerKey = (hasVaultMarker && hasVaultMarker.key) || (hasGuardMarker && hasGuardMarker.key);
-                const markerData = {
-                    signer: {
-                        ed25519PublicKey: markerKey,
-                        weight: 0,
-                    },
-                };
-
-                const op = buildOpSetOptions([signerData, markerData]);
-                return this.handlers.buildSignSubmit(op);
-            }
-            if (signers.length >= 4) {
-                if (this.handlers.isInvalidWeigth()) {
-                    return Promise.reject('Custom signers weigth');
-                }
-                const currentThreshold = this.account.thresholds.high_threshold;
-
-                const newThreshold =
-                    (signers.length - 2) * 10 > currentThreshold ? currentThreshold : (signers.length - 2) * 10;
-
-                const newSignerData = {
-                    signer: {
-                        ed25519PublicKey: key,
-                        weight: 0,
-                    },
-                    lowThreshold: newThreshold,
-                    medThreshold: newThreshold,
-                    highThreshold: newThreshold,
-                };
-
-                const op = buildOpSetOptions(newSignerData);
-                return this.handlers.buildSignSubmit(op);
-            }
-
-            return Promise.reject();
-        },
-
-        setRequiredSigners: qty => {
-            const newThreshold = qty * 10;
-            const options = {
-                lowThreshold: newThreshold,
-                medThreshold: newThreshold,
-                highThreshold: newThreshold,
-            };
-
-            const op = buildOpSetOptions(options);
-            return this.handlers.buildSignSubmit(op);
-        },
-
-        getJwtToken: (endpointUrl, networkPassphrase) => {
-            const headers = { 'Content-Type': 'application/json' };
-
+        getAuthChallengeTx: (endpointUrl, networkPassphrase) => {
             // Gets current network if network param is not provided
             const selectedNetwork = networkPassphrase || driver.Server.networkPassphrase;
             return request
-                .get(endpointUrl, { headers })
-                .then(resChallenge => {
-                    const tx = new StellarSdk.Transaction(resChallenge.transaction, selectedNetwork);
-                    return this.handlers.sign(tx);
-                })
-                .then(tx => {
-                    const body = JSON.stringify({ transaction: tx.signedTx.toEnvelope().toXDR('base64') });
-                    return request.post(endpointUrl, { headers, body });
-                })
+                .get(endpointUrl, { headers: CONTENT_TYPE_HEADER })
+                .then(resChallenge => new StellarSdk.Transaction(resChallenge.transaction, selectedNetwork));
+        },
+        getToken: (endpointUrl, signedTx) => {
+            const body = JSON.stringify({ transaction: signedTx.toEnvelope().toXDR('base64') });
+
+            return request.post(endpointUrl, { headers: CONTENT_TYPE_HEADER, body })
                 .then(({ token }) => {
                     if (this.authType === AUTH_TYPE.LEDGER) {
                         driver.modal.handlers.ledgerFinish('closeWithTimeout', 1000);
                     }
+                    JWT_TOKENS_CACHE.set(endpointUrl, token);
                     return token;
                 });
         },
-
+        isJwtTokenExpired: token => {
+            const expiry = (JSON.parse(window.atob(token.split('.')[1]))).exp * 1000;
+            return expiry - Date.now() < JWT_TOKEN_MINIMUM_REMAINING_LIFETIME;
+        },
+        getTokenFromCache: endpoint => {
+            const tokenFromCache = JWT_TOKENS_CACHE.get(endpoint);
+            if (!tokenFromCache || this.handlers.isJwtTokenExpired(tokenFromCache)) {
+                return null;
+            }
+            return tokenFromCache;
+        },
         setFederation: async fedName => {
             if (this.jwtToken === null) {
                 const userPublicKey = this.account.accountId();
                 const params = { account: userPublicKey };
-                this.jwtToken = await this.handlers.getJwtToken(getEndpoint('getJwtToken', params));
+                const endpoint = getEndpoint('stellartermFederationAuth', params);
+
+                const challengeTx = await this.handlers.getAuthChallengeTx(endpoint);
+                const { signedTx } = await this.handlers.sign(challengeTx);
+                this.jwtToken = await this.handlers.getToken(endpoint, signedTx);
             }
 
             const headers = { 'Content-Type': 'application/json', Authorization: `JWT ${this.jwtToken}` };

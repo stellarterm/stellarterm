@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AssetCardMain from '../../../AssetCard/AssetCardMain/AssetCardMain';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AssetCardInRow from '../../../AssetCard/AssetCardInRow/AssetCardInRow';
 
 export default class AssetCardList extends React.Component {

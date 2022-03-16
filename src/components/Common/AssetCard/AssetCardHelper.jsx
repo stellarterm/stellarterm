@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 
 
 export default class AssetCardHelper extends React.Component {

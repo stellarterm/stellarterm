@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
-import Validate from '../../../../../lib/Validate';
+import Driver from '../../../../../lib/driver/Driver';
+import Validate from '../../../../../lib/helpers/Validate';
 import images from '../../../../../images';
 
 const memoTypes = new Map([

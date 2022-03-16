@@ -1,6 +1,6 @@
 import directory from 'stellarterm-directory';
 import req from './req';
-import Event from '../Event';
+import Event from '../helpers/Event';
 import * as EnvConsts from '../../env-consts';
 import { postWithCancel } from './request';
 import { getEndpoint } from './endpoints';

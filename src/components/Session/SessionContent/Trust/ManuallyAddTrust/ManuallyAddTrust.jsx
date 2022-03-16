@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import _ from 'lodash';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AssetRow from '../../../../Common/AssetRow/AssetRow';
 
 export default class ManuallyAddTrust extends React.Component {

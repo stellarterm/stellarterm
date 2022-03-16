@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
-import Driver from '../../../../lib/Driver';
-import { isHttpConnectionUsed } from '../../../../lib/BrowserSupport';
+import Driver from '../../../../lib/driver/Driver';
+import { isHttpConnectionUsed } from '../../../../lib/helpers/BrowserSupport';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
 import HiddenDescription from '../Common/HiddenDescription';
 import LedgerForm from './LedgerForm/LedgerForm';

@@ -1,5 +1,5 @@
-import { getOnClickAction, getOperationToastTemplate } from '../../components/ToastTemplate/AccountEventsTemplates';
-import Event from '../Event';
+import { getOnClickAction, getOperationToastTemplate } from '../../../components/ToastTemplate/AccountEventsTemplates';
+import Event from '../../helpers/Event';
 
 export default class AccountEvents {
     constructor(driver) {

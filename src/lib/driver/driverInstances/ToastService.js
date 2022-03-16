@@ -1,4 +1,4 @@
-import Event from '../Event';
+import Event from '../../helpers/Event';
 
 export const TOAST_CONTENT_TYPES = {
     default: 'default',

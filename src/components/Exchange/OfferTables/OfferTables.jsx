@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import OfferTable from './OfferTable/OfferTable';
 
 export default class OfferTables extends React.Component {

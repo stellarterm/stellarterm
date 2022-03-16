@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../../lib/Driver';
-import Printify from '../../../../../../lib/Printify';
-import { get24hChangePercent } from '../../../../../../lib/Format';
+import Driver from '../../../../../../lib/driver/Driver';
+import Printify from '../../../../../../lib/helpers/Printify';
+import { get24hChangePercent } from '../../../../../../lib/helpers/Format';
 import PercentChange from '../../../../../Basics/PercentChange/PercentChange';
 import AssetCardMain from '../../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
 import AssetActionButtons from '../AssetActionButtons';
 import processBalances from './processBalances';
-import { SESSION_EVENTS, SESSION_STATE } from '../../../../../../lib/constants';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../../../../lib/constants/sessionConstants';
 
 
 export default function BalancesTable(props) {

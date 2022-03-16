@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import OperationsMap from './OperationsMap';
 import AssetCardInRow from '../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import Printify from '../../../lib/Printify';
-import Driver from '../../../lib/Driver';
+import Printify from '../../../lib/helpers/Printify';
+import Driver from '../../../lib/driver/Driver';
 
 export default class TransactionDetails extends React.Component {
     static generateTableRow(label, content) {
@@ -17,7 +17,7 @@ export default class TransactionDetails extends React.Component {
 
     static getOperationAttr(op, d) {
         return Object.keys(op)
-            .map((attr) => {
+            .map(attr => {
                 const value = op[attr];
 
                 let AttrObj = {
@@ -79,23 +79,23 @@ export default class TransactionDetails extends React.Component {
 
     static getOperationLabel(op) {
         switch (op.type) {
-        case 'changeTrust':
-            return parseFloat(op.limit) === 0 ? 'Remove Asset' : 'Accept Asset';
-        case 'manageOffer':
-            return parseFloat(op.amount) === 0 ? 'Delete Offer' : 'Manage Offer';
-        case 'manageBuyOffer':
-            return parseFloat(op.buyAmount) === 0 ? 'Delete Offer' : 'Manage Offer';
-        case 'manageSellOffer':
-            return parseFloat(op.amount) === 0 ? 'Delete Offer' : 'Manage Offer';
-        default:
-            break;
+            case 'changeTrust':
+                return parseFloat(op.limit) === 0 ? 'Remove Asset' : 'Accept Asset';
+            case 'manageOffer':
+                return parseFloat(op.amount) === 0 ? 'Delete Offer' : 'Manage Offer';
+            case 'manageBuyOffer':
+                return parseFloat(op.buyAmount) === 0 ? 'Delete Offer' : 'Manage Offer';
+            case 'manageSellOffer':
+                return parseFloat(op.amount) === 0 ? 'Delete Offer' : 'Manage Offer';
+            default:
+                break;
         }
         return OperationsMap[op.type].label;
     }
 
     getOperations() {
         const { tx, d } = this.props;
-        return tx.operations.map((op) => {
+        return tx.operations.map(op => {
             if (op.type === 'bumpSequence') {
                 return null;
             }
@@ -104,7 +104,7 @@ export default class TransactionDetails extends React.Component {
             const isDeleteOffer = label === 'Delete Offer';
             const isManageData = label === 'Manage Data';
 
-            const attributesUi = isManageData ? op.name : attributes.map((attribute) => {
+            const attributesUi = isManageData ? op.name : attributes.map(attribute => {
                 const hideDeleteItems = attribute.name === 'amount' || attribute.name === 'price';
 
                 return isDeleteOffer && hideDeleteItems ? null : (

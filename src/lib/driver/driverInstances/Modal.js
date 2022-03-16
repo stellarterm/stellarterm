@@ -1,4 +1,4 @@
-import Event from '../Event';
+import Event from '../../helpers/Event';
 
 export default function Modal() {
     this.event = new Event();

@@ -17,6 +17,7 @@
 @import "./ChooseTransferServer/ChooseTransferServer";
 @import "ClaimableBalanceDetails/ClaimableBalanceDetails";
 @import "WalletConnectSessionRequestModal/WalletConnectSessionRequestModal";
+@import "SignChallengeWithMultisig/SignChallengeWithMultisig";
 
 .GlobalModalBackdrop {
   // This div fills up the whole screen, relative to where the user is scrolled to

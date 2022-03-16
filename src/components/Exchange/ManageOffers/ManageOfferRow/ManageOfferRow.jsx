@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
-import { TX_STATUS } from '../../../../lib/constants';
+import Driver from '../../../../lib/driver/Driver';
+import { TX_STATUS } from '../../../../lib/constants/sessionConstants';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {

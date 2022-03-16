@@ -1,7 +1,7 @@
 import WalletConnectClient, { CLIENT_EVENTS } from '@walletconnect/client';
 import * as StellarSdk from 'stellar-sdk';
-import { AUTH_TYPE, TX_STATUS } from '../constants';
-import Sep7Handler from '../../components/HomePage/Sep7Handler/Sep7Handler';
+import { AUTH_TYPE, TX_STATUS } from '../../constants/sessionConstants';
+import Sep7Handler from '../../../components/HomePage/Sep7Handler/Sep7Handler';
 
 
 const METADATA = {

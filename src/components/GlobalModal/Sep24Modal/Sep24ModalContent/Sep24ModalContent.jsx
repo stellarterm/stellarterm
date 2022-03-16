@@ -2,15 +2,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import Sep24ModalFooter from '../Common/Sep24ModalFooter/Sep24ModalFooter';
-import { getTransferServerInfo, sep24Request, getTransaction } from '../../../../lib/SepUtils';
+import { getTransferServerInfo, sep24Request, getTransaction } from '../../../../lib/helpers/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
 import TransactionContent from '../TransactionContent/TransactionContent';
 import FeeBlock from '../Common/FeeBlock';
 import MinMaxAmount from '../Common/MinMaxAmount';
 import AssetBalance from '../AssetBalance/AssetBalance';
-import { AUTH_TYPE } from '../../../../lib/constants';
+import { AUTH_TYPE } from '../../../../lib/constants/sessionConstants';
+import SignChallengeBlock from '../../../Common/SignChallengeBlock/SignChallengeBlock';
 
 export default class Sep24ModalContent extends React.Component {
     constructor(props) {
@@ -35,6 +36,7 @@ export default class Sep24ModalContent extends React.Component {
                 asset_code: this.props.asset.code,
                 account: this.props.d.session.account.accountId(),
             },
+            showGetTokenFlow: false,
         };
 
         this.callbackHandler = this.callbackHandler.bind(this);
@@ -62,6 +64,76 @@ export default class Sep24ModalContent extends React.Component {
     componentWillUnmount() {
         clearTimeout(this.pollingTimeout);
         window.removeEventListener('message', this.callbackHandler, false);
+    }
+
+
+    async getJwtToken(endpoint) {
+        const { d } = this.props;
+
+        const tokenFromCache = d.session.handlers.getTokenFromCache(endpoint);
+
+        if (tokenFromCache) { return tokenFromCache; }
+
+        let challengeTx = await d.session.handlers.getAuthChallengeTx(endpoint, this.NETWORK_PASSPHRASE);
+
+        if (d.multisig.isMultisigEnabled && d.multisig.isMoreSignaturesNeeded(challengeTx)) {
+            challengeTx = await this.getSignedBySignersChallenge(challengeTx);
+        }
+
+        const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
+
+        if (isLedger) {
+            d.modal.handlers.finish();
+        }
+        const { signedTx } = await d.session.handlers.sign(challengeTx);
+
+        const token = await d.session.handlers.getToken(endpoint, signedTx);
+
+        return token;
+    }
+
+    async getSignedBySignersChallenge(tx) {
+        this.challengeTx = tx;
+        const promise = new Promise(resolve => {
+            this.signedChallengeResolver = resolve;
+        });
+        this.setState({ showGetTokenFlow: true });
+
+        return promise.then(signedTx => {
+            this.setState({ showGetTokenFlow: false });
+            return signedTx;
+        });
+    }
+
+    initSep24() {
+        const { d, isDeposit, asset } = this.props;
+        const { requestParams, transaction } = this.state;
+
+        const params = { account: requestParams.account };
+        const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
+
+        if (this.jwtToken) {
+            if (transaction) { return Promise.resolve(); }
+            return sep24Request(this.TRANSFER_SERVER_SEP0024, isDeposit, this.jwtToken, requestParams);
+        }
+
+        return this.getJwtToken(jwtEndpointUrl)
+            .then(token => {
+                const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
+                if (isLedger) {
+                    d.modal.nextModalName = 'Sep24Modal';
+                    d.modal.nextModalData = {
+                        isDeposit,
+                        asset,
+                        jwtToken: token,
+                        transferServer: this.props.transferServer,
+                    };
+                    return null;
+                }
+                this.jwtToken = token;
+                if (transaction) { return token; }
+                return sep24Request(this.TRANSFER_SERVER_SEP0024, isDeposit, this.jwtToken, requestParams);
+            });
     }
 
     createNewTransaction(immediatelyStart) {
@@ -102,49 +174,6 @@ export default class Sep24ModalContent extends React.Component {
                     reqErrorMsg: (data && data.error) ? data.error : `Failed to obtain ${isDeposit ? 'deposit' : 'withdraw'} details for this asset!`,
                 });
             });
-    }
-
-    initSep24() {
-        const { d, asset, isDeposit } = this.props;
-        const { requestParams, transaction } = this.state;
-
-        const params = { account: requestParams.account };
-        const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
-
-        const isLedgerJwtNeeded = (d.session.authType === AUTH_TYPE.LEDGER)
-            && this.jwtToken === null;
-
-        const isLedgerJwtReceived = d.session.authType === AUTH_TYPE.LEDGER && this.jwtToken !== null;
-
-        const isFreighterJwtReceived = d.session.authType === AUTH_TYPE.FREIGHTER && this.jwtToken !== null;
-
-        // Reopen ledger popup for jwt auth, if needed
-        if (isLedgerJwtNeeded) {
-            d.modal.handlers.finish();
-
-            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
-                d.modal.nextModalName = 'Sep24Modal';
-                d.modal.nextModalData = {
-                    isDeposit,
-                    asset,
-                    jwtToken: token,
-                    transferServer: this.props.transferServer,
-                };
-            });
-        }
-
-        // If ledger or Freighter auth, and jwt already recieved, init sep24
-        if (isLedgerJwtReceived || isFreighterJwtReceived) {
-            if (transaction) { return Promise.resolve(); }
-            return sep24Request(this.TRANSFER_SERVER_SEP0024, isDeposit, this.jwtToken, requestParams);
-        }
-
-        // Else init sep24 transaction
-        return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
-            this.jwtToken = token;
-            if (transaction) { return token; }
-            return sep24Request(this.TRANSFER_SERVER_SEP0024, isDeposit, this.jwtToken, requestParams);
-        });
     }
 
     fetchTransaction() {
@@ -219,7 +248,7 @@ export default class Sep24ModalContent extends React.Component {
     }
 
     render() {
-        const { reqErrorMsg, isLoading, transaction, assetDisabled, windowClosed } = this.state;
+        const { reqErrorMsg, isLoading, transaction, assetDisabled, windowClosed, showGetTokenFlow } = this.state;
         const { d, asset, isDeposit, noActionBtn } = this.props;
         const isAnyError = reqErrorMsg !== null;
 
@@ -237,6 +266,20 @@ export default class Sep24ModalContent extends React.Component {
                 openAnchorWindow={() => this.openAnchorWindow()}
             />
         );
+
+        if (showGetTokenFlow) {
+            return (
+                <React.Fragment>
+                    <AssetBalance d={d} asset={asset} transaction={transaction} isDeposit={isDeposit} />
+
+                    <SignChallengeBlock
+                        d={d}
+                        signedChallengeResolver={this.signedChallengeResolver}
+                        challengeTx={this.challengeTx}
+                    />
+                </React.Fragment>
+            );
+        }
 
         if ((isAnyError || assetDisabled) && !isLoading) {
             return (

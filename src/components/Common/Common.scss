@@ -12,6 +12,7 @@
 @import './Generic/Generic';
 @import './AppPopover/AppPopover';
 @import './InfoBlock/InfoBlock';
+@import './SignChallengeBlock/SignChallengeBlock';
 
 @mixin textEllipsis {
     overflow: hidden;

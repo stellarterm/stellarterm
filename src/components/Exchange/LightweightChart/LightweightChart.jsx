@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Debounce from 'awesome-debounce-promise';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import images from '../../../images';
 import {
     CrosshairMode,

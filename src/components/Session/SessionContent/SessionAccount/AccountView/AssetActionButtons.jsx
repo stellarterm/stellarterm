@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import images from '../../../../../images';
-import Stellarify from '../../../../../lib/Stellarify';
-import { getTransferDomain, checkAssetSettings, getTransferServer } from '../../../../../lib/SepUtils';
-import { UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants';
+import Stellarify from '../../../../../lib/helpers/Stellarify';
+import { getTransferDomain, checkAssetSettings, getTransferServer } from '../../../../../lib/helpers/SepUtils';
+import { UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants/sessionConstants';
 
 export default class AssetActionButtons extends React.Component {
     static getBuyLumensLink(isXLMNative) {

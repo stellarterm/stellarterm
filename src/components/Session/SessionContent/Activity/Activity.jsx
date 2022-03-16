@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import NotFound from '../../../NotFound/NotFound';
 import ActivityNavMenu from './ActivitityNavMenu/ActivityNavMenu';
 import ActivityOpenOrders from './ActivityOpenOrders/ActivityOpenOrders';
