@@ -34,7 +34,7 @@ export default class WalletConnectService {
         }
         this.client = await WalletConnectClient.init({
             // logger: 'debug',
-            relayProvider: 'wss://relay.walletconnect.org',
+            projectId: process.env.WC_KEY,
         });
 
         // there is a problem with updating the states in wallet connect, a small timeout solves this problem
