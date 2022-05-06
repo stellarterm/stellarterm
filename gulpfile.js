@@ -185,6 +185,7 @@ const bundler = watchify(browserify({
     },
 }).transform(babelify.configure({
     presets: ['@babel/preset-env', '@babel/preset-react'],
+    compact: true,
 })));
 
 if (process.env.WC_KEY) {
@@ -289,6 +290,7 @@ gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
     .pipe(babel({
         presets: ['@babel/preset-env'],
+        compact: true,
     }))
     .pipe($.uglify())
     .pipe(gulp.dest('dist/scripts')));
