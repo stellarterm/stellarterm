@@ -362,7 +362,7 @@ const MagicSpoon = {
 
         sdkAccount.maxLumenSpend = () => {
             const balance = sdkAccount.getLumenBalance();
-            const extraFeeReserve = 0.01;
+            const extraFeeReserve = 0.022;
             const reserve = sdkAccount.calculatePaddedReserve() + extraFeeReserve;
             if (reserve > balance) {
                 return 0;
