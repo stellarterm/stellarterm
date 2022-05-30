@@ -31,6 +31,20 @@ exports.niceRound = function niceRound(input) {
         : _.round(input, exports.niceNumDecimals(input));
 };
 
+exports.formatNumber = function formatNumber(input) {
+    return input.toLocaleString('en-US', {
+        maximumFractionDigits: 7,
+    });
+};
+
+exports.roundAndFormat = function roundAndFormat(input) {
+    const rounded = exports.niceRound(input);
+
+    return rounded.toLocaleString('en-US', {
+        maximumFractionDigits: 7,
+    });
+};
+
 exports.getCurrentYear = function getCurrentYear() {
     return new Date().getFullYear();
 };

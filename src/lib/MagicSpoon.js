@@ -411,6 +411,7 @@ const MagicSpoon = {
         this.ready = false;
         // Initial orderbook load
         Server.orderbook(baseBuying, counterSelling)
+            .limit(200)
             .call()
             .then(orderbook => {
                 this.asks = orderbook.asks;
@@ -422,7 +423,7 @@ const MagicSpoon = {
                 onUpdate();
             });
 
-        this.closeOrderbookStream = Server.orderbook(baseBuying, counterSelling).stream({
+        this.closeOrderbookStream = Server.orderbook(baseBuying, counterSelling).limit(200).stream({
             onmessage: res => {
                 let updated = false;
                 if (!_.isEqual(this.bids, res.bids)) {
