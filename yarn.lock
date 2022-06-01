@@ -9921,9 +9921,9 @@ stellar-sdk@9.1.0:
     urijs "^1.19.1"
     utility-types "^3.7.0"
 
-"stellarterm-api@git+https://github.com/stellarterm/stellarterm-api.git#node-12":
+"stellarterm-api@git+https://github.com/stellarterm/stellarterm-api.git":
   version "1.0.0"
-  resolved "git+https://github.com/stellarterm/stellarterm-api.git#c8039e26e936d6443e82676ea6fe8f0e73155ae7"
+  resolved "git+https://github.com/stellarterm/stellarterm-api.git#bde4640c6875eb56a9d3b8ec94e4bf125d8ecd9f"
   dependencies:
     aws-sdk "^2.465.0"
     bluebird "^3.5.0"
@@ -9934,11 +9934,11 @@ stellar-sdk@9.1.0:
     request "^2.88.0"
     request-promise "^4.2.1"
     stellar-sdk "8.0.0"
-    stellarterm-directory "git+https://github.com/stellarterm/stellarterm-directory.git#node-12"
+    stellarterm-directory "git+https://github.com/stellarterm/stellarterm-directory.git"
 
-"stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git#node-12":
+"stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git":
   version "2.0.0"
-  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#b3199efd5a83c2e50644ce167aec4dd10ca1ce1d"
+  resolved "git+https://github.com/stellarterm/stellarterm-directory.git#eb2ec6fedc47d0599e784e6995de665d7d78c954"
 
 stream-browserify@^2.0.0:
   version "2.0.2"

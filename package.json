@@ -43,8 +43,8 @@
     "screenfull": "^4.2.1",
     "stellar-identicon-js": "^1.0.0",
     "stellar-sdk": "9.1.0",
-    "stellarterm-api": "git+https://github.com/stellarterm/stellarterm-api.git#node-12",
-    "stellarterm-directory": "git+https://github.com/stellarterm/stellarterm-directory.git#node-12",
+    "stellarterm-api": "git+https://github.com/stellarterm/stellarterm-api.git",
+    "stellarterm-directory": "git+https://github.com/stellarterm/stellarterm-directory.git",
     "trezor-connect": "8.2.4-extended",
     "whatwg-fetch": "2.0.4",
     "yargs": "^12.0.5"
