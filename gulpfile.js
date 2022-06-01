@@ -189,7 +189,6 @@ const bundler = watchify(browserify({
 })));
 
 if (process.env.WC_KEY) {
-    console.log('FOUNDED IN ENV');
     bundler.transform('envify', {
         WC_KEY: process.env.WC_KEY,
     });
@@ -200,7 +199,6 @@ try {
         // eslint-disable-next-line import/no-unresolved,global-require
         const wcKey = require('./.wc-key.json');
         // eslint-disable-next-line no-return-assign,consistent-return
-        console.log('FOUNDED IN FILE');
         bundler.transform('envify', {
             WC_KEY: wcKey.WC_KEY,
         });
