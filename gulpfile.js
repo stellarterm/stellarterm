@@ -24,7 +24,6 @@ const fs = require('fs');
 const execSync = require('child_process').execSync;
 const argv = require('yargs').argv;
 const config = require('./env-config.json');
-const envify = require('envify');
 
 try {
     // !You need to add coin market cup key to your environment
@@ -187,25 +186,6 @@ const bundler = watchify(browserify({
     presets: ['@babel/preset-env', '@babel/preset-react'],
     compact: true,
 })));
-
-if (process.env.WC_KEY) {
-    bundler.transform('envify', {
-        WC_KEY: process.env.WC_KEY,
-    });
-}
-
-try {
-    if (!process.env.WC_KEY) {
-        // eslint-disable-next-line import/no-unresolved,global-require
-        const wcKey = require('./.wc-key.json');
-        // eslint-disable-next-line no-return-assign,consistent-return
-        bundler.transform('envify', {
-            WC_KEY: wcKey.WC_KEY,
-        });
-    }
-} catch (e) {
-    throw new Error('');
-}
 
 
 const rebundle = () => bundler.bundle()
