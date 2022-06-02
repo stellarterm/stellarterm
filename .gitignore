@@ -22,5 +22,3 @@ directory/directory.json
 api/setEnvironment.sh
 api/setStagingEnvironment.sh
 /cmc-key.js
-
-.wc-key.json

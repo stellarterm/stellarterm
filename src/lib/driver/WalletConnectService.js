@@ -3,6 +3,7 @@ import * as StellarSdk from 'stellar-sdk';
 import { AUTH_TYPE, TX_STATUS } from '../constants';
 import Sep7Handler from '../../components/HomePage/Sep7Handler/Sep7Handler';
 
+const PROJECT_ID = '2b3adbd81527ef317a8e791759d34d20';
 
 const METADATA = {
     name: 'StellarTerm',
@@ -34,7 +35,7 @@ export default class WalletConnectService {
         }
         this.client = await WalletConnectClient.init({
             // logger: 'debug',
-            projectId: process.env.WC_KEY,
+            projectId: PROJECT_ID,
         });
 
         // there is a problem with updating the states in wallet connect, a small timeout solves this problem
