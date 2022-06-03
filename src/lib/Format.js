@@ -28,6 +28,20 @@ exports.niceRound = function niceRound(input) {
     return _.round(input, decimal);
 };
 
+exports.formatNumber = function formatNumber(input) {
+    return input.toLocaleString('en-US', {
+        maximumFractionDigits: 7,
+    });
+};
+
+exports.roundAndFormat = function roundAndFormat(input) {
+    const rounded = exports.niceRound(input);
+
+    return rounded.toLocaleString('en-US', {
+        maximumFractionDigits: 7,
+    });
+};
+
 exports.getCurrentYear = function getCurrentYear() {
     return new Date().getFullYear();
 };

@@ -20,6 +20,7 @@ import LightweightChart from './LightweightChart/LightweightChart';
 import MarketsHistory from './MarketsHistory/MarketsHistory';
 import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
+import DepthChart from './DepthChart/DepthChart';
 
 const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
@@ -311,6 +312,7 @@ export default class Exchange extends React.Component {
         const pairName = `${baseBuying.code}/${counterSelling.code}`;
         const isOrderbookTab = marketType === 'orderbook';
         const isHistoryTab = marketType === 'history';
+        const isDepthTab = marketType === 'depth';
         const pairPickerClass = `so-back islandBack islandBack--t ${fullscreenMode ? 'hidden-pair' : ''}`;
         const uniqPairKey = Stellarify.pairToExchangeUrl(baseBuying, counterSelling);
 
@@ -368,6 +370,12 @@ export default class Exchange extends React.Component {
                                     <span>Orderbook</span>
                                 </a>
                                 <a
+                                    onClick={() => this.setState({ marketType: 'depth' })}
+                                    className={isDepthTab ? 'active_Tab' : ''}
+                                >
+                                    <span>Market depth</span>
+                                </a>
+                                <a
                                     onClick={() => this.setState({ marketType: 'history' })}
                                     className={isHistoryTab ? 'active_Tab' : ''}
                                 >
@@ -377,6 +385,7 @@ export default class Exchange extends React.Component {
                         </div>
                         {isOrderbookTab ? <OfferTables d={this.props.d} /> : null}
                         {isHistoryTab ? <MarketsHistory d={this.props.d} /> : null}
+                        {isDepthTab ? <DepthChart d={this.props.d} /> : null}
                     </div>
                 </div>
 
