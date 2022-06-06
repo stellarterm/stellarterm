@@ -42,7 +42,7 @@
     "react-virtualized": "^9.21.1",
     "screenfull": "^4.2.1",
     "stellar-identicon-js": "^1.0.0",
-    "stellar-sdk": "10.1.0",
+    "stellar-sdk": "10.1.2",
     "stellarterm-api": "git+https://github.com/stellarterm/stellarterm-api.git",
     "stellarterm-directory": "git+https://github.com/stellarterm/stellarterm-directory.git",
     "trezor-connect": "8.2.4-extended",
