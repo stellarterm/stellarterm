@@ -19,10 +19,8 @@ const DepthChart = ({ d }) => {
         );
     }
 
-    const { asks, bids } = processOrderbook(asksFromHorizon, bidsFromHorizon);
-
     // check for a thin orderbook
-    if (asks.length < 2 || bids.length < 2) {
+    if (asksFromHorizon.length < 2 || bidsFromHorizon.length < 2) {
         return (
             <div className="OfferTables">
                 <div className="island__sub__division">
@@ -31,6 +29,8 @@ const DepthChart = ({ d }) => {
             </div>
         );
     }
+
+    const { asks, bids } = processOrderbook(asksFromHorizon, bidsFromHorizon);
 
     useEffect(() => {
         const chartInstance = new DepthChartD3(baseBuying, counterSelling);
