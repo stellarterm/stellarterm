@@ -16,6 +16,8 @@ import WalletConnectService from './driver/WalletConnectService';
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
 function Driver() {
+    this.isOnline = true;
+
     this.horizonServer = new HorizonServer(this);
     this.ticker = new Ticker();
     this.session = new Session(this);

@@ -170,6 +170,8 @@ const bundler = watchify(browserify({
     entries: [
         './src/components/App.jsx',
         './node_modules/lightweight-charts',
+        './node_modules/@walletconnect/jsonrpc-ws-connection/node_modules/@walletconnect/jsonrpc-utils/dist/esm/index.js',
+        './node_modules/@walletconnect/jsonrpc-provider/node_modules/@walletconnect/jsonrpc-utils/dist/esm/index.js',
     ],
     extensions: ['.jsx', '.js'],
     debug: true,
