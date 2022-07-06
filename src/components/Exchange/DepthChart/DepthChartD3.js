@@ -74,6 +74,8 @@ export default class DepthChartD3 {
         this.dotsGroup = null;
         this.asksLine = null;
         this.bidsLine = null;
+        this.asksPath = null;
+        this.bidsPath = null;
 
 
         this.cachedPosition = null;
@@ -86,8 +88,8 @@ export default class DepthChartD3 {
         this.scaleX = d3.scalePow().range([0, this.xAxisLength]);
         this.scaleY = d3.scaleLinear().range([0, this.yAxisLength]);
 
-        this.axisX = d3.axisBottom().scale(this.scaleX);
-        this.axisY = d3.axisLeft().scale(this.scaleY);
+        this.axisX = d3.axisBottom().tickFormat(e => roundAndFormat(e, true)).scale(this.scaleX);
+        this.axisY = d3.axisLeft().tickFormat(e => roundAndFormat(e, true)).scale(this.scaleY);
 
         this.line = d3.line()
             .x(data => this.scaleX(getPriceValue(data)) + MARGIN_LEFT)
@@ -156,17 +158,27 @@ export default class DepthChartD3 {
 
         this.asksLine = this.svg
             .append('path')
-            .attr('class', 'asksLine')
-            .attr('fill', 'url(#asksGradient)')
+            .attr('fill', 'transparent')
             .attr('stroke', ASKS_LINE_COLOR)
             .attr('stroke-width', LINE_CHART_STROKE_WIDTH);
 
+        this.asksPath = this.svg
+            .append('path')
+            .attr('fill', 'url(#asksGradient)')
+            .attr('stroke', 'transparent')
+            .attr('stroke-width', 0);
+
         this.bidsLine = this.svg
             .append('path')
-            .attr('class', 'bidsLine')
-            .attr('fill', 'url(#bidsGradient)')
+            .attr('fill', 'transparent')
             .attr('stroke', BIDS_LINE_COLOR)
             .attr('stroke-width', LINE_CHART_STROKE_WIDTH);
+
+        this.bidsPath = this.svg
+            .append('path')
+            .attr('fill', 'url(#bidsGradient)')
+            .attr('stroke', 'transparent')
+            .attr('stroke-width', 0);
 
         // ===========================================================
         // add crossHair
@@ -393,6 +405,9 @@ export default class DepthChartD3 {
             .attr('y1', 0)
             .attr('x2', this.xAxisLength)
             .attr('y2', 0);
+
+        d3.selectAll('g.x-axis g.tick text')
+            .attr('dy', 19);
     }
     _updateBidsLine() {
         if (!this.bids.length) {
@@ -403,6 +418,11 @@ export default class DepthChartD3 {
             .transition()
             .duration(this.animationDuration)
             .attr('d', () => this._getBidsLine(this.bids));
+
+        this.bidsPath
+            .transition()
+            .duration(this.animationDuration)
+            .attr('d', () => this._getBidsPath(this.bids));
 
 
         const dotsData = this.bids.filter(bid =>
@@ -428,9 +448,14 @@ export default class DepthChartD3 {
             );
     }
 
-    _getBidsLine(data) {
+    _getBidsPath(data) {
         const lineValues = this.line(data).slice(1);
         return `M${MARGIN_LEFT},${HEIGHT - MARGIN_BOTTOM}, ${lineValues},V${HEIGHT - MARGIN_BOTTOM}`;
+    }
+
+    _getBidsLine(data) {
+        const lineValues = this.line(data).slice(1);
+        return `M${lineValues}`;
     }
 
     _updateAsksLine() {
@@ -442,6 +467,12 @@ export default class DepthChartD3 {
             .transition()
             .duration(this.animationDuration)
             .attr('d', () => this._getAsksLine(this.asks));
+
+
+        this.asksPath
+            .transition()
+            .duration(this.animationDuration)
+            .attr('d', () => this._getAsksPath(this.asks));
 
         const dotsData = this.asks.filter(ask =>
             (getPriceValue(ask) * Number(ask.amount)) / this.asks[this.asks.length - 1].sum >= CIRCLE_THRESHOLD,
@@ -466,11 +497,17 @@ export default class DepthChartD3 {
             );
     }
 
-    _getAsksLine(data) {
+    _getAsksPath(data) {
         const lineValues = this.line(data).slice(1);
         const splitedValues = lineValues.split(',');
 
         return `M${splitedValues[0]},${HEIGHT - MARGIN_BOTTOM},${lineValues},l0,${HEIGHT - MARGIN_BOTTOM - splitedValues[splitedValues.length - 1]}`;
+    }
+
+    _getAsksLine(data) {
+        const lineValues = this.line(data).slice(1);
+
+        return `M${lineValues}`;
     }
 
     _addMouseListeners() {
@@ -565,13 +602,13 @@ export default class DepthChartD3 {
         this.tooltipX.style('display', 'block').attr('x', `${xCoord}`).text();
 
         this.tooltipX.style('display', 'block').attr('transform', `translate(${xCoord},${HEIGHT - MARGIN_BOTTOM})`);
-        tooltipXText.text(roundAndFormat(this.scaleX.invert(xCoord - MARGIN_LEFT)));
+        tooltipXText.text(roundAndFormat(this.scaleX.invert(xCoord - MARGIN_LEFT), true));
         const { width: w1, height: h1 } = tooltipXText.node().getBBox();
         tooltipXText.attr('transform', `translate(${-w1 / 2},${h1 + (AXIS_TOOLTIP_OFFSET / 2)})`);
         tooltipXPath.attr('d', getBottomTooltipPathD(w1 + AXIS_TOOLTIP_OFFSET, h1 + AXIS_TOOLTIP_OFFSET, AXIS_TOOLTIP_MARGIN, AXIS_TOOLTIP_BORDER_RADIUS, AXIS_TOOLTIP_TRIANGLE_SIZE));
 
         this.tooltipY.style('display', 'block').attr('transform', `translate(${MARGIN_LEFT},${yCoord})`);
-        tooltipYText.text(roundAndFormat(this.scaleY.invert(yCoord - MARGIN_TOP)));
+        tooltipYText.text(roundAndFormat(this.scaleY.invert(yCoord - MARGIN_TOP), true));
         const { width: w2, height: h2 } = tooltipYText.node().getBBox();
         tooltipYText.attr('transform', `translate(${-w2 - AXIS_TOOLTIP_OFFSET},${(h2 / 2) - (AXIS_TOOLTIP_OFFSET / 2)})`);
         tooltipYPath.attr('d', getLeftTooltipPathD(w2 + AXIS_TOOLTIP_OFFSET, h2 + AXIS_TOOLTIP_OFFSET, AXIS_TOOLTIP_MARGIN, AXIS_TOOLTIP_BORDER_RADIUS, AXIS_TOOLTIP_TRIANGLE_SIZE));
@@ -583,7 +620,7 @@ export default class DepthChartD3 {
         const yCoord = this.scaleY(ask.sum) + MARGIN_TOP;
 
         this.focusAsks.style('display', 'block').attr('transform', `translate(${xCoord},${yCoord})`);
-        this.textAsks.selectAll('.asksPriceValue').text(formatNumber(ask.price));
+        this.textAsks.selectAll('.asksPriceValue').text(`${formatNumber(ask.price)} ${this.baseBuying.code}`);
         this.textAsks.selectAll('.asksAmountValue').text(`${roundAndFormat(ask.amount)} ${this.baseBuying.code}`);
         this.textAsks.selectAll('.asksSumValue').text(`${roundAndFormat(Number(ask.price) * Number(ask.amount))} ${this.counterSelling.code}`);
         this.textAsks.selectAll('.asksTotalBaseValue').text(`${roundAndFormat(ask.sumReverse)} ${this.baseBuying.code}`);
@@ -641,7 +678,7 @@ export default class DepthChartD3 {
 
         this.focusBids.style('display', 'block').attr('transform', `translate(${xCoord},${yCoord})`);
 
-        this.textBids.selectAll('.bidsPriceValue').text(formatNumber(bid.price));
+        this.textBids.selectAll('.bidsPriceValue').text(`${formatNumber(bid.price)} ${this.baseBuying.code}`);
         this.textBids.selectAll('.bidsAmountValue').text(`${roundAndFormat(bid.amount / bid.price)} ${this.baseBuying.code}`);
         this.textBids.selectAll('.bidsSumValue').text(`${roundAndFormat(Number(bid.amount))} ${this.counterSelling.code}`);
         this.textBids.selectAll('.bidsTotalBaseValue').text(`${roundAndFormat(bid.sumReverse)} ${this.baseBuying.code}`);
