@@ -620,7 +620,7 @@ export default class DepthChartD3 {
         const yCoord = this.scaleY(ask.sum) + MARGIN_TOP;
 
         this.focusAsks.style('display', 'block').attr('transform', `translate(${xCoord},${yCoord})`);
-        this.textAsks.selectAll('.asksPriceValue').text(`${formatNumber(ask.price)} ${this.baseBuying.code}`);
+        this.textAsks.selectAll('.asksPriceValue').text(`${formatNumber(ask.price)} ${this.counterSelling.code}`);
         this.textAsks.selectAll('.asksAmountValue').text(`${roundAndFormat(ask.amount)} ${this.baseBuying.code}`);
         this.textAsks.selectAll('.asksSumValue').text(`${roundAndFormat(Number(ask.price) * Number(ask.amount))} ${this.counterSelling.code}`);
         this.textAsks.selectAll('.asksTotalBaseValue').text(`${roundAndFormat(ask.sumReverse)} ${this.baseBuying.code}`);
@@ -678,7 +678,7 @@ export default class DepthChartD3 {
 
         this.focusBids.style('display', 'block').attr('transform', `translate(${xCoord},${yCoord})`);
 
-        this.textBids.selectAll('.bidsPriceValue').text(`${formatNumber(bid.price)} ${this.baseBuying.code}`);
+        this.textBids.selectAll('.bidsPriceValue').text(`${formatNumber(bid.price)} ${this.counterSelling.code}`);
         this.textBids.selectAll('.bidsAmountValue').text(`${roundAndFormat(bid.amount / bid.price)} ${this.baseBuying.code}`);
         this.textBids.selectAll('.bidsSumValue').text(`${roundAndFormat(Number(bid.amount))} ${this.counterSelling.code}`);
         this.textBids.selectAll('.bidsTotalBaseValue').text(`${roundAndFormat(bid.sumReverse)} ${this.baseBuying.code}`);
