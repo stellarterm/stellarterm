@@ -6,10 +6,11 @@ import {
     AXIS_TOOLTIP_FILL,
     AXIS_TOOLTIP_FONT_SIZE,
     AXIS_TOOLTIP_FONT_WEIGHT,
-    AXIS_TOOLTIP_MARGIN,
     AXIS_TOOLTIP_OFFSET,
     AXIS_TOOLTIP_TEXT_COLOR,
     AXIS_TOOLTIP_TRIANGLE_SIZE,
+    AXIS_TOOLTIP_X_MARGIN,
+    AXIS_TOOLTIP_Y_MARGIN,
     AXIS_Y_INCREASE_COEFFICIENT,
     BIDS_LINE_COLOR,
     CIRCLE_FILL,
@@ -599,19 +600,26 @@ export default class DepthChartD3 {
         const tooltipYText = this.tooltipY.selectAll('.tooltipYText');
         const tooltipYPath = this.tooltipY.selectAll('.tooltipYPath');
 
-        this.tooltipX.style('display', 'block').attr('x', `${xCoord}`).text();
+        this.tooltipX.style('display', 'block').attr('x', `${xCoord}`);
 
         this.tooltipX.style('display', 'block').attr('transform', `translate(${xCoord},${HEIGHT - MARGIN_BOTTOM})`);
         tooltipXText.text(roundAndFormat(this.scaleX.invert(xCoord - MARGIN_LEFT), true));
         const { width: w1, height: h1 } = tooltipXText.node().getBBox();
-        tooltipXText.attr('transform', `translate(${-w1 / 2},${h1 + (AXIS_TOOLTIP_OFFSET / 2)})`);
-        tooltipXPath.attr('d', getBottomTooltipPathD(w1 + AXIS_TOOLTIP_OFFSET, h1 + AXIS_TOOLTIP_OFFSET, AXIS_TOOLTIP_MARGIN, AXIS_TOOLTIP_BORDER_RADIUS, AXIS_TOOLTIP_TRIANGLE_SIZE));
+        tooltipXText.attr('transform', `translate(${-w1 / 2},${AXIS_TOOLTIP_X_MARGIN + AXIS_TOOLTIP_TRIANGLE_SIZE + AXIS_TOOLTIP_OFFSET + (h1 / 2)})`);
+        tooltipXPath.attr('d', getBottomTooltipPathD(w1 + AXIS_TOOLTIP_OFFSET, h1 + AXIS_TOOLTIP_OFFSET, AXIS_TOOLTIP_X_MARGIN, AXIS_TOOLTIP_BORDER_RADIUS, AXIS_TOOLTIP_TRIANGLE_SIZE));
+
+        const rightOffset =
+            this.svg.node().getBoundingClientRect().right - this.tooltipX.node().getBoundingClientRect().right;
+
+        if (rightOffset < 0) {
+            this.tooltipX.attr('transform', `translate(${xCoord + rightOffset},${HEIGHT - MARGIN_BOTTOM})`);
+        }
 
         this.tooltipY.style('display', 'block').attr('transform', `translate(${MARGIN_LEFT},${yCoord})`);
         tooltipYText.text(roundAndFormat(this.scaleY.invert(yCoord - MARGIN_TOP), true));
         const { width: w2, height: h2 } = tooltipYText.node().getBBox();
         tooltipYText.attr('transform', `translate(${-w2 - AXIS_TOOLTIP_OFFSET},${(h2 / 2) - (AXIS_TOOLTIP_OFFSET / 2)})`);
-        tooltipYPath.attr('d', getLeftTooltipPathD(w2 + AXIS_TOOLTIP_OFFSET, h2 + AXIS_TOOLTIP_OFFSET, AXIS_TOOLTIP_MARGIN, AXIS_TOOLTIP_BORDER_RADIUS, AXIS_TOOLTIP_TRIANGLE_SIZE));
+        tooltipYPath.attr('d', getLeftTooltipPathD(w2 + AXIS_TOOLTIP_OFFSET, h2 + AXIS_TOOLTIP_OFFSET, AXIS_TOOLTIP_Y_MARGIN, AXIS_TOOLTIP_BORDER_RADIUS, AXIS_TOOLTIP_TRIANGLE_SIZE));
     }
 
     _addAsksTooltip(index, isInvert) {
