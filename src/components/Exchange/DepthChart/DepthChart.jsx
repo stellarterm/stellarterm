@@ -12,7 +12,7 @@ const EmptyState = () => (
     </div>
 );
 
-const DepthChart = ({ d }) => {
+const DepthChart = ({ d, isLinear }) => {
     const [chart, setChart] = useState(null);
     const [isHidden, setIsHidden] = useState(document.hidden);
     const { asks: asksFromHorizon, bids: bidsFromHorizon, baseBuying, counterSelling } = d.orderbook.data;
@@ -58,8 +58,9 @@ const DepthChart = ({ d }) => {
         chart.updateChart(
             asks,
             bids,
+            isLinear,
         );
-    }, [d.orderbook.data.bids, d.orderbook.data.asks, chart, isHidden]);
+    }, [d.orderbook.data.bids, d.orderbook.data.asks, chart, isHidden, isLinear]);
 
 
     return (
@@ -71,4 +72,5 @@ export default DepthChart;
 
 DepthChart.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
+    isLinear: PropTypes.bool.isRequired,
 };

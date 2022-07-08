@@ -41,7 +41,6 @@ import {
     WIDTH,
 } from './depthChartConstants';
 
-
 const getPriceValue = orderbookItem => (orderbookItem.price_r.n / orderbookItem.price_r.d);
 
 function getLeftTooltipPathD(width, height, marginRight, borderRadius, triangleSize) {
@@ -86,7 +85,7 @@ export default class DepthChartD3 {
         this.xAxisLength = WIDTH - MARGIN_LEFT;
         this.yAxisLength = HEIGHT - MARGIN_TOP - MARGIN_BOTTOM;
 
-        this.scaleX = d3.scalePow().range([0, this.xAxisLength]);
+        this.scaleX = d3.scaleLinear();
         this.scaleY = d3.scaleLinear().range([0, this.yAxisLength]);
 
         this.axisX = d3.axisBottom().tickFormat(e => roundAndFormat(e, true)).scale(this.scaleX);
@@ -258,11 +257,12 @@ export default class DepthChartD3 {
     updateChart(
         asks,
         bids,
+        isLinear,
     ) {
         this.asks = asks;
         this.bids = bids;
 
-        this._updateAxes();
+        this._updateAxes(isLinear);
         this._updateBidsLine();
         this._updateAsksLine();
 
@@ -370,11 +370,30 @@ export default class DepthChartD3 {
         bidsTotalCounterLine.append('tspan').style('font-weight', 'normal').attr('class', 'bidsTotalCounterValue');
     }
 
-    _updateAxes() {
-        this.scaleX.domain([
-            this.bids.length ? getPriceValue(this.bids[0]) : 0,
-            this.asks.length ? getPriceValue(this.asks[this.asks.length - 1]) : 0,
-        ]);
+    _updateAxes(isLinear) {
+        if (isLinear) {
+            this.scaleX.domain([
+                this.bids.length ? getPriceValue(this.bids[0]) : 0,
+                this.asks.length ? getPriceValue(this.asks[this.asks.length - 1]) : 0,
+            ]).range([0, this.xAxisLength]);
+            this.axisX.tickValues(null);
+        } else {
+            const prices = [
+                ...this.bids.map(item => getPriceValue(item)),
+                ...this.asks.map(item => getPriceValue(item)),
+            ];
+
+            const uniq = [...new Set(prices)];
+
+            this.scaleX
+                .domain(uniq)
+                .range(new Array(uniq.length)
+                    .fill()
+                    .map((item, index) => (this.xAxisLength * (index / (uniq.length - 1)))));
+
+            this.axisX.tickValues(uniq.filter((value, index) => !(index % 20)));
+        }
+
         this.scaleY.domain(
             [Math.max(this.asks[this.asks.length - 1].sum, this.bids[0].sum) * AXIS_Y_INCREASE_COEFFICIENT, 0],
         );

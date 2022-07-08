@@ -53,6 +53,7 @@ export default class Exchange extends React.Component {
             showAction: false,
             timeFrame: converterOHLC.FRAME_HOUR,
             scaleMode: PriceScaleMode.Normal,
+            isLinear: true,
         };
         this._handleKeyUp = this._handleKeyUp.bind(this);
         this._escExitFullscreen = this._escExitFullscreen.bind(this);
@@ -306,7 +307,7 @@ export default class Exchange extends React.Component {
             offermakers = <OfferMakers d={this.props.d} />;
         }
 
-        const { chartType, marketType, fullscreenMode, timeFrame, scaleMode, showAction } = this.state;
+        const { chartType, marketType, fullscreenMode, timeFrame, scaleMode, showAction, isLinear } = this.state;
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
         const chartSwitcherPanel = this.getChartSwitcherPanel();
         const pairName = `${baseBuying.code}/${counterSelling.code}`;
@@ -382,10 +383,26 @@ export default class Exchange extends React.Component {
                                     <span>Trades history</span>
                                 </a>
                             </div>
+                            {isDepthTab && <div
+                                className="ListHeader_lowTradable"
+                                onClick={() => {
+                                    this.setState({ isLinear: !isLinear });
+                                }}
+                            >
+                                Linear
+                                <input
+                                    type="checkbox"
+                                    readOnly
+                                    checked={isLinear}
+                                />
+                                <span className="custom-checkbox">
+                                    {isLinear && <img src={images['icon-tick-green']} alt="✓" />}
+                                </span>
+                            </div>}
                         </div>
                         {isOrderbookTab ? <OfferTables d={this.props.d} /> : null}
                         {isHistoryTab ? <MarketsHistory d={this.props.d} /> : null}
-                        {isDepthTab ? <DepthChart d={this.props.d} /> : null}
+                        {isDepthTab ? <DepthChart d={this.props.d} isLinear={isLinear} /> : null}
                     </div>
                 </div>
 
