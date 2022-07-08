@@ -17,7 +17,7 @@ const DepthChart = ({ d }) => {
     const [isHidden, setIsHidden] = useState(document.hidden);
     const { asks: asksFromHorizon, bids: bidsFromHorizon, baseBuying, counterSelling } = d.orderbook.data;
 
-    if (!asksFromHorizon.length && !bidsFromHorizon.length) {
+    if (!asksFromHorizon.length || !bidsFromHorizon.length) {
         return (
             <EmptyState />
         );
