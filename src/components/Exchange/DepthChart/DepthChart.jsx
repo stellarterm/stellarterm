@@ -1,7 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../lib/Driver';
-import processOrderbook from './processOrderbook';
 import DepthChartD3 from './DepthChartD3';
 
 const EmptyState = () => (
@@ -12,21 +10,12 @@ const EmptyState = () => (
     </div>
 );
 
-const DepthChart = ({ d, isLinear }) => {
+const DepthChart = ({ asks, bids, baseBuying, counterSelling, isLinear }) => {
     const [chart, setChart] = useState(null);
     const [isHidden, setIsHidden] = useState(document.hidden);
-    const { asks: asksFromHorizon, bids: bidsFromHorizon, baseBuying, counterSelling } = d.orderbook.data;
-
-    if (!asksFromHorizon.length || !bidsFromHorizon.length) {
-        return (
-            <EmptyState />
-        );
-    }
-
-    const { asks, bids } = processOrderbook(asksFromHorizon, bidsFromHorizon);
 
     // check for a thin orderbook
-    if (asksFromHorizon.length < 2 || bidsFromHorizon.length < 2 || asks.length < 2 || bids.length < 2) {
+    if (asks.length < 2 || bids.length < 2) {
         return (
             <EmptyState />
         );
@@ -60,7 +49,7 @@ const DepthChart = ({ d, isLinear }) => {
             bids,
             isLinear,
         );
-    }, [d.orderbook.data.bids, d.orderbook.data.asks, chart, isHidden, isLinear]);
+    }, [bids, asks, chart, isHidden, isLinear]);
 
 
     return (
@@ -71,6 +60,9 @@ const DepthChart = ({ d, isLinear }) => {
 export default DepthChart;
 
 DepthChart.propTypes = {
-    d: PropTypes.instanceOf(Driver).isRequired,
     isLinear: PropTypes.bool.isRequired,
+    asks: PropTypes.arrayOf(PropTypes.any).isRequired,
+    bids: PropTypes.arrayOf(PropTypes.any).isRequired,
+    baseBuying: PropTypes.objectOf(PropTypes.any).isRequired,
+    counterSelling: PropTypes.objectOf(PropTypes.any).isRequired,
 };

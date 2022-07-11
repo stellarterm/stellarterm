@@ -21,6 +21,7 @@ import MarketsHistory from './MarketsHistory/MarketsHistory';
 import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
 import DepthChart from './DepthChart/DepthChart';
+import processOrderbook from './DepthChart/processOrderbook';
 
 const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
@@ -308,7 +309,8 @@ export default class Exchange extends React.Component {
         }
 
         const { chartType, marketType, fullscreenMode, timeFrame, scaleMode, showAction, isLinear } = this.state;
-        const { baseBuying, counterSelling } = this.props.d.orderbook.data;
+        const { baseBuying, counterSelling, asks: asksFromHorizon, bids: bidsFromHorizon } =
+            this.props.d.orderbook.data;
         const chartSwitcherPanel = this.getChartSwitcherPanel();
         const pairName = `${baseBuying.code}/${counterSelling.code}`;
         const isOrderbookTab = marketType === 'orderbook';
@@ -316,6 +318,13 @@ export default class Exchange extends React.Component {
         const isDepthTab = marketType === 'depth';
         const pairPickerClass = `so-back islandBack islandBack--t ${fullscreenMode ? 'hidden-pair' : ''}`;
         const uniqPairKey = Stellarify.pairToExchangeUrl(baseBuying, counterSelling);
+
+        const isThinOrderbook = !asksFromHorizon.length || !bidsFromHorizon.length;
+        const { asks = [], bids = [] } =
+            (isDepthTab && !isThinOrderbook) ? processOrderbook(asksFromHorizon, bidsFromHorizon) : {};
+
+        const showLinearCheckbox = (isDepthTab && asks.length > 1 && bids.length > 1);
+
 
         return (
             <div key={uniqPairKey}>
@@ -383,7 +392,7 @@ export default class Exchange extends React.Component {
                                     <span>Trades history</span>
                                 </a>
                             </div>
-                            {isDepthTab && <div
+                            {showLinearCheckbox && <div
                                 className="ListHeader_lowTradable"
                                 onClick={() => {
                                     this.setState({ isLinear: !isLinear });
@@ -402,7 +411,14 @@ export default class Exchange extends React.Component {
                         </div>
                         {isOrderbookTab ? <OfferTables d={this.props.d} /> : null}
                         {isHistoryTab ? <MarketsHistory d={this.props.d} /> : null}
-                        {isDepthTab ? <DepthChart d={this.props.d} isLinear={isLinear} /> : null}
+                        {isDepthTab ?
+                            <DepthChart
+                                asks={asks}
+                                bids={bids}
+                                counterSelling={counterSelling}
+                                baseBuying={baseBuying}
+                                isLinear={isLinear}
+                            /> : null}
                     </div>
                 </div>
 
