@@ -391,7 +391,7 @@ export default class DepthChartD3 {
                     .fill()
                     .map((item, index) => (this.xAxisLength * (index / (uniq.length - 1)))));
 
-            this.axisX.tickValues(uniq.filter((value, index) => !(index % 20)));
+            this.axisX.tickValues(uniq.filter((value, index) => !(index % Math.floor(uniq.length / 10))));
         }
 
         this.scaleY.domain(
@@ -575,8 +575,17 @@ export default class DepthChartD3 {
 
         // case when the cursor is between asks and bids lines
         if (bidsNearestIndex === (this.bids.length - 1) && asksNearestIndex === 0) {
-            this._addAsksTooltip(asksNearestIndex, true);
-            this._addBidsTooltip(bidsNearestIndex, true);
+            const priceOnCursor = this.scaleX.invert(xCoord - MARGIN_LEFT);
+            const firstAsksPrice = getPriceValue(this.asks[0]);
+            const lastBidsPrice = getPriceValue(this.bids[this.bids.length - 1]);
+
+            if ((firstAsksPrice - priceOnCursor) < (priceOnCursor - lastBidsPrice)) {
+                this._addAsksTooltip(asksNearestIndex);
+                this.focusBids.style('display', 'none');
+            } else {
+                this._addBidsTooltip(bidsNearestIndex);
+                this.focusAsks.style('display', 'none');
+            }
             return;
         }
 
@@ -641,7 +650,7 @@ export default class DepthChartD3 {
         tooltipYPath.attr('d', getLeftTooltipPathD(w2 + AXIS_TOOLTIP_OFFSET, h2 + AXIS_TOOLTIP_OFFSET, AXIS_TOOLTIP_Y_MARGIN, AXIS_TOOLTIP_BORDER_RADIUS, AXIS_TOOLTIP_TRIANGLE_SIZE));
     }
 
-    _addAsksTooltip(index, isInvert) {
+    _addAsksTooltip(index) {
         const ask = this.asks[index];
         const xCoord = this.scaleX(getPriceValue(ask)) + MARGIN_LEFT;
         const yCoord = this.scaleY(ask.sum) + MARGIN_TOP;
@@ -655,22 +664,40 @@ export default class DepthChartD3 {
 
         const { width: w, height: h } = this.textAsks.node().getBBox();
 
+        this._createAsksRightTooltip(w, h);
+
+        if (this.svg.node().getBoundingClientRect().right < this.pathAsks.node().getBoundingClientRect().right) {
+            this._createAsksLeftTooltip(w, h);
+        }
+    }
+
+    _createAsksRightTooltip(w, h) {
         this.textAsks
-            .attr('transform', isInvert ?
-                `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})` :
-                `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
+            .attr('transform',
+                `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
             )
             .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
-
         this.pathAsks
-            .attr('d', isInvert ?
+            .attr('d',
                 getRightTooltipPathD(
                     w + DATA_TOOLTIP_OFFSET_X,
                     h + DATA_TOOLTIP_OFFSET_Y,
                     DATA_TOOLTIP_MARGIN,
                     DATA_TOOLTIP_BORDER_RADIUS,
                     DATA_TOOLTIP_TRIANGLE_SIZE,
-                ) :
+                ),
+            );
+    }
+
+    _createAsksLeftTooltip(w, h) {
+        this.textAsks
+            .attr('transform',
+                `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
+            )
+            .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
+
+        this.pathAsks
+            .attr('d',
                 getLeftTooltipPathD(
                     w + DATA_TOOLTIP_OFFSET_X,
                     h + DATA_TOOLTIP_OFFSET_Y,
@@ -679,26 +706,9 @@ export default class DepthChartD3 {
                     DATA_TOOLTIP_TRIANGLE_SIZE,
                 ),
             );
-
-        if (this.svg.node().getBoundingClientRect().right < this.pathAsks.node().getBoundingClientRect().right) {
-            this.textAsks
-                .attr('transform',
-                    `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
-                );
-            this.pathAsks
-                .attr('d',
-                    getLeftTooltipPathD(
-                        w + DATA_TOOLTIP_OFFSET_X,
-                        h + DATA_TOOLTIP_OFFSET_Y,
-                        DATA_TOOLTIP_MARGIN,
-                        DATA_TOOLTIP_BORDER_RADIUS,
-                        DATA_TOOLTIP_TRIANGLE_SIZE,
-                    ),
-                );
-        }
     }
 
-    _addBidsTooltip(index, isInvert) {
+    _addBidsTooltip(index) {
         const bid = this.bids[index];
         const xCoord = this.scaleX(getPriceValue(bid)) + MARGIN_LEFT;
         const yCoord = this.scaleY(bid.sum) + MARGIN_TOP;
@@ -714,45 +724,44 @@ export default class DepthChartD3 {
 
         const { width: w, height: h } = this.textBids.node().getBBox();
 
+        this._createBidsLeftTooltip(w, h);
+
+        if (this.svg.node().getBoundingClientRect().left > this.pathBids.node().getBoundingClientRect().left) {
+            this._createBidsRightTooltip(w, h);
+        }
+    }
+
+    _createBidsLeftTooltip(w, h) {
         this.textBids
-            .attr('transform', isInvert ?
-                `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})` :
+            .attr('transform',
+                `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`)
+            .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
+
+        this.pathBids.attr('d',
+            getLeftTooltipPathD(
+                w + DATA_TOOLTIP_OFFSET_X,
+                h + DATA_TOOLTIP_OFFSET_Y,
+                DATA_TOOLTIP_MARGIN,
+                DATA_TOOLTIP_BORDER_RADIUS,
+                DATA_TOOLTIP_TRIANGLE_SIZE,
+            ),
+        );
+    }
+
+    _createBidsRightTooltip(w, h) {
+        this.textBids
+            .attr('transform',
                 `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`)
             .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
 
         this.pathBids.attr('d',
-            isInvert ?
-                getLeftTooltipPathD(
-                    w + DATA_TOOLTIP_OFFSET_X,
-                    h + DATA_TOOLTIP_OFFSET_Y,
-                    DATA_TOOLTIP_MARGIN,
-                    DATA_TOOLTIP_BORDER_RADIUS,
-                    DATA_TOOLTIP_TRIANGLE_SIZE,
-                ) :
-                getRightTooltipPathD(
-                    w + DATA_TOOLTIP_OFFSET_X,
-                    h + DATA_TOOLTIP_OFFSET_Y,
-                    DATA_TOOLTIP_MARGIN,
-                    DATA_TOOLTIP_BORDER_RADIUS,
-                    DATA_TOOLTIP_TRIANGLE_SIZE,
-                ),
+            getRightTooltipPathD(
+                w + DATA_TOOLTIP_OFFSET_X,
+                h + DATA_TOOLTIP_OFFSET_Y,
+                DATA_TOOLTIP_MARGIN,
+                DATA_TOOLTIP_BORDER_RADIUS,
+                DATA_TOOLTIP_TRIANGLE_SIZE,
+            ),
         );
-
-        if (this.svg.node().getBoundingClientRect().left > this.pathBids.node().getBoundingClientRect().left) {
-            this.textBids
-                .attr('transform',
-                    `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
-                );
-            this.pathBids
-                .attr('d',
-                    getRightTooltipPathD(
-                        w + DATA_TOOLTIP_OFFSET_X,
-                        h + DATA_TOOLTIP_OFFSET_Y,
-                        DATA_TOOLTIP_MARGIN,
-                        DATA_TOOLTIP_BORDER_RADIUS,
-                        DATA_TOOLTIP_TRIANGLE_SIZE,
-                    ),
-                );
-        }
     }
 }
