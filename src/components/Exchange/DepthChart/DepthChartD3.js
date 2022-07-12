@@ -55,47 +55,6 @@ function getBottomTooltipPathD(width, height, marginTop, borderRadius, triangleS
     return `M 0 ${marginTop} L ${triangleSize} ${marginTop + triangleSize} H ${(width / 2) - borderRadius} A ${borderRadius} ${borderRadius} 0 0 1 ${width / 2} ${marginTop + triangleSize + borderRadius} V ${((marginTop + triangleSize) + height) - borderRadius} A ${borderRadius} ${borderRadius} 0 0 1 ${(width / 2) - borderRadius} ${height + marginTop + triangleSize} H -${(width / 2) - borderRadius} A ${borderRadius} ${borderRadius} 0 0 1 -${width / 2} ${((marginTop + triangleSize) + height) - borderRadius} V ${marginTop + triangleSize + borderRadius} A ${borderRadius} ${borderRadius} 0 0 1 -${(width / 2) - borderRadius} ${marginTop + triangleSize} H -${triangleSize} Z`;
 }
 
-function buildLeftTooltip(textNode, pathNode) {
-    const { width: w, height: h } = textNode.node().getBBox();
-
-    textNode
-        .attr('transform',
-            `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
-        )
-        .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
-
-    pathNode
-        .attr('d',
-            getLeftTooltipPathD(
-                w + DATA_TOOLTIP_OFFSET_X,
-                h + DATA_TOOLTIP_OFFSET_Y,
-                DATA_TOOLTIP_MARGIN,
-                DATA_TOOLTIP_BORDER_RADIUS,
-                DATA_TOOLTIP_TRIANGLE_SIZE,
-            ),
-        );
-}
-
-function buildRightTooltip(textNode, pathNode) {
-    const { width: w, height: h } = textNode.node().getBBox();
-
-    textNode
-        .attr('transform',
-            `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
-        )
-        .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
-    pathNode
-        .attr('d',
-            getRightTooltipPathD(
-                w + DATA_TOOLTIP_OFFSET_X,
-                h + DATA_TOOLTIP_OFFSET_Y,
-                DATA_TOOLTIP_MARGIN,
-                DATA_TOOLTIP_BORDER_RADIUS,
-                DATA_TOOLTIP_TRIANGLE_SIZE,
-            ),
-        );
-}
-
 export default class DepthChartD3 {
     constructor(base, counter) {
         this.animationDuration = INITIAL_ANIMATION_DURATION;
@@ -106,12 +65,9 @@ export default class DepthChartD3 {
         this.crosshair = null;
         this.tooltipX = null;
         this.tooltipY = null;
-        this.focusAsks = null;
-        this.focusBids = null;
-        this.pathAsks = null;
-        this.pathBids = null;
-        this.textAsks = null;
-        this.textBids = null;
+        this.focus = null;
+        this.dataTooltipPath = null;
+        this.dataTooltipText = null;
         this.dotsGroup = null;
         this.asksLine = null;
         this.bidsLine = null;
@@ -310,8 +266,7 @@ export default class DepthChartD3 {
         if (this.cachedPosition) {
             this._onMouseMove(this.cachedPosition[0], this.cachedPosition[1]);
         } else {
-            this.focusAsks.style('display', 'none');
-            this.focusBids.style('display', 'none');
+            this.focus.style('display', 'none');
         }
 
         if (this.animationDuration === INITIAL_ANIMATION_DURATION) {
@@ -322,93 +277,46 @@ export default class DepthChartD3 {
     _addDataTooltipsTemplate() {
         // ===========================================================
         // add circles and tooltips with chart data
-        this.focusAsks = this.svg
+        this.focus = this.svg
             .append('g')
-            .attr('class', 'focusAsks')
-            .style('display', 'none')
-            .attr('class', 'focusAsks');
+            .style('display', 'none');
 
-        this.focusAsks
+        this.focus
             .append('circle')
             .attr('stroke', FOCUS_CIRCLE_STROKE)
             .attr('stroke-width', FOCUS_CIRCLE_STROKE_WIDTH)
-            .attr('fill', ASKS_LINE_COLOR)
             .attr('r', FOCUS_CIRCLE_RADIUS);
 
-        this.focusBids = this.svg
-            .append('g')
-            .attr('class', 'focusBids')
-            .style('display', 'none')
-            .attr('class', 'focusBids');
-
-        this.focusBids
-            .append('circle')
-            .attr('stroke', FOCUS_CIRCLE_STROKE)
-            .attr('stroke-width', FOCUS_CIRCLE_STROKE_WIDTH)
-            .attr('fill', BIDS_LINE_COLOR)
-            .attr('r', FOCUS_CIRCLE_RADIUS);
-
-        this.pathAsks = this.focusAsks
+        this.dataTooltipPath = this.focus
             .append('path')
             .attr('stroke', DATA_TOOLTIP_COLOR)
             .attr('stroke-opacity', DATA_TOOLTIP_OPACITY)
             .attr('fill', DATA_TOOLTIP_COLOR)
             .attr('fill-opacity', DATA_TOOLTIP_OPACITY);
 
-        this.pathBids = this.focusBids
-            .append('path')
-            .attr('stroke', DATA_TOOLTIP_COLOR)
-            .attr('stroke-opacity', DATA_TOOLTIP_OPACITY)
-            .attr('fill', DATA_TOOLTIP_COLOR)
-            .attr('fill-opacity', DATA_TOOLTIP_OPACITY);
-
-        this.textAsks = this.focusAsks
-            .append('text')
-            .style('font-size', DATA_TOOLTIP_FONT_SIZE);
-        this.textBids = this.focusBids
+        this.dataTooltipText = this.focus
             .append('text')
             .style('font-size', DATA_TOOLTIP_FONT_SIZE);
 
-        const asksPriceLine = this.textAsks.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        asksPriceLine.append('tspan').text('Price: ');
-        asksPriceLine.append('tspan').style('font-weight', 'normal').attr('class', 'asksPriceValue');
+        const priceLine = this.dataTooltipText.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
+        priceLine.append('tspan').text('Price: ');
+        priceLine.append('tspan').style('font-weight', 'normal').attr('class', 'priceValue');
 
-        const asksAmountLine = this.textAsks.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        asksAmountLine.append('tspan').text('Amount: ');
-        asksAmountLine.append('tspan').style('font-weight', 'normal').attr('class', 'asksAmountValue');
+        const amountLine = this.dataTooltipText.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
+        amountLine.append('tspan').text('Amount: ');
+        amountLine.append('tspan').style('font-weight', 'normal').attr('class', 'amountValue');
 
-        const asksSumLine = this.textAsks.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        asksSumLine.append('tspan').text('Sum: ');
-        asksSumLine.append('tspan').style('font-weight', 'normal').attr('class', 'asksSumValue');
+        const sumLine = this.dataTooltipText.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
+        sumLine.append('tspan').text('Sum: ');
+        sumLine.append('tspan').style('font-weight', 'normal').attr('class', 'sumValue');
 
-        const asksTotalBaseLine = this.textAsks.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        asksTotalBaseLine.append('tspan').text(`Total ${this.baseBuying.code}: `);
-        asksTotalBaseLine.append('tspan').style('font-weight', 'normal').attr('class', 'asksTotalBaseValue');
+        const totalBaseLine = this.dataTooltipText.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
+        totalBaseLine.append('tspan').text(`Total ${this.baseBuying.code}: `);
+        totalBaseLine.append('tspan').style('font-weight', 'normal').attr('class', 'totalBaseValue');
 
-        const asksTotalCounterLine = this.textAsks.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        asksTotalCounterLine.append('tspan').text(`Total ${this.counterSelling.code}: `);
-        asksTotalCounterLine.append('tspan').style('font-weight', 'normal').attr('class', 'asksTotalCounterValue');
-
-
-        const bidsPriceLine = this.textBids.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        bidsPriceLine.append('tspan').text('Price: ');
-        bidsPriceLine.append('tspan').style('font-weight', 'normal').attr('class', 'bidsPriceValue');
-
-        const bidsAmountLine = this.textBids.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        bidsAmountLine.append('tspan').text('Amount: ');
-        bidsAmountLine.append('tspan').style('font-weight', 'normal').attr('class', 'bidsAmountValue');
-
-        const bidsSumLine = this.textBids.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        bidsSumLine.append('tspan').text('Sum: ');
-        bidsSumLine.append('tspan').style('font-weight', 'normal').attr('class', 'bidsSumValue');
-
-        const bidsTotalBaseLine = this.textBids.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        bidsTotalBaseLine.append('tspan').text(`Total ${this.baseBuying.code}: `);
-        bidsTotalBaseLine.append('tspan').style('font-weight', 'normal').attr('class', 'bidsTotalBaseValue');
-
-        const bidsTotalCounterLine = this.textBids.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
-        bidsTotalCounterLine.append('tspan').text(`Total ${this.counterSelling.code}: `);
-        bidsTotalCounterLine.append('tspan').style('font-weight', 'normal').attr('class', 'bidsTotalCounterValue');
+        const totalCounterLine = this.dataTooltipText.append('tspan').attr('x', 0).attr('dy', DATA_TOOLTIP_LINE_HEIGHT);
+        totalCounterLine.append('tspan').text(`Total ${this.counterSelling.code}: `);
+        totalCounterLine.append('tspan').style('font-weight', 'normal').attr('class', 'totalCounterValue');
     }
 
     _updateAxes(isLinear) {
@@ -592,7 +500,7 @@ export default class DepthChartD3 {
                 this.tooltipY.style('display', 'none');
 
                 if (xCoord >= this.svg.node().getBoundingClientRect().width) {
-                    this.focusAsks.style('display', 'none');
+                    this.focus.style('display', 'none');
                 }
             });
     }
@@ -607,8 +515,7 @@ export default class DepthChartD3 {
             this.crosshair.style('display', 'none');
             this.tooltipX.style('display', 'none');
             this.tooltipY.style('display', 'none');
-            this.focusAsks.style('display', 'none');
-            this.focusBids.style('display', 'none');
+            this.focus.style('display', 'none');
             return;
         }
         this._updateCrossHair(xCoord, yCoord);
@@ -621,27 +528,21 @@ export default class DepthChartD3 {
             const lastBidsPrice = getPriceValue(this.bids[this.bids.length - 1]);
 
             if ((firstAsksPrice - priceOnCursor) < (priceOnCursor - lastBidsPrice)) {
-                this._addAsksTooltip(asksNearestIndex);
-                this.focusBids.style('display', 'none');
+                this._addDataTooltip(asksNearestIndex, true);
             } else {
-                this._addBidsTooltip(bidsNearestIndex);
-                this.focusAsks.style('display', 'none');
+                this._addDataTooltip(bidsNearestIndex, false);
             }
             return;
         }
 
         // case when the cursor is on bids line
         if (asksNearestIndex !== 0) {
-            this._addAsksTooltip(asksNearestIndex);
-        } else {
-            this.focusAsks.style('display', 'none');
+            this._addDataTooltip(asksNearestIndex, true);
         }
 
         // case when the cursor is on asks line
         if (bidsNearestIndex !== (this.bids.length - 1)) {
-            this._addBidsTooltip(bidsNearestIndex);
-        } else {
-            this.focusBids.style('display', 'none');
+            this._addDataTooltip(bidsNearestIndex, false);
         }
     }
 
@@ -691,42 +592,67 @@ export default class DepthChartD3 {
         tooltipYPath.attr('d', getLeftTooltipPathD(w2 + AXIS_TOOLTIP_OFFSET, h2 + AXIS_TOOLTIP_OFFSET, AXIS_TOOLTIP_Y_MARGIN, AXIS_TOOLTIP_BORDER_RADIUS, AXIS_TOOLTIP_TRIANGLE_SIZE));
     }
 
-    _addAsksTooltip(index) {
-        const ask = this.asks[index];
-        const xCoord = this.scaleX(getPriceValue(ask)) + MARGIN_LEFT;
-        const yCoord = this.scaleY(ask.sum) + MARGIN_TOP;
+    _addDataTooltip(index, isAsks) {
+        const item = isAsks ? this.asks[index] : this.bids[index];
+        const xCoord = this.scaleX(getPriceValue(item)) + MARGIN_LEFT;
+        const yCoord = this.scaleY(item.sum) + MARGIN_TOP;
 
-        this.focusAsks.style('display', 'block').attr('transform', `translate(${xCoord},${yCoord})`);
-        this.textAsks.selectAll('.asksPriceValue').text(`${formatNumber(ask.price)} ${this.counterSelling.code}`);
-        this.textAsks.selectAll('.asksAmountValue').text(`${roundAndFormat(ask.amount)} ${this.baseBuying.code}`);
-        this.textAsks.selectAll('.asksSumValue').text(`${roundAndFormat(Number(ask.price) * Number(ask.amount))} ${this.counterSelling.code}`);
-        this.textAsks.selectAll('.asksTotalBaseValue').text(`${roundAndFormat(ask.sumReverse)} ${this.baseBuying.code}`);
-        this.textAsks.selectAll('.asksTotalCounterValue').text(`${roundAndFormat(ask.sum)} ${this.counterSelling.code}`);
+        this.focus
+            .style('display', 'block')
+            .attr('transform', `translate(${xCoord},${yCoord})`)
+            .attr('fill', isAsks ? ASKS_LINE_COLOR : BIDS_LINE_COLOR);
 
-        buildLeftTooltip(this.textAsks, this.pathAsks);
+        this.dataTooltipText.selectAll('.priceValue').text(`${formatNumber(item.price)} ${this.counterSelling.code}`);
+        this.dataTooltipText.selectAll('.amountValue').text(`${roundAndFormat(isAsks ? item.amount : (item.amount / item.price))} ${this.baseBuying.code}`);
+        this.dataTooltipText.selectAll('.sumValue').text(`${roundAndFormat(isAsks ? (Number(item.price) * Number(item.amount)) : Number(item.amount))} ${this.counterSelling.code}`);
+        this.dataTooltipText.selectAll('.totalBaseValue').text(`${roundAndFormat(item.sumReverse)} ${this.baseBuying.code}`);
+        this.dataTooltipText.selectAll('.totalCounterValue').text(`${roundAndFormat(item.sum)} ${this.counterSelling.code}`);
 
-        if (this.svg.node().getBoundingClientRect().right < this.pathAsks.node().getBoundingClientRect().right) {
-            buildRightTooltip(this.textAsks, this.pathAsks);
+        this._buildRightTooltip();
+
+        if (this.svg.node().getBoundingClientRect().right < this.dataTooltipPath.node().getBoundingClientRect().right) {
+            this._buildLeftTooltip();
         }
     }
 
-    _addBidsTooltip(index) {
-        const bid = this.bids[index];
-        const xCoord = this.scaleX(getPriceValue(bid)) + MARGIN_LEFT;
-        const yCoord = this.scaleY(bid.sum) + MARGIN_TOP;
+    _buildLeftTooltip() {
+        const { width: w, height: h } = this.dataTooltipText.node().getBBox();
 
-        this.focusBids.style('display', 'block').attr('transform', `translate(${xCoord},${yCoord})`);
+        this.dataTooltipText
+            .attr('transform',
+                `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
+            )
+            .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
 
-        this.textBids.selectAll('.bidsPriceValue').text(`${formatNumber(bid.price)} ${this.counterSelling.code}`);
-        this.textBids.selectAll('.bidsAmountValue').text(`${roundAndFormat(bid.amount / bid.price)} ${this.baseBuying.code}`);
-        this.textBids.selectAll('.bidsSumValue').text(`${roundAndFormat(Number(bid.amount))} ${this.counterSelling.code}`);
-        this.textBids.selectAll('.bidsTotalBaseValue').text(`${roundAndFormat(bid.sumReverse)} ${this.baseBuying.code}`);
-        this.textBids.selectAll('.bidsTotalCounterValue').text(`${roundAndFormat(bid.sum)} ${this.counterSelling.code}`);
+        this.dataTooltipPath
+            .attr('d',
+                getLeftTooltipPathD(
+                    w + DATA_TOOLTIP_OFFSET_X,
+                    h + DATA_TOOLTIP_OFFSET_Y,
+                    DATA_TOOLTIP_MARGIN,
+                    DATA_TOOLTIP_BORDER_RADIUS,
+                    DATA_TOOLTIP_TRIANGLE_SIZE,
+                ),
+            );
+    }
 
-        buildLeftTooltip(this.textBids, this.pathBids);
+    _buildRightTooltip() {
+        const { width: w, height: h } = this.dataTooltipText.node().getBBox();
 
-        if (this.svg.node().getBoundingClientRect().left > this.pathBids.node().getBoundingClientRect().left) {
-            buildRightTooltip(this.textBids, this.pathBids);
-        }
+        this.dataTooltipText
+            .attr('transform',
+                `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
+            )
+            .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
+        this.dataTooltipPath
+            .attr('d',
+                getRightTooltipPathD(
+                    w + DATA_TOOLTIP_OFFSET_X,
+                    h + DATA_TOOLTIP_OFFSET_Y,
+                    DATA_TOOLTIP_MARGIN,
+                    DATA_TOOLTIP_BORDER_RADIUS,
+                    DATA_TOOLTIP_TRIANGLE_SIZE,
+                ),
+            );
     }
 }
