@@ -26,9 +26,43 @@ exports.niceNumDecimals = function niceNumDecimals(input) {
 };
 
 exports.niceRound = function niceRound(input) {
+    if (input === 0) {
+        return 0;
+    }
     return input < 0.000001
         ? _.round(input, exports.niceNumDecimals(input)).toFixed(7)
         : _.round(input, exports.niceNumDecimals(input));
+};
+
+exports.formatNumber = function formatNumber(input) {
+    return Number(input).toLocaleString('en-US', {
+        maximumFractionDigits: 7,
+    });
+};
+
+function nFormatter(num, digits) {
+    const lookup = [
+        { value: 1, symbol: '' },
+        { value: 1e3, symbol: 'k' },
+        { value: 1e6, symbol: 'M' },
+        { value: 1e9, symbol: 'B' },
+        { value: 1e12, symbol: 'T' },
+        { value: 1e15, symbol: 'Q' },
+    ];
+    const rx = /\.0+$|(\.[0-9]*[1-9])0+$/;
+    const item = lookup.slice().reverse().find(i => num >= i.value);
+    return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0';
+}
+
+exports.roundAndFormat = function roundAndFormat(input, formatBigNumbersWithPostfix) {
+    if (formatBigNumbersWithPostfix && input >= 1e9) {
+        return nFormatter(input, 2);
+    }
+    const rounded = exports.niceRound(input);
+
+    return rounded.toLocaleString('en-US', {
+        maximumFractionDigits: 7,
+    });
 };
 
 exports.getCurrentYear = function getCurrentYear() {

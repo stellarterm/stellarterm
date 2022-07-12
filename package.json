@@ -23,6 +23,7 @@
     "babelify": "10.0.0",
     "bignumber.js": "4.1.0",
     "browser-sync-middleware-spa": "^1.0.0",
+    "d3": "^7.4.4",
     "fast-average-color": "5.2.0",
     "gulp-babel": "^8.0.0",
     "gulp-imagemin": "^6.0.0",
