@@ -55,6 +55,47 @@ function getBottomTooltipPathD(width, height, marginTop, borderRadius, triangleS
     return `M 0 ${marginTop} L ${triangleSize} ${marginTop + triangleSize} H ${(width / 2) - borderRadius} A ${borderRadius} ${borderRadius} 0 0 1 ${width / 2} ${marginTop + triangleSize + borderRadius} V ${((marginTop + triangleSize) + height) - borderRadius} A ${borderRadius} ${borderRadius} 0 0 1 ${(width / 2) - borderRadius} ${height + marginTop + triangleSize} H -${(width / 2) - borderRadius} A ${borderRadius} ${borderRadius} 0 0 1 -${width / 2} ${((marginTop + triangleSize) + height) - borderRadius} V ${marginTop + triangleSize + borderRadius} A ${borderRadius} ${borderRadius} 0 0 1 -${(width / 2) - borderRadius} ${marginTop + triangleSize} H -${triangleSize} Z`;
 }
 
+function buildLeftTooltip(textNode, pathNode) {
+    const { width: w, height: h } = textNode.node().getBBox();
+
+    textNode
+        .attr('transform',
+            `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
+        )
+        .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
+
+    pathNode
+        .attr('d',
+            getLeftTooltipPathD(
+                w + DATA_TOOLTIP_OFFSET_X,
+                h + DATA_TOOLTIP_OFFSET_Y,
+                DATA_TOOLTIP_MARGIN,
+                DATA_TOOLTIP_BORDER_RADIUS,
+                DATA_TOOLTIP_TRIANGLE_SIZE,
+            ),
+        );
+}
+
+function buildRightTooltip(textNode, pathNode) {
+    const { width: w, height: h } = textNode.node().getBBox();
+
+    textNode
+        .attr('transform',
+            `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
+        )
+        .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
+    pathNode
+        .attr('d',
+            getRightTooltipPathD(
+                w + DATA_TOOLTIP_OFFSET_X,
+                h + DATA_TOOLTIP_OFFSET_Y,
+                DATA_TOOLTIP_MARGIN,
+                DATA_TOOLTIP_BORDER_RADIUS,
+                DATA_TOOLTIP_TRIANGLE_SIZE,
+            ),
+        );
+}
+
 export default class DepthChartD3 {
     constructor(base, counter) {
         this.animationDuration = INITIAL_ANIMATION_DURATION;
@@ -662,50 +703,11 @@ export default class DepthChartD3 {
         this.textAsks.selectAll('.asksTotalBaseValue').text(`${roundAndFormat(ask.sumReverse)} ${this.baseBuying.code}`);
         this.textAsks.selectAll('.asksTotalCounterValue').text(`${roundAndFormat(ask.sum)} ${this.counterSelling.code}`);
 
-        const { width: w, height: h } = this.textAsks.node().getBBox();
-
-        this._createAsksRightTooltip(w, h);
+        buildLeftTooltip(this.textAsks, this.pathAsks);
 
         if (this.svg.node().getBoundingClientRect().right < this.pathAsks.node().getBoundingClientRect().right) {
-            this._createAsksLeftTooltip(w, h);
+            buildRightTooltip(this.textAsks, this.pathAsks);
         }
-    }
-
-    _createAsksRightTooltip(w, h) {
-        this.textAsks
-            .attr('transform',
-                `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
-            )
-            .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
-        this.pathAsks
-            .attr('d',
-                getRightTooltipPathD(
-                    w + DATA_TOOLTIP_OFFSET_X,
-                    h + DATA_TOOLTIP_OFFSET_Y,
-                    DATA_TOOLTIP_MARGIN,
-                    DATA_TOOLTIP_BORDER_RADIUS,
-                    DATA_TOOLTIP_TRIANGLE_SIZE,
-                ),
-            );
-    }
-
-    _createAsksLeftTooltip(w, h) {
-        this.textAsks
-            .attr('transform',
-                `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`,
-            )
-            .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
-
-        this.pathAsks
-            .attr('d',
-                getLeftTooltipPathD(
-                    w + DATA_TOOLTIP_OFFSET_X,
-                    h + DATA_TOOLTIP_OFFSET_Y,
-                    DATA_TOOLTIP_MARGIN,
-                    DATA_TOOLTIP_BORDER_RADIUS,
-                    DATA_TOOLTIP_TRIANGLE_SIZE,
-                ),
-            );
     }
 
     _addBidsTooltip(index) {
@@ -721,47 +723,10 @@ export default class DepthChartD3 {
         this.textBids.selectAll('.bidsTotalBaseValue').text(`${roundAndFormat(bid.sumReverse)} ${this.baseBuying.code}`);
         this.textBids.selectAll('.bidsTotalCounterValue').text(`${roundAndFormat(bid.sum)} ${this.counterSelling.code}`);
 
-
-        const { width: w, height: h } = this.textBids.node().getBBox();
-
-        this._createBidsLeftTooltip(w, h);
+        buildLeftTooltip(this.textBids, this.pathBids);
 
         if (this.svg.node().getBoundingClientRect().left > this.pathBids.node().getBoundingClientRect().left) {
-            this._createBidsRightTooltip(w, h);
+            buildRightTooltip(this.textBids, this.pathBids);
         }
-    }
-
-    _createBidsLeftTooltip(w, h) {
-        this.textBids
-            .attr('transform',
-                `translate(${-w - ((DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE)},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`)
-            .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
-
-        this.pathBids.attr('d',
-            getLeftTooltipPathD(
-                w + DATA_TOOLTIP_OFFSET_X,
-                h + DATA_TOOLTIP_OFFSET_Y,
-                DATA_TOOLTIP_MARGIN,
-                DATA_TOOLTIP_BORDER_RADIUS,
-                DATA_TOOLTIP_TRIANGLE_SIZE,
-            ),
-        );
-    }
-
-    _createBidsRightTooltip(w, h) {
-        this.textBids
-            .attr('transform',
-                `translate(${(DATA_TOOLTIP_OFFSET_X / 2) + DATA_TOOLTIP_MARGIN + DATA_TOOLTIP_TRIANGLE_SIZE},${-(h / 2) - (DATA_TOOLTIP_OFFSET_Y / 2)})`)
-            .attr('fill', DATA_TOOLTIP_TEXT_COLOR);
-
-        this.pathBids.attr('d',
-            getRightTooltipPathD(
-                w + DATA_TOOLTIP_OFFSET_X,
-                h + DATA_TOOLTIP_OFFSET_Y,
-                DATA_TOOLTIP_MARGIN,
-                DATA_TOOLTIP_BORDER_RADIUS,
-                DATA_TOOLTIP_TRIANGLE_SIZE,
-            ),
-        );
     }
 }
