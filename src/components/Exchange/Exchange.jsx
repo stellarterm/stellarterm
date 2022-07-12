@@ -54,7 +54,7 @@ export default class Exchange extends React.Component {
             showAction: false,
             timeFrame: converterOHLC.FRAME_HOUR,
             scaleMode: PriceScaleMode.Normal,
-            isLinear: true,
+            isLinear: false,
         };
         this._handleKeyUp = this._handleKeyUp.bind(this);
         this._escExitFullscreen = this._escExitFullscreen.bind(this);
