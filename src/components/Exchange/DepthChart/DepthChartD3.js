@@ -480,13 +480,14 @@ export default class DepthChartD3 {
     }
 
     _addMouseListeners() {
-        this.svg.on('mousemove', event => {
-            const [xCoord, yCoord] = d3.pointer(event);
+        this.svg.on('mousemove touchmove', event => {
+            event.preventDefault();
+            const [xCoord, yCoord] = d3.pointers(event)[0];
             this.cachedPosition = [xCoord, yCoord];
             this._onMouseMove(xCoord, yCoord);
         })
             .on('mouseover', event => {
-                const [xCoord, yCoord] = d3.pointer(event);
+                const [xCoord, yCoord] = d3.pointers(event)[0];
                 this.cachedPosition = [xCoord, yCoord];
                 this.crosshair.style('display', 'block');
                 this.tooltipX.style('display', 'block');
@@ -494,7 +495,7 @@ export default class DepthChartD3 {
             })
             .on('mouseout', event => {
                 this.cachedPosition = null;
-                const [xCoord] = d3.pointer(event);
+                const [xCoord] = d3.pointers(event)[0];
                 this.crosshair.style('display', 'none');
                 this.tooltipX.style('display', 'none');
                 this.tooltipY.style('display', 'none');
