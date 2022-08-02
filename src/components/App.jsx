@@ -82,6 +82,8 @@ class TermApp extends React.Component {
         );
 
         window.addEventListener('online', () => {
+            this.d.isOnline = true;
+            this.d.walletConnectService.restoreConnectionIfNeeded();
             this.setState({ id: this.state.id + 1 }, () => {
                 this.d.toastService.clearToasts();
                 this.d.toastService.success('Connection restored', 'Internet connection has been restored');
@@ -89,6 +91,8 @@ class TermApp extends React.Component {
         });
 
         window.addEventListener('offline', () => {
+            this.d.isOnline = false;
+            this.d.walletConnectService.clearClient();
             this.d.toastService.error('No connection', 'Internet connection appears to be offline');
         });
 

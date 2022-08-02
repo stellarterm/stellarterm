@@ -31,12 +31,12 @@ const WalletConnectPairingModal = ({ submit, data }) => {
                         key={pairing.topic}
                         onClick={() => connect(pairing)}
                     >
-                        <img className="WalletConnectPairingModal_pairing-icon" src={pairing.state.metadata.icons[0]} alt="" />
+                        <img className="WalletConnectPairingModal_pairing-icon" src={pairing.peerMetadata.icons[0]} alt="" />
                         <div className="WalletConnectPairingModal_pairing-data">
                             <span className={`WalletConnectPairingModal_pairing-name ${currentPairings.length > 1 && index === 0 ? 'latest' : ''}`}>
-                                {pairing.state.metadata.name}
+                                {pairing.peerMetadata.name}
                             </span>
-                            <span className="WalletConnectPairingModal_pairing-description">{pairing.state.metadata.description}</span>
+                            <span className="WalletConnectPairingModal_pairing-description">{pairing.peerMetadata.description}</span>
                         </div>
                         <div
                             className="WalletConnectPairingModal_pairing-delete"
