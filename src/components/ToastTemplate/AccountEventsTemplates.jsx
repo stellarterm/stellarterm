@@ -62,15 +62,21 @@ const getTradeBody = (op, titleText) => {
     );
 };
 
-const getTrustlineBody = (op, titleText) => (
-    <React.Fragment>
-        <div className="popup-title">{titleText}</div>
-        <div className="popup-text">
-            <div>Asset:</div>
-            <div>{op.asset_code}</div>
-        </div>
-    </React.Fragment>
-);
+const getTrustlineBody = (op, titleText) => {
+    if (!op.asset_code) {
+        return null;
+    }
+
+    return (
+        <React.Fragment>
+            <div className="popup-title">{titleText}</div>
+            <div className="popup-text">
+                <div>Asset:</div>
+                <div>{op.asset_code}</div>
+            </div>
+        </React.Fragment>
+    );
+};
 
 const getMultisigBody = (op, titleText) => (
     <React.Fragment>

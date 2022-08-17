@@ -9,6 +9,7 @@ import AssetCardInRow from '../../../../../Common/AssetCard/AssetCardInRow/Asset
 import { formatDate } from './../../Activity';
 import Printify from '../../../../../../lib/Printify';
 import { TX_STATUS } from '../../../../../../lib/constants';
+import ErrorHandler from '../../../../../../lib/ErrorHandler';
 
 
 export default class ActivityOpenOrdersRow extends React.Component {
@@ -33,6 +34,8 @@ export default class ActivityOpenOrdersRow extends React.Component {
             await signAndSubmit.serverResult;
             this.setState({ buttonReady: 'true' });
         } catch (error) {
+            const errorMessage = ErrorHandler(error);
+            this.props.d.toastService.error('Can’t cancel the offer', errorMessage);
             console.error('Errored when cancelling offer', error);
             this.setState({ buttonReady: 'true' });
         }

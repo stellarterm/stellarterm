@@ -74,6 +74,7 @@ export function buildOpSendPayment(opts) {
         destination: opts.destination,
         asset: opts.asset,
         amount: opts.amount,
+        withMuxing: Boolean(opts.withMuxing),
     });
 }
 
@@ -128,7 +129,7 @@ export function buildOpRemoveOffer(opts) {
         buying: parseAsset(offer.buying),
         selling: parseAsset(offer.selling),
         amount: '0',
-        price: '1',
+        price: offer.price,
         offerId: offer.id,
     }));
 }

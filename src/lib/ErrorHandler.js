@@ -143,6 +143,7 @@ errorMap
         'the Account doesn’t have a DataEntry with that Name.')
     .set('op_invalid_name',
         'Name not a valid string.')
+    .set('op_cannot_delete', 'Asset can’t be removed as you have an associated pool share')
     .set('op_bad_seq',
         'The specified bumpTo sequence number is not a valid sequence number. It must be between 0 ' +
         'and INT64_MAX (9223372036854775807 or 0x7fffffffffffffff).');

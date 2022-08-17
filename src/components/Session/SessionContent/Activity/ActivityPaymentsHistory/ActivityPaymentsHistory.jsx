@@ -18,7 +18,7 @@ export default class ActivityPaymentsHistory extends React.Component {
         return history.filter(item => (PAYMENTS_TYPES.includes(item.type)));
     }
 
-    static getOperationTypeAndAddress(type, account, account_id, funder, from, to, into) {
+    static getOperationTypeAndAddress(type, account, account_id, funder, from, to, into, to_muxed) {
         switch (type) {
             case 'create_account':
                 return ({
@@ -29,12 +29,15 @@ export default class ActivityPaymentsHistory extends React.Component {
                 opType: (account === account_id) ? 'Account merged to' : 'Account merged',
                 address: (account === account_id) ? into : account,
             });
-            case 'payment': return ({
-                opType: (to === account_id) ?
-                    <span>Receive</span> :
-                    <span>Send</span>,
-                address: (to === account_id) ? from : to,
-            });
+            case 'payment': {
+                const isSend = to !== account_id;
+                return {
+                    opType: isSend ?
+                        <span>Send</span> :
+                        <span>Receive</span>,
+                    address: isSend ? (to_muxed || to) : from,
+                };
+            }
             default: break;
         }
         return null;
@@ -74,11 +77,12 @@ export default class ActivityPaymentsHistory extends React.Component {
         const { effectsHistory } = this.props.d.effects;
 
         const { account, funder, created_at, starting_balance,
-            amount, to, from, asset_code, asset_issuer, transaction_hash, type, paging_token, into } = historyItem;
+            amount, to, from, asset_code, asset_issuer, transaction_hash, type, paging_token, into, to_muxed,
+        } = historyItem;
 
         const { time, date } = formatDate(created_at);
         const { opType, address } =
-            this.constructor.getOperationTypeAndAddress(type, account, account_id, funder, from, to, into);
+            this.constructor.getOperationTypeAndAddress(type, account, account_id, funder, from, to, into, to_muxed);
         const canvas = createStellarIdenticon(address);
         const renderedIcon = canvas.toDataURL();
         const viewAddress = address && `${address.substr(0, 18)}...${address.substr(-12, 12)}`;

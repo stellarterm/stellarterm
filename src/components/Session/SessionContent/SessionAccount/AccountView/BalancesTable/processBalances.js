@@ -20,7 +20,7 @@ const getUnknownAssetData = async ({ code, issuer, balance }, d) => {
 
     const change24hUSD = (((finishPrice / startPrice) - 1) * 100);
 
-    const balanceUSD = (parseFloat(balance) * lastTrades.records[0].avg * USD_XLM).toFixed(2);
+    const balanceUSD = (parseFloat(balance) * lastTrades.records[0].avg * USD_XLM);
 
     return {
         change24hUSD,
@@ -39,10 +39,7 @@ const processBalances = d => {
             );
 
             if (tickerAsset) {
-                const balanceUSD = (balance.balance * (tickerAsset.price_USD || 0)).toLocaleString('en-US', {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                });
+                const balanceUSD = (balance.balance * (tickerAsset.price_USD || 0));
 
                 Object.assign(balance, {
                     tradeLink: tickerAsset.slug !== 'XLM-native' ? `/exchange/${tickerAsset.topTradePairSlug}` : '',
