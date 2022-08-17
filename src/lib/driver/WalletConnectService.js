@@ -92,6 +92,7 @@ export default class WalletConnectService {
     }
 
     onSessionDeleted(topic) {
+        this.driver.toastService.info('session_delete', topic);
         if (this.session && this.session.topic === topic) {
             this.session = null;
             this.appMeta = null;
@@ -164,7 +165,9 @@ export default class WalletConnectService {
             }
 
             this.session = await approval();
+            this.driver.toastService.info('new session', JSON.stringify(this.session));
         } catch (e) {
+            this.driver.toastService.info('connecting error', JSON.stringify(e));
             if (this.session) {
                 return Promise.resolve({ status: 'cancel' });
             }
@@ -228,6 +231,7 @@ export default class WalletConnectService {
                     },
                 },
             }).then(result => {
+                this.driver.toastService.info('sign result', JSON.stringify(result));
                 this.driver.session.account.refresh();
                 this.driver.session.account.updateOffers();
                 return result;
