@@ -47,6 +47,9 @@ class Header extends React.Component {
                     <Link className="buy_crypto-link" to="/buy-crypto?code=xlm">
                         Buy Stellar Lumens
                     </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=USDC_XLM">
+                        Buy USDC Coin (Stellar)
+                    </Link>
                     <Link className="buy_crypto-link" to="/buy-crypto?code=btc">
                         Buy Bitcoin
                     </Link>
