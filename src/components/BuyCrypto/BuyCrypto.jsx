@@ -320,7 +320,7 @@ export default class BuyCrypto extends React.Component {
                         value={currencyAmount}
                         maxLength={20}
                         onChange={e => this.changeCurrencyAmount(e.target.value, this.state.selectedCurrency)}
-                        placeholder={`Amount in ${selectedCurrency.code} you pay`}
+                        placeholder={`Amount in ${selectedCurrency.display_code} you pay`}
                     />
 
                     <CurrencyDropdown
@@ -342,7 +342,7 @@ export default class BuyCrypto extends React.Component {
                         value={cryptoAmount}
                         maxLength={20}
                         onChange={e => this.changeCryptoAmount(e.target.value)}
-                        placeholder={`Amount in ${selectedCrypto.code} you get`}
+                        placeholder={`Amount in ${selectedCrypto.display_code} you get`}
                     />
 
                     <CurrencyDropdown
@@ -364,7 +364,7 @@ export default class BuyCrypto extends React.Component {
                     </div>
 
                     <button type="submit" className="s-button" disabled={isSubmitDisabled}>
-                        Buy {selectedCrypto && selectedCrypto.code.toUpperCase()}
+                        Buy {selectedCrypto && selectedCrypto.display_code.toUpperCase()}
                     </button>
                 </div>
             </form>
