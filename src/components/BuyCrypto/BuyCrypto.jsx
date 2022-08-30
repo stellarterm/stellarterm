@@ -132,7 +132,8 @@ export default class BuyCrypto extends React.Component {
             .then(quote => {
                 this.getMoonpayTransaction().then(url => {
                     this.setState({ quote, isPending: false });
-                    this.props.d.modal.handlers.activate('MoonpayModal', Object.assign(quote, url));
+                    this.props.d.modal.handlers.activate('MoonpayModal',
+                        Object.assign(quote, url, { displayCode: selectedCrypto.display_code }));
                 });
             })
             .catch(e => this.setState({ isPending: false, error: e }));
