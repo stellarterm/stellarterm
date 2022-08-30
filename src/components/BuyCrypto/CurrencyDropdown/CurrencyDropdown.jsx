@@ -150,7 +150,7 @@ export default class CurrencyDropdown extends React.Component {
                     <div className="token_block_wrapper">
                         <img className="currency_icon" src={selectedToken.icon} alt={selectedToken.name} />
                         <div className="name_wrapper">
-                            <span className="code_small">{selectedToken.code}</span>
+                            <span className="code_small">{selectedToken.display_code}</span>
                             <span className="name_small">{selectedToken.name}</span>
                         </div>
                     </div>
