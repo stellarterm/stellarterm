@@ -615,6 +615,11 @@ export default function Send(driver) {
                     return;
                 }
 
+                if (!driver.isOnline) {
+                    driver.toastService.error('No connection', 'Internet connection appears to be offline');
+                    return;
+                }
+
                 if (this.authType === AUTH_TYPE.WALLET_CONNECT) {
                     driver.walletConnectService.logout();
                 }

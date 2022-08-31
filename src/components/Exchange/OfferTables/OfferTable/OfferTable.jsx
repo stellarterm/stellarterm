@@ -35,7 +35,7 @@ export default class OfferTable extends React.Component {
             this.constructor.getHeaderItem('Depth', counterCurrency),
             this.constructor.getHeaderItem('Sum', counterCurrency),
             this.constructor.getHeaderItem('Amount', baseCurrency),
-            this.constructor.getHeaderItem('Price', baseCurrency),
+            this.constructor.getHeaderItem('Price', counterCurrency),
         ];
 
         if (!isBuy) {

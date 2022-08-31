@@ -15,7 +15,7 @@ export const TABLE_MAX_HEIGHT = Math.max(window.innerHeight - 470, 376);
 export const SCROLL_WIDTH = 17;
 export const formatDate = timestamp => {
     const date = new Date(timestamp).toLocaleDateString();
-    const time = new Date(timestamp).toLocaleTimeString('en-US', {
+    const time = new Date(timestamp).toLocaleTimeString('en-En', {
         hour: '2-digit',
         minute: '2-digit',
         hour12: false,

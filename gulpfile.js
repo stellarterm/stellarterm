@@ -170,6 +170,8 @@ const bundler = watchify(browserify({
     entries: [
         './src/components/App.jsx',
         './node_modules/lightweight-charts',
+        './node_modules/@walletconnect/jsonrpc-ws-connection/node_modules/@walletconnect/jsonrpc-utils/dist/esm/index.js',
+        './node_modules/@walletconnect/jsonrpc-provider/node_modules/@walletconnect/jsonrpc-utils/dist/esm/index.js',
     ],
     extensions: ['.jsx', '.js'],
     debug: true,
@@ -186,6 +188,8 @@ const bundler = watchify(browserify({
     presets: ['@babel/preset-env', '@babel/preset-react'],
     compact: true,
 })));
+
+
 const rebundle = () => bundler.bundle()
     // log errors if they happen
     .on('error', e => {
@@ -266,6 +270,7 @@ gulp.task('copyStaticFiles', () => gulp.src('static/**/*', { dot: true })
 gulp.task('uglify-js', () => gulp.src('dist/scripts/app.js')
     .pipe(babel({
         presets: ['@babel/preset-env'],
+        compact: true,
     }))
     .pipe($.uglify())
     .pipe(gulp.dest('dist/scripts')));

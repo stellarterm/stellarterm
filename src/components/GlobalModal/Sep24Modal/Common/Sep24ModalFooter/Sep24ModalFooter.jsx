@@ -150,6 +150,7 @@ export default class Sep24ModalFooter extends React.Component {
             destination: transaction.withdraw_anchor_account,
             asset: new StellarSdk.Asset(asset.code, asset.issuer),
             amount: transaction.amount_in,
+            withMuxing: transaction.withdraw_anchor_account.startsWith('M'),
         };
 
         const sendMemo = memo

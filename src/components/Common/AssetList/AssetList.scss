@@ -162,50 +162,7 @@
             }
         }
     }
-    .ListHeader_lowTradable {
-        display: flex;
-        align-items: center;
-        font-size: 13px;
-        padding-left: 0.5em;
-        cursor: pointer;
-        position: relative;
 
-        &:hover {
-            background-color: rgba(104, 200, 111, 0.1);
-            .custom-checkbox {
-                border: solid 1px #68c86f;
-            }
-        }
-
-        &:active {
-            background-color: rgba(104, 200, 111, 0.15);
-        }
-
-        & input[type="checkbox"] {
-            visibility: hidden;
-            position: absolute;
-        }
-        .custom-checkbox {
-            width: 15px;
-            height: 15px;
-            border-radius: 2px;
-            background-color: #fff;
-            border: solid 1px #bdbfc0;
-            margin: 0 7px;
-        }
-
-        & input[type="checkbox"]:checked ~ .custom-checkbox{
-            border: solid 1px #68c86f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            img{
-                width: 9px;
-                height: 9px;
-            }
-        }
-    }
 
     .ListHeader_dropdown{
         display: flex;
@@ -215,6 +172,51 @@
 
         & > span{
             margin-right: 8px;
+        }
+    }
+}
+
+.ListHeader_lowTradable {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    padding-left: 0.5em;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+        background-color: rgba(104, 200, 111, 0.1);
+        .custom-checkbox {
+            border: solid 1px #68c86f;
+        }
+    }
+
+    &:active {
+        background-color: rgba(104, 200, 111, 0.15);
+    }
+
+    & input[type="checkbox"] {
+        visibility: hidden;
+        position: absolute;
+    }
+    .custom-checkbox {
+        width: 15px;
+        height: 15px;
+        border-radius: 2px;
+        background-color: #fff;
+        border: solid 1px #bdbfc0;
+        margin: 0 7px;
+    }
+
+    & input[type="checkbox"]:checked ~ .custom-checkbox{
+        border: solid 1px #68c86f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img{
+            width: 9px;
+            height: 9px;
         }
     }
 }

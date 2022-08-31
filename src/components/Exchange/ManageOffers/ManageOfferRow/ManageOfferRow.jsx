@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import images from '../../../../images';
 import Driver from '../../../../lib/driver/Driver';
 import { TX_STATUS } from '../../../../lib/constants/sessionConstants';
+import ErrorHandler from '../../../../lib/ErrorHandler';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {
@@ -69,6 +70,8 @@ export default class ManageOffers extends React.Component {
         try {
             await signAndSubmit.serverResult;
         } catch (error) {
+            const errorMessage = ErrorHandler(error);
+            this.props.d.toastService.error('Can’t cancel the offer', errorMessage);
             console.error('Errored when cancelling offer', error);
             this.setState({ ready: 'true' });
         }

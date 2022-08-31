@@ -1,8 +1,11 @@
-import WalletConnectClient, { CLIENT_EVENTS } from '@walletconnect/client';
+import WalletConnectClient, { SIGN_CLIENT_EVENTS } from '@walletconnect/sign-client';
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { getInternalError, getSdkError } from '@walletconnect/utils';
 import * as StellarSdk from 'stellar-sdk';
 import { AUTH_TYPE, TX_STATUS } from '../../constants/sessionConstants';
 import Sep7Handler from '../../../components/HomePage/Sep7Handler/Sep7Handler';
 
+const PROJECT_ID = '2b3adbd81527ef317a8e791759d34d20';
 
 const METADATA = {
     name: 'StellarTerm',
@@ -12,11 +15,19 @@ const METADATA = {
     icons: ['https://avatars.githubusercontent.com/u/25021964?s=200&v=4.png'],
 };
 
-const STELLAR_METHODS = {
-    SIGN: 'stellar_signAndSubmitXDR',
-};
-const TESTNET = 'stellar:testnet';
 const PUBNET = 'stellar:pubnet';
+
+const STELLAR_METHODS = {
+    SIGN_AND_SUBMIT: 'stellar_signAndSubmitXDR',
+};
+
+const REQUIRED_NAMESPACES = {
+    stellar: {
+        chains: [PUBNET],
+        methods: Object.values(STELLAR_METHODS),
+        events: [],
+    },
+};
 
 export default class WalletConnectService {
     constructor(driver) {
@@ -24,34 +35,32 @@ export default class WalletConnectService {
         this.appMeta = null;
         this.client = null;
         this.session = null;
-
-        this.isPairCreated = false;
     }
 
     async initWalletConnect() {
+        if (!this.driver.isOnline) {
+            this.driver.toastService.error('No connection', 'Internet connection appears to be offline');
+        }
         if (this.client) {
             return null;
         }
         this.client = await WalletConnectClient.init({
-            // logger: 'debug',
-            relayProvider: 'wss://relay.walletconnect.org',
+            logger: 'debug',
+            projectId: PROJECT_ID,
+            metadata: METADATA,
         });
-
-        // there is a problem with updating the states in wallet connect, a small timeout solves this problem
-        // TODO delete this when it is fixed in the library
-        await new Promise(resolve => { setTimeout(() => resolve(), 500); });
 
         this.listenWalletConnectEvents();
 
-        if (!this.client.session.topics.length) {
+        if (!this.client.session.length) {
             return null;
         }
 
         this.session =
-            await this.client.session.get(this.client.session.topics[0]);
+            await this.client.session.getAll()[0];
 
         // eslint-disable-next-line no-unused-vars
-        const [chain, reference, publicKey] = this.session.state.accounts[0].split(':');
+        const [chain, reference, publicKey] = this.session.namespaces.stellar.accounts[0].split(':');
         this.appMeta = this.session.peer.metadata;
         const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
 
@@ -62,59 +71,34 @@ export default class WalletConnectService {
         return 'logged';
     }
 
-    listenWalletConnectEvents() {
-        this.client.on(CLIENT_EVENTS.pairing.created, res => this.onPairCreated(res));
-
-        this.client.on(CLIENT_EVENTS.pairing.updated, res => this.onPairUpdated(res));
-
-        this.client.on(CLIENT_EVENTS.session.deleted, session => this.onSessionDeleted(session));
-
-        this.client.on(CLIENT_EVENTS.pairing.proposal, proposal => this.onPairProposal(proposal));
+    clearClient() {
+        if (this.client) {
+            this.client = null;
+        }
     }
 
-    async onPairCreated(res) {
-        this.appMeta = res.state.metadata;
-        this.isPairCreated = true;
-    }
-
-    onPairUpdated(res) {
-        this.appMeta = res.state.metadata;
-
-        if (this.isPairCreated) {
-            this.isPairCreated = false;
-
-            this.driver.modal.handlers.finish();
-
-            this.driver.modal.handlers.activate('WalletConnectSessionRequestModal', {
-                title: this.appMeta.name,
-                logo: this.appMeta.icons[0],
+    async restoreConnectionIfNeeded() {
+        if (this.session) {
+            this.client = await WalletConnectClient.init({
+                logger: 'debug',
+                projectId: PROJECT_ID,
+                metadata: METADATA,
             });
         }
     }
 
-    onSessionDeleted(session) {
-        if (this.session && this.session.topic === session.topic) {
+    listenWalletConnectEvents() {
+        this.client.on(SIGN_CLIENT_EVENTS.session_delete, ({ topic }) => this.onSessionDeleted(topic));
+    }
+
+    onSessionDeleted(topic) {
+        if (this.session && this.session.topic === topic) {
             this.session = null;
             this.appMeta = null;
             this.driver.session.handlers.handleLogout();
         }
     }
 
-    async onPairProposal(proposal) {
-        const { uri } = proposal.signal.params;
-
-        const { status } = await this.driver.modal.handlers.activate('WalletConnectQRModal', uri);
-
-        if (status === 'cancel') {
-            await this.client.pairing.pending.update(proposal.topic, {
-                outcome: {
-                    reason: { message: 'cancelled' },
-                },
-                status: 'responded',
-            });
-            await this.client.crypto.keychain.del(proposal.proposer.publicKey);
-        }
-    }
 
     async login() {
         const result = await this.initWalletConnect();
@@ -127,18 +111,21 @@ export default class WalletConnectService {
             this.driver.modal.handlers.cancel();
         }
 
-        if (this.client.pairing.topics.length > 3) {
+        if (this.client.pairing.getAll({ active: true }).length > 3) {
             const deletePromises = [];
-            this.client.pairing.topics.slice(0, -3).forEach(topic => {
-                deletePromises.push(this.client.pairing.delete({ topic }));
-            });
+            this.client.pairing
+                .getAll({ active: true })
+                .slice(0, -3)
+                .forEach(pairing => {
+                    deletePromises.push(this.client.pairing.delete(pairing.topic, getInternalError('UNKNOWN_TYPE')));
+                });
 
             await Promise.all(deletePromises);
         }
 
-        if (this.client.pairing.topics.length) {
+        if (this.client.pairing.getAll({ active: true }).length) {
             this.driver.modal.handlers.activate('WalletConnectPairingModal', {
-                pairings: this.client.pairing.values.reverse(),
+                pairings: this.client.pairing.getAll({ active: true }).reverse(),
                 connect: this.connect.bind(this),
                 deletePairing: this.deletePairing.bind(this),
             });
@@ -149,33 +136,34 @@ export default class WalletConnectService {
     }
 
     async deletePairing(topic) {
-        await this.client.pairing.delete({ topic });
+        await this.client.pairing.delete(topic, getInternalError('UNKNOWN_TYPE'));
     }
 
     async connect(pairing) {
+        if (!this.driver.isOnline) {
+            this.driver.toastService.error('No connection', 'Internet connection appears to be offline');
+        }
         if (this.driver.modal.modalName === 'WalletConnectPairingModal') {
             this.driver.modal.handlers.finish();
         }
         if (pairing) {
             this.driver.modal.handlers.activate('WalletConnectSessionRequestModal', {
-                title: pairing.state.metadata.name,
-                logo: pairing.state.metadata.icons[0],
+                title: pairing.peerMetadata.name,
+                logo: pairing.peerMetadata.icons[0],
             });
         }
 
         try {
-            this.session = await this.client.connect({
-                metadata: METADATA,
-                pairing: pairing ? { topic: pairing.topic } : undefined,
-                permissions: {
-                    blockchain: {
-                        chains: [this.driver.Server.isTestnet ? TESTNET : PUBNET],
-                    },
-                    jsonrpc: {
-                        methods: Object.values(STELLAR_METHODS),
-                    },
-                },
+            const { uri, approval } = await this.client.connect({
+                pairingTopic: pairing ? pairing.topic : undefined,
+                requiredNamespaces: REQUIRED_NAMESPACES,
             });
+
+            if (!pairing) {
+                this.driver.modal.handlers.activate('WalletConnectQRModal', uri);
+            }
+
+            this.session = await approval();
         } catch (e) {
             if (this.session) {
                 return Promise.resolve({ status: 'cancel' });
@@ -184,7 +172,7 @@ export default class WalletConnectService {
             if (e.message === 'cancelled') {
                 return Promise.resolve({ status: 'cancel' });
             }
-            const errorMessage = e.message === 'Session not approved' ?
+            const errorMessage = e.message === 'rejected' ?
                 'Connection canceled by the user' :
                 e.message;
             this.driver.toastService.error('Connection unsuccessful', errorMessage);
@@ -195,7 +183,7 @@ export default class WalletConnectService {
         this.appMeta = this.session.peer.metadata;
 
         // eslint-disable-next-line no-unused-vars
-        const [chain, reference, publicKey] = this.session.state.accounts[0].split(':');
+        const [chain, reference, publicKey] = this.session.namespaces.stellar.accounts[0].split(':');
         const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
         return this.driver.session.handlers.logIn(keypair, {
             authType: AUTH_TYPE.WALLET_CONNECT,
@@ -203,10 +191,8 @@ export default class WalletConnectService {
             Sep7Handler(this.driver);
 
             if (pairing) {
-                this.client.pairing.settled.update(pairing.topic, {
-                    state: {
-                        metadata: this.appMeta,
-                    },
+                this.client.pairing.update(pairing.topic, {
+                    peerMetadata: this.appMeta,
                 });
             }
         });
@@ -216,8 +202,9 @@ export default class WalletConnectService {
         if (this.session) {
             await this.client.disconnect({
                 topic: this.session.topic,
-                reason: 'log out',
+                reason: getSdkError('USER_DISCONNECTED'),
             });
+            this.onSessionDeleted(this.session.topic);
         }
     }
 
@@ -233,10 +220,9 @@ export default class WalletConnectService {
             logo: this.appMeta.icons[0],
             result: this.client.request({
                 topic: this.session.topic,
-                chainId: this.driver.Server.isTestnet ? TESTNET : PUBNET,
+                chainId: PUBNET,
                 request: {
-                    jsonrpc: '2.0',
-                    method: STELLAR_METHODS.SIGN,
+                    method: STELLAR_METHODS.SIGN_AND_SUBMIT,
                     params: {
                         xdr,
                     },
