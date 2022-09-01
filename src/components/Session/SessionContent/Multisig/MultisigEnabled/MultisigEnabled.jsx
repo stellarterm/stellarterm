@@ -45,7 +45,8 @@ export default class MultisigEnabled extends React.Component {
             <SignerDataRow
                 key={signer.key}
                 signer={signer}
-                d={this.props.d} />
+                d={this.props.d}
+            />
         ));
     }
 
@@ -117,7 +118,7 @@ export default class MultisigEnabled extends React.Component {
                     });
             });
 
-        Promise.all(promises).then((signersData) => {
+        Promise.all(promises).then(signersData => {
             const onlyVaultSigners = signersData.every(signer => !signer.noVault);
             this.setState({ signersData, onlyVaultSigners });
         });
@@ -129,7 +130,7 @@ export default class MultisigEnabled extends React.Component {
         let imageName = 'sign-unknown';
         let title = 'unknown signer';
 
-        signers.forEach((signer) => {
+        signers.forEach(signer => {
             const knownData = this.getKnownKeyData(signer.key);
             if (knownData && knownData.type !== 'Your account key') {
                 imageName = knownData.imageName;
@@ -168,7 +169,8 @@ export default class MultisigEnabled extends React.Component {
                 </span>
                 <div
                     className="CopyButton"
-                    onClick={() => this.props.d.modal.handlers.activate('multisigSetRequiredSigners')}>
+                    onClick={() => this.props.d.modal.handlers.activate('multisigSetRequiredSigners')}
+                >
                     <img src={images['icon-edit']} alt="edit" />
                     <span>EDIT</span>
                 </div>
@@ -188,9 +190,10 @@ export default class MultisigEnabled extends React.Component {
                         {this.getMultisigData()}
                         <a
                             className="MultisigEnabled-header-wrap-info"
-                            href="https://lobstr.zendesk.com/hc/en-us/categories/360001534333-LOBSTR-Vault"
+                            href="https://vault.zendesk.com/hc/en-us"
                             rel="noopener noreferrer"
-                            target="_blank">
+                            target="_blank"
+                        >
                             <img src={images['icon-info']} alt="i" />
                         </a>
                     </div>
