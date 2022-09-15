@@ -226,9 +226,7 @@ export default class WalletConnectService {
                 chainId: PUBNET,
                 request: {
                     method: STELLAR_METHODS.SIGN_AND_SUBMIT,
-                    params: {
-                        xdr,
-                    },
+                    params: JSON.stringify({ xdr }),
                 },
             }).then(result => {
                 this.driver.toastService.info('sign result', JSON.stringify(result));
