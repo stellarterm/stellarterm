@@ -11,25 +11,12 @@ export default class ManuallyAddTrust extends React.Component {
         this.state = {
             trustCode: '',
             trustIssuer: '',
-            unknownAssetData: '',
-            isDataUpdate: false,
         };
-    }
-
-    async loadUnknownData(asset) {
-        if (!this.state.isDataUpdate) {
-            const unknownAssetData = await this.props.d.session.handlers.loadUnknownAssetData(asset);
-            this.setState({
-                unknownAssetData,
-                isDataUpdate: true,
-            });
-        }
     }
 
     handleInput(event, trustType) {
         this.setState({
             [trustType]: event.target.value,
-            isDataUpdate: false,
         });
     }
 
@@ -65,7 +52,7 @@ export default class ManuallyAddTrust extends React.Component {
         }
 
         const asset = new StellarSdk.Asset(trustCode, trustIssuer);
-        this.loadUnknownData(asset);
+
         return (
             <React.Fragment>
                 <div className="AssetRowContainer">
@@ -96,7 +83,8 @@ export default class ManuallyAddTrust extends React.Component {
                             type="text"
                             value={trustCode}
                             onChange={e => this.handleInput(e, 'trustCode')}
-                            placeholder="Asset code (example: BTC)" />
+                            placeholder="Asset code (example: BTC)"
+                        />
                     </label>
 
                     <label className="s-inputGroup AddTrust_inputGroup" htmlFor="inputManuallyIssuer">
@@ -111,7 +99,8 @@ export default class ManuallyAddTrust extends React.Component {
                             value={trustIssuer}
                             onChange={e => this.handleInput(e, 'trustIssuer')}
                             placeholder="Asset Issuer
-                            (example: GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R)" />
+                            (example: GC4DJYMFQZVX3R56FVCN3WA7FJFKT24VI67ODTZUENSE4YNUXZ3WYI7R)"
+                        />
                     </label>
                 </div>
 

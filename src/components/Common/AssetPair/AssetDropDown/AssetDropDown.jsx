@@ -9,6 +9,7 @@ import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import AssetCardList from './AssetCardList/AssetCardList';
 import images from '../../../../images';
 import AssetCardInRow from '../../AssetCard/AssetCardInRow/AssetCardInRow';
+import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../../lib/driver/Session';
 
 const ENTER = 13;
 const ARROW_UP = 38;
@@ -24,14 +25,6 @@ const regexp = new RegExp(pattern);
 
 
 export default class AssetDropDown extends React.Component {
-    static getDomainForUnknownAsset(asset) {
-        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
-        const assetData = unknownAssetsData.find(assetLocalItem => (
-            assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
-        ));
-        if (!assetData) { return ''; }
-        return (assetData.currency && assetData.currency.host) || assetData.host;
-    }
     constructor(props) {
         super(props);
 
@@ -126,11 +119,15 @@ export default class AssetDropDown extends React.Component {
         const { inputCode, currencies } = this.state;
         const inputCodeLowerCased = inputCode.toLowerCase();
 
+        const assetsData = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
+
         const unknownAssets = (account && account.getSortedBalances({ onlyUnknown: true })) || [];
         const filteredUnknownAssets = unknownAssets
             .filter(asset =>
                 asset.code.toLowerCase().includes(inputCodeLowerCased) ||
-                this.constructor.getDomainForUnknownAsset(asset).toLowerCase().includes(inputCodeLowerCased),
+                (assetsData.has(getAssetString(asset)) &&
+                    Boolean(assetsData.get(getAssetString(asset)).home_domain) &&
+                    assetsData.get(getAssetString(asset)).home_domain.toLowerCase().includes(inputCodeLowerCased)),
             );
 
         const filteredCurrencies = currencies.filter(currency => (

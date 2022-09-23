@@ -27,6 +27,9 @@ import {
 import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../constants';
 
 const fee = '100000';
+export const CACHED_ASSETS_ALIAS = 'cached_asset_data';
+export const UPDATE_CACHED_ASSETS_TIMESTAMP = 'update_cached_asset_data_timestamp';
+export const getAssetString = asset => `${asset.code}:${asset.issuer}`;
 
 export default function Send(driver) {
     this.event = new Event();
@@ -44,7 +47,6 @@ export default function Send(driver) {
         this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'freighter', 'wallet-connect' - AUTH_TYPE
         this.jwtToken = null;
         this.userFederation = '';
-        this.promisesForMyltipleLoading = {};
 
         this.hasPendingTransaction = false;
     };
@@ -60,69 +62,82 @@ export default function Send(driver) {
         }
     };
 
-    this.addKnownAssetData = () => {
-        const knownAssetsData = JSON.parse(localStorage.getItem('knownAssetsData')) || {};
-        const { time, directoryBuild, assets: localStorageAssets = [] } = knownAssetsData;
-        const periodUpdate = 14 * 24 * 60 * 60 * 1000;
+    this.currentAssetParams = new URLSearchParams();
+    this.timeout = null;
 
-        const frontendDirectoryBuild = directory.buildID;
+    this.updatePromise = new Promise(resolve => {
+        this.resolver = resolve;
+    });
 
-        if (
-            localStorageAssets.length &&
-            ((new Date() - new Date(time)) < periodUpdate) &&
-            String(directoryBuild) === String(frontendDirectoryBuild)
-        ) {
-            this.addKnownAssetDataCalled = true;
-            return Promise.resolve();
+    const timeoutDelay = 500;
+
+    this.getAssetsData = assetStrings => {
+        const cachedAssets = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
+
+        const assetStringsArray = Array.isArray(assetStrings) ? assetStrings : [assetStrings];
+
+        const filteredStringsArray = assetStringsArray.filter(assetString => !cachedAssets.has(assetString));
+
+        if (!filteredStringsArray.length) {
+            return this.updatePromise;
         }
 
-        const { anchors } = directory;
-        const chainPromise = Object.keys(anchors).reduce((chain, anchorDomain) => {
-            const { assets } = anchors[anchorDomain];
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
 
-            return chain.then(newArray =>
-                StellarSdk.StellarTomlResolver.resolve(anchorDomain)
-                    .then(toml => {
-                        const currencies = toml.CURRENCIES;
-                        const arrayAssets = Object.keys(assets).reduce((acc, assetCode) => {
-                            const assetIssuer = assets[assetCode].split('-')[1];
-                            const currency = currencies.find(
-                                cur => cur.code === assetCode && cur.issuer === assetIssuer,
-                            );
-                            if (!currency || !currency.image) {
-                                return acc;
-                            }
-                            acc.push({
-                                code: assetCode,
-                                issuer: assetIssuer,
-                                logo: currency.image,
-                            });
-                            return acc;
-                        }, []);
-
-                        if (arrayAssets.length === 0) {
-                            return newArray;
-                        }
-                        return [...newArray, ...arrayAssets];
-                    })
-                    .catch(() => newArray),
-            );
-        }, Promise.resolve([]));
-
-        return chainPromise.then(res => {
-            localStorage.setItem(
-                'knownAssetsData',
-                JSON.stringify({
-                    time: new Date(),
-                    directoryBuild: frontendDirectoryBuild,
-                    assets: res,
-                }),
-            );
-            this.addKnownAssetDataCalled = true;
+        filteredStringsArray.forEach(assetString => {
+            if (!this.currentAssetParams.getAll('asset').includes(assetString)) {
+                this.currentAssetParams.append('asset', assetString);
+            }
         });
+
+        this.timeout = setTimeout(() => {
+            request.get(`${EnvConsts.ASSET_DATA_API}?${this.currentAssetParams.toString()}`).then(res => {
+                Promise.all(res.results.map(asset => {
+                    if (asset.image) {
+                        return this.handlers.getAverageColor(asset.image, asset.code, asset.issuer)
+                            .then(result => Object.assign(asset, { color: result }));
+                    }
+                    return Promise.resolve(asset);
+                })).then(assets => {
+                    const cached = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
+                    assets.forEach(asset => {
+                        cached.set(getAssetString(asset), asset);
+                    });
+                    localStorage.setItem(CACHED_ASSETS_ALIAS, JSON.stringify(Array.from(cached.entries())));
+                    this.resolver();
+
+                    this.updatePromise = new Promise(resolve => {
+                        this.resolver = resolve;
+                    });
+                });
+            });
+            this.timeout = null;
+            this.currentAssetParams.delete('asset');
+        }, timeoutDelay);
+
+        return this.updatePromise;
     };
-    this.addKnownAssetDataPromise = directory.initializeIssuerOrgs(EnvConsts.ANCHORS_URL)
-        .then(() => this.addKnownAssetData());
+
+    this.cacheDirectoryAssetData = () => {
+        const lastUpdateTimestamp = Number(localStorage.getItem(UPDATE_CACHED_ASSETS_TIMESTAMP) || 0);
+        const periodUpdate = 24 * 60 * 60 * 1000;
+
+        if (Date.now() - lastUpdateTimestamp > periodUpdate) {
+            localStorage.removeItem(CACHED_ASSETS_ALIAS);
+            localStorage.setItem(UPDATE_CACHED_ASSETS_TIMESTAMP, Date.now().toString());
+
+            const { assets } = directory;
+
+            this.getAssetsData(Object.keys(assets).map(item => item.split('-').join(':')));
+        }
+    };
+
+    directory.initializeIssuerOrgs(EnvConsts.ANCHORS_URL)
+        .then(() => {
+            this.cacheDirectoryAssetData();
+        });
 
     // Ping the Ledger device to see if it is connected
     this.tryConnectLedger = () =>
@@ -243,7 +258,6 @@ export default function Send(driver) {
                     this.bip32Path = opts.bip32Path;
 
                     // Functions of session after sign in
-                    this.handlers.addUnknownAssetData();
                     driver.accountEvents.listenAccountEvents(driver.Server, this.account.account_id);
                     this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
 
@@ -899,40 +913,6 @@ export default function Send(driver) {
             init();
             this.event.trigger(SESSION_EVENTS.LOGOUT_EVENT, this);
         },
-        addUnknownAssetData: () => {
-            const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
-
-            // period = days x hours x min x sec x ms
-            const periodUpdate = 14 * 24 * 60 * 60 * 1000;
-
-            const chainPromise = this.account.balances.reduce((chain, sdkBalance) => {
-                const asset = directory.resolveAssetByAccountId(sdkBalance.asset_code, sdkBalance.asset_issuer);
-                if (asset.domain !== 'unknown' || asset.code === undefined) {
-                    return chain;
-                }
-
-                const assetData = unknownAssetsData.find(
-                    assetLocalItem => assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer,
-                );
-
-                if (assetData && new Date() - new Date(assetData.time) < periodUpdate) {
-                    return chain;
-                }
-
-                if (assetData) {
-                    unknownAssetsData.splice(unknownAssetsData.indexOf(assetData), 1);
-                }
-
-                return chain.then(newArray =>
-                    this.handlers.loadUnknownAssetData(asset).then(res => [...newArray, res]),
-                );
-            }, Promise.resolve([]));
-
-            chainPromise.then(arr => {
-                localStorage.setItem('unknownAssetsData', JSON.stringify([...unknownAssetsData, ...arr]));
-                this.event.trigger(SESSION_EVENTS.ASSETS_DATA_EVENT, this);
-            });
-        },
 
         getDomainByIssuer: async issuer => {
             const account = await driver.Server.loadAccount(issuer);
@@ -940,59 +920,6 @@ export default function Send(driver) {
                 return null;
             }
             return account.home_domain;
-        },
-
-        loadUnknownAssetData: asset => {
-            const id = asset.code + asset.issuer;
-            if (!this.promisesForMyltipleLoading[id]) {
-                this.promisesForMyltipleLoading[id] = this.handlers.singleLoadUnknownAssetData(asset);
-            }
-            return this.promisesForMyltipleLoading[id];
-        },
-
-        singleLoadUnknownAssetData: async asset => {
-            try {
-                const homeDomain = await this.handlers.getDomainByIssuer(asset.issuer);
-
-                if (homeDomain === null) {
-                    throw new Error();
-                }
-                const toml = await StellarSdk.StellarTomlResolver.resolve(homeDomain);
-
-                const currency = toml.CURRENCIES.find(
-                    cur => cur.code.toUpperCase() === asset.code.toUpperCase() && cur.issuer === asset.issuer,
-                );
-
-                if (!currency) {
-                    throw new Error();
-                }
-
-                const { image, host } = currency;
-                const color = image && (await this.handlers.getAverageColor(image, asset.code, homeDomain));
-
-                // Stellarterm used only "image" and "host" fields;
-
-                return {
-                    code: asset.code,
-                    issuer: asset.issuer,
-                    host: homeDomain,
-                    currency: {
-                        host,
-                        image,
-                    },
-                    color,
-                    time: new Date(),
-                };
-            } catch (e) {
-                return {
-                    code: asset.code,
-                    issuer: asset.issuer,
-                    host: '',
-                    currency: {},
-                    color: '',
-                    time: new Date(),
-                };
-            }
         },
 
         getAverageColor: (imageUrl, code, domain) => {
