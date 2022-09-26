@@ -123,12 +123,16 @@ export default class AssetDropDown extends React.Component {
 
         const unknownAssets = (account && account.getSortedBalances({ onlyUnknown: true })) || [];
         const filteredUnknownAssets = unknownAssets
-            .filter(asset =>
-                asset.code.toLowerCase().includes(inputCodeLowerCased) ||
-                (assetsData.has(getAssetString(asset)) &&
-                    Boolean(assetsData.get(getAssetString(asset)).home_domain) &&
-                    assetsData.get(getAssetString(asset)).home_domain.toLowerCase().includes(inputCodeLowerCased)),
-            );
+            .filter(asset => {
+                if (asset.code.toLowerCase().includes(inputCodeLowerCased)) {
+                    return true;
+                }
+
+                const assetData = assetsData.get(getAssetString(asset));
+                const domain = assetData && assetData.home_domain;
+
+                return domain && domain.toLowerCase().includes(inputCodeLowerCased);
+            });
 
         const filteredCurrencies = currencies.filter(currency => (
             !assets.find(asset => ((asset.code === currency.code) && (asset.issuer === currency.issuer))) &&

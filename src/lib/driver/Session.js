@@ -93,25 +93,29 @@ export default function Send(driver) {
         });
 
         this.timeout = setTimeout(() => {
-            request.get(`${EnvConsts.ASSET_DATA_API}?${this.currentAssetParams.toString()}`).then(res => {
-                Promise.all(res.results.map(asset => {
-                    if (asset.image) {
-                        return this.handlers.getAverageColor(asset.image, asset.code, asset.issuer)
-                            .then(result => Object.assign(asset, { color: result }));
-                    }
-                    return Promise.resolve(asset);
-                })).then(assets => {
+            const resolver = this.resolver;
+
+            request.get(`${EnvConsts.ASSET_DATA_API}?${this.currentAssetParams.toString()}`)
+                .then(res => {
+                    const colorRequests = res.results.map(asset => {
+                        if (asset.image) {
+                            return this.handlers.getAverageColor(asset.image, asset.code, asset.issuer)
+                                .then(result => Object.assign(asset, { color: result }));
+                        }
+                        return Promise.resolve(asset);
+                    });
+                    return Promise.all(colorRequests);
+                })
+                .then(assets => {
                     const cached = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
                     assets.forEach(asset => {
                         cached.set(getAssetString(asset), asset);
                     });
                     localStorage.setItem(CACHED_ASSETS_ALIAS, JSON.stringify(Array.from(cached.entries())));
-                    this.resolver();
-
-                    this.updatePromise = new Promise(resolve => {
-                        this.resolver = resolve;
-                    });
+                    resolver();
                 });
+            this.updatePromise = new Promise(resolve => {
+                this.resolver = resolve;
             });
             this.timeout = null;
             this.currentAssetParams.delete('asset');
