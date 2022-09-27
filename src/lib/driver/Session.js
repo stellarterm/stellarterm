@@ -920,7 +920,7 @@ export default function Send(driver) {
         getAverageColor: (imageUrl, code, domain) => {
             const fac = new FastAverageColor();
             const img = document.createElement('img');
-            img.src = `${imageUrl}?rnd${Math.random()}`;
+            img.src = imageUrl;
             img.crossOrigin = 'Anonymous';
 
             return fac
