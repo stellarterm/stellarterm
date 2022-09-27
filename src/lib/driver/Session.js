@@ -25,6 +25,7 @@ import {
     buildOpSetOptions,
 } from '../operationBuilders';
 import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../constants';
+import DelayedPromise from '../DelayedPromise';
 
 const fee = '100000';
 export const CACHED_ASSETS_ALIAS = 'cached_asset_data';
@@ -62,66 +63,56 @@ export default function Send(driver) {
         }
     };
 
-    this.currentAssetParams = new URLSearchParams();
-    this.timeout = null;
-
-    this.updatePromise = new Promise(resolve => {
-        this.resolver = resolve;
-    });
-
+    const getAssetDataRequestParams = new URLSearchParams();
     const timeoutDelay = 500;
 
     this.getAssetsData = assetStrings => {
         const cachedAssets = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
 
-        const assetStringsArray = Array.isArray(assetStrings) ? assetStrings : [assetStrings];
+        const assetArray = Array.isArray(assetStrings) ? assetStrings : [assetStrings];
 
-        const filteredStringsArray = assetStringsArray.filter(assetString => !cachedAssets.has(assetString));
+        const assetsToRequest = assetArray.filter(assetString => !cachedAssets.has(assetString));
 
-        if (!filteredStringsArray.length) {
-            return this.updatePromise;
+        if (!assetsToRequest.length) {
+            return Promise.resolve();
         }
 
-        if (this.timeout) {
-            clearTimeout(this.timeout);
-        }
-
-        filteredStringsArray.forEach(assetString => {
-            if (!this.currentAssetParams.getAll('asset').includes(assetString)) {
-                this.currentAssetParams.append('asset', assetString);
+        assetsToRequest.forEach(assetString => {
+            if (!getAssetDataRequestParams.getAll('asset').includes(assetString)) {
+                getAssetDataRequestParams.append('asset', assetString);
             }
         });
 
-        this.timeout = setTimeout(() => {
-            const resolver = this.resolver;
+        if (this.delayedRequest) {
+            this.delayedRequest.reset();
+            return this.currentRequest;
+        }
 
-            request.get(`${EnvConsts.ASSET_DATA_API}?${this.currentAssetParams.toString()}`)
-                .then(res => {
-                    const colorRequests = res.results.map(asset => {
-                        if (asset.image) {
-                            return this.handlers.getAverageColor(asset.image, asset.code, asset.issuer)
-                                .then(result => Object.assign(asset, { color: result }));
-                        }
-                        return Promise.resolve(asset);
-                    });
-                    return Promise.all(colorRequests);
-                })
-                .then(assets => {
-                    const cached = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
-                    assets.forEach(asset => {
-                        cached.set(getAssetString(asset), asset);
-                    });
-                    localStorage.setItem(CACHED_ASSETS_ALIAS, JSON.stringify(Array.from(cached.entries())));
-                    resolver();
+        this.delayedRequest = new DelayedPromise(timeoutDelay);
+
+        this.currentRequest = this.delayedRequest.promise
+            .then(() => {
+                this.delayedRequest = null;
+                const params = getAssetDataRequestParams.toString();
+                getAssetDataRequestParams.delete('asset');
+                return request.get(`${EnvConsts.ASSET_DATA_API}?${params}`);
+            })
+            .then(({ results }) => {
+                if (!results.length) {
+                    return Promise.reject();
+                }
+                const colorRequests = results.map(asset => this.handlers.loadAssetColor(asset));
+                return Promise.all(colorRequests);
+            })
+            .then(assets => {
+                const cached = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
+                assets.forEach(asset => {
+                    cached.set(getAssetString(asset), asset);
                 });
-            this.updatePromise = new Promise(resolve => {
-                this.resolver = resolve;
+                localStorage.setItem(CACHED_ASSETS_ALIAS, JSON.stringify(Array.from(cached.entries())));
             });
-            this.timeout = null;
-            this.currentAssetParams.delete('asset');
-        }, timeoutDelay);
 
-        return this.updatePromise;
+        return this.currentRequest;
     };
 
     this.cacheDirectoryAssetData = () => {
@@ -939,6 +930,15 @@ export default function Send(driver) {
                     console.warn(`Can not calculate background color for ${code} (${domain}). Reason: CORS Policy`);
                     return '';
                 });
+        },
+
+        loadAssetColor: asset => {
+            if (asset.image) {
+                return this.handlers
+                    .getAverageColor(asset.image, asset.code, asset.issuer)
+                    .then(result => Object.assign(asset, { color: result }));
+            }
+            return Promise.resolve(asset);
         },
     };
 }

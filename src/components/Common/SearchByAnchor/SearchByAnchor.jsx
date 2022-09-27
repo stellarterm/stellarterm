@@ -171,8 +171,6 @@ export default class SearchByAnchor extends React.Component {
                             d={this.props.d}
                             tradeLink={this.props.tradeLink}
                             asset={asset}
-                            currency={currency}
-                            host={anchorDomain}
                         />
                     );
                 });
