@@ -17,7 +17,7 @@ export default class AssetCardHelper extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loadedAssetData: undefined,
+            assetDataChecked: false,
         };
     }
 
@@ -25,8 +25,18 @@ export default class AssetCardHelper extends React.Component {
         this._mounted = true;
     }
 
+    componentDidUpdate(prevProps) {
+        if (prevProps.code !== this.props.code || prevProps.issuer !== this.props.issuer) {
+            this.setAssetUnchecked();
+        }
+    }
+
     componentWillUnmount() {
         this._mounted = false;
+    }
+
+    setAssetUnchecked() {
+        this.setState({ assetDataChecked: false });
     }
 
     getRenderedAssetData() {
@@ -71,18 +81,30 @@ export default class AssetCardHelper extends React.Component {
 
         const assetInfo = cachedAssets.get(getAssetString(asset));
 
-        if (!assetInfo) {
+        if (!assetInfo && !this.state.assetDataChecked) {
             this.props.d.session.getAssetsData(getAssetString(asset)).then(() => {
                 this.forceUpdate();
+            }).catch(() => {
+                this.setState({ assetDataChecked: true });
             });
         }
 
-        if (!assetInfo) {
+        if (!assetInfo && !this.state.assetDataChecked) {
             return ({
                 asset,
                 logo: 'load',
                 logoPadding: true,
                 domain: 'load',
+                color: '#A5A0A7',
+            });
+        }
+
+        if (!assetInfo && this.state.assetDataChecked) {
+            return ({
+                asset,
+                logo: 'unknown',
+                logoPadding: true,
+                domain: 'unknown',
                 color: '#A5A0A7',
             });
         }

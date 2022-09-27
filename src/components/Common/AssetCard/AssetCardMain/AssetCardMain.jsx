@@ -92,10 +92,4 @@ AssetCardMain.propTypes = {
     issuer: PropTypes.string,
     domain: PropTypes.string,
     noborder: PropTypes.bool,
-    host: PropTypes.string,
-    color: PropTypes.string,
-    currency: PropTypes.shape({
-        image: PropTypes.string,
-        host: PropTypes.string,
-    }),
 };
