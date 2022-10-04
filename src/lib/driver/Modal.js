@@ -30,9 +30,17 @@ export default function Modal() {
             this.inputData = inputData;
             this.event.trigger();
 
-            return new Promise((resolve) => {
+            return new Promise(resolve => {
                 this.activeResolver = resolve;
             });
+        },
+
+        updateData: data => {
+            if (!this.active) {
+                return;
+            }
+            this.inputData = data;
+            this.event.trigger();
         },
 
         cancel: () => {
@@ -44,7 +52,7 @@ export default function Modal() {
             this.event.trigger();
         },
 
-        waitLedger: (output) => {
+        waitLedger: output => {
             this.activeResolver({
                 status: 'finish',
                 output,
@@ -65,27 +73,27 @@ export default function Modal() {
         ledgerFinish: (result, timeoutMs) => {
             this.txStatus = result;
             switch (result) {
-            case 'close':
-                clearTimeout(this.timeoutClose);
-                this.active = false;
-                this.modalName = '';
-                this.event.trigger();
-                this.handlers.checkNextModal();
-                break;
-            case 'error':
-                this.event.trigger();
-                break;
-            case 'closeWithTimeout':
-                this.timeoutClose = setTimeout(() => {
-                    this.handlers.ledgerFinish('close');
-                }, timeoutMs);
-                break;
-            default:
-                break;
+                case 'close':
+                    clearTimeout(this.timeoutClose);
+                    this.active = false;
+                    this.modalName = '';
+                    this.event.trigger();
+                    this.handlers.checkNextModal();
+                    break;
+                case 'error':
+                    this.event.trigger();
+                    break;
+                case 'closeWithTimeout':
+                    this.timeoutClose = setTimeout(() => {
+                        this.handlers.ledgerFinish('close');
+                    }, timeoutMs);
+                    break;
+                default:
+                    break;
             }
         },
 
-        finish: (output) => {
+        finish: output => {
             this.active = false;
             this.modalName = '';
             this.activeResolver({

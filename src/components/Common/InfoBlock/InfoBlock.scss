@@ -28,6 +28,23 @@
         font-size: 18px;
         font-weight: normal;
     }
+
+    &.InfoBlock_smallInRow {
+        padding: 0;
+        border: none;
+        background: #fff;
+        margin-bottom: 32px;
+
+        .info_title {
+            font-size: 16px;
+        }
+
+        .info_icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 8px;
+        }
+    }
 }
 
 .Info_success {

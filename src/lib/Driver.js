@@ -12,6 +12,7 @@ import ClaimableBalances from './driver/ClaimableBalances';
 import Effects from './driver/Effects';
 import Payments from './driver/Payments';
 import WalletConnectService from './driver/WalletConnectService';
+import Swap from './driver/Swap';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -30,6 +31,7 @@ function Driver() {
     this.claimableBalances = new ClaimableBalances(this);
     this.effects = new Effects(this);
     this.payments = new Payments(this);
+    this.swap = new Swap(this);
 
     window.view = accountId => {
         this.session.handlers.logInWithPublicKey(accountId);

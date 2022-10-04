@@ -9,6 +9,7 @@ import ActivityTradesHistory from './ActivityTradesHistory/ActivityTradesHistory
 import ActivityPaymentsHistory from './ActivityPaymentsHistory/ActivityPaymentsHistory';
 import ActivitySignersHistory from './ActivitySignersHistory/ActivitySignersHistory';
 import ActivityTrustlinesHistory from './ActivityTrustlinesHistory/ActivityTrustlinesHistory';
+import ActivitySwapHistory from './ActivitySwapHistory/ActivitySwapHistory';
 
 export const ROW_HEIGHT = 47;
 export const TABLE_MAX_HEIGHT = Math.max(window.innerHeight - 470, 376);
@@ -84,6 +85,15 @@ export default class Activity extends React.Component {
                         path="/account/activity/payments/"
                         render={() =>
                             <ActivityPaymentsHistory
+                                d={d}
+                            />}
+                    />
+
+                    <Route
+                        exact
+                        path="/account/activity/swap/"
+                        render={() =>
+                            <ActivitySwapHistory
                                 d={d}
                             />}
                     />

@@ -1,0 +1,67 @@
+.SwapAssetsList {
+    position: absolute;
+    top: 26px;
+    left: 0;
+    width: 100%;
+    border-radius: 2px;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+    z-index: 10;
+
+    .SwapAssetsList_close {
+        cursor: pointer;
+        display: block;
+    }
+
+    .SwapAssetsList_search {
+        display: block;
+    }
+
+    .SwapAssetsList_assets {
+        display: flex;
+        flex-direction: column;
+        border-radius: 0 0 2px 2px;
+        border: solid 1px #d7e0e4;
+        border-top: none;
+        max-height: 345px;
+        overflow: auto;
+    }
+
+    .SwapAssetsList_section-title {
+        font-size: 8px;
+        font-weight: 300;
+        letter-spacing: 1.2px;
+        color: #8b95a9;
+        margin-top: 14px;
+        margin-bottom: 5px;
+        padding-left: 16px;
+    }
+
+    .SwapAssetsList_asset-row {
+        height: 40px;
+        min-height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        cursor: pointer;
+        padding-left: 16px;
+        padding-right: 9px;
+
+        &.active {
+            background-color: #d7e0e433;
+        }
+    }
+
+    .SwapAssetsList_asset-amount {
+        font-size: 14px;
+        font-weight: normal;
+        color: #1c2e3e;
+        text-align: right;
+        white-space: nowrap;
+    }
+
+    .nk-spinner-small-black {
+        margin-right: 6px;
+    }
+}
