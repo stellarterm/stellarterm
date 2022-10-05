@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
 import Driver from '../../../lib/driver/Driver';
+import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../lib/driver/Session';
 
 
 export default class AssetCardHelper extends React.Component {
@@ -17,7 +17,7 @@ export default class AssetCardHelper extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            loadedAssetData: undefined,
+            assetDataChecked: false,
         };
     }
 
@@ -27,7 +27,7 @@ export default class AssetCardHelper extends React.Component {
 
     componentDidUpdate(prevProps) {
         if (prevProps.code !== this.props.code || prevProps.issuer !== this.props.issuer) {
-            this.loadAssetData(new StellarSdk.Asset(this.props.code, this.props.issuer));
+            this.setAssetUnchecked();
         }
     }
 
@@ -35,56 +35,8 @@ export default class AssetCardHelper extends React.Component {
         this._mounted = false;
     }
 
-    getUnknownAssetDataFromLocalStorage(asset, anchor) {
-        let name = 'load';
-        let logo = 'load';
-        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
-        const assetData = unknownAssetsData.find(assetLocalItem => (
-            assetLocalItem.code === this.props.code && assetLocalItem.issuer === this.props.issuer
-        )) || {};
-
-        if (!assetData.time && !this.state.loadedAssetData && !this.props.currency && !this._mounted) {
-            this.loadAssetData(asset);
-        }
-
-        const currency = this.props.currency || assetData.currency;
-        const { image, host } = currency || '';
-        const domain = host && host.split('//')[1];
-
-        name = this.props.host || assetData.host || domain || (assetData.time ? anchor.name : name);
-        const color = this.props.color || assetData.color || '#A5A0A7';
-        logo = image || (currency ? 'unknown' : logo);
-        const logoPadding = !!image;
-
-        return {
-            name,
-            logo,
-            logoPadding,
-            color,
-        };
-    }
-
-    getKnownAssetDataFromLocalStorage(asset, anchor) {
-        const knownAssetsData = JSON.parse(localStorage.getItem('knownAssetsData')) || {};
-        const { assets = [] } = knownAssetsData;
-
-        if (
-            !assets.length &&
-            !this.props.d.session.addKnownAssetDataCalled
-        ) {
-            this.props.d.session.addKnownAssetDataPromise.then(() => this.forceUpdate());
-            return anchor;
-        }
-        const knownAsset = assets.find(item => (
-            item.code === asset.code && item.issuer === asset.issuer
-        ));
-
-        if (!knownAsset) {
-            return anchor;
-        }
-
-        knownAsset.logoPadding = true;
-        return knownAsset;
+    setAssetUnchecked() {
+        this.setState({ assetDataChecked: false });
     }
 
     getRenderedAssetData() {
@@ -92,13 +44,22 @@ export default class AssetCardHelper extends React.Component {
             throw new Error(`AssetCard expects to get a code in the this.props. Instead, got: ${this.props.code}`);
         }
 
-        const isXLMNative = this.props.code === 'XLM' && this.props.domain === undefined && this.props.issuer === undefined;
+        const isXLMNative = this.props.code === 'XLM' && this.props.domain === undefined
+            && (this.props.issuer === undefined || this.props.issuer === null);
         const haveDomain = this.props.domain !== undefined;
         const haveIssuer = this.props.issuer !== undefined;
 
         let asset = {};
         if (isXLMNative) {
             asset = directory.nativeAsset;
+            const anchor = directory.getAnchor(asset.domain);
+            return ({
+                asset,
+                logo: anchor.logo,
+                logoPadding: true,
+                domain: anchor.name,
+                color: anchor.color,
+            });
         } else if (haveDomain) {
             asset = directory.getAssetByDomain(this.props.code, this.props.domain);
         } else if (haveIssuer) {
@@ -116,47 +77,52 @@ export default class AssetCardHelper extends React.Component {
             );
         }
 
-        const anchor = directory.getAnchor(asset.domain);
-        const isUnknown = anchor.name === 'unknown';
+        const cachedAssets = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
 
-        let { name } = isUnknown ? this.getUnknownAssetDataFromLocalStorage(asset, anchor) : anchor;
-        let { logo, logoPadding } = isUnknown ?
-            this.getUnknownAssetDataFromLocalStorage(asset, anchor) :
-            this.getKnownAssetDataFromLocalStorage(asset, anchor);
-        let color = isUnknown ? '#A5A0A7' : anchor.color;
+        const assetInfo = cachedAssets.get(getAssetString(asset));
 
-        if ((name === 'load' || logo === 'load') && this.state.loadedAssetData) {
-            name = this.state.loadedAssetData.host || this.props.host || anchor.name;
-            const { image, host } = this.state.loadedAssetData.currency || '';
-            name = (host && host.split('//')[1]) || name;
-            logo = image || 'unknown';
-            logoPadding = !!image;
-            color = this.state.loadedAssetData.color || color;
-        }
-        // if the average color of the icon is white then for a better view we make the border color black
-        if (color === '#ffffff') {
-            color = '#000000';
-        }
-        return ({
-            asset,
-            logo,
-            directoryLogo: !isUnknown && anchor.logo,
-            logoPadding,
-            domain: name,
-            color,
-        });
-    }
-
-    async loadAssetData(asset) {
-        if (!this.props.d) {
-            return;
-        }
-        const loadedAssetData = await this.props.d.session.handlers.loadUnknownAssetData(asset);
-        if (this._mounted) {
-            this.setState({
-                loadedAssetData,
+        if (!assetInfo && !this.state.assetDataChecked) {
+            this.props.d.session.getAssetsData(getAssetString(asset)).then(() => {
+                this.forceUpdate();
+            }).catch(() => {
+                this.setState({ assetDataChecked: true });
             });
         }
+
+        if (!assetInfo && !this.state.assetDataChecked) {
+            return ({
+                asset,
+                logo: 'load',
+                logoPadding: true,
+                domain: 'load',
+                color: '#A5A0A7',
+            });
+        }
+
+        if (!assetInfo && this.state.assetDataChecked) {
+            return ({
+                asset,
+                logo: 'unknown',
+                logoPadding: true,
+                domain: 'unknown',
+                color: '#A5A0A7',
+            });
+        }
+
+        // if the average color of the icon is white then for a better view we make the border color black
+        if (assetInfo.color === '#ffffff') {
+            assetInfo.color = '#000000';
+        }
+
+        const anchor = directory.getAnchor(asset.domain);
+
+        return ({
+            asset,
+            logo: (assetInfo.image || (anchor.name !== 'unknown' && anchor.logo) || 'unknown'),
+            logoPadding: true,
+            domain: (assetInfo.home_domain || asset.domain || 'unknown'),
+            color: assetInfo.color || (anchor.name !== 'unknown' && anchor.color) || '#A5A0A7',
+        });
     }
 
     render() {
@@ -169,10 +135,4 @@ AssetCardHelper.propTypes = {
     code: PropTypes.string.isRequired,
     issuer: PropTypes.string,
     domain: PropTypes.string,
-    host: PropTypes.string,
-    color: PropTypes.string,
-    currency: PropTypes.shape({
-        image: PropTypes.string,
-        host: PropTypes.string,
-    }),
 };

@@ -63,7 +63,7 @@ export default class TopVolumeAssets extends React.Component {
                     baseAssetIssuer: 'native',
                     counterAssetCode: assetCode,
                     counterAssetIssuer: assetIssuer,
-                    numHoursAgo: 168,
+                    numHoursAgo: 24,
                 });
             const lastLumenPrice = (lastLumenTrade && lastLumenTrade.data && lastLumenTrade.data.markets.length)
                 ? lastLumenTrade.data.markets[0].close
