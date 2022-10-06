@@ -32,7 +32,8 @@ import {
     TX_STATUS,
 } from '../../constants/sessionConstants';
 import { CONTENT_TYPE_HEADER } from '../../constants/commonConstants';
-import DelayedPromise from '../DelayedPromise';
+import DelayedPromise from '../../helpers/DelayedPromise';
+import { MULTISIG_PROVIDERS } from '../../constants/multisigConstants';
 
 const fee = '100000';
 export const CACHED_ASSETS_ALIAS = 'cached_asset_data';
@@ -265,6 +266,10 @@ export default function Send(driver) {
                     driver.accountEvents.listenAccountEvents(driver.Server, this.account.account_id);
                     this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
 
+                    if (driver.multisig.multisigProvider === MULTISIG_PROVIDERS.STELLAR_GUARD) {
+                        driver.multisig.checkGuardSignerActivation();
+                    }
+
                     driver.claimableBalances.getClaimableBalances();
                     return;
                 }
@@ -401,7 +406,7 @@ export default function Send(driver) {
                 if (signResult.status === TX_STATUS.FINISH) {
                     const tx = signResult.signedTx;
 
-                    if (driver.multisig.isMultisigEnabled && driver.multisig.isMoreSignaturesNeeded(tx)) {
+                    if (driver.multisig.isMultisigEnabled && driver.multisig.moreSignaturesNeeded(tx)) {
                         this.hasPendingTransaction = false;
 
                         return driver.multisig.sendToSigner(tx);

@@ -21,7 +21,6 @@ import { CONTENT_TYPE_HEADER } from '../../constants/commonConstants';
 export default class Multisig {
     constructor(driver) {
         this.driver = driver;
-        this.guardActivationChecked = false;
     }
 
     static getShortKey(key) {
@@ -71,10 +70,6 @@ export default class Multisig {
     }
 
     get signers() {
-        if (this.multisigProvider === MULTISIG_PROVIDERS.STELLAR_GUARD && !this.guardActivationChecked) {
-            this.checkGuardSignerActivation();
-        }
-
         return this.account.signers.map(({ key, weight, type }) => {
             if (key === this.account.account_id) {
                 return {
@@ -211,7 +206,7 @@ export default class Multisig {
      * @param tx - {StellarSdk.Transaction}
      * @returns {boolean}
      */
-    isMoreSignaturesNeeded(tx) {
+    moreSignaturesNeeded(tx) {
         const { operations } = tx;
 
         const transactionThreshold = operations.reduce((acc, operation) => {
@@ -222,13 +217,13 @@ export default class Multisig {
                     return threshold;
                 }
                 return used;
-            }, [THRESHOLDS.UNKNOWN]);
+            }, THRESHOLDS.UNKNOWN);
 
-            if (usedThreshold === [THRESHOLDS.UNKNOWN]) {
+            if (usedThreshold === THRESHOLDS.UNKNOWN) {
                 throw new Error('unknown operation');
             }
 
-            if (usedThreshold === [THRESHOLDS.MULTIPLE]) {
+            if (usedThreshold === THRESHOLDS.MULTIPLE) {
                 const { masterWeight, lowThreshold, medThreshold, highThreshold, signer } = operation;
                 usedThreshold =
                 masterWeight || lowThreshold || medThreshold || highThreshold || signer
@@ -318,8 +313,6 @@ export default class Multisig {
     }
 
     checkGuardSignerActivation() {
-        this.guardActivationChecked = true;
-
         const guardUrl = getEndpoint('activateGuardSigner') + this.account.account_id.toString();
 
         request

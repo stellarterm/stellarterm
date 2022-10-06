@@ -189,7 +189,7 @@ export default class Sep6ModalContent extends React.Component {
 
         let challengeTx = await d.session.handlers.getAuthChallengeTx(endpoint, this.NETWORK_PASSPHRASE);
 
-        if (d.multisig.isMultisigEnabled && d.multisig.isMoreSignaturesNeeded(challengeTx)) {
+        if (d.multisig.isMultisigEnabled && d.multisig.moreSignaturesNeeded(challengeTx)) {
             challengeTx = await this.getSignedBySignersChallenge(challengeTx);
         }
 
@@ -205,7 +205,7 @@ export default class Sep6ModalContent extends React.Component {
         return token;
     }
 
-    async getSignedBySignersChallenge(tx) {
+    getSignedBySignersChallenge(tx) {
         this.challengeTx = tx;
         const promise = new Promise(resolve => {
             this.signedChallengeResolver = resolve;
