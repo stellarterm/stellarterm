@@ -19,7 +19,7 @@ import {
     buildOpClaimClaimableBalance,
     buildOpCreateAccount,
     buildOpCreateBuyOffer,
-    buildOpCreateSellOffer,
+    buildOpCreateSellOffer, buildOpPathPaymentStrictReceive, buildOpPathPaymentStrictSend,
     buildOpRemoveOffer,
     buildOpSendPayment,
     buildOpSetOptions,
@@ -460,6 +460,8 @@ export default function Send(driver) {
                     'manageBuyOffer',
                     'manageSellOffer',
                     'claimClaimableBalance',
+                    'pathPaymentStrictSend',
+                    'pathPaymentStrictReceive',
                 ],
                 high_threshold: ['accountMerge'],
                 setOptions: ['setOptions'], // med or high
@@ -871,6 +873,19 @@ export default function Send(driver) {
             }
 
             return this.handlers.buildSignSubmit(op, memo, opts.withMuxing);
+        },
+        swap: opts => {
+            const ops = [];
+
+            if (opts.withTrust) {
+                ops.push(buildOpChangeTrust({ asset: opts.destination }));
+            }
+            // eslint-disable-next-line no-param-reassign
+            opts.address = this.account.accountId();
+            const op = opts.isSend ? buildOpPathPaymentStrictSend(opts) : buildOpPathPaymentStrictReceive(opts);
+            ops.push(op);
+
+            return this.handlers.buildSignSubmit(ops);
         },
         logout: () => {
             try {

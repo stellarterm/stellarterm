@@ -9,10 +9,11 @@ const DEFAULT_LOGO_SIZE = 50;
 
 export default class AssetCardSeparateLogo extends AssetCardHelper {
     getLogoBlock(logo, color, asset, directoryLogo) {
-        const { logoSize, boxy } = this.props;
+        const { logoSize, boxy, circle } = this.props;
         const style = {
-            border: `1px solid ${color}`,
-            borderRadius: boxy ? 0 : 4,
+            border: circle ? 'none' : `1px solid ${color}`,
+            // eslint-disable-next-line no-nested-ternary
+            borderRadius: boxy ? 0 : (circle ? '50%' : 4),
             background: `${color}0D`,
         };
 
@@ -25,8 +26,9 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
         };
 
         const innerSizeStyles = {
-            height: (logoSize || DEFAULT_LOGO_SIZE) * 0.8,
-            width: (logoSize || DEFAULT_LOGO_SIZE) * 0.8,
+            height: circle ? '100%' : (logoSize || DEFAULT_LOGO_SIZE) * 0.8,
+            width: circle ? '100%' : (logoSize || DEFAULT_LOGO_SIZE) * 0.8,
+            borderRadius: circle ? '50%' : 0,
         };
 
         const loaderSize = {
@@ -35,7 +37,12 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
         };
 
         const unknownLogo = (
-            <div className="AssetCard_unknown_logo">
+            <div
+                className="AssetCard_unknown_logo" style={{
+                    height: logoSize || DEFAULT_LOGO_SIZE,
+                    width: logoSize || DEFAULT_LOGO_SIZE,
+                }}
+            >
                 <div className="Unknown_circle" style={innerSizeStyles}>
                     <span className="assetSymbol">{asset.code[0]}</span>
                 </div>
@@ -68,16 +75,21 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
                     onError={e => this.constructor.onImageLoadError(e, directoryLogo, div)}
                     style={innerSizeStyles}
                     src={logo}
-                    alt="logo" />
+                    alt="logo"
+                />
             </div>
         );
     }
 
     render() {
-        const { noIssuer, longIssuer } = this.props;
+        const { noIssuer, longIssuer, inRow, onlyLogo } = this.props;
         const { asset, logo, domain, color, directoryLogo } = this.getRenderedAssetData();
         const { code, issuer } = asset;
         const logoBlock = this.getLogoBlock(logo, color, asset, directoryLogo);
+
+        if (onlyLogo) {
+            return logoBlock;
+        }
 
         let viewIssuer = '';
         const isNative = code === 'XLM' && !issuer;
@@ -87,14 +99,14 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
         } else {
             viewIssuer = longIssuer ?
                 issuer :
-                `${issuer.substr(0, 6)}...${issuer.substr(-6, 6)}`;
+                `${issuer.slice(0, 6)}...${issuer.slice(issuer.length - 6, issuer.length)}`;
         }
 
         return (
             <div className="AssetCardSeparateLogo">
                 {logoBlock}
                 <div className="AssetCardSeparateLogo_details">
-                    <div className={`AssetCardSeparateLogo_details-row ${noIssuer ? 'inColumn' : ''}`}>
+                    <div className={`AssetCardSeparateLogo_details-row ${noIssuer ? 'inColumn' : ''} ${inRow ? 'inRow' : ''}`}>
                         <span className="AssetCardSeparateLogo_code">{code}</span>
                         <span className="AssetCardSeparateLogo_domain">
                             {domain !== 'load' ? domain : <Ellipsis />}
@@ -114,5 +126,8 @@ AssetCardSeparateLogo.propTypes = {
     noIssuer: PropTypes.bool,
     logoSize: PropTypes.number,
     boxy: PropTypes.bool,
+    circle: PropTypes.bool,
+    inRow: PropTypes.bool,
+    onlyLogo: PropTypes.bool,
 };
 

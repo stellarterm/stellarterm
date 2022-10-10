@@ -1,6 +1,8 @@
 .AssetCardSeparateLogo{
     display: flex;
     flex-direction: row;
+    align-items: center;
+    width: 100%;
 
     .AssetCardSeparateLogo_logo{
         display: flex;
@@ -41,6 +43,19 @@
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
+                }
+            }
+
+            &.inRow{
+                flex-direction: row;
+                align-items: center;
+
+                .AssetCardSeparateLogo_code{
+                    margin-left: 7px;
+                }
+
+                .AssetCardSeparateLogo_domain {
+                    margin-left: 6px;
                 }
             }
         }
