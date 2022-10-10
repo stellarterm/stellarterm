@@ -127,8 +127,11 @@ const SwapConfirm = ({ params, submit, d }) => {
             path: processedPath,
         });
 
-        if (signAndSubmit.status === TX_STATUS.AWAIT_SIGNERS
-            || signAndSubmit.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
+        if (signAndSubmit.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
+            return;
+        }
+
+        if (signAndSubmit.status === TX_STATUS.AWAIT_SIGNERS) {
             submit.finish();
             return;
         }
