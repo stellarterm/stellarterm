@@ -26,6 +26,21 @@
         border-top: none;
         max-height: 345px;
         overflow: auto;
+
+        &::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        /* Track */
+        &::-webkit-scrollbar-track {
+            background: #fff;
+        }
+
+        /* Handle */
+        &::-webkit-scrollbar-thumb {
+            background: #999;
+            border-radius: 2.5rem;
+        }
     }
 
     .SwapAssetsList_section-title {
