@@ -68,12 +68,19 @@
         }
     }
 
+    .AssetCardSeparateLogo {
+        width: 50%;
+    }
+
     .SwapAssetsList_asset-amount {
         font-size: 14px;
         font-weight: normal;
         color: #1c2e3e;
         text-align: right;
         white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        width: 50%;
     }
 
     .nk-spinner-small-black {

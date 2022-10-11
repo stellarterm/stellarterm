@@ -39,10 +39,16 @@
                 .AssetCardSeparateLogo_domain {
                     font-size: 12px;
                     line-height: 14px;
-                    opacity: 0.6;
+                    color: #9aa6ac99;
                     white-space: nowrap;
                     text-overflow: ellipsis;
                     overflow: hidden;
+
+                    &:hover{
+                        overflow: unset;
+                        background-color: #fff;
+                        z-index: 2;
+                    }
                 }
             }
 
