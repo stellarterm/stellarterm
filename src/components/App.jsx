@@ -25,6 +25,7 @@ import Footer from './Footer/Footer';
 import BuyCrypto from './BuyCrypto/BuyCrypto';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
 import AppLoading from './AppLoading/AppLoading';
+import Swap from './Swap/Swap';
 
 window.React = React;
 const mountNode = document.getElementById('app');
@@ -185,6 +186,10 @@ class TermApp extends React.Component {
                                         <Route
                                             path="/buy-crypto"
                                             render={props => <BuyCrypto {...props} d={d} />}
+                                        />
+                                        <Route
+                                            path="/swap"
+                                            render={props => <Swap {...props} d={d} />}
                                         />
 
                                         <Route component={NotFound} />

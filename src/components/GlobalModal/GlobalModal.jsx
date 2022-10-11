@@ -27,6 +27,9 @@ import WalletConnectPairingModal from './WalletConnectPairingModal/WalletConnect
 import ChooseTransferServer from './ChooseTransferServer/ChooseTransferServer';
 import ClaimableBalanceDetails from './ClaimableBalanceDetails/ClaimableBalanceDetails';
 import WalletConnectSessionRequestModal from './WalletConnectSessionRequestModal/WalletConnectSessionRequestModal';
+import SwapSettings from './SwapModals/SwapSettings/SwapSettings';
+import SwapConfirm from './SwapModals/SwapConfirm/SwapConfirm';
+import SwapSuccess from './SwapModals/SwapSuccess/SwapSuccess';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -174,6 +177,15 @@ export default class GlobalModal extends React.Component {
                 break;
             case 'ClaimableBalanceDetails':
                 body = <ClaimableBalanceDetails d={d} submit={d.modal.handlers} claimableBalance={modal.inputData} />;
+                break;
+            case 'SwapSettings':
+                body = <SwapSettings d={d} submit={d.modal.handlers} />;
+                break;
+            case 'SwapConfirm':
+                body = <SwapConfirm d={d} submit={d.modal.handlers} params={modal.inputData} />;
+                break;
+            case 'SwapSuccess':
+                body = <SwapSuccess d={d} submit={d.modal.handlers} details={modal.inputData} />;
                 break;
             default:
                 body = (

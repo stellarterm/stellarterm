@@ -1,0 +1,90 @@
+@import "SwapFormRow/SwapFormRow";
+
+.Swap_container {
+    margin-top: 72px;
+    width: 466px;
+    padding: 32px 32px 38px 32px;
+    margin-bottom: 80px;
+
+    .Swap_header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 32px;
+    }
+
+    .Swap_title {
+        font-size: 30px;
+        color: #1c2e3e;
+        font-weight: normal;
+    }
+
+    .Swap_settings {
+        cursor: pointer;
+        padding: 5px;
+        border-radius: 2px;
+
+        &:hover {
+            background-color: #d7e0e433;
+        }
+    }
+
+    .s-button {
+        width: 100%;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        .nk-spinner {
+            margin-left: 16px;
+        }
+    }
+
+    .Swap_switch {
+        margin: 22px auto 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transform-origin: center;
+        cursor: pointer;
+        padding: 5px;
+        width: min-content;
+        border-radius: 2px;
+
+        &:hover {
+            background-color: #d7e0e433;
+
+            img {
+                transform: rotate(270deg);
+            }
+        }
+
+        img {
+            transition: transform 0.3s ease-in-out;
+            transform: rotate(90deg);
+        }
+    }
+
+    .Swap_form {
+        position: relative;
+    }
+
+    .Swap_price {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        right: 0;
+        top: calc(100% + 10px);
+        font-size: 14px;
+        font-weight: normal;
+        color: #1c2e3e;
+        cursor: pointer;
+
+        img {
+            margin-left: 8px;
+            opacity: 0.5;
+        }
+    }
+}

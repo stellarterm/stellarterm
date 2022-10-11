@@ -1,0 +1,25 @@
+.SwapAsset_container {
+    margin-top: 26px;
+    min-width: 161px;
+    height: 55px;
+    padding: 16px 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 2px;
+    border: solid 1px #d7e0e4;
+    font-size: 12px;
+    font-weight: normal;
+    color: #9aa6ac;
+    cursor: pointer;
+    background-color: #fff;
+    text-align: unset;
+
+    &:active {
+        border: solid 1px #69c76f;
+    }
+
+    .SwapAsset_asset {
+        max-width: 80%;
+    }
+}
