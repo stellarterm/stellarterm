@@ -8,6 +8,11 @@ import Ellipsis from '../../Ellipsis/Ellipsis';
 const DEFAULT_LOGO_SIZE = 50;
 
 export default class AssetCardSeparateLogo extends AssetCardHelper {
+    constructor() {
+        super();
+        this.ref = React.createRef();
+    }
+
     getLogoBlock(logo, color, asset, directoryLogo) {
         const { logoSize, boxy, circle } = this.props;
         const style = {
@@ -82,7 +87,7 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
     }
 
     render() {
-        const { noIssuer, longIssuer, inRow, onlyLogo } = this.props;
+        const { noIssuer, longIssuer, inRow, onlyLogo, logoSize } = this.props;
         const { asset, logo, domain, color, directoryLogo } = this.getRenderedAssetData();
         const { code, issuer } = asset;
         const logoBlock = this.getLogoBlock(logo, color, asset, directoryLogo);
@@ -103,9 +108,13 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
         }
 
         return (
-            <div className="AssetCardSeparateLogo">
+            <div className="AssetCardSeparateLogo" ref={this.ref}>
                 {logoBlock}
-                <div className="AssetCardSeparateLogo_details">
+                <div
+                    className="AssetCardSeparateLogo_details" style={{
+                        width: (this.ref.current && inRow) ? `${this.ref.current.clientWidth - (1.2 * (logoSize || DEFAULT_LOGO_SIZE))}px` : '80%',
+                    }}
+                >
                     <div className={`AssetCardSeparateLogo_details-row ${noIssuer ? 'inColumn' : ''} ${inRow ? 'inRow' : ''}`}>
                         <span className="AssetCardSeparateLogo_code">{code}</span>
                         <span className="AssetCardSeparateLogo_domain">
