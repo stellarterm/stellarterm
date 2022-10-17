@@ -190,7 +190,7 @@ export default class MultisigEnabled extends React.Component {
                         {this.getMultisigData()}
                         <a
                             className="MultisigEnabled-header-wrap-info"
-                            href="https://vault.zendesk.com/hc/en-us"
+                            href="https://lobstrvault.freshdesk.com/support/solutions/151000012441"
                             rel="noopener noreferrer"
                             target="_blank"
                         >
