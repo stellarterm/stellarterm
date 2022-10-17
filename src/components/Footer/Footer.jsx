@@ -61,7 +61,7 @@ class Footer extends React.Component {
 
                             <a
                                 className="Footer_link"
-                                href="https://stellarterm.zendesk.com/"
+                                href="https://stellarterm.freshdesk.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >

@@ -92,7 +92,7 @@ const WalletConnectBody = ({ history, d, modal }) => {
                     </div>
                     <a
                         className="LoginPage_green-link"
-                        href="https://stellarterm.zendesk.com/hc/en-us/articles/4406496403217"
+                        href="https://stellarterm.freshdesk.com/support/solutions/articles/151000012438-walletconnect-how-do-i-log-in-to-stellarterm-with-my-wallet-app"
                         target="_blank"
                         rel="nofollow noopener noreferrer"
                     >
