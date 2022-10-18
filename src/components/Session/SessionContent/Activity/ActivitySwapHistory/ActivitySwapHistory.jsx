@@ -3,13 +3,13 @@ import React, { useEffect, useState } from 'react';
 import StellarSdk from 'stellar-sdk';
 import { AutoSizer, InfiniteLoader, List } from 'react-virtualized';
 import PropTypes from 'prop-types';
-import { PAYMENTS_EVENTS } from '../../../../../lib/driver/Payments';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activity';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import Printify from '../../../../../lib/Printify';
 import images from '../../../../../images';
-import Driver from '../../../../../lib/Driver';
 import useForceUpdate from '../../../../../lib/useForceUpdate';
+import { PAYMENTS_EVENTS } from '../../../../../lib/driver/driverInstances/Payments';
+import Printify from '../../../../../lib/helpers/Printify';
+import Driver from '../../../../../lib/driver/Driver';
 
 
 const SWAP_TYPES = ['path_payment_strict_send', 'path_payment_strict_receive'];

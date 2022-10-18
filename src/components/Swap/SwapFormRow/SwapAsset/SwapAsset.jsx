@@ -3,7 +3,7 @@ import { Asset } from 'stellar-sdk';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 
 const SwapAsset = ({ asset, d, openList }) => (
     <button className="SwapAsset_container" onClick={openList}>

@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import Driver from '../../../../lib/driver/Driver';
 import { isHttpConnectionUsed } from '../../../../lib/helpers/BrowserSupport';
-import { SESSION_EVENTS } from '../../../../lib/constants';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
 import HiddenDescription from '../Common/HiddenDescription';
+import { SESSION_EVENTS } from '../../../../lib/constants/sessionConstants';
 import LedgerForm from './LedgerForm/LedgerForm';
 import LedgerAlert from './LedgerAlert/LedgerAlert';
 import LedgerSetupNotes from './LedgerSetupNotes/LedgerSetupNotes';
 import LedgerSetupInstructions from './LedgerSetupInstructions/LedgerSetupInstructions';
 import images from './../../../../images';
+
 
 export default class LedgerBody extends React.Component {
     constructor(props) {

@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Asset } from 'stellar-sdk';
-import Driver from '../../../lib/Driver';
 import Input from '../../Common/Input/Input';
-import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants';
-import { formatNumber, roundAndFormat } from '../../../lib/Format';
 import useForceUpdate from '../../../lib/useForceUpdate';
+import { formatNumber, roundAndFormat } from '../../../lib/helpers/Format';
+import Driver from '../../../lib/driver/Driver';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants/sessionConstants';
 import SwapAsset from './SwapAsset/SwapAsset';
 import SwapAssetsList from './SwapAssetsList/SwapAssetsList';
 

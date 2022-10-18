@@ -3,15 +3,15 @@ import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import StellarSdk from 'stellar-sdk';
 import BigNumber from 'bignumber.js';
-import Stellarify from '../../lib/Stellarify';
 import NotFound from '../NotFound/NotFound';
-import { SESSION_EVENTS, SESSION_STATE } from '../../lib/constants';
 import useUpdateInterval from '../../lib/useUpdateInterval';
 import images from '../../images';
-import Driver from '../../lib/Driver';
 import InfoBlock from '../Common/InfoBlock/InfoBlock';
 import useDebounce from '../../lib/useDebounce';
-import { formatNumber } from '../../lib/Format';
+import Stellarify from '../../lib/helpers/Stellarify';
+import Driver from '../../lib/driver/Driver';
+import { SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
+import { formatNumber } from '../../lib/helpers/Format';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
 
 

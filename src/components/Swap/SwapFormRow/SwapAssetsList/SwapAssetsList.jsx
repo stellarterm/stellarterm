@@ -2,14 +2,14 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Debounce from 'awesome-debounce-promise';
-import Driver from '../../../../lib/Driver';
 import Input from '../../../Common/Input/Input';
 import images from '../../../../images';
 import useOnClickOutside from '../../../../lib/useClickOutside';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
-import { formatNumber } from '../../../../lib/Format';
 import useOnKeyDown from '../../../../lib/useOnKeyDown';
-import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../../lib/driver/Session';
+import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../../lib/driver/driverInstances/Session';
+import { formatNumber } from '../../../../lib/helpers/Format';
+import Driver from '../../../../lib/driver/Driver';
 
 
 const DEBOUNCE_TIME = 700;
