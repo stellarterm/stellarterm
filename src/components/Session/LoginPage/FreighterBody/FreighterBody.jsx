@@ -5,7 +5,6 @@ import images from '../../../../images';
 import HiddenDescription from '../Common/HiddenDescription';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
 import Driver from '../../../../lib/driver/Driver';
-import { isChrome } from '../../../../lib/helpers/BrowserSupport';
 import AcceptTerms from '../Common/AcceptTerms';
 
 
@@ -34,15 +33,6 @@ const FreighterBody = ({ history, d, modal }) => {
     };
 
     const getFreighterLoginForm = () => {
-        if (!isChrome()) {
-            return (
-                <p className="LoginPage__form--title browser-support">
-                    Freighter extension is not supported by your browser.
-                    <br />
-                    Please use Google Chrome.
-                </p>
-            );
-        }
         if (!isConnected()) {
             return (
                 <Fragment>
@@ -53,7 +43,7 @@ const FreighterBody = ({ history, d, modal }) => {
                         className="LoginPage__link"
                         target="_blank"
                         rel="nofollow noopener noreferrer"
-                        href="https://chrome.google.com/webstore/detail/freighter/bcacfldlkkdogcmkkibnjlakofdplcbk"
+                        href="https://www.freighter.app/"
                     >
                         Install Freighter
                     </a>

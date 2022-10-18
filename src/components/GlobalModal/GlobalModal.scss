@@ -17,6 +17,9 @@
 @import "./ChooseTransferServer/ChooseTransferServer";
 @import "ClaimableBalanceDetails/ClaimableBalanceDetails";
 @import "WalletConnectSessionRequestModal/WalletConnectSessionRequestModal";
+@import "SwapModals/SwapSettings/SwapSettings";
+@import "SwapModals/SwapConfirm/SwapConfirm";
+@import "SwapModals/SwapSuccess/SwapSuccess";
 @import "SignChallengeWithMultisig/SignChallengeWithMultisig";
 
 .GlobalModalBackdrop {

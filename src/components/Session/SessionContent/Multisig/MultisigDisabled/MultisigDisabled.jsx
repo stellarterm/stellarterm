@@ -18,7 +18,7 @@ export default class MultisigDisabled extends React.Component {
                             security by requiring additional approvals for each transaction.
                         </span>
                         <a
-                            href="https://vault.zendesk.com/hc/en-us"
+                            href="https://lobstrvault.freshdesk.com/support/solutions/151000012441"
                             target="_blank"
                             rel="noopener noreferrer"
                         >

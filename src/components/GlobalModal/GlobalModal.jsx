@@ -28,6 +28,9 @@ import ChooseTransferServer from './ChooseTransferServer/ChooseTransferServer';
 import ClaimableBalanceDetails from './ClaimableBalanceDetails/ClaimableBalanceDetails';
 import WalletConnectSessionRequestModal from './WalletConnectSessionRequestModal/WalletConnectSessionRequestModal';
 import SignChallengeWithMultisig from './SignChallengeWithMultisig/SignChallengeWithMultisig';
+import SwapSettings from './SwapModals/SwapSettings/SwapSettings';
+import SwapConfirm from './SwapModals/SwapConfirm/SwapConfirm';
+import SwapSuccess from './SwapModals/SwapSuccess/SwapSuccess';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -178,6 +181,15 @@ export default class GlobalModal extends React.Component {
                 break;
             case 'SignChallengeWithMultisig':
                 body = <SignChallengeWithMultisig d={d} submit={d.modal.handlers} data={modal.inputData} />;
+                break;
+            case 'SwapSettings':
+                body = <SwapSettings d={d} submit={d.modal.handlers} />;
+                break;
+            case 'SwapConfirm':
+                body = <SwapConfirm d={d} submit={d.modal.handlers} params={modal.inputData} />;
+                break;
+            case 'SwapSuccess':
+                body = <SwapSuccess d={d} submit={d.modal.handlers} details={modal.inputData} />;
                 break;
             default:
                 body = (

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
-import isElectron from 'is-electron';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../images';
 import Driver from '../../lib/driver/Driver';
@@ -195,9 +194,9 @@ class Header extends React.Component {
                             </Link>
                             {this.createHeaderTab('/markets/', 'Markets')}
                             {this.createHeaderTab('/exchange/', 'Exchange')}
-                            {this.createHeaderTab('/account/', 'Account')}
+                            {this.createHeaderTab('/swap/', 'Swap')}
                             {this.getBuyCryptoLobsterLink()}
-                            {!isElectron() ? this.createHeaderTab('/download/', 'Download') : null}
+                            {this.createHeaderTab('/account/', 'Account')}
                         </nav>
 
                         {accountBlock}

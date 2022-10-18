@@ -20,7 +20,7 @@ const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
 // eslint-disable-next-line no-useless-escape
-const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+const pattern = /^(https?:\/\/)?([\da-z-]+)\.([a-z]{2,6})([\/\w -]*)*\/?$/;
 const regexp = new RegExp(pattern);
 
 
@@ -76,7 +76,7 @@ export default class AssetDropDown extends React.Component {
     }
 
     onUpdate({ code, issuer }) {
-        this.props.onUpdate(issuer ? new StellarSdk.Asset(code, issuer) : new StellarSdk.Asset.native());
+        this.props.onUpdate(issuer ? new StellarSdk.Asset(code, issuer) : StellarSdk.Asset.native());
         this.setState({
             isOpenList: false,
             termAsset: null,

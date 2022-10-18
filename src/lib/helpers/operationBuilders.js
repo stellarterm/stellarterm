@@ -133,3 +133,25 @@ export function buildOpRemoveOffer(opts) {
         offerId: offer.id,
     }));
 }
+
+export function buildOpPathPaymentStrictSend(opts) {
+    return StellarSdk.Operation.pathPaymentStrictSend({
+        sendAsset: opts.source,
+        sendAmount: opts.sourceAmount,
+        path: opts.path,
+        destAsset: opts.destination,
+        destMin: opts.optimizedEstimatedValue,
+        destination: opts.address,
+    });
+}
+
+export function buildOpPathPaymentStrictReceive(opts) {
+    return StellarSdk.Operation.pathPaymentStrictReceive({
+        sendAsset: opts.source,
+        sendMax: opts.optimizedEstimatedValue,
+        path: opts.path,
+        destAsset: opts.destination,
+        destAmount: opts.destinationAmount,
+        destination: opts.address,
+    });
+}

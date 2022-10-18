@@ -1,0 +1,63 @@
+.SwapSettings {
+    background-color: #fff;
+    width: 612px;
+    max-height: 100%;
+    overflow-y: auto;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    &-content {
+        padding: 31px 34px 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &-title {
+        font-size: 18px;
+        font-weight: normal;
+        color: #505558;
+        margin-bottom: 10px;
+    }
+
+    &-description {
+        font-size: 16px;
+        font-weight: 300;
+        color: #505558;
+        margin-bottom: 16px;
+    }
+
+    .SwapSettings_percents {
+        display: flex;
+
+        .SwapSettings_percent {
+            font-size: 14px;
+            font-weight: normal;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 55px;
+            height: 31px;
+            margin-right: 3px;
+            border-radius: 2px;
+            background-color: #d7e0e4;
+            color: #505558;
+            cursor: pointer;
+
+            &--active {
+                background-color: #69c76f;
+                color: #fff;
+            }
+        }
+    }
+
+    .Modal_button-block{
+        padding-right: 0;
+        margin-top: 20px;
+        margin-bottom: 0;
+
+        .s-button {
+            width: 174px;
+        }
+    }
+}

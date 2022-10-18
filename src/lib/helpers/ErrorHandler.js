@@ -146,7 +146,12 @@ errorMap
     .set('op_cannot_delete', 'Asset can’t be removed as you have an associated pool share')
     .set('op_bad_seq',
         'The specified bumpTo sequence number is not a valid sequence number. It must be between 0 ' +
-        'and INT64_MAX (9223372036854775807 or 0x7fffffffffffffff).');
+        'and INT64_MAX (9223372036854775807 or 0x7fffffffffffffff).')
+    .set('op_not_authorized', 'The destination account is not authorized to hold this asset.')
+    .set('op_under_dest_min',
+        'The paths that could send destination amount of destination asset would fall short of destination min.')
+    .set('op_over_source_max',
+        'The paths that could send destination amount of destination asset would exceed send max.');
 
 
 export default function ErrorHandler(error, errorPrefix) {

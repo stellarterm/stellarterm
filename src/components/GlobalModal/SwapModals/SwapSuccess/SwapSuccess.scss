@@ -1,0 +1,50 @@
+.SwapSuccess {
+    background-color: #fff;
+    width: 612px;
+    max-height: 100%;
+    margin: 0 auto;
+    box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.16);
+
+    &_content {
+        padding: 74px 0 56px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    &_title {
+        font-size: 40px;
+        font-weight: bold;
+        color: #505558;
+        margin-top: 16px;
+        margin-bottom: 19px;
+    }
+
+    &_details {
+        display: flex;
+        align-items: center;
+        margin-bottom: 42px;
+
+        &-arrow {
+            margin: 0 20px;
+        }
+    }
+
+    &_amount {
+        font-size: 16px;
+        font-weight: 600;
+        color: #252625;
+        margin-left: 8px;
+    }
+
+    .SwapSuccess_buttons {
+        display: flex;
+        gap: 15px;
+
+        button {
+            height: 52px;
+            width: 188px;
+        }
+    }
+}

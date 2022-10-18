@@ -35,7 +35,7 @@ export default class Payments {
                 this.paymentsHistory = result.records;
                 this.nextPaymentsHistoryRequest = result.next;
                 this.loading = false;
-                this.event.trigger({ type: PAYMENTS_EVENTS.GET_HISTORY_REQUEST });
+                this.event.trigger({ type: PAYMENTS_EVENTS.GET_PAYMENTS_REQUEST });
             });
     }
 

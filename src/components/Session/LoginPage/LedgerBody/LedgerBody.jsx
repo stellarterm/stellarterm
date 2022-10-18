@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import Driver from '../../../../lib/driver/Driver';
 import { isHttpConnectionUsed } from '../../../../lib/helpers/BrowserSupport';
+import { SESSION_EVENTS } from '../../../../lib/constants';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
 import HiddenDescription from '../Common/HiddenDescription';
 import LedgerForm from './LedgerForm/LedgerForm';
@@ -25,10 +26,17 @@ export default class LedgerBody extends React.Component {
         TransportWebUSB.isSupported()
             .then(isSupported => this.setState({ isWebUsbSupported: isSupported }))
             .catch(error => this.setState({ error }));
+
+        this.unsub = this.props.d.session.event.sub(event => {
+            if (event === SESSION_EVENTS.LEDGER_EVENT) {
+                this.forceUpdate();
+            }
+        });
     }
 
     componentWillUnmount() {
         this.props.d.session.connectLedgerError = null;
+        this.unsub();
     }
 
     render() {

@@ -1,0 +1,47 @@
+@import "SwapAsset/SwapAsset";
+@import "SwapAssetsList/SwapAssetsList";
+
+.SwapFormRow {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    position: relative;
+
+    &.last {
+        margin-bottom: 62px;
+    }
+
+    .SwapFormRow_available {
+        position: absolute;
+        top: 3px;
+        right: 0;
+        font-size: 12px;
+        font-weight: normal;
+        color: #9aa6ac;
+
+        .SwapFormRow_available-link {
+            color: #69c76f;
+            cursor: pointer;
+        }
+    }
+
+    .SwapFormRow_usd {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        font-size: 12px;
+        font-weight: normal;
+        color: #9aa6ac;
+        max-width: 60px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+
+        span.positive {
+            color: #69c76f;
+        }
+        span.negative {
+            color: #e33c4c;
+        }
+    }
+}

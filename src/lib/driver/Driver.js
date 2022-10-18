@@ -13,6 +13,7 @@ import Effects from './driverInstances/Effects';
 import Payments from './driverInstances/Payments';
 import WalletConnectService from './driverInstances/WalletConnectService';
 import Multisig from './driverInstances/Multisig';
+import Swap from './driverInstances/Swap';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -32,6 +33,7 @@ function Driver() {
     this.effects = new Effects(this);
     this.payments = new Payments(this);
     this.multisig = new Multisig(this);
+    this.swap = new Swap(this);
 
     window.view = accountId => {
         this.session.handlers.logInWithPublicKey(accountId);

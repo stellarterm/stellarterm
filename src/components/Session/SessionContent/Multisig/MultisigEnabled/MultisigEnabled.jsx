@@ -60,7 +60,7 @@ export default class MultisigEnabled extends React.Component {
 
                         <a
                             className="MultisigEnabled-header-wrap-info"
-                            href="https://lobstr.zendesk.com/hc/en-us/categories/360001534333-LOBSTR-Vault"
+                            href="https://lobstrvault.freshdesk.com/support/solutions/151000012441"
                             rel="noopener noreferrer"
                             target="_blank"
                         >
