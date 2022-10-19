@@ -255,7 +255,13 @@ export default class Multisig {
             request
                 .post(getEndpoint(endpointName), { headers, body })
                 .then(() => this.driver.modal.handlers.activate('multisig', { title, logo }))
-                .catch(e => console.error(e));
+                .catch(e => {
+                    console.log(e);
+                    this.driver.modal.handlers.activate('multisigUnknown', {
+                        tx: xdr,
+                        isTestnet: this.driver.Server.isTestnet,
+                    });
+                });
         }
         return {
             status: TX_STATUS.AWAIT_SIGNERS,

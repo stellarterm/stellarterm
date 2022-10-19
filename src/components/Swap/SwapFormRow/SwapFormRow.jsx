@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Asset } from 'stellar-sdk';
 import Input from '../../Common/Input/Input';
-import useForceUpdate from '../../../lib/useForceUpdate';
+import useForceUpdate from '../../../lib/hooks/useForceUpdate';
 import { formatNumber, roundAndFormat } from '../../../lib/helpers/Format';
 import Driver from '../../../lib/driver/Driver';
 import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants/sessionConstants';

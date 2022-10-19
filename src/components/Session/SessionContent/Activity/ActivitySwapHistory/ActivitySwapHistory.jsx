@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activity';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import images from '../../../../../images';
-import useForceUpdate from '../../../../../lib/useForceUpdate';
+import useForceUpdate from '../../../../../lib/hooks/useForceUpdate';
 import { PAYMENTS_EVENTS } from '../../../../../lib/driver/driverInstances/Payments';
 import Printify from '../../../../../lib/helpers/Printify';
 import Driver from '../../../../../lib/driver/Driver';

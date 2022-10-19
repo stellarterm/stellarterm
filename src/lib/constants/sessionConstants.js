@@ -32,7 +32,6 @@ export const TX_STATUS = {
 };
 
 export const UNSUPPORTED_JWT_AUTH_TYPES = new Map([
-    [AUTH_TYPE.WALLET_CONNECT, 'WalletConnect'],
     [AUTH_TYPE.TREZOR, 'Trezor'],
 ]);
 

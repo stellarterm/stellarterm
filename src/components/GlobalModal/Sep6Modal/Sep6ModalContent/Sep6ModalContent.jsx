@@ -232,8 +232,9 @@ export default class Sep6ModalContent extends React.Component {
             this.jwtToken = token;
 
             const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
+            const isWalletConnect = d.session.authType === AUTH_TYPE.WALLET_CONNECT;
 
-            if (isLedger) {
+            if (isLedger || isWalletConnect) {
                 d.modal.nextModalName = 'Sep6Modal';
                 d.modal.nextModalData = {
                     isDeposit,

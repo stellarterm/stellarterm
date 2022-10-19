@@ -120,7 +120,8 @@ export default class Sep24ModalContent extends React.Component {
         return this.getJwtToken(jwtEndpointUrl)
             .then(token => {
                 const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
-                if (isLedger) {
+                const isWalletConnect = d.session.authType === AUTH_TYPE.WALLET_CONNECT;
+                if (isLedger || isWalletConnect) {
                     d.modal.nextModalName = 'Sep24Modal';
                     d.modal.nextModalData = {
                         isDeposit,

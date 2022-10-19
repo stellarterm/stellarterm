@@ -19,7 +19,9 @@ import {
     buildOpClaimClaimableBalance,
     buildOpCreateAccount,
     buildOpCreateBuyOffer,
-    buildOpCreateSellOffer, buildOpPathPaymentStrictReceive, buildOpPathPaymentStrictSend,
+    buildOpCreateSellOffer,
+    buildOpPathPaymentStrictReceive,
+    buildOpPathPaymentStrictSend,
     buildOpRemoveOffer,
     buildOpSendPayment,
     buildOpSetOptions,
@@ -310,7 +312,18 @@ export default function Send(driver) {
                     signedTx: tx,
                 };
             } else if (this.authType === AUTH_TYPE.WALLET_CONNECT) {
-                return driver.walletConnectService.signTx(tx);
+                // use signTx in case when needed to sign challenge tx (manage data operation)
+                if (tx.operations.find(({ type }) => type === 'manageData')) {
+                    const signedXDR = await driver.walletConnectService.signTx(tx);
+                    const signedTx = new StellarSdk.Transaction(signedXDR, driver.Server.networkPassphrase);
+
+                    return {
+                        status: TX_STATUS.FINISH,
+                        signedTx,
+                    };
+                }
+
+                return driver.walletConnectService.signAndSubmitTx(tx);
             } else if (this.authType === AUTH_TYPE.LEDGER) {
                 return driver.modal.handlers.activate('signWithLedger', tx).then(async modalResult => {
                     if (modalResult.status === 'finish') {
@@ -418,7 +431,7 @@ export default function Send(driver) {
                             this.hasPendingTransaction = false;
                             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'));
                             this.account.refresh();
-                            if (this.authType === AUTH_TYPE.LEDGER) {
+                            if (this.authType === AUTH_TYPE.LEDGER || this.authType === AUTH_TYPE.WALLET_CONNECT) {
                                 driver.modal.handlers.ledgerFinish('closeWithTimeout', 3000);
                             }
                             return transactionResult;
@@ -459,7 +472,7 @@ export default function Send(driver) {
 
             return request.post(endpointUrl, { headers: CONTENT_TYPE_HEADER, body })
                 .then(({ token }) => {
-                    if (this.authType === AUTH_TYPE.LEDGER) {
+                    if (this.authType === AUTH_TYPE.LEDGER || this.authType === AUTH_TYPE.WALLET_CONNECT) {
                         driver.modal.handlers.ledgerFinish('closeWithTimeout', 1000);
                     }
                     JWT_TOKENS_CACHE.set(endpointUrl, token);
