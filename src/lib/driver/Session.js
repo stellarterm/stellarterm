@@ -401,7 +401,7 @@ export default function Send(driver) {
                         return this.handlers.sendToSigner(signResult);
                     }
                     console.log('Submitting tx\nhash:', tx.hash().toString('hex'));
-                    const serverResult = driver.Server.submitTransaction(tx)
+                    const serverResult = driver.Server.submitTransaction(tx, { skipMemoRequiredCheck: true })
                         .then(transactionResult => {
                             this.hasPendingTransaction = false;
                             console.log('Confirmed tx\nhash:', tx.hash().toString('hex'));
