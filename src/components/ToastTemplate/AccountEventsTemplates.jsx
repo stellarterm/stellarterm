@@ -1,5 +1,5 @@
 import React from 'react';
-import Printify from '../../lib/Printify';
+import Printify from '../../lib/helpers/Printify';
 
 const actionTypes = new Map([
     ['account_inflation_destination_updated', 'Inflation destination set'],

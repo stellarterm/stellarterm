@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LoginPage from './LoginPage/LoginPage';
-import Driver from '../../lib/Driver';
+import Driver from '../../lib/driver/Driver';
 import SessionActivate from './SessionActivate/SessionActivate';
 import SessionLoading from './SessionLoading/SessionLoading';
 import SessionContent from './SessionContent/SessionContent';
-import { SESSION_STATE } from '../../lib/constants';
+import { SESSION_STATE } from '../../lib/constants/sessionConstants';
 
 export default class Session extends React.Component {
     constructor(props) {

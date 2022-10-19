@@ -3,13 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../../lib/Driver';
+import Driver from '../../../../../../lib/driver/Driver';
 import images from '../../../../../../images';
 import AssetCardInRow from '../../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import { formatDate } from './../../Activity';
-import Printify from '../../../../../../lib/Printify';
-import { TX_STATUS } from '../../../../../../lib/constants';
-import ErrorHandler from '../../../../../../lib/ErrorHandler';
+import Printify from '../../../../../../lib/helpers/Printify';
+import { TX_STATUS } from '../../../../../../lib/constants/sessionConstants';
+import ErrorHandler from '../../../../../../lib/helpers/ErrorHandler';
 
 
 export default class ActivityOpenOrdersRow extends React.Component {

@@ -1,7 +1,7 @@
 import * as StellarSdk from 'stellar-sdk';
-import Event from './Event';
-import { get } from './api/request';
-import { SESSION_STATE } from './constants';
+import Event from '../../helpers/Event';
+import { get } from '../../api/request';
+import { SESSION_STATE } from '../../constants/sessionConstants';
 
 
 export const HORIZON_SERVER_EVENTS = {

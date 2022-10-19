@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import AssetCardHelper from '../AssetCardHelper';
 import images from '../../../../images';
 import Ellipsis from '../../Ellipsis/Ellipsis';
-import hexToRGBA from '../../../../lib/hexToRgba';
-import Driver from '../../../../lib/Driver';
+import hexToRGBA from '../../../../lib/helpers/hexToRgba';
+import Driver from '../../../../lib/driver/Driver';
 
 export default class AssetCardInRow extends AssetCardHelper {
     render() {

@@ -1,6 +1,6 @@
-import Event from '../Event';
-import { getAvailableClaimsCount, getNextClaimTime } from '../claimableBalancesHelpers';
-import { SESSION_EVENTS, SESSION_STATE } from '../constants';
+import Event from '../../helpers/Event';
+import { getAvailableClaimsCount, getNextClaimTime } from '../../helpers/claimableBalancesHelpers';
+import { SESSION_EVENTS, SESSION_STATE } from '../../constants/sessionConstants';
 
 const LAST_SEEN_CLAIMABLE_BALANCE_ALIAS = 'lastSeenClaimableBalance';
 

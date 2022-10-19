@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../../lib/Driver';
-import { AUTH_TYPE } from '../../../../../../lib/constants';
+import Driver from '../../../../../../lib/driver/Driver';
+import { AUTH_TYPE } from '../../../../../../lib/constants/sessionConstants';
 
 const images = require('../../../../../../images');
 
@@ -9,7 +9,7 @@ export default class MultisigSetRequiredSigners extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            requiredSigners: (props.d.session.account.thresholds.low_threshold / 10),
+            requiredSigners: props.d.multisig.requiredSigners,
         };
     }
 
@@ -19,7 +19,7 @@ export default class MultisigSetRequiredSigners extends React.Component {
         if (authType === AUTH_TYPE.LEDGER) {
             submit.cancel();
         }
-        d.session.handlers.setRequiredSigners(this.state.requiredSigners)
+        d.multisig.setRequiredSigners(this.state.requiredSigners)
             .then(() => {
                 if (authType !== AUTH_TYPE.WALLET_CONNECT) {
                     submit.cancel();
@@ -30,7 +30,7 @@ export default class MultisigSetRequiredSigners extends React.Component {
 
     handleChoose(key) {
         const { requiredSigners } = this.state;
-        const { signers } = this.props.d.session.account;
+        const { signers } = this.props.d.multisig;
 
         if (key === 'add' && requiredSigners === signers.length - 1) {
             return;
@@ -44,9 +44,9 @@ export default class MultisigSetRequiredSigners extends React.Component {
 
     render() {
         const { submit, d } = this.props;
-        const { signers } = d.session.account;
+        const { signers } = d.multisig;
         const { requiredSigners } = this.state;
-        const noChanges = requiredSigners === (d.session.account.thresholds.low_threshold / 10);
+        const noChanges = requiredSigners === d.multisig.requiredSigners;
 
         return (
             <div className="MultisigSetRequiredSigners">

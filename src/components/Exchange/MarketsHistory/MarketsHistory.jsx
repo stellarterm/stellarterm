@@ -3,8 +3,8 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { AutoSizer, List } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
-import Driver from '../../../lib/Driver';
-import Printify from '../../../lib/Printify';
+import Driver from '../../../lib/driver/Driver';
+import Printify from '../../../lib/helpers/Printify';
 import images from '../../../images';
 
 let prevPrice = 0;

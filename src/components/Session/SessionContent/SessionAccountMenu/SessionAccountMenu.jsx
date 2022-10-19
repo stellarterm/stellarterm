@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Driver from '../../../../lib/Driver';
-import { SESSION_STATE } from '../../../../lib/constants';
+import Driver from '../../../../lib/driver/Driver';
+import { SESSION_STATE } from '../../../../lib/constants/sessionConstants';
 
 export default class SessionAccountMenu extends React.Component {
     static createMenuTab(url, text, active) {

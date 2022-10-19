@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import directory from 'stellarterm-directory';
-import { niceNumDecimals, get24hChangePercent } from '../../../../lib/Format';
-import Printify from '../../../../lib/Printify';
+import { niceNumDecimals, get24hChangePercent } from '../../../../lib/helpers/Format';
+import Printify from '../../../../lib/helpers/Printify';
 import Ticker from '../../../../lib/api/Ticker';
 import PercentChange from '../../../Basics/PercentChange/PercentChange';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 
 export default class AssetListRows extends React.Component {
     static getAssetRow(asset, ticker) {

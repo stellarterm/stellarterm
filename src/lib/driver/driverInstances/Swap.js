@@ -1,6 +1,6 @@
 import StellarSdk from 'stellar-sdk';
 import BigNumber from 'bignumber.js';
-import MagicSpoon from '../MagicSpoon';
+import MagicSpoon from '../../helpers/MagicSpoon';
 
 export default class Swap {
     static findMaxSendPath(records) {

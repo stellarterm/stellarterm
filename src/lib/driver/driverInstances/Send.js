@@ -1,14 +1,14 @@
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import Stellarify from '../Stellarify';
-import Validate from '../Validate';
-import Event from '../Event';
-import * as EnvConsts from '../../env-consts';
-import ErrorHandler from '../ErrorHandler';
-import * as request from '../api/request';
-import { getUrlWithParams } from '../api/endpoints';
-import { TX_STATUS } from '../constants';
+import Stellarify from '../../helpers/Stellarify';
+import Validate from '../../helpers/Validate';
+import Event from '../../helpers/Event';
+import * as EnvConsts from '../../../env-consts';
+import ErrorHandler from '../../helpers/ErrorHandler';
+import * as request from '../../api/request';
+import { getUrlWithParams } from '../../api/endpoints';
+import { TX_STATUS } from '../../constants/sessionConstants';
 
 export default class Send {
     constructor(driver) {

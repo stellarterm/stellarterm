@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import images from '../../../images';
 import Phrases from './SecretPhrases.json';
 import Sep7Handler from '../../HomePage/Sep7Handler/Sep7Handler';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 
 
 export default class SecretPhraseSetup extends React.Component {
@@ -53,7 +53,8 @@ export default class SecretPhraseSetup extends React.Component {
                         onClick={() => {
                             submit.cancel();
                             Sep7Handler(d);
-                        }} />
+                        }}
+                    />
                 </div>
                 <div className="SecretPhraseSetup_wrap">
                     <p className="SecretPhraseSetup_title">
@@ -81,7 +82,8 @@ export default class SecretPhraseSetup extends React.Component {
                         onChange={e => this.handleInput(e)}
                         value={secretPhrase}
                         placeholder="Enter Secret Phrase (at least 5 symbols)"
-                        className="LoginPage__password" />
+                        className="LoginPage__password"
+                    />
                     <span onClick={() => this.generatePhrase()} className="SecretPhraseSetup_generate">Generate</span>
                     <div className="Modal_button-block">
                         <button
@@ -90,13 +92,15 @@ export default class SecretPhraseSetup extends React.Component {
                             onClick={() => {
                                 submit.cancel();
                                 Sep7Handler(d);
-                            }}>
+                            }}
+                        >
                             Cancel
                         </button>
                         <button
                             className="s-button"
                             disabled={!buttonReady || secretPhrase.length < 5}
-                            onClick={() => this.savePhrase()}>
+                            onClick={() => this.savePhrase()}
+                        >
                             {buttonReady ? 'Save' : <div className="nk-spinner" />}
                         </button>
                     </div>

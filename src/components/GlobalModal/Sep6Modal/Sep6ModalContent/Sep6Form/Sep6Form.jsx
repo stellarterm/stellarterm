@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import FeeBlock from '../../Common/FeeBlock';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import FieldGenerator from '../FieldGenerator/FieldGenerator';
 
 export default class Sep6Form extends React.Component {

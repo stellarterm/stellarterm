@@ -2,7 +2,7 @@ import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import MinMaxAmount from '../../Common/MinMaxAmount';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 
 const regexp = new RegExp(/^(\d{0,15})([.]\d{1,7})?$/);
 const fieldsDisplayNames = new Map([['dest', 'destination'], ['dest_extra', 'destination extra']]);

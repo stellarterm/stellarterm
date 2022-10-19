@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import Validate from '../../../../lib/Validate';
+import Validate from '../../../../lib/helpers/Validate';
 
 export default class AssetPickerNarrow extends React.Component {
     static checkInputs({ inputCode: code, inputIssuer: issuer }) {

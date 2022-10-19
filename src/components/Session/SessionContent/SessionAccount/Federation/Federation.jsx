@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../../images';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import Ellipsis from '../../../../Common/Ellipsis/Ellipsis';
 import CopyButton from '../../../../Common/CopyButton/CopyButton';
-import { SESSION_EVENTS, UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants';
+import { SESSION_EVENTS, UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants/sessionConstants';
 import FederationInput from './FederationInput/FederationInput';
 
 export const MIN_FED_LENGTH = 4;

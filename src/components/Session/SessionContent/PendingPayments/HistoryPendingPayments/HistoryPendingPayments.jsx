@@ -5,7 +5,7 @@ import createStellarIdenticon from 'stellar-identicon-js';
 import ActivityFromEffectsBase from '../../Activity/ActivityFromEffectsBase';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../../Activity/Activity';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import Printify from '../../../../../lib/Printify';
+import Printify from '../../../../../lib/helpers/Printify';
 import images from '../../../../../images';
 import ClaimantsList from './ClaimantsList';
 

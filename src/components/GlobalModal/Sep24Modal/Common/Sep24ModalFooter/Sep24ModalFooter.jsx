@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../lib/Driver';
-import ErrorHandler from '../../../../../lib/ErrorHandler';
+import Driver from '../../../../../lib/driver/Driver';
+import ErrorHandler from '../../../../../lib/helpers/ErrorHandler';
 import images from '../../../../../images';
-import Validate from '../../../../../lib/Validate';
-import { AUTH_TYPE, TX_STATUS } from '../../../../../lib/constants';
+import Validate from '../../../../../lib/helpers/Validate';
+import { AUTH_TYPE, TX_STATUS } from '../../../../../lib/constants/sessionConstants';
 
 export default class Sep24ModalFooter extends React.Component {
     constructor(props) {

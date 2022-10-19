@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import { AutoSizer, InfiniteLoader, List } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../../Activity/Activity';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import Printify from '../../../../../lib/Printify';
+import Printify from '../../../../../lib/helpers/Printify';
 import images from '../../../../../images';
-import { getNextClaimTime } from '../../../../../lib/claimableBalancesHelpers';
+import { getNextClaimTime } from '../../../../../lib/helpers/claimableBalancesHelpers';
 
 
 export default class ActivePendingPaymentsHistory extends React.Component {

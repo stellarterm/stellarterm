@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import createStellarIdenticon from 'stellar-identicon-js';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
-import Driver from '../../../../lib/Driver';
-import { SESSION_STATE } from '../../../../lib/constants';
+import Driver from '../../../../lib/driver/Driver';
+import { SESSION_STATE } from '../../../../lib/constants/sessionConstants';
 
 export default class AccountModalBlock extends React.Component {
     goToLogin() {

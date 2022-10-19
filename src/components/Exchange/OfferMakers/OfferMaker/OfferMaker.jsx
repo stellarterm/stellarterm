@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
-import ErrorHandler from '../../../../lib/ErrorHandler';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import ReservedPopover from '../../../Common/AppPopover/ReservedPopover';
-import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../../../../lib/constants';
+import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {

@@ -2,8 +2,8 @@ import WalletConnectClient, { SIGN_CLIENT_EVENTS } from '@walletconnect/sign-cli
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { getInternalError, getSdkError } from '@walletconnect/utils';
 import * as StellarSdk from 'stellar-sdk';
-import { AUTH_TYPE, TX_STATUS } from '../constants';
-import Sep7Handler from '../../components/HomePage/Sep7Handler/Sep7Handler';
+import { AUTH_TYPE, TX_STATUS } from '../../constants/sessionConstants';
+import Sep7Handler from '../../../components/HomePage/Sep7Handler/Sep7Handler';
 
 const PROJECT_ID = '2b3adbd81527ef317a8e791759d34d20';
 
@@ -19,6 +19,7 @@ const PUBNET = 'stellar:pubnet';
 
 const STELLAR_METHODS = {
     SIGN_AND_SUBMIT: 'stellar_signAndSubmitXDR',
+    SIGN: 'stellar_signXDR',
 };
 
 const REQUIRED_NAMESPACES = {
@@ -208,7 +209,7 @@ export default class WalletConnectService {
         }
     }
 
-    signTx(tx) {
+    signAndSubmitTx(tx) {
         if (this.driver.modal.modalName) {
             this.driver.modal.handlers.finish();
         }
@@ -235,5 +236,39 @@ export default class WalletConnectService {
         });
 
         return { status: TX_STATUS.SENT_TO_WALLET_CONNECT };
+    }
+
+    signTx(tx) {
+        if (this.driver.modal.modalName) {
+            this.driver.modal.handlers.finish();
+        }
+
+        const xdr = tx.toEnvelope().toXDR('base64');
+
+        return new Promise(((resolve, reject) => {
+            this.driver.modal.handlers.activate('WalletConnectRequestModal', {
+                title: this.appMeta.name,
+                logo: this.appMeta.icons[0],
+                result: this.client.request({
+                    topic: this.session.topic,
+                    chainId: PUBNET,
+                    request: {
+                        method: STELLAR_METHODS.SIGN,
+                        params: {
+                            xdr,
+                        },
+                    },
+                }).then(({ signedXDR }) => {
+                    resolve(signedXDR);
+                    return ({
+                        status: 'success',
+                    });
+                }).catch(() => {
+                    reject('Cancelled by user');
+
+                    throw new Error();
+                }),
+            });
+        }));
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route, Redirect } from 'react-router-dom';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import NotFound from '../../NotFound/NotFound';
 import Trust from './Trust/Trust';
 import Send from './Send/Send';

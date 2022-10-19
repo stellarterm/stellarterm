@@ -2,14 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../lib/Driver';
+import Driver from '../../lib/driver/Driver';
 import AssetList from '../Common/AssetList/AssetList';
 import CustomPairMenu from './CustomPairMenu/CustomPairMenu';
 import CustomMarketPicker from './CustomMarketPicker/CustomMarketPicker';
 import SearchByAnchor from '../Common/SearchByAnchor/SearchByAnchor';
 import AssetDropDown from '../Common/AssetPair/AssetDropDown/AssetDropDown';
 import TopVolumeAssets from './TopVolumeAssets/TopVolumeAssets';
-import Stellarify from '../../lib/Stellarify';
+import Stellarify from '../../lib/helpers/Stellarify';
 import NotFound from '../NotFound/NotFound';
 import images from '../../images';
 

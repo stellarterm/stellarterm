@@ -1,5 +1,5 @@
 import createStellarIdenticon from 'stellar-identicon-js';
-import { SESSION_STATE } from './constants';
+import { SESSION_STATE } from '../constants/sessionConstants';
 
 function setFavicon(favicon = '/favicon.ico') {
     const links = document.getElementsByTagName('link');

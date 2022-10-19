@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import { Link } from 'react-router-dom';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
-import Printify from '../../../../lib/Printify';
-import { niceNumDecimals } from '../../../../lib/Format';
-import Driver from '../../../../lib/Driver';
+import Printify from '../../../../lib/helpers/Printify';
+import { niceNumDecimals } from '../../../../lib/helpers/Format';
+import Driver from '../../../../lib/driver/Driver';
 import PercentChange from '../../../Basics/PercentChange/PercentChange';
 
 const SHOW_MORE_STEP_SIZE = 30;

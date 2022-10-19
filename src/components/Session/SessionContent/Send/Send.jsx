@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import SendSetup from './SendSetup/SendSetup';
 import SendError from './SendError/SendError';
 import SendReview from './SendReview/SendReview';

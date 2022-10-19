@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import SendDest from './SendDest';
 import SendAsset from './SendAsset';
 import SendMemo from './SendMemo';

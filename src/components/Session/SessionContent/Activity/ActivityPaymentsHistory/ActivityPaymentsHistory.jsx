@@ -4,12 +4,12 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activity';
-import Printify from '../../../../../lib/Printify';
-import { PAYMENTS_EVENTS } from '../../../../../lib/driver/Payments';
+import Printify from '../../../../../lib/helpers/Printify';
+import { PAYMENTS_EVENTS } from '../../../../../lib/driver/driverInstances/Payments';
 
 const PAYMENTS_TYPES = ['create_account', 'account_merge', 'payment'];
 

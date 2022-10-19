@@ -3,8 +3,8 @@ import { Asset } from 'stellar-sdk';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
-import Driver from '../../../../lib/Driver';
-import { formatNumber } from '../../../../lib/Format';
+import Driver from '../../../../lib/driver/Driver';
+import { formatNumber } from '../../../../lib/helpers/Format';
 
 
 const SwapSuccess = ({ submit, d, details }) => {

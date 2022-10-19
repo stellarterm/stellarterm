@@ -1,5 +1,5 @@
 import * as d3 from 'd3';
-import { roundAndFormat, formatNumber } from '../../../lib/Format';
+import { roundAndFormat, formatNumber } from '../../../lib/helpers/Format';
 import {
     ASKS_LINE_COLOR,
     AXIS_TOOLTIP_BORDER_RADIUS,

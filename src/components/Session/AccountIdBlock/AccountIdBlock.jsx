@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import QRCode from 'qrcode.react';
 import createStellarIdenticon from 'stellar-identicon-js';
-import clickToSelect from '../../../lib/clickToSelect';
+import clickToSelect from '../../../lib/helpers/clickToSelect';
 import CopyButton from '../../Common/CopyButton/CopyButton';
 
 export default function AccountIdBlock(props) {

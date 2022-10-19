@@ -5,10 +5,10 @@ import * as StellarSdk from 'stellar-sdk';
 import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import BigNumber from 'bignumber.js';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT, TABLE_MAX_HEIGHT, SCROLL_WIDTH } from '../Activity';
-import Printify from '../../../../../lib/Printify';
+import Printify from '../../../../../lib/helpers/Printify';
 import ActivityFromEffectsBase from '../ActivityFromEffectsBase';
 
 

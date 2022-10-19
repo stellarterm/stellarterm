@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../lib/Driver';
+import Driver from '../../lib/driver/Driver';
 import images from '../../images';
-import { TOAST_CONTENT_TYPES, TOAST_TYPES } from '../../lib/driver/ToastService';
+import { TOAST_CONTENT_TYPES, TOAST_TYPES } from '../../lib/driver/driverInstances/ToastService';
 
 export default class ToastTemplate extends React.Component {
     static getIconName(type) {
