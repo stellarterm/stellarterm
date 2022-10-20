@@ -2,6 +2,8 @@ import StellarSdk from 'stellar-sdk';
 import BigNumber from 'bignumber.js';
 import MagicSpoon from '../MagicSpoon';
 
+const XDR_AMOUNT_COEFFICIENT = 0.0000001;
+
 export default class Swap {
     static findMaxSendPath(records) {
         if (!records.length) {
@@ -77,14 +79,16 @@ export default class Swap {
         let totalAmount = new BigNumber(0);
         foundPathStrictSendResults.forEach(result => {
             totalAmount = totalAmount.plus(
-                result
-                    .tr()
-                    .pathPaymentStrictSendResult()
-                    .success()
-                    .last()
-                    .amount()
-                    .toNumber(),
-            ).times(0.0000001);
+                new BigNumber(
+                    result
+                        .tr()
+                        .pathPaymentStrictSendResult()
+                        .success()
+                        .last()
+                        .amount()
+                        .toNumber(),
+                ).times(XDR_AMOUNT_COEFFICIENT),
+            );
         });
 
         return totalAmount.toFixed(7);
@@ -106,15 +110,17 @@ export default class Swap {
 
         foundPathStrictSendResults.forEach(result => {
             totalAmount = totalAmount.plus(
-                result
-                    .tr()
-                    .pathPaymentStrictReceiveResult()
-                    .success()
-                    .offers()[0]
-                    .value()
-                    .amountBought()
-                    .toNumber(),
-            ).times(0.0000001);
+                new BigNumber(
+                    result
+                        .tr()
+                        .pathPaymentStrictReceiveResult()
+                        .success()
+                        .offers()[0]
+                        .value()
+                        .amountBought()
+                        .toNumber(),
+                ).times(XDR_AMOUNT_COEFFICIENT),
+            );
         });
 
         return totalAmount.toFixed(7);
