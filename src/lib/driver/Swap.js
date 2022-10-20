@@ -79,15 +79,51 @@ export default class Swap {
         let totalAmount = new BigNumber(0);
         foundPathStrictSendResults.forEach(result => {
             totalAmount = totalAmount.plus(
-                new BigNumber(
-                    result
-                        .tr()
-                        .pathPaymentStrictSendResult()
-                        .success()
-                        .last()
-                        .amount()
-                        .toNumber(),
-                ).times(XDR_AMOUNT_COEFFICIENT),
+                result
+                    .tr()
+                    .pathPaymentStrictSendResult()
+                    .success()
+                    .offers()
+                    .reverse()
+                    .reduce((acc, item) => {
+                        const isNative = item.value().assetSold().value() === undefined;
+
+                        const assetCode = isNative ?
+                            'native' :
+                            item.value()
+                                .assetSold()
+                                .value()
+                                .assetCode()
+                                .toString();
+
+                        const assetIssuer = isNative ?
+                            'native' :
+                            item.value()
+                                .assetSold()
+                                .value()
+                                .issuer()
+                                .value()
+                                .toString('hex');
+
+                        const amount = item.value().amountSold().toNumber();
+
+                        if (acc.code === null) {
+                            acc.code = assetCode;
+                            acc.issuer = assetIssuer;
+
+                            acc.amount = new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+
+                            return acc;
+                        }
+
+                        if (acc.code !== assetCode || acc.issuer !== assetIssuer) {
+                            return acc;
+                        }
+
+                        acc.amount += new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+
+                        return acc;
+                    }, { code: null, issuer: null, amount: 0 }).amount,
             );
         });
 
@@ -110,16 +146,50 @@ export default class Swap {
 
         foundPathStrictSendResults.forEach(result => {
             totalAmount = totalAmount.plus(
-                new BigNumber(
-                    result
-                        .tr()
-                        .pathPaymentStrictReceiveResult()
-                        .success()
-                        .offers()[0]
-                        .value()
-                        .amountBought()
-                        .toNumber(),
-                ).times(XDR_AMOUNT_COEFFICIENT),
+                result
+                    .tr()
+                    .pathPaymentStrictReceiveResult()
+                    .success()
+                    .offers()
+                    .reduce((acc, item) => {
+                        const isNative = item.value().assetBought().value() === undefined;
+
+                        const assetCode = isNative ?
+                            'native' :
+                            item.value()
+                                .assetBought()
+                                .value()
+                                .assetCode()
+                                .toString();
+
+                        const assetIssuer = isNative ?
+                            'native' :
+                            item.value()
+                                .assetBought()
+                                .value()
+                                .issuer()
+                                .value()
+                                .toString('hex');
+
+                        const amount = item.value().amountBought().toNumber();
+
+                        if (acc.code === null) {
+                            acc.code = assetCode;
+                            acc.issuer = assetIssuer;
+
+                            acc.amount = new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+
+                            return acc;
+                        }
+
+                        if (acc.code !== assetCode || acc.issuer !== assetIssuer) {
+                            return acc;
+                        }
+
+                        acc.amount += new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+
+                        return acc;
+                    }, { code: null, issuer: null, amount: 0 }).amount,
             );
         });
 
