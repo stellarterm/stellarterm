@@ -86,26 +86,18 @@ export default class Swap {
                     .offers()
                     .reverse()
                     .reduce((acc, item) => {
-                        const isNative = item.value().assetSold().value() === undefined;
+                        const itemValue = item.value();
+                        const assetValue = itemValue.assetSold().value();
 
-                        const assetCode = isNative ?
-                            'native' :
-                            item.value()
-                                .assetSold()
-                                .value()
-                                .assetCode()
-                                .toString();
+                        const assetCode = assetValue ?
+                            assetValue.assetCode().toString() :
+                            'native';
 
-                        const assetIssuer = isNative ?
-                            'native' :
-                            item.value()
-                                .assetSold()
-                                .value()
-                                .issuer()
-                                .value()
-                                .toString('hex');
+                        const assetIssuer = assetValue ?
+                            assetValue.issuer().value().toString('hex') :
+                            'native';
 
-                        const amount = item.value().amountSold().toNumber();
+                        const amount = itemValue.amountSold().toNumber();
 
                         if (acc.code === null) {
                             acc.code = assetCode;
@@ -152,26 +144,18 @@ export default class Swap {
                     .success()
                     .offers()
                     .reduce((acc, item) => {
-                        const isNative = item.value().assetBought().value() === undefined;
+                        const itemValue = item.value();
+                        const assetValue = itemValue.assetBought().value();
 
-                        const assetCode = isNative ?
-                            'native' :
-                            item.value()
-                                .assetBought()
-                                .value()
-                                .assetCode()
-                                .toString();
+                        const assetCode = assetValue ?
+                            assetValue.assetCode().toString() :
+                            'native';
 
-                        const assetIssuer = isNative ?
-                            'native' :
-                            item.value()
-                                .assetBought()
-                                .value()
-                                .issuer()
-                                .value()
-                                .toString('hex');
+                        const assetIssuer = assetValue ?
+                            assetValue.issuer().value().toString('hex') :
+                            'native';
 
-                        const amount = item.value().amountBought().toNumber();
+                        const amount = itemValue.amountBought().toNumber();
 
                         if (acc.code === null) {
                             acc.code = assetCode;
