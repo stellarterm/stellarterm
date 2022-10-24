@@ -61,6 +61,7 @@ const SwapSettings = ({ submit, d }) => {
                     onChange={setSlippage}
                     value={slippage.toString()}
                     inputType="number"
+                    style={{ paddingRight: '200px' }}
                     postfix={
                         <div className="SwapSettings_percents">
                             {SWAP_PERCENTS.map(percent => (

@@ -235,7 +235,7 @@ const SwapConfirm = ({ params, submit, d }) => {
                         />
                     </div>
 
-                    <span>{slippage}%</span>
+                    <span>{formatNumber(slippage)}%</span>
                 </div>
 
                 <div className="SwapConfirm_details-row">
