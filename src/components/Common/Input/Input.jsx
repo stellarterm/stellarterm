@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useMemo } from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 
@@ -21,7 +21,7 @@ const Input = forwardRef(
         inputType,
         ...props
     }, ref) => {
-        const id = _.uniqueId();
+        const id = useMemo(() => _.uniqueId(), []);
 
         const onInputChange = ({ target }) => {
             const type = inputType || 'text';
