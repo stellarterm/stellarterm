@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
+import isElectron from 'is-electron';
 import images from '../../images';
 import { getCurrentYear } from '../../lib/Format';
 
@@ -48,15 +49,26 @@ class Footer extends React.Component {
                             </a>
                         </div>
 
-                        <a
-                            className="Footer_link"
-                            href="https://stellarterm.zendesk.com/"
-                            target="_blank"
-                            rel="noopener noreferrer"
-                        >
-                            <img src={images['icon-support']} alt="support" />
+                        <div className="Footer_social_links">
+
+                            {!isElectron() && <Link
+                                className="Footer_link"
+                                to="/download/"
+                            >
+                                <img src={images['icon-download']} alt="support" />
+                            Download
+                            </Link>}
+
+                            <a
+                                className="Footer_link"
+                                href="https://stellarterm.freshdesk.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <img src={images['icon-support']} alt="support" />
                             Support Center
-                        </a>
+                            </a>
+                        </div>
                     </div>
                     <div className="Footer_disclaimer_block">
                         <div className="Footer_disclaimer_column">

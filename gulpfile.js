@@ -222,7 +222,7 @@ gulp.task('watch', baseTasks, () => {
         logPrefix: 'BS',
         server: ['dist'],
         https: true,
-        middleware: [browserSyncSpa(/exchange[^-]|^[^.]+$/, indexPath)],
+        middleware: [browserSyncSpa(/exchange[^-]|^[^.]+$/, indexPath), browserSyncSpa(/swap[^-]|^[^.]+$/, indexPath)],
     });
     gulp.watch('./src/index.html', ['html-reload']);
     gulp.watch(['src/**/*.scss'], ['css-reload']);

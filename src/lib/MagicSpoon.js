@@ -7,7 +7,7 @@ import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from 'trezor-connect';
 import { signTransaction } from '@stellar/freighter-api';
-import TransformTrezorTransaction from 'trezor-connect/lib/plugins/stellar/plugin';
+import TransformTrezorTransaction from '@trezor/connect-plugin-stellar';
 import ErrorHandler from './ErrorHandler';
 
 
@@ -113,6 +113,30 @@ const MagicSpoon = {
             return assetBalance ? assetBalance.balance : null;
         };
 
+        /**
+         * Returns string of available balance if exists
+         * @param targetAsset {StellarSdk.Asset}
+         * @returns {string|null}
+         */
+        sdkAccount.getAvailableBalance = targetAsset => {
+            const balanceInstance = sdkAccount.getAssetBalanceInstance(targetAsset);
+
+            if (balanceInstance === null) {
+                return null;
+            }
+
+            if (targetAsset.isNative()) {
+                return new BigNumber(sdkAccount.maxLumenSpend())
+                    .minus(balanceInstance.selling_liabilities)
+                    .toFixed(7);
+            }
+
+            return new BigNumber(balanceInstance.balance)
+                .minus(new BigNumber(balanceInstance.selling_liabilities))
+                .toFixed(7);
+        };
+
+
         sdkAccount.getReservedBalance = targetAsset => {
             const assetBalance = sdkAccount.getAssetBalanceInstance(targetAsset);
 
@@ -155,6 +179,7 @@ const MagicSpoon = {
                     code: sdkBalance.asset_code,
                     issuer: sdkBalance.asset_issuer,
                     balance: sdkBalance.balance,
+                    sdkBalance,
                 };
                 const asset = directory.resolveAssetByAccountId(newBalance.code, newBalance.issuer);
                 if (asset.domain === 'unknown') {
@@ -482,12 +507,12 @@ const MagicSpoon = {
                 console.error(ErrorHandler(error));
             });
     },
-    async getLast24hAggregationsWithStep15min(Server, base, counter) {
+    async getLast24hAggregationsWithStep15min(Server, base, counter, limit) {
         const RESOLUTION_15_MINUTES = 900;
         const endDate = Math.round(Date.now() / 1000);
         const startDate = endDate - PERIOD_24H;
 
-        return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_15_MINUTES, 100);
+        return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_15_MINUTES, limit || 100);
     },
     async getLastMinuteAggregation(Server, base, counter) {
         const RESOLUTION_MINUTE = 60;

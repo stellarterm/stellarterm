@@ -54,8 +54,8 @@ function nFormatter(num, digits) {
     return item ? (num / item.value).toFixed(digits).replace(rx, '$1') + item.symbol : '0';
 }
 
-exports.roundAndFormat = function roundAndFormat(input, formatBigNumbersWithPostfix) {
-    if (formatBigNumbersWithPostfix && input >= 1e9) {
+exports.roundAndFormat = function roundAndFormat(input, withPostfix, postfixThreshold) {
+    if (withPostfix && input >= (postfixThreshold || 1e9)) {
         return nFormatter(input, 2);
     }
     const rounded = exports.niceRound(input);

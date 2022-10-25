@@ -20,6 +20,7 @@ export default class ActivityNavMenu extends React.Component {
                 {this.constructor.getMenuItem('/account/activity/', 'Active orders', hasOpenOffers)}
                 {this.constructor.getMenuItem('/account/activity/trade/', 'Trades')}
                 {this.constructor.getMenuItem('/account/activity/payments/', 'Payments')}
+                {this.constructor.getMenuItem('/account/activity/swap/', 'Swap')}
                 {this.constructor.getMenuItem('/account/activity/signers/', 'Signers')}
                 {this.constructor.getMenuItem('/account/activity/trustlines/', 'Trustlines')}
             </div>

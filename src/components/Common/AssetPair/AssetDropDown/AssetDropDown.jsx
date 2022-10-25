@@ -6,9 +6,10 @@ import Debounce from 'awesome-debounce-promise';
 import directory from 'stellarterm-directory';
 import Driver from '../../../../lib/Driver';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
-import AssetCardList from './AssetCardList/AssetCardList';
 import images from '../../../../images';
 import AssetCardInRow from '../../AssetCard/AssetCardInRow/AssetCardInRow';
+import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../../lib/driver/Session';
+import AssetCardList from './AssetCardList/AssetCardList';
 
 const ENTER = 13;
 const ARROW_UP = 38;
@@ -19,19 +20,11 @@ const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
 // eslint-disable-next-line no-useless-escape
-const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
+const pattern = /^(https?:\/\/)?([\da-z-]+)\.([a-z]{2,6})([\/\w -]*)*\/?$/;
 const regexp = new RegExp(pattern);
 
 
 export default class AssetDropDown extends React.Component {
-    static getDomainForUnknownAsset(asset) {
-        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
-        const assetData = unknownAssetsData.find(assetLocalItem => (
-            assetLocalItem.code === asset.code && assetLocalItem.issuer === asset.issuer
-        ));
-        if (!assetData) { return ''; }
-        return (assetData.currency && assetData.currency.host) || assetData.host;
-    }
     constructor(props) {
         super(props);
 
@@ -83,7 +76,7 @@ export default class AssetDropDown extends React.Component {
     }
 
     onUpdate({ code, issuer }) {
-        this.props.onUpdate(issuer ? new StellarSdk.Asset(code, issuer) : new StellarSdk.Asset.native());
+        this.props.onUpdate(issuer ? new StellarSdk.Asset(code, issuer) : StellarSdk.Asset.native());
         this.setState({
             isOpenList: false,
             termAsset: null,
@@ -126,12 +119,20 @@ export default class AssetDropDown extends React.Component {
         const { inputCode, currencies } = this.state;
         const inputCodeLowerCased = inputCode.toLowerCase();
 
+        const assetsData = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
+
         const unknownAssets = (account && account.getSortedBalances({ onlyUnknown: true })) || [];
         const filteredUnknownAssets = unknownAssets
-            .filter(asset =>
-                asset.code.toLowerCase().includes(inputCodeLowerCased) ||
-                this.constructor.getDomainForUnknownAsset(asset).toLowerCase().includes(inputCodeLowerCased),
-            );
+            .filter(asset => {
+                if (asset.code.toLowerCase().includes(inputCodeLowerCased)) {
+                    return true;
+                }
+
+                const assetData = assetsData.get(getAssetString(asset));
+                const domain = assetData && assetData.home_domain;
+
+                return domain && domain.toLowerCase().includes(inputCodeLowerCased);
+            });
 
         const filteredCurrencies = currencies.filter(currency => (
             !assets.find(asset => ((asset.code === currency.code) && (asset.issuer === currency.issuer))) &&
