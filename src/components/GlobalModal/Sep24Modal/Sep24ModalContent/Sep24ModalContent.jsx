@@ -68,7 +68,7 @@ export default class Sep24ModalContent extends React.Component {
 
 
     async getJwtToken(endpoint) {
-        const { d } = this.props;
+        const { d, asset, isDeposit } = this.props;
 
         const tokenFromCache = d.session.handlers.getTokenFromCache(endpoint);
 
@@ -81,6 +81,7 @@ export default class Sep24ModalContent extends React.Component {
         }
 
         const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
+        const isWalletConnect = d.session.authType === AUTH_TYPE.WALLET_CONNECT;
 
         if (isLedger) {
             d.modal.handlers.finish();
@@ -88,6 +89,16 @@ export default class Sep24ModalContent extends React.Component {
         const { signedTx } = await d.session.handlers.sign(challengeTx);
 
         const token = await d.session.handlers.getToken(endpoint, signedTx);
+
+        if (isLedger || isWalletConnect) {
+            d.modal.nextModalName = 'Sep24Modal';
+            d.modal.nextModalData = {
+                isDeposit,
+                asset,
+                jwtToken: token,
+                transferServer: this.props.transferServer,
+            };
+        }
 
         return token;
     }
@@ -106,7 +117,7 @@ export default class Sep24ModalContent extends React.Component {
     }
 
     initSep24() {
-        const { d, isDeposit, asset } = this.props;
+        const { isDeposit } = this.props;
         const { requestParams, transaction } = this.state;
 
         const params = { account: requestParams.account };
@@ -119,18 +130,6 @@ export default class Sep24ModalContent extends React.Component {
 
         return this.getJwtToken(jwtEndpointUrl)
             .then(token => {
-                const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
-                const isWalletConnect = d.session.authType === AUTH_TYPE.WALLET_CONNECT;
-                if (isLedger || isWalletConnect) {
-                    d.modal.nextModalName = 'Sep24Modal';
-                    d.modal.nextModalData = {
-                        isDeposit,
-                        asset,
-                        jwtToken: token,
-                        transferServer: this.props.transferServer,
-                    };
-                    return null;
-                }
                 this.jwtToken = token;
                 if (transaction) { return token; }
                 return sep24Request(this.TRANSFER_SERVER_SEP0024, isDeposit, this.jwtToken, requestParams);
