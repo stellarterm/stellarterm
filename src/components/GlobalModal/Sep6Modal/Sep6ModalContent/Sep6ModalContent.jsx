@@ -181,7 +181,7 @@ export default class Sep6ModalContent extends React.Component {
     }
 
     async getJwtToken(endpoint) {
-        const { d } = this.props;
+        const { d, isDeposit, asset } = this.props;
 
         const tokenFromCache = d.session.handlers.getTokenFromCache(endpoint);
 
@@ -194,6 +194,7 @@ export default class Sep6ModalContent extends React.Component {
         }
 
         const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
+        const isWalletConnect = d.session.authType === AUTH_TYPE.WALLET_CONNECT;
 
         if (isLedger) {
             d.modal.handlers.finish();
@@ -201,6 +202,17 @@ export default class Sep6ModalContent extends React.Component {
         const { signedTx } = await d.session.handlers.sign(challengeTx);
 
         const token = await d.session.handlers.getToken(endpoint, signedTx);
+
+        if (isLedger || isWalletConnect) {
+            d.modal.nextModalName = 'Sep6Modal';
+            d.modal.nextModalData = {
+                isDeposit,
+                asset,
+                jwtToken: token,
+                transferServer: this.props.transferServer,
+            };
+            return null;
+        }
 
         return token;
     }
@@ -222,7 +234,6 @@ export default class Sep6ModalContent extends React.Component {
         if (this.jwtToken) {
             return this.getSep6Request(transferAssetInfo);
         }
-        const { d, asset, isDeposit } = this.props;
         const { requestParams } = this.state;
 
         const params = { account: requestParams.account };
@@ -230,20 +241,6 @@ export default class Sep6ModalContent extends React.Component {
 
         return this.getJwtToken(jwtEndpointUrl).then(token => {
             this.jwtToken = token;
-
-            const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
-            const isWalletConnect = d.session.authType === AUTH_TYPE.WALLET_CONNECT;
-
-            if (isLedger || isWalletConnect) {
-                d.modal.nextModalName = 'Sep6Modal';
-                d.modal.nextModalData = {
-                    isDeposit,
-                    asset,
-                    jwtToken: token,
-                    transferServer: this.props.transferServer,
-                };
-                return null;
-            }
 
             return this.getSep6Request(transferAssetInfo);
         });
