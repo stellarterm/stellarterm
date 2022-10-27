@@ -106,7 +106,7 @@ const SwapAssetsList = ({ d, closeList, setAsset, myAssets, knownAssets }) => {
             });
 
         setFilteredMyAssets(filteredBySearch);
-    }, [searchText]);
+    }, [searchText, myAssets]);
 
     useEffect(() => {
         const knownWithoutMy = myAssets ? knownAssets.filter(({ code, issuer }) => !myAssetsSet.has(`${code}-${issuer}`)) : knownAssets;
