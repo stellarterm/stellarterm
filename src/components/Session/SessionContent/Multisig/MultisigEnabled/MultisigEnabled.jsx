@@ -13,6 +13,12 @@ const images = require('../../../../../images');
 
 
 export default class MultisigEnabled extends React.Component {
+    componentDidMount() {
+        if (this.props.d.multisig.multisigProvider === MULTISIG_PROVIDERS.STELLAR_GUARD) {
+            this.props.d.multisig.checkGuardSignerActivation();
+        }
+    }
+
     getSigners() {
         const { signers } = this.props.d.multisig;
 
