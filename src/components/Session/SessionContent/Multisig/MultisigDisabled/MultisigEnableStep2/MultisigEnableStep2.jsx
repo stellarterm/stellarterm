@@ -20,12 +20,6 @@ export default class MultisigEnableStep2 extends React.Component {
         };
     }
 
-    componentDidUpdate(prevState) {
-        if (this.state.publicKey !== prevState.publicKey && !this.state.isUpdated && !this.state.checkProviderLoading) {
-            this.checkKey();
-        }
-    }
-
     handleInput(e) {
         e.preventDefault();
         this.setState({
@@ -33,7 +27,8 @@ export default class MultisigEnableStep2 extends React.Component {
             valid: StellarSdk.StrKey.isValidEd25519PublicKey(e.target.value),
             inputError: '',
             isUpdated: false,
-        });
+            provider: null,
+        }, () => this.checkKey());
     }
 
     goBack() {
@@ -46,7 +41,19 @@ export default class MultisigEnableStep2 extends React.Component {
 
     checkKey() {
         const { publicKey, valid } = this.state;
+        if (!publicKey) {
+            return;
+        }
         if (valid) {
+            const keyAlreadyUsed = this.props.d.multisig.signers.find(({ key }) => key === publicKey);
+
+            if (keyAlreadyUsed) {
+                this.setState({
+                    inputError: 'This key is already a signer',
+                });
+                return;
+            }
+
             this.setState({ checkProviderLoading: true });
 
             Multisig.getKeyProvider(publicKey)
@@ -56,26 +63,21 @@ export default class MultisigEnableStep2 extends React.Component {
                         checkProviderLoading: false,
                         isUpdated: true,
                     });
+                    if (this.props.d.multisig.isMultisigEnabled && provider !== MULTISIG_PROVIDERS.LOBSTR_VAULT) {
+                        this.setState({
+                            inputError: 'You can add additional signatures only with the LOBSTR VAULT',
+                        });
+                    }
                 });
+        } else {
+            this.setState({
+                inputError: 'Incorrect Stellar public key',
+            });
         }
     }
 
     async addSigner() {
-        const { provider } = this.state;
-        if (!this.state.valid) {
-            this.setState({
-                inputError: 'Incorrect Stellar public key',
-            });
-            return;
-        }
-
-        if (this.props.d.multisig.isMultisigEnabled && provider !== MULTISIG_PROVIDERS.LOBSTR_VAULT) {
-            this.setState({
-                inputError: 'You can add additional signatures only with the LOBSTR VAULT',
-            });
-            return;
-        }
-        const { publicKey } = this.state;
+        const { provider, publicKey } = this.state;
 
         const signerData = {
             provider,
@@ -129,7 +131,7 @@ export default class MultisigEnableStep2 extends React.Component {
                         Back
                     </button>
                     <button
-                        disabled={!valid || checkProviderLoading}
+                        disabled={!valid || checkProviderLoading || Boolean(inputError)}
                         className="s-button"
                         onClick={() => this.addSigner()}
                     >Add signer</button>
