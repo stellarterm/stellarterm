@@ -2,6 +2,8 @@ import StellarSdk from 'stellar-sdk';
 import BigNumber from 'bignumber.js';
 import MagicSpoon from '../../helpers/MagicSpoon';
 
+const XDR_AMOUNT_COEFFICIENT = 0.0000001;
+
 export default class Swap {
     static findMaxSendPath(records) {
         if (!records.length) {
@@ -81,10 +83,40 @@ export default class Swap {
                     .tr()
                     .pathPaymentStrictSendResult()
                     .success()
-                    .last()
-                    .amount()
-                    .toNumber(),
-            ).times(0.0000001);
+                    .offers()
+                    .reverse()
+                    .reduce((acc, item) => {
+                        const itemValue = item.value();
+                        const assetValue = itemValue.assetSold().value();
+
+                        const assetCode = assetValue ?
+                            assetValue.assetCode().toString() :
+                            'native';
+
+                        const assetIssuer = assetValue ?
+                            assetValue.issuer().value().toString('hex') :
+                            'native';
+
+                        const amount = itemValue.amountSold().toNumber();
+
+                        if (acc.code === null) {
+                            acc.code = assetCode;
+                            acc.issuer = assetIssuer;
+
+                            acc.amount = new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+
+                            return acc;
+                        }
+
+                        if (acc.code !== assetCode || acc.issuer !== assetIssuer) {
+                            return acc;
+                        }
+
+                        acc.amount += new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+
+                        return acc;
+                    }, { code: null, issuer: null, amount: 0 }).amount,
+            );
         });
 
         return totalAmount.toFixed(7);
@@ -110,11 +142,39 @@ export default class Swap {
                     .tr()
                     .pathPaymentStrictReceiveResult()
                     .success()
-                    .offers()[0]
-                    .value()
-                    .amountBought()
-                    .toNumber(),
-            ).times(0.0000001);
+                    .offers()
+                    .reduce((acc, item) => {
+                        const itemValue = item.value();
+                        const assetValue = itemValue.assetBought().value();
+
+                        const assetCode = assetValue ?
+                            assetValue.assetCode().toString() :
+                            'native';
+
+                        const assetIssuer = assetValue ?
+                            assetValue.issuer().value().toString('hex') :
+                            'native';
+
+                        const amount = itemValue.amountBought().toNumber();
+
+                        if (acc.code === null) {
+                            acc.code = assetCode;
+                            acc.issuer = assetIssuer;
+
+                            acc.amount = new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+
+                            return acc;
+                        }
+
+                        if (acc.code !== assetCode || acc.issuer !== assetIssuer) {
+                            return acc;
+                        }
+
+                        acc.amount += new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+
+                        return acc;
+                    }, { code: null, issuer: null, amount: 0 }).amount,
+            );
         });
 
         return totalAmount.toFixed(7);
