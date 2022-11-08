@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
-import Driver from '../../../lib/Driver';
-import ErrorHandler from '../../../lib/ErrorHandler';
-import { AUTH_TYPE } from '../../../lib/constants';
+import Driver from '../../../lib/driver/Driver';
+import ErrorHandler from '../../../lib/helpers/ErrorHandler';
+import { AUTH_TYPE } from '../../../lib/constants/sessionConstants';
 
 
 export default class CancelOffersModal extends React.Component {

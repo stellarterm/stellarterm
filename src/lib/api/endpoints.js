@@ -1,8 +1,9 @@
 import _ from 'lodash';
 import * as EnvConsts from '../../env-consts';
+import { MARKER_KEYS, MULTISIG_PROVIDERS } from '../constants/multisigConstants';
 
 export const endpoints = {
-    getJwtToken: {
+    stellartermFederationAuth: {
         url: 'api/authentication/',
         baseUrl: EnvConsts.FEDERATION_API_URL,
     },
@@ -21,6 +22,10 @@ export const endpoints = {
     sendTransactionToVault: {
         url: 'transactions/',
         baseUrl: EnvConsts.LOBSTR_VAULT_URL,
+    },
+    isGuardSigner: {
+        url: `accounts/${MARKER_KEYS[MULTISIG_PROVIDERS.STELLAR_GUARD]}/multisig`,
+        baseUrl: EnvConsts.STELLAR_GUARD_URL,
     },
     sendTransactionToGuard: {
         url: 'transactions/',

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../lib/Driver';
+import Driver from '../../lib/driver/Driver';
 import MultisigEnableStep1 from './../Session/SessionContent/Multisig/MultisigDisabled/MultisigEnableStep1/MultisigEnableStep1';
 import MultisigEnableStep2 from './../Session/SessionContent/Multisig/MultisigDisabled/MultisigEnableStep2/MultisigEnableStep2';
 import MultisigEnableStep3 from './../Session/SessionContent/Multisig/MultisigDisabled/MultisigEnableStep3/MultisigEnableStep3';
@@ -27,6 +27,7 @@ import WalletConnectPairingModal from './WalletConnectPairingModal/WalletConnect
 import ChooseTransferServer from './ChooseTransferServer/ChooseTransferServer';
 import ClaimableBalanceDetails from './ClaimableBalanceDetails/ClaimableBalanceDetails';
 import WalletConnectSessionRequestModal from './WalletConnectSessionRequestModal/WalletConnectSessionRequestModal';
+import SignChallengeWithMultisig from './SignChallengeWithMultisig/SignChallengeWithMultisig';
 import SwapSettings from './SwapModals/SwapSettings/SwapSettings';
 import SwapConfirm from './SwapModals/SwapConfirm/SwapConfirm';
 import SwapSuccess from './SwapModals/SwapSuccess/SwapSuccess';
@@ -122,7 +123,7 @@ export default class GlobalModal extends React.Component {
                 body = <MultisigEnableStep3 submit={d.modal.handlers} signerData={modal.inputData} d={d} />;
                 break;
             case 'multisigDisableModal':
-                body = <MultisigDisableModal submit={d.modal.handlers} signerKey={modal.inputData} d={d} />;
+                body = <MultisigDisableModal submit={d.modal.handlers} signer={modal.inputData} d={d} />;
                 break;
             case 'multisigSetRequiredSigners':
                 body = <MultisigSetRequiredSigners submit={d.modal.handlers} d={d} />;
@@ -177,6 +178,9 @@ export default class GlobalModal extends React.Component {
                 break;
             case 'ClaimableBalanceDetails':
                 body = <ClaimableBalanceDetails d={d} submit={d.modal.handlers} claimableBalance={modal.inputData} />;
+                break;
+            case 'SignChallengeWithMultisig':
+                body = <SignChallengeWithMultisig d={d} submit={d.modal.handlers} data={modal.inputData} />;
                 break;
             case 'SwapSettings':
                 body = <SwapSettings d={d} submit={d.modal.handlers} />;

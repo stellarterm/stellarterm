@@ -1,18 +1,19 @@
 import '@babel/polyfill';
 import BigNumber from 'bignumber.js';
-import Ticker from './api/Ticker';
-import Send from './driver/Send';
-import AccountEvents from './driver/AccountEvents';
-import Session from './driver/Session';
-import Orderbook from './driver/Orderbook';
-import Modal from './driver/Modal';
-import ToastService from './driver/ToastService';
-import HorizonServer from './HorizonServer';
-import ClaimableBalances from './driver/ClaimableBalances';
-import Effects from './driver/Effects';
-import Payments from './driver/Payments';
-import WalletConnectService from './driver/WalletConnectService';
-import Swap from './driver/Swap';
+import Ticker from '../api/Ticker';
+import Send from './driverInstances/Send';
+import AccountEvents from './driverInstances/AccountEvents';
+import Session from './driverInstances/Session';
+import Orderbook from './driverInstances/Orderbook';
+import Modal from './driverInstances/Modal';
+import ToastService from './driverInstances/ToastService';
+import HorizonServer from './driverInstances/HorizonServer';
+import ClaimableBalances from './driverInstances/ClaimableBalances';
+import Effects from './driverInstances/Effects';
+import Payments from './driverInstances/Payments';
+import WalletConnectService from './driverInstances/WalletConnectService';
+import Multisig from './driverInstances/Multisig';
+import Swap from './driverInstances/Swap';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -31,6 +32,7 @@ function Driver() {
     this.claimableBalances = new ClaimableBalances(this);
     this.effects = new Effects(this);
     this.payments = new Payments(this);
+    this.multisig = new Multisig(this);
     this.swap = new Swap(this);
 
     window.view = accountId => {

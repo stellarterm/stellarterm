@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import createStellarIdenticon from 'stellar-identicon-js';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import { AUTH_TYPE } from '../../../../../lib/constants';
-import Validate from '../../../../../lib/Validate';
+import { AUTH_TYPE } from '../../../../../lib/constants/sessionConstants';
+import Validate from '../../../../../lib/helpers/Validate';
 
 export default class SendReview extends React.Component {
     constructor(props) {

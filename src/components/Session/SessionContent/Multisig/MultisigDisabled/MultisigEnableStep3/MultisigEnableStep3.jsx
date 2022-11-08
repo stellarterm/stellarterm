@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../../lib/Driver';
+import Driver from '../../../../../../lib/driver/Driver';
 import Ellipsis from './../../../../../Common/Ellipsis/Ellipsis';
-import ErrorHandler from '../../../../../../lib/ErrorHandler';
-import { AUTH_TYPE } from '../../../../../../lib/constants';
+import ErrorHandler from '../../../../../../lib/helpers/ErrorHandler';
+import { AUTH_TYPE, TX_STATUS } from '../../../../../../lib/constants/sessionConstants';
+import { MULTISIG_PROVIDERS } from '../../../../../../lib/constants/multisigConstants';
 
 const images = require('../../../../../../images');
 
@@ -18,7 +19,7 @@ export default class MultisigEnableStep3 extends React.Component {
     }
 
     async addSigner(signerData, d) {
-        const { publicKey, signerProvider } = signerData;
+        const { publicKey, provider } = signerData;
         const { authType } = d.session;
         this.setState({
             pending: true,
@@ -28,16 +29,19 @@ export default class MultisigEnableStep3 extends React.Component {
             this.props.submit.cancel();
         }
         try {
-            const result = await d.session.handlers.addSigner(publicKey, signerProvider);
-            if (result.status === 'finish' && signerProvider === 'stellarGuard') {
+            const result =
+                d.multisig.isMultisigEnabled ?
+                    await d.multisig.addSigner(publicKey) :
+                    await d.multisig.enableMultisig(publicKey, provider);
+            if (result.status === TX_STATUS.FINISH && provider === MULTISIG_PROVIDERS.STELLAR_GUARD) {
                 result.serverResult.then(() => {
-                    d.session.handlers.activateGuardSigner();
+                    d.multisig.activateGuardSigner();
                 });
             }
             if (authType === AUTH_TYPE.WALLET_CONNECT) {
                 return;
             }
-            if (d.session.account.signers.length > 1) {
+            if (d.multisig.isMultisigEnabled) {
                 this.props.submit.cancel();
                 return;
             }

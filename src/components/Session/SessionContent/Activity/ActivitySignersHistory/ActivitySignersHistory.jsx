@@ -5,7 +5,7 @@ import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activity';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import ActivityFromEffectsBase from '../ActivityFromEffectsBase';
 
 const SIGNERS_TYPES = ['signer_removed', 'signer_created', 'signer_updated', 'account_thresholds_updated'];

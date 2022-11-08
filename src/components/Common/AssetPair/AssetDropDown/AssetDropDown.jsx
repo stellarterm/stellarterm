@@ -4,11 +4,11 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Debounce from 'awesome-debounce-promise';
 import directory from 'stellarterm-directory';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
 import images from '../../../../images';
 import AssetCardInRow from '../../AssetCard/AssetCardInRow/AssetCardInRow';
-import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../../lib/driver/Session';
+import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../../lib/driver/driverInstances/Session';
 import AssetCardList from './AssetCardList/AssetCardList';
 
 const ENTER = 13;

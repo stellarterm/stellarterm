@@ -1,6 +1,6 @@
 import StellarSdk from 'stellar-sdk';
 import BigNumber from 'bignumber.js';
-import MagicSpoon from '../MagicSpoon';
+import MagicSpoon from '../../helpers/MagicSpoon';
 
 const XDR_AMOUNT_COEFFICIENT = 0.0000001;
 

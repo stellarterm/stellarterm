@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../lib/Driver';
-import ErrorHandler from '../../../../lib/ErrorHandler';
+import Driver from '../../../../lib/driver/Driver';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import images from '../../../../images';
-import { TX_STATUS } from '../../../../lib/constants';
+import { TX_STATUS } from '../../../../lib/constants/sessionConstants';
 
 export default class TrustButton extends React.Component {
     static goToLink(e) {

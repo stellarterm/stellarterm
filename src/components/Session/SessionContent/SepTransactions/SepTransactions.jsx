@@ -5,16 +5,16 @@ import moment from 'moment';
 import * as StellarSdk from 'stellar-sdk';
 import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import images from '../../../../images';
 import {
     getTransferServer,
     getTransferServerInfo,
     getTransactions,
     checkAssetSettings,
-} from '../../../../lib/SepUtils';
+} from '../../../../lib/helpers/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
-import Stellarify from '../../../../lib/Stellarify';
+import Stellarify from '../../../../lib/helpers/Stellarify';
 import AssetRow from '../../../Common/AssetRow/AssetRow';
 import AppLoading from '../../../AppLoading/AppLoading';
 
@@ -306,6 +306,47 @@ export default class SepTransactions extends React.Component {
         );
     }
 
+    async getJwtToken(endpoint) {
+        const { d } = this.props;
+
+        const tokenFromCache = d.session.handlers.getTokenFromCache(endpoint);
+
+        if (tokenFromCache) { return tokenFromCache; }
+
+        let challengeTx = await d.session.handlers.getAuthChallengeTx(endpoint, this.NETWORK_PASSPHRASE);
+
+        if (d.multisig.isMultisigEnabled && d.multisig.moreSignaturesNeeded(challengeTx)) {
+            challengeTx = await this.getSignedBySignersChallenge(challengeTx);
+        }
+
+        const { signedTx } = await d.session.handlers.sign(challengeTx);
+
+        const token = await d.session.handlers.getToken(endpoint, signedTx);
+
+        return token;
+    }
+
+    getSignedBySignersChallenge(tx) {
+        this.challengeTx = tx;
+        const promise = new Promise((resolve, reject) => {
+            this.signedChallengeResolver = resolve;
+            this.signedChallengeRejecter = reject;
+        });
+
+        this.props.d.modal.handlers.activate('SignChallengeWithMultisig', { tx, resolver: this.signedChallengeResolver })
+            .then(({ status }) => {
+                if (status === 'cancel') {
+                    this.signedChallengeRejecter();
+                    this.setState({ errorMsg: 'Authentication failed' });
+                }
+            });
+
+        return promise.then(res => {
+            this.props.d.modal.handlers.finish();
+            return res;
+        });
+    }
+
     checkForJwt(asset, noAuth) {
         const { d } = this.props;
         const requestParams = {
@@ -317,7 +358,7 @@ export default class SepTransactions extends React.Component {
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
 
-        return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
+        return this.getJwtToken(jwtEndpointUrl).then(token => {
             this.jwtToken = token;
             return getTransactions(this.TRANSFER_SERVER, requestParams, this.jwtToken, asset.sep24, noAuth);
         });

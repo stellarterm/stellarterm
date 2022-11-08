@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../../lib/Driver';
+import Driver from '../../../../../../lib/driver/Driver';
 import Ellipsis from '../../../../../Common/Ellipsis/Ellipsis';
-import { TX_STATUS } from '../../../../../../lib/constants';
-import ErrorHandler from '../../../../../../lib/ErrorHandler';
+import { TX_STATUS } from '../../../../../../lib/constants/sessionConstants';
+import ErrorHandler from '../../../../../../lib/helpers/ErrorHandler';
 
 export default class RemoveTrustLink extends React.Component {
     constructor(props) {

@@ -3,18 +3,19 @@ import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import Sep6ModalFooter from '../Common/Sep6ModalFooter/Sep6ModalFooter';
 import Sep6Form from './Sep6Form/Sep6Form';
-import { getTransferServerInfo, sep6Request } from '../../../../lib/SepUtils';
+import { getTransferServerInfo, sep6Request } from '../../../../lib/helpers/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
-import ErrorHandler from '../../../../lib/ErrorHandler';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import FeeBlock from '../Common/FeeBlock';
 import ExtraInfoBlock from '../Common/ExtraInfoBlock';
 import EstimatedTime from '../Common/EstimatedTIme';
 import MinMaxAmount from '../Common/MinMaxAmount';
 import KycFrame from './KycFrame/KycFrame';
-import { AUTH_TYPE } from '../../../../lib/constants';
+import { AUTH_TYPE } from '../../../../lib/constants/sessionConstants';
+import SignChallengeBlock from '../../../Common/SignChallengeBlock/SignChallengeBlock';
 
 const kycStatusTypes = new Set(['denied', 'pending']);
 
@@ -40,6 +41,7 @@ export default class Sep6ModalContent extends React.Component {
                 asset_code: this.props.asset.code,
                 account: this.props.d.session.account.accountId(),
             },
+            showGetTokenFlow: false,
         };
     }
 
@@ -178,37 +180,70 @@ export default class Sep6ModalContent extends React.Component {
         );
     }
 
+    async getJwtToken(endpoint) {
+        const { d, isDeposit, asset } = this.props;
+
+        const tokenFromCache = d.session.handlers.getTokenFromCache(endpoint);
+
+        if (tokenFromCache) { return tokenFromCache; }
+
+        let challengeTx = await d.session.handlers.getAuthChallengeTx(endpoint, this.NETWORK_PASSPHRASE);
+
+        if (d.multisig.isMultisigEnabled && d.multisig.moreSignaturesNeeded(challengeTx)) {
+            challengeTx = await this.getSignedBySignersChallenge(challengeTx);
+        }
+
+        const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
+        const isWalletConnect = d.session.authType === AUTH_TYPE.WALLET_CONNECT;
+
+        if (isLedger) {
+            d.modal.handlers.finish();
+        }
+        const { signedTx } = await d.session.handlers.sign(challengeTx);
+
+        const token = await d.session.handlers.getToken(endpoint, signedTx);
+
+        if (isLedger || isWalletConnect) {
+            d.modal.nextModalName = 'Sep6Modal';
+            d.modal.nextModalData = {
+                isDeposit,
+                asset,
+                jwtToken: token,
+                transferServer: this.props.transferServer,
+            };
+            return null;
+        }
+
+        return token;
+    }
+
+    getSignedBySignersChallenge(tx) {
+        this.challengeTx = tx;
+        const promise = new Promise(resolve => {
+            this.signedChallengeResolver = resolve;
+        });
+        this.setState({ showGetTokenFlow: true });
+
+        return promise.then(signedTx => {
+            this.setState({ showGetTokenFlow: false });
+            return signedTx;
+        });
+    }
+
     checkForJwt(transferAssetInfo) {
-        const { d, asset, isDeposit } = this.props;
+        if (this.jwtToken) {
+            return this.getSep6Request(transferAssetInfo);
+        }
         const { requestParams } = this.state;
 
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
-        const isLedgerJwtNeeded = d.session.authType === AUTH_TYPE.LEDGER && this.jwtToken === null;
 
-        if (isLedgerJwtNeeded) {
-            d.modal.handlers.finish();
+        return this.getJwtToken(jwtEndpointUrl).then(token => {
+            this.jwtToken = token;
 
-            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
-                d.modal.nextModalName = 'Sep6Modal';
-                d.modal.nextModalData = {
-                    isDeposit,
-                    asset,
-                    jwtToken: token,
-                    transferServer: this.props.transferServer,
-                };
-                return null;
-            });
-        }
-
-        if (this.jwtToken === null) {
-            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then(token => {
-                this.jwtToken = token;
-                return this.getSep6Request(transferAssetInfo);
-            });
-        }
-
-        return this.getSep6Request(transferAssetInfo);
+            return this.getSep6Request(transferAssetInfo);
+        });
     }
 
     withdrawRequest() {
@@ -231,8 +266,21 @@ export default class Sep6ModalContent extends React.Component {
     }
 
     render() {
-        const { reqErrorMsg, isLoading, response, assetDisabled } = this.state;
+        const { d } = this.props;
+        const { reqErrorMsg, isLoading, response, assetDisabled, showGetTokenFlow } = this.state;
         const isAnyError = reqErrorMsg !== null;
+
+        if (showGetTokenFlow) {
+            return (
+                <React.Fragment>
+                    <SignChallengeBlock
+                        d={d}
+                        signedChallengeResolver={this.signedChallengeResolver}
+                        challengeTx={this.challengeTx}
+                    />
+                </React.Fragment>
+            );
+        }
 
         if ((_.isEmpty(response) || assetDisabled) && !isLoading) {
             return (

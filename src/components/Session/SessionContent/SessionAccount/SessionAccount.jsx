@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import Generic from '../../../Common/Generic/Generic';
 import AccountIdBlock from '../../AccountIdBlock/AccountIdBlock';
 import Federation from './Federation/Federation';

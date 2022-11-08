@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 
 const getModalContent = (type, asset) => {
     switch (type) {

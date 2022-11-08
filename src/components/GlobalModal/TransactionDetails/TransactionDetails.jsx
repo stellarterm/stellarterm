@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import AssetCardInRow from '../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import Printify from '../../../lib/Printify';
-import Driver from '../../../lib/Driver';
+import Printify from '../../../lib/helpers/Printify';
+import Driver from '../../../lib/driver/Driver';
 import OperationsMap from './OperationsMap';
 
 export default class TransactionDetails extends React.Component {

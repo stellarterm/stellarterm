@@ -1,5 +1,5 @@
 import * as StellarSdk from 'stellar-sdk';
-import MagicSpoon from '../../../../../../lib/MagicSpoon';
+import MagicSpoon from '../../../../../../lib/helpers/MagicSpoon';
 
 const getUnknownAssetData = async ({ code, issuer, balance }, d) => {
     const lastTrades = await MagicSpoon.getLast24hAggregationsWithStep15min(d.Server,

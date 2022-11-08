@@ -2,8 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
-import Driver from '../../../lib/Driver';
-import { getBrowserName } from '../../../lib/BrowserSupport'
+import Driver from '../../../lib/driver/Driver';
+import { getBrowserName } from '../../../lib/helpers/BrowserSupport';
 
 export default class BrowserModal extends React.Component {
     constructor(props) {
@@ -32,7 +32,8 @@ export default class BrowserModal extends React.Component {
                     <img
                         src={images['icon-close']}
                         alt="X"
-                        onClick={() => { this.onClickCloseButton(); }} />
+                        onClick={() => { this.onClickCloseButton(); }}
+                    />
                 </div>
 
                 <div className="BrowserModal_content">
@@ -53,13 +54,15 @@ export default class BrowserModal extends React.Component {
                             <input
                                 type="checkbox"
                                 onChange={() => this.onClickDontShow()}
-                                checked={this.state.dontShow} />
-                            <span>Don{"'"}t show this message again</span>
+                                checked={this.state.dontShow}
+                            />
+                            <span>Don{'\''}t show this message again</span>
                         </div>
 
                         <button
                             className="s-button"
-                            onClick={() => { this.onClickCloseButton(); }}>
+                            onClick={() => { this.onClickCloseButton(); }}
+                        >
                             I Understand
                         </button>
                     </div>

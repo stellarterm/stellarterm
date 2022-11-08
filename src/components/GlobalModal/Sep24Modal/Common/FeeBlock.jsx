@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Printify from '../../../../lib/Printify';
+import Printify from '../../../../lib/helpers/Printify';
 
 export default function FeeBlock(props) {
     const { feeFixed, feePercent, assetCode, assetAnchor, amountForFee, isDeposit } = props;

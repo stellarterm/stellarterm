@@ -4,9 +4,9 @@ import { Redirect, Link } from 'react-router-dom';
 import QRCode from 'qrcode.react';
 import SessionAccountMenu from '../SessionContent/SessionAccountMenu/SessionAccountMenu';
 import ErrorBoundary from '../../Common/ErrorBoundary/ErrorBoundary';
-import clickToSelect from '../../../lib/clickToSelect';
+import clickToSelect from '../../../lib/helpers/clickToSelect';
 import CopyButton from '../../Common/CopyButton/CopyButton';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import images from '../../../images';
 import ActivityPendingPaymentsHistory from '../SessionContent/PendingPayments/ActivePendingPayments/ActivePendingPayments';
 

@@ -1,5 +1,5 @@
-import MagicSpoon from '../MagicSpoon';
-import Event from '../Event';
+import MagicSpoon from '../../helpers/MagicSpoon';
+import Event from '../../helpers/Event';
 
 export default class Orderbook {
     constructor(driver) {

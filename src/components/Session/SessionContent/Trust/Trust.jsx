@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import ManageTrust from './ManageTrust/ManageTrust';
 import ManuallyAddTrust from './ManuallyAddTrust/ManuallyAddTrust';
 import SearchByAnchor from '../../../Common/SearchByAnchor/SearchByAnchor';

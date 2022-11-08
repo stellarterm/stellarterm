@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import Sep24ModalContent from './Sep24ModalContent/Sep24ModalContent';
 import WithdrawCompleted from './WithdrawCompleted/WithdrawCompleted';
 
