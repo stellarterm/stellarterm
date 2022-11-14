@@ -45,7 +45,7 @@ export default class WalletConnectService {
             return null;
         }
         this.client = await WalletConnectClient.init({
-            logger: 'debug',
+            // logger: 'debug',
             projectId: PROJECT_ID,
             metadata: METADATA,
         });
@@ -80,7 +80,7 @@ export default class WalletConnectService {
     async restoreConnectionIfNeeded() {
         if (this.session) {
             this.client = await WalletConnectClient.init({
-                logger: 'debug',
+                // logger: 'debug',
                 projectId: PROJECT_ID,
                 metadata: METADATA,
             });
