@@ -14,18 +14,17 @@ const DepthChart = ({ asks, bids, baseBuying, counterSelling, isLinear }) => {
     const [chart, setChart] = useState(null);
     const [isHidden, setIsHidden] = useState(document.hidden);
 
-    // check for a thin orderbook
-    if (asks.length < 2 || bids.length < 2) {
-        return (
-            <EmptyState />
-        );
-    }
-
     useEffect(() => {
-        const chartInstance = new DepthChartD3(baseBuying, counterSelling);
-        chartInstance.initializeChart();
-        setChart(chartInstance);
-    }, []);
+        if (asks.length < 2 || bids.length < 2) {
+            setChart(null);
+            return;
+        }
+        if (!chart) {
+            const chartInstance = new DepthChartD3(baseBuying, counterSelling);
+            chartInstance.initializeChart();
+            setChart(chartInstance);
+        }
+    }, [asks, bids]);
 
     const onVisibilityChange = () => {
         setIsHidden(document.hidden);
@@ -50,6 +49,13 @@ const DepthChart = ({ asks, bids, baseBuying, counterSelling, isLinear }) => {
             isLinear,
         );
     }, [bids, asks, chart, isHidden, isLinear]);
+
+    // check for a thin orderbook
+    if (asks.length < 2 || bids.length < 2) {
+        return (
+            <EmptyState />
+        );
+    }
 
 
     return (
