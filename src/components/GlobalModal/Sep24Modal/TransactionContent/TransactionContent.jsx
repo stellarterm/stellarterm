@@ -1,11 +1,11 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
 import MemoBlock from '../../Sep24Modal/Common/MemoBlock';
 import EstimatedTime from '../../Sep24Modal/Common/EstimatedTime';
+import { formatNumber } from '../../../../lib/helpers/Format';
 
 export default class TransactionContent extends React.Component {
     static getReadableDate(date) {
@@ -92,7 +92,7 @@ export default class TransactionContent extends React.Component {
                 {amount_in ? this.constructor.getInfoBlock('Payment amount', `${amount_in} ${asset.code}`) : null}
                 {amount_out ? this.constructor.getInfoBlock('Order amount', `${amount_out} ${asset.code}`) : null}
                 {this.constructor.getInfoBlock('Details', message)}
-                {amount_fee ? this.constructor.getInfoBlock('Fee', `${amount_fee} ${asset.code}`) : null}
+                {amount_fee ? this.constructor.getInfoBlock('Fee', `${formatNumber(amount_fee)} ${asset.code}`) : null}
                 {status_eta ? <EstimatedTime time={status_eta} /> : null}
             </div>
         );

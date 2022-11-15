@@ -5,6 +5,11 @@ import Printify from '../../../../lib/helpers/Printify';
 export default function FeeBlock(props) {
     const { feeFixed, feePercent, assetCode, assetAnchor, amountForFee, isDeposit } = props;
     const isNoFee = feeFixed === 0 && feePercent === 0;
+
+    if (isNoFee) {
+        return null;
+    }
+
     const isfixedFee = feeFixed !== 0 && feePercent === 0;
     const isPercentFee = feeFixed === 0 && feePercent !== 0;
     const isBothFee = feeFixed !== 0 && feePercent !== 0;
@@ -15,9 +20,7 @@ export default function FeeBlock(props) {
     let feeText;
     let totalFee = 0;
 
-    if (isNoFee) {
-        feeText = 'No fee';
-    } else if (isfixedFee) {
+    if (isfixedFee) {
         feeText = `${feeFixed} ${assetName}`;
         totalFee = `${feeFixed} ${assetName}`;
     } else if (isPercentFee) {
@@ -55,7 +58,7 @@ export default function FeeBlock(props) {
                 <div className="content_title">{feeTitle} fee</div>
                 <div className="content_text">{feeText}</div>
             </div>
-            {isfixedFee || isNoFee ? null : (
+            {isfixedFee ? null : (
                 <div className="content_block">
                     <div className="content_title">Total {feeTitle} fee</div>
                     <div className="content_text">{totalFee}</div>
