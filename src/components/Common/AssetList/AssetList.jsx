@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import images from '../../../images';
 import Loading from '../Loading/Loading';
 import Ellipsis from '../Ellipsis/Ellipsis';
 import AssetListRows from './AssetListRows/AssetListRows';
-
 
 export default class AssetList extends React.Component {
     constructor(props) {
@@ -64,7 +63,8 @@ export default class AssetList extends React.Component {
                     <img
                         src={images['sort-arrow-act']}
                         alt="sortBy"
-                        className={this.state.sortType === true ? 'revert' : ''} />
+                        className={this.state.sortType === true ? 'revert' : ''}
+                    />
                 )}
             </div>
         );
@@ -100,7 +100,8 @@ export default class AssetList extends React.Component {
                     limit={limit}
                     sortBy={sortBy}
                     sortType={sortType}
-                    showLowTradable={showLowTradable} />
+                    showLowTradable={showLowTradable}
+                />
             </div>
         );
     }

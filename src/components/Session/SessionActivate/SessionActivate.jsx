@@ -1,15 +1,31 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 import QRCode from 'qrcode.react';
 import SessionAccountMenu from '../SessionContent/SessionAccountMenu/SessionAccountMenu';
 import ErrorBoundary from '../../Common/ErrorBoundary/ErrorBoundary';
-import clickToSelect from '../../../lib/clickToSelect';
+import clickToSelect from '../../../lib/helpers/clickToSelect';
 import CopyButton from '../../Common/CopyButton/CopyButton';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import images from '../../../images';
+import ActivityPendingPaymentsHistory from '../SessionContent/PendingPayments/ActivePendingPayments/ActivePendingPayments';
 
 export default function SessionActivate(props) {
+    useEffect(() => {
+        props.d.claimableBalances.getClaimableBalances();
+    }, []);
+
+    const [hasClaimableBalances, setHasClaimableBalances] =
+        useState(Boolean(props.d.claimableBalances.pendingClaimableBalances.length));
+
+    useEffect(() => {
+        const unsub = props.d.claimableBalances.event.sub(() => {
+            setHasClaimableBalances(Boolean(props.d.claimableBalances.pendingClaimableBalances.length));
+        });
+
+        return () => unsub();
+    });
+
     const { unfundedAccountId } = props;
 
     if (props.d.Server.isTestnet) {
@@ -20,8 +36,10 @@ export default function SessionActivate(props) {
                         <div className="titleDesc">Account activation required</div>
                         <a
                             href="https://www.stellar.org/laboratory/#account-creator?network=test"
-                            className="s-button" target="_blank"
-                            rel="nofollow noopener noreferrer">
+                            className="s-button"
+                            target="_blank"
+                            rel="nofollow noopener noreferrer"
+                        >
                             Use the Friendbot to get some test lumens
                         </a>
                     </div>
@@ -85,7 +103,7 @@ export default function SessionActivate(props) {
                                         <div className="buyTitle">Secure</div>
                                         <div className="buyDesc">
                                             Payment processor complies with PCI SAQ when storing, processing and
-                                             transmitting cardholder data
+                                            transmitting cardholder data
                                         </div>
                                     </div>
                                 </div>
@@ -102,18 +120,20 @@ export default function SessionActivate(props) {
                                     </div>
                                 </div>
 
-                                <a
-                                    href={`https://lobstr.co/buy-crypto?target_address=${unfundedAccountId}`}
-                                    className="s-button"
-                                    target="_blank"
-                                    rel="nofollow noopener noreferrer">
+                                <Link className="s-button" to="/buy-crypto?code=xlm">
                                     Buy XLM
-                                </a>
+                                </Link>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            {hasClaimableBalances &&
+                <div className="island Activity no_top_margin">
+                    <ActivityPendingPaymentsHistory d={props.d} />
+                </div>
+            }
+
         </ErrorBoundary>
     );
 }

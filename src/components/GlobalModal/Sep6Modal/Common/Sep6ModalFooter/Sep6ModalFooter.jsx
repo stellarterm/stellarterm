@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../lib/Driver';
-import MagicSpoon from '../../../../../lib/MagicSpoon';
-import ErrorHandler from '../../../../../lib/ErrorHandler';
+import Driver from '../../../../../lib/driver/Driver';
+import ErrorHandler from '../../../../../lib/helpers/ErrorHandler';
 import images from '../../../../../images';
+import { AUTH_TYPE, TX_STATUS } from '../../../../../lib/constants/sessionConstants';
 
 export default class Sep6ModalFooter extends React.Component {
     constructor(props) {
@@ -23,7 +22,7 @@ export default class Sep6ModalFooter extends React.Component {
         const { withdrawRequest, asset, isDeposit, requestParams } = this.props;
         this.setState({ isPending: true, isError: false, errorMsg: '' });
 
-        withdrawRequest().then((res) => {
+        withdrawRequest().then(res => {
             const kycStatusTypes = new Set(['denied', 'pending']);
             const isInteractive = res.type === 'interactive_customer_info_needed';
             const isKycError = kycStatusTypes.has(res.status) && res.type === 'customer_info_status';
@@ -38,6 +37,7 @@ export default class Sep6ModalFooter extends React.Component {
                     isDeposit,
                     isConfirm: true,
                     confirmData: Object.assign(res, requestParams),
+                    transferServer: this.props.transferServer,
                 });
             }
         });
@@ -88,7 +88,8 @@ export default class Sep6ModalFooter extends React.Component {
                     onClick={() => {
                         window.history.pushState({}, null, '/');
                         d.modal.handlers.cancel();
-                    }}>
+                    }}
+                >
                     Cancel
                 </button>
 
@@ -96,7 +97,8 @@ export default class Sep6ModalFooter extends React.Component {
                     <button
                         className="s-button"
                         disabled={isAnyError || isLoading || neededKyc}
-                        onClick={confirmFunction}>
+                        onClick={confirmFunction}
+                    >
                         {isPending ? <div className="nk-spinner" /> : confirmButtonText}
                     </button>
                 )}
@@ -116,19 +118,20 @@ export default class Sep6ModalFooter extends React.Component {
             type = `MEMO_${type.toUpperCase()}`;
         }
 
-        const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
+        const sendOpts = {
             destination: sendData.account_id,
             asset: new StellarSdk.Asset(asset.code, asset.issuer),
             amount: sendData.amount,
-            memo: memo
-                ? {
-                    type,
-                    content: memo,
-                }
-                : undefined,
-        });
+        };
 
-        if (d.session.authType === 'ledger') {
+        const sendMemo = memo
+            ? {
+                type,
+                content: memo,
+            }
+            : undefined;
+
+        if (d.session.authType === AUTH_TYPE.LEDGER) {
             d.modal.handlers.finish();
             d.modal.nextModalName = 'Sep6Modal';
             d.modal.nextModalData = {
@@ -137,18 +140,19 @@ export default class Sep6ModalFooter extends React.Component {
                 isDeposit: false,
                 isConfirm: false,
                 withdrawCompleted: true,
+                transferServer: this.props.transferServer,
             };
-            d.session.handlers.buildSignSubmit(tx);
+            d.session.handlers.send(sendOpts, sendMemo);
             return null;
         }
 
-        const bssResult = await d.session.handlers.buildSignSubmit(tx);
-        if (bssResult.status === 'await_signers') {
+        const bssResult = await d.session.handlers.send(sendOpts, sendMemo);
+        if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
             d.modal.handlers.cancel();
             window.history.pushState({}, null, '/');
         }
 
-        if (bssResult.status === 'finish') {
+        if (bssResult.status === TX_STATUS.FINISH) {
             bssResult.serverResult
                 .then(() => {
                     this.setState({
@@ -161,9 +165,10 @@ export default class Sep6ModalFooter extends React.Component {
                         isDeposit: false,
                         isConfirm: false,
                         withdrawCompleted: true,
+                        transferServer: this.props.transferServer,
                     });
                 })
-                .catch((e) => {
+                .catch(e => {
                     this.setState({
                         isPending: false,
                         isError: true,
@@ -175,10 +180,8 @@ export default class Sep6ModalFooter extends React.Component {
     }
 
     render() {
-        const { asset } = this.props;
+        const { transferServer } = this.props;
         const { isError, errorMsg } = this.state;
-        const selectedAnchor = directory.getAnchor(asset.domain);
-        const supportMail = asset.customTransferSupport || selectedAnchor.support;
 
         return (
             <React.Fragment>
@@ -193,13 +196,21 @@ export default class Sep6ModalFooter extends React.Component {
 
                 <div className="Modal_footer">
                     <div className="transaction_support">
-                        <span>Having issues with your transaction?</span>
-                        <span>
-                            Contact anchor support at{' '}
-                            <a href={`mailto:${supportMail}`} target="_blank" rel="nofollow noopener noreferrer">
-                                {supportMail}
-                            </a>
-                        </span>
+                        {transferServer.SUPPORT && (
+                            <React.Fragment>
+                                <span>Having issues with your transaction?</span>
+                                <span>
+                                    Contact anchor support at{' '}
+                                    <a
+                                        href={`mailto:${transferServer.SUPPORT}`}
+                                        target="_blank"
+                                        rel="nofollow noopener noreferrer"
+                                    >
+                                        {transferServer.SUPPORT}
+                                    </a>
+                                </span>
+                            </React.Fragment>
+                        )}
                     </div>
 
                     {this.getActionButtons()}
@@ -221,4 +232,5 @@ Sep6ModalFooter.propTypes = {
     needConfirm: PropTypes.bool,
     emptyDeposit: PropTypes.bool,
     withdrawCompleted: PropTypes.bool,
+    transferServer: PropTypes.objectOf(PropTypes.any),
 };

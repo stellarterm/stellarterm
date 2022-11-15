@@ -1,0 +1,160 @@
+.SignChallengeBlock {
+    .content_main {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+
+        img {
+            margin-bottom: 18px;
+        }
+    }
+}
+
+.SignChallengeBlock_title {
+    font-size: 16px;
+    color: #505558;
+    margin-bottom: 6px;
+    font-weight: normal;
+}
+
+.SignChallengeBlock_description {
+    font-size: 16px;
+    color: #505558;
+    font-weight: 300;
+}
+
+.SignChallengeBlock_footer {
+    margin-top: 37px;
+    display: flex;
+
+    .spinner-green {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .nk-spinner {
+            width: 24px;
+            height: 24px;
+            border: 2px solid #7ed085;
+            border-left: 2px solid #fff;
+        }
+    }
+}
+
+.SignChallengeBlock_required-signers {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: 15px;
+
+    span {
+        font-size: 16px;
+        color: #505558;
+        font-weight: 300;
+    }
+
+    span:first-child {
+        margin-bottom: 2px;
+        font-weight: normal;
+    }
+}
+
+.SignChallengeBlock_paragraph {
+    display: flex;
+    flex-direction: column;
+    color: #505558;
+
+    &:first-child {
+        margin-top: 31px;
+    }
+
+    margin-top: 20px;
+}
+
+.SignChallengeBlock_paragraph-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+
+    .CopyButton {
+            margin-right: 0;
+        }
+}
+
+.SignChallengeBlock_paragraph-title {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+.SignChallengeBlock_paragraph-content {
+    font-size: 16px;
+    font-weight: 300;
+}
+
+.SignChallengeBlock_input-wrap {
+    position: relative;
+}
+
+.SignChallengeBlock_input {
+    display: flex;
+    width: 100%;
+    height: 52px;
+    border-radius: 2px;
+    border: solid 1px #bdbfc0;
+    padding: 16px 21px;
+    font-size: 16px;
+    line-height: 20px;
+    font-weight: 300;
+    margin-top: 10px;
+    margin-bottom: 20px;
+    outline: none;
+    resize: none;
+
+    &.withError {
+        border-color: #e33c4c;
+    }
+
+    &::placeholder {
+        opacity: 0.5;
+    }
+}
+
+.Error-tooltip{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    width: max-content;
+    height: 28px;
+    padding: 0 11px;
+    background-color: #fe6d74;
+    color: #fff;
+    top: calc(100% - 16px);
+    left: 1px;
+    z-index: 2;
+    font-size: 13px;
+    font-weight: normal;
+    border-radius: 2px;
+    cursor: default;
+
+    &::after {
+        content: '';
+        position: absolute;
+        left: 20px;
+        bottom: 27px;
+        border: 4px solid transparent;
+        border-bottom: 4px solid #fe6d74;
+    }
+}
+
+.SignChallengeBlock_button{
+        margin-left: auto;
+        width: 120px;
+        height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            margin-right: 5px;
+        }
+    }

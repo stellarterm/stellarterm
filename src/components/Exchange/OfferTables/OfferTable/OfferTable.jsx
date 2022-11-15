@@ -2,9 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
-import Format from '../../../../lib/Format';
-import Driver from '../../../../lib/Driver';
-import Printify from '../../../../lib/Printify';
+import Format from '../../../../lib/helpers/Format';
+import Driver from '../../../../lib/driver/Driver';
+import Printify from '../../../../lib/helpers/Printify';
 
 // Dumb component that mainly renders the UI
 export default class OfferTable extends React.Component {
@@ -35,7 +35,7 @@ export default class OfferTable extends React.Component {
             this.constructor.getHeaderItem('Depth', counterCurrency),
             this.constructor.getHeaderItem('Sum', counterCurrency),
             this.constructor.getHeaderItem('Amount', baseCurrency),
-            this.constructor.getHeaderItem('Price', baseCurrency),
+            this.constructor.getHeaderItem('Price', counterCurrency),
         ];
 
         if (!isBuy) {

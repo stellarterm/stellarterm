@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as StellarSdk from 'stellar-sdk';
-import images from '../../../images';
-import Driver from '../../../lib/Driver';
-import Stellarify from '../../../lib/Stellarify';
+import Driver from '../../../lib/driver/Driver';
+import Stellarify from '../../../lib/helpers/Stellarify';
 import AssetDropDown from '../../Common/AssetPair/AssetDropDown/AssetDropDown';
+import SwitchBtn from '../../Basics/SwitchBtn/SwitchBtn';
 
 export default class CustomPairMenu extends React.Component {
     constructor(props) {
@@ -22,11 +22,12 @@ export default class CustomPairMenu extends React.Component {
         return (
             <AssetDropDown
                 d={d}
-                onUpdate={(asset) => {
+                onUpdate={asset => {
                     this.stateUpdate(assetType, asset);
                 }}
                 asset={this.state[assetType]}
-                exception={exception} />
+                exception={exception}
+            />
         );
     }
 
@@ -34,20 +35,12 @@ export default class CustomPairMenu extends React.Component {
         if (!this.state.baseBuying || !this.state.counterSelling) {
             return <div className="CustomPairMenu__separator" />;
         }
-        return (
-            <div className="CustomPairMenu__swap" onClick={() => this.swap()}>
-                <img src={images.switch} alt="swap" width="20" height="24" />
-            </div>
-        );
+        return <SwitchBtn onClickFunc={() => this.swap()} smallWidth />;
     }
 
     stateUpdate(assetType, asset) {
         this.setState({ [assetType]: asset });
     }
-
-    // goToTrade() {
-    //     window.location = `${Stellarify.pairToExchangeUrl(this.state.baseBuying, this.state.counterSelling)}`;
-    // }
 
     swap() {
         const { baseBuying, counterSelling } = this.state;
@@ -59,8 +52,10 @@ export default class CustomPairMenu extends React.Component {
 
     render() {
         const { baseBuying, counterSelling } = this.state;
-        const link = (baseBuying && counterSelling)
-            && Stellarify.pairToExchangeUrl(this.state.baseBuying, this.state.counterSelling);
+        const link =
+            baseBuying &&
+            counterSelling &&
+            Stellarify.pairToExchangeUrl(this.state.baseBuying, this.state.counterSelling);
 
         return (
             <div className="island">
@@ -83,9 +78,7 @@ export default class CustomPairMenu extends React.Component {
                     {this.getAssetDropDown(this.props.d, 'counterSelling')}
 
                     <Link to={`/${link}`}>
-                        <button
-                            disabled={!counterSelling || !baseBuying}
-                            className="CustomPairMenu__button">
+                        <button disabled={!counterSelling || !baseBuying} className="CustomPairMenu__button">
                             Start trading
                         </button>
                     </Link>

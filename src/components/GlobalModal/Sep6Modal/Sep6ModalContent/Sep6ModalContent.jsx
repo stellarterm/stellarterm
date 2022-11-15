@@ -3,18 +3,19 @@ import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import Sep6ModalFooter from '../Common/Sep6ModalFooter/Sep6ModalFooter';
 import Sep6Form from './Sep6Form/Sep6Form';
-import { getTransferServer, getTransferServerInfo, sep6Request } from '../../../../lib/SepUtils';
+import { getTransferServerInfo, sep6Request } from '../../../../lib/helpers/SepUtils';
 import { getUrlWithParams } from '../../../../lib/api/endpoints';
-import ErrorHandler from '../../../../lib/ErrorHandler';
-
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import FeeBlock from '../Common/FeeBlock';
 import ExtraInfoBlock from '../Common/ExtraInfoBlock';
 import EstimatedTime from '../Common/EstimatedTIme';
 import MinMaxAmount from '../Common/MinMaxAmount';
 import KycFrame from './KycFrame/KycFrame';
+import { AUTH_TYPE } from '../../../../lib/constants/sessionConstants';
+import SignChallengeBlock from '../../../Common/SignChallengeBlock/SignChallengeBlock';
 
 const kycStatusTypes = new Set(['denied', 'pending']);
 
@@ -24,9 +25,9 @@ export default class Sep6ModalContent extends React.Component {
 
         this.assetInfo = {};
         this.jwtToken = this.props.jwtToken;
-        this.TRANSFER_SERVER = null;
-        this.WEB_AUTH_URL = null;
-        this.NETWORK_PASSPHRASE = null;
+        this.TRANSFER_SERVER = this.props.transferServer.TRANSFER_SERVER;
+        this.WEB_AUTH_URL = this.props.transferServer.WEB_AUTH_URL;
+        this.NETWORK_PASSPHRASE = this.props.transferServer.NETWORK_PASSPHRASE || this.props.d.Server.networkPassphrase;
 
         this.state = {
             isLoading: true,
@@ -40,21 +41,16 @@ export default class Sep6ModalContent extends React.Component {
                 asset_code: this.props.asset.code,
                 account: this.props.d.session.account.accountId(),
             },
+            showGetTokenFlow: false,
         };
     }
 
     componentDidMount() {
-        const { asset, isDeposit, d } = this.props;
+        const { asset, isDeposit } = this.props;
 
-        getTransferServer(asset)
-            .then(({ TRANSFER_SERVER, WEB_AUTH_URL, NETWORK_PASSPHRASE }) => {
-                this.TRANSFER_SERVER = TRANSFER_SERVER;
-                this.WEB_AUTH_URL = WEB_AUTH_URL;
-                this.NETWORK_PASSPHRASE = NETWORK_PASSPHRASE || d.Server.networkPassphrase;
-            })
-            .then(() => getTransferServerInfo(this.TRANSFER_SERVER))
+        getTransferServerInfo(this.TRANSFER_SERVER)
             .then(transferInfo => (isDeposit ? transferInfo.deposit : transferInfo.withdraw))
-            .then((info) => {
+            .then(info => {
                 const transferAssetInfo = info[asset.code];
                 this.assetInfo = transferAssetInfo;
 
@@ -65,17 +61,18 @@ export default class Sep6ModalContent extends React.Component {
                             isDeposit ? 'deposits' : 'withdrawals'
                         }.`,
                     });
+                    return null;
                 } else if (transferAssetInfo.authentication_required) {
                     return this.checkForJwt(transferAssetInfo);
                 }
 
                 return this.getSep6Request(transferAssetInfo);
             })
-            .then((res) => {
+            .then(res => {
                 this.setState({
                     isLoading: false,
                     response: res,
-                    reqErrorMsg: res.error || res.errors || this.state.reqErrorMsg,
+                    reqErrorMsg: (res && res.error) || (res && res.errors) || this.state.reqErrorMsg,
                 });
             })
             .catch(() => {
@@ -126,7 +123,8 @@ export default class Sep6ModalContent extends React.Component {
                         <FeeBlock
                             feeFixed={parseFloat(response.fee_fixed) || 0}
                             feePercent={parseFloat(response.fee_percent) || 0}
-                            assetCode={asset.code} />
+                            assetCode={asset.code}
+                        />
 
                         <EstimatedTime time={response.eta || ''} isDeposit={isDeposit} />
 
@@ -134,12 +132,14 @@ export default class Sep6ModalContent extends React.Component {
                             minLimit={response.min_amount || ''}
                             maxLimit={response.max_amount || ''}
                             assetCode={asset.code}
-                            isDeposit />
+                            isDeposit
+                        />
 
                         <ExtraInfoBlock
                             extra={
                                 _.has(response, 'extra_info') && response.extra_info !== null ? response.extra_info : ''
-                            } />
+                            }
+                        />
                     </React.Fragment>
                 ) : (
                     <Sep6Form
@@ -151,7 +151,8 @@ export default class Sep6ModalContent extends React.Component {
                         max={parseFloat(this.assetInfo.max_amount) || ''}
                         feeFixed={parseFloat(this.assetInfo.fee_fixed) || 0}
                         feePercent={parseFloat(this.assetInfo.fee_percent) || 0}
-                        onUpdateForm={(params, isError) => this.onUpdateForm(params, isError)} />
+                        onUpdateForm={(params, isError) => this.onUpdateForm(params, isError)}
+                    />
                 )}
             </React.Fragment>
         ) : null;
@@ -165,6 +166,7 @@ export default class Sep6ModalContent extends React.Component {
         return (
             <Sep6ModalFooter
                 d={d}
+                transferServer={this.props.transferServer}
                 asset={asset}
                 needConfirm={false}
                 isDeposit={isDeposit}
@@ -173,40 +175,75 @@ export default class Sep6ModalContent extends React.Component {
                 isAnyError={isFormError || isAnyError}
                 requestParams={this.state.requestParams}
                 withdrawRequest={() => this.withdrawRequest()}
-                onUpdateFooterRes={res => this.onUpdateFooterRes(res)} />
+                onUpdateFooterRes={res => this.onUpdateFooterRes(res)}
+            />
         );
     }
 
+    async getJwtToken(endpoint) {
+        const { d, isDeposit, asset } = this.props;
+
+        const tokenFromCache = d.session.handlers.getTokenFromCache(endpoint);
+
+        if (tokenFromCache) { return tokenFromCache; }
+
+        let challengeTx = await d.session.handlers.getAuthChallengeTx(endpoint, this.NETWORK_PASSPHRASE);
+
+        if (d.multisig.isMultisigEnabled && d.multisig.moreSignaturesNeeded(challengeTx)) {
+            challengeTx = await this.getSignedBySignersChallenge(challengeTx);
+        }
+
+        const isLedger = d.session.authType === AUTH_TYPE.LEDGER;
+        const isWalletConnect = d.session.authType === AUTH_TYPE.WALLET_CONNECT;
+
+        if (isLedger) {
+            d.modal.handlers.finish();
+        }
+        const { signedTx } = await d.session.handlers.sign(challengeTx);
+
+        const token = await d.session.handlers.getToken(endpoint, signedTx);
+
+        if (isLedger || isWalletConnect) {
+            d.modal.nextModalName = 'Sep6Modal';
+            d.modal.nextModalData = {
+                isDeposit,
+                asset,
+                jwtToken: token,
+                transferServer: this.props.transferServer,
+            };
+            return null;
+        }
+
+        return token;
+    }
+
+    getSignedBySignersChallenge(tx) {
+        this.challengeTx = tx;
+        const promise = new Promise(resolve => {
+            this.signedChallengeResolver = resolve;
+        });
+        this.setState({ showGetTokenFlow: true });
+
+        return promise.then(signedTx => {
+            this.setState({ showGetTokenFlow: false });
+            return signedTx;
+        });
+    }
+
     checkForJwt(transferAssetInfo) {
-        const { d, asset, isDeposit } = this.props;
+        if (this.jwtToken) {
+            return this.getSep6Request(transferAssetInfo);
+        }
         const { requestParams } = this.state;
 
         const params = { account: requestParams.account };
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
-        const isLedgerJwtNeeded = d.session.authType === 'ledger' && this.jwtToken === null;
 
-        if (isLedgerJwtNeeded) {
-            d.modal.handlers.finish();
+        return this.getJwtToken(jwtEndpointUrl).then(token => {
+            this.jwtToken = token;
 
-            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
-                d.modal.nextModalName = 'Sep6Modal';
-                d.modal.nextModalData = {
-                    isDeposit,
-                    asset,
-                    jwtToken: token,
-                };
-                return null;
-            });
-        }
-
-        if (this.jwtToken === null) {
-            return d.session.handlers.getJwtToken(jwtEndpointUrl, this.NETWORK_PASSPHRASE).then((token) => {
-                this.jwtToken = token;
-                return this.getSep6Request(transferAssetInfo);
-            });
-        }
-
-        return this.getSep6Request(transferAssetInfo);
+            return this.getSep6Request(transferAssetInfo);
+        });
     }
 
     withdrawRequest() {
@@ -214,7 +251,7 @@ export default class Sep6ModalContent extends React.Component {
         const { isDeposit } = this.props;
 
         return sep6Request(this.TRANSFER_SERVER, isDeposit, this.jwtToken, requestParams)
-            .then((res) => {
+            .then(res => {
                 this.setState({
                     isLoading: false,
                     response: res,
@@ -223,14 +260,27 @@ export default class Sep6ModalContent extends React.Component {
 
                 return res;
             })
-            .catch((e) => {
+            .catch(e => {
                 this.setState({ isLoading: false, reqErrorMsg: ErrorHandler(e) });
             });
     }
 
     render() {
-        const { reqErrorMsg, isLoading, response, assetDisabled } = this.state;
+        const { d } = this.props;
+        const { reqErrorMsg, isLoading, response, assetDisabled, showGetTokenFlow } = this.state;
         const isAnyError = reqErrorMsg !== null;
+
+        if (showGetTokenFlow) {
+            return (
+                <React.Fragment>
+                    <SignChallengeBlock
+                        d={d}
+                        signedChallengeResolver={this.signedChallengeResolver}
+                        challengeTx={this.challengeTx}
+                    />
+                </React.Fragment>
+            );
+        }
 
         if ((_.isEmpty(response) || assetDisabled) && !isLoading) {
             return (
@@ -269,7 +319,8 @@ export default class Sep6ModalContent extends React.Component {
                                 kycUrl={response.url || ''}
                                 status={response.status || ''}
                                 sizes={response.dimensions || ''}
-                                moreInfo={response.more_info_url || ''} />
+                                moreInfo={response.more_info_url || ''}
+                            />
 
                             {this.getMainInfo()}
                         </React.Fragment>
@@ -287,4 +338,5 @@ Sep6ModalContent.propTypes = {
     isDeposit: PropTypes.bool.isRequired,
     d: PropTypes.instanceOf(Driver).isRequired,
     asset: PropTypes.objectOf(PropTypes.any).isRequired,
+    transferServer: PropTypes.objectOf(PropTypes.any),
 };

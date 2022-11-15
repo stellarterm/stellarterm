@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Driver from '../../lib/Driver';
+import Driver from '../../lib/driver/Driver';
 import AssetList from '../Common/AssetList/AssetList';
 import Sep7Handler from './Sep7Handler/Sep7Handler';
+import { SESSION_STATE } from '../../lib/constants/sessionConstants';
+import images from '../../images';
 
 
 export default class HomePage extends React.Component {
     constructor(props) {
         super(props);
-        this.listenId = this.props.driver.session.event.listen(() => {
+        this.unsub = this.props.driver.session.event.sub(() => {
             this.forceUpdate();
         });
     }
@@ -19,12 +21,12 @@ export default class HomePage extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.driver.session.event.unlisten(this.listenId);
+        this.unsub();
     }
 
     renderHomePageActions() {
         const state = this.props.driver.session.state;
-        if (state !== 'out') { return ''; }
+        if (state !== SESSION_STATE.OUT) { return ''; }
 
         const signUpLinkClass = 'HomePage__lead__actions__sign-up-button HomePage__lead__actions__button s-button';
         return (
@@ -39,7 +41,6 @@ export default class HomePage extends React.Component {
     render() {
         return (
             <div>
-
                 <div className="HomePage__black">
                     <div className="so-back">
                         <div className="HomePage__lead">
@@ -64,9 +65,10 @@ export default class HomePage extends React.Component {
                 <div className="so-back islandBack HomePage__assetList">
                     <div className="island">
                         <AssetList d={this.props.driver} limit={6} />
-                        <div className="AssetListFooter">
-                            View more assets on the <Link to="/markets/">market list page</Link>.
-                        </div>
+                        <Link to="/markets/" className="AssetListFooterAsLink">
+                            View more assets on the Markets page
+                            <img src={images['icon-arrow-right-green']} alt="" />
+                        </Link>
                     </div>
                 </div>
 

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import OfferMaker from './OfferMaker/OfferMaker';
 import AssetRow from '../../Common/AssetRow/AssetRow';
+import { SESSION_STATE } from '../../../lib/constants/sessionConstants';
 
 
 export default function OfferMakers(props) {
@@ -11,7 +12,7 @@ export default function OfferMakers(props) {
     }
 
     const trustNeededAssets = [];
-    const login = props.d.session.state === 'in';
+    const login = props.d.session.state === SESSION_STATE.IN;
     if (login) {
         const { baseBuying, counterSelling } = props.d.orderbook.data;
         const { account } = props.d.session;

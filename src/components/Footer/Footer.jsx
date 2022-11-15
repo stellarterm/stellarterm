@@ -2,7 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
+import isElectron from 'is-electron';
 import images from '../../images';
+import { getCurrentYear } from '../../lib/helpers/Format';
 
 class Footer extends React.Component {
     constructor(props) {
@@ -32,7 +34,8 @@ class Footer extends React.Component {
                                 className="Footer_link"
                                 href="https://twitter.com/stellarterm"
                                 target="_blank"
-                                rel="noopener noreferrer">
+                                rel="noopener noreferrer"
+                            >
                                 <img src={images['icon-twitter']} alt="twitter" />
                                 @StellarTerm
                             </a>
@@ -46,45 +49,62 @@ class Footer extends React.Component {
                             </a>
                         </div>
 
-                        <a
-                            className="Footer_link"
-                            href="https://stellarterm.zendesk.com/"
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            <img src={images['icon-support']} alt="support" />
+                        <div className="Footer_social_links">
+
+                            {!isElectron() && <Link
+                                className="Footer_link"
+                                to="/download/"
+                            >
+                                <img src={images['icon-download']} alt="support" />
+                            Download
+                            </Link>}
+
+                            <a
+                                className="Footer_link"
+                                href="https://stellarterm.freshdesk.com/"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                <img src={images['icon-support']} alt="support" />
                             Support Center
-                        </a>
+                            </a>
+                        </div>
                     </div>
                     <div className="Footer_disclaimer_block">
                         <div className="Footer_disclaimer_column">
                             <div className="Footer_disclaimer">
-                            Cryptocurrency assets are subject to high market risks and volatility. Past performance is
-                             not indicative of future results. Investments in blockchain assets may result in loss of
-                             part or all of your investment. StellarTerm does NOT endorse ANY asset on the Stellar
-                             network. Please do your own research and use caution.
+                                Cryptocurrency assets are subject to high market risks and volatility. Past performance
+                                is not indicative of future results. Investments in blockchain assets may result in loss
+                                of part or all of your investment. StellarTerm does NOT endorse ANY asset on the Stellar
+                                network. Please do your own research and use caution.
                             </div>
 
                             {isExchangePage ? (
                                 <div className="Footer_disclaimer">
-                                This product includes software developed at TradingView, Inc. TradingView Lightweight
-                                 Charts Copyright (с) 2019{' '}
+                                    This product includes software developed at TradingView, Inc. TradingView
+                                    Lightweight Charts Copyright (с) {getCurrentYear()}{' '}
                                     <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">
                                         TradingView
                                     </a>
-                                , Inc.
+                                    , Inc.
                                 </div>
                             ) : null}
                         </div>
                         <div className="Footer_disclaimer_column">
                             <span className="Footer_version">v{window.stBuildInfo.version}</span>
                             <div className="Footer_privacy_links">
-                                <Link to="/privacy/" className="Footer_link">Privacy Policy</Link>
-                                <Link to="/terms-of-use/" className="Footer_link">Terms of use</Link>
+                                <Link to="/privacy/" className="Footer_link">
+                                    Privacy Policy
+                                </Link>
+                                <Link to="/terms-of-use/" className="Footer_link">
+                                    Terms of use
+                                </Link>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>);
+            </div>
+        );
     }
 }
 

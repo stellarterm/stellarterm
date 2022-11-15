@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from './../../../../images';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 
 
 export default class SecretPhrase extends React.Component {
@@ -30,7 +30,8 @@ export default class SecretPhrase extends React.Component {
                     <p
                         onClick={() => this.props.d.modal.handlers.activate(
                             'SecretPhraseSetup', () => this.handleUpdate())}
-                        className="SecretPhrase_button">
+                        className="SecretPhrase_button"
+                    >
                         Configure Secret Phrase
                         <img src={images['icon-arrow-right-green']} alt="->" />
                     </p>

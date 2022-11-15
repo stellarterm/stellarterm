@@ -24,12 +24,12 @@ export default class MoonpayModal extends React.Component {
         const {
             quote: {
                 baseCurrency,
-                currency,
                 quoteCurrencyAmount,
                 feeAmount,
                 networkFeeAmount,
                 extraFeeAmount,
                 totalAmount,
+                displayCode,
             },
         } = this.props;
 
@@ -52,7 +52,7 @@ export default class MoonpayModal extends React.Component {
                         <div className="details_row">
                             <span className="details_desc">Order amount:</span>
                             <span className="details_data">
-                                {quoteCurrencyAmount} {currency.code.toUpperCase()}
+                                {quoteCurrencyAmount} {displayCode}
                             </span>
                         </div>
                         <div className="details_row">

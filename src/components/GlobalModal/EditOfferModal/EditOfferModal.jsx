@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
 import OfferMaker from '../../Exchange/OfferMakers/OfferMaker/OfferMaker';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 
 
 export default class EditOfferModal extends React.Component {

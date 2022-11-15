@@ -1,9 +1,9 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AcceptTerms from '../../Common/AcceptTerms';
-import images from '../../../../../images';
+import InfoBlock from '../../../../Common/InfoBlock/InfoBlock';
 
 export default class LedgerForm extends React.Component {
     constructor(props) {
@@ -12,6 +12,10 @@ export default class LedgerForm extends React.Component {
             bip32Path: '0',
             ledgerAdvanced: false,
         };
+    }
+
+    componentWillUnmount() {
+        this.props.d.session.setupLedgerError = null;
     }
 
     handleBip32PathInput(event) {
@@ -37,30 +41,24 @@ export default class LedgerForm extends React.Component {
 
         if (setupLedgerError) {
             return (
-                <div className="ErrorTransactionBlock">
-                    <img src={images['icon-circle-fail']} alt="fail" />
+                <InfoBlock withIcon type="error" title="Connected to Ledger but returned an error:">
                     <span>
-                        Connected to Ledger but returned an error:
-                        <br />
-                        <strong>
-                            {setupLedgerError === 'Ledger device: UNKNOWN_ERROR (0x6804)'
-                                ? 'Ledger locked after idle timeout. Please unlock your device.'
-                                : setupLedgerError}
-                        </strong>
+                        {setupLedgerError === 'Ledger device: UNKNOWN_ERROR (0x6804)'
+                            ? 'Ledger locked after idle timeout. Please unlock your device.'
+                            : setupLedgerError}
                     </span>
-                </div>
+                </InfoBlock>
             );
         }
         if (setupError) {
             return (
-                <div className="ErrorTransactionBlock">
-                    <img src={images['icon-circle-fail']} alt="fail" />
+                <InfoBlock withIcon type="error" title="Unable to contact network.">
                     <span>
-                        Unable to contact network.Please check your internet connection and allow connections to
-                         horizon.stellar.org. Maybe an adblocker or plugin (such as Privacy Badger) is preventing
-                         the client from communicating with the network.
+                        Please check your internet connection and allow connections to horizon.stellar.org. Maybe an
+                        adblocker or plugin (such as Privacy Badger) is preventing the client from communicating with
+                        the network.
                     </span>
-                </div>
+                </InfoBlock>
             );
         }
         return null;
@@ -72,16 +70,12 @@ export default class LedgerForm extends React.Component {
         const { ledgerAdvanced, bip32Path } = this.state;
 
         if (!ledgerAdvanced) {
-            return (
-                <a onClick={() => this.enableAdvanced()}>
-                    Advanced: Use custom BIP32 path
-                </a>
-            );
+            return <a onClick={() => this.enableAdvanced()}>Advanced: Use custom BIP32 path</a>;
         }
 
         return (
             <label htmlFor="bip32Path" className="LoginPage__bip32Path">
-                Path: <span className="">{"44'/148'/"}</span>
+                Path: 44&apos;/148&apos;/
                 <input
                     style={inputWidthStyle}
                     name="bip32Path"
@@ -90,13 +84,14 @@ export default class LedgerForm extends React.Component {
                     value={bip32Path}
                     onChange={e => this.handleBip32PathInput(e)}
                     autoFocus
-                    onFocus={(e) => {
+                    onFocus={e => {
                         // Move the carat to the end
                         const content = e.target.value;
                         e.target.value = '';
                         e.target.value = content;
-                    }} />
-                <span>{"'"}</span>
+                    }}
+                />
+                <span>{'\''}</span>
             </label>
         );
     }
@@ -106,18 +101,18 @@ export default class LedgerForm extends React.Component {
         const customPath = this.renderCustomPath();
 
         return (
-            <div className="LoginPage__greenBox">
-                <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
-                <form onSubmit={e => this.proceedWithLedger(e)}>
-                    <div className="LoginPage__submitWrap">
-                        {ledgerErrorMessage}
-                        <AcceptTerms loginButtonText={'Sign in with Ledger'} />
-                        <div className="LoginPage__customPath">
-                            {customPath}
+            <React.Fragment>
+                <div className="LoginPage__greenBox">
+                    <p className="LoginPage__form--title">Ledger Wallet found and connected!</p>
+                    <form onSubmit={e => this.proceedWithLedger(e)}>
+                        <div className="LoginPage__submitWrap">
+                            <AcceptTerms loginButtonText={'Log in with Ledger'} />
+                            <div className="LoginPage__customPath">{customPath}</div>
                         </div>
-                    </div>
-                </form>
-            </div>
+                    </form>
+                </div>
+                {ledgerErrorMessage}
+            </React.Fragment>
         );
     }
 }

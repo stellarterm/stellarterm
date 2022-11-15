@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AssetPair from '../../Common/AssetPair/AssetPair';
 import AssetPickerNarrow from './AssetPickerNarrow/AssetPickerNarrow';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 
 
 export default class CustomMarketPicker extends React.Component {

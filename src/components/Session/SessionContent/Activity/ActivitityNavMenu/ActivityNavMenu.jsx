@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 
 
 export default class ActivityNavMenu extends React.Component {
-    static getMenuItem(link, title, hasOpenOffers) {
+    static getMenuItem(link, title, hasActiveItems) {
         const isCurrentTab = window.location.pathname === link ? ' is-current' : '';
         return (
             <Link className={`ActivityNavMenu_item${isCurrentTab}`} to={link}>
                 <span>{title}</span>
-                {hasOpenOffers && <div className="green_dot" />}
+                {hasActiveItems && <div className="green_dot" />}
             </Link>
         );
     }
@@ -20,6 +20,7 @@ export default class ActivityNavMenu extends React.Component {
                 {this.constructor.getMenuItem('/account/activity/', 'Active orders', hasOpenOffers)}
                 {this.constructor.getMenuItem('/account/activity/trade/', 'Trades')}
                 {this.constructor.getMenuItem('/account/activity/payments/', 'Payments')}
+                {this.constructor.getMenuItem('/account/activity/swap/', 'Swap')}
                 {this.constructor.getMenuItem('/account/activity/signers/', 'Signers')}
                 {this.constructor.getMenuItem('/account/activity/trustlines/', 'Trustlines')}
             </div>

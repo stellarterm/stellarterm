@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { getEndpoint } from '../../lib/api/endpoints';
 import * as request from '../../lib/api/request';
 import images from '../../images';
-import Driver from '../../lib/Driver';
-import { isValidToPrecision, isNoRecalculateNeeded } from '../../lib/Format';
+import Driver from '../../lib/driver/Driver';
+import { isValidToPrecision, isNoRecalculateNeeded } from '../../lib/helpers/Format';
 import BuyCryptoStatic from './BuyCryptoStatic/BuyCryptoStatic';
 import CurrencyDropdown from './CurrencyDropdown/CurrencyDropdown';
 
@@ -132,7 +132,8 @@ export default class BuyCrypto extends React.Component {
             .then(quote => {
                 this.getMoonpayTransaction().then(url => {
                     this.setState({ quote, isPending: false });
-                    this.props.d.modal.handlers.activate('MoonpayModal', Object.assign(quote, url));
+                    this.props.d.modal.handlers.activate('MoonpayModal',
+                        Object.assign(quote, url, { displayCode: selectedCrypto.display_code }));
                 });
             })
             .catch(e => this.setState({ isPending: false, error: e }));
@@ -320,7 +321,7 @@ export default class BuyCrypto extends React.Component {
                         value={currencyAmount}
                         maxLength={20}
                         onChange={e => this.changeCurrencyAmount(e.target.value, this.state.selectedCurrency)}
-                        placeholder={`Amount in ${selectedCurrency.code} you pay`}
+                        placeholder={`Amount in ${selectedCurrency.display_code} you pay`}
                     />
 
                     <CurrencyDropdown
@@ -342,7 +343,7 @@ export default class BuyCrypto extends React.Component {
                         value={cryptoAmount}
                         maxLength={20}
                         onChange={e => this.changeCryptoAmount(e.target.value)}
-                        placeholder={`Amount in ${selectedCrypto.code} you get`}
+                        placeholder={`Amount in ${selectedCrypto.display_code} you get`}
                     />
 
                     <CurrencyDropdown
@@ -364,7 +365,7 @@ export default class BuyCrypto extends React.Component {
                     </div>
 
                     <button type="submit" className="s-button" disabled={isSubmitDisabled}>
-                        Buy {selectedCrypto && selectedCrypto.code.toUpperCase()}
+                        Buy {selectedCrypto && selectedCrypto.display_code.toUpperCase()}
                     </button>
                 </div>
             </form>

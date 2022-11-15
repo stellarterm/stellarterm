@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import images from '../../../../../../images';
-import Driver from '../../../../../../lib/Driver';
+import Driver from '../../../../../../lib/driver/Driver';
 import ReservedDescription from './ReservedDescription/ReservedDescription';
 
 export default function ReservedBalance(props) {
@@ -19,7 +19,7 @@ export default function ReservedBalance(props) {
         const reserveRow = (
             <div className="reserved_item" key={`${reserveType}-${typeCount}`}>
                 <span>
-                    {reserveType} {typeCount === 0 ? '' : `(${typeCount})`}
+                    {reserveType} {typeCount === 0 ? '' : `(${Math.abs(typeCount)})`}
                 </span>
                 <span className={iconBlockClass}>
                     {reservedXLM} XLM

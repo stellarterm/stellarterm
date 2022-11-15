@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
+import { TX_STATUS } from '../../../../lib/constants/sessionConstants';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {
@@ -61,13 +63,15 @@ export default class ManageOffers extends React.Component {
         const { rectifiedOffer } = this.props;
         const signAndSubmit = await handlers.removeOffer(rectifiedOffer);
 
-        if (signAndSubmit.status !== 'finish') { return; }
+        if (signAndSubmit.status !== TX_STATUS.FINISH) { return; }
 
         this.setState({ ready: false });
 
         try {
             await signAndSubmit.serverResult;
         } catch (error) {
+            const errorMessage = ErrorHandler(error);
+            this.props.d.toastService.error('Can’t cancel the offer', errorMessage);
             console.error('Errored when cancelling offer', error);
             this.setState({ ready: 'true' });
         }

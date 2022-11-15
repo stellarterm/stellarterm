@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import SignUpBody from './SignUpBody/SignUpBody';
 import LedgerBody from './LedgerBody/LedgerBody';
 import LoginPageBody from './LoginPageBody/LoginPageBody';
-import HardwareWalletLoginLink from './Common/HardwareWalletLoginLink/HardwareWalletLoginLink';
 import TrezorBody from './TrezorBody/TrezorBody';
 import FreighterBody from './FreighterBody/FreighterBody';
+import WalletConnectBody from './WalletConnectBody/WalletConnectBody';
+import LoginLinks from './Common/LoginLinksBlock/LoginLinks';
 
 
 export default function LoginPage(props) {
@@ -14,67 +15,74 @@ export default function LoginPage(props) {
     let pageBody;
 
     switch (rootAddress) {
-    case 'account':
-        pageBody = (
-            <div className="so-back islandBack islandBack--t">
-                <div className="island">
-                    <div className="LoginPage">
-                        <LoginPageBody d={props.d} />
+        case 'account':
+            pageBody = (
+                <div className="so-back islandBack islandBack--t">
+                    <div className="island">
+                        <div className="LoginPage">
+                            <LoginPageBody d={props.d} />
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
-        break;
-    case 'ledger':
-        pageBody = (
-            <div className="so-back islandBack islandBack--t">
-                <div className="island">
-                    <div className="LoginPage">
-                        <LedgerBody {...props} d={props.d} />
+            );
+            break;
+        case 'ledger':
+            pageBody = (
+                <div className="so-back islandBack islandBack--t">
+                    <div className="island">
+                        <div className="LoginPage">
+                            <LedgerBody {...props} d={props.d} />
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
-        break;
-    case 'trezor':
-        pageBody = (
-            <div className="so-back islandBack islandBack--t">
-                <div className="island">
-                    <div className="LoginPage">
-                        <TrezorBody {...props} d={props.d} />
+            );
+            break;
+        case 'trezor':
+            pageBody = (
+                <div className="so-back islandBack islandBack--t">
+                    <div className="island">
+                        <div className="LoginPage">
+                            <TrezorBody {...props} d={props.d} />
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
-        break;
-    case 'freighter':
-        pageBody = (
-            <div className="so-back islandBack islandBack--t">
-                <div className="island">
-                    <div className="LoginPage">
-                        <FreighterBody {...props} d={props.d} />
+            );
+            break;
+        case 'freighter':
+            pageBody = (
+                <div className="so-back islandBack islandBack--t">
+                    <div className="island">
+                        <div className="LoginPage">
+                            <FreighterBody {...props} d={props.d} />
+                        </div>
                     </div>
                 </div>
-            </div>
-        );
-        break;
+            );
+            break;
+        case 'wallet-connect':
+            pageBody = (
+                <div className="so-back islandBack islandBack--t">
+                    <div className="island">
+                        <div className="LoginPage">
+                            <WalletConnectBody {...props} d={props.d} />
+                        </div>
+                    </div>
+                </div>
+            );
+            break;
 
-    case 'signup':
-        pageBody = <SignUpBody d={props.d} />;
-        break;
-    default:
-        break;
+        case 'signup':
+            pageBody = <SignUpBody d={props.d} />;
+            break;
+        default:
+            break;
     }
 
     return (
         <React.Fragment>
             {pageBody}
             {rootAddress === 'account' &&
-                <React.Fragment>
-                    <HardwareWalletLoginLink wallet={'freighter'} />
-                    <HardwareWalletLoginLink wallet={'ledger'} />
-                    <HardwareWalletLoginLink wallet={'trezor'} />
-                </React.Fragment>}
+                <LoginLinks />}
         </React.Fragment>
     );
 }

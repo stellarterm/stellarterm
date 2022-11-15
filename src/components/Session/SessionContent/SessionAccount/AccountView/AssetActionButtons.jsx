@@ -1,13 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../lib/Driver';
+import directory from 'stellarterm-directory';
+import Driver from '../../../../../lib/driver/Driver';
 import images from '../../../../../images';
-import Stellarify from '../../../../../lib/Stellarify';
+import Stellarify from '../../../../../lib/helpers/Stellarify';
+import { getTransferDomain, checkAssetSettings, getTransferServer } from '../../../../../lib/helpers/SepUtils';
+import { UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants/sessionConstants';
 
 export default class AssetActionButtons extends React.Component {
+    static getBuyLumensLink(isXLMNative) {
+        if (!isXLMNative) {
+            return null;
+        }
+
+        return (
+            <Link to="/buy-crypto?code=xlm">
+                <div className="actionBtn">
+                    <div className="btnHint btnHint_wide">Buy lumens</div>
+                    <img className="actionBtn_icon" src={images['icon-deposit']} alt="withdraw" />
+                </div>
+            </Link>
+        );
+    }
+
     constructor(props) {
         super(props);
 
@@ -16,56 +33,88 @@ export default class AssetActionButtons extends React.Component {
         };
     }
 
-    onSepClick(isDeposit) {
+    async onSepClick(isDeposit) {
         const { d, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
-        const isSep24 = directoryAsset !== null && directoryAsset.sep24 === true;
 
-        d.modal.handlers.activate(`Sep${isSep24 ? '24' : '6'}Modal`, {
+        if (directoryAsset.sep24 && !this.checkIsJWTSupported(isDeposit ? 'Deposits' : 'Withdrawals')) {
+            return;
+        }
+
+        const transferServer = await getTransferServer(directoryAsset, isDeposit ? 'deposit' : 'withdraw', d.modal);
+
+        if (transferServer === 'cancelled') {
+            return;
+        }
+
+        if (!transferServer) {
+            d.toastService.error(
+                `${isDeposit ? 'Deposits' : 'Withdrawals'} not available`,
+                `${asset.code} ${isDeposit ? 'deposits' : 'withdrawals'} not available at the moment. Try back later.`,
+            );
+            return;
+        }
+
+        d.modal.handlers.activate(`Sep${transferServer.IS_SEP24 ? '24' : '6'}Modal`, {
             isDeposit,
             asset: directoryAsset,
+            transferServer,
         });
     }
 
-    getBuyCryptoLobsterLink(isXLMNative) {
-        const { account, unfundedAccountId } = this.props.d.session;
-        const accountID = account === null ? unfundedAccountId : account.accountId();
-        const targetAddressParam = `?target_address=${accountID}`;
+    async onHistoryClick() {
+        if (!this.checkIsJWTSupported('History')) {
+            return;
+        }
+        const { d, asset } = this.props;
+        const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
 
-        if (!isXLMNative) { return null; }
+        const { output } = await getTransferDomain(directoryAsset, 'history', d.modal);
 
-        return (
-            <a
-                href={`https://lobstr.co/buy-crypto${targetAddressParam}`}
-                target="_blank" rel="nofollow noopener noreferrer">
-                <div className="actionBtn">
-                    <div className="btnHint btnHint_wide">Buy lumens</div>
-                    <img className="actionBtn_icon" src={images['icon-deposit']} alt="withdraw" />
-                </div>
-            </a>
-        );
+        if (!output) {
+            return;
+        }
+
+        const assetSlug = Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer));
+
+        this.props.history.push(`transactions?asset=${assetSlug}&anchorDomain=${output.domain}`);
+    }
+
+    checkIsJWTSupported(type) {
+        const { authType } = this.props.d.session;
+        const isJWTUnsupported = UNSUPPORTED_JWT_AUTH_TYPES.has(authType);
+
+        if (isJWTUnsupported) {
+            this.props.d.toastService.error(
+                `${type} not available`,
+                `Deposits and withdrawals are not available with ${UNSUPPORTED_JWT_AUTH_TYPES.get(authType)} at the moment`,
+            );
+        }
+
+        return !isJWTUnsupported;
     }
 
     render() {
         const { onlyIcons, asset } = this.props;
         const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
-        const isDepositEnabled = directoryAsset !== null && directoryAsset.deposit === true;
-        const isWithdrawEnabled = directoryAsset !== null && directoryAsset.withdraw === true;
+
         const isXLMNative = asset.code === 'XLM' && asset.issuer === null;
+
+        const {
+            isDepositEnabled = false, isWithdrawEnabled = false, isHistoryEnabled = false,
+        } = (directoryAsset && checkAssetSettings(directoryAsset)) || {};
 
         const containerClass = `ActionBtns_container ${onlyIcons ? 'hide_ActionText' : ''}`;
 
-        const assetSlug = Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer));
-
         return (
             <div className={containerClass}>
-                {isDepositEnabled || isWithdrawEnabled ? (
-                    <Link to={`transactions?asset=${assetSlug}`}>
+                {isHistoryEnabled ? (
+                    <div onClick={() => this.onHistoryClick()}>
                         <div className="actionBtn">
                             <div className="btnHint btnHint_wide">Transfer history</div>
                             <img className="actionBtn_icon" src={images['icon-transactions']} alt="transfer-history" />
                         </div>
-                    </Link>
+                    </div>
                 ) : null}
                 {isDepositEnabled ? (
                     <div className="actionBtn" onClick={() => this.onSepClick(true)}>
@@ -81,12 +130,12 @@ export default class AssetActionButtons extends React.Component {
                     </div>
                 ) : null}
 
-                {this.getBuyCryptoLobsterLink(isXLMNative)}
+                {this.constructor.getBuyLumensLink(isXLMNative)}
 
                 <Link
                     to={`/account/send?asset=${Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer))}`}
-                    onClick={() => this.props.d.send.resetSendForm()}>
-
+                    onClick={() => this.props.d.send.resetSendForm()}
+                >
                     <div className="actionBtn">
                         <div className="btnHint">Send</div>
                         <img className="actionBtn_icon" src={images['icon-send']} alt="send" />
@@ -110,4 +159,5 @@ AssetActionButtons.propTypes = {
     d: PropTypes.instanceOf(Driver),
     onlyIcons: PropTypes.bool,
     asset: PropTypes.objectOf(PropTypes.any),
+    history: PropTypes.objectOf(PropTypes.any),
 };

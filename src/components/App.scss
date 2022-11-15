@@ -1,26 +1,29 @@
-@import "./CommonCss/solar-css/lib/index";
-@import "./CommonCss/solar-stellarterm/lib/index";
+@import './CommonCss/solar-css/lib/index';
+@import './CommonCss/solar-stellarterm/lib/index';
 
-@import "./CommonCss/solar-css/styles/index";
-@import "./CommonCss/solar-stellarterm/styles/index";
+@import './CommonCss/solar-css/styles/index';
+@import './CommonCss/solar-stellarterm/styles/index';
 
-@import "./CommonCss/row";
-@import "./CommonCss/island";
-@import "./CommonCss/lightenZeros";
+@import './CommonCss/row';
+@import './CommonCss/island';
+@import './CommonCss/lightenZeros';
 
-@import "./Common/Common";
-@import "./Download/Download";
-@import "./Header/Header";
-@import "./Footer/Footer";
-@import "./Session/Session";
-@import "./Markets/Markets";
-@import "./NotFound/NotFound";
-@import "./HomePage/HomePage";
-@import "./Exchange/Exchange";
-@import "./TermsOfUse/TermsOfUse";
-@import "./GlobalModal/GlobalModal";
-@import "./PopupAlert/PopupAlert";
-@import "BuyCrypto/BuyCrypto";
+@import './Basics/Basics';
+@import './Common/Common';
+@import './Download/Download';
+@import './Header/Header';
+@import './Footer/Footer';
+@import './Session/Session';
+@import './Markets/Markets';
+@import './NotFound/NotFound';
+@import './HomePage/HomePage';
+@import './Exchange/Exchange';
+@import './TermsOfUse/TermsOfUse';
+@import './GlobalModal/GlobalModal';
+@import 'ToastTemplate/ToastTemplate';
+@import 'BuyCrypto/BuyCrypto';
+@import "AppLoading/AppLoading";
+@import "Swap/Swap";
 
 html {
     min-width: 1052px;

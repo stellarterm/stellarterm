@@ -3,11 +3,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../../lib/Driver';
+import Driver from '../../../../../../lib/driver/Driver';
 import images from '../../../../../../images';
 import AssetCardInRow from '../../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import { formatDate } from './../../Activity';
-import Printify from '../../../../../../lib/Printify';
+import Printify from '../../../../../../lib/helpers/Printify';
+import { TX_STATUS } from '../../../../../../lib/constants/sessionConstants';
+import ErrorHandler from '../../../../../../lib/helpers/ErrorHandler';
 
 
 export default class ActivityOpenOrdersRow extends React.Component {
@@ -24,7 +26,7 @@ export default class ActivityOpenOrdersRow extends React.Component {
         const { handlers } = this.props.d.session;
         const signAndSubmit = await handlers.removeOffer(offer);
 
-        if (signAndSubmit.status !== 'finish') { return; }
+        if (signAndSubmit.status !== TX_STATUS.FINISH) { return; }
 
         this.setState({ buttonReady: false });
 
@@ -32,6 +34,8 @@ export default class ActivityOpenOrdersRow extends React.Component {
             await signAndSubmit.serverResult;
             this.setState({ buttonReady: 'true' });
         } catch (error) {
+            const errorMessage = ErrorHandler(error);
+            this.props.d.toastService.error('Can’t cancel the offer', errorMessage);
             console.error('Errored when cancelling offer', error);
             this.setState({ buttonReady: 'true' });
         }
@@ -100,12 +104,14 @@ export default class ActivityOpenOrdersRow extends React.Component {
                         onClick={e => this.handleEdit(e, offerData)}
                         src={images['icon-edit']}
                         alt="edit"
-                        title="Edit order" />
+                        title="Edit order"
+                    />
                     {buttonReady ? <img
                         onClick={e => this.removeOffer(e, offer)}
                         src={images['icon-close-green']}
                         alt="cancel"
-                        title="Cancel order" /> :
+                        title="Cancel order"
+                    /> :
                         <div className="nk-spinner-green">
                             <div className="nk-spinner" />
                         </div>}

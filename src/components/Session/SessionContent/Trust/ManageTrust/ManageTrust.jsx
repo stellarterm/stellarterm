@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AssetCardMain from '../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
 import RemoveTrustLink from './RemoveTrustLink/RemoveTrustLink';
 

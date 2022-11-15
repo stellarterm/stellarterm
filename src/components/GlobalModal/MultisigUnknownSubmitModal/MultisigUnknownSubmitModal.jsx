@@ -4,7 +4,12 @@ import images from '../../../images';
 import CopyButton from '../../Common/CopyButton/CopyButton';
 
 export default function MultisigUnknownSubmitModal(props) {
-    const { tx, submit } = props;
+    const { data, submit } = props;
+    const { tx, isTestnet } = data;
+
+    const network = isTestnet ? 'test' : 'public';
+    const encodedTx = encodeURIComponent(tx);
+    const expertLink = `https://laboratory.stellar.org/#xdr-viewer?input=${encodedTx}&type=TransactionEnvelope&network=${network}`;
 
     return (
         <div className="MultisigUnknownSubmitModal ">
@@ -24,7 +29,20 @@ export default function MultisigUnknownSubmitModal(props) {
                     <CopyButton text={tx} />
                 </div>
                 <div className="MultisigUnknownSubmitModal__XDR_content">
-                    <div>{tx}</div>
+                    <div className="MultisigUnknownSubmitModal__XDR_content-container">
+                        {tx}
+
+                        <div className="MultisigUnknownSubmitModal__XDR_content_link">
+                            <a
+                                href={expertLink}
+                                target="_blank"
+                                rel="nofollow noopener noreferrer"
+                            >
+                                View transaction details
+                                <img src={images['icon-arrow-right-green']} alt="" />
+                            </a>
+                        </div>
+                    </div>
                     <span>Copy this XDR to your multisignature service and add additional signatures.</span>
                 </div>
             </div>
@@ -37,6 +55,9 @@ export default function MultisigUnknownSubmitModal(props) {
     );
 }
 MultisigUnknownSubmitModal.propTypes = {
-    tx: PropTypes.string,
+    data: PropTypes.shape({
+        tx: PropTypes.string,
+        isTestnet: PropTypes.bool,
+    }),
     submit: PropTypes.objectOf(PropTypes.func),
 };

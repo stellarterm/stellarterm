@@ -1,18 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../lib/Driver';
-import ErrorHandler from '../../../../lib/ErrorHandler';
+import Driver from '../../../../lib/driver/Driver';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 import Sep7GetBuiltTx from '../Sep7GetBuiltTx/Sep7GetBuiltTx';
+import { AUTH_TYPE, SESSION_STATE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
 
 const images = require('./../../../../images');
 
 
 export default class Sep7ChangeTrustModal extends React.Component {
+    static clearUri() {
+        window.history.pushState({}, null, '/');
+    }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -23,7 +28,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
             loaded: false,
             isLoadInProcess: false,
         };
-        this.listenId = this.props.d.session.event.listen(() => {
+        this.unsub = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
     }
@@ -37,7 +42,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
+        this.unsub();
     }
 
     getTransactionDetails() {
@@ -56,7 +61,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
         const { submit, d } = this.props;
         const { state } = d.session;
         const { pending } = this.state;
-        if (state !== 'in') {
+        if (state !== SESSION_STATE.IN) {
             return null;
         }
         return (
@@ -66,13 +71,15 @@ export default class Sep7ChangeTrustModal extends React.Component {
                     onClick={() => {
                         window.history.pushState({}, null, '/');
                         submit.cancel();
-                    }}>
+                    }}
+                >
                     Cancel
                 </button>
                 <button
                     disabled={this.state.pending}
                     onClick={() => this.handleSubmit()}
-                    className="s-button">
+                    className="s-button"
+                >
                     Confirm{pending && <Ellipsis />}
                 </button>
             </div>
@@ -114,8 +121,9 @@ export default class Sep7ChangeTrustModal extends React.Component {
     async handleSubmit() {
         this.setState({ pending: true });
         const { d, submit, txDetails } = this.props;
+        const { authType } = d.session;
 
-        if (d.session.authType === 'ledger') {
+        if (authType === AUTH_TYPE.LEDGER) {
             submit.cancel();
         }
 
@@ -124,14 +132,17 @@ export default class Sep7ChangeTrustModal extends React.Component {
 
             const bssResult = await d.session.handlers.signSubmit(tx);
 
-            if (bssResult.status === 'await_signers') {
-                submit.cancel();
-                window.history.pushState({}, null, '/');
+            if (bssResult.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
+                this.constructor.clearUri();
             }
-            if (bssResult.status === 'finish') {
+            if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
+                submit.cancel();
+                this.constructor.clearUri();
+            }
+            if (bssResult.status === TX_STATUS.FINISH) {
                 await bssResult.serverResult;
                 submit.cancel();
-                window.history.pushState({}, null, '/');
+                this.constructor.clearUri();
             }
         } catch (e) {
             this.setState({
@@ -160,7 +171,8 @@ export default class Sep7ChangeTrustModal extends React.Component {
                             onClick={() => {
                                 submit.cancel();
                                 window.history.pushState({}, null, '/');
-                            }} />
+                            }}
+                        />
                     </div>
                     <div className="Sep7ChangeTrustModal_loading">
                         Loading<Ellipsis />
@@ -179,13 +191,15 @@ export default class Sep7ChangeTrustModal extends React.Component {
                         onClick={() => {
                             submit.cancel();
                             window.history.pushState({}, null, '/');
-                        }} />
+                        }}
+                    />
                 </div>
                 <div className="Sep7ChangeTrustModal_content">
                     <AssetCardSeparateLogo
                         d={d}
                         code={line.code}
-                        issuer={line.issuer} />
+                        issuer={line.issuer}
+                    />
                     {desc &&
                         <div className="Sep7ChangeTrustModal_desc">
                             <span>{desc}</span>

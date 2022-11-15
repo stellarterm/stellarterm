@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../lib/Driver';
+import directory from 'stellarterm-directory';
+import Driver from '../../../lib/driver/Driver';
 import images from '../../../images';
 import NotFound from '../../NotFound/NotFound';
 import TopVolumeAssetList from './TopVolumeAssetList/TopVolumeAssetList';
@@ -29,9 +30,9 @@ export default class TopVolumeAssets extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (!prevProps.baseAsset
+        if (this.props.baseAsset && (!prevProps.baseAsset
             || prevProps.baseAsset.code !== this.props.baseAsset.code
-            || prevProps.baseAsset.issuer !== this.props.baseAsset.issuer) {
+            || prevProps.baseAsset.issuer !== this.props.baseAsset.issuer)) {
             this.getStellarMarketsData();
             this.resetSort();
         }
@@ -62,7 +63,7 @@ export default class TopVolumeAssets extends React.Component {
                     baseAssetIssuer: 'native',
                     counterAssetCode: assetCode,
                     counterAssetIssuer: assetIssuer,
-                    numHoursAgo: 168,
+                    numHoursAgo: 24,
                 });
             const lastLumenPrice = (lastLumenTrade && lastLumenTrade.data && lastLumenTrade.data.markets.length)
                 ? lastLumenTrade.data.markets[0].close
@@ -71,12 +72,18 @@ export default class TopVolumeAssets extends React.Component {
             const revertedCounterResponse = counterResponse.data.markets.map(market => ({
                 counterAssetCode: market.baseAssetCode,
                 counterAssetIssuer: market.baseAssetIssuer === 'native' ? null : market.baseAssetIssuer,
+                baseAssetCode: market.counterAssetCode,
+                baseAssetIssuer: market.counterAssetIssuer,
                 baseVolume: market.counterVolume,
                 open: (1 / market.open).toFixed(7),
                 close: (1 / market.close).toFixed(7),
             }));
 
-            const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse];
+            const combinedMarketsData = [...baseResponse.data.markets, ...revertedCounterResponse]
+                .filter(({ counterAssetCode, counterAssetIssuer, baseAssetCode, baseAssetIssuer }) => (
+                    !directory.isDisabledAsset(counterAssetCode, counterAssetIssuer) &&
+                        !directory.isDisabledAsset(baseAssetCode, baseAssetIssuer)
+                ));
             this.setState({
                 stellarMarketsData: combinedMarketsData,
                 lastLumenPrice,
@@ -110,7 +117,7 @@ export default class TopVolumeAssets extends React.Component {
             { title: 'Change (24h)', sortField: 'change24h', align: 'right' },
         ];
 
-        return headerCells.map((headerCell) => {
+        return headerCells.map(headerCell => {
             if (headerCell.sortField === 'withoutSort') {
                 return (
                     <div className={`TopVolume_cell withoutSort ${headerCell.align}`} key={headerCell.title}>
@@ -123,7 +130,8 @@ export default class TopVolumeAssets extends React.Component {
                 <div
                     className={`TopVolume_cell ${headerCell.align}`}
                     onClick={() => this.handleSort(headerCell.sortField)}
-                    key={headerCell.title}>
+                    key={headerCell.title}
+                >
 
                     <span>{headerCell.title}</span>
                     {this.state.sortField !== headerCell.sortField ?
@@ -131,7 +139,8 @@ export default class TopVolumeAssets extends React.Component {
                         <img
                             src={images['sort-arrow-act']}
                             alt="sortBy"
-                            className={this.state.sortDirection} />
+                            className={this.state.sortDirection}
+                        />
                     }
                 </div>
             );
@@ -202,11 +211,12 @@ export default class TopVolumeAssets extends React.Component {
                     loadingData={loadingData}
                     lastLumenPrice={lastLumenPrice}
                     sortField={sortField}
-                    sortDirection={sortDirection} />
+                    sortDirection={sortDirection}
+                />
             </div>);
     }
 }
 TopVolumeAssets.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    baseAsset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
+    baseAsset: PropTypes.instanceOf(StellarSdk.Asset),
 };

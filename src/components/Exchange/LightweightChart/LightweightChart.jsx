@@ -1,21 +1,35 @@
+/* eslint-disable no-unused-vars */
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import Debounce from 'awesome-debounce-promise';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import images from '../../../images';
-
-import * as chartOptions from './LightweightChartOptions';
-import * as converterOHLC from './ConverterOHLC';
-import exportChartPng from './CanvasHandler';
-
 import {
     CrosshairMode,
     PriceScaleMode,
 } from '../../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
+import * as chartOptions from './LightweightChartOptions';
+import * as converterOHLC from './ConverterOHLC';
+import exportChartPng from './CanvasHandler';
 import UtcTimeString from './UtcTimeString/UtcTimeString';
 import ChartDataPanel from './ChartDataPanel/ChartDataPanel';
 import FullscreenScrollBlock from './FullscreenScrollBlock/FullscreenScrollBlock';
+
+const AGGREGATIONS_DEPS = {
+    // 3 days
+    60: 3 * 24 * 60 * 60,
+    // 1 week
+    300: 7 * 24 * 60 * 60,
+    // 1 month
+    900: 31 * 24 * 60 * 60,
+    // 6 months
+    3600: 6 * 31 * 24 * 60 * 60,
+    // 3 years
+    86400: 3 * 12 * 31 * 24 * 60 * 60,
+    // 5 years
+    604800: 5 * 12 * 31 * 24 * 60 * 60,
+};
 
 export default class LightweightChart extends React.Component {
     constructor(props) {
@@ -25,15 +39,21 @@ export default class LightweightChart extends React.Component {
             pairName: this.props.pairName,
             chartInited: false,
             isLoadingNext: false,
-            isLoadingInit: true,
-            60: { trades: [], volumes: [] },
-            300: { trades: [], volumes: [] },
-            900: { trades: [], volumes: [] },
-            3600: { trades: [], volumes: [] },
-            86400: { trades: [], volumes: [] },
-            604800: { trades: [], volumes: [] },
+            isLoadingInit: false,
+            trades: [],
+            volumes: [],
+            nextTrades: null,
+            fullHistoryLoaded: false,
         };
         this.applyChartOptions = this.applyChartOptions.bind(this);
+
+        this.debouncedUpdateLastTrades = Debounce(this.updateLastTrades.bind(this), 700);
+
+        this.unsubLastTrades = this.props.d.orderbook.event.sub(event => {
+            if (event && event.lastTrades && !event.lastTradesInit) {
+                this.debouncedUpdateLastTrades();
+            }
+        });
     }
 
     componentDidMount() {
@@ -73,32 +93,40 @@ export default class LightweightChart extends React.Component {
         this._mounted = false;
         this.CHART.unsubscribeVisibleTimeRangeChange();
         window.removeEventListener('resize', this.applyChartOptions);
+        this.unsubLastTrades();
     }
 
     onClickTimeFrameBtn(timeFrame) {
-        this.props.onUpdate('timeFrame', timeFrame);
-        if (this.state[timeFrame].trades.length === 0) {
-            this.setState({ isLoadingInit: true });
-            this.getTrades(timeFrame);
+        if (timeFrame === this.props.timeFrame) {
+            return;
         }
+        this.props.onUpdate('timeFrame', timeFrame);
+
+        this.getTrades(timeFrame);
     }
 
     getTrades(timeFrame) {
-        const { fullHistoryLoaded } = this.state[timeFrame];
+        this.setState({
+            isLoadingInit: true,
+            trades: [],
+            volumes: [],
+            nextTrades: null,
+            fullHistoryLoaded: false,
+        });
+
         const { data, handlers } = this.props.d.orderbook;
 
-        if (fullHistoryLoaded) { return; }
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
 
-        handlers.getTrades(timeFrame, 100).then((res) => {
+        handlers.getTrades(startDate, endDate, timeFrame, 100).then(res => {
             if (!res) {
                 this.setState({
                     isLoadingInit: false,
-                    [timeFrame]: {
-                        trades: [],
-                        volumes: [],
-                        nextTrades: null,
-                        fullHistoryLoaded: true,
-                    },
+                    trades: [],
+                    volumes: [],
+                    nextTrades: null,
+                    fullHistoryLoaded: true,
                 });
                 return;
             }
@@ -109,12 +137,10 @@ export default class LightweightChart extends React.Component {
             if (this._mounted) {
                 this.setState({
                     isLoadingInit: false,
-                    [timeFrame]: {
-                        trades: convertedTrades,
-                        volumes: convertedVolume,
-                        nextTrades: res.next,
-                        fullHistoryLoaded: fullLoaded,
-                    },
+                    trades: convertedTrades,
+                    volumes: convertedVolume,
+                    nextTrades: res.next,
+                    fullHistoryLoaded: fullLoaded,
                 });
             }
         });
@@ -122,43 +148,41 @@ export default class LightweightChart extends React.Component {
 
     getNextTrades() {
         const { timeFrame, d } = this.props;
-        const { fullHistoryLoaded } = this.state[timeFrame];
+        const { fullHistoryLoaded } = this.state;
 
-        if (fullHistoryLoaded) { return; }
+        if (fullHistoryLoaded || !this.state.nextTrades) { return; }
 
         this.setState({ isLoadingNext: true });
-        this.state[timeFrame].nextTrades().then((res) => {
+        this.state.nextTrades().then(res => {
             const fullLoaded = res.records.length === 0;
             const convertedTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
             const convertedVolume = converterOHLC.getVolumeData(convertedTrades, d.orderbook.data);
-            const concatedTrades = [...convertedTrades, ...this.state[timeFrame].trades];
-            const concatedVolumes = [...convertedVolume, ...this.state[timeFrame].volumes];
+            const concatedTrades = [...convertedTrades, ...this.state.trades];
+            const concatedVolumes = [...convertedVolume, ...this.state.volumes];
 
             if (this._mounted) {
                 this.setState({
                     isLoadingNext: false,
-                    [timeFrame]: {
-                        trades: concatedTrades,
-                        volumes: concatedVolumes,
-                        nextTrades: res.next,
-                        fullHistoryLoaded: fullLoaded,
-                    },
+                    trades: concatedTrades,
+                    volumes: concatedVolumes,
+                    nextTrades: res.next,
+                    fullHistoryLoaded: fullLoaded,
                 });
             }
         });
     }
 
     setChartData() {
-        const { timeFrame } = this.props;
-        this.ohlcSeries.setData(this.state[timeFrame].trades);
-        this.volumeSeries.setData(this.state[timeFrame].volumes);
+        this.ohlcSeries.setData(this.state.trades);
+        this.volumeSeries.setData(this.state.volumes);
     }
 
     getTimeFrameBtn(btnText, timeFrame) {
         return (
             <a
                 className={`timeBtn ${this.props.timeFrame === timeFrame ? 'timeBtn_active' : ''}`}
-                onClick={() => this.onClickTimeFrameBtn(timeFrame)}>
+                onClick={() => this.onClickTimeFrameBtn(timeFrame)}
+            >
                 {btnText}
             </a>
         );
@@ -168,7 +192,8 @@ export default class LightweightChart extends React.Component {
         return (
             <a
                 className={`scaleBtn ${this.props.scaleMode === scaleMode ? 'scaleBtn_active' : ''}`}
-                onClick={() => this.props.onUpdate('scaleMode', scaleMode)}>
+                onClick={() => this.props.onUpdate('scaleMode', scaleMode)}
+            >
                 {text}
             </a>
         );
@@ -197,18 +222,22 @@ export default class LightweightChart extends React.Component {
         this.volumeSeries = this.CHART.addHistogramSeries(chartOptions.getVolumeOptions());
         this.setChartSeries();
 
-        this.CHART.subscribeVisibleTimeRangeChange((param) => {
+        this.CHART.subscribeVisibleTimeRangeChange(param => {
             if (!param || !param.from) { return; }
 
-            const lastTradeElement = this.state[this.props.timeFrame].trades[0];
-            const tradesIsLoaded = this.state[this.props.timeFrame].trades.length !== 0;
+            const lastTradeElement = this.state.trades[0];
+            const tradesIsLoaded = this.state.trades.length !== 0;
 
-            if (tradesIsLoaded && param.from === lastTradeElement.time && !this.state.isLoadingNext) {
+            if (
+                tradesIsLoaded && param.from === lastTradeElement.time &&
+                !this.state.isLoadingNext &&
+                !this.state.isLoadingInit
+            ) {
                 this.getNextTrades();
             }
             // Sets first visible trade, only for screenshot
-            this.firstVisibleTrade = this.state[this.props.timeFrame].trades.find(trade => trade.time === param.to);
-            this.firstVisibleVolume = this.state[this.props.timeFrame].volumes.find(trade => trade.time === param.to);
+            this.firstVisibleTrade = this.state.trades.find(trade => trade.time === param.to);
+            this.firstVisibleVolume = this.state.volumes.find(trade => trade.time === param.to);
         });
 
         this.setState({ chartInited: true });
@@ -228,6 +257,44 @@ export default class LightweightChart extends React.Component {
             this.firstVisibleTrade,
             this.firstVisibleVolume,
         );
+    }
+
+    updateLastTrades() {
+        const { timeFrame } = this.props;
+
+        if (!this.state.trades.length || this.state.isLoadingInit) {
+            return;
+        }
+
+        const endDate = Math.round(Date.now() / 1000);
+        const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
+
+        this.props.d.orderbook.handlers.getTrades(startDate, endDate, timeFrame, 20).then(res => {
+            const { trades, volumes, nextTrades, fullHistoryLoaded } = this.state;
+
+            const convertedLastTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
+            const convertedLastVolumes = converterOHLC.getVolumeData(convertedLastTrades,
+                this.props.d.orderbook.data);
+
+            const firstIndex = trades.findIndex(trade => trade.time === convertedLastTrades[0].time);
+
+            const [_oldTrade, ...newTrades] = convertedLastTrades;
+            const [_oldVolume, ...newVolumes] = convertedLastVolumes;
+
+            trades[firstIndex + 1].close = newTrades[0].open;
+
+            const updatedTrades = [...trades.slice(0, firstIndex + 1), ...newTrades];
+            const updatedVolumes = [...volumes.slice(0, firstIndex + 1), ...newVolumes];
+
+            if (this._mounted) {
+                this.setState({
+                    trades: updatedTrades,
+                    volumes: updatedVolumes,
+                    nextTrades,
+                    fullHistoryLoaded,
+                });
+            }
+        });
     }
 
     chartInit() {
@@ -252,10 +319,10 @@ export default class LightweightChart extends React.Component {
 
     render() {
         const { chartInited, isLoadingInit, pairName } = this.state;
-        const { trades, volumes } = this.state[this.props.timeFrame];
+        const { trades, volumes } = this.state;
         const { fullscreen } = this.props;
         const noDataFounded = trades.length === 0;
-        const showChartControls = chartInited && !isLoadingInit && !noDataFounded;
+        const showChartControls = chartInited && !isLoadingInit;
 
         return (
             <React.Fragment>
@@ -265,7 +332,8 @@ export default class LightweightChart extends React.Component {
                         timeFrame={this.props.timeFrame}
                         trades={trades}
                         volumes={volumes}
-                        pairName={pairName} />
+                        pairName={pairName}
+                    />
                 ) : null}
 
                 <div className="chart_Msg_Container">

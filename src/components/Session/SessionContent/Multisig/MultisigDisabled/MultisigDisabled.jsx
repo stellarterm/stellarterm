@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 
 
 export default class MultisigDisabled extends React.Component {
@@ -18,8 +18,10 @@ export default class MultisigDisabled extends React.Component {
                             security by requiring additional approvals for each transaction.
                         </span>
                         <a
-                            href="https://lobstr.zendesk.com/hc/en-us/categories/360001534333-LOBSTR-Vault"
-                            target="_blank">
+                            href="https://lobstrvault.freshdesk.com/support/solutions/151000012441"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                        >
                         Read more about multisig
                         </a>
                     </div>

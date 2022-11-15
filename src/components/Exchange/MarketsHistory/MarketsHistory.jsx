@@ -3,24 +3,47 @@ import moment from 'moment';
 import PropTypes from 'prop-types';
 import { AutoSizer, List } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
-import Driver from '../../../lib/Driver';
-import Printify from '../../../lib/Printify';
+import Driver from '../../../lib/driver/Driver';
+import Printify from '../../../lib/helpers/Printify';
 import images from '../../../images';
 
 let prevPrice = 0;
 
 export default class MarketsHistory extends React.Component {
-    static getAccountRow(publiKey) {
-        const baseAccount = createStellarIdenticon(publiKey).toDataURL();
-        const basePublicKey = publiKey && `${publiKey.substr(0, 6)}...${publiKey.substr(-6, 6)}`;
-        return <span className="publicKey_icon"><img src={baseAccount} alt={publiKey} /> {basePublicKey}</span>;
+    static getAccountView(publicKey) {
+        const baseAccount = createStellarIdenticon(publicKey).toDataURL();
+        const basePublicKey = publicKey && `${publicKey.substr(0, 6)}...${publicKey.substr(-6, 6)}`;
+        return <span className="publicKey_icon"><img src={baseAccount} alt={publicKey} /> {basePublicKey}</span>;
     }
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            trades: this.props.d.orderbook.data.marketTradesHistory,
-        };
+    static getLiquidityView(liquidityPoolId) {
+        const liquidityPoolShort = `${liquidityPoolId.slice(0, 4)}...${liquidityPoolId.slice(-4)}`;
+
+        return <span>Liq. pool: {liquidityPoolShort}</span>;
+    }
+
+    static getAccountRow(isBase, trade) {
+        if (isBase) {
+            return trade.base_account ?
+                MarketsHistory.getAccountView(trade.base_account) :
+                MarketsHistory.getLiquidityView(trade.base_liquidity_pool_id);
+        }
+
+        return trade.counter_account ?
+            MarketsHistory.getAccountView(trade.counter_account) :
+            MarketsHistory.getLiquidityView(trade.counter_liquidity_pool_id);
+    }
+
+    componentDidMount() {
+        this.unsub = this.props.d.orderbook.event.sub(event => {
+            if (event && event.lastTrades) {
+                this.forceUpdate();
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        this.unsub();
     }
 
     getRowItems(trade, rowKey, rowStyle) {
@@ -45,8 +68,8 @@ export default class MarketsHistory extends React.Component {
 
         const rowItems = [
             { value: `${relativeTradeTime} ago`, key: 'date', className: 'row-left' },
-            { value: this.constructor.getAccountRow(trade.base_account), key: 'seller', className: 'row-left' },
-            { value: this.constructor.getAccountRow(trade.counter_account), key: 'buyer', className: 'row-left' },
+            { value: this.constructor.getAccountRow(true, trade), key: 'seller', className: 'row-left' },
+            { value: this.constructor.getAccountRow(false, trade), key: 'buyer', className: 'row-left' },
             { value: <div className={priceMoveClass}>{sideText} {Printify.lightenZeros(currentPrice)}</div>, key: 'price', className: 'row-right' },
             { value: Printify.lightenZeros(trade.base_amount), key: 'amount_base', className: 'row-right' },
             { value: Printify.lightenZeros(trade.counter_amount), key: 'amount_counter', className: 'row-right' },
@@ -65,7 +88,7 @@ export default class MarketsHistory extends React.Component {
 
     getHistoryTable() {
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
-        const { trades } = this.state;
+        const trades = this.props.d.orderbook.lastTrades.marketTradesHistory;
         const rowHeight = 30;
         const tableHeight = trades.length > 20 ? 600 : trades.length * rowHeight;
 
@@ -108,7 +131,8 @@ export default class MarketsHistory extends React.Component {
                                         ? prevPrice
                                         : (trades[index + 1].price.n / trades[index + 1].price.d).toFixed(7);
                                     return this.getRowItems(trades[index], key, style);
-                                }} />
+                                }}
+                            />
                         )}
                     </AutoSizer>
                 </div>
@@ -117,7 +141,7 @@ export default class MarketsHistory extends React.Component {
     }
 
     render() {
-        const { trades } = this.state;
+        const trades = this.props.d.orderbook.lastTrades.marketTradesHistory;
         const noMarketTrades = !trades || trades.length === 0;
 
         const marketsTitleText = `Market trades history ${noMarketTrades ? 'is empty' : ''}`;

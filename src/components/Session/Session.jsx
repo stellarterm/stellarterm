@@ -1,21 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import LoginPage from './LoginPage/LoginPage';
-import Driver from '../../lib/Driver';
+import Driver from '../../lib/driver/Driver';
 import SessionActivate from './SessionActivate/SessionActivate';
 import SessionLoading from './SessionLoading/SessionLoading';
 import SessionContent from './SessionContent/SessionContent';
+import { SESSION_STATE } from '../../lib/constants/sessionConstants';
 
 export default class Session extends React.Component {
     constructor(props) {
         super(props);
-        this.listenId = this.props.d.session.event.listen(() => {
+        this.unsub = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
     }
 
     componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
+        this.unsub();
     }
 
     render() {
@@ -24,16 +25,16 @@ export default class Session extends React.Component {
         const { state, unfundedAccountId } = d.session;
 
         switch (state) {
-        case 'out':
-            return <LoginPage {...props} d={d} urlParts={urlParts} />;
-        case 'unfunded':
-            return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} />;
-        case 'loading':
-            return <SessionLoading />;
-        case 'in':
-            return <SessionContent {...props} d={d} />;
-        default:
-            break;
+            case SESSION_STATE.OUT:
+                return <LoginPage {...props} d={d} urlParts={urlParts} />;
+            case SESSION_STATE.UNFUNDED:
+                return <SessionActivate unfundedAccountId={unfundedAccountId} d={d} />;
+            case SESSION_STATE.LOADING:
+                return <SessionLoading />;
+            case SESSION_STATE.IN:
+                return <SessionContent {...props} d={d} />;
+            default:
+                break;
         }
         return null;
     }

@@ -1,8 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../../lib/Driver';
+import Driver from '../../../../../../lib/driver/Driver';
 import Ellipsis from '../../../../../Common/Ellipsis/Ellipsis';
+import { TX_STATUS } from '../../../../../../lib/constants/sessionConstants';
+import ErrorHandler from '../../../../../../lib/helpers/ErrorHandler';
 
 export default class RemoveTrustLink extends React.Component {
     constructor(props) {
@@ -17,7 +19,7 @@ export default class RemoveTrustLink extends React.Component {
         const { code, issuer } = this.props.balance;
 
         this.props.d.session.handlers.removeTrust(code, issuer).then(({ status, serverResult }) => {
-            if (status !== 'finish') {
+            if (status !== TX_STATUS.FINISH) {
                 return null;
             }
 
@@ -25,6 +27,7 @@ export default class RemoveTrustLink extends React.Component {
             return serverResult
                 .then(res => console.log('Successfully removed trust', res))
                 .catch((err) => {
+                    this.props.d.toastService.error('Can’t remove asset', ErrorHandler(err));
                     console.log('Errored when removing trust', err);
                     this.setState({ status: 'error' });
                 });

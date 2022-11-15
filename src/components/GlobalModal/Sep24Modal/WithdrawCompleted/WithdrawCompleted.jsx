@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import Sep24ModalFooter from '../Common/Sep24ModalFooter/Sep24ModalFooter';
 
 export default function WithdrawCompleted(props) {
-    const { d, asset, withdrawAmount, transaction } = props;
+    const { d, asset, withdrawAmount, transaction, transferServer } = props;
 
     return (
         <React.Fragment>
@@ -27,6 +27,7 @@ export default function WithdrawCompleted(props) {
                 isAnyError={false}
                 isLoading={false}
                 transaction={transaction}
+                transferServer={transferServer}
                 withdrawCompleted />
         </React.Fragment>
     );
@@ -37,4 +38,5 @@ WithdrawCompleted.propTypes = {
     withdrawAmount: PropTypes.string.isRequired,
     asset: PropTypes.objectOf(PropTypes.any).isRequired,
     transaction: PropTypes.objectOf(PropTypes.any).isRequired,
+    transferServer: PropTypes.objectOf(PropTypes.any).isRequired,
 };

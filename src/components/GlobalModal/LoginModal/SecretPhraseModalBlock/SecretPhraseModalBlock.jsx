@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 
 
 export default class SecretPhraseModalBlock extends React.Component {

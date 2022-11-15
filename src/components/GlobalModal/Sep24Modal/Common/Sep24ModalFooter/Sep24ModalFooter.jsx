@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../lib/Driver';
-import MagicSpoon from '../../../../../lib/MagicSpoon';
-import ErrorHandler from '../../../../../lib/ErrorHandler';
+import Driver from '../../../../../lib/driver/Driver';
+import ErrorHandler from '../../../../../lib/helpers/ErrorHandler';
 import images from '../../../../../images';
-import Validate from '../../../../../lib/Validate';
+import Validate from '../../../../../lib/helpers/Validate';
+import { AUTH_TYPE, TX_STATUS } from '../../../../../lib/constants/sessionConstants';
 
 export default class Sep24ModalFooter extends React.Component {
     constructor(props) {
@@ -28,9 +27,9 @@ export default class Sep24ModalFooter extends React.Component {
             isDeposit,
             transaction,
             noActionBtn: true,
+            transferServer: this.props.transferServer,
         });
     }
-
 
     getNewModal(dataToModal) {
         const { d } = this.props;
@@ -55,9 +54,10 @@ export default class Sep24ModalFooter extends React.Component {
         } = this.props;
         const { isPending } = this.state;
 
-        const cancelBtnText = (transaction &&
-            (transaction.status === 'pending_user_transfer_start' || transaction.status === 'completed')) ?
-            'Close' : 'Cancel';
+        const cancelBtnText =
+            transaction && (transaction.status === 'pending_user_transfer_start' || transaction.status === 'completed')
+                ? 'Close'
+                : 'Cancel';
 
         const cancelButton = (
             <button
@@ -66,33 +66,26 @@ export default class Sep24ModalFooter extends React.Component {
                 onClick={() => {
                     window.history.pushState({}, null, '/');
                     d.modal.handlers.cancel();
-                }}>
+                }}
+            >
                 {cancelBtnText}
             </button>
         );
 
         const finishButton = (
-            <button
-                className="s-button"
-                onClick={() => d.modal.handlers.finish()}>
+            <button className="s-button" onClick={() => d.modal.handlers.finish()}>
                 Done
             </button>
         );
 
         if (isLoading || isAnyError || noActionBtn) {
-            return (
-                <div className="Action_buttons">
-                    {cancelButton}
-                </div>
-            );
+            return <div className="Action_buttons">{cancelButton}</div>;
         }
 
         if (withdrawCompleted) {
             return (
                 <div className="Action_buttons">
-                    <button
-                        className="s-btn_cancel"
-                        onClick={() => this.onClickWithdrawDone()}>
+                    <button className="s-btn_cancel" onClick={() => this.onClickWithdrawDone()}>
                         Back to details
                     </button>
                 </div>
@@ -112,7 +105,8 @@ export default class Sep24ModalFooter extends React.Component {
                     <button
                         className="s-button"
                         disabled={isAnyError || isLoading || isPending}
-                        onClick={() => this.sendWithdrawAsset()}>
+                        onClick={() => this.sendWithdrawAsset()}
+                    >
                         {isPending ? <div className="nk-spinner" /> : 'Withdraw'}
                     </button>
                 </div>
@@ -120,9 +114,7 @@ export default class Sep24ModalFooter extends React.Component {
         }
 
         return isCompleted ? (
-            <div className="Action_buttons">
-                {finishButton}
-            </div>
+            <div className="Action_buttons">{finishButton}</div>
         ) : (
             <div className="Action_buttons">
                 {cancelButton}
@@ -131,7 +123,7 @@ export default class Sep24ModalFooter extends React.Component {
                     <button className="s-button" onClick={() => this.props.openAnchorWindow()}>
                         {windowClosed ? 'Retry' : 'Continue'}
                     </button>
-                ) : null }
+                ) : null}
             </div>
         );
     }
@@ -154,19 +146,21 @@ export default class Sep24ModalFooter extends React.Component {
             memo = buff.toString('hex');
         }
 
-        const tx = await MagicSpoon.buildTxSendPayment(d.Server, d.session.account, {
+        const sendOpts = {
             destination: transaction.withdraw_anchor_account,
             asset: new StellarSdk.Asset(asset.code, asset.issuer),
             amount: transaction.amount_in,
-            memo: memo
-                ? {
-                    type,
-                    content: memo,
-                }
-                : undefined,
-        });
+            withMuxing: transaction.withdraw_anchor_account.startsWith('M'),
+        };
 
-        if (d.session.authType === 'ledger') {
+        const sendMemo = memo
+            ? {
+                type,
+                content: memo,
+            }
+            : undefined;
+
+        if (d.session.authType === AUTH_TYPE.LEDGER) {
             d.modal.handlers.finish();
             d.modal.nextModalName = 'Sep24Modal';
             d.modal.nextModalData = {
@@ -175,19 +169,20 @@ export default class Sep24ModalFooter extends React.Component {
                 isDeposit: false,
                 withdrawCompleted: true,
                 transaction,
+                transferServer: this.props.transferServer,
             };
-            d.session.handlers.buildSignSubmit(tx);
+            d.session.handlers.send(sendOpts, sendMemo);
             return null;
         }
 
-        const bssResult = await d.session.handlers.buildSignSubmit(tx);
+        const bssResult = await d.session.handlers.send(sendOpts, sendMemo);
 
-        if (bssResult.status === 'await_signers') {
+        if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
             d.modal.handlers.cancel();
             window.history.pushState({}, null, '/');
         }
 
-        if (bssResult.status === 'finish') {
+        if (bssResult.status === TX_STATUS.FINISH) {
             try {
                 await bssResult.serverResult;
 
@@ -201,6 +196,7 @@ export default class Sep24ModalFooter extends React.Component {
                     isDeposit: false,
                     withdrawCompleted: true,
                     transaction,
+                    transferServer: this.props.transferServer,
                 });
             } catch (e) {
                 this.setState({
@@ -214,10 +210,8 @@ export default class Sep24ModalFooter extends React.Component {
     }
 
     render() {
-        const { asset } = this.props;
+        const { transferServer } = this.props;
         const { isError, errorMsg } = this.state;
-        const selectedAnchor = directory.getAnchor(asset.domain);
-        const supportMail = asset.customTransferSupport || selectedAnchor.support;
 
         return (
             <React.Fragment>
@@ -232,13 +226,21 @@ export default class Sep24ModalFooter extends React.Component {
 
                 <div className="Modal_footer">
                     <div className="transaction_support">
-                        <span>Having issues with your transaction?</span>
-                        <span>
-                            Contact anchor support at{' '}
-                            <a href={`mailto:${supportMail}`} target="_blank" rel="nofollow noopener noreferrer">
-                                {supportMail}
-                            </a>
-                        </span>
+                        {transferServer.SUPPORT && (
+                            <React.Fragment>
+                                <span>Having issues with your transaction?</span>
+                                <span>
+                                    Contact anchor support at{' '}
+                                    <a
+                                        href={`mailto:${transferServer.SUPPORT}`}
+                                        target="_blank"
+                                        rel="nofollow noopener noreferrer"
+                                    >
+                                        {transferServer.SUPPORT}
+                                    </a>
+                                </span>
+                            </React.Fragment>
+                        )}
                     </div>
 
                     {this.getActionButtons()}
@@ -259,4 +261,5 @@ Sep24ModalFooter.propTypes = {
     windowClosed: PropTypes.bool,
     transaction: PropTypes.objectOf(PropTypes.any),
     openAnchorWindow: PropTypes.func,
+    transferServer: PropTypes.objectOf(PropTypes.any),
 };

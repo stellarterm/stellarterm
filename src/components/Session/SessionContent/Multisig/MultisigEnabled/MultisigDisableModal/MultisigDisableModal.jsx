@@ -1,11 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../../lib/Driver';
+import Driver from '../../../../../../lib/driver/Driver';
+import { MULTISIG_PROVIDERS, SIGNER_KINDS } from '../../../../../../lib/constants/multisigConstants';
 
 const images = require('../../../../../../images');
 
 export default function MultisigDisableModal(props) {
-    const { submit, d, signerKey } = props;
+    const { submit, d, signer } = props;
+
+    const removeSigner = () => {
+        submit.cancel();
+
+        const { multisigProvider, signers } = d.multisig;
+
+        const cosigners = signers.filter(({ kind }) => kind === SIGNER_KINDS.COSIGNER);
+
+        const isGuardCosigner = multisigProvider === MULTISIG_PROVIDERS.STELLAR_GUARD
+            && signer.kind === SIGNER_KINDS.COSIGNER;
+
+        const isLastVaultCosigner = cosigners.length === 1 && multisigProvider === MULTISIG_PROVIDERS.LOBSTR_VAULT;
+
+        const isLastCustomSigner = signer.kind === SIGNER_KINDS.CUSTOM && signers.length === 2;
+
+        if (isGuardCosigner || isLastVaultCosigner || isLastCustomSigner) {
+            d.multisig.disableMultisig();
+        } else {
+            d.multisig.removeSigner(signer);
+        }
+    };
+
     return (
         <div className="MultisigDisableModal">
             <div className="Modal_header">
@@ -22,10 +45,8 @@ export default function MultisigDisableModal(props) {
                 <button className="cancel-button" onClick={() => submit.cancel()}>Cancel</button>
                 <button
                     className="s-button"
-                    onClick={() => {
-                        submit.cancel();
-                        d.session.handlers.removeSigner(signerKey);
-                    }} >
+                    onClick={() => removeSigner()}
+                >
                     Remove
                 </button>
             </div>
@@ -35,5 +56,5 @@ export default function MultisigDisableModal(props) {
 MultisigDisableModal.propTypes = {
     submit: PropTypes.objectOf(PropTypes.func),
     d: PropTypes.instanceOf(Driver),
-    signerKey: PropTypes.string,
+    signer: PropTypes.objectOf(PropTypes.any),
 };

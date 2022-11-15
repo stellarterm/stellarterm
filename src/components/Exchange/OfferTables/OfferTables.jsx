@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import OfferTable from './OfferTable/OfferTable';
 
 export default class OfferTables extends React.Component {
     static getOpenOffersData(side, orderbook) {
         const isBuy = side === 'buy';
-        const offers = isBuy ? orderbook.bids : orderbook.asks;
+        const offers = isBuy ? orderbook.bids.slice(0, 20) : orderbook.asks.slice(0, 20);
         let depth = 0;
 
         return offers.map((offer, index) => {
@@ -29,14 +29,14 @@ export default class OfferTables extends React.Component {
     static getMaxDepth(orderbook) {
         const { asks, bids } = orderbook;
 
-        const cappedDepthAsks = asks.reduce((acc, ask) => {
+        const cappedDepthAsks = asks.slice(0, 20).reduce((acc, ask) => {
             if (Number(ask.price) / Number(asks[0].price) < 1.2) {
                 return Number(acc) + Number(ask.amount) * Number(ask.price);
             }
             return acc;
         }, 0);
 
-        const cappedDepthBids = bids.reduce((acc, bid) => {
+        const cappedDepthBids = bids.slice(0, 20).reduce((acc, bid) => {
             if (Number(bids[0].price) / Number(bid.price) < 1.2) {
                 return Number(acc) + Number(bid.amount);
             }
@@ -60,7 +60,8 @@ export default class OfferTables extends React.Component {
                     maxDepth={this.constructor.getMaxDepth(orderbook)}
                     counterCurrency={counterAssetName}
                     baseCurrency={baseAssetName}
-                    d={this.props.d} />
+                    d={this.props.d}
+                />
             </div>
         );
     }

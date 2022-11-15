@@ -1,0 +1,15 @@
+#depth-chart {
+    min-height: 600px;
+}
+
+.tick > text {
+    font-size: 12px;
+    color: #505558;
+    font-weight: normal;
+}
+
+.domain, .tick > line {
+    stroke: #000;
+    stroke-opacity: 0.1;
+    stroke-width: 1;
+}

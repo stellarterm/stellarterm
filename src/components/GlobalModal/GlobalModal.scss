@@ -11,6 +11,16 @@
 @import "./Sep24Modal/Sep24Modal";
 @import "./BrowserModal/BrowserModal";
 @import "./MoonpayModal/MoonpayModal";
+@import "WalletConnectQRModal/WalletConnectQRModal";
+@import "WalletConnectRequestModal/WalletConnectRequestModal";
+@import "WalletConnectPairingModal/WalletConnectPairingModal";
+@import "./ChooseTransferServer/ChooseTransferServer";
+@import "ClaimableBalanceDetails/ClaimableBalanceDetails";
+@import "WalletConnectSessionRequestModal/WalletConnectSessionRequestModal";
+@import "SwapModals/SwapSettings/SwapSettings";
+@import "SwapModals/SwapConfirm/SwapConfirm";
+@import "SwapModals/SwapSuccess/SwapSuccess";
+@import "SignChallengeWithMultisig/SignChallengeWithMultisig";
 
 .GlobalModalBackdrop {
   // This div fills up the whole screen, relative to where the user is scrolled to

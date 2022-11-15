@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
 import { Link } from 'react-router-dom';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import TrustButton from './TrustButton/TrustButton';
-import Stellarify from '../../../lib/Stellarify';
+import Stellarify from '../../../lib/helpers/Stellarify';
 import AssetCardSeparateLogo from '../AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 
 
@@ -16,14 +15,6 @@ export default class AssetRow extends React.Component {
         this.state = {
             color: undefined,
         };
-    }
-
-    componentDidMount() {
-        const { currency } = this.props;
-        const hasAssetInDirectory = currency && !!directory.getAssetByAccountId(currency.code, currency.issuer);
-        if (currency && currency.image && !hasAssetInDirectory) {
-            this.getColor(currency);
-        }
     }
 
     getRowActionButton(discoveredAsset) {
@@ -42,19 +33,9 @@ export default class AssetRow extends React.Component {
                 d={this.props.d}
                 asset={this.props.asset}
                 message={messageText}
-                currency={this.props.currency}
                 color={this.state.color}
-                host={this.props.host} />
+            />
         );
-    }
-
-    async getColor({ image }) {
-        const color = await this.props.d.session.handlers.getAverageColor(
-            image,
-            this.props.asset.getCode(),
-            this.props.host,
-        );
-        this.setState({ color });
     }
 
     render() {
@@ -68,16 +49,14 @@ export default class AssetRow extends React.Component {
                 issuer={this.props.asset.getIssuer()}
                 longIssuer
                 color={this.state.color}
-                currency={this.props.currency}
                 boxy
-                host={this.props.host} />) : (
+            />) : (
             <AssetCardMain
                 d={this.props.d}
                 code={this.props.asset.getCode()}
                 issuer={this.props.asset.getIssuer()}
                 color={this.state.color}
-                currency={this.props.currency}
-                host={this.props.host} />);
+            />);
 
         return !tradeLink ? (
             <div className="AssetRow">
@@ -97,11 +76,6 @@ export default class AssetRow extends React.Component {
 AssetRow.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     asset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
-    host: PropTypes.string,
     tradeLink: PropTypes.bool,
-    currency: PropTypes.shape({
-        image: PropTypes.string,
-        host: PropTypes.string,
-    }),
     hideMessage: PropTypes.bool,
 };

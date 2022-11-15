@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import images from '../../../images';
-import Driver from '../../../lib/Driver';
-import Stellarify from '../../../lib/Stellarify';
+import Driver from '../../../lib/driver/Driver';
+import Stellarify from '../../../lib/helpers/Stellarify';
+import SwitchBtn from '../../Basics/SwitchBtn/SwitchBtn';
 import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import AssetDropDown from './AssetDropDown/AssetDropDown';
 
@@ -30,17 +30,19 @@ export default class AssetPair extends React.Component {
             <div className="AssetPair__card">
                 {dropdown ? (
                     <AssetDropDown
-                        onUpdate={(asset) => {
+                        onUpdate={asset => {
                             this.assetUpdate(asset, assetType);
                         }}
                         d={d}
                         asset={this.state[assetType]}
-                        exception={exception} />
+                        exception={exception}
+                    />
                 ) : (
                     <AssetCardMain
                         code={this.props[assetType].getCode()}
                         issuer={this.props[assetType].getIssuer()}
-                        d={d} />
+                        d={d}
+                    />
                 )}
             </div>
         );
@@ -50,15 +52,11 @@ export default class AssetPair extends React.Component {
         if (!swap) {
             return <div className="AssetPair__separator" />;
         }
-        return (
-            <div className="AssetPair__swap" onClick={() => this.swap()}>
-                <img src={images.switch} alt="swap" width="20" height="24" />
-            </div>
-        );
+
+        return <SwitchBtn onClickFunc={() => this.swapPair()} />;
     }
 
     assetUpdate(asset, assetType) {
-        this.props.d.orderbook.closeOrderbookStream();
         this.setState({ [assetType]: asset });
 
         const isBase = assetType === 'baseBuying';
@@ -70,7 +68,7 @@ export default class AssetPair extends React.Component {
         window.scrollTo(0, 0);
     }
 
-    swap() {
+    swapPair() {
         const { baseBuying, counterSelling } = this.props;
         this.props.d.orderbook.handlers.setOrderbook(counterSelling, baseBuying);
         window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(counterSelling, baseBuying)}`);
@@ -84,10 +82,10 @@ export default class AssetPair extends React.Component {
 
     render() {
         const { row, d, baseBuying, counterSelling, dropdown, swap, fullscreen } = this.props;
-        const assetPairClassname = `AssetPair ${fullscreen ? 'AssetPair_fullscreen' : ''}`;
+        const assetPairClassName = `AssetPair ${fullscreen ? 'AssetPair_fullscreen' : ''}`;
 
         const content = (
-            <div className={assetPairClassname}>
+            <div className={assetPairClassName}>
                 {this.getAssetCard(dropdown, d, 'baseBuying')}
                 {this.getSeparator(swap)}
                 {this.getAssetCard(dropdown, d, 'counterSelling')}
@@ -122,6 +120,7 @@ export default class AssetPair extends React.Component {
         );
     }
 }
+
 AssetPair.propTypes = {
     d: PropTypes.instanceOf(Driver),
     baseBuying: PropTypes.objectOf(PropTypes.string),

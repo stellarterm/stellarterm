@@ -4,15 +4,14 @@ import { isConnected } from '@stellar/freighter-api';
 import images from '../../../../images';
 import HiddenDescription from '../Common/HiddenDescription';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
-import Driver from '../../../../lib/Driver';
-import { isChrome } from '../../../../lib/BrowserSupport';
+import Driver from '../../../../lib/driver/Driver';
 import AcceptTerms from '../Common/AcceptTerms';
 
 
 const FreighterBody = ({ history, d, modal }) => {
     const [loginError, setLoginError] = useState('');
 
-    const loginWithFreighter = (event) => {
+    const loginWithFreighter = event => {
         event.preventDefault();
         setLoginError('');
         d.session.handlers.logInWithFreighter()
@@ -34,15 +33,6 @@ const FreighterBody = ({ history, d, modal }) => {
     };
 
     const getFreighterLoginForm = () => {
-        if (!isChrome()) {
-            return (
-                <p className="LoginPage__form--title browser-support">
-                    Freighter extension is not supported by your browser.
-                    <br />
-                    Please use Google Chrome.
-                </p>
-            );
-        }
         if (!isConnected()) {
             return (
                 <Fragment>
@@ -53,7 +43,8 @@ const FreighterBody = ({ history, d, modal }) => {
                         className="LoginPage__link"
                         target="_blank"
                         rel="nofollow noopener noreferrer"
-                        href="https://chrome.google.com/webstore/detail/freighter/bcacfldlkkdogcmkkibnjlakofdplcbk">
+                        href="https://www.freighter.app/"
+                    >
                         Install Freighter
                     </a>
                 </Fragment>
@@ -64,7 +55,7 @@ const FreighterBody = ({ history, d, modal }) => {
             <form onSubmit={loginWithFreighter}>
                 <div className="LoginPage__submitWrap">
                     {loginErrorView}
-                    <AcceptTerms loginButtonText={'Sign in with Freighter'} />
+                    <AcceptTerms loginButtonText={'Log in with Freighter'} />
                 </div>
             </form>
         );
@@ -88,7 +79,8 @@ const FreighterBody = ({ history, d, modal }) => {
                             onClick={() => history.goBack()}
                             className="LoginPage__header-goBack"
                             src={images['icon-arrow-left-green-large']}
-                            alt="<" />
+                            alt="<"
+                        />
                         <HiddenDescription />
                     </div>
                     <div className="LoginPage__header">

@@ -1,16 +1,21 @@
 {
     "staging": {
+        "ANCHORS_URL": "https://fed-staging.stellarterm.com/issuer_orgs/",
+        "DESTINATIONS_URL": "https://fed-staging.stellarterm.com/destinations/",
         "API_URL": "https://api-staging.stellarterm.com/v1/",
         "LOBSTR_VAULT_URL": "https://vault-staging.lobstr.co/api/",
-        "FEDERATION_API_URL": "https://fed.stellarterm.com/",
+        "FEDERATION_API_URL": "https://fed-staging.stellarterm.com/",
         "HOME_URL": "https://staging--hopeful-brahmagupta-343062.netlify.com/",
         "HOME_DOMAIN": "staging.stellarterm.com",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
         "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
         "MOONPAY_API_URL": "https://staging.lobstr.co/api/",
-        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/",
+        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/"
     },
     "production": {
+        "ANCHORS_URL": "https://fed.stellarterm.com/issuer_orgs/",
+        "DESTINATIONS_URL": "https://fed.stellarterm.com/destinations/",
         "API_URL": "https://api.stellarterm.com/v1/",
         "LOBSTR_VAULT_URL": "https://vault.lobstr.co/api/",
         "FEDERATION_API_URL": "https://fed.stellarterm.com/",
@@ -19,17 +24,21 @@
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
         "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
         "MOONPAY_API_URL": "https://lobstr.co/api/",
-        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/",
+        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/"
     },
     "local": {
+        "ANCHORS_URL": "https://fed-staging.stellarterm.com/issuer_orgs/",
+        "DESTINATIONS_URL": "https://fed-staging.stellarterm.com/destinations/",
         "API_URL": "https://localhost:3000/api/v1/",
         "LOBSTR_VAULT_URL": "https://vault.lobstr.co/api/",
-        "FEDERATION_API_URL": "https://fed.stellarterm.com/",
+        "FEDERATION_API_URL": "https://fed-staging.stellarterm.com/",
         "HOME_URL": "https://localhost:3000/",
         "HOME_DOMAIN": "localhost:3000",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
         "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
         "MOONPAY_API_URL": "https://staging.lobstr.co/api/",
-        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/"
+        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/",
+        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/"
     }
 }

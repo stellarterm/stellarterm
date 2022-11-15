@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import TrezorConnect, { DEVICE_EVENT } from 'trezor-connect';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
 import images from '../../../../images';
 import HiddenDescription from '../Common/HiddenDescription';
@@ -26,7 +26,7 @@ export default class TrezorBody extends React.Component {
             showInstructions: false,
         };
 
-        TrezorConnect.on(DEVICE_EVENT, (event) => {
+        TrezorConnect.on(DEVICE_EVENT, event => {
             if (event.type === 'device-disconnect') {
                 this.props.d.session.handlers.logout();
             }
@@ -40,7 +40,7 @@ export default class TrezorBody extends React.Component {
             <form onSubmit={e => this.loginWithTrezor(e)}>
                 <div className="LoginPage__submitWrap">
                     {loginError}
-                    <AcceptTerms loginButtonText={'Sign in with Trezor'} />
+                    <AcceptTerms loginButtonText={'Log in with Trezor'} />
                     <div className="LoginPage__customPath">
                         {customPath}
                     </div>
@@ -55,7 +55,7 @@ export default class TrezorBody extends React.Component {
         const { bip32Path } = this.state;
         this.props.d.session.handlers.logInWithTrezor(`m/44'/148'/${bip32Path}'`)
             .then()
-            .catch((e) => {
+            .catch(e => {
                 console.log(e);
                 this.setState({ loginError: e.message });
             });
@@ -87,7 +87,7 @@ export default class TrezorBody extends React.Component {
 
         return (
             <label htmlFor="bip32Path" className="LoginPage__bip32Path">
-                Path: <span className="">{"44'/148'/"}</span>
+                Path: <span className="">{'44\'/148\'/'}</span>
                 <input
                     style={inputWidthStyle}
                     name="bip32Path"
@@ -96,13 +96,14 @@ export default class TrezorBody extends React.Component {
                     value={bip32Path}
                     onChange={e => this.handleBip32PathInput(e)}
                     autoFocus
-                    onFocus={(e) => {
+                    onFocus={e => {
                         // Move the carat to the end
                         const content = e.target.value;
                         e.target.value = '';
                         e.target.value = content;
-                    }} />
-                <span>{"'"}</span>
+                    }}
+                />
+                <span>{'\''}</span>
             </label>
         );
     }
@@ -144,7 +145,8 @@ export default class TrezorBody extends React.Component {
                                 onClick={() => history.goBack()}
                                 className="LoginPage__header-goBack"
                                 src={images['icon-arrow-left-green-large']}
-                                alt="<" />
+                                alt="<"
+                            />
                             <HiddenDescription />
                         </div>
                         <div className="LoginPage__header">
@@ -160,7 +162,8 @@ export default class TrezorBody extends React.Component {
                         {!showInstructions &&
                         <span
                             className="LoginPage_green-link"
-                            onClick={() => this.setState({ showInstructions: true })}>
+                            onClick={() => this.setState({ showInstructions: true })}
+                        >
                                 Show setup instructions
                         </span>
                         }

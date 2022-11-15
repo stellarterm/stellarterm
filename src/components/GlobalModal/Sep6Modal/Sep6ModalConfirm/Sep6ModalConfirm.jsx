@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import FeeBlock from '../Common/FeeBlock';
 import ExtraInfoBlock from '../Common/ExtraInfoBlock';
 import EstimatedTime from '../Common/EstimatedTIme';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import Sep6ModalFooter from '../Common/Sep6ModalFooter/Sep6ModalFooter';
 import MemoBlock from '../Common/MemoBlock';
 import MinMaxAmount from '../Common/MinMaxAmount';
@@ -48,7 +48,8 @@ export default class Sep6ModalConfirm extends React.Component {
                     feeFixed={parseFloat(res.fee_fixed) || 0}
                     feePercent={parseFloat(res.fee_percent) || 0}
                     assetCode={asset.code}
-                    amountForFee={parseFloat(res.amount)} />
+                    amountForFee={parseFloat(res.amount)}
+                />
 
                 <ExtraInfoBlock extra={_.has(res, 'extra_info') && res.extra_info !== null ? res.extra_info : ''} />
             </div>
@@ -74,7 +75,8 @@ export default class Sep6ModalConfirm extends React.Component {
                     feeFixed={parseFloat(res.fee_fixed) || 0}
                     feePercent={parseFloat(res.fee_percent) || 0}
                     assetCode={asset.code}
-                    amountForFee={parseFloat(res.amount)} />
+                    amountForFee={parseFloat(res.amount)}
+                />
 
                 <ExtraInfoBlock extra={_.has(res, 'extra_info') && res.extra_info !== null ? res.extra_info : ''} />
             </div>
@@ -92,10 +94,12 @@ export default class Sep6ModalConfirm extends React.Component {
                     d={d}
                     asset={asset}
                     isDeposit={isDeposit}
+                    transferServer={this.props.transferServer}
                     isAnyError={false}
                     isLoading={false}
                     needConfirm
-                    sendData={confirmData} />
+                    sendData={confirmData}
+                />
             </React.Fragment>
         );
     }
@@ -106,4 +110,5 @@ Sep6ModalConfirm.propTypes = {
     isDeposit: PropTypes.bool.isRequired,
     confirmData: PropTypes.objectOf(PropTypes.any).isRequired,
     asset: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.bool])).isRequired,
+    transferServer: PropTypes.objectOf(PropTypes.any),
 };

@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
-import Driver from '../../../lib/Driver';
-import ErrorHandler from '../../../lib/ErrorHandler';
+import Driver from '../../../lib/driver/Driver';
+import ErrorHandler from '../../../lib/helpers/ErrorHandler';
+import { AUTH_TYPE } from '../../../lib/constants/sessionConstants';
 
 
 export default class CancelOffersModal extends React.Component {
@@ -16,7 +17,7 @@ export default class CancelOffersModal extends React.Component {
     async removeOffers(submit, offers) {
         this.setState({ buttonReady: false });
 
-        if (this.props.d.session.authType === 'ledger') {
+        if (this.props.d.session.authType === AUTH_TYPE.LEDGER) {
             submit.cancel();
         }
 
@@ -46,7 +47,8 @@ export default class CancelOffersModal extends React.Component {
                     <img
                         src={images['icon-close']}
                         alt="X"
-                        onClick={() => submit.cancel()} />
+                        onClick={() => submit.cancel()}
+                    />
                 </div>
                 <div className="CancelOffersModal_content">
                     <div className="CancelOffersModal_title">
@@ -65,13 +67,15 @@ export default class CancelOffersModal extends React.Component {
                         <button
                             className="cancel-button"
                             disabled={!buttonReady}
-                            onClick={() => submit.cancel()}>
+                            onClick={() => submit.cancel()}
+                        >
                             Back
                         </button>
                         <button
                             className="s-button"
                             disabled={!buttonReady}
-                            onClick={() => this.removeOffers(submit, offers)}>
+                            onClick={() => this.removeOffers(submit, offers)}
+                        >
                             {buttonReady ? 'Confirm' : <div className="nk-spinner" />}
                         </button>
                     </div>

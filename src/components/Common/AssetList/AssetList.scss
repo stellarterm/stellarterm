@@ -65,12 +65,6 @@
             display: table-cell;
             vertical-align: middle;
 
-            .changePositive {
-                color: $s-color-primary3;
-            }
-            .changeNegative {
-                color: darken($s-color-alert, 5%);
-            }
             .tradeLink {
                 border-bottom: 1px dotted $s-color-neutral5;
             }
@@ -109,7 +103,7 @@
 }
 
 .AssetListFooter {
-    font-size: $s-scale-6;
+    font-size: $s-scale-4;
     text-align: center;
     padding: 12px 18px;
     color: $s-color-neutral5;
@@ -117,6 +111,26 @@
 
     a:hover {
         color: $s-color-neutral3;
+    }
+}
+
+.AssetListFooterAsLink {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 57px;
+    color: #68c86f;
+    font-size: 14px;
+    font-weight: normal;
+    text-decoration: none;
+    border-top: 1px solid #f4f4f5;
+
+    img {
+        margin-left: 12px;
+    }
+
+    &:hover {
+        background-color: #f4f4f533;
     }
 }
 
@@ -148,50 +162,7 @@
             }
         }
     }
-    .ListHeader_lowTradable {
-        display: flex;
-        align-items: center;
-        font-size: 13px;
-        padding-left: 0.5em;
-        cursor: pointer;
-        position: relative;
 
-        &:hover {
-            background-color: rgba(104, 200, 111, 0.1);
-            .custom-checkbox {
-                border: solid 1px #68c86f;
-            }
-        }
-
-        &:active {
-            background-color: rgba(104, 200, 111, 0.15);
-        }
-
-        & input[type="checkbox"] {
-            visibility: hidden;
-            position: absolute;
-        }
-        .custom-checkbox {
-            width: 15px;
-            height: 15px;
-            border-radius: 2px;
-            background-color: #fff;
-            border: solid 1px #bdbfc0;
-            margin: 0 7px;
-        }
-
-        & input[type="checkbox"]:checked ~ .custom-checkbox{
-            border: solid 1px #68c86f;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-
-            img{
-                width: 9px;
-                height: 9px;
-            }
-        }
-    }
 
     .ListHeader_dropdown{
         display: flex;
@@ -201,6 +172,51 @@
 
         & > span{
             margin-right: 8px;
+        }
+    }
+}
+
+.ListHeader_lowTradable {
+    display: flex;
+    align-items: center;
+    font-size: 13px;
+    padding-left: 0.5em;
+    cursor: pointer;
+    position: relative;
+
+    &:hover {
+        background-color: rgba(104, 200, 111, 0.1);
+        .custom-checkbox {
+            border: solid 1px #68c86f;
+        }
+    }
+
+    &:active {
+        background-color: rgba(104, 200, 111, 0.15);
+    }
+
+    & input[type="checkbox"] {
+        visibility: hidden;
+        position: absolute;
+    }
+    .custom-checkbox {
+        width: 15px;
+        height: 15px;
+        border-radius: 2px;
+        background-color: #fff;
+        border: solid 1px #bdbfc0;
+        margin: 0 7px;
+    }
+
+    & input[type="checkbox"]:checked ~ .custom-checkbox{
+        border: solid 1px #68c86f;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img{
+            width: 9px;
+            height: 9px;
         }
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { AutoSizer, List } from 'react-virtualized';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import ActivityOpenOrdersRow from './ActivityOpenOrdersRow/ActivityOpenOrdersRow';
 import { ROW_HEIGHT, TABLE_MAX_HEIGHT, SCROLL_WIDTH } from './../Activity';
 
@@ -33,7 +33,8 @@ export default class ActivityOpenOrders extends React.Component {
                     {openOffers.length > 1 &&
                         <button
                             className="CancelOffers_button"
-                            onClick={e => this.cancelAllOffers(e, '', openOffers)}>
+                            onClick={e => this.cancelAllOffers(e, '', openOffers)}
+                        >
                             <span>+</span>
                             Cancel all orders
                         </button>}
@@ -58,7 +59,8 @@ export default class ActivityOpenOrders extends React.Component {
                                     rowCount={openOffers.length}
                                     rowRenderer={
                                         ({ key, index, style }) =>
-                                            this.constructor.getTableContent(openOffers[index], key, style, d)} />
+                                            this.constructor.getTableContent(openOffers[index], key, style, d)}
+                                />
                             )}
                         </AutoSizer>
                     </div>

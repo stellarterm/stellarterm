@@ -12,29 +12,39 @@ export default function NotFound(props) {
     let description404;
 
     switch (pageName) {
-    case 'exchange':
-        image404 = <img src={images['icon-pairNotFound']} alt="not-found" />;
-        titleText = 'Market pair not found';
-        description404 = (
-            <p>
+        case 'exchange':
+            image404 = <img src={images['icon-pairNotFound']} alt="not-found" />;
+            titleText = 'Market pair not found';
+            description404 = (
+                <p>
                     Exchange pair was not found on the ledger. Check the selected assets
                     or <Link to="/markets/">choose another pair.</Link>
-            </p>
-        );
-        break;
-    case 'markets' :
-        image404 = <img src={images['icon-notFound']} alt="not-found" />;
-        titleText = 'Base asset not found';
-        description404 = (
-            <p>
+                </p>
+            );
+            break;
+        case 'swap':
+            image404 = <img src={images['icon-pairNotFound']} alt="not-found" />;
+            titleText = 'Swap pair not found';
+            description404 = (
+                <p>
+                    Swap pair was not found on the ledger. Check the selected assets
+                    or <Link to="/swap/">choose another pair.</Link>
+                </p>
+            );
+            break;
+        case 'markets' :
+            image404 = <img src={images['icon-notFound']} alt="not-found" />;
+            titleText = 'Base asset not found';
+            description404 = (
+                <p>
                 Base asset was not found. Check the selected asset or choose another asset.
-            </p>
-        );
-        break;
-    default:
-        image404 = <img src={images['icon-notFound']} alt="not-found" />;
-        titleText = 'Page not found';
-        description404 = <p>This page does not exist or was recently moved. Go to <Link to="/">Home page.</Link></p>;
+                </p>
+            );
+            break;
+        default:
+            image404 = <img src={images['icon-notFound']} alt="not-found" />;
+            titleText = 'Page not found';
+            description404 = <p>This page does not exist or was recently moved. Go to <Link to="/">Home page.</Link></p>;
     }
 
     const notFoundContent = (

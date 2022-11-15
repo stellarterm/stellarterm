@@ -4,11 +4,12 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import images from '../../../../../images';
-import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from './../Activity';
-import Printify from '../../../../../lib/Printify';
+import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activity';
+import Printify from '../../../../../lib/helpers/Printify';
+import { PAYMENTS_EVENTS } from '../../../../../lib/driver/driverInstances/Payments';
 
 const PAYMENTS_TYPES = ['create_account', 'account_merge', 'payment'];
 
@@ -17,56 +18,86 @@ export default class ActivityPaymentsHistory extends React.Component {
         return history.filter(item => (PAYMENTS_TYPES.includes(item.type)));
     }
 
-    static getOperationTypeAndAddress(type, account, account_id, funder, from, to, into) {
+    static getOperationTypeAndAddress(type, account, account_id, funder, from, to, into, to_muxed) {
         switch (type) {
-        case 'create_account':
-            return ({
-                opType: (account === account_id) ? 'Created by' : 'Created',
-                address: (account === account_id) ? funder : account,
+            case 'create_account':
+                return ({
+                    opType: (account === account_id) ? 'Created by' : 'Created',
+                    address: (account === account_id) ? funder : account,
+                });
+            case 'account_merge': return ({
+                opType: (account === account_id) ? 'Account merged to' : 'Account merged',
+                address: (account === account_id) ? into : account,
             });
-        case 'account_merge': return ({
-            opType: (account === account_id) ? 'Account merged to' : 'Account merged',
-            address: (account === account_id) ? into : account,
-        });
-        case 'payment': return ({
-            opType: (to === account_id) ?
-                <span>Receive</span> :
-                <span>Send</span>,
-            address: (to === account_id) ? from : to,
-        });
-        default: break;
+            case 'payment': {
+                const isSend = to !== account_id;
+                return {
+                    opType: isSend ?
+                        <span>Send</span> :
+                        <span>Receive</span>,
+                    address: isSend ? (to_muxed || to) : from,
+                };
+            }
+            default: break;
         }
         return null;
     }
 
-    componentDidUpdate(prevProps) {
-        const prevHistory = this.constructor.filterPaymentsHistory(prevProps.history);
-        const currentHistory = this.constructor.filterPaymentsHistory(this.props.history);
-        if ((currentHistory.length !== 0) && (prevHistory.length === currentHistory.length)) {
-            this.props.loadMore();
+    constructor(props) {
+        super(props);
+
+        if (!this.props.d.payments.paymentsHistory.length) {
+            this.props.d.payments.getPaymentsHistory();
         }
+
+        if (!this.props.d.effects.effectsHistory.length) {
+            this.props.d.effects.getEffectsHistory();
+        }
+
+        this.unsubPayments = this.props.d.payments.event.sub(event => {
+            if (event.type === PAYMENTS_EVENTS.NEXT_PAYMENTS_REQUEST &&
+                !this.constructor.filterPaymentsHistory(event.newItems).length
+            ) {
+                this.props.d.payments.loadMorePaymentsHistory();
+            }
+            this.forceUpdate();
+        });
+        this.unsubEffects = this.props.d.effects.event.sub(() => {
+            this.forceUpdate();
+        });
+    }
+
+    componentWillUnmount() {
+        this.unsubEffects();
+        this.unsubPayments();
     }
 
     getPaymentsHistoryRow(historyItem, key, style, isTestnet) {
         const { account_id } = this.props.d.session.account;
-        const { allHistory } = this.props;
+        const { effectsHistory } = this.props.d.effects;
+
         const { account, funder, created_at, starting_balance,
-            amount, to, from, asset_code, asset_issuer, transaction_hash, type, paging_token, into } = historyItem;
+            amount, to, from, asset_code, asset_issuer, transaction_hash, type, paging_token, into, to_muxed,
+        } = historyItem;
 
         const { time, date } = formatDate(created_at);
         const { opType, address } =
-            this.constructor.getOperationTypeAndAddress(type, account, account_id, funder, from, to, into);
+            this.constructor.getOperationTypeAndAddress(type, account, account_id, funder, from, to, into, to_muxed);
         const canvas = createStellarIdenticon(address);
         const renderedIcon = canvas.toDataURL();
         const viewAddress = address && `${address.substr(0, 18)}...${address.substr(-12, 12)}`;
 
         const asset = asset_issuer ? new StellarSdk.Asset(asset_code, asset_issuer) : new StellarSdk.Asset.native();
 
-        const itemFromCommonHistory = allHistory.find(item =>
+        const itemFromCommonHistory = effectsHistory.find(item =>
             (item.paging_token.indexOf(paging_token) === 0 && item.amount));
 
         const viewAmount = amount || starting_balance
             || (itemFromCommonHistory && itemFromCommonHistory.amount);
+
+        if (!viewAmount) {
+            this.props.d.effects.loadMoreHistory();
+        }
 
         return (
             <div key={key} style={style} className="Activity-table-row">
@@ -88,7 +119,8 @@ export default class ActivityPaymentsHistory extends React.Component {
                     <a
                         href={`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${transaction_hash}`}
                         target="_blank"
-                        rel="noopener noreferrer">
+                        rel="noopener noreferrer"
+                    >
                         <img title="StellarExpert" src={images['icon-info']} alt="i" />
                     </a>
                 </div>
@@ -98,7 +130,9 @@ export default class ActivityPaymentsHistory extends React.Component {
 
 
     render() {
-        const { history, loading, d } = this.props;
+        const { d } = this.props;
+        const { paymentsHistory: history, loading } = d.payments;
+
         const paymentHistory = this.constructor.filterPaymentsHistory(history);
 
         const listHeight = ROW_HEIGHT * paymentHistory.length;
@@ -131,11 +165,12 @@ export default class ActivityPaymentsHistory extends React.Component {
                                 <InfiniteLoader
                                     isRowLoaded={() => {}}
                                     rowCount={paymentHistory.length}
-                                    loadMoreRows={(e) => {
+                                    loadMoreRows={e => {
                                         if (e.stopIndex + 40 > paymentHistory.length) {
-                                            this.props.loadMore();
+                                            this.props.d.payments.loadMorePaymentsHistory();
                                         }
-                                    }}>
+                                    }}
+                                >
                                     {({ onRowsRendered, registerChild }) => (
                                         <List
                                             width={width}
@@ -150,7 +185,8 @@ export default class ActivityPaymentsHistory extends React.Component {
                                                         paymentHistory[index],
                                                         key,
                                                         style,
-                                                        d.Server.isTestnet)} />
+                                                        d.Server.isTestnet)}
+                                        />
                                     )}
                                 </InfiniteLoader>
                             )}
@@ -163,8 +199,4 @@ export default class ActivityPaymentsHistory extends React.Component {
 }
 ActivityPaymentsHistory.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    allHistory: PropTypes.arrayOf(PropTypes.any),
-    history: PropTypes.arrayOf(PropTypes.any),
-    loading: PropTypes.bool,
-    loadMore: PropTypes.func,
 };

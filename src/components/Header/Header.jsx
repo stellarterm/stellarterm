@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
-import isElectron from 'is-electron';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../images';
-import Driver from '../../lib/Driver';
+import Driver from '../../lib/driver/Driver';
+import AppPopover from '../Common/AppPopover/AppPopover';
+import { SESSION_STATE } from '../../lib/constants/sessionConstants';
 
 class Header extends React.Component {
     constructor(props) {
@@ -14,7 +15,7 @@ class Header extends React.Component {
             currentPath: window.location.pathname,
         };
 
-        this.listenId = this.props.d.session.event.listen(() => {
+        this.unlisten = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });
     }
@@ -28,7 +29,7 @@ class Header extends React.Component {
     }
 
     componentWillUnmount() {
-        this.props.d.session.event.unlisten(this.listenId);
+        this.unlisten();
     }
 
     getBuyCryptoLobsterLink() {
@@ -44,6 +45,9 @@ class Header extends React.Component {
                 <div className="buy_crypto-links">
                     <Link className="buy_crypto-link" to="/buy-crypto?code=xlm">
                         Buy Stellar Lumens
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?code=USDC_XLM">
+                        Buy USDC Coin (Stellar)
                     </Link>
                     <Link className="buy_crypto-link" to="/buy-crypto?code=btc">
                         Buy Bitcoin
@@ -63,14 +67,14 @@ class Header extends React.Component {
     }
 
     getNetworkBar() {
-        const { isDefault, horizonUrl, networkPassphrase } = this.props.network;
+        const { isDefault, currentServerUrl, networkPassphrase } = this.props.d.Server;
 
         return !isDefault ? (
             <div className="so-back Header_network">
                 <div className="so-chunk">
                     <div className="Network_bar">
                         <span>
-                            Horizon url: <strong>{horizonUrl}</strong>
+                            Horizon url: <strong>{currentServerUrl}</strong>
                         </span>
                         <span>
                             Network passphrase: <strong>{networkPassphrase}</strong>
@@ -83,9 +87,10 @@ class Header extends React.Component {
 
     getAccountBlock() {
         const { state, account, userFederation, unfundedAccountId } = this.props.d.session;
+        const hasMetadata = Boolean(this.props.d.walletConnectService.appMeta);
         const { showPopup } = this.state;
 
-        if (state === 'out') {
+        if (state === SESSION_STATE.OUT) {
             return (
                 <div className="Header_login">
                     <Link className="Header_login-button" to="/signup/">
@@ -99,7 +104,7 @@ class Header extends React.Component {
                 </div>
             );
         }
-        if (state === 'loading') {
+        if (state === SESSION_STATE.LOADING) {
             return null;
         }
         const fullFederation = `${userFederation}*stellarterm.com`;
@@ -127,6 +132,20 @@ class Header extends React.Component {
                 <div className="Header_account-icon">
                     <img src={renderedIcon} alt="icon" />
                 </div>
+                {hasMetadata &&
+                    <AppPopover
+                        hoverArea={
+                            <div className="Header_app-icon">
+                                <img src={this.props.d.walletConnectService.appMeta.icons[0]} alt="" />
+                            </div>
+                        }
+                        content={
+                            <span>
+                                Account connected with WalletConnect
+                            </span>
+                        }
+                    />
+                }
             </div>
         );
     }
@@ -173,11 +192,11 @@ class Header extends React.Component {
                             <Link className="Nav_logo" to={'/'}>
                                 StellarTerm
                             </Link>
-                            {this.createHeaderTab('/exchange/', 'Exchange')}
                             {this.createHeaderTab('/markets/', 'Markets')}
+                            {this.createHeaderTab('/exchange/', 'Exchange')}
+                            {this.createHeaderTab('/swap/', 'Swap')}
                             {this.getBuyCryptoLobsterLink()}
                             {this.createHeaderTab('/account/', 'Account')}
-                            {!isElectron() ? this.createHeaderTab('/download/', 'Download') : null}
                         </nav>
 
                         {accountBlock}
@@ -190,13 +209,6 @@ class Header extends React.Component {
 
 Header.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    network: PropTypes.shape({
-        horizonUrl: PropTypes.string,
-        isCustom: PropTypes.bool,
-        isDefault: PropTypes.bool,
-        isTestnet: PropTypes.bool,
-        networkPassphrase: PropTypes.string,
-    }).isRequired,
     location: PropTypes.objectOf(PropTypes.any),
 };
 

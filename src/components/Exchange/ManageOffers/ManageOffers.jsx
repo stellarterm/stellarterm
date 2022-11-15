@@ -1,15 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Driver from '../../../lib/Driver';
-import Stellarify from '../../../lib/Stellarify';
+import Driver from '../../../lib/driver/Driver';
+import Stellarify from '../../../lib/helpers/Stellarify';
 import ManageOfferRow from './ManageOfferRow/ManageOfferRow';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants/sessionConstants';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {
         super(props);
-        this.unsub = this.props.d.session.event.sub(() => {
-            this.forceUpdate();
+        this.unsub = this.props.d.session.event.sub(eventName => {
+            if (eventName === SESSION_EVENTS.ACCOUNT_EVENT) {
+                this.forceUpdate();
+            }
         });
     }
 
@@ -73,7 +76,8 @@ export default class ManageOffers extends React.Component {
                     {sortedRectifiedOffers.length > 1 &&
                         <button
                             className="CancelOffers_button"
-                            onClick={e => this.cancelAllOffers(e, side, sortedRectifiedOffers)}>
+                            onClick={e => this.cancelAllOffers(e, side, sortedRectifiedOffers)}
+                        >
                             <span>+</span>
                             Cancel {side} offers
                         </button>}
@@ -97,7 +101,7 @@ export default class ManageOffers extends React.Component {
     }
 
     render() {
-        if (this.props.d.session.state === 'out' || this.props.d.session.state === 'loading') {
+        if (this.props.d.session.state === SESSION_STATE.OUT || this.props.d.session.state === SESSION_STATE.LOADING) {
             return (
                 <div className="island__paddedContent">
                     <div className="OfferMakerOverview_login">
@@ -110,7 +114,7 @@ export default class ManageOffers extends React.Component {
             );
         }
 
-        if (this.props.d.session.state === 'unfunded') {
+        if (this.props.d.session.state === SESSION_STATE.UNFUNDED) {
             return (
                 <div className="island__paddedContent">
                     <div className="OfferMakerOverview_login">

@@ -1,4 +1,7 @@
 .TopVolume{
+    display: flex;
+    flex-direction: column;
+
     .TopVolume_header{
         display: flex;
         flex-direction: row;
@@ -80,21 +83,9 @@
             width: 100%;
         }
 
-        .changeArrow{
-            margin-left: 8px;
-        }
-
         &.right {
             justify-content: flex-end;
             flex: 0.7;
-        }
-
-        .changePositive{
-            color: #56a15c;
-        }
-
-        .changeNegative{
-            color: #f92828;
         }
 
         .TopVolume_cell-column{
@@ -115,5 +106,9 @@
                 opacity: 0.6;
             }
         }
+    }
+
+    .s-button {
+        margin: 20px auto;
     }
 }

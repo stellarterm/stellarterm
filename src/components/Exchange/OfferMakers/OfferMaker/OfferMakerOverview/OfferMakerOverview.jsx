@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import OfferMakerResultMessage from './OfferMakerResultMessage/OfferMakerResultMessage';
+import { SESSION_STATE } from '../../../../../lib/constants/sessionConstants';
 
 
 export default class OfferMakerOverview extends React.Component {
@@ -27,7 +28,7 @@ export default class OfferMakerOverview extends React.Component {
         }
 
         return (
-            `${capitalizedSide} ${this.constructor.capDigits(amount)} ${baseBuying.getCode()} 
+            `${capitalizedSide} ${this.constructor.capDigits(amount)} ${baseBuying.getCode()}
              for ${this.constructor.capDigits(total)} ${counterSelling.getCode()}`
         );
     }
@@ -44,7 +45,8 @@ export default class OfferMakerOverview extends React.Component {
             <button
                 type="submit"
                 className={`offer_button ${capitalizedSide}`}
-                disabled={!valid || !isButtonReady}>
+                disabled={!valid || !isButtonReady}
+            >
                 {this.getButtonContent(capitalizedSide, baseBuying, counterSelling)}
             </button>
         );
@@ -56,7 +58,7 @@ export default class OfferMakerOverview extends React.Component {
         const isBuy = this.props.side === 'buy';
         const capitalizedSide = isBuy ? 'Buy' : 'Sell';
 
-        if (state === 'out') {
+        if (state === SESSION_STATE.OUT) {
             return (
                 <div className="OfferMakerOverview_login">
                     <span className="offer_message">
@@ -67,7 +69,7 @@ export default class OfferMakerOverview extends React.Component {
             );
         }
 
-        if (state === 'unfunded') {
+        if (state === SESSION_STATE.UNFUNDED) {
             return (
                 <div className="OfferMakerOverview_login">
                     <span className="offer_message">

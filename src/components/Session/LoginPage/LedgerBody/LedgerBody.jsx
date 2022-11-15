@@ -1,45 +1,52 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../lib/Driver';
+import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
+import Driver from '../../../../lib/driver/Driver';
+import { isHttpConnectionUsed } from '../../../../lib/helpers/BrowserSupport';
+import SecretPhrase from '../SecretPhrase/SecretPhrase';
+import HiddenDescription from '../Common/HiddenDescription';
+import { SESSION_EVENTS } from '../../../../lib/constants/sessionConstants';
 import LedgerForm from './LedgerForm/LedgerForm';
 import LedgerAlert from './LedgerAlert/LedgerAlert';
 import LedgerSetupNotes from './LedgerSetupNotes/LedgerSetupNotes';
 import LedgerSetupInstructions from './LedgerSetupInstructions/LedgerSetupInstructions';
-import SecretPhrase from '../SecretPhrase/SecretPhrase';
-import HiddenDescription from '../Common/HiddenDescription';
 import images from './../../../../images';
-import {
-    isChrome,
-    isWindowsOS,
-    browserU2FSupport,
-    isHttpConnectionUsed,
-} from '../../../../lib/BrowserSupport';
+
 
 export default class LedgerBody extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             showInstructions: false,
+            isWebUsbSupported: false,
+            error: '',
         };
     }
 
     componentDidMount() {
-        if (!isWindowsOS()) {
-            this.brakePing = this.props.d.session.pingLedger();
-        }
+        TransportWebUSB.isSupported()
+            .then(isSupported => this.setState({ isWebUsbSupported: isSupported }))
+            .catch(error => this.setState({ error }));
+
+        this.unsub = this.props.d.session.event.sub(event => {
+            if (event === SESSION_EVENTS.LEDGER_EVENT) {
+                this.forceUpdate();
+            }
+        });
     }
 
     componentWillUnmount() {
-        if (!isWindowsOS()) { this.brakePing(); }
+        this.props.d.session.connectLedgerError = null;
+        this.unsub();
     }
 
     render() {
         const { d, modal } = this.props;
-        const { showInstructions } = this.state;
+        const { showInstructions, isWebUsbSupported } = this.state;
         const ledgerConnected = d.session.ledgerConnected;
         let loginForm;
 
-        if (!isChrome() && !browserU2FSupport()) {
+        if (!isWebUsbSupported) {
             loginForm = <LedgerAlert alertType={'useChrome'} />;
         } else if (isHttpConnectionUsed()) {
             loginForm = <LedgerAlert alertType={'useHttps'} />;
@@ -66,7 +73,8 @@ export default class LedgerBody extends React.Component {
                                 onClick={() => this.props.history.goBack()}
                                 className="LoginPage__header-goBack"
                                 src={images['icon-arrow-left-green-large']}
-                                alt="<" />
+                                alt="<"
+                            />
                             <HiddenDescription />
                         </div>
                         <div className="LoginPage__header">
@@ -77,13 +85,14 @@ export default class LedgerBody extends React.Component {
                             <img src={images['ledger-logo']} alt="ledger" width="133" />
                         </div>
                         {loginForm}
-                        {!showInstructions &&
+                        {!showInstructions && (
                             <span
                                 className="LoginPage_green-link"
-                                onClick={() => this.setState({ showInstructions: true })}>
+                                onClick={() => this.setState({ showInstructions: true })}
+                            >
                                 Show setup instructions
                             </span>
-                        }
+                        )}
                     </div>
                     <SecretPhrase d={d} />
                 </div>
@@ -91,7 +100,8 @@ export default class LedgerBody extends React.Component {
                     <div className="LoginPage_instructions-wrap">
                         <LedgerSetupInstructions />
                         <LedgerSetupNotes />
-                    </div>)}
+                    </div>
+                )}
             </React.Fragment>
         );
     }

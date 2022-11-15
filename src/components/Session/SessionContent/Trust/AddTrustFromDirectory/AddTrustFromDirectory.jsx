@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import directory from 'stellarterm-directory';
 import * as StellarSdk from 'stellar-sdk';
 import _ from 'lodash';
-import Driver from '../../../../../lib/Driver';
+import directory from 'stellarterm-directory';
+import Driver from '../../../../../lib/driver/Driver';
 import AssetRow from '../../../../Common/AssetRow/AssetRow';
 
 export default function AddTrustFromDirectory(props) {
@@ -13,23 +13,30 @@ export default function AddTrustFromDirectory(props) {
     const ticker = props.d.ticker;
 
     if (ticker.ready) {
-        ticker.data.assets.forEach((asset) => {
+        ticker.data.assets.forEach(asset => {
             const assetIsNotXLM = asset.id !== 'XLM-native';
 
             if (assetIsNotXLM) {
                 const sdkAsset = new StellarSdk.Asset(asset.code, asset.issuer);
-                assetAdded[asset.id] = true;
-                assetRows.push(<AssetRow key={asset.id} d={props.d} asset={sdkAsset} />);
+
+                const directoryAsset = directory.getAssetByAccountId(asset.code, asset.issuer);
+
+                if (!directoryAsset.unlisted && !directoryAsset.disabled) {
+                    assetAdded[asset.id] = true;
+                    assetRows.push(<AssetRow key={asset.id} d={props.d} asset={sdkAsset} />);
+                }
             }
         });
     }
 
-    _.each(directory.assets, (assetObj) => {
+    _.each(directory.assets, assetObj => {
         const basicSlug = `${assetObj.code}-${assetObj.issuer}`;
 
         if (!(basicSlug in assetAdded)) {
             const asset = new StellarSdk.Asset(assetObj.code, assetObj.issuer);
-            assetRows.push(<AssetRow key={basicSlug} d={props.d} asset={asset} />);
+            if (!assetObj.unlisted && !assetObj.disabled) {
+                assetRows.push(<AssetRow key={basicSlug} d={props.d} asset={asset} />);
+            }
         }
     });
 

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
-import directory from 'stellarterm-directory';
-import Driver from '../../../../lib/Driver';
-import ErrorHandler from '../../../../lib/ErrorHandler';
+import Driver from '../../../../lib/driver/Driver';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import images from '../../../../images';
+import { TX_STATUS } from '../../../../lib/constants/sessionConstants';
 
 export default class TrustButton extends React.Component {
     static goToLink(e) {
@@ -21,7 +21,8 @@ export default class TrustButton extends React.Component {
                     src={images['icon-circle-preloader-gif']}
                     width="20"
                     height="20"
-                    alt="load" />
+                    alt="load"
+                />
             </div>
         );
     }
@@ -37,27 +38,20 @@ export default class TrustButton extends React.Component {
 
     handleSubmitTrust(event) {
         event.preventDefault();
-        if (this.props.d.session.authType === 'ledger') {
-            this.addDataToLocalStorage();
-        }
         this.props.d.session.handlers
             .addTrust(this.props.asset.getCode(), this.props.asset.getIssuer())
-            .then((bssResult) => {
-                if (bssResult.status === 'await_signers') {
-                    this.addDataToLocalStorage();
-                }
-                if (bssResult.status !== 'finish') {
+            .then(({ status, serverResult }) => {
+                if (status !== TX_STATUS.FINISH) {
                     return null;
                 }
 
                 this.setState({ status: 'pending' });
 
-                return bssResult.serverResult
+                return serverResult
                     .then(() => {
                         this.setState({ status: 'ready' });
-                        this.addDataToLocalStorage();
                     })
-                    .catch((error) => {
+                    .catch(error => {
                         const { response } = error;
                         const { data } = response || '';
                         let errorType = 'unknown';
@@ -73,44 +67,6 @@ export default class TrustButton extends React.Component {
                         });
                     });
             });
-    }
-
-    async addDataToLocalStorage() {
-        const { asset, host, currency, color } = this.props;
-
-        // do not write assets from the directory to the localStorage
-        const assetFromDirectory = directory.resolveAssetByAccountId(asset.code, asset.issuer);
-
-        if (assetFromDirectory.domain !== 'unknown') {
-            return;
-        }
-
-        // check if asset already exists in the localStorage
-        const unknownAssetsData = JSON.parse(localStorage.getItem('unknownAssetsData')) || [];
-        const localStorageHasAsset = unknownAssetsData.find(item => (
-            (item.code === asset.code) && (item.issuer === asset.issuer)
-        ));
-
-        if (localStorageHasAsset) {
-            return;
-        }
-
-        // if the asset data does not received as props - load it
-        let unknownAsset;
-        if (currency && host) {
-            unknownAsset = {
-                code: asset.code,
-                issuer: asset.issuer,
-                host,
-                currency,
-                color,
-                time: new Date(),
-            };
-        } else {
-            unknownAsset = await this.props.d.session.handlers.loadUnknownAssetData(asset);
-        }
-
-        localStorage.setItem('unknownAssetsData', JSON.stringify([...unknownAssetsData, unknownAsset]));
     }
 
     checkAssetForAccept() {
@@ -189,10 +145,4 @@ TrustButton.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     asset: PropTypes.instanceOf(StellarSdk.Asset).isRequired,
     message: PropTypes.string.isRequired,
-    host: PropTypes.string,
-    color: PropTypes.string,
-    currency: PropTypes.shape({
-        image: PropTypes.string,
-        host: PropTypes.string,
-    }),
 };

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Debounce from 'awesome-debounce-promise/dist/index';
-import Stellarify from '../../../lib/Stellarify';
-import Driver from '../../../lib/Driver';
+import Stellarify from '../../../lib/helpers/Stellarify';
+import Driver from '../../../lib/driver/Driver';
 import Ellipsis from '../Ellipsis/Ellipsis';
 import AssetRow from '../AssetRow/AssetRow';
 import MessageRow from './MessageRow/MessageRow';
@@ -11,19 +11,59 @@ import MessageRow from './MessageRow/MessageRow';
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
 const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
-const regexp = new RegExp(pattern);
+const regexp = new RegExp(pattern, 'i');
 
 export default class SearchByAnchor extends React.Component {
     constructor(props) {
         super(props);
+        this.urlSearchParams = new URLSearchParams(window.location.search);
+
         this.state = {
-            anchorDomain: '',
+            anchorDomain: (this.props.withUrlParams && this.urlSearchParams.get('search')) || '',
             allCurrencies: [],
             resolveState: '',
         };
     }
 
+    componentDidMount() {
+        if (!this.props.withUrlParams) {
+            return;
+        }
+
+        if (this.state.anchorDomain) {
+            this.getAssetsFromUrl(this.state.anchorDomain);
+        }
+
+
+        this.unlisten = this.props.history.listen((location, action) => {
+            this.urlSearchParams = new URLSearchParams(location.search);
+
+            if (action === 'POP' && this.urlSearchParams.get('search') !== this.state.anchorDomain) {
+                this.setState({ anchorDomain: this.urlSearchParams.get('search') || '', resolveState: '' });
+                this.getAssetsFromUrl(this.state.anchorDomain);
+            }
+        });
+    }
+
+    componentWillUnmount() {
+        if (this.props.withUrlParams) {
+            this.unlisten();
+        }
+    }
+
     async getAssetsFromUrl(domain) {
+        if (!domain) {
+            return;
+        }
+        if (!regexp.test(domain)) {
+            this.setState({
+                resolveState: 'invalid_domain',
+            });
+            return;
+        }
+
+        this.setState({ resolveState: 'pending' });
+
         try {
             let domainToFetch = domain.includes('https://') ? domain.replace('https://', '') : domain;
             if (domainToFetch.slice(-1) === '/') {
@@ -65,25 +105,22 @@ export default class SearchByAnchor extends React.Component {
 
     handleInputFederation({ target }) {
         const anchorDomain = target.value;
-        if (anchorDomain && !regexp.test(anchorDomain)) {
-            this.setState({
-                allCurrencies: [],
-                resolveState: 'invalid_domain',
-                anchorDomain,
-            });
+
+        this.setState({ anchorDomain, allCurrencies: [], resolveState: '' });
+
+        this.getAssetsFromUrl(anchorDomain);
+
+        if (!this.props.withUrlParams) {
             return;
         }
-        const resolveState = anchorDomain ? 'pending' : '';
-
-        this.setState({
-            allCurrencies: [],
-            resolveState,
-            anchorDomain,
-        });
 
         if (anchorDomain) {
-            this.getAssetsFromUrl(anchorDomain);
+            this.urlSearchParams.set('search', anchorDomain);
+        } else {
+            this.urlSearchParams.delete('search');
         }
+
+        this.props.history.replace(`?${this.urlSearchParams.toString()}`);
     }
 
     render() {
@@ -140,17 +177,13 @@ export default class SearchByAnchor extends React.Component {
                             d={this.props.d}
                             tradeLink={this.props.tradeLink}
                             asset={asset}
-                            currency={currency}
-                            host={anchorDomain}
                         />
                     );
                 });
                 assetsAmount = assetResults.filter(asset => asset !== null).length;
-                assetResults = this.props.tradeLink ? (
-                    <div className="AssetRow_flex3">{assetResults}</div>
-                ) : (
-                    <div className="AssetRowContainer">{assetResults}</div>
-                );
+                assetResults = this.props.tradeLink ?
+                    <div className="AssetRow_flex3">{assetResults}</div> :
+                    <div className="AssetRowContainer">{assetResults}</div>;
                 break;
             default:
                 break;
@@ -177,7 +210,7 @@ export default class SearchByAnchor extends React.Component {
                             value={anchorDomain}
                             onChange={e => this.handleInputFederation(e)}
                             placeholder="Enter the anchor domain name to see issued assets
-                             (e.g. www.anchorusd.com, apay.io, etc)"
+                             (e.g. ultrastellar.com, apay.io, etc)"
                         />
                     </label>
                 </div>
@@ -190,4 +223,6 @@ export default class SearchByAnchor extends React.Component {
 SearchByAnchor.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     tradeLink: PropTypes.bool,
+    history: PropTypes.objectOf(PropTypes.any),
+    withUrlParams: PropTypes.bool,
 };

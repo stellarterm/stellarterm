@@ -4,60 +4,43 @@ import PropTypes from 'prop-types';
 import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../../../../images';
-import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from './../Activity';
-import Driver from '../../../../../lib/Driver';
+import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activity';
+import Driver from '../../../../../lib/driver/Driver';
+import ActivityFromEffectsBase from '../ActivityFromEffectsBase';
 
 const SIGNERS_TYPES = ['signer_removed', 'signer_created', 'signer_updated', 'account_thresholds_updated'];
 
-export default class ActivitySignersHistory extends React.Component {
+export default class ActivitySignersHistory extends ActivityFromEffectsBase {
     static async goToStellarExpert(operation, isTestnet) {
         const { transaction_hash } = await operation();
         window.open(`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${transaction_hash}`, '_blank');
     }
 
-    static filterHistoryBySigners(history) {
+    static filterEffects(history) {
         return history.filter(item => (SIGNERS_TYPES.includes(item.type)));
     }
 
     static getViewType(type, weight, low_threshold, med_threshold, high_threshold) {
         switch (type) {
-        case 'account_thresholds_updated': return ({
-            viewType: 'Thresholds updated',
-            keyWeight: (<span>Low: {low_threshold} Med: {med_threshold} High: {high_threshold}</span>),
-        });
-        case 'signer_removed': return ({
-            viewType: (<span className="red">Signer removed</span>),
-            keyWeight: weight,
-        });
-        case 'signer_created': return ({
-            viewType: (<span className="green">Signer created</span>),
-            keyWeight: weight,
-        });
-        case 'signer_updated': return ({
-            viewType: 'Signer updated',
-            keyWeight: weight,
-        });
-        default: break;
+            case 'account_thresholds_updated': return ({
+                viewType: 'Thresholds updated',
+                keyWeight: (<span>Low: {low_threshold} Med: {med_threshold} High: {high_threshold}</span>),
+            });
+            case 'signer_removed': return ({
+                viewType: (<span className="red">Signer removed</span>),
+                keyWeight: weight,
+            });
+            case 'signer_created': return ({
+                viewType: (<span className="green">Signer created</span>),
+                keyWeight: weight,
+            });
+            case 'signer_updated': return ({
+                viewType: 'Signer updated',
+                keyWeight: weight,
+            });
+            default: break;
         }
         return null;
-    }
-
-    componentDidMount() {
-        const history = this.constructor.filterHistoryBySigners(this.props.history);
-        if (history.length === 0 && !this.props.isFull && !this.props.loading) {
-            this.props.loadMore();
-        }
-    }
-
-    componentDidUpdate(prevProps) {
-        if (prevProps.history.length === this.props.history.length) {
-            return;
-        }
-        const prevHistory = this.constructor.filterHistoryBySigners(prevProps.history);
-        const currentHistory = this.constructor.filterHistoryBySigners(this.props.history);
-        if (prevHistory.length === currentHistory.length) {
-            this.props.loadMore();
-        }
     }
 
     getSignerHistoryRow(historyItem, key, style, isTestnet) {
@@ -90,15 +73,17 @@ export default class ActivitySignersHistory extends React.Component {
                         title="StellarExpert"
                         src={images['icon-info']}
                         alt="i"
-                        onClick={() => { this.constructor.goToStellarExpert(operation, isTestnet).then(); }} />
+                        onClick={() => { this.constructor.goToStellarExpert(operation, isTestnet).then(); }}
+                    />
                 </div>
             </div>
         );
     }
 
     render() {
-        const { history, loading, d } = this.props;
-        const signersHistory = this.constructor.filterHistoryBySigners(history);
+        const { d } = this.props;
+        const { effectsHistory, loading } = d.effects;
+        const signersHistory = this.constructor.filterEffects(effectsHistory);
 
         const listHeight = ROW_HEIGHT * signersHistory.length;
         const maxHeight = Math.min(listHeight, TABLE_MAX_HEIGHT);
@@ -129,11 +114,12 @@ export default class ActivitySignersHistory extends React.Component {
                                 <InfiniteLoader
                                     isRowLoaded={() => {}}
                                     rowCount={signersHistory.length}
-                                    loadMoreRows={(e) => {
+                                    loadMoreRows={e => {
                                         if (e.stopIndex + 40 > signersHistory.length) {
-                                            this.props.loadMore();
+                                            this.props.d.effects.loadMoreHistory();
                                         }
-                                    }}>
+                                    }}
+                                >
                                     {({ onRowsRendered, registerChild }) => (
                                         <List
                                             width={width}
@@ -149,7 +135,8 @@ export default class ActivitySignersHistory extends React.Component {
                                                         key,
                                                         style,
                                                         d.Server.isTestnet,
-                                                    )} />
+                                                    )}
+                                        />
                                     )}
                                 </InfiniteLoader>
                             )}
@@ -162,8 +149,4 @@ export default class ActivitySignersHistory extends React.Component {
 }
 ActivitySignersHistory.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    history: PropTypes.arrayOf(PropTypes.any),
-    loading: PropTypes.bool,
-    loadMore: PropTypes.func,
-    isFull: PropTypes.bool,
 };

@@ -3,8 +3,8 @@ import ReactDOMServer from 'react-dom/server';
 import PropTypes from 'prop-types';
 import Ellipsis from '../../Ellipsis/Ellipsis';
 import images from '../../../../images';
-import hexToRGBA from '../../../../lib/hexToRgba';
-import Driver from '../../../../lib/Driver';
+import hexToRGBA from '../../../../lib/helpers/hexToRgba';
+import Driver from '../../../../lib/driver/Driver';
 import AssetCardHelper from '../AssetCardHelper';
 
 export default class AssetCardMain extends AssetCardHelper {
@@ -92,10 +92,4 @@ AssetCardMain.propTypes = {
     issuer: PropTypes.string,
     domain: PropTypes.string,
     noborder: PropTypes.bool,
-    host: PropTypes.string,
-    color: PropTypes.string,
-    currency: PropTypes.shape({
-        image: PropTypes.string,
-        host: PropTypes.string,
-    }),
 };
