@@ -65,10 +65,7 @@ export default class SearchByAnchor extends React.Component {
         this.setState({ resolveState: 'pending' });
 
         try {
-            let domainToFetch = domain.includes('https://') ? domain.replace('https://', '') : domain;
-            if (domainToFetch.slice(-1) === '/') {
-                domainToFetch = domainToFetch.replace('/', '');
-            }
+            const domainToFetch = domain.replace(/^https?:\/\/|\/$/g, '');
 
             const resolvedAnchor = await resolveAnchor(domainToFetch);
 
@@ -183,7 +180,7 @@ export default class SearchByAnchor extends React.Component {
                 assetsAmount = assetResults.filter(asset => asset !== null).length;
                 assetResults = this.props.tradeLink ? (
                     <div className="AssetRow_flex3">{assetResults}</div>
-                    ) : (
+                ) : (
                     <div className="AssetRowContainer">{assetResults}</div>
                 );
                 break;
@@ -212,7 +209,7 @@ export default class SearchByAnchor extends React.Component {
                             value={anchorDomain}
                             onChange={e => this.handleInputFederation(e)}
                             placeholder="Enter the anchor domain name to see issued assets
-                             (e.g. ultrastellar.com, apay.io, etc)"
+                             (e.g. ultrastellar.com, aqua.network, etc)"
                         />
                     </label>
                 </div>
