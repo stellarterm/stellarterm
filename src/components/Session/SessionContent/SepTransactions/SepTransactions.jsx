@@ -21,7 +21,7 @@ import AppLoading from '../../../AppLoading/AppLoading';
 const TRANSACTIONS_LIMIT = 10;
 const ROW_HEIGHT = 41;
 
-const HISTORY_EMPTY = 'You have not made any deposits or withdrawals of this asset.';
+const HISTORY_EMPTY = 'no history';
 
 export default class SepTransactions extends React.Component {
     constructor(props) {
@@ -82,7 +82,7 @@ export default class SepTransactions extends React.Component {
             .catch(res => {
                 this.setState({
                     isLoading: false,
-                    errorMsg: res && res.error ? res.error : this.state.errorMsg,
+                    errorMsg: (res && res.error) ? res.error : this.state.errorMsg,
                 });
             });
     }
@@ -101,8 +101,7 @@ export default class SepTransactions extends React.Component {
         }
 
         let asset = _.find(directory.assets, {
-            code: parsedAsset.code,
-            issuer: parsedAsset.issuer,
+            code: parsedAsset.code, issuer: parsedAsset.issuer,
         });
 
         const { isHistoryEnabled } = checkAssetSettings(asset);
@@ -201,22 +200,24 @@ export default class SepTransactions extends React.Component {
         const { isLoading, errorMsg, fullLoaded, sepAsset } = this.state;
         const { transactions } = sepAsset;
 
-        const transactionsContent = transactions
-            ? transactions.map(transaction => {
-                const { kind, status, started_at, amount_in, amount_out, amount_fee } = transaction;
+        const transactionsContent = transactions ? (
+            transactions.map(transaction => {
+                const {
+                    kind,
+                    status,
+                    started_at,
+                    amount_in,
+                    amount_out,
+                    amount_fee,
+                } = transaction;
 
                 const readableStatus = status.replace(/_/g, ' ');
-                const kindIconClassName = kind === 'deposit' ? 'deposit_icon' : 'withdraw_icon';
-                const transactionKindIcon =
-                    kind === 'deposit' ? (
-                        <span className={kindIconClassName}>
-                            <img src={images['icon-trade-up']} alt="up" />
-                        </span>
-                    ) : (
-                        <span className={kindIconClassName}>
-                            <img src={images['icon-trade-down']} alt="down" />
-                        </span>
-                    );
+                const kindIconClassname = kind === 'deposit' ? 'deposit_icon' : 'withdraw_icon';
+                const transactionKindIcon = kind === 'deposit' ? (
+                    <span className={kindIconClassname}><img src={images['icon-trade-up']} alt="up" /></span>
+                ) : (
+                    <span className={kindIconClassname}><img src={images['icon-trade-down']} alt="down" /></span>
+                );
 
                 return (
                     <div
@@ -224,6 +225,7 @@ export default class SepTransactions extends React.Component {
                         className="Activity-table-row sep-transaction-row"
                         onClick={() => this.onClickTransaction(sepAsset, transaction)}
                     >
+
                         <div className="Activity-table-cell flex5">
                             <span>{moment(new Date(started_at)).format('MMMM D YYYY, HH:mm')}</span>
                         </div>
@@ -250,8 +252,7 @@ export default class SepTransactions extends React.Component {
                         </div>
                     </div>
                 );
-            })
-            : null;
+            })) : null;
 
         const loadMoreContent = (
             <div className="Activity-table-row load-more-row" onClick={() => this.onClickLoadMore()}>
@@ -262,7 +263,9 @@ export default class SepTransactions extends React.Component {
                         </span>
                     ) : null}
 
-                    {transactions.length >= TRANSACTIONS_LIMIT && !isLoading ? <span>Load more</span> : null}
+                    {transactions.length >= TRANSACTIONS_LIMIT && !isLoading ? (
+                        <span>Load more</span>
+                    ) : null }
                 </div>
             </div>
         );
@@ -280,16 +283,18 @@ export default class SepTransactions extends React.Component {
                         </div>
                     </div>
                 ) : null}
+
                 {errorMsg || !transactionsContent ? (
                     <div className="transaction-row-error">
                         <span className="error-span">
-                            {transactions.length === 0 && !errorMsg && <span>{HISTORY_EMPTY}</span>}
-                            {errorMsg && (
-                                <React.Fragment>
-                                    <img src={images['icon-circle-fail']} alt="failed" />
-                                    {errorMsg}
-                                </React.Fragment>
-                            )}
+                            {
+                                errorMsg === HISTORY_EMPTY ?
+                                    <span>You have not made any deposits or withdrawals of this asset.</span> :
+                                    <React.Fragment>
+                                        <img src={images['icon-circle-fail']} alt="failed" />
+                                        {errorMsg}
+                                    </React.Fragment>
+                            }
                         </span>
                     </div>
                 ) : null}
