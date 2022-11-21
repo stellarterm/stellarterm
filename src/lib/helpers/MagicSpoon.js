@@ -397,26 +397,47 @@ const MagicSpoon = {
 
         sdkAccount.offers = {};
 
+        const processOffers = records => records.reduce((acc, offer) => {
+            acc[offer.id] = offer;
+            if (offer.last_modified_time === null) {
+                acc[offer.id].last_modified_time = new Date();
+            }
+            return acc;
+        }, {});
+
+        const OFFERS_LIMIT = 200;
+
+        const getNextOffers = nextRequest => {
+            nextRequest().then(({ records, next }) => {
+                sdkAccount.offers = Object.assign(sdkAccount.offers, processOffers(records));
+
+                if (records.length === OFFERS_LIMIT) {
+                    return getNextOffers(next);
+                }
+                onUpdate();
+
+                return null;
+            });
+        };
+
         // Horizon offers for account doesn't return us updates. So we will have to manually update it.
         // We won't miss any offers assuming that the user only updates their offers through the client
         // with just one window open at a time
         sdkAccount.updateOffers = () =>
             this.Server.offers()
                 .forAccount(keypair.publicKey())
-                .limit(200) // TODO: Keep iterating through next() to show more than 100 offers
+                .limit(OFFERS_LIMIT)
                 .order('desc')
                 .call()
-                .then(res => {
-                    sdkAccount.offers = res.records.reduce((acc, offer) => {
-                        acc[offer.id] = offer;
-                        if (offer.last_modified_time === null) {
-                            acc[offer.id].last_modified_time = new Date();
-                        }
-                        return acc;
-                    }, {});
+                .then(({ records, next }) => {
+                    sdkAccount.offers = processOffers(records);
+                    if (records.length === OFFERS_LIMIT) {
+                        return getNextOffers(next);
+                    }
                     onUpdate();
                     return null;
                 });
+
         sdkAccount.updateOffers();
 
         sdkAccount.close = () => {
