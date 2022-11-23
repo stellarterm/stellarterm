@@ -1,6 +1,5 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
@@ -67,6 +66,7 @@ export default class TransactionContent extends React.Component {
             amount_in,
             amount_out,
             amount_fee,
+            id,
         } = transaction;
 
         const readableStatus = status.replace(/_/g, ' ');
@@ -84,6 +84,7 @@ export default class TransactionContent extends React.Component {
                 )}
                 {this.constructor.getInfoBlock('Type', kind)}
                 {this.constructor.getInfoBlock('Status', readableStatus)}
+                {id ? this.constructor.getInfoBlock('Transaction ID', id) : null}
                 {started_at ? this.constructor.getInfoBlock('Started time', startDate) : null}
                 {completed_at ? this.constructor.getInfoBlock('Completed at', completeDate) : null}
                 {from ? this.constructor.getInfoBlock('Source', from) : null}
