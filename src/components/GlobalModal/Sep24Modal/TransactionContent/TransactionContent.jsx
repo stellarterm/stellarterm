@@ -11,11 +11,11 @@ export default class TransactionContent extends React.Component {
         return moment(new Date(date)).format('MMMM D YYYY, HH:mm');
     }
 
-    static getInfoBlock(title, text) {
+    static getInfoBlock(title, text, withoutCapitalize) {
         return text ? (
             <div className="content_block">
                 <div className="content_title">{title}</div>
-                <div className="content_text"><span>{text}</span></div>
+                <div className={`content_text ${withoutCapitalize ? '' : 'capitalized'}`}><span>{text}</span></div>
             </div>
         ) : null;
     }
@@ -84,7 +84,7 @@ export default class TransactionContent extends React.Component {
                 )}
                 {this.constructor.getInfoBlock('Type', kind)}
                 {this.constructor.getInfoBlock('Status', readableStatus)}
-                {id ? this.constructor.getInfoBlock('Transaction ID', id) : null}
+                {id ? this.constructor.getInfoBlock('Transaction ID', id, true) : null}
                 {started_at ? this.constructor.getInfoBlock('Started time', startDate) : null}
                 {completed_at ? this.constructor.getInfoBlock('Completed at', completeDate) : null}
                 {from ? this.constructor.getInfoBlock('Source', from) : null}
