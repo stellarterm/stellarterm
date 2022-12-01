@@ -10,12 +10,8 @@
     }
 
     .content_block {
-        .content_text {
-            &.capitalized {
-                span::first-letter {
-                    text-transform: uppercase;
-                }
-            }
+        .content_text > span.capitalized::first-letter {
+            text-transform: uppercase;
         }
     }
 }

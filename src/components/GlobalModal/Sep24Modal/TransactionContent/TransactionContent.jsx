@@ -15,7 +15,11 @@ export default class TransactionContent extends React.Component {
         return text ? (
             <div className="content_block">
                 <div className="content_title">{title}</div>
-                <div className={`content_text ${withoutCapitalize ? '' : 'capitalized'}`}><span>{text}</span></div>
+                <div className="content_text">
+                    <span className={`${withoutCapitalize ? '' : 'capitalized'}`}>
+                        {text}
+                    </span>
+                </div>
             </div>
         ) : null;
     }
