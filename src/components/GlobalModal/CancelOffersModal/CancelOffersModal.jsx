@@ -14,14 +14,17 @@ export default class CancelOffersModal extends React.Component {
             errorMessage: '',
         };
     }
-    async removeOffers(submit, offers) {
+    async removeOffers(submit, offersData) {
+        const { side, offers } = offersData;
         this.setState({ buttonReady: false });
 
         if (this.props.d.session.authType === AUTH_TYPE.LEDGER) {
             submit.cancel();
         }
 
-        const signAndSubmit = await this.props.d.session.handlers.removeOffer(offers);
+        const signAndSubmit = await this.props.d.session.handlers
+            .removeOffer(offers.map(offer => Object.assign({}, offer, { isBuyOffer: side === 'buy' })));
+
         if (signAndSubmit.status === 'await_signers') {
             submit.cancel();
         }
@@ -38,7 +41,7 @@ export default class CancelOffersModal extends React.Component {
     }
     render() {
         const { submit, offersData } = this.props;
-        const { side, offers } = offersData;
+        const { side } = offersData;
         const { errorMessage, buttonReady } = this.state;
         return (
             <div className="CancelOffersModal">
@@ -74,7 +77,7 @@ export default class CancelOffersModal extends React.Component {
                         <button
                             className="s-button"
                             disabled={!buttonReady}
-                            onClick={() => this.removeOffers(submit, offers)}
+                            onClick={() => this.removeOffers(submit, offersData)}
                         >
                             {buttonReady ? 'Confirm' : <div className="nk-spinner" />}
                         </button>
