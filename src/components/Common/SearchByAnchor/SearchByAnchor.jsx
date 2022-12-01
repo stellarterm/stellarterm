@@ -4,9 +4,9 @@ import * as StellarSdk from 'stellar-sdk';
 import Debounce from 'awesome-debounce-promise/dist/index';
 import Stellarify from '../../../lib/helpers/Stellarify';
 import Driver from '../../../lib/driver/Driver';
-import MessageRow from './MessageRow/MessageRow';
 import Ellipsis from '../Ellipsis/Ellipsis';
 import AssetRow from '../AssetRow/AssetRow';
+import MessageRow from './MessageRow/MessageRow';
 
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
@@ -65,7 +65,10 @@ export default class SearchByAnchor extends React.Component {
         this.setState({ resolveState: 'pending' });
 
         try {
-            const resolvedAnchor = await resolveAnchor(domain);
+            const domainToFetch = domain.replace(/^https?:\/\/|\/$/g, '');
+
+            const resolvedAnchor = await resolveAnchor(domainToFetch);
+
             const { anchorDomain } = this.state;
             if (domain !== anchorDomain) {
                 return;
@@ -204,7 +207,7 @@ export default class SearchByAnchor extends React.Component {
                             value={anchorDomain}
                             onChange={e => this.handleInputFederation(e)}
                             placeholder="Enter the anchor domain name to see issued assets
-                             (e.g. ultrastellar.com, apay.io, etc)"
+                             (e.g. ultrastellar.com, aqua.network, etc)"
                         />
                     </label>
                 </div>

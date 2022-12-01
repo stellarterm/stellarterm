@@ -10,6 +10,8 @@
     }
 
     .content_block {
+        word-break: break-all;
+
         .content_text > span.capitalized::first-letter {
             text-transform: uppercase;
         }
