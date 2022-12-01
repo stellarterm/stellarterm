@@ -4,9 +4,9 @@ import Printify from '../../../../lib/helpers/Printify';
 
 export default function FeeBlock(props) {
     const { feeFixed, feePercent, assetCode, assetAnchor, amountForFee, isDeposit } = props;
-    const isNoFee = feeFixed === 0 && feePercent === 0;
+    const withoutFee = feeFixed === 0 && feePercent === 0;
 
-    if (isNoFee) {
+    if (withoutFee) {
         return null;
     }
 
