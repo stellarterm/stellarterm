@@ -405,13 +405,13 @@ const MagicSpoon = {
             return acc;
         }, {});
 
-        const OFFERS_LIMIT = 200;
+        const OFFERS_CHUNK_SIZE = 200;
 
         const getNextOffers = nextRequest => {
             nextRequest().then(({ records, next }) => {
-                sdkAccount.offers = Object.assign(sdkAccount.offers, processOffers(records));
+                sdkAccount.offers = Object.assign({}, sdkAccount.offers, processOffers(records));
 
-                if (records.length === OFFERS_LIMIT) {
+                if (records.length === OFFERS_CHUNK_SIZE) {
                     return getNextOffers(next);
                 }
                 onUpdate();
@@ -426,12 +426,12 @@ const MagicSpoon = {
         sdkAccount.updateOffers = () =>
             this.Server.offers()
                 .forAccount(keypair.publicKey())
-                .limit(OFFERS_LIMIT)
+                .limit(OFFERS_CHUNK_SIZE)
                 .order('desc')
                 .call()
                 .then(({ records, next }) => {
                     sdkAccount.offers = processOffers(records);
-                    if (records.length === OFFERS_LIMIT) {
+                    if (records.length === OFFERS_CHUNK_SIZE) {
                         return getNextOffers(next);
                     }
                     onUpdate();
