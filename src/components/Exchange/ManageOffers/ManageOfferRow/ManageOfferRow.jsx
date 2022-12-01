@@ -61,7 +61,7 @@ export default class ManageOffers extends React.Component {
 
         const { handlers } = this.props.d.session;
         const { rectifiedOffer, side } = this.props;
-        const signAndSubmit = await handlers.removeOffer(Object.assign(rectifiedOffer, { isBuyOffer: side === 'buy' }));
+        const signAndSubmit = await handlers.removeOffer(Object.assign({}, rectifiedOffer, { isBuyOffer: side === 'buy' }));
 
         if (signAndSubmit.status !== TX_STATUS.FINISH) { return; }
 

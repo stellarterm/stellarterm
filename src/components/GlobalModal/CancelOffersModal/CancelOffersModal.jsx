@@ -23,7 +23,7 @@ export default class CancelOffersModal extends React.Component {
         }
 
         const signAndSubmit = await this.props.d.session.handlers
-            .removeOffer(offers.map(offer => Object.assign(offer, { isBuyOffer: side === 'buy' })));
+            .removeOffer(offers.map(offer => Object.assign({}, offer, { isBuyOffer: side === 'buy' })));
 
         if (signAndSubmit.status === 'await_signers') {
             submit.cancel();
