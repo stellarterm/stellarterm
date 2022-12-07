@@ -6,6 +6,7 @@ import ErrorHandler from '../../../../../lib/helpers/ErrorHandler';
 import images from '../../../../../images';
 import Validate from '../../../../../lib/helpers/Validate';
 import { AUTH_TYPE, TX_STATUS } from '../../../../../lib/constants/sessionConstants';
+import { addIdToCache, hasIdInCache } from '../../../../../lib/constants/sep24Constants';
 
 export default class Sep24ModalFooter extends React.Component {
     constructor(props) {
@@ -78,7 +79,9 @@ export default class Sep24ModalFooter extends React.Component {
             </button>
         );
 
-        if (isLoading || isAnyError || noActionBtn) {
+        const wasFunded = transaction && hasIdInCache(transaction.id) && transaction.status === 'pending_user_transfer_start';
+
+        if (isLoading || isAnyError || noActionBtn || wasFunded) {
             return <div className="Action_buttons">{cancelButton}</div>;
         }
 
@@ -178,6 +181,7 @@ export default class Sep24ModalFooter extends React.Component {
         const bssResult = await d.session.handlers.send(sendOpts, sendMemo);
 
         if (bssResult.status === TX_STATUS.AWAIT_SIGNERS) {
+            addIdToCache(transaction.id);
             d.modal.handlers.cancel();
             window.history.pushState({}, null, '/');
         }
@@ -198,6 +202,8 @@ export default class Sep24ModalFooter extends React.Component {
                     transaction,
                     transferServer: this.props.transferServer,
                 });
+
+                addIdToCache(transaction.id);
             } catch (e) {
                 this.setState({
                     isPending: false,

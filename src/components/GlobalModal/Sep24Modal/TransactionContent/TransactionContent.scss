@@ -10,10 +10,20 @@
     }
 
     .content_block {
-        word-break: break-all;
+        word-break: break-word;
 
         .content_text > span.capitalized::first-letter {
             text-transform: uppercase;
         }
+    }
+
+    .ShowMore {
+        color: #68c86f;
+        font-size: 14px;
+        font-weight: normal;
+        border-bottom: 1px dotted #68c86f;
+        cursor: pointer;
+        text-decoration: none;
+        width: fit-content;
     }
 }

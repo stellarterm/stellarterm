@@ -17,6 +17,8 @@ import { getUrlWithParams } from '../../../../lib/api/endpoints';
 import Stellarify from '../../../../lib/helpers/Stellarify';
 import AssetRow from '../../../Common/AssetRow/AssetRow';
 import AppLoading from '../../../AppLoading/AppLoading';
+import { mapShortStatus } from '../../../../lib/constants/sep24Constants';
+import { formatNumber } from '../../../../lib/helpers/Format';
 
 const TRANSACTIONS_LIMIT = 10;
 const ROW_HEIGHT = 41;
@@ -54,6 +56,7 @@ export default class SepTransactions extends React.Component {
             transaction,
             jwtToken: this.jwtToken,
             transferServer: this.transferServer,
+            isDetailsModal: true,
         });
     }
 
@@ -211,7 +214,6 @@ export default class SepTransactions extends React.Component {
                     amount_fee,
                 } = transaction;
 
-                const readableStatus = status.replace(/_/g, ' ');
                 const kindIconClassname = kind === 'deposit' ? 'deposit_icon' : 'withdraw_icon';
                 const transactionKindIcon = kind === 'deposit' ? (
                     <span className={kindIconClassname}><img src={images['icon-trade-up']} alt="up" /></span>
@@ -236,11 +238,11 @@ export default class SepTransactions extends React.Component {
                         </div>
 
                         <div className="Activity-table-cell flex5">
-                            <span>{readableStatus}</span>
+                            <span>{mapShortStatus(status)}</span>
                         </div>
 
                         <div className="Activity-table-cell flex3 flex-end">
-                            <span>{amount_fee ? `${amount_fee} ${sepAsset.code}` : '-'}</span>
+                            <span>{amount_fee ? `${formatNumber(amount_fee)} ${sepAsset.code}` : '-'}</span>
                         </div>
 
                         <div className="Activity-table-cell flex3 flex-end">

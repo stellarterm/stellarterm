@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../images';
 import Driver from '../../../lib/driver/Driver';
+import TransactionContent from '../Sep24Modal/TransactionContent/TransactionContent';
 import Sep6ModalContent from './Sep6ModalContent/Sep6ModalContent';
 import AssetBalance from './AssetBalance/AssetBalance';
 import Sep6ModalConfirm from './Sep6ModalConfirm/Sep6ModalConfirm';
 import WithdrawCompleted from './WithdrawCompleted/WithdrawCompleted';
-import TransactionContent from '../Sep24Modal/TransactionContent/TransactionContent';
+
 
 export default class Sep6Modal extends React.Component {
     constructor(props) {
@@ -90,7 +91,10 @@ export default class Sep6Modal extends React.Component {
             <div className="Sep6Modal">
                 <div className="Modal_header">
                     <span>
-                        {isDeposit ? 'Deposit' : 'Withdraw'} {data.asset.code} asset
+                        {data.isDetailsModal ?
+                            `${data.asset.code} ${isDeposit ? 'deposit' : 'withdrawal'} details` :
+                            `${isDeposit ? 'Deposit' : 'Withdraw'} ${data.asset.code} asset`
+                        }
                     </span>
                     <img
                         src={images['icon-close']}

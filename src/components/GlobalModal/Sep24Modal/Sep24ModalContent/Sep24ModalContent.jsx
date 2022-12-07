@@ -12,6 +12,7 @@ import MinMaxAmount from '../Common/MinMaxAmount';
 import AssetBalance from '../AssetBalance/AssetBalance';
 import { AUTH_TYPE } from '../../../../lib/constants/sessionConstants';
 import SignChallengeBlock from '../../../Common/SignChallengeBlock/SignChallengeBlock';
+import { removeIdFromCache } from '../../../../lib/constants/sep24Constants';
 
 export default class Sep24ModalContent extends React.Component {
     constructor(props) {
@@ -188,7 +189,14 @@ export default class Sep24ModalContent extends React.Component {
                 clearTimeout(this.pollingTimeout);
                 this.setState({ transaction });
 
-                if (statusIsInactive) { return null; }
+                if (!this.props.isDeposit && this.state.transaction.status !== 'pending_user_transfer_start') {
+                    removeIdFromCache(transaction.id);
+                }
+
+                if (statusIsInactive) {
+                    removeIdFromCache(transaction.id);
+                    return null;
+                }
 
                 this.pollingTimeout = setTimeout(() => {
                     this.fetchTransaction();
