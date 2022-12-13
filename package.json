@@ -19,7 +19,7 @@
     "@stellar/freighter-api": "1.1.2",
     "@stellarguard/stellar-uri": "^1.1.1",
     "@trezor/connect-plugin-stellar": "^9.0.0",
-    "@walletconnect/sign-client": "2.1.1",
+    "@walletconnect/sign-client": "2.1.4",
     "awesome-debounce-promise": "2.1.0",
     "babelify": "10.0.0",
     "bignumber.js": "4.1.0",
