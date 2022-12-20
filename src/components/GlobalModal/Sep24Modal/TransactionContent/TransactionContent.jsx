@@ -42,6 +42,10 @@ export default class TransactionContent extends React.Component {
             deposit_memo_type,
         } = transaction;
 
+        if (!deposit_memo) {
+            return null;
+        }
+
         return (
             <MemoBlock memo={deposit_memo} memoType={deposit_memo_type} isDeposit />
         );
@@ -60,7 +64,10 @@ export default class TransactionContent extends React.Component {
             <React.Fragment>
                 {this.constructor.getInfoBlock('Anchor\'s withdrawal address', withdraw_anchor_account)}
 
-                <MemoBlock memo={withdraw_memo} memoType={withdraw_memo_type} isDeposit={false} />
+                {withdraw_memo ?
+                    <MemoBlock memo={withdraw_memo} memoType={withdraw_memo_type} isDeposit={false} /> :
+                    null
+                }
             </React.Fragment>
         );
     }
