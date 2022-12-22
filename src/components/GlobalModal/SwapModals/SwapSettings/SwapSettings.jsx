@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import images from '../../../../images';
 import Input from '../../../Common/Input/Input';
 import InfoBlock from '../../../Common/InfoBlock/InfoBlock';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 
 export const SWAP_SLIPPAGE_ALIAS = 'swap_slippage_value';
 
@@ -61,6 +61,7 @@ const SwapSettings = ({ submit, d }) => {
                     onChange={setSlippage}
                     value={slippage.toString()}
                     inputType="number"
+                    style={{ paddingRight: '200px' }}
                     postfix={
                         <div className="SwapSettings_percents">
                             {SWAP_PERCENTS.map(percent => (

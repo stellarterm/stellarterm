@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
-import { HORIZON_SERVER_EVENTS } from '../../../../../lib/HorizonServer';
+import Driver from '../../../../../lib/driver/Driver';
+import { HORIZON_SERVER_EVENTS } from '../../../../../lib/driver/driverInstances/HorizonServer';
 import { CODE_ENTER } from '../../SessionAccount/Federation/Federation';
 
 const PreferredHorizon = ({ d }) => {

@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { getEndpoint } from '../../lib/api/endpoints';
 import * as request from '../../lib/api/request';
 import images from '../../images';
-import Driver from '../../lib/Driver';
-import { isValidToPrecision, isNoRecalculateNeeded } from '../../lib/Format';
+import Driver from '../../lib/driver/Driver';
+import { isValidToPrecision, isNoRecalculateNeeded } from '../../lib/helpers/Format';
 import BuyCryptoStatic from './BuyCryptoStatic/BuyCryptoStatic';
 import CurrencyDropdown from './CurrencyDropdown/CurrencyDropdown';
 

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import createStellarIdenticon from 'stellar-identicon-js';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import images from '../../../../../images';
-import Validate from '../../../../../lib/Validate';
+import Validate from '../../../../../lib/helpers/Validate';
 
 export default function SendSuccess(props) {
     const { d, awaitSigners } = props;

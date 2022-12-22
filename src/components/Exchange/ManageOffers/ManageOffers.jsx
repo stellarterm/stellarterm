@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import Driver from '../../../lib/Driver';
-import Stellarify from '../../../lib/Stellarify';
+import Driver from '../../../lib/driver/Driver';
+import Stellarify from '../../../lib/helpers/Stellarify';
 import ManageOfferRow from './ManageOfferRow/ManageOfferRow';
-import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants/sessionConstants';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {

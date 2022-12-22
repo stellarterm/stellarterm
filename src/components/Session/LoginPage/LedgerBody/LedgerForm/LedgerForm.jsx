@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'lodash';
 import PropTypes from 'prop-types';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 import AcceptTerms from '../../Common/AcceptTerms';
 import InfoBlock from '../../../../Common/InfoBlock/InfoBlock';
 

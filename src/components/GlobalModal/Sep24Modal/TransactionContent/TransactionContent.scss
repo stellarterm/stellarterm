@@ -10,10 +10,10 @@
     }
 
     .content_block {
-        .content_text {
-            span::first-letter {
-                text-transform: uppercase;
-            }
+        word-break: break-all;
+
+        .content_text > span.capitalized::first-letter {
+            text-transform: uppercase;
         }
     }
 }

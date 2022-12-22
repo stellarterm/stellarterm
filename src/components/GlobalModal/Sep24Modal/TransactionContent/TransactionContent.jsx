@@ -1,22 +1,26 @@
 /* eslint-disable camelcase */
 import React from 'react';
-import _ from 'lodash';
 import moment from 'moment';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
 import MemoBlock from '../../Sep24Modal/Common/MemoBlock';
 import EstimatedTime from '../../Sep24Modal/Common/EstimatedTime';
+import { formatNumber } from '../../../../lib/helpers/Format';
 
 export default class TransactionContent extends React.Component {
     static getReadableDate(date) {
         return moment(new Date(date)).format('MMMM D YYYY, HH:mm');
     }
 
-    static getInfoBlock(title, text) {
+    static getInfoBlock(title, text, withoutCapitalize) {
         return text ? (
             <div className="content_block">
                 <div className="content_title">{title}</div>
-                <div className="content_text"><span>{text}</span></div>
+                <div className="content_text">
+                    <span className={`${withoutCapitalize ? '' : 'capitalized'}`}>
+                        {text}
+                    </span>
+                </div>
             </div>
         ) : null;
     }
@@ -67,6 +71,7 @@ export default class TransactionContent extends React.Component {
             amount_in,
             amount_out,
             amount_fee,
+            id,
         } = transaction;
 
         const readableStatus = status.replace(/_/g, ' ');
@@ -84,6 +89,7 @@ export default class TransactionContent extends React.Component {
                 )}
                 {this.constructor.getInfoBlock('Type', kind)}
                 {this.constructor.getInfoBlock('Status', readableStatus)}
+                {id ? this.constructor.getInfoBlock('Transaction ID', id, true) : null}
                 {started_at ? this.constructor.getInfoBlock('Started time', startDate) : null}
                 {completed_at ? this.constructor.getInfoBlock('Completed at', completeDate) : null}
                 {from ? this.constructor.getInfoBlock('Source', from) : null}
@@ -92,7 +98,7 @@ export default class TransactionContent extends React.Component {
                 {amount_in ? this.constructor.getInfoBlock('Payment amount', `${amount_in} ${asset.code}`) : null}
                 {amount_out ? this.constructor.getInfoBlock('Order amount', `${amount_out} ${asset.code}`) : null}
                 {this.constructor.getInfoBlock('Details', message)}
-                {amount_fee ? this.constructor.getInfoBlock('Fee', `${amount_fee} ${asset.code}`) : null}
+                {amount_fee ? this.constructor.getInfoBlock('Fee', `${formatNumber(amount_fee)} ${asset.code}`) : null}
                 {status_eta ? <EstimatedTime time={status_eta} /> : null}
             </div>
         );

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import OfferMaker from './OfferMaker/OfferMaker';
 import AssetRow from '../../Common/AssetRow/AssetRow';
-import { SESSION_STATE } from '../../../lib/constants';
+import { SESSION_STATE } from '../../../lib/constants/sessionConstants';
 
 
 export default function OfferMakers(props) {

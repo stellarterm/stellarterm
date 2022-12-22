@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../lib/Driver';
-import Stellarify from '../../../lib/Stellarify';
+import Driver from '../../../lib/driver/Driver';
+import Stellarify from '../../../lib/helpers/Stellarify';
 import AssetDropDown from '../../Common/AssetPair/AssetDropDown/AssetDropDown';
 import SwitchBtn from '../../Basics/SwitchBtn/SwitchBtn';
 

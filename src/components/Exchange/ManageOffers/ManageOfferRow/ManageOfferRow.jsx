@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
-import Driver from '../../../../lib/Driver';
-import { TX_STATUS } from '../../../../lib/constants';
-import ErrorHandler from '../../../../lib/ErrorHandler';
+import Driver from '../../../../lib/driver/Driver';
+import { TX_STATUS } from '../../../../lib/constants/sessionConstants';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {
@@ -60,8 +60,8 @@ export default class ManageOffers extends React.Component {
         event.preventDefault();
 
         const { handlers } = this.props.d.session;
-        const { rectifiedOffer } = this.props;
-        const signAndSubmit = await handlers.removeOffer(rectifiedOffer);
+        const { rectifiedOffer, side } = this.props;
+        const signAndSubmit = await handlers.removeOffer(Object.assign({}, rectifiedOffer, { isBuyOffer: side === 'buy' }));
 
         if (signAndSubmit.status !== TX_STATUS.FINISH) { return; }
 

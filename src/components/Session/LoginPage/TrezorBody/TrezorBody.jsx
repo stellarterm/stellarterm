@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
 import TrezorConnect, { DEVICE_EVENT } from 'trezor-connect';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
 import images from '../../../../images';
 import HiddenDescription from '../Common/HiddenDescription';

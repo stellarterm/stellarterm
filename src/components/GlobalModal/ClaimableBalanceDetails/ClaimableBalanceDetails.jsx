@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../../images';
-import Driver from '../../../lib/Driver';
-import { getNextClaimTime } from '../../../lib/claimableBalancesHelpers';
+import Driver from '../../../lib/driver/Driver';
+import { getNextClaimTime } from '../../../lib/helpers/claimableBalancesHelpers';
 import { formatDate } from '../../Session/SessionContent/Activity/Activity';
 import AssetCardInRow from '../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import ErrorHandler from '../../../lib/ErrorHandler';
+import ErrorHandler from '../../../lib/helpers/ErrorHandler';
 import AppPopover from '../../Common/AppPopover/AppPopover';
-import { AUTH_TYPE, SESSION_STATE } from '../../../lib/constants';
+import { AUTH_TYPE, SESSION_STATE } from '../../../lib/constants/sessionConstants';
 
 const MOMENT_FORMAT = 'DD/MM/YYYY HH:mm';
 

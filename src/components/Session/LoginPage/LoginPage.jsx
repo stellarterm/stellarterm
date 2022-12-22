@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import SignUpBody from './SignUpBody/SignUpBody';
 import LedgerBody from './LedgerBody/LedgerBody';
 import LoginPageBody from './LoginPageBody/LoginPageBody';

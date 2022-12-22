@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import SignUpPreview from './SignUpPreview/SignUpPreview';
 import SignUpGenerateKeyPair from './SignUpGenerateKeyPair/SignUpGenerateKeyPair';
 import LoginPageBody from '../LoginPageBody/LoginPageBody';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import LoginLinks from '../Common/LoginLinksBlock/LoginLinks';
 
 export default class SignUpBody extends React.Component {

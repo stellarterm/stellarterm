@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import * as StellarSdk from 'stellar-sdk';
 import Debounce from 'awesome-debounce-promise';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import AssetPair from '../../Common/AssetPair/AssetPair';
-import MagicSpoon from '../../../lib/MagicSpoon';
+import MagicSpoon from '../../../lib/helpers/MagicSpoon';
 import { getReadableNumber } from '../LightweightChart/ConverterOHLC';
-import { niceRound } from '../../../lib/Format';
+import { niceRound } from '../../../lib/helpers/Format';
 import images from '../../../images';
 
 export default class PairPicker extends React.Component {

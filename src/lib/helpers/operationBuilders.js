@@ -1,6 +1,6 @@
 import BigNumber from 'bignumber.js';
 import * as StellarSdk from 'stellar-sdk';
-import { AUTH_TYPE } from './constants';
+import { AUTH_TYPE } from '../constants/sessionConstants';
 
 // opts.baseBuying -- StellarSdk.Asset (example: XLM)
 // opts.counterSelling -- StellarSdk.Asset (example: USD)
@@ -125,13 +125,19 @@ export function buildOpRemoveOffer(opts) {
             : new StellarSdk.Asset(asset.asset_code, asset.asset_issuer);
     }
 
-    return offers.map(offer => StellarSdk.Operation.manageSellOffer({
-        buying: parseAsset(offer.buying),
-        selling: parseAsset(offer.selling),
-        amount: '0',
-        price: offer.price,
-        offerId: offer.id,
-    }));
+    return offers.map(offer => {
+        const options = {
+            buying: parseAsset(offer.buying),
+            selling: parseAsset(offer.selling),
+            amount: offer.isBuyOffer ? undefined : '0',
+            buyAmount: offer.isBuyOffer ? '0' : undefined,
+            price: offer.price,
+            offerId: offer.id,
+        };
+        return offer.isBuyOffer ?
+            StellarSdk.Operation.manageBuyOffer(options) :
+            StellarSdk.Operation.manageSellOffer(options);
+    });
 }
 
 export function buildOpPathPaymentStrictSend(opts) {

@@ -6,12 +6,12 @@ import PropTypes from 'prop-types';
 import images from '../../../../images';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 import AppPopover from '../../../Common/AppPopover/AppPopover';
-import Driver from '../../../../lib/Driver';
-import { formatNumber } from '../../../../lib/Format';
 import { getSlippageValue } from '../SwapSettings/SwapSettings';
-import ErrorHandler from '../../../../lib/ErrorHandler';
-import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants';
-import Swap from '../../../../lib/driver/Swap';
+import Swap from '../../../../lib/driver/driverInstances/Swap';
+import { formatNumber } from '../../../../lib/helpers/Format';
+import Driver from '../../../../lib/driver/Driver';
+import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
+import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 
 
 const processPathAsset = ({ asset_type, asset_code, asset_issuer }) => {
@@ -235,7 +235,7 @@ const SwapConfirm = ({ params, submit, d }) => {
                         />
                     </div>
 
-                    <span>{slippage}%</span>
+                    <span>{formatNumber(slippage)}%</span>
                 </div>
 
                 <div className="SwapConfirm_details-row">

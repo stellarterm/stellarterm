@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Redirect } from 'react-router-dom';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import LoginModalBlock from './LoginModalBlock/LoginModalBlock';
 import images from './../../../images';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import SecretPhraseModalBlock from './SecretPhraseModalBlock/SecretPhraseModalBlock';
 import Sep7Handler from '../../HomePage/Sep7Handler/Sep7Handler';
-import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../lib/constants/sessionConstants';
 
 
 export default class LoginModal extends React.Component {

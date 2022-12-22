@@ -1,5 +1,5 @@
 import Debounce from 'awesome-debounce-promise';
-import Event from '../Event';
+import Event from '../../helpers/Event';
 
 export const EFFECTS_EVENTS = {
     START_REQUEST: 'start request',

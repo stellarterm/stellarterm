@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import { Link } from 'react-router-dom';
-import Driver from '../../../lib/Driver';
+import Driver from '../../../lib/driver/Driver';
 import AssetCardMain from '../AssetCard/AssetCardMain/AssetCardMain';
 import TrustButton from './TrustButton/TrustButton';
-import Stellarify from '../../../lib/Stellarify';
+import Stellarify from '../../../lib/helpers/Stellarify';
 import AssetCardSeparateLogo from '../AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 
 

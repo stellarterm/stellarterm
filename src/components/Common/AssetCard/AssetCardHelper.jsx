@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
-import Driver from '../../../lib/Driver';
-import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../lib/driver/Session';
+import Driver from '../../../lib/driver/Driver';
+import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../lib/driver/driverInstances/Session';
 
 
 export default class AssetCardHelper extends React.Component {

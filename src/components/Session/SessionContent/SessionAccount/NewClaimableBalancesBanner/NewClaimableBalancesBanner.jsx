@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import images from '../../../../../images';
-import Driver from '../../../../../lib/Driver';
+import Driver from '../../../../../lib/driver/Driver';
 
 const NewClaimableBalancesBanner = ({ d }) => (
     <div className="NewClaimableBalancesBanner">

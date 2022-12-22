@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { EFFECTS_EVENTS } from '../../../../lib/driver/Effects';
-import Driver from '../../../../lib/Driver';
+import { EFFECTS_EVENTS } from '../../../../lib/driver/driverInstances/Effects';
+import Driver from '../../../../lib/driver/Driver';
 
 
 export default class ActivityFromEffectsBase extends React.Component {

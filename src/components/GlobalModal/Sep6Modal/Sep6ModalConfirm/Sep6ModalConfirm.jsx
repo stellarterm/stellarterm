@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import FeeBlock from '../Common/FeeBlock';
 import ExtraInfoBlock from '../Common/ExtraInfoBlock';
 import EstimatedTime from '../Common/EstimatedTIme';
-import Driver from '../../../../lib/Driver';
+import Driver from '../../../../lib/driver/Driver';
 import Sep6ModalFooter from '../Common/Sep6ModalFooter/Sep6ModalFooter';
 import MemoBlock from '../Common/MemoBlock';
 import MinMaxAmount from '../Common/MinMaxAmount';

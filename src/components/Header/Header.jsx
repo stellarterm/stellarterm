@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { Link, withRouter } from 'react-router-dom';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../images';
-import Driver from '../../lib/Driver';
+import Driver from '../../lib/driver/Driver';
 import AppPopover from '../Common/AppPopover/AppPopover';
-import { SESSION_STATE } from '../../lib/constants';
+import { SESSION_STATE } from '../../lib/constants/sessionConstants';
 
 class Header extends React.Component {
     constructor(props) {

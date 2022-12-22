@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 import * as StellarSdk from 'stellar-sdk';
 import directory from 'stellarterm-directory';
-import * as request from './api/request';
-import { getUrlWithParams } from './api/endpoints';
+import * as request from '../api/request';
+import { getUrlWithParams } from '../api/endpoints';
 
 let headers = {};
 

@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
-import Driver from '../../../../../../lib/Driver';
+import Driver from '../../../../../../lib/driver/Driver';
+import Multisig from '../../../../../../lib/driver/driverInstances/Multisig';
+import { KEY_NAMES, MULTISIG_PROVIDERS } from '../../../../../../lib/constants/multisigConstants';
 
 const images = require('../../../../../../images');
 
@@ -11,51 +13,11 @@ export default class MultisigEnableStep2 extends React.Component {
         this.state = {
             publicKey: '',
             valid: false,
-            isVaultKey: undefined,
-            isGuardKey: 'noChoosed',
             inputError: '',
-            selectError: '',
             isUpdated: false,
-            isOpenSelect: false,
+            provider: null,
+            checkProviderLoading: false,
         };
-    }
-
-    componentDidUpdate(prevState) {
-        if (this.state.publicKey !== prevState.publicKey && !this.state.isUpdated) {
-            this.isVaultKey();
-        }
-    }
-
-    getSelectedOption() {
-        const { isGuardKey } = this.state;
-        if (isGuardKey === 'isGuard') {
-            return (
-                <div className="MultisigEnableStep2_select-row no-hover">
-                    <img src={images['sign-stellarguard']} alt="guard" />
-                    <span>StellarGuard</span>
-                </div>
-            );
-        }
-        if (isGuardKey === 'other') {
-            return (
-                <div
-                    className="MultisigEnableStep2_select-row no-hover">
-                    <img src={images['sign-unknown']} alt="unknown-signer" />
-                    <span>Other</span>
-                </div>
-            );
-        }
-        return (
-            <span>Select multisig provider</span>
-        );
-    }
-
-    handleSelect(value) {
-        this.setState({
-            isGuardKey: value,
-            selectError: '',
-            isOpenSelect: false,
-        });
     }
 
     handleInput(e) {
@@ -64,18 +26,9 @@ export default class MultisigEnableStep2 extends React.Component {
             publicKey: e.target.value,
             valid: StellarSdk.StrKey.isValidEd25519PublicKey(e.target.value),
             inputError: '',
-            selectError: '',
             isUpdated: false,
-            isVaultKey: undefined,
-            isGuardKey: 'noChoosed',
-        });
-    }
-
-    openSelect() {
-        this.setState({
-            isOpenSelect: !this.state.isOpenSelect,
-            isGuardKey: 'noChoosed',
-        });
+            provider: null,
+        }, () => this.checkKey());
     }
 
     goBack() {
@@ -86,50 +39,48 @@ export default class MultisigEnableStep2 extends React.Component {
         }
     }
 
-    isVaultKey() {
+    checkKey() {
         const { publicKey, valid } = this.state;
+        if (!publicKey) {
+            return;
+        }
         if (valid) {
-            this.props.d.session.handlers.isLobstrVaultKey(publicKey).then(
-                (res) => {
+            const keyAlreadyUsed = this.props.d.multisig.signers.find(({ key }) => key === publicKey);
+
+            if (keyAlreadyUsed) {
+                this.setState({
+                    inputError: 'This key is already a signer',
+                });
+                return;
+            }
+
+            this.setState({ checkProviderLoading: true });
+
+            Multisig.getKeyProvider(publicKey)
+                .then(provider => {
                     this.setState({
-                        isVaultKey: res[0].exists,
+                        provider,
+                        checkProviderLoading: false,
                         isUpdated: true,
                     });
-                },
-            );
+                    if (this.props.d.multisig.isMultisigEnabled && provider !== MULTISIG_PROVIDERS.LOBSTR_VAULT) {
+                        this.setState({
+                            inputError: 'You can add additional signatures only with the LOBSTR VAULT',
+                        });
+                    }
+                });
+        } else {
+            this.setState({
+                inputError: 'Incorrect Stellar public key',
+            });
         }
     }
 
     async addSigner() {
-        if (!this.state.valid) {
-            this.setState({
-                inputError: 'Incorrect Stellar public key',
-            });
-            return;
-        }
+        const { provider, publicKey } = this.state;
 
-        let signerProvider;
-        if (this.state.isVaultKey) {
-            signerProvider = 'lobstrVault';
-        }
-        if (this.props.d.session.account.signers.length > 1 && !this.state.isVaultKey) {
-            this.setState({
-                inputError: 'You can add additional signatures only with the LOBSTR VAULT',
-            });
-            return;
-        }
-        if (this.state.isGuardKey === 'isGuard') {
-            signerProvider = 'stellarGuard';
-        }
-        if (!this.state.isVaultKey && this.state.isGuardKey === 'noChoosed') {
-            this.setState({
-                selectError: 'Please choose your multisig provider',
-            });
-            return;
-        }
-        const { publicKey } = this.state;
         const signerData = {
-            signerProvider,
+            provider,
             publicKey,
         };
         this.props.submit.cancel();
@@ -137,7 +88,7 @@ export default class MultisigEnableStep2 extends React.Component {
     }
 
     render() {
-        const { isVaultKey, inputError, publicKey, valid, isOpenSelect, selectError } = this.state;
+        const { inputError, publicKey, valid, checkProviderLoading, provider } = this.state;
         return (
             <div className="MultisigEnableStep2">
                 <div className="Modal_header">
@@ -159,58 +110,31 @@ export default class MultisigEnableStep2 extends React.Component {
                             className={inputError && 'invalid'}
                             value={publicKey}
                             onChange={e => this.handleInput(e)}
-                            placeholder="Stellar public key" />
+                            placeholder="Stellar public key"
+                        />
 
-                        {isVaultKey &&
-                        <span className="MultisigEnableStep2_vault">LOBSTR Vault key</span>}
+                        {valid && !checkProviderLoading && !inputError &&
+                            <span className="MultisigEnableStep2_vault">
+                                {provider ? KEY_NAMES.COSIGNER(provider) : KEY_NAMES.CUSTOM}
+                            </span>
+                        }
 
                         {inputError &&
-                        <span className="MultisigEnableStep2_error">{inputError}</span>}
+                            <span className="MultisigEnableStep2_error">{inputError}</span>}
                     </div>
-
-                    {(valid && isVaultKey !== undefined && !isVaultKey) &&
-                        <div>
-                            <label htmlFor="select" className="MultisigEnableStep2_select-label">
-                                Multisig provider
-                            </label>
-                            <div id="select" className="MultisigEnableStep2_select-wrap">
-                                <div className="MultisigEnableStep2_select" onClick={() => this.openSelect()}>
-                                    {this.getSelectedOption()}
-                                    <img
-                                        src={images.dropdown}
-                                        alt="arrow"
-                                        className={isOpenSelect ? 'isOpen' : ''} />
-                                </div>
-                                {isOpenSelect &&
-                                    <div className="MultisigEnableStep2_select-options">
-                                        <div
-                                            className="MultisigEnableStep2_select-row"
-                                            onClick={() => this.handleSelect('isGuard')}>
-                                            <img src={images['sign-stellarguard']} alt="guard" />
-                                            <span>StellarGuard</span>
-                                        </div>
-                                        <div
-                                            className="MultisigEnableStep2_select-row"
-                                            onClick={() => this.handleSelect('other')}>
-                                            <img src={images['sign-unknown']} alt="signer-unknown" />
-                                            <span>Other</span>
-                                        </div>
-                                    </div>}
-                                {selectError &&
-                                    <span className="MultisigEnableStep2_error">{selectError}</span>}
-                            </div>
-                        </div>}
                 </div>
                 <div className="Modal_button-block">
                     <button
                         className="cancel-button"
-                        onClick={() => this.goBack()}>
+                        onClick={() => this.goBack()}
+                    >
                         Back
                     </button>
                     <button
-                        disabled={valid && isVaultKey === undefined}
+                        disabled={!valid || checkProviderLoading || Boolean(inputError)}
                         className="s-button"
-                        onClick={() => this.addSigner()}>Add signer</button>
+                        onClick={() => this.addSigner()}
+                    >Add signer</button>
                 </div>
             </div>
         );
