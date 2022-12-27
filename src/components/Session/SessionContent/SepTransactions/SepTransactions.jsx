@@ -356,6 +356,11 @@ export default class SepTransactions extends React.Component {
         };
 
         const params = { account: requestParams.account };
+
+        if (noAuth) {
+            return getTransactions(this.TRANSFER_SERVER, requestParams, null, asset.sep24, noAuth);
+        }
+
         const jwtEndpointUrl = getUrlWithParams(this.WEB_AUTH_URL, params);
 
         return this.getJwtToken(jwtEndpointUrl).then(token => {
