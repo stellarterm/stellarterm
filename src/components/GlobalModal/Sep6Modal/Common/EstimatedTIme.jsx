@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default function EstimatedTime(props) {
     const { time, kycTime, isDeposit } = props;
     const actionText = isDeposit ? 'deposit' : 'withdrawal';
-    const noTimeInfo = time === '';
+    const noTimeInfo = time === undefined;
     const waitTimeInMins = Math.ceil(time / 60);
     let timeString;
 

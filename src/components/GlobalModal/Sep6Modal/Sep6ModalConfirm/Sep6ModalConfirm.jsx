@@ -42,7 +42,7 @@ export default class Sep6ModalConfirm extends React.Component {
 
                 <MemoBlock memo={res.memo || ''} memoType={res.memo_type || ''} />
 
-                <EstimatedTime time={res.eta || ''} isDeposit={isDeposit} />
+                <EstimatedTime time={res.eta} isDeposit={isDeposit} />
 
                 <FeeBlock
                     feeFixed={parseFloat(res.fee_fixed) || 0}
@@ -69,7 +69,7 @@ export default class Sep6ModalConfirm extends React.Component {
 
                 <MinMaxAmount minLimit={res.min_amount || ''} maxLimit={res.max_amount || ''} assetCode={asset.code} isDeposit />
 
-                <EstimatedTime time={res.eta || ''} isDeposit={isDeposit} />
+                <EstimatedTime time={res.eta} isDeposit={isDeposit} />
 
                 <FeeBlock
                     feeFixed={parseFloat(res.fee_fixed) || 0}

@@ -8,12 +8,16 @@ import WithdrawCompleted from './WithdrawCompleted/WithdrawCompleted';
 export default function Sep24Modal(props) {
     const { data, d } = props;
     const {
-        isDeposit, withdrawCompleted, asset, amount, transaction, noActionBtn, jwtToken, transferServer,
+        isDeposit, withdrawCompleted, asset, amount, transaction, noActionBtn, jwtToken, transferServer, isDetailsModal,
     } = data;
 
+    // eslint-disable-next-line no-nested-ternary
     const titleText = withdrawCompleted ?
         'Withdrawal initiated' :
-        `${isDeposit ? 'Deposit' : 'Withdraw'} ${asset.code} asset`;
+        (isDetailsModal ?
+            `${asset.code} ${isDeposit ? 'deposit' : 'withdrawal'} details` :
+            `${isDeposit ? 'Deposit' : 'Withdraw'} ${asset.code} asset`
+        );
 
     return (
         <div className="Sep24Modal">
