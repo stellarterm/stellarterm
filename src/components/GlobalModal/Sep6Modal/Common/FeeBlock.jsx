@@ -1,65 +1,55 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import Printify from '../../../../lib/helpers/Printify';
 
-export default function FeeBlock(props) {
-    const { feeFixed, feePercent, assetCode, amountForFee } = props;
-    const isNoFee = feeFixed === 0 && feePercent === 0;
-    const isfixedFee = feeFixed !== 0 && feePercent === 0;
-    const isPercentFee = feeFixed === 0 && feePercent !== 0;
-    const isBothFee = feeFixed !== 0 && feePercent !== 0;
+const FeeBlock = ({ feeFixed, feePercent, assetCode, amountForFee }) => {
+    const feeDescription = useMemo(() =>
+        `${Number(feeFixed) ? `${feeFixed} ${assetCode}` : ''} ${(Number(feeFixed) && Number(feePercent)) ? ' + ' : ''} ${Number(feePercent) ? `${feePercent}%` : ''}`,
+    [feeFixed, feePercent, assetCode],
+    );
 
-    const amountProvided = amountForFee !== undefined;
-    let feeText;
-    let totalFee = 0;
+    const feeValue = useMemo(() => {
+        if (!feeFixed && !feePercent) {
+            return 0;
+        }
+        let fee = 0;
 
-    if (isNoFee) {
-        feeText = 'No fee';
-    } else if (isfixedFee) {
-        feeText = `${feeFixed} ${assetCode}`;
-        totalFee = `${feeFixed} ${assetCode}`;
-    } else if (isPercentFee) {
-        feeText = `${feePercent}%`;
-        totalFee = amountProvided ? (
-            <div>
-                {Printify.lightenZeros(((parseFloat(amountForFee) / 100) * feePercent).toFixed(7))}{' '}
-                {assetCode}
+        if (feeFixed) {
+            fee += Number(feeFixed);
+        }
+
+        if (feePercent && Boolean(amountForFee)) {
+            fee += ((Number(amountForFee) * Number(feePercent)) / 100);
+        }
+        return fee;
+    }, [feeFixed, feePercent, amountForFee]);
+
+    if (!feeValue) {
+        return null;
+    }
+
+    if (!amountForFee) {
+        return (
+            <div className="content_block">
+                <div className="content_title">Fees</div>
+                <div className="content_text">{feeDescription}</div>
             </div>
-        ) : (
-            feeText
-        );
-    } else if (isBothFee) {
-        feeText = `${feeFixed} ${assetCode} + ${feePercent}%`;
-        totalFee = amountProvided ? (
-            <div>
-                {Printify.lightenZeros((((parseFloat(amountForFee) / 100) * feePercent) + feeFixed).toFixed(7))}{' '}
-                {assetCode}
-            </div>
-        ) : (
-            feeText
         );
     }
 
-    return !amountProvided ? (
-        <div className="content_block">
-            <div className="content_title">Fee</div>
-            <div className="content_text">{feeText}</div>
-        </div>
-    ) : (
+    return (
         <React.Fragment>
             <div className="content_block">
-                <div className="content_title">Fee</div>
-                <div className="content_text">{feeText}</div>
+                <div className="content_title">Fees</div>
+                <div className="content_text">{Printify.lightenZeros(feeValue.toFixed(7), undefined, ` ${assetCode}`)}</div>
             </div>
-            {isfixedFee || isNoFee ? null : (
-                <div className="content_block">
-                    <div className="content_title">Total fee</div>
-                    <div className="content_text">{totalFee}</div>
-                </div>
-            )}
+            <div className="content_block">
+                <div className="content_title">Amount you receive</div>
+                <div className="content_text">{Printify.lightenZeros((Number(amountForFee) - feeValue).toFixed(7), undefined, ` ${assetCode}`)}</div>
+            </div>
         </React.Fragment>
     );
-}
+};
 
 FeeBlock.propTypes = {
     feeFixed: PropTypes.number.isRequired,
@@ -67,3 +57,5 @@ FeeBlock.propTypes = {
     assetCode: PropTypes.string.isRequired,
     amountForFee: PropTypes.number,
 };
+
+export default FeeBlock;

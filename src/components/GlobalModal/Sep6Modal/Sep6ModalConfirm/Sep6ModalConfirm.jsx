@@ -26,14 +26,21 @@ export default class Sep6ModalConfirm extends React.Component {
         return (
             <div className="content_main">
                 <div className="content_block">
-                    <div className="content_title">Amount</div>
-                    <div className="content_text">{res.amount} {asset.code}</div>
-                </div>
-
-                <div className="content_block">
                     <div className="content_title">Your {asset.code} address</div>
                     <div className="content_text">{res.dest}</div>
                 </div>
+
+                <div className="content_block">
+                    <div className="content_title">Amount you {isDeposit ? 'deposit' : 'withdraw'}</div>
+                    <div className="content_text">{res.amount} {asset.code}</div>
+                </div>
+
+                <FeeBlock
+                    feeFixed={parseFloat(res.fee_fixed) || 0}
+                    feePercent={parseFloat(res.fee_percent) || 0}
+                    assetCode={asset.code}
+                    amountForFee={parseFloat(res.amount)}
+                />
 
                 <div className="content_block">
                     <div className="content_title">Anchors address</div>
@@ -43,13 +50,6 @@ export default class Sep6ModalConfirm extends React.Component {
                 <MemoBlock memo={res.memo || ''} memoType={res.memo_type || ''} />
 
                 <EstimatedTime time={res.eta} isDeposit={isDeposit} />
-
-                <FeeBlock
-                    feeFixed={parseFloat(res.fee_fixed) || 0}
-                    feePercent={parseFloat(res.fee_percent) || 0}
-                    assetCode={asset.code}
-                    amountForFee={parseFloat(res.amount)}
-                />
 
                 <ExtraInfoBlock extra={_.has(res, 'extra_info') && res.extra_info !== null ? res.extra_info : ''} />
             </div>
