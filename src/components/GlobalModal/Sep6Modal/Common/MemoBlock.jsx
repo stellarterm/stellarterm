@@ -13,7 +13,7 @@ export default function MemoBlock(props) {
             </div>
             {memoType && <div className="content_block">
                 <div className="content_title">Memo type</div>
-                <div className="content_text">{memoType}</div>
+                <div className="content_text memo_type">{memoType}</div>
             </div>}
         </React.Fragment>
     );

@@ -26,7 +26,7 @@ export default class Sep6ModalConfirm extends React.Component {
         return (
             <div className="content_main">
                 <div className="content_block">
-                    <div className="content_title">Your {asset.code} address</div>
+                    <div className="content_title">Destination {asset.code} address</div>
                     <div className="content_text">{res.dest}</div>
                 </div>
 
