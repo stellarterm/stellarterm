@@ -142,28 +142,41 @@ export default class OfferMaker extends React.Component {
         });
         state.valid = false;
 
-        const [integerPart, fractionalPart] = value.split('.');
-
-        const roundedValue = (fractionalPart && fractionalPart.length > 7) ?
-            `${integerPart}.${fractionalPart.slice(0, 7)}` : value;
-
-        if (item === 'price' || item === 'amount' || item === 'total') {
-            state[item] = roundedValue;
-        } else {
-            throw new Error('Invalid item type');
-        }
-
         try {
+            const [integerPart, fractionalPart] = value.split('.');
+
+            const roundedValue = (fractionalPart && fractionalPart.length > 7) ?
+                `${integerPart}.${fractionalPart.slice(0, 7)}` : value;
+
+            if (item === 'price' || item === 'amount' || item === 'total') {
+                state[item] = roundedValue;
+            } else {
+                throw new Error('Invalid item type');
+            }
+
+
             // If there is an error, we will just let the user input change but not the affected inputs
             if (item === 'price' || item === 'amount') {
                 const changeValueType = item === 'price' ? 'amount' : 'price';
-                state.total = new BigNumber(
+                const newTotal = new BigNumber(
                     new BigNumber(roundedValue).times(new BigNumber(state[changeValueType])).toFixed(7),
                 ).toString();
+
+                if (Number.isNaN(Number(newTotal))) {
+                    throw new Error('Invalid input');
+                }
+
+                state.total = newTotal;
             } else if (item === 'total') {
-                state.amount = new BigNumber(
+                const newAmount = new BigNumber(
                     new BigNumber(roundedValue).dividedBy(new BigNumber(state.price)).toFixed(7),
                 ).toString();
+
+                if (Number.isNaN(Number(newAmount))) {
+                    throw new Error('Invalid input');
+                }
+
+                state.amount = newAmount;
             } else {
                 throw new Error('Invalid item type');
             }
