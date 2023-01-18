@@ -6,10 +6,16 @@ export default function MemoBlock(props) {
     const isNoMemo = memo === '';
 
     return isNoMemo ? null : (
-        <div className="content_block">
-            <div className="content_title">Memo</div>
-            <div className="content_text">{memo}</div>
-        </div>
+        <React.Fragment>
+            <div className="content_block">
+                <div className="content_title">Memo</div>
+                <div className="content_text">{memo}</div>
+            </div>
+            {memoType && <div className="content_block">
+                <div className="content_title">Memo type</div>
+                <div className="content_text memo_type">{memoType}</div>
+            </div>}
+        </React.Fragment>
     );
 }
 

@@ -69,12 +69,15 @@
                         height: 24px;
                         margin-right: 0.4em;
                     }
+
+                    &.memo_type {
+                        text-transform: capitalize;
+                    }
                 }
             }
 
             .extra_info {
                 .content_text {
-                    text-transform: capitalize;
                     white-space: pre-line;
                 }
             }
