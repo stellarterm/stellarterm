@@ -296,17 +296,19 @@ export default class Sep6ModalContent extends React.Component {
             );
         }
 
+        if (isAnyError) {
+            return (
+                <div className="content_error">
+                    <div className="sep6_requestError">
+                        <img src={images['icon-circle-fail']} alt="fail" />
+                        <span>{reqErrorMsg}</span>
+                    </div>
+                </div>
+            );
+        }
+
         return (
             <React.Fragment>
-                {isAnyError ? (
-                    <div className="content_error">
-                        <div className="sep6_requestError">
-                            <img src={images['icon-circle-fail']} alt="fail" />
-                            <span>{reqErrorMsg}</span>
-                        </div>
-                    </div>
-                ) : null}
-
                 <div className="content_main">
                     {isLoading ? (
                         <div className="loader_container">
