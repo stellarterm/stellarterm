@@ -145,9 +145,12 @@
                 display: flex;
 
                 input {
-                    width: 75%;
                     border-radius: 3px 0 0 3px;
                     border-right: 0;
+                    height: 37px;
+                    font-size: 16px;
+                    font-weight: 300;
+                    padding: 0.3333em 1em;
                 }
 
                 .offer_input_group_tag {
