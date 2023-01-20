@@ -7,6 +7,7 @@ import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import ReservedPopover from '../../../Common/AppPopover/ReservedPopover';
 import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
+import Input from '../../../Common/Input/Input';
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
@@ -286,14 +287,23 @@ export default class OfferMaker extends React.Component {
                 <td className="offer_table_label">{inputType}</td>
                 <td className="offer_table_input_cell">
                     <label className="offer_input_group" htmlFor={inputType}>
-                        <input
-                            type="text"
-                            name={inputType}
-                            maxLength="20"
+                        {/*<input*/}
+                        {/*    type="text"*/}
+                        {/*    name={inputType}*/}
+                        {/*    maxLength="20"*/}
+                        {/*    value={this.state[inputType]}*/}
+                        {/*    onFocus={() => { this.touchedOffer = true; }}*/}
+                        {/*    onChange={e =>*/}
+                        {/*        this.updateState(inputType, e.target.value, minValue, maxOffer)}*/}
+                        {/*    placeholder=""*/}
+                        {/*/>*/}
+                        <Input
+                            inputType="number"
+                            onChange={value => this.updateState(inputType, value, minValue, maxOffer)}
                             value={this.state[inputType]}
                             onFocus={() => { this.touchedOffer = true; }}
-                            onChange={e =>
-                                this.updateState(inputType, e.target.value, minValue, maxOffer)}
+                            maxLength="20"
+                            name={inputType}
                             placeholder=""
                         />
                         <div className="offer_input_group_tag">{assetName}</div>
