@@ -37,6 +37,12 @@ export default class GlobalModal extends React.Component {
         super(props);
         this.unsub = this.props.d.modal.event.sub(() => {
             this.forceUpdate();
+
+            if (this.props.d.modal.active) {
+                document.documentElement.style.overflow = 'hidden';
+            } else {
+                document.documentElement.style.overflow = '';
+            }
         });
         this.state = {};
     }
