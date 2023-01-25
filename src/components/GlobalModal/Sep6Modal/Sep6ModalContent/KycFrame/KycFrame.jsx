@@ -18,9 +18,9 @@ export default function KycFrame(props) {
                     <div className="content_title">
                         {status === 'pending' ? (
                             <img src={images['icon-clock']} alt="wait" />
-                        ) : (
-                            <img src={images['icon-circle-fail']} alt="error" />
-                        )}
+                        ) :
+                            null
+                        }
 
                         {statusText.has(status) ? statusText.get(status) : null}
                     </div>
