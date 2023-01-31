@@ -11,24 +11,52 @@ import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activ
 import Printify from '../../../../../lib/helpers/Printify';
 import { PAYMENTS_EVENTS } from '../../../../../lib/driver/driverInstances/Payments';
 
-const PAYMENTS_TYPES = ['create_account', 'account_merge', 'payment'];
+const PAYMENTS_TYPES = [
+    'create_account', 'account_merge', 'payment',
+];
+
+const PATH_PAYMENTS_TYPES = ['path_payment_strict_send', 'path_payment_strict_receive'];
 
 export default class ActivityPaymentsHistory extends React.Component {
     static filterPaymentsHistory(history) {
-        return history.filter(item => (PAYMENTS_TYPES.includes(item.type)));
+        return history.filter(item => (PAYMENTS_TYPES.includes(item.type) ||
+            (PATH_PAYMENTS_TYPES.includes(item.type) && item.from !== item.to)));
     }
 
-    static getOperationTypeAndAddress(type, account, account_id, funder, from, to, into, to_muxed) {
+    static getOperationTypeAndAddress({
+        type,
+        account,
+        funder,
+        from,
+        to,
+        into,
+        to_muxed,
+        amount,
+        asset_issuer,
+        asset_code,
+        source_amount,
+        source_asset_issuer,
+        source_asset_code,
+    },
+    account_id,
+    ) {
         switch (type) {
             case 'create_account':
                 return ({
                     opType: (account === account_id) ? 'Created by' : 'Created',
                     address: (account === account_id) ? funder : account,
+                    amount,
+                    asset: asset_issuer ?
+                        new StellarSdk.Asset(asset_code, asset_issuer) : StellarSdk.Asset.native(),
                 });
-            case 'account_merge': return ({
-                opType: (account === account_id) ? 'Account merged to' : 'Account merged',
-                address: (account === account_id) ? into : account,
-            });
+            case 'account_merge':
+                return ({
+                    opType: (account === account_id) ? 'Account merged to' : 'Account merged',
+                    address: (account === account_id) ? into : account,
+                    amount,
+                    asset: asset_issuer ?
+                        new StellarSdk.Asset(asset_code, asset_issuer) : StellarSdk.Asset.native(),
+                });
             case 'payment': {
                 const isSend = to !== account_id;
                 return {
@@ -36,6 +64,41 @@ export default class ActivityPaymentsHistory extends React.Component {
                         <span>Send</span> :
                         <span>Receive</span>,
                     address: isSend ? (to_muxed || to) : from,
+                    amount,
+                    asset: asset_issuer ?
+                        new StellarSdk.Asset(asset_code, asset_issuer) : StellarSdk.Asset.native(),
+                };
+            }
+            case 'path_payment_strict_send': {
+                const isSend = to !== account_id;
+                return {
+                    opType: isSend ?
+                        <span>Send</span> :
+                        <span>Receive</span>,
+                    address: isSend ? (to_muxed || to) : from,
+                    amount: isSend ? source_amount : amount,
+                    asset: (isSend ? source_asset_issuer : asset_issuer) ?
+                        new StellarSdk.Asset(
+                            isSend ? source_asset_code : asset_code,
+                            isSend ? source_asset_issuer : asset_issuer,
+                        ) :
+                        StellarSdk.Asset.native(),
+                };
+            }
+            case 'path_payment_strict_receive': {
+                const isSend = to !== account_id;
+                return {
+                    opType: isSend ?
+                        <span>Send</span> :
+                        <span>Receive</span>,
+                    address: isSend ? (to_muxed || to) : from,
+                    amount: isSend ? source_amount : amount,
+                    asset: (isSend ? source_asset_issuer : asset_issuer) ?
+                        new StellarSdk.Asset(
+                            isSend ? source_asset_code : asset_code,
+                            isSend ? source_asset_issuer : asset_issuer,
+                        ) :
+                        StellarSdk.Asset.native(),
                 };
             }
             default: break;
@@ -55,7 +118,8 @@ export default class ActivityPaymentsHistory extends React.Component {
         }
 
         this.unsubPayments = this.props.d.payments.event.sub(event => {
-            if (event.type === PAYMENTS_EVENTS.NEXT_PAYMENTS_REQUEST &&
+            if ((event.type === PAYMENTS_EVENTS.NEXT_PAYMENTS_REQUEST ||
+                    event.type === PAYMENTS_EVENTS.GET_PAYMENTS_REQUEST) &&
                 !this.constructor.filterPaymentsHistory(event.newItems).length
             ) {
                 this.props.d.payments.loadMorePaymentsHistory();
@@ -76,18 +140,16 @@ export default class ActivityPaymentsHistory extends React.Component {
         const { account_id } = this.props.d.session.account;
         const { effectsHistory } = this.props.d.effects;
 
-        const { account, funder, created_at, starting_balance,
-            amount, to, from, asset_code, asset_issuer, transaction_hash, type, paging_token, into, to_muxed,
+        const { created_at, starting_balance,
+            transaction_hash, paging_token,
         } = historyItem;
 
         const { time, date } = formatDate(created_at);
-        const { opType, address } =
-            this.constructor.getOperationTypeAndAddress(type, account, account_id, funder, from, to, into, to_muxed);
+        const { opType, address, asset, amount } =
+            this.constructor.getOperationTypeAndAddress(historyItem, account_id);
         const canvas = createStellarIdenticon(address);
         const renderedIcon = canvas.toDataURL();
         const viewAddress = address && `${address.substr(0, 18)}...${address.substr(-12, 12)}`;
-
-        const asset = asset_issuer ? new StellarSdk.Asset(asset_code, asset_issuer) : new StellarSdk.Asset.native();
 
         const itemFromCommonHistory = effectsHistory.find(item =>
             (item.paging_token.indexOf(paging_token) === 0 && item.amount));
