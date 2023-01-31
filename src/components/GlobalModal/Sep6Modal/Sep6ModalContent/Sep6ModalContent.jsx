@@ -266,7 +266,7 @@ export default class Sep6ModalContent extends React.Component {
     }
 
     render() {
-        const { d } = this.props;
+        const { d, isDeposit } = this.props;
         const { reqErrorMsg, isLoading, response, assetDisabled, showGetTokenFlow } = this.state;
         const isAnyError = reqErrorMsg !== null;
 
@@ -283,6 +283,20 @@ export default class Sep6ModalContent extends React.Component {
         }
 
         if ((_.isEmpty(response) || assetDisabled) && !isLoading) {
+            return (
+                <React.Fragment>
+                    <div className="content_error">
+                        <div className="sep6_requestError">
+                            <img src={images['icon-circle-fail']} alt="fail" />
+                            <span>{reqErrorMsg}</span>
+                        </div>
+                    </div>
+                    {this.getContentFooter()}
+                </React.Fragment>
+            );
+        }
+
+        if (isAnyError && isDeposit) {
             return (
                 <React.Fragment>
                     <div className="content_error">
