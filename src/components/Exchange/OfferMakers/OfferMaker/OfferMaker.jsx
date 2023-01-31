@@ -287,16 +287,6 @@ export default class OfferMaker extends React.Component {
                 <td className="offer_table_label">{inputType}</td>
                 <td className="offer_table_input_cell">
                     <label className="offer_input_group" htmlFor={inputType}>
-                        {/*<input*/}
-                        {/*    type="text"*/}
-                        {/*    name={inputType}*/}
-                        {/*    maxLength="20"*/}
-                        {/*    value={this.state[inputType]}*/}
-                        {/*    onFocus={() => { this.touchedOffer = true; }}*/}
-                        {/*    onChange={e =>*/}
-                        {/*        this.updateState(inputType, e.target.value, minValue, maxOffer)}*/}
-                        {/*    placeholder=""*/}
-                        {/*/>*/}
                         <Input
                             inputType="number"
                             onChange={value => this.updateState(inputType, value, minValue, maxOffer)}
