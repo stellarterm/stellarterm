@@ -33,11 +33,11 @@ export function getReadableNumber(volume) {
     return readableVolume;
 }
 
-export function getVolumeData(trades, { baseBuying, counterSelling }) {
-    return trades.map((trade) => {
+export function getVolumeData(trades, base, counter) {
+    return trades.map(trade => {
         // Displays XLM volume, if traded to xlm, else used base_volume
-        const isBaseNativeXLM = baseBuying.code === 'XLM' && baseBuying.issuer === undefined;
-        const isCounterNativeXLM = counterSelling.code === 'XLM' && counterSelling.issuer === undefined;
+        const isBaseNativeXLM = base.code === 'XLM' && base.issuer === undefined;
+        const isCounterNativeXLM = counter.code === 'XLM' && counter.issuer === undefined;
         const isTradeToXLM = isBaseNativeXLM || isCounterNativeXLM;
 
         const volumeXLM = isBaseNativeXLM ? trade.baseVolume : trade.counterVolume;
@@ -47,7 +47,7 @@ export function getVolumeData(trades, { baseBuying, counterSelling }) {
             time: trade.time,
             value: parseFloat(volume.toFixed(7)),
             color: trade.open <= trade.close ? volumeUpColor : volumeDownColor,
-            volumeName: isTradeToXLM ? 'XLM' : baseBuying.code,
+            volumeName: isTradeToXLM ? 'XLM' : base.code,
         };
     });
 }

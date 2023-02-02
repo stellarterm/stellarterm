@@ -18,44 +18,16 @@ export default function processOrderbook(asks, bids) {
         return { asks: filteredAsks, bids: filteredBids };
     }
 
-    let sumAsks = 0;
-    let sumAsksReverse = 0;
-
-    const processedAsks = filteredAsks.map(ask => {
-        sumAsks += Number(ask.amount) * Number(ask.price);
-        sumAsksReverse += Number(ask.amount);
-
-        return {
-            ...ask,
-            sum: sumAsks,
-            sumReverse: sumAsksReverse,
-        };
-    });
-
-    let sumBids = 0;
-    let sumBidsReverse = 0;
-
-    const processedBids = filteredBids.map(bid => {
-        sumBids += Number(bid.amount);
-        sumBidsReverse += Number(bid.amount) / Number(bid.price);
-
-        return {
-            ...bid,
-            sum: sumBids,
-            sumReverse: sumBidsReverse,
-        };
-    });
-
-    processedBids.reverse();
+    filteredBids.reverse();
 
     return {
         asks: [
-            ...processedAsks,
-            ...new Array(200 - processedAsks.length).fill(processedAsks[processedAsks.length - 1]),
+            ...filteredAsks,
+            ...new Array(200 - filteredAsks.length).fill(filteredAsks[filteredAsks.length - 1]),
         ],
         bids: [
-            ...new Array(200 - processedBids.length).fill(processedBids[0]),
-            ...processedBids,
+            ...new Array(200 - filteredBids.length).fill(filteredBids[0]),
+            ...filteredBids,
         ],
     };
 }

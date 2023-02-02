@@ -63,14 +63,16 @@ export default class AssetPair extends React.Component {
         const base = isBase ? asset : this.props.baseBuying;
         const counter = isBase ? this.props.counterSelling : asset;
 
-        this.props.d.orderbook.handlers.setOrderbook(base, counter);
+        this.props.d.orderbook.setOrderbook(base, counter);
+        this.props.d.trades.setPair(base, counter);
         window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(base, counter)}`);
         window.scrollTo(0, 0);
     }
 
     swapPair() {
         const { baseBuying, counterSelling } = this.props;
-        this.props.d.orderbook.handlers.setOrderbook(counterSelling, baseBuying);
+        this.props.d.orderbook.setOrderbook(counterSelling, baseBuying);
+        this.props.d.trades.setPair(counterSelling, baseBuying);
         window.history.pushState({}, null, `${Stellarify.pairToExchangeUrl(counterSelling, baseBuying)}`);
         window.scrollTo(0, 0);
     }

@@ -1,0 +1,15 @@
+export const ORDERBOOK_EVENTS = {
+    LOAD: 'LOAD',
+    DATA_LOADED: 'DATA_LOADED',
+    DATA_UPDATED: 'DATA_UPDATE',
+    PICK_PRICE: 'PICK_PRICE',
+    ZOOM_UPDATE: 'ZOOM_UPDATE',
+};
+
+export const ORDERBOOK_PRECISION = 7;
+
+export const ORDERBOOK_MAX_DEPTH_PERCENT = 1.2; // 20%
+
+export const ORDERBOOK_LIST_SIZE = 20;
+
+export const MIN_FOR_GROUPING = 10;

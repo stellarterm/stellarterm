@@ -44,7 +44,7 @@ export default class ActivityOpenOrdersRow extends React.Component {
     handleEdit(event, offerData) {
         event.preventDefault();
         const { base, counter } = offerData.rectifiedOffer;
-        this.props.d.orderbook.handlers.setOrderbook(counter, base);
+        this.props.d.orderbook.setOrderbook(counter, base);
         this.props.d.modal.handlers.activate('EditOfferModal', offerData);
     }
 

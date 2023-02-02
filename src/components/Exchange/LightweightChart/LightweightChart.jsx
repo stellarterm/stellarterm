@@ -15,6 +15,7 @@ import exportChartPng from './CanvasHandler';
 import UtcTimeString from './UtcTimeString/UtcTimeString';
 import ChartDataPanel from './ChartDataPanel/ChartDataPanel';
 import FullscreenScrollBlock from './FullscreenScrollBlock/FullscreenScrollBlock';
+import { TRADES_EVENTS } from '../../../lib/driver/driverInstances/Trades';
 
 const AGGREGATIONS_DEPS = {
     // 3 days
@@ -49,8 +50,8 @@ export default class LightweightChart extends React.Component {
 
         this.debouncedUpdateLastTrades = Debounce(this.updateLastTrades.bind(this), 700);
 
-        this.unsubLastTrades = this.props.d.orderbook.event.sub(event => {
-            if (event && event.lastTrades && !event.lastTradesInit) {
+        this.unsubTrades = this.props.d.trades.event.sub(event => {
+            if (event.type === TRADES_EVENTS.STREAM_UPDATE) {
                 this.debouncedUpdateLastTrades();
             }
         });
@@ -93,7 +94,7 @@ export default class LightweightChart extends React.Component {
         this._mounted = false;
         this.CHART.unsubscribeVisibleTimeRangeChange();
         window.removeEventListener('resize', this.applyChartOptions);
-        this.unsubLastTrades();
+        this.unsubTrades();
     }
 
     onClickTimeFrameBtn(timeFrame) {
@@ -114,12 +115,13 @@ export default class LightweightChart extends React.Component {
             fullHistoryLoaded: false,
         });
 
-        const { data, handlers } = this.props.d.orderbook;
+        const { trades } = this.props.d;
+        const { base, counter } = trades;
 
         const endDate = Math.round(Date.now() / 1000);
         const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
 
-        handlers.getTrades(startDate, endDate, timeFrame, 100).then(res => {
+        trades.getTrades(startDate, endDate, timeFrame, 100).then(res => {
             if (!res) {
                 this.setState({
                     isLoadingInit: false,
@@ -133,7 +135,7 @@ export default class LightweightChart extends React.Component {
 
             const fullLoaded = res.records.length === 0;
             const convertedTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
-            const convertedVolume = converterOHLC.getVolumeData(convertedTrades, data);
+            const convertedVolume = converterOHLC.getVolumeData(convertedTrades, base, counter);
             if (this._mounted) {
                 this.setState({
                     isLoadingInit: false,
@@ -147,8 +149,10 @@ export default class LightweightChart extends React.Component {
     }
 
     getNextTrades() {
-        const { timeFrame, d } = this.props;
+        const { timeFrame } = this.props;
         const { fullHistoryLoaded } = this.state;
+
+        const { base, counter } = this.props.d.trades;
 
         if (fullHistoryLoaded || !this.state.nextTrades) { return; }
 
@@ -156,7 +160,7 @@ export default class LightweightChart extends React.Component {
         this.state.nextTrades().then(res => {
             const fullLoaded = res.records.length === 0;
             const convertedTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
-            const convertedVolume = converterOHLC.getVolumeData(convertedTrades, d.orderbook.data);
+            const convertedVolume = converterOHLC.getVolumeData(convertedTrades, base, counter);
             const concatedTrades = [...convertedTrades, ...this.state.trades];
             const concatedVolumes = [...convertedVolume, ...this.state.volumes];
 
@@ -269,12 +273,18 @@ export default class LightweightChart extends React.Component {
         const endDate = Math.round(Date.now() / 1000);
         const startDate = endDate - AGGREGATIONS_DEPS[timeFrame];
 
-        this.props.d.orderbook.handlers.getTrades(startDate, endDate, timeFrame, 20).then(res => {
+        const { trades: tradesInstance } = this.props.d;
+        const { base, counter } = tradesInstance;
+
+        tradesInstance.getTrades(startDate, endDate, timeFrame, 20).then(res => {
             const { trades, volumes, nextTrades, fullHistoryLoaded } = this.state;
 
             const convertedLastTrades = converterOHLC.aggregationToOhlc([...res.records], timeFrame);
-            const convertedLastVolumes = converterOHLC.getVolumeData(convertedLastTrades,
-                this.props.d.orderbook.data);
+            const convertedLastVolumes = converterOHLC.getVolumeData(
+                convertedLastTrades,
+                base,
+                counter,
+            );
 
             const firstIndex = trades.findIndex(trade => trade.time === convertedLastTrades[0].time);
 
