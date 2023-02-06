@@ -1,7 +1,6 @@
 .AssetCardList{
   width: 100%;
-  max-height: 230px;
-  overflow-y: auto;
+
   position: absolute;
   border: 1px solid rgb(189, 191, 192);
   border-top: none;
@@ -14,6 +13,11 @@
   line-height: 35px;
 }
 
+.AssetCardList_scrollable {
+    overflow-y: auto;
+    max-height: 230px;
+}
+
 .AssetCardList_card{
   margin: 1px 5px;
 }
@@ -21,6 +25,20 @@
 .AssetCardList_empty{
   font-size: 14px;
   margin-left: 20px;
+}
+
+.AssetCardList_reset {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 300;
+    cursor: pointer;
+    border: solid 1px #f6f6f6;
+
+    &:hover {
+        background-color: #fbfbfc;;
+    }
 }
 
 
