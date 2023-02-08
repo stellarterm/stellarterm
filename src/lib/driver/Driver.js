@@ -14,6 +14,7 @@ import Payments from './driverInstances/Payments';
 import WalletConnectService from './driverInstances/WalletConnectService';
 import Multisig from './driverInstances/Multisig';
 import Swap from './driverInstances/Swap';
+import Trades from './driverInstances/Trades';
 
 BigNumber.config({ EXPONENTIAL_AT: 100 });
 
@@ -34,6 +35,7 @@ function Driver() {
     this.payments = new Payments(this);
     this.multisig = new Multisig(this);
     this.swap = new Swap(this);
+    this.trades = new Trades(this);
 
     window.view = accountId => {
         this.session.handlers.logInWithPublicKey(accountId);

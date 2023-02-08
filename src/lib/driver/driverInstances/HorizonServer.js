@@ -183,8 +183,11 @@ export default class HorizonServer {
         }
 
         if (this.driver.orderbook.data.ready) {
-            this.driver.orderbook.handlers.stopOrderbook();
-            this.driver.orderbook.handlers.stopLastTradesStream();
+            this.driver.orderbook.stopOrderbook();
+        }
+
+        if (this.driver.trades.ready) {
+            this.driver.trades.stopStream();
         }
 
         localStorage.setItem(ACTIVE_HORIZON_SERVER, url);

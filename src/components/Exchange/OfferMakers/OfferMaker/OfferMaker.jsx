@@ -27,9 +27,6 @@ export default class OfferMaker extends React.Component {
         this.touchedOffer = Boolean(this.props.existingOffer);
 
         this.orderbookUnsub = this.props.d.orderbook.event.sub(data => {
-            if (data && data.lastTrades) {
-                return;
-            }
             if (data && data.pickPrice) {
                 this.touchedOffer = true;
                 this.updateState('price', data.pickPrice);

@@ -451,64 +451,6 @@ const MagicSpoon = {
 
         return sdkAccount;
     },
-    Orderbook(Server, baseBuying, counterSelling, onUpdate) {
-        // Orderbook is an object that keeps track of the orderbook for you.
-        // All the driver needs to do is remember to call the close function
-        this.ready = false;
-        // Initial orderbook load
-        Server.orderbook(baseBuying, counterSelling)
-            .limit(200)
-            .call()
-            .then(orderbook => {
-                this.asks = orderbook.asks;
-                this.bids = orderbook.bids;
-                this.baseBuying = baseBuying;
-                this.counterSelling = counterSelling;
-
-                this.ready = true;
-                onUpdate();
-            });
-
-        this.closeOrderbookStream = Server.orderbook(baseBuying, counterSelling).limit(200).stream({
-            onmessage: res => {
-                let updated = false;
-                if (!_.isEqual(this.bids, res.bids)) {
-                    this.bids = res.bids;
-                    updated = true;
-                }
-                if (!_.isEqual(this.asks, res.asks)) {
-                    this.asks = res.asks;
-                    updated = true;
-                }
-                if (updated) {
-                    onUpdate();
-                }
-            },
-        });
-    },
-
-    LastTrades(Server, baseBuying, counterSelling, onUpdate) {
-        MagicSpoon.pairTrades(Server, baseBuying, counterSelling, 200).then(result => {
-            const { records } = result || [];
-            this.marketTradesHistory = records;
-            onUpdate({ lastTrades: true, lastTradesInit: true });
-
-            this.closeLastTradesStream = Server.trades()
-                .forAssetPair(baseBuying, counterSelling)
-                .order('asc')
-                .cursor('now')
-                .stream({
-                    onmessage: trade => {
-                        this.marketTradesHistory = [trade, ...this.marketTradesHistory];
-                        onUpdate({ lastTrades: true });
-                    },
-                    onerror: error => {
-                        console.log(error);
-                        this.closeLastTradesStream();
-                    },
-                });
-        });
-    },
 
     async tradeAggregation(Server, baseBuying, counterSelling, START_TIME, END_TIME, RESOLUTION, LIMIT) {
         const limit = LIMIT || 100;
@@ -542,18 +484,6 @@ const MagicSpoon = {
         const startDate = endDate - PERIOD_24H;
 
         return this.tradeAggregation(Server, base, counter, startDate, endDate, RESOLUTION_MINUTE, 1);
-    },
-    pairTrades(Server, baseBuying, counterSelling, LIMIT) {
-        const limit = LIMIT || 100;
-
-        return Server.trades()
-            .forAssetPair(baseBuying, counterSelling)
-            .limit(limit)
-            .order('desc')
-            .call()
-            .catch(error => {
-                console.error(error);
-            });
     },
 
     overwrite(buffer) {

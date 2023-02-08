@@ -10,6 +10,7 @@ import MagicSpoon from '../../../lib/helpers/MagicSpoon';
 import { getReadableNumber } from '../LightweightChart/ConverterOHLC';
 import { niceRound } from '../../../lib/helpers/Format';
 import images from '../../../images';
+import { TRADES_EVENTS } from '../../../lib/driver/driverInstances/Trades';
 
 export default class PairPicker extends React.Component {
     static get24ChangesPercent(state) {
@@ -37,8 +38,8 @@ export default class PairPicker extends React.Component {
 
         this.debouncedGetLastTrades = Debounce(this.getLastTrades.bind(this), 700);
 
-        this.unsubLastTrades = this.props.d.orderbook.event.sub(event => {
-            if (event && event.lastTrades && !event.lastTradesInit) {
+        this.unsubTrades = this.props.d.trades.event.sub(event => {
+            if (event.type === TRADES_EVENTS.STREAM_UPDATE) {
                 this.debouncedGetLastTrades();
             }
         });
@@ -64,6 +65,7 @@ export default class PairPicker extends React.Component {
     componentWillUnmount() {
         this._mounted = false;
         this.unsub();
+        this.unsubTrades();
     }
 
     setChangesDirection(lastChangesDirection) {
@@ -75,7 +77,7 @@ export default class PairPicker extends React.Component {
 
     getPairMarketsData() {
         const { d } = this.props;
-        const { baseBuying } = d.orderbook.data;
+        const { base } = d.trades;
         const { last24HourTrades, lastMinutesTrade, counterWithLumenLastTrade } = this.state;
 
         if (!last24HourTrades || !lastMinutesTrade || !counterWithLumenLastTrade || !d.ticker.ready) {
@@ -111,7 +113,7 @@ export default class PairPicker extends React.Component {
             lastPrice * counterWithLumenLastTradeOpen;
 
         const { USD_XLM } = d.ticker.data._meta.externalPrices;
-        const lastUsdPrice = baseBuying.isNative() ? USD_XLM : USD_XLM * convertedLastPriceToXLM;
+        const lastUsdPrice = base.isNative() ? USD_XLM : USD_XLM * convertedLastPriceToXLM;
 
         return {
             status: 'trades_fully',
@@ -126,19 +128,19 @@ export default class PairPicker extends React.Component {
 
     async getLastTrades() {
         const { d } = this.props;
-        const { baseBuying, counterSelling, ready } = d.orderbook.data;
+        const { base, counter, ready } = d.trades;
         if (!ready) {
             return;
         }
-        const pairWithoutLumen = !baseBuying.isNative() && !counterSelling.isNative();
+        const pairWithoutLumen = !base.isNative() && !counter.isNative();
 
         const lastTradesWithStep15min =
-            await d.orderbook.handlers.getLast24hAggregationsWithStep15min();
+            await d.trades.getLast24hAggregationsWithStep15min();
 
-        const lastMinutesTrade = await d.orderbook.handlers.getLastMinuteAggregation();
+        const lastMinutesTrade = await d.trades.getLastMinuteAggregation();
 
         const counterWithLumenLastTrade = pairWithoutLumen ?
-            await MagicSpoon.getLastMinuteAggregation(d.Server, counterSelling, StellarSdk.Asset.native()) :
+            await MagicSpoon.getLastMinuteAggregation(d.Server, counter, StellarSdk.Asset.native()) :
             'notRequired';
 
         if (!this._mounted) {
@@ -163,9 +165,8 @@ export default class PairPicker extends React.Component {
     }
 
     getPairMarketsTableContent() {
-        const { d } = this.props;
-        const { counterSelling } = d.orderbook.data;
-        const counterAssetCode = counterSelling.getCode();
+        const { counter } = this.props.d.trades;
+        const counterAssetCode = counter.getCode();
         const { status, lastPrice, lastUsdPrice, changes24, volume24, price24low, price24high } =
             this.getPairMarketsData();
 
@@ -207,18 +208,14 @@ export default class PairPicker extends React.Component {
 
     render() {
         const { d } = this.props;
-        const { ready, baseBuying, counterSelling } = d.orderbook.data;
-
-        if (!ready) {
-            return (<div>Loading<Ellipsis /></div>);
-        }
+        const { base, counter } = d.trades;
 
         const marketsTableContent = this.getPairMarketsTableContent();
 
         return (
             <div className="island">
                 <div className="PairPicker_assetPair">
-                    <AssetPair baseBuying={baseBuying} counterSelling={counterSelling} d={d} swap dropdown />
+                    <AssetPair baseBuying={base} counterSelling={counter} d={d} swap dropdown />
                 </div>
                 <div className="PairPicker_marketsTable">
                     <div className="PairPicker_marketsTable-header">
