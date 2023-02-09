@@ -173,7 +173,11 @@ export default class WalletConnectService {
             if (e.message === 'cancelled') {
                 return Promise.resolve({ status: 'cancel' });
             }
-            const errorMessage = (e.message === 'rejected' || e.message === '') ?
+            const errorMessage = (
+                e.message === 'rejected' ||
+                e.message === '' ||
+                e.code === getSdkError('USER_REJECTED').code
+            ) ?
                 'Connection canceled by the user' :
                 e.message;
             this.driver.toastService.error('Connection unsuccessful', errorMessage);
