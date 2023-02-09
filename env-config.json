@@ -8,10 +8,9 @@
         "HOME_URL": "https://staging--hopeful-brahmagupta-343062.netlify.com/",
         "HOME_DOMAIN": "staging.stellarterm.com",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
-        "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
         "MOONPAY_API_URL": "https://staging.lobstr.co/api/",
-        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/",
-        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/"
+        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/",
+        "TOP_MARKETS_API": "https://markets.ultrastellar.com/api/v1/"
     },
     "production": {
         "ANCHORS_URL": "https://fed.stellarterm.com/issuer_orgs/",
@@ -22,10 +21,9 @@
         "HOME_URL": "https://stellarterm.com/",
         "HOME_DOMAIN": "stellarterm.com",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
-        "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
         "MOONPAY_API_URL": "https://lobstr.co/api/",
-        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/",
-        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/"
+        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/",
+        "TOP_MARKETS_API": "https://markets.ultrastellar.com/api/v1/"
     },
     "local": {
         "ANCHORS_URL": "https://fed-staging.stellarterm.com/issuer_orgs/",
@@ -36,9 +34,8 @@
         "HOME_URL": "https://localhost:3000/",
         "HOME_DOMAIN": "localhost:3000",
         "STELLAR_GUARD_URL": "https://stellarguard.me/api/",
-        "STELLAR_TICKER": "https://ticker.stellar.org/v1/",
         "MOONPAY_API_URL": "https://staging.lobstr.co/api/",
-        "STELLAR_TICKER_TESTNET": "https://ticker-testnet.stellar.org/v1/",
-        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/"
+        "ASSET_DATA_API": "https://assets.ultrastellar.com/api/v1/assets/",
+        "TOP_MARKETS_API": "https://markets.ultrastellar.com/api/v1/"
     }
 }

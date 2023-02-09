@@ -19,8 +19,8 @@ const KEY_F = 70;
 const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
-// eslint-disable-next-line no-useless-escape
-const pattern = /^(https?:\/\/)?([\da-z-]+)\.([a-z]{2,6})([\/\w -]*)*\/?$/;
+// eslint-disable-next-line no-useless-escape,max-len
+const pattern = /^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$/;
 const regexp = new RegExp(pattern);
 
 
@@ -75,8 +75,15 @@ export default class AssetDropDown extends React.Component {
         this.dTicker.event.unlisten(this.listenId);
     }
 
-    onUpdate({ code, issuer }) {
-        this.props.onUpdate(issuer ? new StellarSdk.Asset(code, issuer) : StellarSdk.Asset.native());
+    onUpdate(asset) {
+        if (asset) {
+            this.props.onUpdate(asset.issuer ?
+                new StellarSdk.Asset(asset.code, asset.issuer) :
+                StellarSdk.Asset.native());
+        } else {
+            this.props.onUpdate(null);
+        }
+
         this.setState({
             isOpenList: false,
             termAsset: null,
@@ -184,6 +191,17 @@ export default class AssetDropDown extends React.Component {
         }
     }
 
+    getPlaceholder() {
+        const { placeholder, compactSize } = this.props;
+        const { isOpenList } = this.state;
+
+        if (placeholder && !isOpenList) {
+            return placeholder;
+        }
+
+        return compactSize ? 'Type code or domain' : 'Type asset code or domain name';
+    }
+
     openListByFocus() {
         if (this.state.activeCardIndex === null) {
             this.setState({
@@ -223,7 +241,7 @@ export default class AssetDropDown extends React.Component {
 
     render() {
         const { isOpenList } = this.state;
-        const { compactSize } = this.props;
+        const { compactSize, withEmpty } = this.props;
         const isOpenClass = isOpenList ? 'AssetDropDown_isOpen' : '';
         const isCompactClass = compactSize ? 'AssetDropDown__compactSize' : '';
 
@@ -257,7 +275,7 @@ export default class AssetDropDown extends React.Component {
                                 onChange={e => this.handleInput(e)}
                                 onKeyUp={e => this.setActiveCardIndex(e)}
                                 value={this.state.inputCode}
-                                placeholder={compactSize ? 'Type code or domain' : 'Type asset code or domain name'}
+                                placeholder={this.getPlaceholder()}
                             />
                         </div>
                     }
@@ -284,6 +302,7 @@ export default class AssetDropDown extends React.Component {
                         onUpdate={asset => { this.onUpdate(asset); }}
                         assetsList={this.getFilteredAssets()}
                         activeCardIndex={this.state.activeCardIndex}
+                        withEmpty={withEmpty}
                     /> :
                     null
                 }
@@ -298,4 +317,6 @@ AssetDropDown.propTypes = {
     exception: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     onUpdate: PropTypes.func,
     compactSize: PropTypes.bool,
+    withEmpty: PropTypes.bool,
+    placeholder: PropTypes.string,
 };
