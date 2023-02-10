@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Switch, Route } from 'react-router-dom';
-import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../lib/driver/Driver';
 import AssetList from '../Common/AssetList/AssetList';
 import CustomPairMenu from './CustomPairMenu/CustomPairMenu';
@@ -15,6 +14,12 @@ import images from '../../images';
 
 const KNOWN_MARKETS_ROUTE = '/markets/';
 const TOP_VOLUME_ROUTE = '/markets/top/';
+
+
+const FILTER_PARAM = 'filter';
+
+// redirect from ?base=... to ?filter=...
+const OLD_FILTER_PARAM = 'base';
 
 
 export default class Markets extends React.Component {
@@ -40,8 +45,8 @@ export default class Markets extends React.Component {
             }
 
             if (location.pathname === KNOWN_MARKETS_ROUTE) {
-                if (this.urlSearchParams.has('base')) {
-                    this.urlSearchParams.delete('base');
+                if (this.urlSearchParams.has(FILTER_PARAM)) {
+                    this.urlSearchParams.delete(FILTER_PARAM);
                     this.props.history.replace(`?${this.urlSearchParams.toString()}`);
                 }
             }
@@ -52,22 +57,32 @@ export default class Markets extends React.Component {
         this.unlisten();
     }
 
+    onBaseAssetUpdate(asset) {
+        if (asset) {
+            this.urlSearchParams.set(FILTER_PARAM, Stellarify.assetToSlug(asset));
+        } else {
+            this.urlSearchParams.delete(FILTER_PARAM);
+        }
+        this.props.history.push(`?${this.urlSearchParams.toString()}`);
+    }
+
     getBaseAssetFromUrl() {
-        const slug = this.urlSearchParams.get('base');
+        // redirect from ?base=... to ?filter=...
+        if (this.urlSearchParams.has(OLD_FILTER_PARAM)) {
+            const filter = this.urlSearchParams.get(OLD_FILTER_PARAM);
+            this.urlSearchParams.delete(OLD_FILTER_PARAM);
+            this.urlSearchParams.set(FILTER_PARAM, filter);
+            this.props.history.replace(`?${this.urlSearchParams.toString()}`);
+        }
+
+        const slug = this.urlSearchParams.get(FILTER_PARAM);
 
         if (this.state.baseAsset && Stellarify.assetToSlug(this.state.baseAsset) === slug) {
             return;
         }
 
-        if (!slug) {
-            this.urlSearchParams.set('base', 'XLM-native');
-            this.props.history.replace(`?${this.urlSearchParams.toString()}`);
-
-            this.setState({ baseAsset: StellarSdk.Asset.native() });
-            return;
-        }
         try {
-            this.setState({ baseAsset: Stellarify.parseAssetSlug(slug) });
+            this.setState({ baseAsset: slug ? Stellarify.parseAssetSlug(slug) : null });
         } catch (e) {
             console.warn(e);
             this.setState({ baseAsset: null });
@@ -93,7 +108,7 @@ export default class Markets extends React.Component {
                         {...props}
                     />
                 </div>
-                <div className="so-back islandBack">
+                <div className="so-back islandBack" ref={ref => { this.tableRef = ref; }}>
                     <div className="island">
                         <div className="AssetList_Header">
                             <div className="AssetList_Tabs">
@@ -140,16 +155,15 @@ export default class Markets extends React.Component {
                                     render={() =>
                                         <React.Fragment>
                                             <div className="ListHeader_dropdown">
-                                                <span>Base asset:</span>
                                                 <AssetDropDown
                                                     d={d}
                                                     compactSize
                                                     asset={this.state.baseAsset}
-                                                    onUpdate={asset => {
-                                                        this.setState({ baseAsset: asset });
-                                                        this.urlSearchParams.set('base', Stellarify.assetToSlug(asset));
-                                                        this.props.history.push(`?${this.urlSearchParams.toString()}`);
-                                                    }}
+                                                    onUpdate={asset =>
+                                                        this.onBaseAssetUpdate(asset)
+                                                    }
+                                                    withEmpty={Boolean(this.state.baseAsset)}
+                                                    placeholder="Select an asset to filter by"
                                                 />
                                             </div>
                                         </React.Fragment>
@@ -174,6 +188,7 @@ export default class Markets extends React.Component {
                                     <TopVolumeAssets
                                         d={d}
                                         baseAsset={this.state.baseAsset}
+                                        tableRef={this.tableRef}
                                     />
                                 }
                             />

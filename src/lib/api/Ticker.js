@@ -2,8 +2,6 @@ import directory from 'stellarterm-directory';
 import req from './req';
 import Event from '../helpers/Event';
 import * as EnvConsts from '../../env-consts';
-import { postWithCancel } from './request';
-import { getEndpoint } from './endpoints';
 
 const MAX_ATTEMPTS = 120;
 const API_DATA = 'ticker.json';
@@ -48,34 +46,5 @@ export default class Ticker {
                 const nextAttempt = (attempt || 0) + 1;
                 setTimeout(() => this.loadWithAttempts(promiseFunction, message, nextAttempt), 1000);
             });
-    }
-
-    static loadStellarMarketsData({
-        baseAssetCode, baseAssetIssuer, numHoursAgo, counterAssetCode, counterAssetIssuer, isTestnet,
-    }) {
-        const headers = { 'Content-Type': 'application/json' };
-        const stellarTickerGraphQLParams =
-            `{ markets(
-            ${numHoursAgo ? `numHoursAgo: ${numHoursAgo},` : ''}
-            ${counterAssetCode ? `counterAssetCode: "${counterAssetCode}",` : ''}
-            ${counterAssetIssuer ? `counterAssetIssuer: "${counterAssetIssuer}",` : ''}
-            ${baseAssetCode ? `baseAssetCode: "${baseAssetCode}",` : ''}
-            ${baseAssetIssuer ? `baseAssetIssuer: "${baseAssetIssuer}"` : ''}) { ` +
-            'tradePair ' +
-            'baseVolume ' +
-            'counterVolume ' +
-            'change ' +
-            'close ' +
-            'open ' +
-            'baseAssetCode ' +
-            'baseAssetIssuer ' +
-            'counterAssetCode ' +
-            'counterAssetIssuer} }';
-
-        const body = JSON.stringify({ query: stellarTickerGraphQLParams });
-        return postWithCancel(getEndpoint(isTestnet ? 'stellarTestnetTickerGraphQL' : 'stellarTickerGraphQL'), {
-            headers,
-            body,
-        });
     }
 }

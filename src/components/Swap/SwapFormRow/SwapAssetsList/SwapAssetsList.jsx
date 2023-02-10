@@ -14,8 +14,8 @@ import Driver from '../../../../lib/driver/Driver';
 
 const DEBOUNCE_TIME = 700;
 const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
-// eslint-disable-next-line no-useless-escape
-const pattern = /^(https?:\/\/)?([\da-z-]+)\.([a-z]{2,6})([\/\w -]*)*\/?$/;
+// eslint-disable-next-line no-useless-escape,max-len
+const pattern = /^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$/;
 const regexp = new RegExp(pattern);
 
 const SwapAssetsList = ({ d, closeList, setAsset, myAssets, knownAssets }) => {

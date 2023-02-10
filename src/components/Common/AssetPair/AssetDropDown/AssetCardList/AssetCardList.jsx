@@ -22,50 +22,55 @@ export default class AssetCardList extends React.Component {
     }
 
     render() {
-        const { assetsList, activeCardIndex, d, host, compactSize } = this.props;
+        const { assetsList, activeCardIndex, d, compactSize, withEmpty } = this.props;
 
-        const rows = assetsList.map((asset, index) => {
-            const currency = {};
-            currency.image = asset.image;
-            return (
-                <div
-                    className={`AssetCardList_card ${index === activeCardIndex ? 'AssetCardList_card-active' : ''}`}
-                    key={asset.code + asset.issuer}
-                    ref={index === activeCardIndex ? (node) => {
-                        this.activeRef = node;
-                    } : null}
-                    onClick={() => this.handleChoose(asset)}>
-                    {compactSize ?
-                        <AssetCardInRow
-                            d={d}
-                            code={asset.code}
-                            issuer={asset.issuer}
-                            host={host}
-                            currency={currency.image ? currency : null} /> :
-                        <AssetCardMain
-                            d={d}
-                            code={asset.code}
-                            issuer={asset.issuer}
-                            host={host}
-                            currency={currency.image ? currency : null}
-                            boxy
-                            noborder={index !== activeCardIndex} />
-                    }
+        const rows = assetsList.map((asset, index) => (
+            <div
+                className={`AssetCardList_card ${index === activeCardIndex ? 'AssetCardList_card-active' : ''}`}
+                key={asset.code + asset.issuer}
+                ref={index === activeCardIndex ? node => {
+                    this.activeRef = node;
+                } : null}
+                onClick={() => this.handleChoose(asset)}
+            >
+                {compactSize ?
+                    <AssetCardInRow
+                        d={d}
+                        code={asset.code}
+                        issuer={asset.issuer}
+                    /> :
+                    <AssetCardMain
+                        d={d}
+                        code={asset.code}
+                        issuer={asset.issuer}
+                        boxy
+                        noborder={index !== activeCardIndex}
+                    />
+                }
 
-                </div>
-            );
-        });
+            </div>
+        ));
 
         return (
             <div className="AssetCardList">
-                {rows.length ?
-                    rows :
-                    <span className="AssetCardList_empty">
-                        {compactSize ?
-                            'Asset not found' :
-                            'Asset not found. Use custom pairs selector.'
-                        }
-                    </span>
+                <div className="AssetCardList_scrollable">
+                    {rows.length ?
+                        rows :
+                        <span className="AssetCardList_empty">
+                            {compactSize ?
+                                'Asset not found' :
+                                'Asset not found. Use custom pairs selector.'
+                            }
+                        </span>
+                    }
+                </div>
+                {withEmpty &&
+                    <div
+                        className="AssetCardList_reset"
+                        onClick={() => this.handleChoose(null)}
+                    >
+                        Reset filter
+                    </div>
                 }
             </div>
         );
@@ -73,9 +78,9 @@ export default class AssetCardList extends React.Component {
 }
 AssetCardList.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    host: PropTypes.string,
     onUpdate: PropTypes.func,
     activeCardIndex: PropTypes.number,
     assetsList: PropTypes.arrayOf(PropTypes.object),
     compactSize: PropTypes.bool,
+    withEmpty: PropTypes.bool,
 };

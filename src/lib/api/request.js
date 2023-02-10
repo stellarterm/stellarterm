@@ -8,7 +8,7 @@ function checkStatus(response) {
     const { status, statusText } = response;
     const error = new Error(`${status}: ${statusText}`);
     error.response = response;
-    return response.json().then((errorData) => {
+    return response.json().then(errorData => {
         error.data = errorData;
         throw error;
     });
@@ -48,8 +48,12 @@ function requestWithCancel(method, url, options) {
     };
 }
 
+function getWithCancel(url, options) {
+    return requestWithCancel('GET', url, options);
+}
+
 function postWithCancel(url, options) {
     return requestWithCancel('POST', url, options);
 }
 
-export { get, post, patch, postWithCancel };
+export { get, post, patch, postWithCancel, getWithCancel };

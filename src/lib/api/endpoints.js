@@ -35,10 +35,6 @@ export const endpoints = {
         url: 'accounts/',
         baseUrl: EnvConsts.STELLAR_GUARD_URL,
     },
-    stellarTickerGraphQL: {
-        url: 'graphql',
-        baseUrl: EnvConsts.STELLAR_TICKER,
-    },
     moonpayStatus: {
         url: 'moonpay/status',
         baseUrl: EnvConsts.MOONPAY_API_URL,
@@ -62,10 +58,6 @@ export const endpoints = {
     moonpayTransaction: {
         url: 'v2/moonpay/transaction/stellarterm/',
         baseUrl: EnvConsts.MOONPAY_API_URL,
-    },
-    stellarTestnetTickerGraphQL: {
-        url: 'graphql',
-        baseUrl: EnvConsts.STELLAR_TICKER_TESTNET,
     },
 };
 
