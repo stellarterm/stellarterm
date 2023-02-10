@@ -35,10 +35,8 @@ export default class MarketsHistory extends React.Component {
     }
 
     componentDidMount() {
-        this.unsub = this.props.d.orderbook.event.sub(event => {
-            if (event && event.lastTrades) {
-                this.forceUpdate();
-            }
+        this.unsub = this.props.d.trades.event.sub(() => {
+            this.forceUpdate();
         });
     }
 
@@ -87,8 +85,8 @@ export default class MarketsHistory extends React.Component {
     }
 
     getHistoryTable() {
-        const { baseBuying, counterSelling } = this.props.d.orderbook.data;
-        const trades = this.props.d.orderbook.lastTrades.marketTradesHistory;
+        const { base, counter } = this.props.d.trades;
+        const trades = this.props.d.trades.tradesHistory.slice(0, 200);
         const rowHeight = 30;
         const tableHeight = trades.length > 20 ? 600 : trades.length * rowHeight;
 
@@ -106,15 +104,15 @@ export default class MarketsHistory extends React.Component {
                     </div>
                     <div className="MarketTable_header_item row-right">
                         <span className="header_text">Price</span>
-                        <span className="pair_small"> ({baseBuying.code}/{counterSelling.code})</span>
+                        <span className="pair_small"> ({base.code}/{counter.code})</span>
                     </div>
                     <div className="MarketTable_header_item row-right">
                         <span className="header_text">Amount</span>
-                        <span className="pair_small"> ({baseBuying.code})</span>
+                        <span className="pair_small"> ({base.code})</span>
                     </div>
                     <div className="MarketTable_header_item row-right">
                         <span className="header_text">Total</span>
-                        <span className="pair_small"> ({counterSelling.code})</span>
+                        <span className="pair_small"> ({counter.code})</span>
                     </div>
                 </div>
 
@@ -141,7 +139,7 @@ export default class MarketsHistory extends React.Component {
     }
 
     render() {
-        const trades = this.props.d.orderbook.lastTrades.marketTradesHistory;
+        const trades = this.props.d.trades.tradesHistory;
         const noMarketTrades = !trades || trades.length === 0;
 
         const marketsTitleText = `Market trades history ${noMarketTrades ? 'is empty' : ''}`;

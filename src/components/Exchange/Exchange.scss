@@ -69,6 +69,39 @@
         }
     }
 
+    .ListHeader_zoom {
+        display: flex;
+        font-size: 14px;
+        color: #9aa6ac;
+
+        span {
+            margin-right: 16px;
+        }
+
+        button {
+            width: 24px;
+            height: 24px;
+            margin-left: 4px;
+            background-color: #fff;
+            border: 1px solid transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+
+            &:active {
+                border: 1px solid #86d38c;
+            }
+
+            &:disabled {
+                pointer-events: none;
+                img {
+                    opacity: 0.3;
+                }
+            }
+        }
+    }
+
     .fullscreen_Block {
         .actionBtn {
             display: flex;

@@ -18,7 +18,7 @@ export default class OfferTable extends React.Component {
     }
 
     getRowStyle(isBuy, offer) {
-        const depthPercentage = Math.min(100, Number((offer.depth / this.props.maxDepth) * 100).toFixed(1));
+        const depthPercentage = Math.min(100, (Number((offer.sum) / this.props.maxDepth.toNumber()) * 100));
 
         const rowStyle = {};
         const background = isBuy ? '#dcf6de' : '#fed6d8';
@@ -53,20 +53,20 @@ export default class OfferTable extends React.Component {
         const hasOffers = this.props.offers.length !== 0;
 
         const depthNumDecimals = hasOffers
-            ? Math.max(0, Format.niceNumDecimals(this.props.offers[this.props.offers.length - 1].depth))
+            ? Math.max(0, Format.niceNumDecimals(this.props.offers[this.props.offers.length - 1].sum))
             : 7;
 
         const priceNumDecimals = 7;
         const rowItems = [
             {
-                value: Number(offer.depth).toLocaleString('en-US', {
+                value: Number(offer.sum).toLocaleString('en-US', {
                     minimumFractionDigits: depthNumDecimals,
                     maximumFractionDigits: depthNumDecimals,
                 }),
                 key: 'sum',
             },
-            { value: Printify.lightenZeros(offer.counter), key: 'counter' },
-            { value: Printify.lightenZeros(offer.base), key: 'base' },
+            { value: Printify.lightenZeros(isBuy ? offer.amount : offer.amountReverse), key: 'counter' },
+            { value: Printify.lightenZeros(isBuy ? offer.amountReverse : offer.amount), key: 'base' },
             { value: Printify.lightenZeros(offer.price, priceNumDecimals), key: 'price' },
         ];
 
@@ -86,7 +86,8 @@ export default class OfferTable extends React.Component {
             <div className="OfferTable__row_background" key={offer.key}>
                 <div
                     className="OfferTable_hoverBlock"
-                    onClick={() => this.props.d.orderbook.handlers.pickPrice(offer.price)} />
+                    onClick={() => this.props.d.orderbook.pickPrice(offer.price)}
+                />
 
                 <div className="OfferTable__row" style={this.getRowStyle(isBuy, offer)}>
                     {this.getRowItems(isBuy, offer)}

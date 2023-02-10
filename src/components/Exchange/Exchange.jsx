@@ -22,6 +22,7 @@ import ChartActionAlert from './ChartActionAlert/ChartActionAlert';
 import * as converterOHLC from './LightweightChart/ConverterOHLC';
 import DepthChart from './DepthChart/DepthChart';
 import processOrderbook from './DepthChart/processOrderbook';
+import { MIN_FOR_GROUPING } from '../../lib/constants/orderbookContants';
 
 const BAR = 'barChart';
 const CANDLE = 'candlestickChart';
@@ -81,9 +82,9 @@ export default class Exchange extends React.Component {
         document.removeEventListener('fullscreenchange', this._escExitFullscreen);
         document.removeEventListener('MSFullscreenChange', this._escExitFullscreen);
 
-        this.props.d.orderbook.handlers.stopOrderbook();
+        this.props.d.orderbook.stopOrderbook();
 
-        this.props.d.orderbook.handlers.stopLastTradesStream();
+        this.props.d.trades.stopStream();
 
         if (this.state.fullscreenMode) {
             this.toggleFullScreen();
@@ -179,7 +180,8 @@ export default class Exchange extends React.Component {
             try {
                 const baseBuying = Stellarify.parseAssetSlug(urlParts[2]);
                 const counterSelling = Stellarify.parseAssetSlug(urlParts[3]);
-                this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
+                this.props.d.orderbook.setOrderbook(baseBuying, counterSelling);
+                this.props.d.trades.setPair(baseBuying, counterSelling);
             } catch (e) {
                 console.error(e);
                 this.setState({ wrongUrl: true });
@@ -193,7 +195,8 @@ export default class Exchange extends React.Component {
                 'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN',
             );
 
-            this.props.d.orderbook.handlers.setOrderbook(baseBuying, counterSelling);
+            this.props.d.orderbook.setOrderbook(baseBuying, counterSelling);
+            this.props.d.trades.setPair(baseBuying, counterSelling);
             window.history.replaceState({}, null, `${Stellarify.pairToExchangeUrl(baseBuying, counterSelling)}`);
             return;
         }
@@ -282,7 +285,10 @@ export default class Exchange extends React.Component {
             return <NotFound pageName="exchange" />;
         }
 
-        if (!this.props.d.orderbook.data.ready) {
+        const { orderbook } = this.props.d;
+        const { data } = orderbook;
+
+        if (!data.ready) {
             return this.state.fullscreenMode ? (
                 <div className="fullscreen_Loading">
                     Loading orderbook data from Horizon
@@ -294,7 +300,6 @@ export default class Exchange extends React.Component {
         }
 
         const thinOrderbookWarning = this.checkOrderbookWarning();
-        const data = this.props.d.orderbook.data;
         const directoryAsset = directory.getAssetByAccountId(data.baseBuying.code, data.baseBuying.issuer);
 
         let offermakers;
@@ -309,8 +314,7 @@ export default class Exchange extends React.Component {
         }
 
         const { chartType, marketType, fullscreenMode, timeFrame, scaleMode, showAction, isLinear } = this.state;
-        const { baseBuying, counterSelling, asks: asksFromHorizon, bids: bidsFromHorizon } =
-            this.props.d.orderbook.data;
+        const { baseBuying, counterSelling, asks: asksFromHorizon, bids: bidsFromHorizon } = data;
         const chartSwitcherPanel = this.getChartSwitcherPanel();
         const pairName = `${baseBuying.code}/${counterSelling.code}`;
         const isOrderbookTab = marketType === 'orderbook';
@@ -407,6 +411,26 @@ export default class Exchange extends React.Component {
                                 <span className="custom-checkbox">
                                     {isLinear && <img src={images['icon-tick-green']} alt="✓" />}
                                 </span>
+                            </div>}
+                            {isOrderbookTab && <div
+                                className="ListHeader_zoom"
+                            >
+                                {Boolean(orderbook.zoomValue) && <span>{orderbook.zoomValue}</span>}
+                                <button
+                                    onClick={() => orderbook.decreaseZoom()}
+                                    disabled={!orderbook.zoomValue}
+                                >
+                                    <img src={images['icon-minus-small']} alt="-" />
+                                </button>
+                                <button
+                                    onClick={() => orderbook.increaseZoom()}
+                                    disabled={
+                                        orderbook.zoomedAsks.length < MIN_FOR_GROUPING ||
+                                        orderbook.zoomedBids.length < MIN_FOR_GROUPING
+                                    }
+                                >
+                                    <img src={images['icon-plus-small']} alt="+" />
+                                </button>
                             </div>}
                         </div>
                         {isOrderbookTab ? <OfferTables d={this.props.d} /> : null}

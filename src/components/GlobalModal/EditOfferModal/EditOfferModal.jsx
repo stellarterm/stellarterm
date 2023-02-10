@@ -33,7 +33,7 @@ export default class EditOfferModal extends React.Component {
 
     revertOffer() {
         const { baseBuying, counterSelling } = this.props.d.orderbook.data;
-        this.props.d.orderbook.handlers.setOrderbook(counterSelling, baseBuying);
+        this.props.d.orderbook.setOrderbook(counterSelling, baseBuying);
         this.setState({
             side: this.state.side === 'sell' ? 'buy' : 'sell',
             reverted: !this.state.reverted,
@@ -54,7 +54,8 @@ export default class EditOfferModal extends React.Component {
                     <img
                         src={images['icon-close']}
                         alt="X"
-                        onClick={() => submit.cancel()} />
+                        onClick={() => submit.cancel()}
+                    />
                 </div>
 
                 {withSwitch &&
@@ -68,7 +69,8 @@ export default class EditOfferModal extends React.Component {
                             </span>
                             <span
                                 className="EditOfferModal_switch-description-button"
-                                onClick={() => this.revertOffer()}>
+                                onClick={() => this.revertOffer()}
+                            >
                                 <img src={images['icon-swap-green']} alt="swap" />
                                 <span>Swap pair and view as {side === 'sell' ? 'buy' : 'sell'} offer</span>
                             </span>
