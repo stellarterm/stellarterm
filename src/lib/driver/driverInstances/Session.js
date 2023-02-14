@@ -678,6 +678,7 @@ export default function Send(driver) {
                 driver.payments.resetPayments();
                 driver.effects.resetEffects();
                 driver.send.resetSendForm();
+                driver.toastService.clearToasts();
                 init();
                 this.event.trigger(SESSION_EVENTS.LOGOUT_EVENT, this);
             }
