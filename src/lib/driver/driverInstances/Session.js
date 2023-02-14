@@ -677,6 +677,7 @@ export default function Send(driver) {
                 driver.claimableBalances.resetClaimableBalances();
                 driver.payments.resetPayments();
                 driver.effects.resetEffects();
+                driver.send.resetSendForm();
                 init();
                 this.event.trigger(SESSION_EVENTS.LOGOUT_EVENT, this);
             }
