@@ -18,7 +18,7 @@ export default class Trades {
     }
 
     setPair(base, counter) {
-        if (this.base && this.counter && this.base.equals(base) && this.counter.equals(counter)) {
+        if (this.ready && this.base && this.counter && this.base.equals(base) && this.counter.equals(counter)) {
             return;
         }
 
@@ -55,7 +55,7 @@ export default class Trades {
             .cursor('now')
             .stream({
                 onmessage: trade => {
-                    this.tradesHistory = [trade, ...this.tradesHistory];
+                    this.tradesHistory = [trade, ...this.tradesHistory].slice(0, 200);
                     this.event.trigger({ type: TRADES_EVENTS.STREAM_UPDATE, trades: this.tradesHistory });
                 },
             });

@@ -86,7 +86,7 @@ export default class MarketsHistory extends React.Component {
 
     getHistoryTable() {
         const { base, counter } = this.props.d.trades;
-        const trades = this.props.d.trades.tradesHistory.slice(0, 200);
+        const trades = this.props.d.trades.tradesHistory;
         const rowHeight = 30;
         const tableHeight = trades.length > 20 ? 600 : trades.length * rowHeight;
 
