@@ -19,7 +19,7 @@
     "@stellar/freighter-api": "1.1.2",
     "@stellarguard/stellar-uri": "^1.1.1",
     "@trezor/connect-plugin-stellar": "^9.0.0",
-    "@walletconnect/sign-client": "2.1.4",
+    "@walletconnect/sign-client": "2.4.6",
     "awesome-debounce-promise": "2.1.0",
     "babelify": "10.0.0",
     "bignumber.js": "9.1.1",
@@ -28,13 +28,14 @@
     "fast-average-color": "5.2.0",
     "gulp-babel": "^8.0.0",
     "gulp-imagemin": "^6.0.0",
-    "gulp-sass": "3.1.0",
+    "gulp-sass": "5.1.0",
     "gulp-useref": "3.1.4",
     "is-electron": "^2.2.0",
     "lightweight-charts": "1.0.2",
     "lodash": "4.17.13",
     "mini-svg-data-uri": "^1.1.3",
     "moment": "^2.29.1",
+    "node-sass": "^8.0.0",
     "prop-types": "15.6.0",
     "qrcode.react": "^0.9.3",
     "react": "16.9.0",
@@ -78,7 +79,7 @@
     "graceful-fs": "^4.2.9"
   },
   "engines": {
-    "node": "^12"
+    "node": ">=14"
   },
   "jest": {
     "transform": {

@@ -21,6 +21,11 @@ export default class Send extends React.Component {
 
     render() {
         const d = this.props.d;
+
+        if (!this.props.d.session.account) {
+            return null;
+        }
+
         const state = d.send.state;
         let sendActionBlock = <SendError d={d} />;
 
