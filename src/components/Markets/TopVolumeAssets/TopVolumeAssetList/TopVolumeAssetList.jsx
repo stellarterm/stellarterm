@@ -38,8 +38,8 @@ const TopVolumeAssetList = ({ d, markets, loading }) => {
                 </div>
             }
             {markets.map(({
-                open_price: openPrice,
                 close_price: closePrice,
+                change_price_percent: changePricePercent,
                 base_asset_code: baseCode,
                 base_asset_issuer: baseIssuer,
                 counter_asset_code: counterCode,
@@ -48,7 +48,7 @@ const TopVolumeAssetList = ({ d, markets, loading }) => {
                 base_volume: baseVolume,
                 base_native_volume: baseNativeVolume,
             }) => {
-                const changes = (((closePrice / openPrice) - 1) * 100).toFixed(2);
+                const changes = Number(changePricePercent).toFixed(2);
 
                 const priceUSD = new BigNumber(counterPrice).multipliedBy(priceUsdXlm).toNumber();
 
