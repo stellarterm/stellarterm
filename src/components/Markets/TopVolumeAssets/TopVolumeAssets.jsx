@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import * as StellarSdk from 'stellar-sdk';
 import Driver from '../../../lib/driver/Driver';
@@ -7,9 +7,31 @@ import { getWithCancel } from '../../../lib/api/request';
 import { TOP_MARKETS_API } from '../../../env-consts';
 import { getUrlWithParams } from '../../../lib/api/endpoints';
 import TopVolumeAssetList from './TopVolumeAssetList/TopVolumeAssetList';
+import SortIcon from './SortIcon/SortIcon';
 
 
 const PAGE_SIZE = 30;
+
+const SortFields = {
+    base: 'base',
+    counter: 'counter',
+    price: 'price',
+    volume: 'volume',
+    change: 'change',
+};
+
+const SortDirections = {
+    up: 'up',
+    down: 'down',
+};
+
+const SortFieldAliases = {
+    [SortFields.counter]: 'base_asset_code',
+    [SortFields.base]: 'counter_asset_code',
+    [SortFields.price]: 'counter_native_price',
+    [SortFields.volume]: 'base_native_volume',
+    [SortFields.change]: 'change_price_percent',
+};
 
 const getAssetString = asset => (asset.isNative() ? 'native' : `${asset.code}:${asset.issuer}`);
 
@@ -19,6 +41,8 @@ const TopVolumeAssets = ({ d, baseAsset, tableRef }) => {
     const [markets, setMarkets] = useState(null);
     const [count, setCount] = useState(0);
     const [loading, setLoading] = useState(true);
+    const [sort, setSort] = useState(SortFields.volume);
+    const [sortDirection, setSortDirection] = useState(SortDirections.down);
 
 
     const canceller = useRef(null);
@@ -57,7 +81,9 @@ const TopVolumeAssets = ({ d, baseAsset, tableRef }) => {
                 'markets/'}`;
 
 
-        requestFn(getUrlWithParams(endpoint, { page, page_size: PAGE_SIZE }))
+        const ordering = `${sortDirection === SortDirections.up ? '' : '-'}${SortFieldAliases[sort]}`;
+
+        requestFn(getUrlWithParams(endpoint, { page, page_size: PAGE_SIZE, ordering }))
             .then(res => {
                 setMarkets(res.results);
                 setCount(res.count);
@@ -68,7 +94,30 @@ const TopVolumeAssets = ({ d, baseAsset, tableRef }) => {
                 }
                 setLoading(false);
             });
-    }, [base, page]);
+    }, [base, page, sort, sortDirection]);
+
+
+    const changeSort = useCallback(sortField => {
+        setPage(1);
+        if (sortField === sort) {
+            setSortDirection(sortDirection === SortDirections.down ? SortDirections.up : SortDirections.down);
+            return;
+        }
+
+        setSort(sortField);
+        setSortDirection(SortDirections.up);
+    }, [sort, sortDirection]);
+
+    const getHeaderCell = useCallback((title, sortField) => (
+        <div className="TopVolume_cell" onClick={() => changeSort(sortField)}>
+            <span>{title}</span>
+            <SortIcon
+                sortAlias={sortField}
+                currentSort={sort}
+                direction={sortDirection}
+            />
+        </div>
+    ), [sort, sortDirection, changeSort]);
 
     if (!loading && !markets) {
         return (
@@ -83,21 +132,11 @@ const TopVolumeAssets = ({ d, baseAsset, tableRef }) => {
     return (
         <div className="TopVolume">
             <div className="TopVolume_header">
-                <div className="TopVolume_cell withoutSort">
-                    <span>Base asset</span>
-                </div>
-                <div className="TopVolume_cell withoutSort">
-                    <span>Counter asset</span>
-                </div>
-                <div className="TopVolume_cell withoutSort">
-                    <span>Price</span>
-                </div>
-                <div className="TopVolume_cell withoutSort">
-                    <span>Volume (24h)</span>
-                </div>
-                <div className="TopVolume_cell withoutSort right">
-                    <span>Change (24h)</span>
-                </div>
+                {getHeaderCell('Base asset', SortFields.base)}
+                {getHeaderCell('Counter asset', SortFields.counter)}
+                {getHeaderCell('Price', SortFields.price)}
+                {getHeaderCell('Volume (24h)', SortFields.volume)}
+                {getHeaderCell('Change (24h)', SortFields.change)}
             </div>
 
             <TopVolumeAssetList
