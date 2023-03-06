@@ -55,9 +55,9 @@ const Swap = ({ d }) => {
 
         const [, , sourcePath, destinationPath] = pathname.split('/');
 
-        if (!sourcePath) {
+        if (!sourcePath || !destinationPath) {
             // default state
-            history.replace('/swap/XLM-native/');
+            history.replace('/swap/XLM-native/USDC-www.centre.io');
             return;
         }
 

@@ -23,13 +23,12 @@ const HARDWARE_WALLET_DATA = {
         link: '/wallet-connect/',
         capitalizedName: 'WalletConnect',
         logo: 'walletconnect-logo',
-        isBeta: true,
         withLobstrTooltip: true,
     },
 };
 export default function LoginLink(props) {
     // eslint-disable-next-line react/prop-types
-    const { link, capitalizedName, logo, isBeta, withLobstrTooltip } = HARDWARE_WALLET_DATA[props.wallet];
+    const { link, capitalizedName, logo, withLobstrTooltip } = HARDWARE_WALLET_DATA[props.wallet];
     return (
         <Link to={link} className="LoginLink">
             <div className="LoginLink_wrap">
@@ -38,7 +37,6 @@ export default function LoginLink(props) {
                 </div>
                 <div className="LoginLink_description">
                     <span>{capitalizedName}</span>
-                    {isBeta && <span className="LoginLink_beta">{' '}(beta)</span>}
                 </div>
             </div>
             <img src={images['icon-arrow-right-black-small']} className="LoginLink_arrow" alt=">" />
