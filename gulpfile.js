@@ -7,7 +7,7 @@ const imagemin = require('gulp-imagemin');
 const svgToMiniDataURI = require('mini-svg-data-uri');
 
 const $ = {
-    sass: require('gulp-sass'),
+    sass: require('gulp-sass')(require('node-sass')),
     useref: require('gulp-useref'),
     uglify: require('gulp-uglify'),
     inlineSource: require('gulp-inline-source'),
@@ -170,6 +170,7 @@ const bundler = watchify(browserify({
     entries: [
         './src/components/App.jsx',
         './node_modules/lightweight-charts',
+        'node_modules/@walletconnect/jsonrpc-ws-connection/node_modules/@walletconnect/jsonrpc-utils/dist/esm/index.js',
     ],
     extensions: ['.jsx', '.js'],
     debug: true,

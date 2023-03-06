@@ -79,7 +79,6 @@ const WalletConnectBody = ({ history, d, modal }) => {
                                 WalletConnect
                                 </span>
                             </div>
-                            <div className="WalletConnect_beta">(beta)</div>
 
                             <div className="LoginLink_lobstr-tooltip">
                                 <img src={images['lobstr-logo']} alt="lobstr" />
