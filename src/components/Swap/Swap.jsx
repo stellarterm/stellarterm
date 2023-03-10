@@ -13,6 +13,7 @@ import Driver from '../../lib/driver/Driver';
 import { SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
 import { formatNumber } from '../../lib/helpers/Format';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
+import processBalances from '../Session/SessionContent/SessionAccount/AccountView/BalancesTable/processBalances';
 
 
 const SWAP_EQUAL_ASSETS_ERROR = 'Swap of equal assets is unavailable.';
@@ -47,7 +48,9 @@ const Swap = ({ d }) => {
     const location = useLocation();
 
     const updateBalances = () => {
-        setMyAssets(d.session.account.getSortedBalances());
+        processBalances(d).then(res => {
+            setMyAssets(res);
+        });
     };
 
     useEffect(() => {

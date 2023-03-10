@@ -10,6 +10,7 @@ import useOnKeyDown from '../../../../lib/hooks/useOnKeyDown';
 import { CACHED_ASSETS_ALIAS, getAssetString } from '../../../../lib/driver/driverInstances/Session';
 import { formatNumber } from '../../../../lib/helpers/Format';
 import Driver from '../../../../lib/driver/Driver';
+import Printify from '../../../../lib/helpers/Printify';
 
 
 const DEBOUNCE_TIME = 700;
@@ -195,6 +196,11 @@ const SwapAssetsList = ({ d, closeList, setAsset, myAssets, knownAssets }) => {
                                 />
                                 <div className="SwapAssetsList_asset-amount">
                                     {formatNumber(asset.balance)} {asset.code}
+                                    {Boolean(asset.balanceUSD) &&
+                                        <span className="SwapAssetsList_asset-usd">
+                                            ~ ${Printify.lightenZeros(asset.balanceUSD.toString(), 2)}
+                                        </span>
+                                    }
                                 </div>
                             </div>
                         ))}

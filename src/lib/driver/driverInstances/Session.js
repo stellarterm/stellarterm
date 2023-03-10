@@ -75,8 +75,10 @@ export default function Send(driver) {
         }
     };
 
-    const getAssetDataRequestParams = new URLSearchParams();
+
+    const assetStringsForRequest = [];
     const timeoutDelay = 500;
+    const batchSize = 100;
 
     this.getAssetsData = assetStrings => {
         const cachedAssets = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
@@ -90,24 +92,35 @@ export default function Send(driver) {
         }
 
         assetsToRequest.forEach(assetString => {
-            if (!getAssetDataRequestParams.getAll('asset').includes(assetString)) {
-                getAssetDataRequestParams.append('asset', assetString);
+            if (!assetStringsForRequest.includes(assetString)) {
+                assetStringsForRequest.push(assetString);
             }
         });
 
-        if (this.delayedRequest) {
-            this.delayedRequest.reset();
+        if (this.delayedRequest && assetStringsForRequest.length >= batchSize) {
+            this.delayedRequest.immediatelyResolve([...assetStringsForRequest]);
+            // clear array
+            assetStringsForRequest.length = 0;
+            this.delayedRequest = null;
             return this.currentRequest;
         }
 
-        this.delayedRequest = new DelayedPromise(timeoutDelay);
+        if (this.delayedRequest) {
+            this.delayedRequest.reset([...assetStringsForRequest]);
+            return this.currentRequest;
+        }
+
+        this.delayedRequest = new DelayedPromise(timeoutDelay, [...assetStringsForRequest]);
 
         this.currentRequest = this.delayedRequest.promise
-            .then(() => {
+            .then(params => {
                 this.delayedRequest = null;
-                const params = getAssetDataRequestParams.toString();
-                getAssetDataRequestParams.delete('asset');
-                return request.get(`${EnvConsts.ASSET_DATA_API}?${params}`);
+                assetStringsForRequest.length = 0;
+                const getAssetDataRequestParams = new URLSearchParams();
+                params.forEach(string => {
+                    getAssetDataRequestParams.append('asset', string);
+                });
+                return request.get(`${EnvConsts.ASSET_DATA_API}?${getAssetDataRequestParams.toString()}`);
             })
             .then(({ results }) => {
                 if (!results.length) {
@@ -698,12 +711,15 @@ export default function Send(driver) {
         getAverageColor: (imageUrl, code, domain) => {
             const fac = new FastAverageColor();
             const img = document.createElement('img');
-            img.src = imageUrl;
             img.crossOrigin = 'Anonymous';
+            img.src = imageUrl;
 
             return fac
                 .getColorAsync(img)
-                .then(col => col.hex)
+                .then(col => {
+                    fac.destroy();
+                    return col.hex;
+                })
                 .catch(() => {
                     console.warn(`Can not calculate background color for ${code} (${domain}). Reason: CORS Policy`);
                     return '';

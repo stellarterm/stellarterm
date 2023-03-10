@@ -1,5 +1,5 @@
 export default class DelayedPromise {
-    constructor(delay) {
+    constructor(delay, data) {
         this.delay = delay;
         this.timeout = null;
 
@@ -7,20 +7,28 @@ export default class DelayedPromise {
             this.resolve = resolve;
         });
 
-        this.reset();
+        this.reset(data);
     }
 
     get promise() {
         return this.promiseValue;
     }
 
-    reset() {
+    immediatelyResolve(data) {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+
+        this.resolve(data);
+    }
+
+    reset(data) {
         if (this.timeout) {
             clearTimeout(this.timeout);
         }
 
         this.timeout = setTimeout(() => {
-            this.resolve();
+            this.resolve(data);
         }, this.delay);
     }
 }
