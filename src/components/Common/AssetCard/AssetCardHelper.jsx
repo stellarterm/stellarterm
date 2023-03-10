@@ -23,11 +23,14 @@ export default class AssetCardHelper extends React.Component {
 
     componentDidMount() {
         this._mounted = true;
+
+        this.getRenderedAssetData();
     }
 
     componentDidUpdate(prevProps) {
         if (prevProps.code !== this.props.code || prevProps.issuer !== this.props.issuer) {
             this.setAssetUnchecked();
+            this.getRenderedAssetData();
         }
     }
 
@@ -36,7 +39,7 @@ export default class AssetCardHelper extends React.Component {
     }
 
     setAssetUnchecked() {
-        this.setState({ assetDataChecked: false });
+        this.setState({ assetDataChecked: false, asset: null });
     }
 
     getRenderedAssetData() {
@@ -53,13 +56,15 @@ export default class AssetCardHelper extends React.Component {
         if (isXLMNative) {
             asset = directory.nativeAsset;
             const anchor = directory.getAnchor(asset.domain);
-            return ({
+
+            this.setState({
                 asset,
                 logo: anchor.logo,
                 logoPadding: true,
                 domain: anchor.name,
                 color: anchor.color,
             });
+            return;
         } else if (haveDomain) {
             asset = directory.getAssetByDomain(this.props.code, this.props.domain);
         } else if (haveIssuer) {
@@ -83,30 +88,32 @@ export default class AssetCardHelper extends React.Component {
 
         if (!assetInfo && !this.state.assetDataChecked) {
             this.props.d.session.getAssetsData(getAssetString(asset)).then(() => {
-                this.forceUpdate();
+                this.getRenderedAssetData();
             }).catch(() => {
                 this.setState({ assetDataChecked: true });
             });
         }
 
         if (!assetInfo && !this.state.assetDataChecked) {
-            return ({
+            this.setState({
                 asset,
                 logo: 'load',
                 logoPadding: true,
                 domain: 'load',
                 color: '#A5A0A7',
             });
+            return;
         }
 
         if (!assetInfo && this.state.assetDataChecked) {
-            return ({
+            this.setState({
                 asset,
                 logo: 'unknown',
                 logoPadding: true,
                 domain: 'unknown',
                 color: '#A5A0A7',
             });
+            return;
         }
 
         // if the average color of the icon is white then for a better view we make the border color black
@@ -116,7 +123,7 @@ export default class AssetCardHelper extends React.Component {
 
         const anchor = directory.getAnchor(asset.domain);
 
-        return ({
+        this.setState({
             asset,
             logo: (assetInfo.image || (anchor.name !== 'unknown' && anchor.logo) || 'unknown'),
             logoPadding: true,

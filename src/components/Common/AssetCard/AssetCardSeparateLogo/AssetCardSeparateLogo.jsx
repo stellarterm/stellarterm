@@ -88,7 +88,12 @@ export default class AssetCardSeparateLogo extends AssetCardHelper {
 
     render() {
         const { noIssuer, longIssuer, inRow, onlyLogo, logoSize } = this.props;
-        const { asset, logo, domain, color, directoryLogo } = this.getRenderedAssetData();
+        const { asset, logo, domain, color, directoryLogo } = this.state;
+
+        if (!asset) {
+            return null;
+        }
+
         const { code, issuer } = asset;
         const logoBlock = this.getLogoBlock(logo, color, asset, directoryLogo);
 
