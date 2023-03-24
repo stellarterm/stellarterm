@@ -16,7 +16,7 @@
     "@babel/polyfill": "^7.12.1",
     "@ledgerhq/hw-app-str": "^5.49.0",
     "@ledgerhq/hw-transport-webusb": "^5.49.0",
-    "@stellar/freighter-api": "1.1.2",
+    "@stellar/freighter-api": "1.4.0",
     "@stellarguard/stellar-uri": "^1.1.1",
     "@trezor/connect-plugin-stellar": "^9.0.0",
     "@walletconnect/sign-client": "2.4.6",
