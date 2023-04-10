@@ -5,6 +5,8 @@ import { TOP_MARKETS_API } from '../../../../../../env-consts';
 
 const API_LIMIT = 200;
 
+const PRICE_CHANGES_LIMIT = 10;
+
 const processUnknownAssets = (assets, priceUsdXlm) => {
     const params = assets.map(asset => getAssetString(asset));
 
@@ -20,6 +22,12 @@ const processUnknownAssets = (assets, priceUsdXlm) => {
             const tradeLink = `/exchange/${asset.code}-${asset.issuer}/XLM-native`;
 
             if (!assetData) {
+                return Object.assign({}, asset, { tradeLink });
+            }
+
+            const priceChanges = Number(assetData.close_native_price) / Number(assetData.avg_native_price);
+
+            if (priceChanges >= PRICE_CHANGES_LIMIT) {
                 return Object.assign({}, asset, { tradeLink });
             }
 
