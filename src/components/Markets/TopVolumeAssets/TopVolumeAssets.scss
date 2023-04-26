@@ -24,10 +24,10 @@
             }
             img.up {
                 transition: 0.2s;
+                transform: rotate(180deg);
             }
             img.down {
                 transition: 0.2s;
-                transform: rotate(180deg);
             }
         }
     }
