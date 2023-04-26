@@ -9,7 +9,10 @@ import Driver from '../../../../lib/driver/Driver';
 
 export default class AssetCardInRow extends AssetCardHelper {
     render() {
-        const { asset, logo, domain, color, directoryLogo } = this.getRenderedAssetData();
+        const { asset, logo, domain, color, directoryLogo } = this.state;
+        if (!asset) {
+            return null;
+        }
         const borderStyle = {};
         const backgroundStyle = {};
 
@@ -42,7 +45,8 @@ export default class AssetCardInRow extends AssetCardHelper {
                         className="Row_logo"
                         onError={e => this.constructor.onImageLoadError(e, directoryLogo, div)}
                         src={logo === 'load' ? images['icon-circle-preloader-gif'] : logo}
-                        alt={asset.code} />)}
+                        alt={asset.code}
+                    />)}
                 {domain === 'load' ?
                     <div className="AssetCardInRow_main">
                         <div className="AssetCardInRow_code">{asset.code}</div>

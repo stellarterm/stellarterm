@@ -9,7 +9,10 @@ import AssetCardHelper from '../AssetCardHelper';
 
 export default class AssetCardMain extends AssetCardHelper {
     render() {
-        const { asset, logo, logoPadding, domain, color, directoryLogo } = this.getRenderedAssetData();
+        const { asset, logo, logoPadding, domain, color, directoryLogo } = this.state;
+        if (!asset) {
+            return null;
+        }
         const issuerAccountId =
             asset.issuer === null
                 ? 'native lumens'
@@ -50,8 +53,8 @@ export default class AssetCardMain extends AssetCardHelper {
                 onError={e => this.constructor.onImageLoadError(e, directoryLogo, div)}
                 className={`AssetCardMain__logo ${logoClassName}`}
                 src={logo}
-                alt={asset.code} />
-            );
+                alt={asset.code}
+            />);
 
         return (
             <div className={assetCardClass} style={borderStyle}>

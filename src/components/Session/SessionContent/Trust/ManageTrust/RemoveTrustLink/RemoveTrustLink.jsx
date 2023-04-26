@@ -71,7 +71,7 @@ export default class RemoveTrustLink extends React.Component {
 
 RemoveTrustLink.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    balance: PropTypes.objectOf(PropTypes.string).isRequired,
+    balance: PropTypes.objectOf(PropTypes.any).isRequired,
     code: PropTypes.string,
     issuer: PropTypes.string,
 };
