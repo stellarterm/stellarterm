@@ -261,8 +261,8 @@ export default class Send {
 
                 if (destination.requiredMemoType) {
                     this.memoContent = '';
-                    this.memoRequired = true;
-                    this.memoType = destination.requiredMemoType;
+                    this.memoRequired = !this.destInput.startsWith('M');
+                    this.memoType = this.destInput.startsWith('M') ? 'none' : destination.requiredMemoType;
                 }
             }
             this.loadTargetAccountDetails();
