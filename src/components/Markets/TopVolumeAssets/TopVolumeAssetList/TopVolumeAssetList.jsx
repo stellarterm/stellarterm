@@ -89,8 +89,8 @@ const TopVolumeAssetList = ({ d, markets, loading }) => {
                                     )}
                                 </span>
                                 <span className="TopVolume_cell-value-usd">
-                                    {priceUSD !== 0 && '$'}
-                                    {priceUSD !== 0 ?
+                                    {Boolean(priceUSD) && '$'}
+                                    {priceUSD ?
                                         Printify.lightenZeros((priceUSD).toString(),
                                             niceNumDecimals(priceUSD)) : '-'}
                                 </span>
@@ -106,7 +106,7 @@ const TopVolumeAssetList = ({ d, markets, loading }) => {
                                     )}
                                 </span>
                                 <span className="TopVolume_cell-value-usd">
-                                    {priceUSD !== 0 ?
+                                    {volumeUSD ?
                                         `$${(volumeUSD).toLocaleString('en-US', {
                                             minimumFractionDigits: 0,
                                             maximumFractionDigits: 0,
