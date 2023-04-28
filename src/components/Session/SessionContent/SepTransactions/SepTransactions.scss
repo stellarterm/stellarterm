@@ -21,17 +21,8 @@
 
     .sep-transaction-row {
         .Activity-table-cell {
-            .deposit_icon,
-            .withdraw_icon {
+            .type-icon{
                 margin-right: 8px;
-            }
-
-            .deposit_icon {
-                transform: rotate(180deg);
-            }
-
-            .withdraw_icon {
-                transform: rotate(-90deg);
             }
 
             span::first-letter {
