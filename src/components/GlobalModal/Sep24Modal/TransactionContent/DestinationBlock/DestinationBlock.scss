@@ -1,0 +1,24 @@
+.Destination_buttons {
+    display: flex;
+    padding: 5px 0;
+    background-color: #7ed08533;
+    border-radius: 2px;
+    width: fit-content;
+    margin-top: 6px;
+
+    .Destination_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 44px;
+        cursor: pointer;
+
+        &:not(:last-child) {
+            border-right: 1px solid #7ed08533;
+        }
+
+        .CopyButton {
+            margin-right: 0;
+        }
+    }
+}

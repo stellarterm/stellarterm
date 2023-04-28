@@ -7,23 +7,37 @@ import MemoBlock from '../../Sep24Modal/Common/MemoBlock';
 import EstimatedTime from '../../Sep24Modal/Common/EstimatedTime';
 import { formatNumber } from '../../../../lib/helpers/Format';
 import { hasIdInCache, mapStatus } from '../../../../lib/constants/sep24Constants';
+import DestinationBlock from './DestinationBlock/DestinationBlock';
 
 export default class TransactionContent extends React.Component {
     static getReadableDate(date) {
         return moment(new Date(date)).format('MMMM D YYYY, HH:mm');
     }
 
-    static getInfoBlock(title, text, withoutCapitalize) {
+    static getInfoBlock(title, text, config) {
+        const { withoutCapitalize, bold } = config || {};
+
+
         return text ? (
             <div className="content_block">
                 <div className="content_title">{title}</div>
                 <div className="content_text">
-                    <span className={`${withoutCapitalize ? '' : 'capitalized'}`}>
+                    <span className={`${withoutCapitalize ? '' : 'capitalized'} ${bold ? 'bold' : ''}`}>
                         {text}
                     </span>
                 </div>
             </div>
         ) : null;
+    }
+
+    static getAssetCode(specifiedAssetField, anchoredAsset) {
+        if (!specifiedAssetField) {
+            return anchoredAsset.code;
+        }
+
+        const [, assetCode] = specifiedAssetField.split(':');
+
+        return assetCode;
     }
 
     constructor(props) {
@@ -62,7 +76,7 @@ export default class TransactionContent extends React.Component {
 
         return (
             <React.Fragment>
-                {this.constructor.getInfoBlock('Anchor\'s withdrawal address', withdraw_anchor_account)}
+                <DestinationBlock destination={withdraw_anchor_account} label="Anchor's withdrawal address" />
 
                 {withdraw_memo ?
                     <MemoBlock memo={withdraw_memo} memoType={withdraw_memo_type} isDeposit={false} /> :
@@ -74,6 +88,7 @@ export default class TransactionContent extends React.Component {
 
     render() {
         const { transaction, isDeposit, asset } = this.props;
+
         const {
             status,
             status_eta,
@@ -84,8 +99,11 @@ export default class TransactionContent extends React.Component {
             from,
             to,
             amount_in,
+            amount_in_asset,
             amount_out,
+            amount_out_asset,
             amount_fee,
+            amount_fee_asset,
             id,
             external_transaction_id,
             stellar_transaction_id,
@@ -103,28 +121,39 @@ export default class TransactionContent extends React.Component {
                 {more_info_url && (
                     <div className="more_Info">
                         <a href={more_info_url} target="_blank" rel="nofollow noopener noreferrer">
+                            more info
                             <img title="More info" src={images['icon-info']} alt="i" />
                         </a>
                     </div>
                 )}
                 {this.constructor.getInfoBlock('Status', mapStatus(wasFunded ? 'await_anchor' : status, isDeposit))}
-                {to ? this.constructor.getInfoBlock('Destination', to) : null}
-                {amount_in ? this.constructor.getInfoBlock(`Amount you ${isDeposit ? 'deposit' : 'withdraw'}`, `${amount_in} ${asset.code}`) : null}
-                {amount_fee ? this.constructor.getInfoBlock('Fees', `${formatNumber(amount_fee)} ${asset.code}`) : null}
-                {amount_out ? this.constructor.getInfoBlock('Amount you receive', `${amount_out} ${asset.code}`) : null}
+                {to ? <DestinationBlock label="Destination" destination={to} /> : null}
+                {amount_in ? this.constructor.getInfoBlock(
+                    `Amount you ${isDeposit ? 'deposit' : 'withdraw'}`,
+                    `${formatNumber(amount_in)} ${this.constructor.getAssetCode(amount_in_asset, asset)}`,
+                    { bold: true }) :
+                    null
+                }
+                {amount_fee ? this.constructor.getInfoBlock('Fees', `${formatNumber(amount_fee)} ${this.constructor.getAssetCode(amount_fee_asset, asset)}`) : null}
+                {amount_out ? this.constructor.getInfoBlock(
+                    'Amount you receive',
+                    `${formatNumber(amount_out)} ${this.constructor.getAssetCode(amount_out_asset, asset)}`,
+                    { bold: true }) :
+                    null
+                }
 
                 {showDetails ? (
-                    <React.Fragment>
+                    <div className="otherDetails">
                         {isDeposit ? this.renderDepositInfo() : this.renderWithdrawInfo()}
-                        {id ? this.constructor.getInfoBlock('Transaction ID', id, true) : null}
-                        {stellar_transaction_id ? this.constructor.getInfoBlock('Stellar transaction ID', stellar_transaction_id, true) : null}
-                        {external_transaction_id ? this.constructor.getInfoBlock('External transaction ID', external_transaction_id, true) : null}
+                        {id ? this.constructor.getInfoBlock('Transaction ID', id, { withoutCapitalize: true }) : null}
+                        {stellar_transaction_id ? this.constructor.getInfoBlock('Stellar transaction ID', stellar_transaction_id, { withoutCapitalize: true }) : null}
+                        {external_transaction_id ? this.constructor.getInfoBlock('External transaction ID', external_transaction_id, { withoutCapitalize: true }) : null}
                         {this.constructor.getInfoBlock('Details', message)}
-                        {from ? this.constructor.getInfoBlock('Source', from) : null}
+                        {from ? <DestinationBlock label="Source" destination={from} /> : null}
                         {started_at ? this.constructor.getInfoBlock('Started at', startDate) : null}
                         {completed_at ? this.constructor.getInfoBlock('Completed at', completeDate) : null}
                         {status_eta ? <EstimatedTime time={status_eta} /> : null}
-                    </React.Fragment>
+                    </div>
                 ) : (
                     <div className="ShowMore" onClick={() => this.setState({ showDetails: true })}>
                         Show other details

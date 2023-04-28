@@ -17,8 +17,9 @@ import { getUrlWithParams } from '../../../../lib/api/endpoints';
 import Stellarify from '../../../../lib/helpers/Stellarify';
 import AssetRow from '../../../Common/AssetRow/AssetRow';
 import AppLoading from '../../../AppLoading/AppLoading';
-import { mapShortStatus } from '../../../../lib/constants/sep24Constants';
+import { mapShortStatus, mapStatusIcon } from '../../../../lib/constants/sep24Constants';
 import { formatNumber } from '../../../../lib/helpers/Format';
+import TransactionContent from '../../../GlobalModal/Sep24Modal/TransactionContent/TransactionContent';
 
 const TRANSACTIONS_LIMIT = 10;
 const ROW_HEIGHT = 41;
@@ -210,16 +211,20 @@ export default class SepTransactions extends React.Component {
                     status,
                     started_at,
                     amount_in,
+                    amount_in_asset,
                     amount_out,
+                    amount_out_asset,
                     amount_fee,
+                    amount_fee_asset,
                 } = transaction;
 
-                const kindIconClassname = kind === 'deposit' ? 'deposit_icon' : 'withdraw_icon';
                 const transactionKindIcon = kind === 'deposit' ? (
-                    <span className={kindIconClassname}><img src={images['icon-trade-up']} alt="up" /></span>
+                    <img src={images['icon-deposit']} alt="up" className="type-icon" />
                 ) : (
-                    <span className={kindIconClassname}><img src={images['icon-trade-down']} alt="down" /></span>
+                    <img src={images['icon-withdraw']} alt="down" className="type-icon" />
                 );
+
+                const statusIconName = mapStatusIcon(status);
 
                 return (
                     <div
@@ -228,29 +233,30 @@ export default class SepTransactions extends React.Component {
                         onClick={() => this.onClickTransaction(sepAsset, transaction)}
                     >
 
-                        <div className="Activity-table-cell flex5">
-                            <span>{moment(new Date(started_at)).format('MMMM D YYYY, HH:mm')}</span>
+                        <div className="Activity-table-cell flex4">
+                            <span>{moment(new Date(started_at)).format('MM/DD/YYYY HH:mm')}</span>
                         </div>
 
-                        <div className="Activity-table-cell flex5">
+                        <div className="Activity-table-cell flex4">
                             {transactionKindIcon}
                             <span>{kind}</span>
                         </div>
 
                         <div className="Activity-table-cell flex5">
+                            <span>{amount_in ? `${formatNumber(amount_in)} ${TransactionContent.getAssetCode(amount_in_asset, sepAsset)}` : '-'}</span>
+                        </div>
+
+                        <div className="Activity-table-cell flex3">
+                            <span>{amount_fee ? `${formatNumber(amount_fee)} ${TransactionContent.getAssetCode(amount_fee_asset, sepAsset)}` : '-'}</span>
+                        </div>
+
+                        <div className="Activity-table-cell flex5">
+                            <span>{amount_out ? `${formatNumber(amount_out)} ${TransactionContent.getAssetCode(amount_out_asset, sepAsset)}` : '-'}</span>
+                        </div>
+
+                        <div className="Activity-table-cell flex5">
+                            {statusIconName ? <img src={images[statusIconName]} alt={statusIconName} className="type-icon" /> : null}
                             <span>{mapShortStatus(status)}</span>
-                        </div>
-
-                        <div className="Activity-table-cell flex3 flex-end">
-                            <span>{amount_fee ? `${formatNumber(amount_fee)} ${sepAsset.code}` : '-'}</span>
-                        </div>
-
-                        <div className="Activity-table-cell flex3 flex-end">
-                            <span>{amount_in ? `${amount_in} ${sepAsset.code}` : '-'}</span>
-                        </div>
-
-                        <div className="Activity-table-cell flex3 flex-end">
-                            <span>{amount_out ? `${amount_out} ${sepAsset.code}` : '-'}</span>
                         </div>
                     </div>
                 );
@@ -407,12 +413,12 @@ export default class SepTransactions extends React.Component {
                             <React.Fragment>
                                 {transactionsCount > 0 ? (
                                     <div className="Activity-table-row head">
-                                        <div className="Activity-table-cell flex5">Date/Time</div>
-                                        <div className="Activity-table-cell flex5">Type</div>
+                                        <div className="Activity-table-cell flex4">Date/Time</div>
+                                        <div className="Activity-table-cell flex4">Type</div>
+                                        <div className="Activity-table-cell flex5">Amount you send</div>
+                                        <div className="Activity-table-cell flex3">Fees</div>
+                                        <div className="Activity-table-cell flex5">Amount you receive</div>
                                         <div className="Activity-table-cell flex5">Status</div>
-                                        <div className="Activity-table-cell flex3 flex-end">Fee</div>
-                                        <div className="Activity-table-cell flex3 flex-end">Amount in</div>
-                                        <div className="Activity-table-cell flex3 flex-end">Amount out</div>
                                     </div>
                                 ) : null}
 
