@@ -45,7 +45,9 @@ const FeeBlock = ({ feeFixed, feePercent, assetCode, amountForFee }) => {
             </div>
             <div className="content_block">
                 <div className="content_title">Amount you receive</div>
-                <div className="content_text">{Printify.lightenZeros((Number(amountForFee) - feeValue).toFixed(7), undefined, ` ${assetCode}`)}</div>
+                <div className="content_text ">
+                    <span className="bold">{Printify.lightenZeros((Number(amountForFee) - feeValue).toFixed(7), undefined, ` ${assetCode}`)}</span>
+                </div>
             </div>
         </React.Fragment>
     );
