@@ -9,6 +9,7 @@ import Driver from '../../../../lib/driver/Driver';
 import Sep6ModalFooter from '../Common/Sep6ModalFooter/Sep6ModalFooter';
 import MemoBlock from '../Common/MemoBlock';
 import MinMaxAmount from '../Common/MinMaxAmount';
+import DestinationBlock from '../../Sep24Modal/TransactionContent/DestinationBlock/DestinationBlock';
 
 export default class Sep6ModalConfirm extends React.Component {
     constructor(props) {
@@ -16,23 +17,23 @@ export default class Sep6ModalConfirm extends React.Component {
 
         this.state = {
             res: this.props.confirmData,
+            showDetails: false,
         };
     }
 
     renderWithdrawInfo() {
-        const { res } = this.state;
+        const { res, showDetails } = this.state;
         const { asset, isDeposit } = this.props;
 
         return (
-            <div className="content_main">
-                <div className="content_block">
-                    <div className="content_title">Destination {asset.code} address</div>
-                    <div className="content_text">{res.dest}</div>
-                </div>
+            <div className="content_main transaction_Info">
+                <DestinationBlock destination={res.dest} label={`Destination ${asset.code} address`} />
 
                 <div className="content_block">
                     <div className="content_title">Amount you {isDeposit ? 'deposit' : 'withdraw'}</div>
-                    <div className="content_text">{res.amount} {asset.code}</div>
+                    <div className="content_text">
+                        <span className="bold">{res.amount} {asset.code}</span>
+                    </div>
                 </div>
 
                 <FeeBlock
@@ -41,17 +42,21 @@ export default class Sep6ModalConfirm extends React.Component {
                     assetCode={asset.code}
                     amountForFee={parseFloat(res.amount)}
                 />
+                {showDetails ? (
+                    <React.Fragment>
+                        <DestinationBlock destination={res.account_id} label="Anchors address" />
 
-                <div className="content_block">
-                    <div className="content_title">Anchors address</div>
-                    <div className="content_text">{res.account_id}</div>
-                </div>
+                        <MemoBlock memo={res.memo || ''} memoType={res.memo_type || ''} />
 
-                <MemoBlock memo={res.memo || ''} memoType={res.memo_type || ''} />
+                        <EstimatedTime time={res.eta} isDeposit={isDeposit} />
 
-                <EstimatedTime time={res.eta} isDeposit={isDeposit} />
-
-                <ExtraInfoBlock extra={_.has(res, 'extra_info') && res.extra_info !== null ? res.extra_info : ''} />
+                        <ExtraInfoBlock extra={_.has(res, 'extra_info') && res.extra_info !== null ? res.extra_info : ''} />
+                    </React.Fragment>
+                ) : (
+                    <div className="ShowMore" onClick={() => this.setState({ showDetails: true })}>
+                        Show other details
+                    </div>
+                )}
             </div>
         );
     }
@@ -79,6 +84,10 @@ export default class Sep6ModalConfirm extends React.Component {
                 />
 
                 <ExtraInfoBlock extra={_.has(res, 'extra_info') && res.extra_info !== null ? res.extra_info : ''} />
+
+                <div className="ShowMore" onClick={() => this.setState({ showDetails: true })}>
+                    Show other details
+                </div>
             </div>
         );
     }
