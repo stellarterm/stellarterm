@@ -11,8 +11,8 @@ export const HORIZON_SERVER_EVENTS = {
 
 
 const DEFAULT_SERVERS = {
-    lobstr: { name: 'LOBSTR horizon', url: 'https://horizon.stellar.lobstr.co' },
     stellar: { name: 'Stellar horizon', url: 'https://horizon.stellar.org' },
+    lobstr: { name: 'LOBSTR horizon', url: 'https://horizon.stellar.lobstr.co' },
 };
 
 const CUSTOM_HORIZON_SERVERS_LIST_LS = 'customHorizonServersList';
@@ -28,7 +28,7 @@ export default class HorizonServer {
         this.event = new Event();
 
         this.customServers = JSON.parse(localStorage.getItem(CUSTOM_HORIZON_SERVERS_LIST_LS) || 'null') || [];
-        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || DEFAULT_SERVERS.lobstr.url;
+        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || DEFAULT_SERVERS.stellar.url;
 
         this.startServer();
     }
