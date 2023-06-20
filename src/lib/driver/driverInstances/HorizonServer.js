@@ -128,6 +128,7 @@ export default class HorizonServer {
         if (window.location.pathname.includes(TESTNET_URL)) {
             network.isDefault = false;
             network.isTestnet = true;
+            network.isCustom = false;
             network.horizonUrl = 'https://horizon-testnet.stellar.org';
             network.networkPassphrase = StellarSdk.Networks.TESTNET;
 
@@ -158,6 +159,7 @@ export default class HorizonServer {
         this.driver.Server.networkPassphrase = networkConfig.networkPassphrase;
         this.driver.Server.isTestnet = networkConfig.isTestnet;
         this.driver.Server.isDefault = networkConfig.isDefault;
+        this.driver.Server.isCustom = networkConfig.isCustom;
     }
 
     /**

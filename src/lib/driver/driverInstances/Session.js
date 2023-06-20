@@ -117,6 +117,15 @@ export default function Send(driver) {
                 this.delayedRequest = null;
                 assetStringsForRequest.length = 0;
                 const getAssetDataRequestParams = new URLSearchParams();
+                if (driver.Server.isCustom) {
+                    const cached = new Map(JSON.parse(localStorage.getItem(CACHED_ASSETS_ALIAS) || '[]'));
+                    params.forEach(asset => {
+                        const [code, issuer] = asset.split(':');
+                        cached.set(asset, { code, issuer });
+                    });
+                    localStorage.setItem(CACHED_ASSETS_ALIAS, JSON.stringify(Array.from(cached.entries())));
+                    return Promise.resolve({ results: [] });
+                }
                 params.forEach(string => {
                     getAssetDataRequestParams.append('asset', string);
                 });
@@ -124,7 +133,7 @@ export default function Send(driver) {
             })
             .then(({ results }) => {
                 if (!results.length) {
-                    return Promise.reject();
+                    return Promise.resolve([]);
                 }
                 const colorRequests = results.map(asset => this.handlers.loadAssetColor(asset));
                 return Promise.all(colorRequests);
