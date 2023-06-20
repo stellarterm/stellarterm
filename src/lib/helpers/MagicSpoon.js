@@ -73,7 +73,7 @@ const MagicSpoon = {
         sdkAccount.signWithFreighter = async tx => {
             console.log('Signing with Freighter extension');
             try {
-                const result = await signTransaction(tx.toEnvelope().toXDR('base64'));
+                const result = await signTransaction(tx.toEnvelope().toXDR('base64'), { network: this.Server.horizonUrl, networkPassphrase: this.Server.networkPassphrase });
                 return new StellarSdk.Transaction(result, this.Server.networkPassphrase);
             } catch (e) {
                 return Promise.reject(e);

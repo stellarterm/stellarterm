@@ -1291,10 +1291,10 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
 
-"@stellar/freighter-api@1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@stellar/freighter-api/-/freighter-api-1.4.0.tgz#f53ab58792733caa1fe33d60050ec24164e331f3"
-  integrity sha512-/ANu1/4mnReUvrSDveKj5XhrnafEssESF/lVdOR1v0ja02kFuhsdsw3anzdz0NvPaPbFgPmjU+v9t9R8KN6r+g==
+"@stellar/freighter-api@1.5.0":
+  version "1.5.0"
+  resolved "https://registry.yarnpkg.com/@stellar/freighter-api/-/freighter-api-1.5.0.tgz#1d49bc243d6aff194af19a3557dbe5ec0a12cd78"
+  integrity sha512-j9bAo3U7UJ0jaEGhKkCcmAiRJ67xUG1Ty3N8dVb65WVkEdXtxEfFtPuRcsr9brX9sHeN+s2caS6KQL8FYZqixg==
 
 "@stellarguard/stellar-uri@^1.1.1":
   version "1.1.3"

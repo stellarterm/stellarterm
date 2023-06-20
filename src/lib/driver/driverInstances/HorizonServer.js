@@ -107,12 +107,20 @@ export default class HorizonServer {
      * }
      */
     getInitialHorizonConfig() {
+        // const network = {
+        //     horizonUrl: this.activeServer,
+        //     networkPassphrase: StellarSdk.Networks.PUBLIC,
+        //     isDefault: true, // If it's default, then we don't show a notice bar at the top
+        //     isTestnet: false,
+        //     isCustom: false,
+        // };
+
         const network = {
-            horizonUrl: this.activeServer,
-            networkPassphrase: StellarSdk.Networks.PUBLIC,
-            isDefault: true, // If it's default, then we don't show a notice bar at the top
-            isTestnet: false,
-            isCustom: false,
+            horizonUrl: 'https://horizon-futurenet.stellar.org',
+            networkPassphrase: 'Test SDF Future Network ; October 2022',
+            isDefault: false, // If it's default, then we don't show a notice bar at the top
+            isTestnet: true,
+            isCustom: true,
         };
 
         const TESTNET_URL = '/testnet';
