@@ -2,6 +2,7 @@ import * as StellarSdk from 'stellar-sdk';
 import Event from '../../helpers/Event';
 import { get } from '../../api/request';
 import { SESSION_STATE } from '../../constants/sessionConstants';
+import { DEFAULT_HORIZON } from '../../../env-consts';
 
 
 export const HORIZON_SERVER_EVENTS = {
@@ -11,8 +12,8 @@ export const HORIZON_SERVER_EVENTS = {
 
 
 const DEFAULT_SERVERS = {
+    stellarTerm: { name: 'StellarTerm horizon', url: 'https://stellarterm.com/horizon' },
     stellar: { name: 'Stellar horizon', url: 'https://horizon.stellar.org' },
-    lobstr: { name: 'LOBSTR horizon', url: 'https://horizon.stellar.lobstr.co' },
 };
 
 const CUSTOM_HORIZON_SERVERS_LIST_LS = 'customHorizonServersList';
@@ -28,7 +29,7 @@ export default class HorizonServer {
         this.event = new Event();
 
         this.customServers = JSON.parse(localStorage.getItem(CUSTOM_HORIZON_SERVERS_LIST_LS) || 'null') || [];
-        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || DEFAULT_SERVERS.stellar.url;
+        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || DEFAULT_HORIZON;
 
         this.startServer();
     }
