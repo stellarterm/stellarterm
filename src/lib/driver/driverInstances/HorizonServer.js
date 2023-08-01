@@ -10,6 +10,11 @@ export const HORIZON_SERVER_EVENTS = {
     newHorizonAdded: 'new horizon added',
 };
 
+const DIRECT_HOSTNAME = 'direct.stellarterm.com';
+const DIRECT_HORIZON = 'https://direct.stellarterm.com/horizon';
+
+const defaultHorizonServer = window.location.hostname === DIRECT_HOSTNAME ? DIRECT_HORIZON : DEFAULT_HORIZON;
+
 
 const DEFAULT_SERVERS = {
     stellarTerm: { name: 'StellarTerm horizon', url: 'https://stellarterm.com/horizon' },
@@ -29,7 +34,7 @@ export default class HorizonServer {
         this.event = new Event();
 
         this.customServers = JSON.parse(localStorage.getItem(CUSTOM_HORIZON_SERVERS_LIST_LS) || 'null') || [];
-        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || DEFAULT_HORIZON;
+        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || defaultHorizonServer;
 
         this.startServer();
     }
