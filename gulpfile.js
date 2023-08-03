@@ -139,12 +139,21 @@ function getEnvironment() {
 }
 
 gulp.task('configEnv', cb => {
-    const ENV = getEnvironment();
-    const envData = config[ENV];
-    const envConfig = Object
-        .entries(envData)
-        .reduce((resultConfig, pair) => `${resultConfig}export const ${pair[0]} = ${JSON.stringify(pair[1])};\n`, '');
-    fs.writeFile('./src/env-consts.js', envConfig, cb);
+    try {
+        const walletConnectData = {
+            // eslint-disable-next-line global-require
+            WALLET_CONNECT_PROJECT_ID: process.env.WALLET_CONNECT_PROJECT_ID || require('./.env.json').WALLET_CONNECT_PROJECT_ID,
+        };
+        const ENV = getEnvironment();
+        const envData = Object.assign(config[ENV], walletConnectData);
+
+        const envConfig = Object
+            .entries(envData)
+            .reduce((resultConfig, pair) => `${resultConfig}export const ${pair[0]} = ${JSON.stringify(pair[1])};\n`, '');
+        fs.writeFile('./src/env-consts.js', envConfig, cb);
+    } catch (e) {
+        throw new Error('WALLET_CONNECT_PROJECT_ID is missing. Please set the WALLET_CONNECT_PROJECT_ID in the ".env.json" file or as an environment variable');
+    }
 });
 
 // Build time information
