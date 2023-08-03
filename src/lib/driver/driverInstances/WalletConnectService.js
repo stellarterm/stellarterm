@@ -4,8 +4,7 @@ import { getInternalError, getSdkError } from '@walletconnect/utils';
 import * as StellarSdk from 'stellar-sdk';
 import { AUTH_TYPE, TX_STATUS } from '../../constants/sessionConstants';
 import Sep7Handler from '../../../components/HomePage/Sep7Handler/Sep7Handler';
-
-const PROJECT_ID = '2b3adbd81527ef317a8e791759d34d20';
+import { WALLET_CONNECT_PROJECT_ID } from '../../../env-consts';
 
 const METADATA = {
     name: 'StellarTerm',
@@ -47,7 +46,7 @@ export default class WalletConnectService {
         }
         this.client = await WalletConnectClient.init({
             // logger: 'debug',
-            projectId: PROJECT_ID,
+            projectId: WALLET_CONNECT_PROJECT_ID,
             metadata: METADATA,
         });
 
@@ -82,7 +81,7 @@ export default class WalletConnectService {
         if (this.session) {
             this.client = await WalletConnectClient.init({
                 // logger: 'debug',
-                projectId: PROJECT_ID,
+                projectId: WALLET_CONNECT_PROJECT_ID,
                 metadata: METADATA,
             });
         }
