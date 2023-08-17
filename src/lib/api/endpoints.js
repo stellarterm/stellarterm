@@ -1,65 +1,41 @@
-import _ from 'lodash';
 import * as EnvConsts from '../../env-consts';
-import { MARKER_KEYS, MULTISIG_PROVIDERS } from '../constants/multisigConstants';
 
-export const endpoints = {
-    stellartermFederationAuth: {
-        url: 'api/authentication/',
-        baseUrl: EnvConsts.FEDERATION_API_URL,
-    },
-    getFederation: {
-        url: 'federation/',
-        baseUrl: EnvConsts.FEDERATION_API_URL,
-    },
-    setFederation: {
-        url: 'federation/manage/',
-        baseUrl: EnvConsts.FEDERATION_API_URL,
-    },
-    isVaultSigner: {
-        url: 'check-user/',
-        baseUrl: EnvConsts.LOBSTR_VAULT_URL,
-    },
-    sendTransactionToVault: {
-        url: 'transactions/',
-        baseUrl: EnvConsts.LOBSTR_VAULT_URL,
-    },
-    isGuardSigner: {
-        url: `accounts/${MARKER_KEYS[MULTISIG_PROVIDERS.STELLAR_GUARD]}/multisig`,
-        baseUrl: EnvConsts.STELLAR_GUARD_URL,
-    },
-    sendTransactionToGuard: {
-        url: 'transactions/',
-        baseUrl: EnvConsts.STELLAR_GUARD_URL,
-    },
-    activateGuardSigner: {
-        url: 'accounts/',
-        baseUrl: EnvConsts.STELLAR_GUARD_URL,
-    },
-    moonpayStatus: {
-        url: 'moonpay/status',
-        baseUrl: EnvConsts.MOONPAY_API_URL,
-    },
-    moonpayCurrencies: {
-        url: 'v2/moonpay/currencies',
-        baseUrl: EnvConsts.MOONPAY_API_URL,
-    },
-    moonpayCrypto: {
-        url: 'v2/moonpay/crypto-currencies/',
-        baseUrl: EnvConsts.MOONPAY_API_URL,
-    },
-    moonpayCryptoPrice: {
-        url: 'moonpay/price/stellarterm/',
-        baseUrl: EnvConsts.MOONPAY_API_URL,
-    },
-    moonpayQuote: {
-        url: 'moonpay/quote/stellarterm/',
-        baseUrl: EnvConsts.MOONPAY_API_URL,
-    },
-    moonpayTransaction: {
-        url: 'v2/moonpay/transaction/stellarterm/',
-        baseUrl: EnvConsts.MOONPAY_API_URL,
-    },
+
+export const ENDPOINTS = {
+    FEDERATION_AUTH: 'FEDERATION_AUTH',
+    GET_FEDERATION: 'GET_FEDERATION',
+    SET_FEDERATION: 'SET_FEDERATION',
+    CHECK_IS_VAULT: 'CHECK_IS_VAULT',
+    SEND_TRANSACTION_TO_VAULT: 'SEND_TRANSACTION_TO_VAULT',
+    CHECK_IS_GUARD: 'CHECK_IS_GUARD',
+    SEND_TRANSACTION_TO_GUARD: 'SEND_TRANSACTION_TO_GUARD',
+    ACTIVATE_GUARD_SIGNER: 'ACTIVATE_GUARD_SIGNER',
+    MOONPAY_STATUS: 'MOONPAY_STATUS',
+    MOONPAY_CURRENCIES: 'MOONPAY_CURRENCIES',
+    MOONPAY_CRYPTO: 'MOONPAY_CRYPTO',
+    MOONPAY_QUOTE: 'MOONPAY_QUOTE',
+    MOONPAY_TRANSACTION: 'MOONPAY_TRANSACTION',
 };
+
+const endpointsMap = new Map([
+    [ENDPOINTS.FEDERATION_AUTH, { url: 'api/authentication/', baseUrl: EnvConsts.FEDERATION_API_URL }],
+    [ENDPOINTS.GET_FEDERATION, { url: 'federation/', baseUrl: EnvConsts.FEDERATION_API_URL }],
+    [ENDPOINTS.SET_FEDERATION, { url: 'federation/manage/', baseUrl: EnvConsts.FEDERATION_API_URL }],
+    [ENDPOINTS.CHECK_IS_VAULT, { url: 'check-user/', baseUrl: EnvConsts.LOBSTR_VAULT_URL }],
+    [ENDPOINTS.SEND_TRANSACTION_TO_VAULT, { url: 'transactions/', baseUrl: EnvConsts.LOBSTR_VAULT_URL }],
+    [ENDPOINTS.CHECK_IS_GUARD, {
+        url: 'accounts/GCVHEKSRASJBD6O2Z532LWH4N2ZLCBVDLLTLKSYCSMBLOYTNMEEGUARD/multisig',
+        baseUrl: EnvConsts.STELLAR_GUARD_URL,
+    }],
+    [ENDPOINTS.SEND_TRANSACTION_TO_GUARD, { url: 'transactions/', baseUrl: EnvConsts.STELLAR_GUARD_URL }],
+    [ENDPOINTS.ACTIVATE_GUARD_SIGNER, { url: 'accounts/', baseUrl: EnvConsts.STELLAR_GUARD_URL }],
+    [ENDPOINTS.MOONPAY_STATUS, { url: 'moonpay/status', baseUrl: EnvConsts.MOONPAY_API_URL }],
+    [ENDPOINTS.MOONPAY_CURRENCIES, { url: 'v2/moonpay/currencies', baseUrl: EnvConsts.MOONPAY_API_URL }],
+    [ENDPOINTS.MOONPAY_CRYPTO, { url: 'v2/moonpay/crypto-currencies/', baseUrl: EnvConsts.MOONPAY_API_URL }],
+    [ENDPOINTS.MOONPAY_QUOTE, { url: 'moonpay/quote/stellarterm/', baseUrl: EnvConsts.MOONPAY_API_URL }],
+    [ENDPOINTS.MOONPAY_TRANSACTION, { url: 'v2/moonpay/transaction/stellarterm/', baseUrl: EnvConsts.MOONPAY_API_URL }],
+]);
+
 
 function getUrlParams(params) {
     return params !== undefined
@@ -70,13 +46,13 @@ function getUrlParams(params) {
 }
 
 export function getEndpoint(endpointName, params) {
-    if (!_.has(endpoints, endpointName)) {
+    if (!endpointsMap.has(endpointName)) {
         return null;
     }
 
-    const endpoint = _.has(endpoints[endpointName], 'baseUrl')
-        ? `${endpoints[endpointName].baseUrl}${endpoints[endpointName].url}`
-        : `${EnvConsts.HOME_URL}${endpoints[endpointName].url}`;
+    const { url, baseUrl } = endpointsMap.get(endpointName);
+
+    const endpoint = `${baseUrl || EnvConsts.HOME_URL}${url}`;
 
     // If GET params is provided
     const urlParams = getUrlParams(params);

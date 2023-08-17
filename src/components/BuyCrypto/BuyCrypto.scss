@@ -119,6 +119,7 @@
                 }
 
                 .s-button {
+                    @include flex-center;
                     height: 52px;
                     width: 160px;
                 }
