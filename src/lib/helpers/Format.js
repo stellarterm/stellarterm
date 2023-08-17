@@ -94,24 +94,27 @@ exports.niceDate = function niceDate(input) {
 
 /**
  * Return true, if string is valid float number with precision
- * @param {number} amount - Amount to validate
+ * @param {string} amount - Amount to validate
  * @param {number} precision - precision to validate
  * @returns {boolean} True, if valid number (ex) 1, 1.00, 20.55400
  */
 exports.isValidToPrecision = function isValidToPrecision(amount, precision) {
-    const regExpStr = Number(precision) === 0 ? '^\\d+$' : `^\\d+([.,]\\d{1,${precision}})?$`;
-    const regExp = new RegExp(regExpStr);
-    return regExp.test(amount.toString());
+    const [, fractionalPart] = amount.split('.');
+
+    if (!fractionalPart) {
+        return true;
+    }
+
+    return fractionalPart.length < precision;
 };
 
 /**
  * Return true, if string should be set to input without recalculate
  * @param {string} amount string to validate
- * @param {number} precision of crypto code after .
  * @returns {boolean} True, if ex ("", "1.", "."), if precision 0, ex (1, 20, 50)
  */
-exports.isNoRecalculateNeeded = function isNoRecalculateNeeded(amount, precision) {
-    return precision && amount.length !== 1 && amount.slice(-1) === '.' && amount.split('.').length === 2;
+exports.isNoRecalculateNeeded = function isNoRecalculateNeeded(amount) {
+    return amount.length !== 1 && amount.slice(-1) === '.' && amount.split('.').length === 2;
 };
 
 /**

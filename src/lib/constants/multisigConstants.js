@@ -1,3 +1,5 @@
+import { ENDPOINTS } from '../api/endpoints';
+
 export const THRESHOLD_MULTIPLIER = 10; // Multisig signer weight
 export const SIGNER_KEY_TYPE = 'ed25519_public_key';
 export const STELLAR_GUARD_BACKUP_KEY_WEIGHT = 20;
@@ -19,12 +21,12 @@ export const MARKER_MAP = Object.keys(MARKER_KEYS).reduce(
 
 export const PROVIDER_DATA = {
     [MULTISIG_PROVIDERS.LOBSTR_VAULT]: {
-        endpointName: 'sendTransactionToVault',
+        endpointName: ENDPOINTS.SEND_TRANSACTION_TO_VAULT,
         title: 'LOBSTR Vault',
         logo: 'sign-vault',
     },
     [MULTISIG_PROVIDERS.STELLAR_GUARD]: {
-        endpointName: 'sendTransactionToGuard',
+        endpointName: ENDPOINTS.SEND_TRANSACTION_TO_GUARD,
         title: 'StellarGuard',
         logo: 'sign-stellarguard',
     },
