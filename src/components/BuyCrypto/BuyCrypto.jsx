@@ -372,8 +372,8 @@ const BuyCrypto = ({ d }) => {
                             <form onSubmit={e => onSubmit(e)}>
                                 <label htmlFor="currencyInput">
                                     <span>You pay</span>
-                                    <span className={errorText ? 'label_error' : 'label_info'}>
-                                        {errorText || limitsLabel}
+                                    <span className={(errorText && Boolean(currencyAmount)) ? 'label_error' : 'label_info'}>
+                                        {(Boolean(currencyAmount) && errorText) || limitsLabel}
                                     </span>
                                 </label>
                                 <div className="Input_block_wrapper">
@@ -397,7 +397,12 @@ const BuyCrypto = ({ d }) => {
                                     />
                                 </div>
                                 <label htmlFor="currencyInput" className="label_withMargin">
-                                    You get
+                                    <span>You get</span>
+                                    {Boolean(cryptoAmount) && !currencyAmount && errorText &&
+                                        <span className="label_error">
+                                            {errorText}
+                                        </span>
+                                    }
                                 </label>
                                 <div className="Input_block_wrapper">
                                     <input
