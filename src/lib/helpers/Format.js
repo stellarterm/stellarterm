@@ -105,7 +105,7 @@ exports.isValidToPrecision = function isValidToPrecision(amount, precision) {
         return true;
     }
 
-    return fractionalPart.length < precision;
+    return fractionalPart.length <= precision;
 };
 
 /**

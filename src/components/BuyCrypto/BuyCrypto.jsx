@@ -238,7 +238,7 @@ const BuyCrypto = ({ d }) => {
 
     // update the quote when the amount change
     useEffect(() => {
-        if (isNoRecalculateNeeded(debouncedCurrencyAmount) || !debouncedCurrencyAmount) {
+        if (isNoRecalculateNeeded(debouncedCurrencyAmount) || !Number(debouncedCurrencyAmount)) {
             return;
         }
         getQuote();
@@ -246,7 +246,7 @@ const BuyCrypto = ({ d }) => {
 
     // update the quote when the amount change
     useEffect(() => {
-        if (isNoRecalculateNeeded(debouncedCryptoAmount) || !debouncedCryptoAmount) {
+        if (isNoRecalculateNeeded(debouncedCryptoAmount) || !Number(debouncedCryptoAmount)) {
             return;
         }
 
@@ -272,6 +272,7 @@ const BuyCrypto = ({ d }) => {
     const onAmountChange = ({ target }, isCurrency) => {
         const amount = target.value;
         const stringAmount = amount.toString().replace(/,/g, '.');
+
         const isValidAmount = isValidToPrecision(
             stringAmount,
             isCurrency ? selectedCurrency.precision : selectedCrypto.precision,
