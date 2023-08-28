@@ -101,11 +101,7 @@ exports.niceDate = function niceDate(input) {
 exports.isValidToPrecision = function isValidToPrecision(amount, precision) {
     const [, fractionalPart] = amount.split('.');
 
-    if (!fractionalPart) {
-        return true;
-    }
-
-    return fractionalPart.length <= precision;
+    return !fractionalPart || fractionalPart.length <= precision;
 };
 
 /**
