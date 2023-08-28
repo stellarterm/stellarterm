@@ -1,5 +1,5 @@
 import * as StellarSdk from 'stellar-sdk';
-import { getEndpoint } from '../../api/endpoints';
+import { ENDPOINTS, getEndpoint } from '../../api/endpoints';
 import * as request from '../../api/request';
 import { TX_STATUS } from '../../constants/sessionConstants';
 import { buildOpSetOptions } from '../../helpers/operationBuilders';
@@ -31,14 +31,14 @@ export default class Multisig {
         const headers = { 'Content-Type': 'application/json' };
         const body = JSON.stringify({ address: key });
         return request
-            .post(getEndpoint('isVaultSigner'), { headers, body })
+            .post(getEndpoint(ENDPOINTS.CHECK_IS_VAULT), { headers, body })
             .then(res => res[0].exists)
             .catch(() => false);
     }
 
     static isStellarGuardKey(key) {
         return request
-            .get(getEndpoint('isGuardSigner', { stellarGuardPublicKey: key }))
+            .get(getEndpoint(ENDPOINTS.CHECK_IS_GUARD, { stellarGuardPublicKey: key }))
             .then(({ configuration, code }) => Boolean(configuration && !code))
             .catch(() => false);
     }
@@ -319,7 +319,7 @@ export default class Multisig {
     }
 
     checkGuardSignerActivation() {
-        const guardUrl = getEndpoint('activateGuardSigner') + this.account.account_id.toString();
+        const guardUrl = getEndpoint(ENDPOINTS.ACTIVATE_GUARD_SIGNER) + this.account.account_id.toString();
 
         request
             .get(guardUrl)
@@ -329,7 +329,7 @@ export default class Multisig {
     }
 
     activateGuardSigner() {
-        const guardUrl = getEndpoint('activateGuardSigner') + this.account.account_id.toString();
+        const guardUrl = getEndpoint(ENDPOINTS.ACTIVATE_GUARD_SIGNER) + this.account.account_id.toString();
         request
             .post(guardUrl)
             .then(() => {})
@@ -466,7 +466,7 @@ export default class Multisig {
     }
 
     static getChallengeTxFromVault(hash) {
-        const endpoint = `${getEndpoint('sendTransactionToVault')}${hash}`;
+        const endpoint = `${getEndpoint(ENDPOINTS.SEND_TRANSACTION_TO_VAULT)}${hash}`;
 
         return request.get(endpoint);
     }

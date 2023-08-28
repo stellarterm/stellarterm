@@ -10,7 +10,7 @@ import directory from 'stellarterm-directory';
 import MagicSpoon from '../../helpers/MagicSpoon';
 import Event from '../../helpers/Event';
 import * as request from '../../api/request';
-import { getEndpoint } from '../../api/endpoints';
+import { ENDPOINTS, getEndpoint } from '../../api/endpoints';
 import * as EnvConsts from '../../../env-consts';
 import Stellarify from '../../helpers/Stellarify';
 import {
@@ -507,7 +507,7 @@ export default function Send(driver) {
             if (this.jwtToken === null) {
                 const userPublicKey = this.account.accountId();
                 const params = { account: userPublicKey };
-                const endpoint = getEndpoint('stellartermFederationAuth', params);
+                const endpoint = getEndpoint(ENDPOINTS.FEDERATION_AUTH, params);
 
                 const challengeTx = await this.handlers.getAuthChallengeTx(endpoint);
                 const { signedTx } = await this.handlers.sign(challengeTx);
@@ -518,7 +518,7 @@ export default function Send(driver) {
             const body = JSON.stringify({ name: fedName });
             const reqType = this.userFederation === '' ? request.post : request.patch;
 
-            const response = await reqType(getEndpoint('setFederation'), { headers, body });
+            const response = await reqType(getEndpoint(ENDPOINTS.SET_FEDERATION), { headers, body });
             this.userFederation = response.name.split('*')[0];
             this.event.trigger(SESSION_EVENTS.FEDERATION_UPDATE_EVENT, this);
             await this.handlers.setHomeDomain();
@@ -551,7 +551,7 @@ export default function Send(driver) {
             const headers = { 'Content-Type': 'application/json' };
             const params = { q: userPublicKey, type: 'id' };
             return request
-                .get(`${getEndpoint('getFederation', params)}`, { headers })
+                .get(`${getEndpoint(ENDPOINTS.GET_FEDERATION, params)}`, { headers })
                 .then(res => {
                     this.userFederation = res.stellar_address.split('*')[0];
                 })

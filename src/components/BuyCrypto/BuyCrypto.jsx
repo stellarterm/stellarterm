@@ -1,149 +1,317 @@
-/* eslint-disable camelcase */
-import React from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import { getEndpoint } from '../../lib/api/endpoints';
-import * as request from '../../lib/api/request';
+import { useHistory, useLocation } from 'react-router-dom';
+import useDebounce from '../../lib/hooks/useDebounce';
+import { ENDPOINTS, getEndpoint } from '../../lib/api/endpoints';
+import { getWithCancel, get } from '../../lib/api/request';
 import images from '../../images';
 import Driver from '../../lib/driver/Driver';
 import { isValidToPrecision, isNoRecalculateNeeded } from '../../lib/helpers/Format';
 import BuyCryptoStatic from './BuyCryptoStatic/BuyCryptoStatic';
 import CurrencyDropdown from './CurrencyDropdown/CurrencyDropdown';
 
-const INITIAL_STATE = {
-    isPending: true,
-    isEnabled: false,
-    selectedCurrency: null,
-    selectedCrypto: { code: 'XLM', icon: '' },
-    currencies: [],
-    crypto: [],
-    cryptoPrices: {},
-    currencyAmount: '',
-    cryptoAmount: '',
-    quote: null,
-    error: null,
-};
 
-export default class BuyCrypto extends React.Component {
-    /**
-     * Return object with popular/nonPopular arrays of currencies
-     * @param {Array} currencies currencies/crypto from moonpay
-     * @returns {Object} {popular/nonPopular} currencies/crypto arrays
-     */
-    static getSortedCurrencies(currencies) {
-        const nonPopularCurrencies = [];
-        const popularCurrencies = currencies
-            .map(currency => {
-                if (currency.is_popular) {
-                    return currency;
-                }
-                nonPopularCurrencies.push(currency);
-                return null;
-            })
-            .filter(el => el !== null);
-
-        return { popular: popularCurrencies, nonPopular: nonPopularCurrencies };
+/**
+ * Return object with popular/nonPopular arrays of currencies
+ * @param {Array} currencies currencies/crypto from moonpay
+ * @returns {Object} {popular/nonPopular} currencies/crypto arrays
+ */
+const sortCurrencies = currencies => currencies.reduce((acc, currency) => {
+    if (currency.is_popular) {
+        acc.popular.push(currency);
+    } else {
+        acc.nonPopular.push(currency);
     }
+    return acc;
+}, { popular: [], nonPopular: [] });
 
-    static getMoonpayInputError(amount, { name, min_amount, max_amount }) {
-        let inputError = '';
-        if (!amount) {
-            return false;
+// moonpay requests
+const getMoonpayStatus = () =>
+    get(getEndpoint(ENDPOINTS.MOONPAY_STATUS));
+
+const getMoonpayCurrencies = () =>
+    get(getEndpoint(ENDPOINTS.MOONPAY_CURRENCIES))
+        .then(({ results }) => results);
+
+const getMoonpayCrypto = () =>
+    get(getEndpoint(ENDPOINTS.MOONPAY_CRYPTO, { page_size: 'all' }))
+        .then(({ results }) => results);
+
+
+const BuyCrypto = ({ d }) => {
+    // ============== STATE ==============
+    const [isPending, setIsPending] = useState(true);
+    const [isAmountPending, setIsAmountPending] = useState(false);
+    const [isEnabled, setIsEnabled] = useState(false);
+    const [selectedCurrency, setSelectedCurrency] = useState(null);
+    const [selectedCrypto, setSelectedCrypto] = useState(null);
+    const [currencies, setCurrencies] = useState([]);
+    const [crypto, setCrypto] = useState([]);
+    const [currencyAmount, setCurrencyAmount] = useState('');
+    const [cryptoAmount, setCryptoAmount] = useState('');
+    const [quote, setQuote] = useState(null);
+    const [initError, setInitError] = useState(null);
+    const [quoteError, setQuoteError] = useState(null);
+
+    // ============== ROUTER HOOKS ==============
+    const location = useLocation();
+    const history = useHistory();
+
+    // debounced values for use state with inputs
+    const debouncedCurrencyAmount = useDebounce(currencyAmount, 500);
+    const debouncedCryptoAmount = useDebounce(cryptoAmount, 500);
+
+    // create request with handle canceller
+    const canceller = useRef(null);
+
+    const createRequestWithCancel = url => {
+        const { request, cancel } = getWithCancel(url);
+
+        canceller.current = cancel;
+
+        return request;
+    };
+
+    // get status, currencies and crypto from moonpay
+    const initMoonpay = () => {
+        setIsPending(true);
+        setInitError(null);
+
+        Promise.all([getMoonpayStatus(), getMoonpayCurrencies(), getMoonpayCrypto()])
+            .then(([{ MOONPAY_ENABLED }, availableCurrencies, availableCrypto]) => {
+                setIsEnabled(MOONPAY_ENABLED);
+
+                const defaultCurrency = availableCurrencies.find(currency => currency.is_default);
+
+                setCurrencies(availableCurrencies);
+                setCrypto(availableCrypto);
+                setSelectedCurrency(defaultCurrency);
+                setCurrencyAmount(String(defaultCurrency.min_amount));
+
+                setIsPending(false);
+            }).catch(e => {
+                setInitError(e);
+                setIsPending(false);
+            });
+    };
+
+    // getting up-to-date information about the purchase of cryptocurrencies,
+    // depending on the selected currencies and the transaction amount
+    const getQuote = () => {
+        if (
+            (!currencyAmount && !cryptoAmount) ||
+            (currencyAmount && cryptoAmount) ||
+            !selectedCurrency ||
+            !selectedCrypto
+        ) {
+            return;
         }
 
-        try {
-            switch (true) {
-                case amount < min_amount:
-                    inputError = `You can't spend less than ${min_amount} ${name}`;
-                    break;
-                case amount > max_amount:
-                    inputError = `You can't spend more than ${max_amount} ${name}`;
-                    break;
-                default:
-            }
-        } catch (e) {
-            return false;
+        if (canceller.current) {
+            canceller.current();
         }
-
-        return inputError;
-    }
-
-    constructor(props) {
-        super(props);
-
-        this.state = INITIAL_STATE;
-    }
-
-    async componentDidMount() {
-        await this.initMoonpay();
-    }
-
-    componentDidUpdate(prevProps) {
-        const { selectedCrypto, isPending } = this.state;
-
-        if (prevProps.location.search !== window.location.search) {
-            try {
-                const urlCryptoCode = new URLSearchParams(window.location.search).get('code');
-
-                const isCurrencyUpdateNeeded =
-                    !isPending && selectedCrypto && urlCryptoCode && urlCryptoCode !== selectedCrypto.code;
-
-                if (isCurrencyUpdateNeeded) {
-                    this.setCrypto(this.state.crypto.find(crypto => crypto.code === urlCryptoCode.toUpperCase()));
-                }
-            } catch (e) {
-                // eslint-disable-next-line no-console
-                console.log(e);
-            }
-        }
-    }
-
-    getMoonpayStatus() {
-        return request.get(getEndpoint('moonpayStatus')).catch(e => this.setState({ error: e }));
-    }
-
-    getMoonpayCurrencies() {
-        return request
-            .get(getEndpoint('moonpayCurrencies'))
-            .then(({ results }) => results)
-            .catch(e => this.setState({ error: e }));
-    }
-
-    getMoonpayCrypto() {
-        const params = { page_size: 'all' };
-        return request
-            .get(getEndpoint('moonpayCrypto', params))
-            .then(({ results }) => results)
-            .catch(e => this.setState({ error: e }));
-    }
-
-    getMoonpayQuote() {
-        this.setState({ isPending: true });
-
-        const { currencyAmount, selectedCurrency, selectedCrypto } = this.state;
+        setIsAmountPending(true);
+        setQuoteError(null);
+        setQuote(null);
 
         const params = {
             base_currency_code: selectedCurrency.code.toLowerCase(),
             currency_code: selectedCrypto.code.toLowerCase(),
-            base_currency_amount: currencyAmount,
         };
 
-        return request
-            .get(getEndpoint('moonpayQuote', params))
-            .then(quote => {
-                this.getMoonpayTransaction().then(url => {
-                    this.setState({ quote, isPending: false });
-                    this.props.d.modal.handlers.activate('MoonpayModal',
-                        Object.assign(quote, url, { displayCode: selectedCrypto.display_code }));
-                });
-            })
-            .catch(e => this.setState({ isPending: false, error: e }));
-    }
+        if (currencyAmount) {
+            params.base_currency_amount = currencyAmount;
+        }
 
-    getMoonpayTransaction() {
-        const { currencyAmount, cryptoAmount, selectedCurrency, selectedCrypto } = this.state;
+        if (cryptoAmount) {
+            params.quote_currency_amount = cryptoAmount;
+        }
+
+        createRequestWithCancel(getEndpoint(ENDPOINTS.MOONPAY_QUOTE, params))
+            .then(res => {
+                setQuote(res);
+                setIsAmountPending(false);
+                setQuoteError(null);
+                if (Boolean(currencyAmount) && Number(currencyAmount) === res.baseCurrencyAmount) {
+                    return setCryptoAmount(String(res.quoteCurrencyAmount));
+                }
+
+                if (Boolean(cryptoAmount) && Number(cryptoAmount) === res.quoteCurrencyAmount) {
+                    return setCurrencyAmount(String(res.baseCurrencyAmount));
+                }
+
+                if (Boolean(currencyAmount) && Number(currencyAmount) >= Number(selectedCurrency.min_amount)) {
+                    return setCryptoAmount(
+                        (Number(currencyAmount) / res.quoteCurrencyPrice).toFixed(selectedCrypto.precision),
+                    );
+                }
+                return null;
+            }).catch(e => {
+                setIsAmountPending(false);
+                if (e.name === 'AbortError') {
+                    return;
+                }
+
+                setQuoteError((e.data && e.data.detail) || 'Something went wrong');
+            });
+    };
+
+    // ================= memoized values =================
+
+    const limitsLabel = useMemo(() => {
+        if (!selectedCurrency) {
+            return '';
+        }
+        const { symbol, min_amount: minAmount, max_amount: maxAmount } = selectedCurrency;
+
+        return `* Min - ${symbol}${minAmount}. Max - ${symbol}${maxAmount}`;
+    }, [selectedCurrency]);
+
+    const errorText = useMemo(() => {
+        if (!selectedCurrency) {
+            return '';
+        }
+
+        if (quoteError) {
+            return quoteError;
+        }
+
+        if (!currencyAmount) {
+            return '';
+        }
+
+        const { name, min_amount: minAmount, max_amount: maxAmount } = selectedCurrency;
+
+        if (Number(currencyAmount) >= Number(minAmount) && Number(currencyAmount) <= Number(maxAmount)) {
+            return '';
+        }
+
+        return Number(currencyAmount) > Number(maxAmount) ?
+            `You can't spend more than ${maxAmount} ${name}` :
+            `You can't spend less than ${minAmount} ${name}`;
+    }, [currencyAmount, selectedCurrency, quoteError]);
+
+    const isSubmitDisabled = useMemo(() =>
+        isPending ||
+            errorText ||
+            !currencyAmount ||
+            !cryptoAmount ||
+            isAmountPending,
+    [isPending, errorText, currencyAmount, cryptoAmount, isAmountPending],
+    );
+
+    const sortedCurrencies = useMemo(() => sortCurrencies(currencies), [currencies]);
+    const sortedCrypto = useMemo(() => sortCurrencies(crypto), [crypto]);
+
+    // ================= effects =================
+
+    useEffect(() => {
+        initMoonpay();
+    }, []);
+
+    // listen the location to change the selectedCrypto
+    useEffect(() => {
+        if (!crypto.length) {
+            return;
+        }
+        const urlParams = new URLSearchParams(location.search);
+        const urlCryptoCode = urlParams.get('code');
+
+        const defaultCrypto = crypto.find(({ is_default: isDefault }) => isDefault);
+        const currentCrypto = crypto.find(({ code }) => Boolean(urlCryptoCode) && code === urlCryptoCode.toUpperCase());
+
+        if (!urlCryptoCode || !currentCrypto) {
+            urlParams.set('code', defaultCrypto.code);
+            history.replace({ search: urlParams.toString() });
+            return;
+        }
+
+        setSelectedCrypto(currentCrypto);
+        setCryptoAmount('');
+    }, [crypto, location]);
+
+    // update the quote when the currencies change
+    useEffect(() => {
+        getQuote();
+    }, [selectedCurrency, selectedCrypto]);
+
+
+    // update the quote when the amount change
+    useEffect(() => {
+        if (isNoRecalculateNeeded(debouncedCurrencyAmount) || !Number(debouncedCurrencyAmount)) {
+            return;
+        }
+        getQuote();
+    }, [debouncedCurrencyAmount]);
+
+    // update the quote when the amount change
+    useEffect(() => {
+        if (isNoRecalculateNeeded(debouncedCryptoAmount) || !Number(debouncedCryptoAmount)) {
+            return;
+        }
+
+        getQuote();
+    }, [debouncedCryptoAmount]);
+
+
+    // currency dropdown handler
+    const onCurrencyChange = token => {
+        setCurrencyAmount(String(token.min_amount));
+        setSelectedCurrency(token);
+        setCryptoAmount('');
+    };
+
+    // crypto dropdown handler
+    const onCryptoChange = token => {
+        const params = new URLSearchParams(location.search);
+        params.set('code', token.code);
+        history.replace({ search: params.toString() });
+    };
+
+    // currency and crypto inputs handler
+    const onAmountChange = ({ target }, isCurrency) => {
+        const amount = target.value;
+        const stringAmount = amount.toString().replace(/,/g, '.');
+
+        const isValidAmount = isValidToPrecision(
+            stringAmount,
+            isCurrency ? selectedCurrency.precision : selectedCrypto.precision,
+        );
+
+        if (Number.isNaN(Number(stringAmount)) || !isValidAmount) {
+            return;
+        }
+
+        if (canceller.current) {
+            canceller.current();
+        }
+
+        if (isCurrency) {
+            setCurrencyAmount(stringAmount);
+        } else {
+            setCryptoAmount(stringAmount);
+        }
+
+        if (isNoRecalculateNeeded(stringAmount)) {
+            return;
+        }
+
+        if (isCurrency) {
+            setCryptoAmount('');
+        } else {
+            setCurrencyAmount('');
+        }
+    };
+
+    // submit form handler
+    const onSubmit = event => {
+        event.preventDefault();
+
+        setIsAmountPending(true);
+
         const {
             session: { account, unfundedAccountId },
-        } = this.props.d;
+        } = d;
 
         const accountID = !account ? unfundedAccountId : account.accountId();
 
@@ -155,256 +323,133 @@ export default class BuyCrypto extends React.Component {
             target_address: selectedCrypto.code === 'XLM' ? accountID : 'null',
         };
 
-        return request
-            .get(getEndpoint('moonpayTransaction', params))
-            .then(url => url)
-            .catch(e => this.setState({ isPending: false, error: e }));
-    }
-
-    setCrypto(selectedCrypto) {
-        this.setState({ selectedCrypto, isPending: true });
-
-        const { selectedCurrency, availableCurrencies } = this.state;
-        const params = { currency_code: selectedCrypto.code.toLowerCase() };
-
-        return request
-            .get(getEndpoint('moonpayCryptoPrice', params))
-            .then(res => {
-                this.setState({ cryptoPrices: res, isPending: false });
-                const defaultCurrency = selectedCurrency || availableCurrencies.find(currency => currency.isDefault);
-                this.changeCurrencyAmount(defaultCurrency.min_amount, defaultCurrency);
+        return get(getEndpoint(ENDPOINTS.MOONPAY_TRANSACTION, params))
+            .then(url => Object.assign(quote, url, { displayCode: selectedCrypto.display_code }))
+            .then(modalParams => {
+                setIsAmountPending(false);
+                d.modal.handlers.activate('MoonpayModal', modalParams);
             })
-            .catch(e => this.setState({ error: e, isPending: false }));
-    }
+            .catch(() => {
+                setIsAmountPending(false);
+                setInitError('An unknown error occurred due to which you cannot buy the crypto, try again in a moment');
+            });
+    };
 
-    async initMoonpay() {
-        this.setState({ isPending: true, error: null });
-        try {
-            let defaultCrypto;
-
-            const { MOONPAY_ENABLED } = await this.getMoonpayStatus();
-            this.setState({ isEnabled: MOONPAY_ENABLED });
-
-            const availableCurrencies = await this.getMoonpayCurrencies();
-            const defaultCurrency = availableCurrencies.find(currency => currency.is_default);
-            this.changeCurrencyAmount(defaultCurrency.min_amount, defaultCurrency);
-
-            const availableCrypto = await this.getMoonpayCrypto();
-            const urlCryptoCode = new URLSearchParams(window.location.search).get('code');
-
-            if (urlCryptoCode) {
-                defaultCrypto = availableCrypto.find(crypto => crypto.code === urlCryptoCode.toUpperCase());
-            } else {
-                defaultCrypto = availableCrypto.find(crypto => crypto.is_default);
-            }
-
-            this.setState({ currencies: availableCurrencies, crypto: availableCrypto });
-            await this.setCrypto(defaultCrypto);
-        } catch (e) {
-            this.setState({ isPending: false });
-        }
-    }
-
-    handleSubmit(event) {
-        event.preventDefault();
-        this.getMoonpayQuote();
-    }
-
-    changeCurrencyAmount(amount, selectedCurrency) {
-        let newState;
-        const { cryptoPrices, selectedCrypto } = this.state;
-
-        const stringAmount = amount.toString().replace(/,/g, '.');
-        const isValidAmount = isValidToPrecision(amount, selectedCurrency.precision);
-
-        if (!stringAmount) {
-            newState = { currencyAmount: stringAmount, cryptoAmount: stringAmount, selectedCurrency };
-        }
-
-        if (isNoRecalculateNeeded(stringAmount, selectedCurrency.precision)) {
-            newState = { currencyAmount: stringAmount, selectedCurrency };
-        }
-
-        if (isValidAmount) {
-            newState = {
-                selectedCurrency,
-                currencyAmount: stringAmount,
-                cryptoAmount: (Number(stringAmount) / cryptoPrices[selectedCurrency.code]).toFixed(
-                    selectedCrypto.precision,
-                ),
-            };
-        }
-
-        this.setState(Object.assign(this.state, newState));
-    }
-
-    changeCryptoAmount(amount) {
-        let newState;
-        const { cryptoPrices, selectedCurrency, selectedCrypto } = this.state;
-        const stringAmount = amount.toString().replace(/,/g, '.');
-        const isValidAmount = isValidToPrecision(amount, selectedCrypto.precision);
-
-        if (!stringAmount) {
-            newState = { currencyAmount: stringAmount, cryptoAmount: stringAmount };
-        }
-
-        if (isNoRecalculateNeeded(stringAmount, selectedCrypto.precision)) {
-            newState = { cryptoAmount: stringAmount };
-        }
-
-        if (isValidAmount) {
-            newState = {
-                cryptoAmount: stringAmount,
-                currencyAmount: (Number(stringAmount) * cryptoPrices[selectedCurrency.code]).toFixed(
-                    selectedCurrency.precision,
-                ),
-            };
-        }
-
-        this.setState(Object.assign(this.state, newState));
-    }
-
-    renderMoonpayForm() {
-        const {
-            error,
-            isPending,
-            currencies,
-            crypto,
-            selectedCrypto,
-            selectedCurrency,
-            currencyAmount,
-            cryptoAmount,
-        } = this.state;
-
-        if (error) {
-            return (
-                <div className="error_msg_block">
-                    <img src={images['icon-circle-fail']} alt="failed" />
-                    <div className="error_title">Something went wrong</div>
-                    <div className="error_text">
-                        An unknown error occurred due to which you cannot buy the crypto, try again in a moment
+    return (
+        <div className="BuyCrypto_wrapper">
+            <div className="BuyCrypto_main">
+                <div className="BuyCrypto_main-text-block">
+                    <div className="BuyCrypto_title">
+                        Buy crypto assets <br /> with VISA or Mastercard
                     </div>
-                    <button onClick={() => this.initMoonpay()} className="s-btn_cancel">
-                        Reload
-                    </button>
-                </div>
-            );
-        }
-
-        const limitsLabel =
-            selectedCurrency &&
-            `* Min - ${selectedCurrency.symbol}${selectedCurrency.min_amount}.
-        Max - ${selectedCurrency.symbol}${selectedCurrency.max_amount}`;
-
-        const errorText = this.constructor.getMoonpayInputError(currencyAmount, selectedCurrency);
-
-        const labelText = errorText || limitsLabel;
-
-        const isSubmitDisabled = isPending || errorText || !currencyAmount || !cryptoAmount;
-
-        const sortedCurrencies = this.constructor.getSortedCurrencies(currencies);
-        const sortedCrypto = this.constructor.getSortedCurrencies(crypto);
-
-        return (
-            <form onSubmit={e => this.handleSubmit(e)}>
-                <label htmlFor="currencyInput">
-                    <span>You pay</span>
-                    <span className={errorText ? 'label_error' : 'label_info'}>{labelText}</span>
-                </label>
-                <div className="Input_block_wrapper">
-                    <input
-                        name="currencyInput"
-                        type="text"
-                        autoFocus
-                        autoComplete="off"
-                        className="Moonpay_input"
-                        value={currencyAmount}
-                        maxLength={20}
-                        onChange={e => this.changeCurrencyAmount(e.target.value, this.state.selectedCurrency)}
-                        placeholder={`Amount in ${selectedCurrency.display_code} you pay`}
-                    />
-
-                    <CurrencyDropdown
-                        popularCurrencies={sortedCurrencies.popular}
-                        nonPopularCurrencies={sortedCurrencies.nonPopular}
-                        selectedToken={selectedCurrency}
-                        changeFunc={token => this.changeCurrencyAmount(token.min_amount, token)}
-                    />
-                </div>
-                <label htmlFor="currencyInput" className="label_withMargin">
-                    You get
-                </label>
-                <div className="Input_block_wrapper">
-                    <input
-                        name="cryptoInput"
-                        type="text"
-                        autoComplete="off"
-                        className="Moonpay_input"
-                        value={cryptoAmount}
-                        maxLength={20}
-                        onChange={e => this.changeCryptoAmount(e.target.value)}
-                        placeholder={`Amount in ${selectedCrypto.display_code} you get`}
-                    />
-
-                    <CurrencyDropdown
-                        popularCurrencies={sortedCrypto.popular}
-                        nonPopularCurrencies={sortedCrypto.nonPopular}
-                        selectedToken={selectedCrypto}
-                        changeFunc={token => {
-                            const params = new URLSearchParams(window.location.search);
-                            params.set('code', token.code);
-                            window.history.replaceState({}, '', `${window.location.pathname}?${params}`);
-                            this.setCrypto(token);
-                        }}
-                    />
-                </div>
-                <div className="form_footer">
-                    <div className="visa_mc_wrapper">
-                        <span>Accepted here</span>
-                        <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
+                    <div className="BuyCrypto_description">
+                        StellarTerm is a trusted place where you can easily buy Lumens and other cryptocurrencies
+                        with your credit or debit card
                     </div>
-
-                    <button type="submit" className="s-button" disabled={isSubmitDisabled}>
-                        Buy {selectedCrypto && selectedCrypto.display_code.toUpperCase()}
-                    </button>
                 </div>
-            </form>
-        );
-    }
 
-    render() {
-        const { isPending } = this.state;
-
-        return (
-            <div className="BuyCrypto_wrapper">
-                <div className="BuyCrypto_main">
-                    <div className="BuyCrypto_main-text-block">
-                        <div className="BuyCrypto_title">
-                            Buy crypto assets <br /> with VISA or Mastercard
+                <div className="BuyCrypto_form">
+                    {/* eslint-disable-next-line no-nested-ternary */}
+                    {isPending ? (
+                        <div className="Loader_wrapper">
+                            <div className="nk-spinner" />
                         </div>
-                        <div className="BuyCrypto_description">
-                            StellarTerm is a trusted place where you can easily buy Lumens and other cryptocurrencies
-                            with your credit or debit card
-                        </div>
-                    </div>
-
-                    <div className="BuyCrypto_form">
-                        {isPending ? (
-                            <div className="Loader_wrapper">
-                                <div className="nk-spinner" />
+                    ) : (
+                        (initError || !isEnabled) ? (
+                            <div className="error_msg_block">
+                                <img src={images['icon-circle-fail']} alt="failed" />
+                                <div className="error_title">Something went wrong</div>
+                                <div className="error_text">
+                                    {!isEnabled ?
+                                        'Buying the crypto has temporarily disabled, try again in a moment' :
+                                        'An unknown error occurred due to which you cannot buy the crypto, try again in a moment'
+                                    }
+                                </div>
+                                <button onClick={() => initMoonpay()} className="s-btn_cancel">
+                                    Reload
+                                </button>
                             </div>
                         ) : (
-                            <React.Fragment>{this.renderMoonpayForm()}</React.Fragment>
-                        )}
-                    </div>
-                </div>
+                            <form onSubmit={e => onSubmit(e)}>
+                                <label htmlFor="currencyInput">
+                                    <span>You pay</span>
+                                    <span className={(errorText && Boolean(currencyAmount)) ? 'label_error' : 'label_info'}>
+                                        {(Boolean(currencyAmount) && errorText) || limitsLabel}
+                                    </span>
+                                </label>
+                                <div className="Input_block_wrapper">
+                                    <input
+                                        name="currencyInput"
+                                        type="text"
+                                        autoFocus
+                                        autoComplete="off"
+                                        className="Moonpay_input"
+                                        value={currencyAmount}
+                                        maxLength={20}
+                                        onChange={e => onAmountChange(e, true)}
+                                        placeholder={`Amount in ${selectedCurrency.display_code} you pay`}
+                                    />
 
-                <BuyCryptoStatic />
+                                    <CurrencyDropdown
+                                        popularCurrencies={sortedCurrencies.popular}
+                                        nonPopularCurrencies={sortedCurrencies.nonPopular}
+                                        selectedToken={selectedCurrency}
+                                        changeFunc={token => onCurrencyChange(token)}
+                                    />
+                                </div>
+                                <label htmlFor="currencyInput" className="label_withMargin">
+                                    <span>You get</span>
+                                    {Boolean(cryptoAmount) && !currencyAmount && errorText &&
+                                        <span className="label_error">
+                                            {errorText}
+                                        </span>
+                                    }
+                                </label>
+                                <div className="Input_block_wrapper">
+                                    <input
+                                        name="cryptoInput"
+                                        type="text"
+                                        autoComplete="off"
+                                        className="Moonpay_input"
+                                        value={cryptoAmount}
+                                        maxLength={20}
+                                        onChange={e => onAmountChange(e, false)}
+                                        placeholder={`Amount in ${selectedCrypto.display_code} you get`}
+                                    />
+
+                                    <CurrencyDropdown
+                                        popularCurrencies={sortedCrypto.popular}
+                                        nonPopularCurrencies={sortedCrypto.nonPopular}
+                                        selectedToken={selectedCrypto}
+                                        changeFunc={token => onCryptoChange(token)}
+                                    />
+                                </div>
+                                <div className="form_footer">
+                                    <div className="visa_mc_wrapper">
+                                        <span>Accepted here</span>
+                                        <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
+                                    </div>
+
+                                    <button type="submit" className="s-button" disabled={isSubmitDisabled}>
+                                        {isAmountPending ?
+                                            <div className="nk-spinner" /> :
+                                            `Buy ${selectedCrypto && selectedCrypto.display_code.toUpperCase()}`
+                                        }
+                                    </button>
+                                </div>
+                            </form>
+                        )
+                    )}
+                </div>
             </div>
-        );
-    }
-}
+
+            <BuyCryptoStatic />
+        </div>
+    );
+};
 
 BuyCrypto.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
 };
+
+export default BuyCrypto;
