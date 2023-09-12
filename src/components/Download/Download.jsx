@@ -4,7 +4,7 @@ import images from '../../images';
 export default () => (
     <div className="DownloadBack">
         <div className="Desktop_centered">
-            <h1 className="desktop_title">StellarTerm For Your Desktop</h1>
+            <h1 className="desktop_title">Zingy Trader For Your Desktop</h1>
             <h2 className="desktop_subtitle">
                 Send, receive, and trade assets on the Stellar network easily from any desktop platform
             </h2>
@@ -28,8 +28,8 @@ export default () => (
                 <div className="description-block">
                     <div className="description-title">About</div>
                     <div className="description-text">
-                        StellarTerm is a web app that runs in the browser. Downloading is not required to use
-                        StellarTerm. In both the web and desktop version, keys are never sent to any server and
+                        Zingy Trader is a web app that runs in the browser. Downloading is not required to use
+                        Zingy Trader. In both the web and desktop version, keys are never sent to any server and
                         transactions are only signed locally. Downloads are for users that prefer a desktop version.
                     </div>
                 </div>
@@ -42,7 +42,7 @@ export default () => (
                     <div className="description-text">
                         Unlike the web version, downloaded versions do not auto-update (this is preferrable to some
                         people). Also, the web version will receive updates sooner than the desktop versions do. The
-                        code to run StellarTerm is self contained in the downloads, though it does not run a Stellar
+                        code to run Zingy Trader is self contained in the downloads, though it does not run a Stellar
                         node or run a Stellar API
                     </div>
                 </div>

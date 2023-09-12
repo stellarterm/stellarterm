@@ -58,7 +58,7 @@ export default class SecretPhraseSetup extends React.Component {
                 </div>
                 <div className="SecretPhraseSetup_wrap">
                     <p className="SecretPhraseSetup_title">
-                        A Secret Phrase can help you verify that you are using authentic StellarTerm website and save
+                        A Secret Phrase can help you verify that you are using authentic Zingy Trader website and save
                          you from phishing attacks.
                     </p>
                     <p>
@@ -67,7 +67,7 @@ export default class SecretPhraseSetup extends React.Component {
                     </p>
                     <ul className="SecretPhraseSetup_description">
                         <li className="SecretPhraseSetup_description-item">
-                            The Phrase could be missing if you access StellarTerm from a new device or a new browser.
+                            The Phrase could be missing if you access Zingy Trader from a new device or a new browser.
                         </li>
                         <li className="SecretPhraseSetup_description-item">
                             Always check the URL to make sure you are on the correct website.

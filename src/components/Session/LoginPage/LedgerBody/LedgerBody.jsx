@@ -80,7 +80,7 @@ export default class LedgerBody extends React.Component {
                         <div className="LoginPage__header">
                             <div className="LoginPage__header-wrap">
                                 <span className="LoginPage__title">Access your account</span>
-                                <span className="LoginPage__intro">Use StellarTerm with your Ledger account</span>
+                                <span className="LoginPage__intro">Use Zingy Trader with your Ledger account</span>
                             </div>
                             <img src={images['ledger-logo']} alt="ledger" width="133" />
                         </div>

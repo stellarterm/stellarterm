@@ -343,7 +343,7 @@ const BuyCrypto = ({ d }) => {
                         Buy crypto assets <br /> with VISA or Mastercard
                     </div>
                     <div className="BuyCrypto_description">
-                        StellarTerm is a trusted place where you can easily buy Lumens and other cryptocurrencies
+                        Zingy Trader is a trusted place where you can easily buy Lumens and other cryptocurrencies
                         with your credit or debit card
                     </div>
                 </div>

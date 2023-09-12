@@ -24,7 +24,7 @@ export default class SecretPhrase extends React.Component {
                         Secret Phrase not found
                     </p>
                     <p className="SecretPhrase_content">
-                        Secret Phrase can help you verify that you are using authentic StellarTerm website and
+                        Secret Phrase can help you verify that you are using authentic Zingy Trader website and
                          save you from phishing attacks.
                     </p>
                     <p
@@ -48,7 +48,7 @@ export default class SecretPhrase extends React.Component {
                     {secretPhrase}
                 </p>
                 <p className="SecretPhrase_description">
-                    Secret Phrase could be missing if you access StellarTerm from a new device or a new browser.
+                    Secret Phrase could be missing if you access Zingy Trader from a new device or a new browser.
                 </p>
             </React.Fragment>
         );
@@ -72,11 +72,11 @@ export default class SecretPhrase extends React.Component {
                 <p className="SecretPhrase_content">Make sure you are on the correct website.</p>
                 <div className="SecretPhrase_checkURL">
                     <img src={images['icon-lock-https']} alt="lock" />
-                    <span className="green">https://</span><span>stellarterm.com</span>
+                    <span className="green">https://</span><span>wallet.zingypay.com</span>
                 </div>
                 <br />
                 <p className="SecretPhrase_title">Keep your secret key secure</p>
-                <p className="SecretPhrase_content">StellarTerm does not save your secret key.
+                <p className="SecretPhrase_content">Zingy Trader does not save your secret key.
                     It is stored on your browser and will be deleted once the page is refreshed or exited.
                 </p>
             </div>

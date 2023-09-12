@@ -38,7 +38,7 @@ export default class ErrorBoundary extends React.Component {
                         <h1>An unknown error occurred</h1>
                         <p>
                             Don’t worry <strong>your funds are safe</strong> and not affected by this error.
-                            This error is just a display error in StellarTerm, and is not your fault.
+                            This error is just a display error in Zingy Trader, and is not your fault.
                         </p>
                     </div>
                     <div className="Error_content">

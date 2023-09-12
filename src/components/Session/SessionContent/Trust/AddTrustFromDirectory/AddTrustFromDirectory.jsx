@@ -47,7 +47,7 @@ export default function AddTrustFromDirectory(props) {
                 <p>
                     This is a list of anchors from the Stellar community.
                     <br />
-                    Note: StellarTerm does not endorse any of these anchors.
+                    Note: Zingy Trader does not endorse any of these anchors.
                 </p>
             </div>
             <div className="AssetRowContainer">{assetRows}</div>

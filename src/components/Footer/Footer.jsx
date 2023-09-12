@@ -39,13 +39,13 @@ class Footer extends React.Component {
                                 <img src={images['icon-twitter']} alt="twitter" />
                                 @StellarTerm
                             </a>
-                            <a href="mailto:support@stellarterm.com" className="Footer_link">
+                            <a href="mailto:support@zingypay.com" className="Footer_link">
                                 <img src={images['icon-email']} alt="email" />
-                                support@stellarterm.com
+                                support@zingypay.com
                             </a>
-                            <a href="mailto:partners@stellarterm.com" className="Footer_link">
+                            <a href="mailto:partners@zingypay.com" className="Footer_link">
                                 <img src={images['icon-email']} alt="email" />
-                                partners@stellarterm.com
+                                partners@zingypay.com
                             </a>
                         </div>
 
@@ -75,7 +75,7 @@ class Footer extends React.Component {
                             <div className="Footer_disclaimer">
                                 Cryptocurrency assets are subject to high market risks and volatility. Past performance
                                 is not indicative of future results. Investments in blockchain assets may result in loss
-                                of part or all of your investment. StellarTerm does NOT endorse ANY asset on the Stellar
+                                of part or all of your investment. Zingy Trader does NOT endorse ANY asset on the Stellar
                                 network. Please do your own research and use caution.
                             </div>
 

@@ -22,7 +22,7 @@ export default () => (
             {' '}and verify the hash.
             <br />
             <br />
-            StellarTerm is released under the Apache 2.0. It is provided &quot;AS IS&quot; without
+            Zingy Trader is released under the Apache 2.0. It is provided &quot;AS IS&quot; without
             warranty. The developer is not responsible for any losses and activities caused
             by the application.
         </div>

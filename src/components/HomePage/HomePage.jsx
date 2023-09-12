@@ -50,12 +50,12 @@ export default class HomePage extends React.Component {
                             </h2>
 
                             <p className="HomePage__lead__summary">
-                                StellarTerm is an <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">
+                                Zingy Trader is an <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">
                                 open source</a> client for the <a href="https://www.stellar.org/" target="_blank" rel="nofollow noopener noreferrer">
                                 Stellar network</a>.
                                 <br />
                                 Send, receive, and <Link to="/exchange/">trade</Link> assets on the Stellar
-                                network easily with StellarTerm.
+                                network easily with Zingy Trader.
                             </p>
                             {this.renderHomePageActions()}
                         </div>
@@ -79,13 +79,13 @@ export default class HomePage extends React.Component {
                             <div className="island__sub__division">
                                 <div className="HomePage__sideBlurb">
                                     <p>
-                                        StellarTerm is just a client that can be used to
+                                        Zingy Trader is just a client that can be used to
                                         access the Stellar Decentralized Exchange. Neither
-                                        StellarTerm nor the developers of it are involved with
+                                        Zingy Trader nor the developers of it are involved with
                                         operating the Stellar network.
                                     </p>
                                     <p>
-                                        StellarTerm is developed by Ultra Stellar, LLC, the same
+                                        Zingy Trader is developed by Ultra Stellar, LLC, the same
                                         company that developed the LOBSTR wallet. The project is
                                         independent of the Stellar Development Foundation.
                                     </p>
@@ -97,7 +97,7 @@ export default class HomePage extends React.Component {
                                     <p>
                                         StellarTerm is open source software.
                                         To support the project, please{' '}
-                                        <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">
+                                        <a href="https://github.com/Zingy Trader/Zingy Trader" target="_blank" rel="nofollow noopener noreferrer">
                                             star the project on GitHub
                                         </a>.
                                     </p>
@@ -107,7 +107,7 @@ export default class HomePage extends React.Component {
                                         without warranty.
                                     </p>
                                     <p>
-                                        StellarTerm is not a custodian of your assets.{' '}
+                                        Zingy Trader is not a custodian of your assets.{' '}
                                         We do not store any tokens, cryptoassets
                                         or private keys on your behalf.
                                     </p>

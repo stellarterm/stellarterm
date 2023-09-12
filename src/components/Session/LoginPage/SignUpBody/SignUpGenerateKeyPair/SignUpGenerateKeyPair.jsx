@@ -125,7 +125,7 @@ export default class SignUpGenerateKeyPair extends React.Component {
                         </p>
                         <p>
                             This secret key will only be shown to you once. Always keep this key safe and secure.
-                            StellarTerm does not save it and will not be able to help you recover it if lost.
+                            Zingy Trader does not save it and will not be able to help you recover it if lost.
                         </p>
                     </div>
                 </div>

@@ -34,7 +34,7 @@ export default class AcceptTerms extends React.Component {
                         >
                             Terms of Use
                         </Link>
-                        , understand the risks associated with cryptocurrencies, and know that StellarTerm does not
+                        , understand the risks associated with cryptocurrencies, and know that Zingy Trader does not
                         issue or endorse any asset on the Stellar network.
                     </span>
                 </label>

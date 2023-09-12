@@ -31,7 +31,7 @@ errorMap
     .set('tx_missing_operation',
         'No operation was specified.')
     .set('tx_bad_seq',
-        'Transaction failed because sequence got out of sync. Please reload StellarTerm and try again.')
+        'Transaction failed because sequence got out of sync. Please reload Zingy Trader and try again.')
     .set('tx_bad_auth',
         'Too few valid signatures / wrong network.')
     .set('tx_insufficient_balance',

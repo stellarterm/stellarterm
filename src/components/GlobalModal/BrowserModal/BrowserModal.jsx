@@ -44,7 +44,7 @@ export default class BrowserModal extends React.Component {
                     </p>
 
                     <p className="browser_description">
-                        We have determined that you may be using a web browser version that is not supported by StellarTerm.
+                        We have determined that you may be using a web browser version that is not supported by Zingy Trader.
                         An outdated browser version may prevent you from accessing certain features.
                         Consider updating to the most recent version of your browser or try a different modern browser for the optimal experience.
                     </p>

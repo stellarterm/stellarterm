@@ -21,7 +21,7 @@ export default function MultisigUnknownSubmitModal(props) {
                         <span>
                             <b>Your account has multisignature enabled.</b>
                         </span>
-                        <span>StellarTerm has signed the transaction, now continue with your multisig service</span>
+                        <span>Zingy Trader has signed the transaction, now continue with your multisig service</span>
                     </div>
                 </div>
                 <div className="MultisigUnknownSubmitModal__XDR_header">

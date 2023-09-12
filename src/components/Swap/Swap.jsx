@@ -60,7 +60,7 @@ const Swap = ({ d }) => {
 
         if (!sourcePath || !destinationPath) {
             // default state
-            history.replace('/swap/XLM-native/USDC-www.centre.io');
+            history.replace('/swap/XLM-native/AFRO-zingypay.com');
             return;
         }
 

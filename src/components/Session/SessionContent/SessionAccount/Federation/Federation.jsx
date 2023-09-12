@@ -100,7 +100,7 @@ export default class Federation extends React.Component {
                 <div className={alertClass}>
                     <div className="Account_alert_left">
                         <p>Your federation address</p>
-                        <strong onClick={() => this.handleEditToggle()}>{`${address}*stellarterm.com`}</strong>
+                        <strong onClick={() => this.handleEditToggle()}>{`${address}*zingypay.com`}</strong>
                     </div>
 
                     <div className="Account_alert_right">
@@ -108,7 +108,7 @@ export default class Federation extends React.Component {
                             <img src={images['icon-edit']} alt="edit" width="24" height="24" />
                             <span>EDIT</span>
                         </div>
-                        <CopyButton text={`${address}*stellarterm.com`} />
+                        <CopyButton text={`${address}*zingypay.com`} />
                     </div>
                 </div>
             );
@@ -118,7 +118,7 @@ export default class Federation extends React.Component {
                     <div className="Account_alert_left">
                         <p className="no_federation_text">
                             Get a short memorable payment address for your wallet
-                            with StellarTerm federation
+                            with Zingy Trader federation
                         </p>
                     </div>
 
@@ -211,7 +211,7 @@ export default class Federation extends React.Component {
                 {errorBlock}
 
                 <p className="AccountView_text">
-                    You can set an alias for your StellarTerm account and use it instead of your public key to receive
+                    You can set an alias for your Zingy Trader account and use it instead of your public key to receive
                     payments on Stellar.
                     <br />
                     Share this address with people so they can send you tokens.

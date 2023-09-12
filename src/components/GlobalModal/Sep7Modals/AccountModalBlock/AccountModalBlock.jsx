@@ -28,7 +28,7 @@ export default class AccountModalBlock extends React.Component {
                                     src={renderedIcon} alt="ident" height="14" width="14"
                                     className="AccountModalBlock_identicon"
                                 />
-                                {userFederation}*stellarterm.com
+                                {userFederation}*zingypay.com
                             </span>
                         </div>
                     );
