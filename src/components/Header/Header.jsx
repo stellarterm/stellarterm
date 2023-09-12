@@ -197,6 +197,14 @@ class Header extends React.Component {
                             {this.createHeaderTab('/swap/', 'Swap')}
                             {this.getBuyCryptoLobsterLink()}
                             {this.createHeaderTab('/account/', 'Account')}
+                            <a
+                                className="Header_link"
+                                href="https://zingypay.com/payment-form"
+                                target="_blank" // Open in a new tab
+                                rel="noopener noreferrer" // Security best practice for target="_blank" links
+                            >
+                                Buy AFRO with Fiat
+                            </a>
                         </nav>
 
                         {accountBlock}

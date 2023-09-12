@@ -32,7 +32,7 @@ class Footer extends React.Component {
                         <div className="Footer_social_links">
                             <a
                                 className="Footer_link"
-                                href="https://twitter.com/stellarterm"
+                                href="https://twitter.com/zingypay"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -81,10 +81,9 @@ class Footer extends React.Component {
 
                             {isExchangePage ? (
                                 <div className="Footer_disclaimer">
-                                    This product includes software developed at TradingView, Inc. TradingView
-                                    Lightweight Charts Copyright (с) {getCurrentYear()}{' '}
-                                    <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">
-                                        TradingView
+                                    This product includes software developed at ZingyPay.com, Inc. ZingyPay Lightweight Charts Copyright (с) {getCurrentYear()}{' '}
+                                    <a href="https://zingypay.com/" target="_blank" rel="noopener noreferrer">
+                                        ZingyPay
                                     </a>
                                     , Inc.
                                 </div>
