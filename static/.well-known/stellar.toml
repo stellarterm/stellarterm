@@ -1,4 +1,4 @@
-# StellarTerm - open source client for Stellar Decentralized Exchange <zingypay.com>
+# Zingy Trader - open source client for Stellar Decentralized Exchange <zingypay.com>
 
 FEDERATION_SERVER="https://zingypay.com/federation/"
 
@@ -7,11 +7,11 @@ DESIRED_BASE_FEE=1000
 
 [DOCUMENTATION]
 ORG_URL="https://zingypay.com"
-ORG_DBA="StellarTerm"
-ORG_NAME="ULTRA STELLAR, LLC"
-ORG_OFFICIAL_EMAIL="hi@zingypay.com"
+ORG_DBA="ZINGYPAY"
+ORG_NAME="ZINGYPAY.COM, LLC"
+ORG_OFFICIAL_EMAIL="info@zingypay.com"
 ORG_TWITTER="zingypay"
 ORG_GITHUB="zingypay"
-ORG_LOGO="https://zingypay.com/favicon-196.png"
+ORG_LOGO="https://res.cloudinary.com/dp7civtid/image/upload/v1691671447/zingypay_icon-1_opygpp.png"
 ORG_DESCRIPTION="Advanced web based trading client for the Stellar network."
 

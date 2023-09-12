@@ -95,7 +95,7 @@ export default class HomePage extends React.Component {
                             <div className="island__sub__division">
                                 <div className="HomePage__sideBlurb">
                                     <p>
-                                        StellarTerm is open source software.
+                                        Zingy Trader is open source software.
                                         To support the project, please{' '}
                                         <a href="https://github.com/Zingy Trader/Zingy Trader" target="_blank" rel="nofollow noopener noreferrer">
                                             star the project on GitHub
