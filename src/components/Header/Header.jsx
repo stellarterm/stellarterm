@@ -190,21 +190,21 @@ class Header extends React.Component {
                     <div className="so-chunk Header">
                         <nav className="Header_nav">
                             <Link className="Nav_logo" to={'/'}>
-                                Zingy Trader
+                                ZingyTrader
                             </Link>
+                            <a
+                               className="Header_link"
+                               href="https://zingypay.com/zingypay/payment-form"
+                               target="_blank"
+                               rel="noopener noreferrer"
+                             >
+                               Buy AFRO <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1694582789/mastercard-icon_nbzeds.png" alt="MasterCard Icon" />
+                             </a>
                             {this.createHeaderTab('/markets/', 'Markets')}
                             {this.createHeaderTab('/exchange/', 'Exchange')}
                             {this.createHeaderTab('/swap/', 'Swap')}
                             {this.getBuyCryptoLobsterLink()}
                             {this.createHeaderTab('/account/', 'Account')}
-                            <a
-                                className="Header_link"
-                                href="https://zingypay.com/payment-form"
-                                target="_blank" // Open in a new tab
-                                rel="noopener noreferrer" // Security best practice for target="_blank" links
-                            >
-                                Buy AFRO with Fiat
-                            </a>
                         </nav>
 
                         {accountBlock}
