@@ -198,7 +198,7 @@ class Header extends React.Component {
                                target="_blank"
                                rel="noopener noreferrer"
                              >
-                               Buy AFRO <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1694582789/mastercard-icon_nbzeds.png" alt="MasterCard Icon" />
+                               Buy AFRO <img src="https://res.cloudinary.com/dp7civtid/image/upload/v1694582789/mastercard-icon_nbzeds.png" alt="MasterCard Icon" style={{ maxWidth: '16px', maxHeight: '16px' }} />
                              </a>
                             {this.createHeaderTab('/markets/', 'Markets')}
                             {this.createHeaderTab('/exchange/', 'Exchange')}
