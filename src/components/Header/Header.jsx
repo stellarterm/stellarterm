@@ -198,6 +198,7 @@ class Header extends React.Component {
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="Header_link"
+                                    style={{ marginRight: '5px' }}
                                >
                                    Buy AFRO
                                </a>
