@@ -37,7 +37,7 @@ class Footer extends React.Component {
                                 rel="noopener noreferrer"
                             >
                                 <img src={images['icon-twitter']} alt="twitter" />
-                                @StellarTerm
+                                @zingypay
                             </a>
                             <a href="mailto:support@zingypay.com" className="Footer_link">
                                 <img src={images['icon-email']} alt="email" />
@@ -61,7 +61,7 @@ class Footer extends React.Component {
 
                             <a
                                 className="Footer_link"
-                                href="https://stellarterm.freshdesk.com/"
+                                href="https://tawk.to/zingypay/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -81,7 +81,7 @@ class Footer extends React.Component {
 
                             {isExchangePage ? (
                                 <div className="Footer_disclaimer">
-                                    This product includes software developed at ZingyPay.com, Inc. ZingyPay Lightweight Charts Copyright (с) {getCurrentYear()}{' '}
+                                    This product includes software developed at ZingyPay.com, Inc. ZingyPay Charts Copyright (с) {getCurrentYear()}{' '}
                                     <a href="https://zingypay.com/" target="_blank" rel="noopener noreferrer">
                                         ZingyPay
                                     </a>
