@@ -86,7 +86,7 @@ const FreighterBody = ({ history, d, modal }) => {
                     <div className="LoginPage__header">
                         <div className="LoginPage__header-wrap">
                             <span className="LoginPage__title">Access your account</span>
-                            <span className="LoginPage__intro">Use StellarTerm with your Freighter extension</span>
+                            <span className="LoginPage__intro">Use Zingy Traderr with your Freighter extension</span>
                         </div>
                         <img src={images['freighter-logo-main']} alt="freighter" height="66" />
                     </div>

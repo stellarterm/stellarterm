@@ -37,8 +37,8 @@ export default class LedgerAlert extends React.Component {
                                 Ledger only works on a https site.
                                 <br />
                                 Please use{' '}
-                                <a href="https://stellarterm.com/" target="_blank" rel="nofollow noopener noreferrer">
-                                    https://stellarterm.com/
+                                <a href="https://zingypay.com/" target="_blank" rel="nofollow noopener noreferrer">
+                                    https://wallet.zingypay.com/
                                 </a>
                             </span>
                         }

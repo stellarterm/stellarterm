@@ -196,10 +196,10 @@ export default class Markets extends React.Component {
                         </Switch>
 
                         <div className="AssetListFooter">
-                            StellarTerm does not endorse any of these issuers. They are here for informational purposes
+                            Zingy Trader does not endorse any of these issuers. They are here for informational purposes
                             only.
                             <br />
-                            To get listed on StellarTerm,{' '}
+                            To get listed on Zingy Trader,{' '}
                             <a
                                 href="https://github.com/stellarterm/stellarterm-directory"
                                 target="_blank"

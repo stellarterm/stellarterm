@@ -32,20 +32,20 @@ class Footer extends React.Component {
                         <div className="Footer_social_links">
                             <a
                                 className="Footer_link"
-                                href="https://twitter.com/stellarterm"
+                                href="https://twitter.com/zingypay"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
                                 <img src={images['icon-twitter']} alt="twitter" />
-                                @StellarTerm
+                                @zingypay
                             </a>
-                            <a href="mailto:support@stellarterm.com" className="Footer_link">
+                            <a href="mailto:support@zingypay.com" className="Footer_link">
                                 <img src={images['icon-email']} alt="email" />
-                                support@stellarterm.com
+                                support@zingypay.com
                             </a>
-                            <a href="mailto:partners@stellarterm.com" className="Footer_link">
+                            <a href="mailto:partners@zingypay.com" className="Footer_link">
                                 <img src={images['icon-email']} alt="email" />
-                                partners@stellarterm.com
+                                partners@zingypay.com
                             </a>
                         </div>
 
@@ -61,7 +61,7 @@ class Footer extends React.Component {
 
                             <a
                                 className="Footer_link"
-                                href="https://stellarterm.freshdesk.com/"
+                                href="https://tawk.to/zingypay.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -75,16 +75,15 @@ class Footer extends React.Component {
                             <div className="Footer_disclaimer">
                                 Cryptocurrency assets are subject to high market risks and volatility. Past performance
                                 is not indicative of future results. Investments in blockchain assets may result in loss
-                                of part or all of your investment. StellarTerm does NOT endorse ANY asset on the Stellar
+                                of part or all of your investment. ZingyTrader does NOT endorse ANY asset on the Stellar
                                 network. Please do your own research and use caution.
                             </div>
 
                             {isExchangePage ? (
                                 <div className="Footer_disclaimer">
-                                    This product includes software developed at TradingView, Inc. TradingView
-                                    Lightweight Charts Copyright (с) {getCurrentYear()}{' '}
-                                    <a href="https://www.tradingview.com/" target="_blank" rel="noopener noreferrer">
-                                        TradingView
+                                    This product includes software developed at ZingyPay.com, Inc. ZingyPay Charts Copyright (с) {getCurrentYear()}{' '}
+                                    <a href="https://zingypay.com/" target="_blank" rel="noopener noreferrer">
+                                        ZingyPay
                                     </a>
                                     , Inc.
                                 </div>

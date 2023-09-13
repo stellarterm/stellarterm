@@ -270,7 +270,7 @@ export default class Send {
             // Prevent race conditions
             const destInput = this.destInput;
             const targetDomain = destInput.split('*')[1];
-            const federationDomain = targetDomain === 'stellarterm.com' ? EnvConsts.HOME_DOMAIN : targetDomain;
+            const federationDomain = targetDomain === 'zingypay.com' ? EnvConsts.HOME_DOMAIN : targetDomain;
             this.requestIsPending = true;
 
             StellarSdk.FederationServer.createForDomain(federationDomain)

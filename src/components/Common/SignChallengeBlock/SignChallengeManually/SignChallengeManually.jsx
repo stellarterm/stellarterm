@@ -69,7 +69,7 @@ const SignChallengeManually = ({ d, resolver, tx }) => {
                 </div>
                 <div className="SignChallengeBlock_paragraph-content">
                     To continue with your deposit, copy the transaction XDR and collect additional signatures of other
-                    co-signers. Return to StellarTerm once the transaction XDR is signed by account co-signers
+                    co-signers. Return to Zingy Trader once the transaction XDR is signed by account co-signers
                 </div>
             </div>
             <div className="SignChallengeBlock_paragraph">

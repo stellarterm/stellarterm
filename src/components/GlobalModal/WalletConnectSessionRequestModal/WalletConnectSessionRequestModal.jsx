@@ -20,7 +20,7 @@ const WalletConnectSessionRequestModal = ({ data, submit }) => (
             <div className="WalletConnectSessionRequestModal__title">
                 The connection request was sent to {data.title}.
                 <br />
-                Confirm the request in the app and continue with StellarTerm.
+                Confirm the request in the app and continue with Zingy Trader.
             </div>
             <div className="WalletConnectSessionRequestModal__container">
                 <div className="WalletConnectSessionRequestModal__icons">

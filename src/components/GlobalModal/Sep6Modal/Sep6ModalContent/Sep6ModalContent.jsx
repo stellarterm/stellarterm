@@ -36,8 +36,8 @@ export default class Sep6ModalContent extends React.Component {
             isFormError: false,
             response: {},
             requestParams: {
-                wallet_name: 'StellarTerm',
-                wallet_url: 'https://stellarterm.com',
+                wallet_name: 'Zingy Trader',
+                wallet_url: 'https://wallet.zingypay.com',
                 asset_code: this.props.asset.code,
                 account: this.props.d.session.account.accountId(),
             },

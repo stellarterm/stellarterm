@@ -60,7 +60,7 @@ const Swap = ({ d }) => {
 
         if (!sourcePath || !destinationPath) {
             // default state
-            history.replace('/swap/XLM-native/USDC-www.centre.io');
+            history.replace('/swap/XLM-native/AFRO-GBUYO263AYAZZKZI5ZCZFCPIGC42JVCGAOIP2CBBCUP2UTCEUIPIE2VV');
             return;
         }
 

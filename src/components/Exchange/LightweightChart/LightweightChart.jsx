@@ -252,7 +252,7 @@ export default class LightweightChart extends React.Component {
         const timeFrameInMin = this.props.timeFrame / 60;
         const canvasScreenshot = this.CHART.takeScreenshot();
         const timeString = moment(new Date()).format('MM_DD_YYYY');
-        const imageName = `StellarTerm-${pairName}_${timeString}`;
+        const imageName = `Zingy Trader-${pairName}_${timeString}`;
         exportChartPng(
             canvasScreenshot,
             imageName,

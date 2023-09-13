@@ -107,7 +107,7 @@ class Header extends React.Component {
         if (state === SESSION_STATE.LOADING) {
             return null;
         }
-        const fullFederation = `${userFederation}*stellarterm.com`;
+        const fullFederation = `${userFederation}*zingypay.com`;
         const accountId = (account && account.account_id) || unfundedAccountId;
         const viewPublicKey = `${accountId.substr(0, 5)}...${accountId.substr(-5, 5)}`;
         const canvas = createStellarIdenticon(accountId);
@@ -190,8 +190,25 @@ class Header extends React.Component {
                     <div className="so-chunk Header">
                         <nav className="Header_nav">
                             <Link className="Nav_logo" to={'/'}>
-                                StellarTerm
+                                ZingyTrader
                             </Link>
+                            <div className="Header_link_container">
+                               <a
+                                    href="https://zingypay.com/zingypay/payment-form"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="Header_link"
+                                    style={{ marginRight: '5px' }}
+                               >
+                                   Buy AFRO
+                               </a>
+                               <img
+                                   src="https://res.cloudinary.com/dp7civtid/image/upload/v1694582789/mastercard-icon_nbzeds.png"
+                                   alt="MasterCard Icon"
+                                   style={{ maxWidth: '16px', maxHeight: '16px', verticalAlign: 'middle' }}
+                               />
+                            </div>
+
                             {this.createHeaderTab('/markets/', 'Markets')}
                             {this.createHeaderTab('/exchange/', 'Exchange')}
                             {this.createHeaderTab('/swap/', 'Swap')}

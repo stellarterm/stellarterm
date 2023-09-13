@@ -8,7 +8,7 @@ const imagePadding = 15;
 
 function drawChartData(ctx, w, h, pairName, timeFrameInMin, trade, volume) {
     const creationTime = moment(new Date()).format('MMMM DD YYYY');
-    const creationDateString = `Created with StellarTerm.com, ${creationTime}, ${UTCTimeString.getUtcString()} `;
+    const creationDateString = `Created with wallet.zingypay.com, ${creationTime}, ${UTCTimeString.getUtcString()} `;
     const pxOffsetFromTime = timeFrameInMin > 60 ? 180 : 150;
 
     // Fill padding with white
@@ -42,7 +42,7 @@ function drawChartData(ctx, w, h, pairName, timeFrameInMin, trade, volume) {
 
     ctx.font = 'bold 32px Source Sans Pro';
     ctx.fillStyle = '#68c86f';
-    ctx.fillText('StellarTerm', w - 180, 48);
+    ctx.fillText('Zingy Trader', w - 180, 48);
 }
 
 export default function exportChartPng(canvas, imageName, pairName, timeFrameInMin, trade, volume) {

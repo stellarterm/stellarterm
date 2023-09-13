@@ -1,7 +1,7 @@
-solar-stellarterm
+solar-Zingy Trader
 --------------
 
-Solar-stellarterm is a fork of solar-stellarorg which is a theme layer for the solar css framework.
+Solar-Zingy Trader is a fork of solar-stellarorg which is a theme layer for the solar css framework.
 
 It themes solar to Stellar Development Foundation's branding by adding a [theme layer](https://github.com/stellar/solar/blob/master/docs/architecture.md#modules-and-themes) on solar.
 
