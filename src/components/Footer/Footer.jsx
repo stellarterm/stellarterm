@@ -61,7 +61,7 @@ class Footer extends React.Component {
 
                             <a
                                 className="Footer_link"
-                                href="https://tawk.to/zingypay/"
+                                href="https://tawk.to/zingypay.com/"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
@@ -75,7 +75,7 @@ class Footer extends React.Component {
                             <div className="Footer_disclaimer">
                                 Cryptocurrency assets are subject to high market risks and volatility. Past performance
                                 is not indicative of future results. Investments in blockchain assets may result in loss
-                                of part or all of your investment. Zingy Trader does NOT endorse ANY asset on the Stellar
+                                of part or all of your investment. ZingyTrader does NOT endorse ANY asset on the Stellar
                                 network. Please do your own research and use caution.
                             </div>
 
