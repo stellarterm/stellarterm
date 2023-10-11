@@ -249,6 +249,7 @@ export default class Sep24ModalContent extends React.Component {
 
         const closeCheckInterval = setInterval(() => {
             if (this.anchorWindow.closed) {
+                this.fetchTransaction();
                 this.setState({ windowClosed: true });
                 clearInterval(closeCheckInterval);
             }
