@@ -2,7 +2,7 @@ import _ from 'lodash';
 import * as StellarSdk from 'stellar-sdk';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
-import TrezorConnect from 'trezor-connect';
+import TrezorConnect from '@trezor/connect-web';
 import { getPublicKey } from '@stellar/freighter-api';
 import FastAverageColor from 'fast-average-color';
 import isElectron from 'is-electron';
