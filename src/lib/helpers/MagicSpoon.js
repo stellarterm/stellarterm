@@ -5,7 +5,7 @@ import directory from 'stellarterm-directory';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
-import TrezorConnect from 'trezor-connect';
+import TrezorConnect from '@trezor/connect-web';
 import { signTransaction } from '@stellar/freighter-api';
 import TransformTrezorTransaction from '@trezor/connect-plugin-stellar';
 import ErrorHandler from './ErrorHandler';
