@@ -34,6 +34,10 @@
             border: solid 1px #fe6d74;
         }
 
+        &.success {
+            border: solid 1px #69C76F;
+        }
+
         &.withPrefix {
             padding-left: 4em;
         }
@@ -62,14 +66,14 @@
         width: 100%;
     }
 
-    .Input_error-tooltip {
+    .Input_tooltip {
         display: flex;
         justify-content: center;
         align-items: center;
         position: absolute;
         height: 20px;
         padding: 0 11px;
-        background-color: #fe6d74;
+
         border-radius: 2px;
         color: #fff;
         left: 0;
@@ -84,6 +88,22 @@
             top: -8px;
             border: 4px solid transparent;
             border-bottom: 4px solid #fe6d74;
+        }
+
+        &.error {
+            background-color: #fe6d74;
+
+            &::after {
+                border-bottom: 4px solid #fe6d74;
+            }
+        }
+
+        &.success {
+            background-color: #69c76f;
+
+            &::after {
+                border-bottom: 4px solid #69c76f;
+            }
         }
     }
 

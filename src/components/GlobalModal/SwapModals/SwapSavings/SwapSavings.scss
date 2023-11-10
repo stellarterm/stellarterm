@@ -1,0 +1,49 @@
+.SwapSavings {
+    &_content {
+        padding: 31px 34px 32px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
+
+    &_title {
+        margin-bottom: 10px;
+        font-size: 18px;
+        color: #505558;
+        font-weight: normal;
+    }
+
+    &_description {
+        margin-bottom: 34px;
+        font-weight: 300;
+    }
+
+    &_path-list {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &_path-row {
+        display: flex;
+        margin-bottom: 17px;
+        justify-content: space-between;
+        align-items: center;
+        font-weight: normal;
+
+        &.head {
+            font-weight: 300;
+        }
+    }
+
+    &_path {
+        display: flex;
+        align-items: center;
+    }
+
+    .s-button {
+        margin-left: auto;
+        width: 228px;
+        height: 52px;
+        margin-top: 35px;
+    }
+}

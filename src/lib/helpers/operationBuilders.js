@@ -140,24 +140,30 @@ export function buildOpRemoveOffer(opts) {
     });
 }
 
-export function buildOpPathPaymentStrictSend(opts) {
+export function buildOpPathPaymentStrictSend({ source, destination, path, address, sourceAmount, estimatedValue }) {
     return StellarSdk.Operation.pathPaymentStrictSend({
-        sendAsset: opts.source,
-        sendAmount: opts.sourceAmount,
-        path: opts.path,
-        destAsset: opts.destination,
-        destMin: opts.optimizedEstimatedValue,
-        destination: opts.address,
+        sendAsset: source,
+        sendAmount: sourceAmount,
+        path,
+        destAsset: destination,
+        destMin: estimatedValue,
+        destination: address,
     });
 }
 
-export function buildOpPathPaymentStrictReceive(opts) {
+export function buildOpPathPaymentStrictReceive({
+    source,
+    destination,
+    path, estimatedValue,
+    address,
+    destinationAmount,
+}) {
     return StellarSdk.Operation.pathPaymentStrictReceive({
-        sendAsset: opts.source,
-        sendMax: opts.optimizedEstimatedValue,
-        path: opts.path,
-        destAsset: opts.destination,
-        destAmount: opts.destinationAmount,
-        destination: opts.address,
+        sendAsset: source,
+        sendMax: estimatedValue,
+        path,
+        destAsset: destination,
+        destAmount: destinationAmount,
+        destination: address,
     });
 }

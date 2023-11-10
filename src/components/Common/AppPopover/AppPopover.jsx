@@ -5,15 +5,19 @@ import images from '../../../images';
 export default function AppPopover(props) {
     const popoverRef = useRef(null);
     const [xPosition, setXPosition] = useState('right');
+    const [yPosition, setYPosition] = useState('bottom');
 
     useEffect(() => {
         if (!popoverRef.current) {
             return;
         }
-        const { right } = popoverRef.current.getBoundingClientRect();
+        const { right, bottom } = popoverRef.current.getBoundingClientRect();
 
         if (right > window.innerWidth) {
             setXPosition('left');
+        }
+        if (bottom > window.innerHeight) {
+            setYPosition('top');
         }
     }, [popoverRef]);
 
@@ -22,7 +26,7 @@ export default function AppPopover(props) {
     return (
         <div className="InfoHover_block">
             {hoverArea || <img src={images['icon-info']} alt="i" />}
-            <div className={`App_popover ${xPosition}`} ref={popoverRef}>
+            <div className={`App_popover ${xPosition} ${yPosition}`} ref={popoverRef}>
                 {content}
             </div>
         </div>
