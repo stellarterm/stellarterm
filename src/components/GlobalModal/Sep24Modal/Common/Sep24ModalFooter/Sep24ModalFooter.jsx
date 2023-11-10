@@ -99,6 +99,7 @@ export default class Sep24ModalFooter extends React.Component {
         const transactionUrl = isInfoNeeded ? `${transaction.url}&callback=postMessage` : false;
         const isWaitingForWithdraw = !isDeposit && transaction.status === 'pending_user_transfer_start';
         const isCompleted = transaction.status === 'completed';
+        const isIncomplete = transaction.status === 'incomplete';
 
         if (isWaitingForWithdraw) {
             return (
@@ -122,7 +123,7 @@ export default class Sep24ModalFooter extends React.Component {
             <div className="Action_buttons">
                 {cancelButton}
 
-                {transactionUrl ? (
+                {(transactionUrl || (windowClosed && isIncomplete)) ? (
                     <button className="s-button" onClick={() => this.props.openAnchorWindow()}>
                         {windowClosed ? 'Retry' : 'Continue'}
                     </button>
