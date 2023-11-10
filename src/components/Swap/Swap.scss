@@ -87,4 +87,12 @@
             opacity: 0.5;
         }
     }
+
+    .Swap_savings {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        cursor: pointer;
+        white-space: nowrap;
+    }
 }

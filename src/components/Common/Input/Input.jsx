@@ -19,6 +19,8 @@ const Input = forwardRef(
         postfix,
         bottomBoxy,
         inputType,
+        success,
+        successTemplate,
         ...props
     }, ref) => {
         const id = useMemo(() => _.uniqueId(), []);
@@ -58,7 +60,7 @@ const Input = forwardRef(
                     <input
                         ref={ref}
                         id={id}
-                        className={`Input ${invalid ? 'invalid' : ''} ${prefix ? 'withPrefix' : ''} ${bottomBoxy ? 'bottomBoxy' : ''} ${postfix ? 'withPostfix' : ''}`}
+                        className={`Input ${invalid ? 'invalid' : ''} ${prefix ? 'withPrefix' : ''} ${bottomBoxy ? 'bottomBoxy' : ''} ${postfix ? 'withPostfix' : ''} ${success ? 'success' : ''}`}
                         value={value}
                         onChange={onInputChange}
                         {...props}
@@ -69,8 +71,14 @@ const Input = forwardRef(
                         </div>
                     )}
                     {Boolean(errorText) && (
-                        <div className="Input_error-tooltip">
+                        <div className="Input_tooltip error">
                             {errorText}
+                        </div>
+                    )}
+
+                    {Boolean(successTemplate) && (
+                        <div className="Input_tooltip success">
+                            {successTemplate}
                         </div>
                     )}
                 </div>
@@ -90,4 +98,6 @@ Input.propTypes = {
     postfix: PropTypes.element,
     bottomBoxy: PropTypes.bool,
     inputType: PropTypes.oneOf(['text', 'number']),
+    success: PropTypes.bool,
+    successTemplate: PropTypes.node,
 };

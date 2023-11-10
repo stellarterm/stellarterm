@@ -25,6 +25,7 @@ const SwapFormRow = ({
     priceImpact,
     setIsInsufficient,
     setIsInvalid,
+    savings,
 }) => {
     const [isListOpen, setIsListOpen] = useState(false);
 
@@ -125,6 +126,8 @@ const SwapFormRow = ({
                             }</span>
                     </div> : null
                 }
+                success={Boolean(savings)}
+                successTemplate={savings}
             />
 
             <SwapAsset asset={asset} d={d} openList={() => setIsListOpen(true)} />
@@ -159,4 +162,5 @@ SwapFormRow.propTypes = {
     priceImpact: PropTypes.number,
     setIsInsufficient: PropTypes.func,
     setIsInvalid: PropTypes.func,
+    savings: PropTypes.node,
 };

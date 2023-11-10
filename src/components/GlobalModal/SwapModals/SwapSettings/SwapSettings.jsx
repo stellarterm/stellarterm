@@ -31,7 +31,7 @@ const SwapSettings = ({ submit, d }) => {
     }, [slippage]);
 
     return (
-        <div className="SwapSettings">
+        <div className="Modal SwapSettings">
             <div className="Modal_header">
                 <span>Transaction settings</span>
                 <img

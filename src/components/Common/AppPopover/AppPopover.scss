@@ -9,7 +9,7 @@
 
     .App_popover {
         position: absolute;
-        top: calc(100% + 5px);
+
         z-index: 10;
         width: 280px;
         padding: 15px 20px;
@@ -22,10 +22,29 @@
         &::after {
             content: "";
             position: absolute;
-            top: -6px;
+
             border: 6px solid transparent;
-            border-top: none;
-            border-bottom: 6px solid #021243;
+
+        }
+
+        &.top {
+            bottom: calc(100% + 5px);
+
+            &::after {
+                bottom: -6px;
+                border-bottom: none;
+                border-top: 6px solid #021243;
+            }
+        }
+
+        &.bottom {
+            top: calc(100% + 5px);
+
+            &::after {
+                top: -6px;
+                border-top: none;
+                border-bottom: 6px solid #021243;
+            }
         }
 
         &.right {

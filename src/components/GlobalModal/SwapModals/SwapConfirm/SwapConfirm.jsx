@@ -1,26 +1,18 @@
 /* eslint-disable camelcase */
 import React, { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import StellarSdk, { Asset } from 'stellar-sdk';
+import { Asset } from 'stellar-sdk';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 import AppPopover from '../../../Common/AppPopover/AppPopover';
 import { getSlippageValue } from '../SwapSettings/SwapSettings';
-import Swap from '../../../../lib/driver/driverInstances/Swap';
+import Swap, { FEE_ADDRESS } from '../../../../lib/driver/driverInstances/Swap';
 import { formatNumber } from '../../../../lib/helpers/Format';
 import Driver from '../../../../lib/driver/Driver';
 import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 
-
-const processPathAsset = ({ asset_type, asset_code, asset_issuer }) => {
-    if (asset_type === 'native') {
-        return StellarSdk.Asset.native();
-    }
-
-    return new StellarSdk.Asset(asset_code, asset_issuer);
-};
 
 const SwapConfirm = ({ params, submit, d }) => {
     const [isPriceReverted, setIsPriceReverted] = useState(false);
@@ -88,14 +80,6 @@ const SwapConfirm = ({ params, submit, d }) => {
             `1 ${source.code} = ${formatNumber(priceValue)} ${destination.code}`;
     }, [sourceAmount, destinationAmount, isPriceReverted, source, destination]);
 
-
-    const processedPath = useMemo(() => path.path.map(asset => processPathAsset(asset)), [path]);
-
-    const fullPath = useMemo(() =>
-        [source, ...processedPath, destination],
-    [source, destination, processedPath],
-    );
-
     const togglePrice = () => {
         setIsPriceReverted(prevState => !prevState);
     };
@@ -117,14 +101,12 @@ const SwapConfirm = ({ params, submit, d }) => {
         }
 
         const signAndSubmit = await d.session.handlers.swap({
-            isSend,
-            source,
-            sourceAmount,
-            destination,
-            destinationAmount,
-            optimizedEstimatedValue,
+            path,
             withTrust,
-            path: processedPath,
+            destination,
+            source,
+            slippage,
+            feeAddress: FEE_ADDRESS,
         });
 
         if (signAndSubmit.status === TX_STATUS.SENT_TO_WALLET_CONNECT) {
@@ -253,27 +235,72 @@ const SwapConfirm = ({ params, submit, d }) => {
                     <span>{formatNumber(optimizedEstimatedValue)} {isSend ? destination.code : source.code}</span>
                 </div>
 
-                <div className="SwapConfirm_details-row">
-                    <div className="SwapConfirm_detail-label">
-                        <span>Path</span>
-                        <AppPopover
-                            content={'Routing through these assets resulted in the best price for your trade'}
-                            hoverArea={<img
-                                src={images['icon-info-gray']}
-                                alt="i"
-                            />}
-                        />
-                    </div>
+                {path.isSmartRouting ? (
+                    <div className="SwapConfirm_details-row">
+                        <div className="SwapConfirm_detail-label">
+                            <span>Saving</span>
+                            <AppPopover
+                                content={<div className="SwapConfirm_saving-popover">
+                                    <h5>Smart Swap</h5>
+                                    <br />
+                                    <p>
+                                        Smart Routing is the process of
+                                        automatically finding the best rate by
+                                        splitting your order between different
+                                        pools and markets
+                                    </p>
+                                    {path.extended_paths.map(item =>
+                                        <div className="SwapConfirm_saving-popover-row" key={item.readablePath.join()}>
+                                            <span>{item.percent.toFixed(2)} %</span>
 
-                    <div className="SwapConfirm_path">
-                        {fullPath.map(({ code, issuer }, index) =>
-                            <div key={code + issuer} className="SwapConfirm_path">
-                                <span>{code}</span>
-                                {index !== (fullPath.length - 1) && <img src={images['icon-arrow-right']} alt="" />}
-                            </div>,
-                        )}
+                                            <div className="SwapConfirm_saving-popover-path">
+                                                {item.readablePath.map((code, index) => (
+                                                    <React.Fragment key={code}>
+                                                        <span>{code}</span>
+                                                        {index !== (item.readablePath.length - 1) && <img src={images['icon-arrow-right']} alt="" />}
+                                                    </React.Fragment>
+                                                ))}
+                                            </div>
+                                        </div>,
+                                    )}
+                                </div>
+                                }
+                                hoverArea={<img
+                                    src={images['icon-info-gray']}
+                                    alt="i"
+                                />}
+                            />
+                        </div>
+
+                        <div className="SwapConfirm_saving">
+                            ~ {path.profit} {path.type === 'send' ? destination.code : source.code}
+                        </div>
                     </div>
-                </div>
+                ) : (
+                    <div className="SwapConfirm_details-row">
+                        <div className="SwapConfirm_detail-label">
+                            <span>Path</span>
+                            <AppPopover
+                                content={'Routing through these assets resulted in the best price for your trade'}
+                                hoverArea={<img
+                                    src={images['icon-info-gray']}
+                                    alt="i"
+                                />}
+                            />
+                        </div>
+
+                        <div className="SwapConfirm_path">
+                            {path.extended_paths[0].readablePath.map((code, index) =>
+                            // eslint-disable-next-line react/no-array-index-key
+                                <div key={code + index} className="SwapConfirm_path">
+                                    <span>{code}</span>
+                                    {index !== (path.extended_paths[0].readablePath.length - 1) &&
+                                         <img src={images['icon-arrow-right']} alt="" />}
+                                </div>,
+                            )}
+                        </div>
+                    </div>
+                )}
 
                 {(priceHasChanges && !pending) && (
                     <div className="SwapConfirm_alert">
