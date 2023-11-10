@@ -76,7 +76,11 @@ export default class TransactionContent extends React.Component {
 
         return (
             <React.Fragment>
-                <DestinationBlock destination={withdraw_anchor_account} label="Anchor's withdrawal address" />
+                {withdraw_anchor_account ?
+                    <DestinationBlock destination={withdraw_anchor_account} label="Anchor's withdrawal address" /> :
+                    null
+                }
+
 
                 {withdraw_memo ?
                     <MemoBlock memo={withdraw_memo} memoType={withdraw_memo_type} isDeposit={false} /> :
