@@ -387,6 +387,7 @@ const Swap = ({ d }) => {
             // reset amounts
             setSourceAmount('');
             setDestinationAmount('');
+            setPath(null);
         }
     };
 
