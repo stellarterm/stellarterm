@@ -73,31 +73,31 @@ export default class Swap {
                     .toNumber();
 
                 if (
-                    priceImpact > SMART_ROUTING_MAX_PRICE_IMPACT &&
+                    priceImpact <= SMART_ROUTING_MAX_PRICE_IMPACT &&
                     (sourceAmount * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT)
                 ) {
-                    return ({
-                        isSmartRouting: false,
-                        type: 'send',
-                        extended_paths: [{
-                            destinationAmount: Number(result.destination_amount),
-                            sourceAmount: Number(result.source_amount),
-                            path: result,
-                            percent: 100,
-                            readablePath: [
-                                source.code,
-                                ...result.path.map(({ asset_type: type, asset_code: code }) => (type === 'native' ? 'XLM' : code)),
-                                destination.code,
-                            ],
-                        }],
-                        profit: 0,
-                        initial_sum: result.destination_amount,
-                        optimized_sum: result.destination_amount,
-                        fee_path: null,
-                    });
+                    return Swap.getSmartRoutingPath(true, source, destination, sourceAmount);
                 }
 
-                return Swap.getSmartRoutingPath(true, source, destination, sourceAmount);
+                return ({
+                    isSmartRouting: false,
+                    type: 'send',
+                    extended_paths: [{
+                        destinationAmount: Number(result.destination_amount),
+                        sourceAmount: Number(result.source_amount),
+                        path: result,
+                        percent: 100,
+                        readablePath: [
+                            source.code,
+                            ...result.path.map(({ asset_type: type, asset_code: code }) => (type === 'native' ? 'XLM' : code)),
+                            destination.code,
+                        ],
+                    }],
+                    profit: 0,
+                    initial_sum: result.destination_amount,
+                    optimized_sum: result.destination_amount,
+                    fee_path: null,
+                });
             });
     }
 
@@ -115,30 +115,31 @@ export default class Swap {
                     .toNumber();
 
                 if (
-                    priceImpact > SMART_ROUTING_MAX_PRICE_IMPACT &&
+                    priceImpact <= SMART_ROUTING_MAX_PRICE_IMPACT &&
                     (destinationAmount * destinationPriceUSD >= SMART_ROUTING_MIN_AMOUNT)
                 ) {
-                    return ({
-                        isSmartRouting: false,
-                        type: 'receive',
-                        extended_paths: [{
-                            destinationAmount: Number(result.destination_amount),
-                            sourceAmount: Number(result.source_amount),
-                            path: result,
-                            percent: 100,
-                            readablePath: [
-                                source.code,
-                                ...result.path.map(({ asset_type: type, asset_code: code }) => (type === 'native' ? 'XLM' : code)),
-                                destination.code,
-                            ],
-                        }],
-                        profit: 0,
-                        initial_sum: result.source_amount,
-                        optimized_sum: result.source_amount,
-                        fee_path: null,
-                    });
+                    return Swap.getSmartRoutingPath(false, source, destination, destinationAmount);
                 }
-                return Swap.getSmartRoutingPath(false, source, destination, destinationAmount);
+
+                return ({
+                    isSmartRouting: false,
+                    type: 'receive',
+                    extended_paths: [{
+                        destinationAmount: Number(result.destination_amount),
+                        sourceAmount: Number(result.source_amount),
+                        path: result,
+                        percent: 100,
+                        readablePath: [
+                            source.code,
+                            ...result.path.map(({ asset_type: type, asset_code: code }) => (type === 'native' ? 'XLM' : code)),
+                            destination.code,
+                        ],
+                    }],
+                    profit: 0,
+                    initial_sum: result.source_amount,
+                    optimized_sum: result.source_amount,
+                    fee_path: null,
+                });
             });
     }
 
