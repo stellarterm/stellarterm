@@ -107,6 +107,11 @@
         span {
             margin-right: 4px;
         }
+
+        .App_popover {
+            width: unset;
+            min-width: 280px;
+        }
     }
 
     &_alert {
@@ -152,6 +157,23 @@
     }
 
     &_path {
+        display: flex;
+        align-items: center;
+    }
+
+    &_saving {
+        color: #69C76F;
+    }
+
+    &_saving-popover-row {
+        display: flex;
+        justify-content: space-between;
+        white-space: nowrap;
+        align-items: center;
+        gap: 20px;
+    }
+
+    &_saving-popover-path {
         display: flex;
         align-items: center;
     }

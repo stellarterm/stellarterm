@@ -36,13 +36,23 @@ import {
 import { CONTENT_TYPE_HEADER } from '../../constants/commonConstants';
 import DelayedPromise from '../../helpers/DelayedPromise';
 import { MULTISIG_PROVIDERS } from '../../constants/multisigConstants';
+import BigNumber from 'bignumber.js';
 
 const fee = '100000';
 export const CACHED_ASSETS_ALIAS = 'cached_asset_data';
 export const UPDATE_CACHED_ASSETS_TIMESTAMP = 'update_cached_asset_data_timestamp';
-export const getAssetString = asset => `${asset.code}:${asset.issuer}`;
+export const getAssetString = asset => ((asset.isNative && asset.isNative()) ? 'native' : `${asset.code}:${asset.issuer}`);
+
 
 const JWT_TOKENS_CACHE = new Map();
+
+const processPathAsset = ({ asset_type: type, asset_code: code, asset_issuer: issuer }) => {
+    if (type === 'native') {
+        return StellarSdk.Asset.native();
+    }
+
+    return new StellarSdk.Asset(code, issuer);
+};
 
 export default function Send(driver) {
     this.event = new Event();
@@ -648,16 +658,58 @@ export default function Send(driver) {
 
             return this.handlers.buildSignSubmit(op, memo, opts.withMuxing);
         },
-        swap: opts => {
+        swap: ({ path, withTrust, destination, source, slippage, feeAddress }) => {
             const ops = [];
 
-            if (opts.withTrust) {
-                ops.push(buildOpChangeTrust({ asset: opts.destination }));
+            if (withTrust) {
+                ops.push(buildOpChangeTrust({ asset: destination }));
             }
             // eslint-disable-next-line no-param-reassign
-            opts.address = this.account.accountId();
-            const op = opts.isSend ? buildOpPathPaymentStrictSend(opts) : buildOpPathPaymentStrictReceive(opts);
-            ops.push(op);
+            const address = this.account.accountId();
+
+            path.extended_paths.forEach(({ destinationAmount, sourceAmount, path: swapPath }) => {
+                const processedPath = swapPath.map(item => processPathAsset(item));
+
+                const estimatedValue = new BigNumber(path.type === 'send' ? 100 - slippage : 100 + slippage)
+                    .times(new BigNumber(path.type === 'send' ? destinationAmount : sourceAmount))
+                    .div(100)
+                    .toFixed(7);
+
+                const op = path.type === 'send' ?
+                    buildOpPathPaymentStrictSend({
+                        source,
+                        destination,
+                        path: processedPath,
+                        sourceAmount: sourceAmount.toFixed(7),
+                        estimatedValue,
+                        address,
+                    }) :
+                    buildOpPathPaymentStrictReceive({
+                        source,
+                        destination,
+                        path: processedPath,
+                        destinationAmount: destinationAmount.toFixed(7),
+                        estimatedValue,
+                        address,
+                    });
+
+                ops.push(op);
+            });
+
+            if (path.fee_path) {
+                const feeOp = buildOpPathPaymentStrictSend({
+                    source,
+                    destination: new StellarSdk.Asset(
+                        path.fee_path.destination_asset_code, path.fee_path.destination_asset_issuer,
+                    ),
+                    path: path.fee_path.path.map(item => processPathAsset(item)),
+                    address: feeAddress,
+                    estimatedValue: '0.0000001',
+                    sourceAmount: path.fee_path.source_amount,
+                });
+
+                ops.push(feeOp);
+            }
 
             return this.handlers.buildSignSubmit(ops);
         },

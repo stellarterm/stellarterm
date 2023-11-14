@@ -3,6 +3,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import StellarSdk from 'stellar-sdk';
 import BigNumber from 'bignumber.js';
+import processBalances from '../Session/SessionContent/SessionAccount/AccountView/BalancesTable/processBalances';
 import NotFound from '../NotFound/NotFound';
 import useUpdateInterval from '../../lib/hooks/useUpdateInterval';
 import images from '../../images';
@@ -11,9 +12,8 @@ import useDebounce from '../../lib/hooks/useDebounce';
 import Stellarify from '../../lib/helpers/Stellarify';
 import Driver from '../../lib/driver/Driver';
 import { SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
-import { formatNumber } from '../../lib/helpers/Format';
+import { formatNumber, roundAndFormat } from '../../lib/helpers/Format';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
-import processBalances from '../Session/SessionContent/SessionAccount/AccountView/BalancesTable/processBalances';
 
 
 const SWAP_EQUAL_ASSETS_ERROR = 'Swap of equal assets is unavailable.';
@@ -44,8 +44,20 @@ const Swap = ({ d }) => {
     const [errorText, setErrorText] = useState('');
     const [isEqualAssets, setIsEqualAssets] = useState(false);
 
+    const [isHidden, setIsHidden] = useState(document.hidden);
+
     const history = useHistory();
     const location = useLocation();
+
+    const onVisibilityChange = () => {
+        setIsHidden(document.hidden);
+    };
+
+    useEffect(() => {
+        document.addEventListener('visibilitychange', onVisibilityChange);
+
+        return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+    }, []);
 
     const updateBalances = () => {
         processBalances(d).then(res => {
@@ -96,24 +108,15 @@ const Swap = ({ d }) => {
     });
 
     useEffect(() => {
-        if (!source) {
+        if (!source || !destination) {
             return;
         }
-        setSourcePriceUSD(null);
-        d.swap.getAssetPriceUsd(source).then(price => {
-            setSourcePriceUSD(price);
-        });
-    }, [source]);
 
-    useEffect(() => {
-        if (!destination) {
-            return;
-        }
-        setDestinationPriceUSD(null);
-        d.swap.getAssetPriceUsd(destination).then(price => {
-            setDestinationPriceUSD(price);
+        d.swap.getUsdPrices(source, destination).then(([priceSource, priceDest]) => {
+            setSourcePriceUSD(priceSource);
+            setDestinationPriceUSD(priceDest);
         });
-    }, [destination]);
+    }, [source, destination]);
 
     useEffect(() => {
         const { assets } = d.ticker.data;
@@ -160,6 +163,7 @@ const Swap = ({ d }) => {
         if (!isSend) {
             setSourceAmount('');
         }
+        setPath(null);
     }, [source, destination]);
 
     const revertAssets = () => {
@@ -237,20 +241,46 @@ const Swap = ({ d }) => {
             .toNumber();
     }, [sourceAmountUSD, destinationAmountUSD]);
 
+    const openSavings = () => {
+        d.modal.handlers.activate('SwapSavings', path);
+    };
+
+    const savings = useMemo(() => {
+        if (!path || !path.isSmartRouting) {
+            return null;
+        }
+
+        return (
+            <div className="Swap_savings" onClick={() => openSavings()}>
+                Savings {roundAndFormat(path.profit)} {path.type === 'send' ? destination.code : source.code}
+                <img src={images['icon-info-white']} alt="" />
+            </div>
+        );
+    }, [path]);
+
     const getSendPath = useCallback(() => {
         if (!destination) {
             return;
         }
         setPending(true);
 
-        d.swap.getBestSendPath(source, destination, debouncedSourceAmount).then(res => {
+        d.swap.getBestSendPath({
+            source,
+            destination,
+            sourceAmount: debouncedSourceAmount,
+            sourcePriceUSD,
+            destinationPriceUSD,
+        }).then(res => {
             setPending(false);
             if (!res) {
                 setErrorText(SWAP_NO_PATH_ERROR);
                 return;
             }
-            setDestinationAmount(res.destination_amount);
+
+            setDestinationAmount(res.optimized_sum);
             setPath(res);
+        }).catch(() => {
+            setErrorText(SWAP_NO_PATH_ERROR);
         });
     }, [source, destination, debouncedSourceAmount]);
 
@@ -260,15 +290,24 @@ const Swap = ({ d }) => {
         }
         setPending(true);
 
-        d.swap.getBestReceivePath(source, destination, debouncedDestinationAmount).then(res => {
+        d.swap.getBestReceivePath({
+            source,
+            destination,
+            destinationAmount: debouncedDestinationAmount,
+            destinationPriceUSD,
+            sourcePriceUSD,
+        }).then(res => {
             setPending(false);
 
             if (!res) {
                 setErrorText(SWAP_NO_PATH_ERROR);
                 return;
             }
-            setSourceAmount(res.source_amount);
+
+            setSourceAmount(res.optimized_sum);
             setPath(res);
+        }).catch(() => {
+            setErrorText(SWAP_NO_PATH_ERROR);
         });
     }, [source, destination, debouncedDestinationAmount]);
 
@@ -290,7 +329,7 @@ const Swap = ({ d }) => {
     const updateIndex = useUpdateInterval(15000, [sourceAmount, destinationAmount]);
 
     useEffect(() => {
-        if (!Number(sourceAmount) || !Number(destinationAmount)) {
+        if (!Number(sourceAmount) || !Number(destinationAmount) || isHidden) {
             return;
         }
 
@@ -299,7 +338,7 @@ const Swap = ({ d }) => {
         } else {
             getReceivePath();
         }
-    }, [updateIndex]);
+    }, [updateIndex, isHidden]);
 
     useEffect(() => {
         if (d.modal.modalName === 'SwapConfirm' && d.modal.active) {
@@ -329,6 +368,12 @@ const Swap = ({ d }) => {
         d.modal.active,
     ]);
 
+    useEffect(() => {
+        if (d.modal.modalName === 'SwapSavings' && d.modal.active) {
+            d.modal.handlers.updateData(path);
+        }
+    }, [path]);
+
     const togglePrice = () => {
         setIsPriceReverted(prevState => !prevState);
     };
@@ -354,6 +399,7 @@ const Swap = ({ d }) => {
             // reset amounts
             setSourceAmount('');
             setDestinationAmount('');
+            setPath(null);
         }
     };
 
@@ -438,6 +484,7 @@ const Swap = ({ d }) => {
                     priceImpact={priceImpact}
                     isDestination
                     setIsInvalid={setIsInvalidDestinationAmount}
+                    savings={savings}
                 />
 
                 {price &&
