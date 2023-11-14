@@ -137,6 +137,11 @@ const SwapConfirm = ({ params, submit, d }) => {
         }
     };
 
+    if (!path) {
+        submit.close();
+        return null;
+    }
+
     return (
         <div className="SwapConfirm">
             <div className="Modal_header">
