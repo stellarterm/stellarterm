@@ -155,7 +155,7 @@ export default class Swap {
         }));
     }
 
-    async getUsdPrices(source, destination) {
+    getUsdPrices(source, destination) {
         const { USD_XLM } = this.driver.ticker.data._meta.externalPrices;
 
         const body = JSON.stringify({ asset_keys: [getAssetString(source), getAssetString(destination)] });
