@@ -44,8 +44,20 @@ const Swap = ({ d }) => {
     const [errorText, setErrorText] = useState('');
     const [isEqualAssets, setIsEqualAssets] = useState(false);
 
+    const [isHidden, setIsHidden] = useState(document.hidden);
+
     const history = useHistory();
     const location = useLocation();
+
+    const onVisibilityChange = () => {
+        setIsHidden(document.hidden);
+    };
+
+    useEffect(() => {
+        document.addEventListener('visibilitychange', onVisibilityChange);
+
+        return () => document.removeEventListener('visibilitychange', onVisibilityChange);
+    }, []);
 
     const updateBalances = () => {
         processBalances(d).then(res => {
@@ -317,7 +329,7 @@ const Swap = ({ d }) => {
     const updateIndex = useUpdateInterval(15000, [sourceAmount, destinationAmount]);
 
     useEffect(() => {
-        if (!Number(sourceAmount) || !Number(destinationAmount)) {
+        if (!Number(sourceAmount) || !Number(destinationAmount) || isHidden) {
             return;
         }
 
@@ -326,7 +338,7 @@ const Swap = ({ d }) => {
         } else {
             getReceivePath();
         }
-    }, [updateIndex]);
+    }, [updateIndex, isHidden]);
 
     useEffect(() => {
         if (d.modal.modalName === 'SwapConfirm' && d.modal.active) {
