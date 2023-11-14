@@ -6,7 +6,7 @@ import { ENDPOINTS, getEndpoint } from '../../api/endpoints';
 import { getAssetString } from './Session';
 
 const XDR_AMOUNT_COEFFICIENT = 0.0000001;
-const SMART_ROUTING_MIN_AMOUNT = 0.1; // 100$
+const SMART_ROUTING_MIN_AMOUNT = 100; // 100$
 const SMART_ROUTING_FEE = 30; // 30%
 const SMART_ROUTING_MAX_PRICE_IMPACT = -0.5;
 
