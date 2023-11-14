@@ -60,9 +60,6 @@ export default class Swap {
     // source_asset_type: string
 
     getBestSendPath({ source, destination, sourceAmount, sourcePriceUSD, destinationPriceUSD }) {
-        if (sourceAmount * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT) {
-            return Swap.getSmartRoutingPath(true, source, destination, sourceAmount);
-        }
         return this.driver.Server.strictSendPaths(source, sourceAmount, [destination])
             .call()
             .then(({ records }) => Swap.findMaxSendPath(records))
@@ -75,7 +72,10 @@ export default class Swap {
                     .times(100)
                     .toNumber();
 
-                if (priceImpact > SMART_ROUTING_MAX_PRICE_IMPACT) {
+                if (
+                    priceImpact > SMART_ROUTING_MAX_PRICE_IMPACT &&
+                    (sourceAmount * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT)
+                ) {
                     return ({
                         isSmartRouting: false,
                         type: 'send',
@@ -102,9 +102,6 @@ export default class Swap {
     }
 
     getBestReceivePath({ source, destination, destinationAmount, destinationPriceUSD, sourcePriceUSD }) {
-        if (destinationAmount * destinationPriceUSD >= SMART_ROUTING_MIN_AMOUNT) {
-            return Swap.getSmartRoutingPath(false, source, destination, destinationAmount);
-        }
         return this.driver.Server.strictReceivePaths([source], destination, destinationAmount)
             .call()
             .then(({ records }) => Swap.findMinReceivePath(records))
@@ -117,7 +114,10 @@ export default class Swap {
                     .times(100)
                     .toNumber();
 
-                if (priceImpact > SMART_ROUTING_MAX_PRICE_IMPACT) {
+                if (
+                    priceImpact > SMART_ROUTING_MAX_PRICE_IMPACT &&
+                    (destinationAmount * destinationPriceUSD >= SMART_ROUTING_MIN_AMOUNT)
+                ) {
                     return ({
                         isSmartRouting: false,
                         type: 'receive',
