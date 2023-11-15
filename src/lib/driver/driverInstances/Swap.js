@@ -85,7 +85,7 @@ export default class Swap {
                     extended_paths: [{
                         destinationAmount: Number(result.destination_amount),
                         sourceAmount: Number(result.source_amount),
-                        path: result,
+                        path: result.path,
                         percent: 100,
                         readablePath: [
                             source.code,
@@ -127,7 +127,7 @@ export default class Swap {
                     extended_paths: [{
                         destinationAmount: Number(result.destination_amount),
                         sourceAmount: Number(result.source_amount),
-                        path: result,
+                        path: result.path,
                         percent: 100,
                         readablePath: [
                             source.code,
