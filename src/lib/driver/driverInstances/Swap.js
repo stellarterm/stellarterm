@@ -156,8 +156,6 @@ export default class Swap {
     }
 
     getUsdPrices(source, destination) {
-        const { USD_XLM } = this.driver.ticker.data._meta.externalPrices;
-
         const body = JSON.stringify({ asset_keys: [getAssetString(source), getAssetString(destination)] });
 
         const headers = { 'Content-Type': 'application/json' };
@@ -171,20 +169,24 @@ export default class Swap {
                         code === destination.code && issuer === destination.issuer);
 
                 return [
-                    // eslint-disable-next-line no-nested-ternary
-                    source.isNative() ?
-                        USD_XLM :
-                        (sourcePrice ?
-                            new BigNumber(sourcePrice.close_native_price).times(new BigNumber(USD_XLM)).toNumber() :
-                            null),
-                    // eslint-disable-next-line no-nested-ternary
-                    destination.isNative() ?
-                        USD_XLM :
-                        (destPrice ?
-                            new BigNumber(destPrice.close_native_price).times(new BigNumber(USD_XLM)).toNumber() :
-                            null),
+                    this.getUsdPrice(source, sourcePrice),
+                    this.getUsdPrice(destination, destPrice),
                 ];
             });
+    }
+
+    getUsdPrice(asset, price) {
+        const { USD_XLM } = this.driver.ticker.data._meta.externalPrices;
+
+        const { close_native_price: nativePrice } = price || {};
+
+        if (asset.isNative()) {
+            return USD_XLM;
+        }
+
+        return nativePrice ?
+            new BigNumber(nativePrice).times(new BigNumber(USD_XLM)).toNumber() :
+            null;
     }
 
     static getSendPathPaymentDestAmount(txRes) {
