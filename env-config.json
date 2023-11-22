@@ -13,7 +13,7 @@
         "TOP_MARKETS_API": "https://markets.ultrastellar.com/api/v1/",
         "DEFAULT_HORIZON": "https://horizon.stellar.org",
         "SMART_ROUTING_API": "https://staging--smart-routing.netlify.app/.netlify/functions/v1/",
-        "SWAP_LOGS_API": "https://testanchor.lobstr.co/api/v1/"
+        "SWAP_LOGS_API": "https://ultrastellar.com/api/v1/"
     },
     "production": {
         "ANCHORS_URL": "https://fed.stellarterm.com/issuer_orgs/",
@@ -29,7 +29,7 @@
         "TOP_MARKETS_API": "https://markets.ultrastellar.com/api/v1/",
         "DEFAULT_HORIZON": "https://stellarterm.com/horizon",
         "SMART_ROUTING_API": "https://routing.ultrastellar.com/.netlify/functions/v1/",
-        "SWAP_LOGS_API": "https://testanchor.lobstr.co/api/v1/"
+        "SWAP_LOGS_API": "https://ultrastellar.com/api/v1/"
     },
     "local": {
         "ANCHORS_URL": "https://fed-staging.stellarterm.com/issuer_orgs/",
@@ -45,6 +45,6 @@
         "TOP_MARKETS_API": "https://markets.ultrastellar.com/api/v1/",
         "DEFAULT_HORIZON": "https://horizon.stellar.org",
         "SMART_ROUTING_API": "https://routing.ultrastellar.com/.netlify/functions/v1/",
-        "SWAP_LOGS_API": "https://testanchor.lobstr.co/api/v1/"
+        "SWAP_LOGS_API": "https://ultrastellar.com/api/v1/"
     }
 }
