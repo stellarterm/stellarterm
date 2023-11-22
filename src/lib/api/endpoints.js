@@ -16,6 +16,7 @@ export const ENDPOINTS = {
     MOONPAY_QUOTE: 'MOONPAY_QUOTE',
     MOONPAY_TRANSACTION: 'MOONPAY_TRANSACTION',
     SMART_ROUTING: 'SMART_ROUTING',
+    SWAP_LOG: 'SWAP_LOG',
 };
 
 const endpointsMap = new Map([
@@ -36,6 +37,7 @@ const endpointsMap = new Map([
     [ENDPOINTS.MOONPAY_QUOTE, { url: 'moonpay/quote/stellarterm/', baseUrl: EnvConsts.MOONPAY_API_URL }],
     [ENDPOINTS.MOONPAY_TRANSACTION, { url: 'v2/moonpay/transaction/stellarterm/', baseUrl: EnvConsts.MOONPAY_API_URL }],
     [ENDPOINTS.SMART_ROUTING, { url: 'smart-routing', baseUrl: EnvConsts.SMART_ROUTING_API }],
+    [ENDPOINTS.SWAP_LOG, { url: 'swap/transactions/', baseUrl: EnvConsts.SWAP_LOGS_API }],
 ]);
 
 

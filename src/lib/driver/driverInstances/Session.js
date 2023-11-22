@@ -7,6 +7,7 @@ import { getPublicKey } from '@stellar/freighter-api';
 import FastAverageColor from 'fast-average-color';
 import isElectron from 'is-electron';
 import directory from 'stellarterm-directory';
+import BigNumber from 'bignumber.js';
 import MagicSpoon from '../../helpers/MagicSpoon';
 import Event from '../../helpers/Event';
 import * as request from '../../api/request';
@@ -36,7 +37,6 @@ import {
 import { CONTENT_TYPE_HEADER } from '../../constants/commonConstants';
 import DelayedPromise from '../../helpers/DelayedPromise';
 import { MULTISIG_PROVIDERS } from '../../constants/multisigConstants';
-import BigNumber from 'bignumber.js';
 
 const fee = '100000';
 export const CACHED_ASSETS_ALIAS = 'cached_asset_data';
@@ -394,7 +394,7 @@ export default function Send(driver) {
                 return modalResult;
             });
         },
-        buildSignSubmit: async (ops, memo, withMuxing) => {
+        buildSignSubmit: async (ops, memo, withMuxing, withLog) => {
             if (this.hasPendingTransaction) {
                 driver.toastService.error(
                     'Transaction in progress',
@@ -422,7 +422,14 @@ export default function Send(driver) {
             if (memo) {
                 tx.addMemo(Stellarify.memo(memo.type, memo.content));
             }
-            return this.handlers.signSubmit(tx.build());
+
+            const builtTx = tx.build();
+
+            if (withLog) {
+                this.handlers.logSwap(builtTx.hash().toString('hex'));
+            }
+
+            return this.handlers.signSubmit(builtTx);
         },
         signSubmit: async transaction => {
             // Returns: bssResult which contains status and (if finish) serverResult
@@ -711,7 +718,15 @@ export default function Send(driver) {
                 ops.push(feeOp);
             }
 
-            return this.handlers.buildSignSubmit(ops);
+            return this.handlers.buildSignSubmit(ops, undefined, false, Boolean(path.fee_path));
+        },
+        logSwap: txHash => {
+            const body = JSON.stringify({
+                transaction_hash: txHash,
+                platform: 'stellarterm',
+            });
+            const headers = { 'Content-Type': 'application/json' };
+            return request.post(getEndpoint(ENDPOINTS.SWAP_LOG), { body, headers });
         },
         logout: () => {
             try {
