@@ -126,8 +126,8 @@ const SwapConfirm = ({ params, submit, d }) => {
                 source,
                 destination,
                 hash: serverResult.id,
-                sourceAmount: isSend ? sourceAmount : Swap.getReceivePathPaymentSourceAmount(serverResult),
-                destinationAmount: isSend ? Swap.getSendPathPaymentDestAmount(serverResult) : destinationAmount,
+                sourceAmount: isSend ? sourceAmount : Swap.getReceiveSwapSourceAmount(serverResult),
+                destinationAmount: isSend ? Swap.getSendSwapDestAmount(serverResult) : destinationAmount,
             });
         } catch (error) {
             const errorMessage = ErrorHandler(error);
