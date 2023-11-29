@@ -189,120 +189,165 @@ export default class Swap {
             null;
     }
 
-    static getSendPathPaymentDestAmount(txRes) {
+    /**
+     * Get the final amount of the send-side swap transaction
+     * @param txRes: Horizon.SubmitTransactionResponse swap transaction result
+     * @return {string} swap destination amount
+     */
+    static getSendSwapDestAmount(txRes) {
         const transactionResult = StellarSdk.xdr.TransactionResult.fromXDR(
             txRes.result_xdr,
             'base64',
         );
 
-        // We need this cause search of ledger bumpSequence temp solution
-        const foundPathStrictSendResults = transactionResult
+        const sendSwapOps = transactionResult
             .result()
             .results()
-            .filter(res => res._value._switch.name === 'pathPaymentStrictSend');
-
-        let totalAmount = new BigNumber(0);
-        foundPathStrictSendResults.forEach(result => {
-            totalAmount = totalAmount.plus(
-                result
+            // use only pathPaymentStrictSend operations
+            .filter(item => item.value().switch().name === StellarSdk.xdr.OperationType.pathPaymentStrictSend().name)
+            // do not sum up the amount that was sent as a fee
+            .filter(item => StellarSdk.StrKey.encodeEd25519PublicKey(
+                item
                     .tr()
                     .pathPaymentStrictSendResult()
                     .success()
-                    .offers()
-                    .reverse()
-                    .reduce((acc, item) => {
-                        const itemValue = item.value();
-                        const assetValue = itemValue.assetSold().value();
+                    .last()
+                    .destination()
+                    .value(),
+            ) !== FEE_ADDRESS);
 
-                        const assetCode = assetValue ?
-                            assetValue.assetCode().toString() :
-                            'native';
+        const destinationAssetString = Swap.getResultXdrAssetString(
+            sendSwapOps[0]
+                .tr()
+                .pathPaymentStrictSendResult()
+                .success()
+                .last()
+                .asset(),
+        );
 
-                        const assetIssuer = assetValue ?
-                            assetValue.issuer().value().toString('hex') :
-                            'native';
+        return sendSwapOps.reduce((acc, op) => acc.plus(
+            op.tr()
+                .pathPaymentStrictSendResult()
+                .success()
+                .offers()
+                .reduce((offersAcc, offer) => {
+                    const offerValue = offer.value();
+                    const asset = offerValue.assetSold();
+                    const assetString = Swap.getResultXdrAssetString(asset);
 
-                        const amount = itemValue.amountSold().toNumber();
-
-                        if (acc.code === null) {
-                            acc.code = assetCode;
-                            acc.issuer = assetIssuer;
-
-                            acc.amount = new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
-
-                            return acc;
-                        }
-
-                        if (acc.code !== assetCode || acc.issuer !== assetIssuer) {
-                            return acc;
-                        }
-
-                        acc.amount += new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
-
-                        return acc;
-                    }, { code: null, issuer: null, amount: 0 }).amount,
-            );
-        });
-
-        return totalAmount.toFixed(7);
+                    if (assetString === destinationAssetString) {
+                        return offersAcc.plus(new BigNumber(offerValue.amountSold().toNumber()));
+                    }
+                    return offersAcc;
+                }, new BigNumber(0)),
+        ), new BigNumber(0))
+            .times(XDR_AMOUNT_COEFFICIENT)
+            .toNumber()
+            .toFixed(7);
     }
 
-    static getReceivePathPaymentSourceAmount(txRes) {
+    /**
+     * Get the final amount of the receive-side swap transaction
+     * @param txRes: Horizon.SubmitTransactionResponse swap transaction result
+     * @return {string} swap source amount
+     */
+    static getReceiveSwapSourceAmount(txRes) {
         const transactionResult = StellarSdk.xdr.TransactionResult.fromXDR(
             txRes.result_xdr,
             'base64',
         );
 
-        // We need this cause search of ledger bumpSequence temp solution
-        const foundPathStrictSendResults = transactionResult
+        const receiveSwapOps = transactionResult
             .result()
             .results()
-            .filter(res => res._value._switch.name === 'pathPaymentStrictReceive');
+            .filter(res => res.value().switch().name === StellarSdk.xdr.OperationType.pathPaymentStrictReceive().name);
 
-        let totalAmount = new BigNumber(0);
+        const sourceAssetString = Swap.getResultXdrAssetString(
+            receiveSwapOps[0]
+                .tr()
+                .pathPaymentStrictReceiveResult()
+                .success()
+                .offers()[0]
+                .value()
+                .assetBought(),
+        );
 
-        foundPathStrictSendResults.forEach(result => {
-            totalAmount = totalAmount.plus(
-                result
+        let totalAmount = receiveSwapOps.reduce((acc, op) => acc.plus(
+            new BigNumber(
+                op
                     .tr()
                     .pathPaymentStrictReceiveResult()
                     .success()
                     .offers()
-                    .reduce((acc, item) => {
-                        const itemValue = item.value();
-                        const assetValue = itemValue.assetBought().value();
+                    .reduce((offersAcc, offer) => {
+                        const offerValue = offer.value();
+                        const asset = offerValue.assetBought();
 
-                        const assetCode = assetValue ?
-                            assetValue.assetCode().toString() :
-                            'native';
+                        const assetString = Swap.getResultXdrAssetString(asset);
 
-                        const assetIssuer = assetValue ?
-                            assetValue.issuer().value().toString('hex') :
-                            'native';
-
-                        const amount = itemValue.amountBought().toNumber();
-
-                        if (acc.code === null) {
-                            acc.code = assetCode;
-                            acc.issuer = assetIssuer;
-
-                            acc.amount = new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
-
-                            return acc;
+                        if (assetString === sourceAssetString) {
+                            return offersAcc.plus(new BigNumber(offerValue.amountBought().toNumber()));
                         }
+                        return offersAcc;
+                    }, new BigNumber(0)),
+            ),
+        ), new BigNumber(0));
 
-                        if (acc.code !== assetCode || acc.issuer !== assetIssuer) {
-                            return acc;
-                        }
 
-                        acc.amount += new BigNumber(amount).times(XDR_AMOUNT_COEFFICIENT).toNumber();
+        // sum up the amount that was sent as a fee
+        const feeOps = transactionResult
+            .result()
+            .results()
+            .filter(res => res.value().switch().name === StellarSdk.xdr.OperationType.pathPaymentStrictSend().name)
+            .filter(item => StellarSdk.StrKey.encodeEd25519PublicKey(
+                item
+                    .tr()
+                    .pathPaymentStrictSendResult()
+                    .success()
+                    .last()
+                    .destination()
+                    .value(),
+            ) === FEE_ADDRESS);
 
-                        return acc;
-                    }, { code: null, issuer: null, amount: 0 }).amount,
-            );
-        });
+        // include fee amounts in the total amount
+        if (feeOps.length) {
+            feeOps.forEach(item => {
+                totalAmount = totalAmount.plus(
+                    item
+                        .tr()
+                        .pathPaymentStrictSendResult()
+                        .success()
+                        .offers()
+                        .reduce((offersAcc, offer) => {
+                            const offerValue = offer.value();
+                            const asset = offerValue.assetBought();
 
-        return totalAmount.toFixed(7);
+                            const assetString = Swap.getResultXdrAssetString(asset);
+
+                            if (assetString === sourceAssetString) {
+                                return offersAcc.plus(new BigNumber(offerValue.amountBought().toNumber()));
+                            }
+
+                            return offersAcc;
+                        }, new BigNumber(0)),
+                );
+            });
+        }
+
+        return totalAmount.times(XDR_AMOUNT_COEFFICIENT).toNumber().toFixed(7);
+    }
+
+    static getResultXdrAssetString(assetResult) {
+        const assetValue = assetResult.value();
+
+        if (!assetValue) {
+            return 'native';
+        }
+
+        const assetCode = assetValue.assetCode().toString();
+        const assetIssuer = StellarSdk.StrKey.encodeEd25519PublicKey(assetValue.issuer().value());
+
+        return `${assetCode}:${assetIssuer}`;
     }
 }
 
