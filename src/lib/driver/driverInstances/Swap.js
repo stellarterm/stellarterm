@@ -116,7 +116,7 @@ export default class Swap {
 
                 if (
                     priceImpact <= SMART_ROUTING_MAX_PRICE_IMPACT &&
-                    (destinationAmount * destinationPriceUSD >= SMART_ROUTING_MIN_AMOUNT)
+                    (Number(result.source_amount) * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT)
                 ) {
                     return Swap.getSmartRoutingPath(false, source, destination, destinationAmount);
                 }
