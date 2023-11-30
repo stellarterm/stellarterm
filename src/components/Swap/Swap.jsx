@@ -464,6 +464,7 @@ const Swap = ({ d }) => {
                     usdValue={sourceAmountUSD}
                     setIsInsufficient={setIsInsufficientSourceBalance}
                     setIsInvalid={setIsInvalidSourceAmount}
+                    savings={(path && path.type === 'receive') ? savings : null}
                 />
 
                 <div className="Swap_switch" onClick={() => revertAssets()}>
@@ -484,7 +485,7 @@ const Swap = ({ d }) => {
                     priceImpact={priceImpact}
                     isDestination
                     setIsInvalid={setIsInvalidDestinationAmount}
-                    savings={savings}
+                    savings={(path && path.type === 'send') ? savings : null}
                 />
 
                 {price &&
