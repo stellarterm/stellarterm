@@ -1,4 +1,4 @@
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import { ENDPOINTS, getEndpoint } from '../../api/endpoints';
 import * as request from '../../api/request';
 import { TX_STATUS } from '../../constants/sessionConstants';

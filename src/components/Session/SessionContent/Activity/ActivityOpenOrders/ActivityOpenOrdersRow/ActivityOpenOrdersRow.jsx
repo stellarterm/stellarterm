@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../../../../lib/driver/Driver';
 import images from '../../../../../../images';
 import AssetCardInRow from '../../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';

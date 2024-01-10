@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import _ from 'lodash';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import directory from 'stellarterm-directory';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';

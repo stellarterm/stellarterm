@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../../images';
 import Driver from '../../../lib/driver/Driver';

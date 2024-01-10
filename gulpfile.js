@@ -10,7 +10,7 @@ const $ = {
     sass: require('gulp-sass')(require('node-sass')),
     useref: require('gulp-useref'),
     uglify: require('gulp-uglify'),
-    inlineSource: require('gulp-inline-source'),
+    inlineSource: require('gulp-inline-source-html'),
 };
 const browserify = require('browserify');
 const watchify = require('watchify');

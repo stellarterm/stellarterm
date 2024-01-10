@@ -1,4 +1,4 @@
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import BigNumber from 'bignumber.js';
 import { TransactionStellarUri } from '@stellarguard/stellar-uri';
 

@@ -1,5 +1,5 @@
 /* eslint-disable no-param-reassign */
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import directory from 'stellarterm-directory';
 import * as request from '../api/request';
 import { getUrlWithParams } from '../api/endpoints';
@@ -79,7 +79,7 @@ export async function getTransferServer(asset, type, modal, transferDomain) {
             TRANSFER_SERVER_SEP0024,
             WEB_AUTH_ENDPOINT,
             NETWORK_PASSPHRASE,
-        } = await StellarSdk.StellarTomlResolver.resolve(domain);
+        } = await StellarSdk.StellarToml.Resolver.resolve(domain);
 
         if (TRANSFER_SERVER_SEP0024 || TRANSFER_SERVER) {
             const noSlashOnUrlEnd = TRANSFER_SERVER ? TRANSFER_SERVER.slice(-1) !== '/' : TRANSFER_SERVER;
