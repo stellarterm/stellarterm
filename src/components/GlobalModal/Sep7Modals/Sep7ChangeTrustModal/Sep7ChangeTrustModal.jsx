@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../../lib/driver/Driver';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
@@ -90,7 +90,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
         this.setState({ isLoadInProcess: true });
         try {
             const domain = await d.session.handlers.getDomainByIssuer(asset.issuer);
-            const toml = await StellarSdk.StellarTomlResolver.resolve(domain);
+            const toml = await StellarSdk.StellarToml.Resolver.resolve(domain);
             const { CURRENCIES } = toml;
             if (!CURRENCIES) {
                 return;

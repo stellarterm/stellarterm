@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { Asset } from 'stellar-sdk';
+import { Asset } from '@stellar/stellar-sdk';
 import Input from '../../Common/Input/Input';
 import useForceUpdate from '../../../lib/hooks/useForceUpdate';
 import { formatNumber, roundAndFormat } from '../../../lib/helpers/Format';

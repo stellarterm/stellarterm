@@ -2,7 +2,7 @@
 import React from 'react';
 import _ from 'lodash';
 import moment from 'moment';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import PropTypes from 'prop-types';
 import directory from 'stellarterm-directory';
 import Driver from '../../../../lib/driver/Driver';

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../lib/driver/Driver';
 import Stellarify from '../../../lib/helpers/Stellarify';
 import AssetDropDown from '../../Common/AssetPair/AssetDropDown/AssetDropDown';

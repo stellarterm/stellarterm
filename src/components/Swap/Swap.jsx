@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import BigNumber from 'bignumber.js';
 import processBalances from '../Session/SessionContent/SessionAccount/AccountView/BalancesTable/processBalances';
 import NotFound from '../NotFound/NotFound';

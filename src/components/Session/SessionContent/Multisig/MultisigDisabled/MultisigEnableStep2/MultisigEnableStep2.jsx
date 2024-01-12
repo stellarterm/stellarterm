@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../../../../lib/driver/Driver';
 import Multisig from '../../../../../../lib/driver/driverInstances/Multisig';
 import { KEY_NAMES, MULTISIG_PROVIDERS } from '../../../../../../lib/constants/multisigConstants';

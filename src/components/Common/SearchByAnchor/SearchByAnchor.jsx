@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Debounce from 'awesome-debounce-promise/dist/index';
 import Stellarify from '../../../lib/helpers/Stellarify';
 import Driver from '../../../lib/driver/Driver';
@@ -9,7 +9,7 @@ import AssetRow from '../AssetRow/AssetRow';
 import MessageRow from './MessageRow/MessageRow';
 
 const DEBOUNCE_TIME = 700;
-const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
+const resolveAnchor = Debounce(StellarSdk.StellarToml.Resolver.resolve, DEBOUNCE_TIME);
 const pattern = /^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/;
 const regexp = new RegExp(pattern, 'i');
 

@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React, { useCallback, useMemo, useState } from 'react';
 import BigNumber from 'bignumber.js';
-import { Asset } from 'stellar-sdk';
+import { Asset } from '@stellar/stellar-sdk';
 import PropTypes from 'prop-types';
 import images from '../../../../images';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';

@@ -1,4 +1,4 @@
-import StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import BigNumber from 'bignumber.js';
 import { post, get } from '../../api/request';
 import { TOP_MARKETS_API } from '../../../env-consts';
@@ -236,7 +236,7 @@ export default class Swap {
                     const assetString = Swap.getResultXdrAssetString(asset);
 
                     if (assetString === destinationAssetString) {
-                        return offersAcc.plus(new BigNumber(offerValue.amountSold().toNumber()));
+                        return offersAcc.plus(new BigNumber(Number(offerValue.amountSold())));
                     }
                     return offersAcc;
                 }, new BigNumber(0)),
@@ -286,7 +286,7 @@ export default class Swap {
                         const assetString = Swap.getResultXdrAssetString(asset);
 
                         if (assetString === sourceAssetString) {
-                            return offersAcc.plus(new BigNumber(offerValue.amountBought().toNumber()));
+                            return offersAcc.plus(new BigNumber(Number(offerValue.amountBought())));
                         }
                         return offersAcc;
                     }, new BigNumber(0)),
@@ -325,7 +325,7 @@ export default class Swap {
                             const assetString = Swap.getResultXdrAssetString(asset);
 
                             if (assetString === sourceAssetString) {
-                                return offersAcc.plus(new BigNumber(offerValue.amountBought().toNumber()));
+                                return offersAcc.plus(new BigNumber(Number(offerValue.amountBought())));
                             }
 
                             return offersAcc;

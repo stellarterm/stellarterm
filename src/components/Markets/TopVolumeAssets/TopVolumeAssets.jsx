@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../lib/driver/Driver';
 import Pagination from '../../Common/Pagination/Pagination';
 import { getWithCancel } from '../../../lib/api/request';
