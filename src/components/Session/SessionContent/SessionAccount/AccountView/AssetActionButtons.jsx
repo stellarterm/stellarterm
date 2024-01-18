@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import directory from 'stellarterm-directory';
 import Driver from '../../../../../lib/driver/Driver';
 import images from '../../../../../images';

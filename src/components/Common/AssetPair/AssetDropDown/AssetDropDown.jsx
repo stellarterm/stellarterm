@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Debounce from 'awesome-debounce-promise';
 import directory from 'stellarterm-directory';
 import Driver from '../../../../lib/driver/Driver';
@@ -18,7 +18,7 @@ const KEY_F = 70;
 
 const ProcessedButtons = new Set([ARROW_UP, ARROW_DOWN, ENTER]);
 const DEBOUNCE_TIME = 700;
-const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
+const resolveAnchor = Debounce(StellarSdk.StellarToml.Resolver.resolve, DEBOUNCE_TIME);
 // eslint-disable-next-line no-useless-escape,max-len
 const pattern = /^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$/;
 const regexp = new RegExp(pattern);

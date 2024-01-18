@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import { List, AutoSizer, InfiniteLoader } from 'react-virtualized';
 import createStellarIdenticon from 'stellar-identicon-js';
 import Driver from '../../../../../lib/driver/Driver';

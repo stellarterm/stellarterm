@@ -1,7 +1,7 @@
 import WalletConnectClient, { SIGN_CLIENT_EVENTS } from '@walletconnect/sign-client';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { getInternalError, getSdkError } from '@walletconnect/utils';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import { AUTH_TYPE, TX_STATUS } from '../../constants/sessionConstants';
 import Sep7Handler from '../../../components/HomePage/Sep7Handler/Sep7Handler';
 import { WALLET_CONNECT_PROJECT_ID } from '../../../env-consts';

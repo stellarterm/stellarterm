@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import directory from 'stellarterm-directory';
 import Stellarify from '../../helpers/Stellarify';
 import Validate from '../../helpers/Validate';
@@ -80,7 +80,7 @@ export default class Send {
             }
 
             if (account.home_domain && this.federationAddress === '') {
-                StellarSdk.StellarTomlResolver.resolve(account.home_domain).then(toml => {
+                StellarSdk.StellarToml.Resolver.resolve(account.home_domain).then(toml => {
                     if (!toml.FEDERATION_SERVER) {
                         return account;
                     }

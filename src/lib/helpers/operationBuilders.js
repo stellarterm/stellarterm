@@ -1,5 +1,5 @@
 import BigNumber from 'bignumber.js';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import { AUTH_TYPE } from '../constants/sessionConstants';
 
 // opts.baseBuying -- StellarSdk.Asset (example: XLM)

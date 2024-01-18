@@ -1,4 +1,4 @@
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Event from '../../helpers/Event';
 import { get } from '../../api/request';
 import { SESSION_STATE } from '../../constants/sessionConstants';
@@ -150,7 +150,7 @@ export default class HorizonServer {
     startServer() {
         const networkConfig = this.getInitialHorizonConfig();
 
-        this.driver.Server = new StellarSdk.Server(networkConfig.horizonUrl);
+        this.driver.Server = new StellarSdk.Horizon.Server(networkConfig.horizonUrl);
         this.driver.Server.currentServerUrl = networkConfig.horizonUrl;
         this.driver.Server.transactionTimeout = TRANSACTION_TIMEOUT;
         this.driver.Server.networkPassphrase = networkConfig.networkPassphrase;
@@ -171,7 +171,7 @@ export default class HorizonServer {
         ) {
             return;
         }
-        this.driver.Server = new StellarSdk.Server(url);
+        this.driver.Server = new StellarSdk.Horizon.Server(url);
         this.driver.Server.currentServerUrl = url;
         this.driver.Server.transactionTimeout = TRANSACTION_TIMEOUT;
         // we can change horizon only to pubnet currently

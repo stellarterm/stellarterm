@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../../lib/driver/Driver';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import images from '../../../../images';

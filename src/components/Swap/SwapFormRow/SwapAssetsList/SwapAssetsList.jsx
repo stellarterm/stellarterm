@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import Debounce from 'awesome-debounce-promise';
 import Input from '../../../Common/Input/Input';
 import images from '../../../../images';
@@ -14,7 +14,7 @@ import Printify from '../../../../lib/helpers/Printify';
 
 
 const DEBOUNCE_TIME = 700;
-const resolveAnchor = Debounce(StellarSdk.StellarTomlResolver.resolve, DEBOUNCE_TIME);
+const resolveAnchor = Debounce(StellarSdk.StellarToml.Resolver.resolve, DEBOUNCE_TIME);
 // eslint-disable-next-line no-useless-escape,max-len
 const pattern = /^(([a-zA-Z]{1})|([a-zA-Z]{1}[a-zA-Z]{1})|([a-zA-Z]{1}[0-9]{1})|([0-9]{1}[a-zA-Z]{1})|([a-zA-Z0-9][a-zA-Z0-9-_]{1,61}[a-zA-Z0-9]))\.([a-zA-Z]{2,6}|[a-zA-Z0-9-]{2,30}\.[a-zA-Z]{2,3})$/;
 const regexp = new RegExp(pattern);

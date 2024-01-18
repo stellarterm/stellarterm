@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import * as StellarSdk from 'stellar-sdk';
+import * as StellarSdk from '@stellar/stellar-sdk';
 import _ from 'lodash';
 import directory from 'stellarterm-directory';
 import Driver from '../../../../../lib/driver/Driver';
