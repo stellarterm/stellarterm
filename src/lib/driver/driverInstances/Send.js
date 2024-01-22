@@ -273,7 +273,7 @@ export default class Send {
             const federationDomain = targetDomain === 'stellarterm.com' ? EnvConsts.HOME_DOMAIN : targetDomain;
             this.requestIsPending = true;
 
-            StellarSdk.FederationServer.createForDomain(federationDomain)
+            StellarSdk.Federation.Server.createForDomain(federationDomain)
                 .then(federationServer => federationServer.resolveAddress(this.destInput))
                 .then(federationRecord => {
                     if (destInput !== this.destInput) {
