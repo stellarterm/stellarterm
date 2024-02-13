@@ -34,7 +34,7 @@ export default class HorizonServer {
         this.event = new Event();
 
         this.customServers = JSON.parse(localStorage.getItem(CUSTOM_HORIZON_SERVERS_LIST_LS) || 'null') || [];
-        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || defaultHorizonServer;
+        this.activeServer = localStorage.getItem(ACTIVE_HORIZON_SERVER) || 'https://horizon.stellar.org';
 
         this.startServer();
     }
