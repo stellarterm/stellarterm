@@ -1,0 +1,15 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "sourceRoot": "./src",
+    "baseUrl": "./src",
+    "declaration": true,
+    "declarationDir": "build/",
+    "outDir": "build/",
+    "paths": {
+      "@shared/*": ["../../@shared/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["build", "node_modules"]
+}

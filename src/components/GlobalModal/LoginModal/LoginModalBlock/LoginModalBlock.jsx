@@ -6,6 +6,7 @@ import LedgerBody from '../../../Session/LoginPage/LedgerBody/LedgerBody';
 import TrezorBody from '../../../Session/LoginPage/TrezorBody/TrezorBody';
 import FreighterBody from '../../../Session/LoginPage/FreighterBody/FreighterBody';
 import WalletConnectBody from '../../../Session/LoginPage/WalletConnectBody/WalletConnectBody';
+import LobstrExtensionBody from '../../../Session/LoginPage/LobstrExtensionBody/LobstrExtensionBody';
 
 const TABS = {
     SECRET: 'secret',
@@ -13,6 +14,7 @@ const TABS = {
     TREZOR: 'trezor',
     FREIGHTER: 'freighter',
     WALLET_CONNECT: 'wallet-connect',
+    LOBSTR_EXTENSION: 'lobstr-extension',
 };
 
 export default class LoginModalBlock extends React.Component {
@@ -45,6 +47,9 @@ export default class LoginModalBlock extends React.Component {
             }
             case TABS.FREIGHTER: {
                 return <FreighterBody d={d} modal />;
+            }
+            case TABS.LOBSTR_EXTENSION: {
+                return <LobstrExtensionBody d={d} modal />;
             }
             default: throw new Error('Unknown tab name');
         }
@@ -82,6 +87,12 @@ export default class LoginModalBlock extends React.Component {
                         className={this.getTabClassName(TABS.WALLET_CONNECT)}
                     >
                         <span>WalletConnect</span>
+                    </div>
+                    <div
+                        onClick={() => this.handleChoose(TABS.LOBSTR_EXTENSION)}
+                        className={this.getTabClassName(TABS.LOBSTR_EXTENSION)}
+                    >
+                        <span>Lobstr Extension</span>
                     </div>
                     <div
                         onClick={() => this.handleChoose(TABS.FREIGHTER)}

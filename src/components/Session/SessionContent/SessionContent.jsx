@@ -54,6 +54,7 @@ export default function SessionContent(props) {
                 <Redirect from="/trezor/" to="/account/" />
                 <Redirect from="/freighter/" to="/account/" />
                 <Redirect from="/signup/" to="/account/" />
+                <Redirect from="/lobstr-extension/" to="/account/" />
                 <Route render={() => <NotFound />} />
             </Switch>
         </React.Fragment>

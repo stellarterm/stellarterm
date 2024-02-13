@@ -22,6 +22,7 @@ export const AUTH_TYPE = {
     TREZOR: 'trezor',
     FREIGHTER: 'freighter',
     WALLET_CONNECT: 'wallet-connect',
+    LOBSTR_EXTENSION: 'lobstr-extension',
 };
 
 export const TX_STATUS = {

@@ -9,6 +9,7 @@ const LoginLinks = ({ narrow }) => (
 
         <div className="LoginLinks_links">
             <LoginLink wallet={'walletConnect'} />
+            <LoginLink wallet={'lobstrExtension'} />
             <LoginLink wallet={'freighter'} />
             <LoginLink wallet={'ledger'} />
             <LoginLink wallet={'trezor'} />

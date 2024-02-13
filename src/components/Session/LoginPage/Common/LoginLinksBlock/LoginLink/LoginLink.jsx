@@ -25,6 +25,12 @@ const HARDWARE_WALLET_DATA = {
         logo: 'walletconnect-logo',
         withLobstrTooltip: true,
     },
+    lobstrExtension: {
+        link: '/lobstr-extension/',
+        capitalizedName: 'LOBSTR Extension',
+        logo: 'lobstr-logo-black',
+        withLobstrTooltip: false,
+    },
 };
 export default function LoginLink(props) {
     // eslint-disable-next-line react/prop-types
@@ -51,5 +57,5 @@ export default function LoginLink(props) {
     );
 }
 LoginLink.propTypes = {
-    wallet: PropTypes.oneOf(['ledger', 'trezor', 'freighter', 'walletConnect']).isRequired,
+    wallet: PropTypes.oneOf(['ledger', 'trezor', 'freighter', 'walletConnect', 'lobstrExtension']).isRequired,
 };

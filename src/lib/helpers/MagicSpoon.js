@@ -7,6 +7,7 @@ import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from '@trezor/connect-web';
 import { signTransaction } from '@stellar/freighter-api';
+import { signTransaction as signTransactionWithLobstr } from '../api/lobstr-signer-extension-api/build/index.min';
 import TransformTrezorTransaction from '@trezor/connect-plugin-stellar';
 import ErrorHandler from './ErrorHandler';
 
@@ -74,6 +75,16 @@ const MagicSpoon = {
             console.log('Signing with Freighter extension');
             try {
                 const result = await signTransaction(tx.toEnvelope().toXDR('base64'));
+                return new StellarSdk.Transaction(result, this.Server.networkPassphrase);
+            } catch (e) {
+                return Promise.reject(e);
+            }
+        };
+
+        sdkAccount.signWithLobstrExtension = async tx => {
+            console.log('Signing with LOBSTR extension');
+            try {
+                const result = await signTransactionWithLobstr(tx.toEnvelope().toXDR('base64'));
                 return new StellarSdk.Transaction(result, this.Server.networkPassphrase);
             } catch (e) {
                 return Promise.reject(e);
