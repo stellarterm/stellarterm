@@ -43,11 +43,11 @@ export default class OfferMaker extends React.Component {
 
         this.state = {
             valid: false,
-            price: props.existingOffer ? props.existingOffer.price : '', // Most sticky item (since the price is pretty static)
-            amount: props.existingOffer ? props.existingOffer.baseAmount : '',
+            price: props.existingOffer ? parseFloat(props.existingOffer.price).toString() : '', // Most sticky item (since the price is pretty static)
+            amount: props.existingOffer ? parseFloat(props.existingOffer.baseAmount).toString() : '',
 
             // Total = price * amount
-            total: props.existingOffer ? props.existingOffer.counterAmount : '',
+            total: props.existingOffer ? parseFloat(props.existingOffer.counterAmount).toString() : '',
             offerId: props.existingOffer ? props.existingOffer.id : undefined,
             buttonState: 'ready', // ready or pending
             errorMessage: '',

@@ -324,6 +324,9 @@ export default class LightweightChart extends React.Component {
             height: chart.clientHeight,
             priceScale: { mode: this.props.scaleMode },
             crosshair: { mode: chartCursorMode },
+            localization: {
+                priceFormatter: p => parseFloat(p.toFixed(7)).toString(),
+            },
         });
     }
 
