@@ -5,8 +5,8 @@ import createStellarIdenticon from 'stellar-identicon-js';
 import ActivityFromEffectsBase from '../../Activity/ActivityFromEffectsBase';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../../Activity/Activity';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import Printify from '../../../../../lib/helpers/Printify';
 import images from '../../../../../images';
+import { formatNumber } from '../../../../../lib/helpers/Format';
 import ClaimantsList from './ClaimantsList';
 
 
@@ -118,7 +118,7 @@ export default class HistoryPendingPayments extends ActivityFromEffectsBase {
                     <AssetCardInRow d={this.props.d} code={assetCode} issuer={assetIssuer} />
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(amount || '')}
+                    {formatNumber(amount || '')}
                 </div>
                 <div className="Activity-table-cell Activity-table_actions flex1">
                     <img

@@ -7,8 +7,7 @@ import Driver from '../../../lib/driver/Driver';
 import Ellipsis from '../../Common/Ellipsis/Ellipsis';
 import AssetPair from '../../Common/AssetPair/AssetPair';
 import MagicSpoon from '../../../lib/helpers/MagicSpoon';
-import { getReadableNumber } from '../LightweightChart/ConverterOHLC';
-import { niceRound } from '../../../lib/helpers/Format';
+import { roundAndFormat, roundAndFormatPrice } from '../../../lib/helpers/Format';
 import images from '../../../images';
 import { TRADES_EVENTS } from '../../../lib/driver/driverInstances/Trades';
 
@@ -31,6 +30,7 @@ export default class PairPicker extends React.Component {
             lastMinutesTrade: undefined,
             counterWithLumenLastTrade: undefined,
             lastChangesDirection: '',
+            lastTradesPending: false,
         };
         this.unsub = this.props.d.ticker.event.sub(() => {
             this.forceUpdate();
@@ -127,18 +127,18 @@ export default class PairPicker extends React.Component {
     }
 
     async getLastTrades() {
-        const { d } = this.props;
-        const { base, counter, ready } = d.trades;
-        if (!ready) {
+        if (this.state.lastTradesPending) {
             return;
         }
+        this.setState({ lastTradesPending: true });
+
+        const { d } = this.props;
+        const { base, counter } = d.trades;
+
         const pairWithoutLumen = !base.isNative() && !counter.isNative();
 
-        const lastTradesWithStep15min =
-            await d.trades.getLast24hAggregationsWithStep15min();
-
+        const lastTradesWithStep15min = await d.trades.getLast24hAggregationsWithStep15min();
         const lastMinutesTrade = await d.trades.getLastMinuteAggregation();
-
         const counterWithLumenLastTrade = pairWithoutLumen ?
             await MagicSpoon.getLastMinuteAggregation(d.Server, counter, StellarSdk.Asset.native()) :
             'notRequired';
@@ -152,6 +152,7 @@ export default class PairPicker extends React.Component {
                 last24HourTrades: [],
                 lastMinutesTrade: {},
                 counterWithLumenLastTrade: {},
+                lastTradesPending: false,
             });
             return;
         }
@@ -161,6 +162,7 @@ export default class PairPicker extends React.Component {
             last24HourTrades,
             lastMinutesTrade,
             counterWithLumenLastTrade,
+            lastTradesPending: false,
         });
     }
 
@@ -189,19 +191,19 @@ export default class PairPicker extends React.Component {
         const noChanges = changes24 === '0.00';
         const isNaNChanges = changes24 === 'NaN';
         const changesClassName = (changes24 >= 0) ? 'positive' : 'negative';
-        const lastUsdView = lastUsdPrice !== 0 ? `$${niceRound(lastUsdPrice)}` : '—';
+        const lastUsdView = lastUsdPrice !== 0 ? `$${roundAndFormat(lastUsdPrice, true, 1e3)}` : '—';
         const changes24View = isNaNChanges ? '—' : `${changes24}%`;
 
         return (
             <div className="PairPicker_marketsTable-content">
-                <span>{getReadableNumber(lastPrice)} {counterAssetCode}</span>
+                <span>{roundAndFormatPrice(lastPrice, 1e3)} {counterAssetCode}</span>
                 <span>{lastUsdView}</span>
                 <span className={(noChanges || isNaNChanges) ? '' : changesClassName}>
                     <span className={this.state.lastChangesDirection}>{changes24 > 0 && '+'}{changes24View}</span>
                 </span>
-                <span>{getReadableNumber(price24high)} {counterAssetCode}</span>
-                <span>{getReadableNumber(price24low)} {counterAssetCode}</span>
-                <span>{getReadableNumber(volume24)} {counterAssetCode}</span>
+                <span>{roundAndFormatPrice(price24high, 1e3)} {counterAssetCode}</span>
+                <span>{roundAndFormatPrice(price24low, 1e3)} {counterAssetCode}</span>
+                <span>{roundAndFormat(volume24, true, 1e3)} {counterAssetCode}</span>
             </div>
         );
     }

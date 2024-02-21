@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Driver from '../../../../../../lib/driver/Driver';
-import Printify from '../../../../../../lib/helpers/Printify';
-import { get24hChangePercent } from '../../../../../../lib/helpers/Format';
+import { formatNumber, get24hChangePercent } from '../../../../../../lib/helpers/Format';
 import PercentChange from '../../../../../Basics/PercentChange/PercentChange';
 import AssetCardMain from '../../../../../Common/AssetCard/AssetCardMain/AssetCardMain';
+import { SESSION_EVENTS, SESSION_STATE } from '../../../../../../lib/constants/sessionConstants';
 import AssetActionButtons from '../AssetActionButtons';
 import processBalances from './processBalances';
-import { SESSION_EVENTS, SESSION_STATE } from '../../../../../../lib/constants/sessionConstants';
 
 
 export default function BalancesTable(props) {
@@ -47,8 +46,9 @@ export default function BalancesTable(props) {
         const { code, issuer, balance } = asset;
 
         const isNoUSDBalanceData = asset.balanceUSD === undefined;
-        const balanceUSD = isNoUSDBalanceData ? null : Printify.lightenZeros(asset.balanceUSD.toString(), 2);
-        const balanceUsdView = balanceUSD ? <span>${balanceUSD}</span> : null;
+        const balanceUsdView = isNoUSDBalanceData ?
+            null :
+            <span>${formatNumber(asset.balanceUSD.toFixed(2))}</span>;
 
         return (
             <tr className="BalancesTable__row" key={code + issuer}>
@@ -56,7 +56,7 @@ export default function BalancesTable(props) {
                     <AssetCardMain code={code} issuer={issuer} d={d} />
                 </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
-                    {Printify.lightenZeros(balance)}
+                    {formatNumber(balance)}
                 </td>
                 <td className="BalancesTable__row__item BalancesTable__row__item--amount">
                     {balanceUsdView}

@@ -111,8 +111,7 @@
             width: 100%;
         }
 
-        &.right {
-            justify-content: flex-end;
+        &:last-child {
             flex: 0.7;
         }
 

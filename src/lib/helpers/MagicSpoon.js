@@ -465,7 +465,6 @@ const MagicSpoon = {
             .limit(limit)
             .order('desc')
             .call()
-            .then(res => res)
             .catch(error => {
                 console.error(ErrorHandler(error));
             });

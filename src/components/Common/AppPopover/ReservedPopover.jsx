@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import Driver from '../../../lib/driver/Driver';
 import images from '../../../images';
+import { formatNumber } from '../../../lib/helpers/Format';
 import AppPopover from './AppPopover';
+
 
 export default function ReservedPopover(props) {
     const { d, asset, onlyIcon } = props;
@@ -25,7 +27,7 @@ export default function ReservedPopover(props) {
             <span>
                 {reserveType} {typeCount === 0 ? '' : `(${Math.abs(typeCount)})`}
             </span>
-            <span>{reservedXLM} XLM</span>
+            <span>{formatNumber(reservedXLM)} XLM</span>
         </div>
     ));
 
@@ -37,27 +39,30 @@ export default function ReservedPopover(props) {
                         <div className="reserve_table">
                             <div className="reserved_item reserved_item_bold">
                                 <span>Reserved</span>
-                                <span>{reservedAmount} XLM</span>
+                                <span>{formatNumber(reservedAmount)} XLM</span>
                             </div>
                             {reservedRows}
-                            <Link to="/account#reserved" className="reserved_link">
+                            <Link to="/account#reserved" onClick={() => d.modal.handlers.cancel()} className="reserved_link">
                                 More information
                                 <img className="icon_arrow" src={images['icon-arrow-right']} alt="arrow" />
                             </Link>
                         </div>
                     ) : (
                         <React.Fragment>
-                            <p><strong>{reservedAmount} {asset.code}</strong> reserved in active offers</p>
-                            <Link to="/account/activity/" className="reserved_link">
+                            <p>
+                                <strong>{formatNumber(reservedAmount)} {asset.code}</strong> reserved in active offers
+                            </p>
+                            <Link to="/account/activity/" onClick={() => d.modal.handlers.cancel()} className="reserved_link">
                                 More information
                                 <img className="icon_arrow" src={images['icon-arrow-right']} alt="arrow" />
                             </Link>
                         </React.Fragment>
                     )
-                } />
+                }
+            />
             {onlyIcon
                 ? null
-                : <div>{reservedAmount} {asset.code} are reserved in your wallet by Stellar network</div>}
+                : <div>{formatNumber(reservedAmount)} {asset.code} are reserved in your wallet by Stellar network</div>}
         </React.Fragment>
     );
 }
