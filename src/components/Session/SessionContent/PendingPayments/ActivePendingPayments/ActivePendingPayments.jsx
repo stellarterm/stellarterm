@@ -6,9 +6,9 @@ import createStellarIdenticon from 'stellar-identicon-js';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../../Activity/Activity';
 import Driver from '../../../../../lib/driver/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import Printify from '../../../../../lib/helpers/Printify';
 import images from '../../../../../images';
 import { getNextClaimTime } from '../../../../../lib/helpers/claimableBalancesHelpers';
+import { formatNumber } from '../../../../../lib/helpers/Format';
 
 
 export default class ActivePendingPaymentsHistory extends React.Component {
@@ -69,7 +69,7 @@ export default class ActivePendingPaymentsHistory extends React.Component {
                     <AssetCardInRow d={this.props.d} code={assetCode} issuer={assetIssuer} />
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(amount || '')}
+                    {formatNumber(amount || '')}
                 </div>
                 <div className="Activity-table-cell Activity-table_actions flex1">
                     <img

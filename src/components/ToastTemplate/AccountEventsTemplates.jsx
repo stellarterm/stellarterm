@@ -1,5 +1,5 @@
 import React from 'react';
-import Printify from '../../lib/helpers/Printify';
+import { formatNumber } from '../../lib/helpers/Format';
 
 const actionTypes = new Map([
     ['account_inflation_destination_updated', 'Inflation destination set'],
@@ -30,7 +30,7 @@ const getPaymentBody = (op, titleText) => {
             <div className="popup-text">
                 <div>Amount:</div>
                 <div>
-                    {Printify.lightenZeros(op.amount)}{' '}
+                    {formatNumber(op.amount)}{' '}
                     <span>{assetCode}</span>
                 </div>
             </div>
@@ -48,15 +48,15 @@ const getTradeBody = (op, titleText) => {
             <div className="popup-title">{titleText}</div>
             <div className="popup-text">
                 <div>Bought:</div>
-                <div>{Printify.lightenZeros(op.bought_amount)}<span> {boughtCode}</span></div>
+                <div>{formatNumber(op.bought_amount)}<span> {boughtCode}</span></div>
             </div>
             <div className="popup-text">
                 <div>Sold:</div>
-                <div>{Printify.lightenZeros(op.sold_amount)}<span> {soldCode}</span></div>
+                <div>{formatNumber(op.sold_amount)}<span> {soldCode}</span></div>
             </div>
             <div className="popup-text-bold">
                 <div>Price:</div>
-                <div>{tradePrice}</div>
+                <div>{formatNumber(tradePrice)}</div>
             </div>
         </React.Fragment>
     );

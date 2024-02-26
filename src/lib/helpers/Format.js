@@ -21,7 +21,7 @@ exports.niceNumDecimals = function niceNumDecimals(input) {
 };
 
 exports.niceRound = function niceRound(input) {
-    if (input === 0) {
+    if (Number(input) === 0) {
         return 0;
     }
     const decimal = exports.niceNumDecimals(input);
@@ -32,15 +32,27 @@ exports.niceRound = function niceRound(input) {
 };
 
 exports.formatNumber = function formatNumber(input) {
+    if (Number(input) === 0) {
+        return 0;
+    }
     return Number(input).toLocaleString('en-US', {
         maximumFractionDigits: 7,
     });
 };
 
+exports.formatInputNumber = function formatInputNumber(input) {
+    const parsed = parseFloat(input).toString();
+    if (!parsed.includes('e')) {
+        return parsed;
+    }
+
+    return Number(input).toFixed(7);
+};
+
 function nFormatter(num, digits) {
     const lookup = [
         { value: 1, symbol: '' },
-        { value: 1e3, symbol: 'k' },
+        { value: 1e3, symbol: 'K' },
         { value: 1e6, symbol: 'M' },
         { value: 1e9, symbol: 'B' },
         { value: 1e12, symbol: 'T' },
@@ -60,6 +72,14 @@ exports.roundAndFormat = function roundAndFormat(input, withPostfix, postfixThre
     return rounded.toLocaleString('en-US', {
         maximumFractionDigits: 7,
     });
+};
+
+exports.roundAndFormatPrice = function roundAndFormatPrice(input, threshold) {
+    if (threshold && input >= threshold) {
+        return nFormatter(input, 2);
+    }
+
+    return exports.formatNumber(input);
 };
 
 exports.getCurrentYear = function getCurrentYear() {

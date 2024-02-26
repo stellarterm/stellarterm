@@ -3,14 +3,15 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import BigNumber from 'bignumber.js';
 import Driver from '../../../../../lib/driver/Driver';
-import OfferMakerResultMessage from './OfferMakerResultMessage/OfferMakerResultMessage';
 import { SESSION_STATE } from '../../../../../lib/constants/sessionConstants';
+import { formatNumber } from '../../../../../lib/helpers/Format';
+import OfferMakerResultMessage from './OfferMakerResultMessage/OfferMakerResultMessage';
 
 
 export default class OfferMakerOverview extends React.Component {
     static capDigits(input) {
         try {
-            return new BigNumber(input).toFixed(7).toString();
+            return formatNumber(new BigNumber(input).toFixed(7));
         } catch (e) {
             return (Math.floor((input * 10000000)) / 10000000).toFixed(7);
         }

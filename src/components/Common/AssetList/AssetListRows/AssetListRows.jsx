@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
 import directory from 'stellarterm-directory';
-import { niceNumDecimals, get24hChangePercent } from '../../../../lib/helpers/Format';
-import Printify from '../../../../lib/helpers/Printify';
+import { niceNumDecimals, get24hChangePercent, formatNumber } from '../../../../lib/helpers/Format';
 import Ticker from '../../../../lib/api/Ticker';
 import PercentChange from '../../../Basics/PercentChange/PercentChange';
 import AssetCardMain from '../../AssetCard/AssetCardMain/AssetCardMain';
@@ -14,13 +13,13 @@ export default class AssetListRows extends React.Component {
     static getAssetRow(asset, ticker) {
         const isNativeXlm = asset.id === 'XLM-native';
         const priceUSD = asset.price_USD ? (
-            <span>${Printify.lightenZeros(asset.price_USD.toString(), niceNumDecimals(asset.price_USD))}</span>
+            <span>${formatNumber(asset.price_USD.toFixed(niceNumDecimals(asset.price_USD)))}</span>
         ) : (
             '-'
         );
 
         const priceXLM = asset.price_XLM
-            ? Printify.lightenZeros(asset.price_XLM.toString(), niceNumDecimals(asset.price_XLM))
+            ? formatNumber(asset.price_XLM.toFixed(niceNumDecimals(asset.price_XLM)))
             : '-';
 
         const volume24h = asset.volume24h_USD
@@ -39,8 +38,7 @@ export default class AssetListRows extends React.Component {
         return (
             <React.Fragment>
                 <div className="asset_cell price-xlm">
-                    {isNativeXlm ? Printify.lightenZeros('1.0000000') : priceXLM}
-                    {Printify.lighten(' XLM')}
+                    {isNativeXlm ? '1' : priceXLM}
                 </div>
                 <div className="asset_cell">{priceUSD}</div>
                 <div className="asset_cell">{volume24h}</div>

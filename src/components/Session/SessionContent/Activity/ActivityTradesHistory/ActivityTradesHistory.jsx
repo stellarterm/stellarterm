@@ -8,8 +8,8 @@ import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCar
 import Driver from '../../../../../lib/driver/Driver';
 import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT, TABLE_MAX_HEIGHT, SCROLL_WIDTH } from '../Activity';
-import Printify from '../../../../../lib/helpers/Printify';
 import ActivityFromEffectsBase from '../ActivityFromEffectsBase';
+import { formatNumber } from '../../../../../lib/helpers/Format';
 
 
 export default class ActivityTradesHistory extends ActivityFromEffectsBase {
@@ -31,11 +31,11 @@ export default class ActivityTradesHistory extends ActivityFromEffectsBase {
 
         const counter = bought_asset_issuer ?
             new StellarSdk.Asset(bought_asset_code, bought_asset_issuer) :
-            new StellarSdk.Asset.native();
+            StellarSdk.Asset.native();
 
         const base = sold_asset_issuer ?
             new StellarSdk.Asset(sold_asset_code, sold_asset_issuer) :
-            new StellarSdk.Asset.native();
+            StellarSdk.Asset.native();
 
 
         const { time, date } = formatDate(created_at);
@@ -52,13 +52,13 @@ export default class ActivityTradesHistory extends ActivityFromEffectsBase {
                     <AssetCardInRow d={d} code={counter.code} issuer={counter.issuer} />
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex5">
-                    {Printify.lightenZeros(sold_amount, undefined, ` ${sold_asset_code || 'XLM'}`)}
+                    <span className="lightenZeros">{formatNumber(sold_amount)} {sold_asset_code || 'XLM'}</span>
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex5">
-                    {Printify.lightenZeros(price)}
+                    {formatNumber(price)}
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex5">
-                    {Printify.lightenZeros(bought_amount, undefined, ` ${bought_asset_code || 'XLM'}`)}
+                    <span className="lightenZeros">{formatNumber(bought_amount)} {bought_asset_code || 'XLM'}</span>
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <img

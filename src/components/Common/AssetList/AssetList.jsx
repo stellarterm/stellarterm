@@ -89,7 +89,7 @@ export default class AssetList extends React.Component {
             <div className="AssetList">
                 <div className="AssetList_head_row">
                     {this.generateRowTitle('Asset', 'assetName')}
-                    {this.generateRowTitle('Price', 'priceXLM')}
+                    {this.generateRowTitle('Price (XLM)', 'priceXLM')}
                     {this.generateRowTitle('Price (USD)', 'priceUSD')}
                     {this.generateRowTitle('Volume (24h)', 'volume24h')}
                     {this.generateRowTitle('Change (24h)', 'change24h')}

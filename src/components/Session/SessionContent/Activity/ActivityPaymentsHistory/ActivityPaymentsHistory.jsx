@@ -8,8 +8,8 @@ import Driver from '../../../../../lib/driver/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import images from '../../../../../images';
 import { formatDate, ROW_HEIGHT, SCROLL_WIDTH, TABLE_MAX_HEIGHT } from '../Activity';
-import Printify from '../../../../../lib/helpers/Printify';
 import { PAYMENTS_EVENTS } from '../../../../../lib/driver/driverInstances/Payments';
+import { formatNumber } from '../../../../../lib/helpers/Format';
 
 const PAYMENTS_TYPES = [
     'create_account', 'account_merge', 'payment',
@@ -175,7 +175,7 @@ export default class ActivityPaymentsHistory extends React.Component {
                     <AssetCardInRow d={this.props.d} code={asset.code} issuer={asset.issuer} />
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(viewAmount || '')}
+                    {formatNumber(viewAmount || '')}
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <a
