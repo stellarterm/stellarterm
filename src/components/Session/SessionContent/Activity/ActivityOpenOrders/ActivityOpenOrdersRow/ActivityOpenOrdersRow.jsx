@@ -20,6 +20,10 @@ export default class ActivityOpenOrdersRow extends React.Component {
         };
     }
 
+    componentWillUnmount() {
+        this.props.d.orderbook.stopOrderbook();
+    }
+
     async removeOffer(event, offer) {
         event.preventDefault();
 
