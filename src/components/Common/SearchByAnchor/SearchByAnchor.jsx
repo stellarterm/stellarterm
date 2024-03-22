@@ -207,7 +207,7 @@ export default class SearchByAnchor extends React.Component {
                             value={anchorDomain}
                             onChange={e => this.handleInputFederation(e)}
                             placeholder="Enter the anchor domain name to see issued assets
-                             (e.g. ultrastellar.com, aqua.network, etc)"
+                             (e.g. ultracapital.xyz, aqua.network, etc)"
                         />
                     </label>
                 </div>
