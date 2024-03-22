@@ -8,8 +8,8 @@ import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCar
 import images from '../../../../../images';
 import useForceUpdate from '../../../../../lib/hooks/useForceUpdate';
 import { PAYMENTS_EVENTS } from '../../../../../lib/driver/driverInstances/Payments';
-import Printify from '../../../../../lib/helpers/Printify';
 import Driver from '../../../../../lib/driver/Driver';
+import { formatNumber } from '../../../../../lib/helpers/Format';
 
 
 const SWAP_TYPES = ['path_payment_strict_send', 'path_payment_strict_receive'];
@@ -77,8 +77,8 @@ const ActivitySwapHistory = ({ d }) => {
                 <div className="Activity-table-cell flex5">
                     <AssetCardInRow d={d} code={destAsset.code} issuer={destAsset.issuer} />
                 </div>
-                <div className="Activity-table-cell">{Printify.lightenZeros(source_amount, undefined, ` ${sourceAsset.code}`)}</div>
-                <div className="Activity-table-cell">{Printify.lightenZeros(amount, undefined, ` ${destAsset.code}`)}</div>
+                <div className="Activity-table-cell">{formatNumber(source_amount)} {sourceAsset.code}</div>
+                <div className="Activity-table-cell">{formatNumber(amount)} {destAsset.code}</div>
                 <div className="Activity-table_actions Activity-table-cell flex1">
                     <a
                         href={`https://stellar.expert/explorer/${isTestnet ? 'testnet' : 'public'}/tx/${transaction_hash}`}

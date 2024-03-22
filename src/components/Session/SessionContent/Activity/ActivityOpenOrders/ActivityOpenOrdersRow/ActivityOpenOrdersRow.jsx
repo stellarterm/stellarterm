@@ -6,10 +6,10 @@ import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../../../../lib/driver/Driver';
 import images from '../../../../../../images';
 import AssetCardInRow from '../../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
-import { formatDate } from './../../Activity';
-import Printify from '../../../../../../lib/helpers/Printify';
 import { TX_STATUS } from '../../../../../../lib/constants/sessionConstants';
 import ErrorHandler from '../../../../../../lib/helpers/ErrorHandler';
+import { formatNumber } from '../../../../../../lib/helpers/Format';
+import { formatDate } from '../../Activity';
 
 
 export default class ActivityOpenOrdersRow extends React.Component {
@@ -59,10 +59,10 @@ export default class ActivityOpenOrdersRow extends React.Component {
         const { last_modified_time, buying, selling, amount, price, price_r, id } = offer;
         const { time, date } = formatDate(last_modified_time);
         const base = buying.asset_issuer ?
-            new StellarSdk.Asset(buying.asset_code, buying.asset_issuer) : new StellarSdk.Asset.native();
+            new StellarSdk.Asset(buying.asset_code, buying.asset_issuer) : StellarSdk.Asset.native();
 
         const counter = selling.asset_issuer ?
-            new StellarSdk.Asset(selling.asset_code, selling.asset_issuer) : new StellarSdk.Asset.native();
+            new StellarSdk.Asset(selling.asset_code, selling.asset_issuer) : StellarSdk.Asset.native();
 
         const priceRevert = new BigNumber(price_r.d).dividedBy(price_r.n).toFixed(7);
         const total = new BigNumber(price_r.n).dividedBy(price_r.d).times(amount).toFixed(7);
@@ -93,15 +93,19 @@ export default class ActivityOpenOrdersRow extends React.Component {
                     <AssetCardInRow d={d} code={base.code} issuer={base.issuer} />
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(offerData.rectifiedOffer.baseAmount,
-                        undefined, ` ${counter.code || 'XLM'}`)}
+                    <span className="lightenZeros">
+                        {formatNumber(offerData.rectifiedOffer.baseAmount)} {counter.code || 'XLM'}
+                    </span>
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(offerData.rectifiedOffer.price)}
+                    <span className="lightenZeros">
+                        {formatNumber(offerData.rectifiedOffer.price)}
+                    </span>
                 </div>
                 <div className="Activity-table_item_right Activity-table-cell flex3">
-                    {Printify.lightenZeros(offerData.rectifiedOffer.counterAmount,
-                        undefined, ` ${base.code || 'XLM'}`)}
+                    <span className="lightenZeros">
+                        {formatNumber(offerData.rectifiedOffer.counterAmount)} {base.code || 'XLM'}
+                    </span>
                 </div>
                 <div className="Activity-table_actions Activity-table-cell flex1_5">
                     <img

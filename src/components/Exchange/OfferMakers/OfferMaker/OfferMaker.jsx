@@ -3,11 +3,13 @@ import PropTypes from 'prop-types';
 import BigNumber from 'bignumber.js';
 import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../../lib/driver/Driver';
-import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 import ReservedPopover from '../../../Common/AppPopover/ReservedPopover';
 import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
 import Input from '../../../Common/Input/Input';
+import { formatInputNumber, formatNumber } from '../../../../lib/helpers/Format';
+import OfferMakerOverview from './OfferMakerOverview/OfferMakerOverview';
+
 
 // OfferMaker is an uncontrolled element (from the perspective of its users)
 export default class OfferMaker extends React.Component {
@@ -43,11 +45,11 @@ export default class OfferMaker extends React.Component {
 
         this.state = {
             valid: false,
-            price: props.existingOffer ? props.existingOffer.price : '', // Most sticky item (since the price is pretty static)
-            amount: props.existingOffer ? props.existingOffer.baseAmount : '',
+            price: props.existingOffer ? formatInputNumber(props.existingOffer.price) : '', // Most sticky item (since the price is pretty static)
+            amount: props.existingOffer ? formatInputNumber(props.existingOffer.baseAmount) : '',
 
             // Total = price * amount
-            total: props.existingOffer ? props.existingOffer.counterAmount : '',
+            total: props.existingOffer ? formatInputNumber(props.existingOffer.counterAmount) : '',
             offerId: props.existingOffer ? props.existingOffer.id : undefined,
             buttonState: 'ready', // ready or pending
             errorMessage: '',
@@ -107,9 +109,10 @@ export default class OfferMaker extends React.Component {
     setInitialState() {
         this.setState({
             valid: false,
-            price: this.props.existingOffer.price, // Most sticky item (since the price is pretty static)
-            amount: this.props.existingOffer.baseAmount,
-            total: this.props.existingOffer.counterAmount,
+            // Most sticky item (since the price is pretty static)
+            price: formatInputNumber(this.props.existingOffer.price),
+            amount: formatInputNumber(this.props.existingOffer.baseAmount),
+            total: formatInputNumber(this.props.existingOffer.counterAmount),
             offerId: this.props.existingOffer.id,
             buttonState: 'ready',
             errorMessage: '',
@@ -375,7 +378,7 @@ export default class OfferMaker extends React.Component {
                 >
 
                     <span>Available:</span>
-                    <span>{maxOfferView} {targetAsset.code}</span>
+                    <span>{formatNumber(maxOfferView)} {targetAsset.code}</span>
                 </div>
 
                 <ReservedPopover

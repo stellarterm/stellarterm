@@ -4,6 +4,7 @@ import images from '../../../../images';
 import Driver from '../../../../lib/driver/Driver';
 import { TX_STATUS } from '../../../../lib/constants/sessionConstants';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
+import { formatNumber } from '../../../../lib/helpers/Format';
 
 export default class ManageOffers extends React.Component {
     constructor(props) {
@@ -32,7 +33,11 @@ export default class ManageOffers extends React.Component {
 
     getRowItems() {
         const { price, baseAmount, counterAmount } = this.props.rectifiedOffer;
-        const rowItems = [price, baseAmount, counterAmount];
+        const rowItems = [
+            formatNumber(price),
+            formatNumber(baseAmount),
+            formatNumber(counterAmount),
+        ];
         if (this.props.side === 'buy') {
             rowItems.reverse();
         }

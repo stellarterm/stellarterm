@@ -6,6 +6,7 @@ import Validate from '../../../../../lib/helpers/Validate';
 import images from '../../../../../images';
 import AssetCardSeparateLogo from '../../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 import ReservedPopover from '../../../../Common/AppPopover/ReservedPopover';
+import { formatNumber } from '../../../../../lib/helpers/Format';
 
 export default class SendAsset extends React.Component {
     constructor(props) {
@@ -17,7 +18,7 @@ export default class SendAsset extends React.Component {
             selectedSlug: this.props.d.send.choosenSlug,
         };
 
-        this.handleClickOutside = (e) => {
+        this.handleClickOutside = e => {
             if (this.node.contains(e.target)) { return; }
             this.setState({ isOpenList: false });
         };
@@ -69,14 +70,16 @@ export default class SendAsset extends React.Component {
             <div
                 className="dropdown_item"
                 onClick={() => this.onClickAssetDropdown(slug)}
-                key={`${availability.asset.getCode()}-${availability.asset.getIssuer()}`}>
+                key={`${availability.asset.getCode()}-${availability.asset.getIssuer()}`}
+            >
 
                 <AssetCardSeparateLogo
                     d={this.props.d}
                     logoSize={35}
                     code={availability.asset.getCode()}
                     issuer={availability.asset.getIssuer()}
-                    noIssuer />
+                    noIssuer
+                />
             </div>
         ));
 
@@ -85,18 +88,21 @@ export default class SendAsset extends React.Component {
         return (
             <div
                 className="Send_dropdown"
-                ref={(node) => { this.node = node; }} >
+                ref={node => { this.node = node; }}
+            >
                 <div className="dropdown_selected" onClick={() => this.onClickAssetDropdown()}>
                     <AssetCardSeparateLogo
                         d={this.props.d}
                         logoSize={35}
                         code={assetToSend.asset.getCode()}
                         issuer={assetToSend.asset.getIssuer()}
-                        noIssuer />
+                        noIssuer
+                    />
                     <img
                         src={images.dropdown}
                         alt="▼"
-                        className={arrowClassName} />
+                        className={arrowClassName}
+                    />
                 </div>
 
                 {isOpenList ? <div className="dropdown_list">{assetsRow}</div> : null}
@@ -158,7 +164,8 @@ export default class SendAsset extends React.Component {
                         placeholder="Enter amount"
                         value={amountToSend}
                         onChange={e => this.onChangeAmount(e)}
-                        onBlur={() => this.onFocusLeave()} />
+                        onBlur={() => this.onFocusLeave()}
+                    />
 
                     <div className="field_description">
                         <ReservedPopover d={d} asset={assetToSend.asset} />
@@ -182,7 +189,7 @@ export default class SendAsset extends React.Component {
                     {account.getBalance(currentAsset) !== null ? (
                         <div className="asset_balance">Available:&nbsp;
                             <span className="asset_amount" onClick={() => this.onClickAvailable(maxAssetSpend)}>
-                                {maxAssetSpend}
+                                {formatNumber(maxAssetSpend)}
                             </span>
                         </div>
                     ) : null}

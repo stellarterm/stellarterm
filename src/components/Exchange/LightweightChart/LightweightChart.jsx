@@ -9,13 +9,14 @@ import {
     CrosshairMode,
     PriceScaleMode,
 } from '../../../../node_modules/lightweight-charts/dist/lightweight-charts.esm.production';
+import { TRADES_EVENTS } from '../../../lib/driver/driverInstances/Trades';
 import * as chartOptions from './LightweightChartOptions';
 import * as converterOHLC from './ConverterOHLC';
 import exportChartPng from './CanvasHandler';
 import UtcTimeString from './UtcTimeString/UtcTimeString';
 import ChartDataPanel from './ChartDataPanel/ChartDataPanel';
 import FullscreenScrollBlock from './FullscreenScrollBlock/FullscreenScrollBlock';
-import { TRADES_EVENTS } from '../../../lib/driver/driverInstances/Trades';
+
 
 const AGGREGATIONS_DEPS = {
     // 3 days
@@ -324,6 +325,9 @@ export default class LightweightChart extends React.Component {
             height: chart.clientHeight,
             priceScale: { mode: this.props.scaleMode },
             crosshair: { mode: chartCursorMode },
+            localization: {
+                priceFormatter: p => parseFloat(p.toFixed(7)).toString(),
+            },
         });
     }
 
