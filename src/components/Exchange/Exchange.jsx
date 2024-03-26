@@ -34,6 +34,8 @@ export default class Exchange extends React.Component {
     constructor(props) {
         super(props);
 
+        this.props.d.orderbook.stopOrderbook();
+
         this.unsub = this.props.d.orderbook.event.sub(() => {
             this.forceUpdate();
         });
