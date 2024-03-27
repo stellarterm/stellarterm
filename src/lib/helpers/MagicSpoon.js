@@ -7,7 +7,7 @@ import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from '@trezor/connect-web';
 import { signTransaction } from '@stellar/freighter-api';
-import { signTransaction as signTransactionWithLobstr } from '../api/lobstr-signer-extension-api/build/index.min';
+import { signTransaction as signTransactionWithLobstr } from '@lobstrco/signer-extension-api';
 import TransformTrezorTransaction from '@trezor/connect-plugin-stellar';
 import ErrorHandler from './ErrorHandler';
 
