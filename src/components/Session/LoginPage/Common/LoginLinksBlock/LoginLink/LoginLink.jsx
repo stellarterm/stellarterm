@@ -23,12 +23,16 @@ const HARDWARE_WALLET_DATA = {
         link: '/wallet-connect/',
         capitalizedName: 'WalletConnect',
         logo: 'walletconnect-logo',
-        withLobstrTooltip: true,
+    },
+    lobstr: {
+        link: '/lobstr/',
+        capitalizedName: 'LOBSTR wallet',
+        logo: 'lobstr-icon-black',
     },
 };
 export default function LoginLink(props) {
     // eslint-disable-next-line react/prop-types
-    const { link, capitalizedName, logo, withLobstrTooltip } = HARDWARE_WALLET_DATA[props.wallet];
+    const { link, capitalizedName, logo } = HARDWARE_WALLET_DATA[props.wallet];
     return (
         <Link to={link} className="LoginLink">
             <div className="LoginLink_wrap">
@@ -40,13 +44,6 @@ export default function LoginLink(props) {
                 </div>
             </div>
             <img src={images['icon-arrow-right-black-small']} className="LoginLink_arrow" alt=">" />
-
-            {withLobstrTooltip &&
-                <div className="LoginLink_lobstr-tooltip">
-                    <img src={images['lobstr-logo']} alt="lobstr" />
-                    Available in LOBSTR wallet
-                </div>
-            }
         </Link>
     );
 }

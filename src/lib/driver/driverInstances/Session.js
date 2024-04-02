@@ -4,6 +4,7 @@ import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from '@trezor/connect-web';
 import { getPublicKey } from '@stellar/freighter-api';
+import { getPublicKey as getPublicKeyFromLobstr } from '@lobstrco/signer-extension-api';
 import FastAverageColor from 'fast-average-color';
 import isElectron from 'is-electron';
 import directory from 'stellarterm-directory';
@@ -213,6 +214,17 @@ export default function Send(driver) {
                 throw e;
             }
         },
+        logInWithLobstrExtension: async () => {
+            try {
+                const publicKey = await getPublicKeyFromLobstr();
+                const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
+                return this.handlers.logIn(keypair, {
+                    authType: AUTH_TYPE.LOBSTR_SIGNER_EXTENSION,
+                });
+            } catch (e) {
+                throw e;
+            }
+        },
         logInWithTrezor: async bip32Path =>
             TrezorConnect.stellarGetAddress({ path: bip32Path, showOnTrezor: false }).then(result => {
                 if (result.success) {
@@ -373,6 +385,12 @@ export default function Send(driver) {
                 };
             } else if (this.authType === AUTH_TYPE.FREIGHTER) {
                 const signedTx = await this.account.signWithFreighter(tx);
+                return {
+                    status: TX_STATUS.FINISH,
+                    signedTx,
+                };
+            } else if (this.authType === AUTH_TYPE.LOBSTR_SIGNER_EXTENSION) {
+                const signedTx = await this.account.signWithLobstrExtension(tx);
                 return {
                     status: TX_STATUS.FINISH,
                     signedTx,

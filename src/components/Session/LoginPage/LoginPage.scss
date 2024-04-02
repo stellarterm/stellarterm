@@ -340,20 +340,6 @@
     align-items: center;
     position: relative;
     bottom: 14px;
-
-    .LoginLink_lobstr-tooltip {
-        top: calc(100% + 8px);
-        left: -10px;
-
-        &::after {
-            top: unset;
-            bottom: calc(100% + 1px);
-            border-top: none;
-            border-bottom: 8px solid #69c76f;
-            border-left: 8px solid transparent;
-            border-right: 8px solid transparent;
-        }
-    }
 }
 
 .WalletConnect_beta {

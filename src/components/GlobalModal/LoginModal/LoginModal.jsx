@@ -43,7 +43,7 @@ export default class LoginModal extends React.Component {
             case SESSION_STATE.LOADING:
                 return (
                     <div className="AccountModalBlock_loading">
-                    Contacting network and loading account<Ellipsis />
+                        Contacting network and loading account<Ellipsis />
                     </div>
                 );
             default:
