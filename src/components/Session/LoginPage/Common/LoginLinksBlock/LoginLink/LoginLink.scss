@@ -6,7 +6,7 @@
     padding-left: 17px;
     padding-right: 14px;
     height: 65px;
-    width: 215px;
+    width: 272px;
     cursor: pointer;
     transition: all 0.15s ease-in;
     text-decoration: none;
@@ -16,7 +16,7 @@
     position: relative;
 
     .narrow & {
-        width: 199px;
+        width: 100%;
     }
 
     &:hover{
@@ -54,40 +54,5 @@
         font-size: 10px;
         font-weight: normal;
         font-style: italic;
-    }
-}
-
-.LoginLink_lobstr-tooltip {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    left: -1px;
-    bottom: calc(100% + 1px);
-    opacity: 0.9;
-    background-color: #69c76f;
-    border: 1px solid #69c76f;
-    border-radius: 2px;
-    width: 182px;
-    height: 36px;
-    color: #fff;
-    font-size: 13px;
-    font-weight: 300;
-
-    img {
-        margin-right: 8px;
-    }
-
-    &::after {
-        content: '';
-        display: block;
-        position: absolute;
-        height: 0;
-        width: 0;
-        left: 30px;
-        top: calc(100% + 1px);
-        border-top: 8px solid #69c76f;
-        border-left: 8px solid transparent;
-        border-right: 8px solid transparent;
     }
 }

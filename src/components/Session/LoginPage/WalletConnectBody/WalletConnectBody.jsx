@@ -79,11 +79,6 @@ const WalletConnectBody = ({ history, d, modal }) => {
                                 WalletConnect
                                 </span>
                             </div>
-
-                            <div className="LoginLink_lobstr-tooltip">
-                                <img src={images['lobstr-logo']} alt="lobstr" />
-                                Available in LOBSTR wallet
-                            </div>
                         </div>
                     </div>
                     <div className="LoginPage__greenBox">

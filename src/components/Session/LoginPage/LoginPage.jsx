@@ -8,6 +8,7 @@ import TrezorBody from './TrezorBody/TrezorBody';
 import FreighterBody from './FreighterBody/FreighterBody';
 import WalletConnectBody from './WalletConnectBody/WalletConnectBody';
 import LoginLinks from './Common/LoginLinksBlock/LoginLinks';
+import LobstrExtensionBody from './LobstrExtensionBody/LobstrExtensionBody';
 
 
 export default function LoginPage(props) {
@@ -65,6 +66,17 @@ export default function LoginPage(props) {
                     <div className="island">
                         <div className="LoginPage">
                             <WalletConnectBody {...props} d={props.d} />
+                        </div>
+                    </div>
+                </div>
+            );
+            break;
+        case 'lobstr':
+            pageBody = (
+                <div className="so-back islandBack islandBack--t">
+                    <div className="island">
+                        <div className="LoginPage">
+                            <LobstrExtensionBody {...props} d={props.d} />
                         </div>
                     </div>
                 </div>
