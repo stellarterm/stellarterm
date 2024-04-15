@@ -6,6 +6,7 @@ import LedgerBody from '../../../Session/LoginPage/LedgerBody/LedgerBody';
 import TrezorBody from '../../../Session/LoginPage/TrezorBody/TrezorBody';
 import FreighterBody from '../../../Session/LoginPage/FreighterBody/FreighterBody';
 import WalletConnectBody from '../../../Session/LoginPage/WalletConnectBody/WalletConnectBody';
+import LobstrExtensionBody from '../../../Session/LoginPage/LobstrExtensionBody/LobstrExtensionBody';
 
 const TABS = {
     SECRET: 'secret',
@@ -13,6 +14,7 @@ const TABS = {
     TREZOR: 'trezor',
     FREIGHTER: 'freighter',
     WALLET_CONNECT: 'wallet-connect',
+    LOBSTR: 'lobstr',
 };
 
 export default class LoginModalBlock extends React.Component {
@@ -33,6 +35,9 @@ export default class LoginModalBlock extends React.Component {
         switch (tab) {
             case TABS.SECRET: {
                 return <LoginPageBody d={d} modal />;
+            }
+            case TABS.LOBSTR: {
+                return <LobstrExtensionBody d={d} modal />;
             }
             case TABS.WALLET_CONNECT: {
                 return <WalletConnectBody d={d} modal />;
@@ -76,6 +81,12 @@ export default class LoginModalBlock extends React.Component {
                         className={this.getTabClassName(TABS.SECRET)}
                     >
                         <span>Secret key</span>
+                    </div>
+                    <div
+                        onClick={() => this.handleChoose(TABS.LOBSTR)}
+                        className={this.getTabClassName(TABS.LOBSTR)}
+                    >
+                        <span>LOBSTR wallet</span>
                     </div>
                     <div
                         onClick={() => this.handleChoose(TABS.WALLET_CONNECT)}

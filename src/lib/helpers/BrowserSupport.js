@@ -1,9 +1,10 @@
 /* eslint-disable */
 export function isIE() { return /*@cc_on!@*/false || !!document.documentMode; }
 export function isEdge() { return !isIE() && !!window.StyleMedia; }
-export function isChrome() { return !!window.chrome && (!!window.chrome.webstore || !!window.chrome.runtime); }
-export function isEdgeChromium() { return isChrome() && (navigator.userAgent.indexOf("Edg") != -1) }
+export function isChromium() { return !!window.chrome }
+export function isEdgeChromium() { return isChromium() && (navigator.userAgent.indexOf("Edg") != -1) }
 export function isOpera() { return (!!window.opr && !!opr.addons) || !!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0; }
+export function isChrome() { return isChromium() && !isOpera() && !isEdgeChromium()}
 export function isFirefox() { return typeof InstallTrigger !== 'undefined'; }
 export function isSafari() { return /constructor/i.test(window.HTMLElement) || ((p) => { return p.toString() === '[object SafariRemoteNotification]'; })(!window.safari || (typeof safari !== 'undefined' && safari.pushNotification)); }
 

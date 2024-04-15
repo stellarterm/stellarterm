@@ -49,6 +49,7 @@ export default function SessionContent(props) {
                     path="/account/settings/"
                     render={prop => <Settings {...prop} d={d} />}
                 />
+                <Redirect from="/lobstr/" to="/account/" />
                 <Redirect from="/ledger/" to="/account/" />
                 <Redirect from="/wallet-connect/" to="/account/" />
                 <Redirect from="/trezor/" to="/account/" />

@@ -8,6 +8,7 @@ const LoginLinks = ({ narrow }) => (
         <div className="LoginLinks_description">Log in with one of the supported wallet providers</div>
 
         <div className="LoginLinks_links">
+            <LoginLink wallet={'lobstr'} />
             <LoginLink wallet={'walletConnect'} />
             <LoginLink wallet={'freighter'} />
             <LoginLink wallet={'ledger'} />
