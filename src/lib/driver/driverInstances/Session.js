@@ -240,7 +240,8 @@ export default function Send(driver) {
             try {
                 const transport = await TransportWebUSB.create();
                 const ledgerApp = new AppStellar(transport);
-                const { publicKey } = await ledgerApp.getPublicKey(bip32Path);
+                const { rawPublicKey } = await ledgerApp.getPublicKey(bip32Path);
+                const publicKey = StellarSdk.StrKey.encodeEd25519PublicKey(rawPublicKey);
 
                 if (!publicKey || publicKey === 'GAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAWHF') {
                     throw new Error(
