@@ -85,22 +85,20 @@ export default class HomePage extends React.Component {
                                         operating the Stellar network.
                                     </p>
                                     <p>
-                                        StellarTerm is developed by Ultra Stellar, LLC, the same
-                                        company that developed the LOBSTR wallet. The project is
-                                        independent of the Stellar Development Foundation.
+                                        StellarTerm is open source software.
+                                        To support the project, please{' '}
+                                        <a
+                                            href="https://github.com/stellarterm/stellarterm" target="_blank"
+                                            rel="nofollow noopener noreferrer"
+                                        >
+                                            star the project on GitHub
+                                        </a>.
                                     </p>
                                 </div>
                             </div>
 
                             <div className="island__sub__division">
                                 <div className="HomePage__sideBlurb">
-                                    <p>
-                                        StellarTerm is open source software.
-                                        To support the project, please{' '}
-                                        <a href="https://github.com/stellarterm/stellarterm" target="_blank" rel="nofollow noopener noreferrer">
-                                            star the project on GitHub
-                                        </a>.
-                                    </p>
                                     <p>
                                         The project is released under the
                                         Apache-2.0 license and is released as is
