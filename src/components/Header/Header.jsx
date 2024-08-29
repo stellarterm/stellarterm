@@ -61,8 +61,8 @@ class Header extends React.Component {
                     <Link className="buy_crypto-link" to="/buy-crypto">
                         Buy other crypto
                     </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto">
-                        Buy with on-ramp
+                    <Link className="buy_crypto-link" to="/buy-via-onramper">
+                        Buy with Onramper
                     </Link>
                 </div>
             </div>

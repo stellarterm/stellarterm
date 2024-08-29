@@ -22,8 +22,9 @@
 @import './GlobalModal/GlobalModal';
 @import 'ToastTemplate/ToastTemplate';
 @import 'BuyCrypto/BuyCrypto';
-@import "AppLoading/AppLoading";
-@import "Swap/Swap";
+@import 'OnRamp/OnRamp';
+@import 'AppLoading/AppLoading';
+@import 'Swap/Swap';
 
 html {
     min-width: 1052px;

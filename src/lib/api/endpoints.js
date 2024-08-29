@@ -1,6 +1,5 @@
 import * as EnvConsts from '../../env-consts';
 
-
 export const ENDPOINTS = {
     FEDERATION_AUTH: 'FEDERATION_AUTH',
     GET_FEDERATION: 'GET_FEDERATION',
@@ -25,10 +24,13 @@ const endpointsMap = new Map([
     [ENDPOINTS.SET_FEDERATION, { url: 'federation/manage/', baseUrl: EnvConsts.FEDERATION_API_URL }],
     [ENDPOINTS.CHECK_IS_VAULT, { url: 'check-user/', baseUrl: EnvConsts.LOBSTR_VAULT_URL }],
     [ENDPOINTS.SEND_TRANSACTION_TO_VAULT, { url: 'transactions/', baseUrl: EnvConsts.LOBSTR_VAULT_URL }],
-    [ENDPOINTS.CHECK_IS_GUARD, {
-        url: 'accounts/GCVHEKSRASJBD6O2Z532LWH4N2ZLCBVDLLTLKSYCSMBLOYTNMEEGUARD/multisig',
-        baseUrl: EnvConsts.STELLAR_GUARD_URL,
-    }],
+    [
+        ENDPOINTS.CHECK_IS_GUARD,
+        {
+            url: 'accounts/GCVHEKSRASJBD6O2Z532LWH4N2ZLCBVDLLTLKSYCSMBLOYTNMEEGUARD/multisig',
+            baseUrl: EnvConsts.STELLAR_GUARD_URL,
+        },
+    ],
     [ENDPOINTS.SEND_TRANSACTION_TO_GUARD, { url: 'transactions/', baseUrl: EnvConsts.STELLAR_GUARD_URL }],
     [ENDPOINTS.ACTIVATE_GUARD_SIGNER, { url: 'accounts/', baseUrl: EnvConsts.STELLAR_GUARD_URL }],
     [ENDPOINTS.MOONPAY_STATUS, { url: 'moonpay/status', baseUrl: EnvConsts.MOONPAY_API_URL }],
@@ -40,12 +42,11 @@ const endpointsMap = new Map([
     [ENDPOINTS.SWAP_LOG, { url: 'swap/transactions/', baseUrl: EnvConsts.SWAP_LOGS_API }],
 ]);
 
-
-function getUrlParams(params) {
+export function getUrlParams(params) {
     return params !== undefined
         ? Object.keys(params)
-            .map(key => `${key}=${encodeURIComponent(params[key])}`)
-            .join('&')
+              .map(key => `${key}=${encodeURIComponent(params[key])}`)
+              .join('&')
         : null;
 }
 
@@ -64,7 +65,10 @@ export function getEndpoint(endpointName, params) {
     return urlParams === null ? endpoint : `${endpoint}?${urlParams}`;
 }
 
-export function getUrlWithParams(endpointUrl, params) {
+export function getUrlWithParams(endpointUrl, params, isMergeParams = false) {
     const urlParams = getUrlParams(params);
-    return urlParams === null ? endpointUrl : `${endpointUrl}?${urlParams}`;
+    if (urlParams === null) {
+        return endpointUrl;
+    }
+    return isMergeParams ? `${endpointUrl}&${urlParams}` : `${endpointUrl}?${urlParams}`;
 }
