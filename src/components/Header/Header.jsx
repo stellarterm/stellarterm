@@ -10,11 +10,11 @@ import { SESSION_STATE } from '../../lib/constants/sessionConstants';
 class Header extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {
-            showPopup: '',
-            currentPath: window.location.pathname,
-        };
 
+        this.state = {
+            currentPath: window.location.pathname,
+            showPopup: '',
+        };
         this.unlisten = this.props.d.session.event.sub(() => {
             this.forceUpdate();
         });

@@ -72,7 +72,6 @@ export default class SendAsset extends React.Component {
                 onClick={() => this.onClickAssetDropdown(slug)}
                 key={`${availability.asset.getCode()}-${availability.asset.getIssuer()}`}
             >
-
                 <AssetCardSeparateLogo
                     d={this.props.d}
                     logoSize={35}

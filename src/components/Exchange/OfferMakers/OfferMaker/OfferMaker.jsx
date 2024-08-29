@@ -247,7 +247,6 @@ export default class OfferMaker extends React.Component {
                     errorMessage: '',
                 });
             }
-
             await signAndSubmit.serverResult;
             this.props.d.modal.handlers.cancel();
             if (this._mounted) {

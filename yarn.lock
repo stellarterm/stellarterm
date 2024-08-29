@@ -11411,9 +11411,9 @@ stellar-sdk@10.4.1:
     urijs "^1.19.1"
     utility-types "^3.7.0"
 
-"stellarterm-api@git+https://github.com/stellarterm/stellarterm-api.git":
+"stellarterm-api@git+https://github.com/stellarterm/stellarterm-api.git#staging":
   version "1.0.0"
-  resolved "git+https://github.com/stellarterm/stellarterm-api.git#1fb07ce6d873c2411a7ba0cee9090b694cec2fd6"
+  resolved "git+https://github.com/stellarterm/stellarterm-api.git#600c6e73df4b83b34f9e24daeef7c2062c783e62"
   dependencies:
     aws-sdk "^2.465.0"
     bluebird "^3.5.0"
@@ -11424,9 +11424,9 @@ stellar-sdk@10.4.1:
     request "^2.88.0"
     request-promise "^4.2.1"
     stellar-sdk "10.4.1"
-    stellarterm-directory "git+https://github.com/stellarterm/stellarterm-directory.git"
+    stellarterm-directory "git+https://github.com/stellarterm/stellarterm-directory.git#staging"
 
-"stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git":
+"stellarterm-directory@git+https://github.com/stellarterm/stellarterm-directory.git#staging":
   version "2.0.0"
   resolved "git+https://github.com/stellarterm/stellarterm-directory.git#1f68ba11dd39d070838e2f5fb451c1d4145280ad"
 

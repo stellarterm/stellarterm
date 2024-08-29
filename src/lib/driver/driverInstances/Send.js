@@ -145,7 +145,6 @@ export default class Send {
             this.assetToSend = this.availableAssets['XLM-native'];
             return;
         }
-
         const senderTrusts = {};
         const receiverTrusts = {};
         const sendableAssets = {};
@@ -207,7 +206,6 @@ export default class Send {
                 // Asset can't be sent.
             }
         });
-
         // Show stuff the recipient doesn't trust
         this.d.session.account.balances.forEach(balance => {
             if (!balance.asset_issuer) {
