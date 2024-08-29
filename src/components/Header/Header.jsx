@@ -61,6 +61,9 @@ class Header extends React.Component {
                     <Link className="buy_crypto-link" to="/buy-crypto">
                         Buy other crypto
                     </Link>
+                    <Link className="buy_crypto-link" to="/buy-via-onramper">
+                        Buy with Onramper
+                    </Link>
                 </div>
             </div>
         );
@@ -132,20 +135,16 @@ class Header extends React.Component {
                 <div className="Header_account-icon">
                     <img src={renderedIcon} alt="icon" />
                 </div>
-                {hasMetadata &&
+                {hasMetadata && (
                     <AppPopover
                         hoverArea={
                             <div className="Header_app-icon">
                                 <img src={this.props.d.walletConnectService.appMeta.icons[0]} alt="" />
                             </div>
                         }
-                        content={
-                            <span>
-                                Account connected with WalletConnect
-                            </span>
-                        }
+                        content={<span>Account connected with WalletConnect</span>}
                     />
-                }
+                )}
             </div>
         );
     }

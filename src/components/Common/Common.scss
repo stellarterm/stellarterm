@@ -13,8 +13,8 @@
 @import './AppPopover/AppPopover';
 @import './InfoBlock/InfoBlock';
 @import './SignChallengeBlock/SignChallengeBlock';
-@import "./Input/Input";
-@import "./Pagination/Pagination";
+@import './Input/Input';
+@import './Pagination/Pagination';
 
 @mixin textEllipsis {
     overflow: hidden;
