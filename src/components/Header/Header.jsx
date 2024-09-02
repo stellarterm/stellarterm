@@ -43,26 +43,23 @@ class Header extends React.Component {
                 <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
                 <img src={images.dropdown} alt="" />
                 <div className="buy_crypto-links">
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=xlm">
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=xlm_stellar">
                         Buy Stellar Lumens
                     </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=USDC_XLM">
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=usdc_stellar">
                         Buy USDC Coin (Stellar)
                     </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=btc">
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=btc">
                         Buy Bitcoin
                     </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=eth">
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=eth">
                         Buy Ethereum
                     </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?code=ltc">
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=ltc_litecoin">
                         Buy Litecoin
                     </Link>
                     <Link className="buy_crypto-link" to="/buy-crypto">
                         Buy other crypto
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-via-onramper">
-                        Buy with Onramper
                     </Link>
                 </div>
             </div>

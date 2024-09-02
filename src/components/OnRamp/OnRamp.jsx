@@ -1,24 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import { getUrlWithParams } from '../../lib/api/endpoints';
-import Driver from '../../lib/driver/Driver';
-import { SESSION_STATE } from '../../lib/constants/sessionConstants';
 import { onRampUrl, onRampStaticParams } from './constants';
 
-const getOnRampIframeLink = isLoggedIn => {
+const getOnRampIframeLink = code => {
     const onRampParams = { ...onRampStaticParams };
 
-    if (isLoggedIn) {
-        onRampParams.defaultCrypto = 'xlm_stellar';
+    if (code) {
+        onRampParams.defaultCrypto = code;
     }
 
     return getUrlWithParams(onRampUrl, onRampParams, true);
 };
 
-const OnRamp = ({ d }) => {
-    const isLoggedIn = d.session.state === SESSION_STATE.IN;
-
-    const onRampIframeLink = getOnRampIframeLink(isLoggedIn);
+const OnRamp = () => {
+    const location = useLocation();
+    const urlParams = new URLSearchParams(location.search);
+    const urlCrypto = urlParams.get('crypto');
+    const onRampIframeLink = getOnRampIframeLink(urlCrypto);
 
     return (
         <div className="OnRamp_container">
@@ -32,10 +31,6 @@ const OnRamp = ({ d }) => {
             />
         </div>
     );
-};
-
-OnRamp.propTypes = {
-    d: PropTypes.instanceOf(Driver).isRequired,
 };
 
 export default OnRamp;
