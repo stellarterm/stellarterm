@@ -22,7 +22,7 @@ import ReloadToTestnet from './ReloadToTestnet/ReloadToTestnet';
 import Session from './Session/Session';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
-import BuyCrypto from './BuyCrypto/BuyCrypto';
+import OnRamp from './OnRamp/OnRamp';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
 import AppLoading from './AppLoading/AppLoading';
 import Swap from './Swap/Swap';
@@ -33,8 +33,9 @@ const mountNode = document.getElementById('app');
 if (!window.location.pathname.includes('index.html') && window.location.hash.indexOf('#') === 0) {
     window.location.replace(
         window.location.pathname +
-        (window.location.pathname[window.location.pathname.length - 1] === '/' ? '' : '/') +
-        window.location.hash.substr(1));
+            (window.location.pathname[window.location.pathname.length - 1] === '/' ? '' : '/') +
+            window.location.hash.substr(1),
+    );
 }
 
 const driver = new Driver();
@@ -124,10 +125,12 @@ class TermApp extends React.Component {
         return (
             <BrowserRouter>
                 <div>
-                    {window.location.pathname.includes('index.html')
-                        && (window.location.hash ?
-                            <Redirect to={`/?tx=${encodeURIComponent(window.location.hash.substr(1))}`} /> :
-                            <Redirect to="/" />)}
+                    {window.location.pathname.includes('index.html') &&
+                        (window.location.hash ? (
+                            <Redirect to={`/?tx=${encodeURIComponent(window.location.hash.substr(1))}`} />
+                        ) : (
+                            <Redirect to="/" />
+                        ))}
                 </div>
 
                 <ErrorBoundary>
@@ -138,11 +141,7 @@ class TermApp extends React.Component {
                                 <Header d={d} />
                                 {isTickerLoaded ? (
                                     <Switch>
-                                        <Route
-                                            exact
-                                            path="/"
-                                            render={props => <HomePage {...props} driver={d} />}
-                                        />
+                                        <Route exact path="/" render={props => <HomePage {...props} driver={d} />} />
                                         <Route path="/download/" component={Download} />
                                         <Route
                                             path="/testnet/"
@@ -160,46 +159,43 @@ class TermApp extends React.Component {
                                         />
                                         <Route
                                             path="/trezor/"
-                                            render={props => <Session {...props} d={this.props.d} urlParts={'trezor'} />}
+                                            render={props => (
+                                                <Session {...props} d={this.props.d} urlParts={'trezor'} />
+                                            )}
                                         />
                                         <Route
                                             path="/freighter/"
-                                            render={props => <Session {...props} d={this.props.d} urlParts={'freighter'} />}
+                                            render={props => (
+                                                <Session {...props} d={this.props.d} urlParts={'freighter'} />
+                                            )}
                                         />
                                         <Route
                                             path="/wallet-connect/"
-                                            render={props => <Session {...props} d={this.props.d} urlParts={'wallet-connect'} />}
+                                            render={props => (
+                                                <Session {...props} d={this.props.d} urlParts={'wallet-connect'} />
+                                            )}
                                         />
                                         <Route
                                             path="/lobstr/"
-                                            render={props => <Session {...props} d={this.props.d} urlParts={'lobstr'} />}
+                                            render={props => (
+                                                <Session {...props} d={this.props.d} urlParts={'lobstr'} />
+                                            )}
                                         />
                                         <Route
                                             path="/signup/"
                                             render={props => <Session {...props} d={d} urlParts={'signup'} />}
                                         />
-                                        <Route
-                                            path="/markets"
-                                            render={props => <Markets {...props} d={d} />}
-                                        />
-                                        <Route
-                                            path="/exchange"
-                                            render={props => <Exchange {...props} d={d} />}
-                                        />
+                                        <Route path="/markets" render={props => <Markets {...props} d={d} />} />
+                                        <Route path="/exchange" render={props => <Exchange {...props} d={d} />} />
 
-                                        <Route
-                                            path="/buy-crypto"
-                                            render={props => <BuyCrypto {...props} d={d} />}
-                                        />
-                                        <Route
-                                            path="/swap"
-                                            render={props => <Swap {...props} d={d} />}
-                                        />
+                                        <Route path="/buy-crypto" render={props => <OnRamp {...props} />} />
+                                        <Route path="/swap" render={props => <Swap {...props} d={d} />} />
 
                                         <Route component={NotFound} />
-                                    </Switch>) :
+                                    </Switch>
+                                ) : (
                                     <AppLoading text="Loading assets and balances" />
-                                }
+                                )}
                                 <ToastTemplate d={d} />
                             </div>
                             <Footer />

@@ -16,7 +16,7 @@ export default class AssetActionButtons extends React.Component {
         }
 
         return (
-            <Link to="/buy-crypto?code=xlm">
+            <Link to="/buy-crypto?code=xlm_stellar">
                 <div className="actionBtn">
                     <div className="btnHint btnHint_wide">Buy lumens</div>
                     <img className="actionBtn_icon" src={images['icon-deposit']} alt="withdraw" />
