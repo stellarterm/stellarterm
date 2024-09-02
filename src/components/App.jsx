@@ -22,7 +22,6 @@ import ReloadToTestnet from './ReloadToTestnet/ReloadToTestnet';
 import Session from './Session/Session';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
-import BuyCrypto from './BuyCrypto/BuyCrypto';
 import OnRamp from './OnRamp/OnRamp';
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
 import AppLoading from './AppLoading/AppLoading';
@@ -189,8 +188,7 @@ class TermApp extends React.Component {
                                         <Route path="/markets" render={props => <Markets {...props} d={d} />} />
                                         <Route path="/exchange" render={props => <Exchange {...props} d={d} />} />
 
-                                        <Route path="/buy-crypto" render={props => <BuyCrypto {...props} d={d} />} />
-                                        <Route path="/buy-via-onramper" render={props => <OnRamp {...props} d={d} />} />
+                                        <Route path="/buy-crypto" render={props => <OnRamp {...props} />} />
                                         <Route path="/swap" render={props => <Swap {...props} d={d} />} />
 
                                         <Route component={NotFound} />
