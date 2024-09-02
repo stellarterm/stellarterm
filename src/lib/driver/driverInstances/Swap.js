@@ -59,7 +59,7 @@ export default class Swap {
     // source_amount: string
     // source_asset_type: string
 
-    getBestSendPath({ source, destination, sourceAmount, sourcePriceUSD, destinationPriceUSD }) {
+    getBestSendPath({ source, destination, sourceAmount, sourcePriceUSD, destinationPriceUSD, smartSwapEnabled }) {
         return this.driver.Server.strictSendPaths(source, sourceAmount, [destination])
             .call()
             .then(({ records }) => Swap.findMaxSendPath(records))
@@ -73,6 +73,7 @@ export default class Swap {
                     .toNumber();
 
                 if (
+                    smartSwapEnabled &&
                     priceImpact <= SMART_ROUTING_MAX_PRICE_IMPACT &&
                     (sourceAmount * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT)
                 ) {
@@ -101,7 +102,14 @@ export default class Swap {
             });
     }
 
-    getBestReceivePath({ source, destination, destinationAmount, destinationPriceUSD, sourcePriceUSD }) {
+    getBestReceivePath({
+        source,
+        destination,
+        destinationAmount,
+        destinationPriceUSD,
+        sourcePriceUSD,
+        smartSwapEnabled,
+    }) {
         return this.driver.Server.strictReceivePaths([source], destination, destinationAmount)
             .call()
             .then(({ records }) => Swap.findMinReceivePath(records))
@@ -115,6 +123,7 @@ export default class Swap {
                     .toNumber();
 
                 if (
+                    smartSwapEnabled &&
                     priceImpact <= SMART_ROUTING_MAX_PRICE_IMPACT &&
                     (Number(result.source_amount) * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT)
                 ) {

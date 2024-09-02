@@ -20,6 +20,18 @@
         margin-bottom: 16px;
     }
 
+    .SwapSettings-smart_swap {
+        display: flex;
+        margin-top: 16px;
+        cursor: pointer;
+        user-select: none;
+
+        input {
+            margin-right: 10px;
+            cursor: pointer;
+        }
+    }
+
     .SwapSettings_percents {
         display: flex;
 

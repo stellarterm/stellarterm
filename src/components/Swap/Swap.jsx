@@ -13,6 +13,7 @@ import Stellarify from '../../lib/helpers/Stellarify';
 import Driver from '../../lib/driver/Driver';
 import { SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
 import { formatNumber, roundAndFormat } from '../../lib/helpers/Format';
+import { getSmartSwapEnabledValue } from '../GlobalModal/SwapModals/SwapSettings/SwapSettings';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
 
 
@@ -34,6 +35,7 @@ const Swap = ({ d }) => {
     const [destinationAmount, setDestinationAmount] = useState('');
     const [isSend, setIsSend] = useState(true);
     const [pending, setPending] = useState(false);
+    const [smartSwapEnabled, setSmartSwapEnabled] = useState(getSmartSwapEnabledValue());
 
     const [isInsufficientSourceBalance, setIsInsufficientSourceBalance] = useState(false);
     const [isInvalidSourceAmount, setIsInvalidSourceAmount] = useState(false);
@@ -270,6 +272,7 @@ const Swap = ({ d }) => {
             sourceAmount: debouncedSourceAmount,
             sourcePriceUSD,
             destinationPriceUSD,
+            smartSwapEnabled,
         }).then(res => {
             setPending(false);
             if (!res) {
@@ -282,7 +285,7 @@ const Swap = ({ d }) => {
         }).catch(() => {
             setErrorText(SWAP_NO_PATH_ERROR);
         });
-    }, [source, destination, debouncedSourceAmount]);
+    }, [source, destination, debouncedSourceAmount, smartSwapEnabled]);
 
     const getReceivePath = useCallback(() => {
         if (!destination) {
@@ -296,6 +299,7 @@ const Swap = ({ d }) => {
             destinationAmount: debouncedDestinationAmount,
             destinationPriceUSD,
             sourcePriceUSD,
+            smartSwapEnabled,
         }).then(res => {
             setPending(false);
 
@@ -309,7 +313,7 @@ const Swap = ({ d }) => {
         }).catch(() => {
             setErrorText(SWAP_NO_PATH_ERROR);
         });
-    }, [source, destination, debouncedDestinationAmount]);
+    }, [source, destination, debouncedDestinationAmount, smartSwapEnabled]);
 
 
     useEffect(() => {
@@ -317,14 +321,14 @@ const Swap = ({ d }) => {
             return;
         }
         getSendPath();
-    }, [debouncedSourceAmount, isSend, source, destination]);
+    }, [debouncedSourceAmount, isSend, source, destination, smartSwapEnabled]);
 
     useEffect(() => {
         if (isSend || !Number(debouncedDestinationAmount) || !Number(destinationAmount)) {
             return;
         }
         getReceivePath();
-    }, [debouncedDestinationAmount, isSend, source, destination]);
+    }, [debouncedDestinationAmount, isSend, source, destination, smartSwapEnabled]);
 
     const updateIndex = useUpdateInterval(15000, [sourceAmount, destinationAmount]);
 
@@ -379,7 +383,9 @@ const Swap = ({ d }) => {
     };
 
     const openSettings = () => {
-        d.modal.handlers.activate('SwapSettings');
+        d.modal.handlers.activate('SwapSettings').then(() => {
+            setSmartSwapEnabled(getSmartSwapEnabledValue());
+        });
     };
 
     const onSubmit = async () => {
