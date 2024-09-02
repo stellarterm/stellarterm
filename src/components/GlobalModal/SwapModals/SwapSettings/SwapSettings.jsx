@@ -6,21 +6,29 @@ import InfoBlock from '../../../Common/InfoBlock/InfoBlock';
 import Driver from '../../../../lib/driver/Driver';
 
 export const SWAP_SLIPPAGE_ALIAS = 'swap_slippage_value';
+export const SWAP_SMART_ENABLED = 'swap_smart_enabled';
 
 export const getSlippageValue = () => localStorage.getItem(SWAP_SLIPPAGE_ALIAS) || '1';
 export const setSlippageValue = slippage => {
     localStorage.setItem(SWAP_SLIPPAGE_ALIAS, slippage);
 };
 
+export const getSmartSwapEnabledValue = () => (localStorage.getItem(SWAP_SMART_ENABLED) || 'true') === 'true';
+export const setSmartSwapEnabledValue = value => {
+    localStorage.setItem(SWAP_SMART_ENABLED, value);
+};
+
 const SWAP_PERCENTS = [0.1, 0.5, 1];
 
 const SwapSettings = ({ submit, d }) => {
     const [slippage, setSlippage] = useState(getSlippageValue());
+    const [smartSwapEnabled, setSmartSwapEnabled] = useState(getSmartSwapEnabledValue());
 
     const onSave = () => {
         setSlippageValue(slippage);
+        setSmartSwapEnabledValue(smartSwapEnabled);
         d.toastService.success('Success', 'You\'ve successfully saved settings');
-        submit.cancel();
+        d.modal.handlers.finish();
     };
 
     const errorText = useMemo(() => {
@@ -77,9 +85,26 @@ const SwapSettings = ({ submit, d }) => {
                     }
                 />
 
+                <label
+                    htmlFor="enableSmartSwap"
+                    className="SwapSettings-smart_swap"
+                    onClick={() => setSmartSwapEnabled(prev => !prev)}
+                >
+                    <input
+                        name="enableSmartSwap"
+                        className="LoginPage__accept__checkbox"
+                        type="checkbox"
+                        checked={smartSwapEnabled}
+                        readOnly
+
+                    />
+                    Enable Smart Swap
+                </label>
+
                 {Boolean(slippage) && Number(slippage) <= 0.1 && Number(slippage) > 0 &&
                     <InfoBlock type={'warning'} withIcon onlyTitle smallInRow title={'Your transaction may fail'} />
                 }
+
                 <div className="Modal_button-block">
                     <button
                         className="s-button"
