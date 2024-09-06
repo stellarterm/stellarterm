@@ -25,6 +25,31 @@
         }
     }
 
+    .SwapFormRow_percent-buttons {
+        position: absolute;
+        top: calc(100% + 7px);
+        right: 0;
+        display: flex;
+        font-size: 12px;
+        font-weight: 400;
+        border: 1px solid #F4F4F5;
+        border-radius: 3px;
+        height: 20px;
+        width: 161px;
+
+        .SwapFormRow_percent-button {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 25%;
+            cursor: pointer;
+
+            &:not(:last-child) {
+                border-left: 1px solid #F4F4F5;
+            }
+        }
+    }
+
     .SwapFormRow_usd {
         display: flex;
         flex-direction: column;

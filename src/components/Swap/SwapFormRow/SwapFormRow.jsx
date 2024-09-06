@@ -130,6 +130,13 @@ const SwapFormRow = ({
                 successTemplate={savings}
             />
 
+            {balance !== null && !isDestination && <div className="SwapFormRow_percent-buttons">
+                <div className="SwapFormRow_percent-button" onClick={() => setAmount((balance * 0.25).toFixed(7))}>25%</div>
+                <div className="SwapFormRow_percent-button" onClick={() => setAmount((balance * 0.5).toFixed(7))}>50%</div>
+                <div className="SwapFormRow_percent-button" onClick={() => setAmount((balance * 0.75).toFixed(7))}>75%</div>
+                <div className="SwapFormRow_percent-button" onClick={() => setAmount(balance)}>100%</div>
+            </div>}
+
             <SwapAsset asset={asset} d={d} openList={() => setIsListOpen(true)} />
 
             {isListOpen && (
