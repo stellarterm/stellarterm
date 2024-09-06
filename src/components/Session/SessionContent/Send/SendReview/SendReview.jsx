@@ -5,6 +5,7 @@ import Driver from '../../../../../lib/driver/Driver';
 import AssetCardInRow from '../../../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import { AUTH_TYPE } from '../../../../../lib/constants/sessionConstants';
 import Validate from '../../../../../lib/helpers/Validate';
+import { formatNumber } from '../../../../../lib/helpers/Format';
 
 export default class SendReview extends React.Component {
     constructor(props) {
@@ -84,7 +85,7 @@ export default class SendReview extends React.Component {
                         <div className="review_data">
                             <div className="content_block">
                                 <div className="content_title">Amount</div>
-                                <div className="content_text">{amountToSend} {assetToSend.asset.code}</div>
+                                <div className="content_text">{formatNumber(amountToSend)} {assetToSend.asset.code}</div>
                             </div>
                             <div className="content_block">
                                 <div className="content_title">Asset</div>
