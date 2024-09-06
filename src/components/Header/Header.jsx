@@ -188,9 +188,9 @@ class Header extends React.Component {
                             <Link className="Nav_logo" to={'/'}>
                                 StellarTerm
                             </Link>
+                            {this.createHeaderTab('/swap/', 'Swap')}
                             {this.createHeaderTab('/markets/', 'Markets')}
                             {this.createHeaderTab('/exchange/', 'Exchange')}
-                            {this.createHeaderTab('/swap/', 'Swap')}
                             {this.getBuyCryptoLobsterLink()}
                             {this.createHeaderTab('/account/', 'Account')}
                         </nav>
