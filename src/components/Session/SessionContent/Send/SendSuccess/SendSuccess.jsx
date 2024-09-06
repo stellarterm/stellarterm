@@ -4,6 +4,7 @@ import createStellarIdenticon from 'stellar-identicon-js';
 import Driver from '../../../../../lib/driver/Driver';
 import images from '../../../../../images';
 import Validate from '../../../../../lib/helpers/Validate';
+import { formatNumber } from '../../../../../lib/helpers/Format';
 
 export default function SendSuccess(props) {
     const { d, awaitSigners } = props;
@@ -48,7 +49,7 @@ export default function SendSuccess(props) {
                     <img src={images['icon-big-circle-success']} alt="success" className="status_icon" />
                 )}
 
-                <h1>{awaitSigners ? 'Almost done' : `${amountToSend} ${assetToSend.asset.code}`}</h1>
+                <h1>{awaitSigners ? 'Almost done' : `${formatNumber(amountToSend)} ${assetToSend.asset.code}`}</h1>
 
                 {!awaitSigners ? (
                     <div className="field_description">
