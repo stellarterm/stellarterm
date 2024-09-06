@@ -20,21 +20,22 @@ const processUnknownAssets = (assets, priceUsdXlm) => {
                 asset.code === assetCode && asset.issuer === assetIssuer);
 
             const tradeLink = `/exchange/${asset.code}-${asset.issuer}/XLM-native`;
+            const swapLink = `/swap/${asset.code}-${asset.issuer}/XLM-native`;
 
             if (!assetData) {
-                return Object.assign({}, asset, { tradeLink });
+                return Object.assign({}, asset, { tradeLink, swapLink });
             }
 
             const priceChanges = Number(assetData.close_native_price) / Number(assetData.avg_native_price);
 
             if (priceChanges >= PRICE_CHANGES_LIMIT) {
-                return Object.assign({}, asset, { tradeLink });
+                return Object.assign({}, asset, { tradeLink, swapLink });
             }
 
             const change24hUSD = (((assetData.close_native_price / assetData.open_native_price) - 1) * 100);
             const balanceUSD = (parseFloat(asset.balance) * assetData.close_native_price * priceUsdXlm);
 
-            return Object.assign({}, asset, { change24h_USD: change24hUSD, balanceUSD, tradeLink });
+            return Object.assign({}, asset, { change24h_USD: change24hUSD, balanceUSD, tradeLink, swapLink });
         }));
 };
 
@@ -54,6 +55,7 @@ const processBalances = d => {
 
             const processedAsset = Object.assign({}, asset, {
                 tradeLink: tickerAsset.slug !== 'XLM-native' ? `/exchange/${tickerAsset.topTradePairSlug}` : '',
+                swapLink: tickerAsset.slug !== 'XLM-native' ? `/swap/${tickerAsset.slug}/XLM-native` : '',
                 balanceUSD,
                 change24h_USD: tickerAsset.change24h_USD,
                 id: tickerAsset.id,
