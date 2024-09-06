@@ -10,21 +10,6 @@ import { getTransferDomain, checkAssetSettings, getTransferServer } from '../../
 import { UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants/sessionConstants';
 
 export default class AssetActionButtons extends React.Component {
-    static getBuyLumensLink(isXLMNative) {
-        if (!isXLMNative) {
-            return null;
-        }
-
-        return (
-            <Link to="/buy-crypto?code=xlm_stellar">
-                <div className="actionBtn">
-                    <div className="btnHint btnHint_wide">Buy lumens</div>
-                    <img className="actionBtn_icon" src={images['icon-deposit']} alt="withdraw" />
-                </div>
-            </Link>
-        );
-    }
-
     constructor(props) {
         super(props);
 
@@ -80,6 +65,49 @@ export default class AssetActionButtons extends React.Component {
         this.props.history.push(`transactions?asset=${assetSlug}&anchorDomain=${output.domain}`);
     }
 
+    getBuyLumensLinks(isXLMNative) {
+        if (!isXLMNative) {
+            return null;
+        }
+
+        return (
+            <div className="ActionBtns_container hide_ActionText">
+                <Link
+                    to="/account/send?asset=XLM-native"
+                    onClick={() => this.props.d.send.resetSendForm()}
+                >
+                    <div className="actionBtn">
+                        <div className="btnHint">Send</div>
+                        <img className="actionBtn_icon" src={images['icon-send']} alt="send" />
+                    </div>
+                </Link>
+
+
+                <Link to="/swap/XLM-native/USDC-www.centre.io">
+                    <div className="actionBtn">
+                        <div className="btnHint">Swap</div>
+                        <img className="actionBtn_icon" src={images['icon-swap']} alt="swap" />
+                    </div>
+                </Link>
+
+                <Link to="/exchange/XLM-native/USDC-www.centre.io">
+                    <div className="actionBtn">
+                        <div className="btnHint">Trade</div>
+                        <img className="actionBtn_icon" src={images['icon-trade']} alt="trade" />
+                    </div>
+                </Link>
+
+                <Link to="/buy-crypto?code=xlm_stellar">
+                    <div className="actionBtn">
+                        <div className="btnHint btnHint_wide">Buy lumens</div>
+                        <img className="actionBtn_icon" src={images['icon-buy']} alt="withdraw" />
+                    </div>
+                </Link>
+            </div>
+
+        );
+    }
+
     checkIsJWTSupported(type) {
         const { authType } = this.props.d.session;
         const isJWTUnsupported = UNSUPPORTED_JWT_AUTH_TYPES.has(authType);
@@ -106,32 +134,12 @@ export default class AssetActionButtons extends React.Component {
 
         const containerClass = `ActionBtns_container ${onlyIcons ? 'hide_ActionText' : ''}`;
 
+        if (isXLMNative) {
+            return this.getBuyLumensLinks(isXLMNative);
+        }
+
         return (
             <div className={containerClass}>
-                {isHistoryEnabled ? (
-                    <div onClick={() => this.onHistoryClick()}>
-                        <div className="actionBtn">
-                            <div className="btnHint btnHint_wide">Transfer history</div>
-                            <img className="actionBtn_icon" src={images['icon-transactions']} alt="transfer-history" />
-                        </div>
-                    </div>
-                ) : null}
-                {isDepositEnabled ? (
-                    <div className="actionBtn" onClick={() => this.onSepClick(true)}>
-                        <div className="btnHint">Deposit</div>
-                        <img className="actionBtn_icon" src={images['icon-deposit']} alt="deposit" />
-                    </div>
-                ) : null}
-
-                {isWithdrawEnabled ? (
-                    <div className="actionBtn" onClick={() => this.onSepClick(false)}>
-                        <div className="btnHint">Withdraw</div>
-                        <img className="actionBtn_icon" src={images['icon-withdraw']} alt="withdraw" />
-                    </div>
-                ) : null}
-
-                {this.constructor.getBuyLumensLink(isXLMNative)}
-
                 <Link
                     to={`/account/send?asset=${Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer))}`}
                     onClick={() => this.props.d.send.resetSendForm()}
@@ -142,6 +150,15 @@ export default class AssetActionButtons extends React.Component {
                     </div>
                 </Link>
 
+                {asset.swapLink ? (
+                    <Link to={asset.swapLink}>
+                        <div className="actionBtn">
+                            <div className="btnHint">Swap</div>
+                            <img className="actionBtn_icon" src={images['icon-swap']} alt="swap" />
+                        </div>
+                    </Link>
+                ) : null}
+
                 {asset.tradeLink ? (
                     <Link to={asset.tradeLink}>
                         <div className="actionBtn">
@@ -150,6 +167,35 @@ export default class AssetActionButtons extends React.Component {
                         </div>
                     </Link>
                 ) : null}
+
+                {(isHistoryEnabled || isDepositEnabled || isDepositEnabled) ?
+                    <div className="actionBtn">
+                        <div className="btnHint btnMenu">
+                            {isHistoryEnabled ? (
+                                <div onClick={() => this.onHistoryClick()}>
+                                    <div className="actionBtn">
+                                        <img className="actionBtn_icon" src={images['icon-transactions']} alt="transfer-history" />
+                                        Transfer history
+                                    </div>
+                                </div>
+                            ) : null}
+                            {isDepositEnabled ? (
+                                <div className="actionBtn" onClick={() => this.onSepClick(true)}>
+                                    <img className="actionBtn_icon" src={images['icon-deposit']} alt="deposit" />
+                                    Deposit
+                                </div>
+                            ) : null}
+
+                            {isWithdrawEnabled ? (
+                                <div className="actionBtn" onClick={() => this.onSepClick(false)}>
+                                    <img className="actionBtn_icon" src={images['icon-withdraw']} alt="withdraw" />
+                                    Withdraw
+                                </div>
+                            ) : null}
+                        </div>
+                        <img className="actionBtn_icon" src={images['icon-three-dots']} alt="dots" />
+                    </div>
+                    : <div className="emptyIcon" />}
             </div>
         );
     }
