@@ -339,7 +339,7 @@ export default function Send(driver) {
                 this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
             });
         },
-        sign: async tx => {
+        sign: async (tx, onlySign) => {
             if (this.authType === AUTH_TYPE.SECRET) {
                 this.account.signWithSecret(tx);
                 console.log('Signed tx\nhash:', tx.hash().toString('hex'), `\n\n${tx.toEnvelope().toXDR('base64')}`);
@@ -349,7 +349,7 @@ export default function Send(driver) {
                 };
             } else if (this.authType === AUTH_TYPE.WALLET_CONNECT) {
                 // use signTx in case when needed to sign challenge tx (manage data operation)
-                if (tx.operations.find(({ type }) => type === 'manageData')) {
+                if (onlySign || tx.operations.find(({ type }) => type === 'manageData')) {
                     const signedXDR = await driver.walletConnectService.signTx(tx);
                     const signedTx = new StellarSdk.Transaction(signedXDR, driver.Server.networkPassphrase);
 

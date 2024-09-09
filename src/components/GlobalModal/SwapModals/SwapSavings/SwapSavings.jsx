@@ -25,7 +25,7 @@ const SwapSavings = ({ submit, path }) => (
                     A fee of 30% of the extra savings generated is automatically included in this quote
             </div>
 
-            <div className="SwapSavings_path-list">
+            {!!path.extended_paths.length && <div className="SwapSavings_path-list">
                 <div className="SwapSavings_path-row head">
                     <span>Swap amount (%)</span>
                     <span>Path</span>
@@ -45,10 +45,10 @@ const SwapSavings = ({ submit, path }) => (
                         </div>
                     </div>,
                 )}
-            </div>
+            </div>}
 
             <button className="s-button" onClick={() => submit.cancel()}>
-                I understand
+                    I understand
             </button>
         </div>
     </div>

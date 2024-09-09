@@ -11,6 +11,10 @@
         font-weight: normal;
         color: #505558;
         margin-bottom: 10px;
+
+        &.topMargin {
+            margin-top: 34px;
+        }
     }
 
     &-description {
@@ -20,16 +24,33 @@
         margin-bottom: 16px;
     }
 
-    .SwapSettings-smart_swap {
+    &-switcher {
         display: flex;
-        margin-top: 16px;
-        cursor: pointer;
-        user-select: none;
+        height: 55px;
 
-        input {
-            margin-right: 10px;
+
+        &-option {
+            flex: 1;
+            border: 1px solid #D7E0E4;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #505558;
+            font-size: 14px;
             cursor: pointer;
+
+
+            &.active {
+                background-color: #69C76F;
+                color: #fff;
+                border: 1px solid #69C76F;
+            }
         }
+    }
+
+    .InfoBlock_base.InfoBlock_smallInRow {
+        margin-bottom: 0;
     }
 
     .SwapSettings_percents {

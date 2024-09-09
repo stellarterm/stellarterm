@@ -1347,37 +1347,42 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
 
+"@stellar-broker/client@0.3.0":
+  version "0.3.0"
+  resolved "https://registry.yarnpkg.com/@stellar-broker/client/-/client-0.3.0.tgz#ee34903e755787e93eae3723daad55ada4e9338b"
+  integrity sha512-8ah7JsNN5O2p+3/lst/f6+EQMCpsv95zkYlin9nsaYTXFOXt/bpeBTBZ4xlixjLXHfaw89crm69sEBD5MGxZXQ==
+
 "@stellar/freighter-api@1.4.0":
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/@stellar/freighter-api/-/freighter-api-1.4.0.tgz#f53ab58792733caa1fe33d60050ec24164e331f3"
   integrity sha512-/ANu1/4mnReUvrSDveKj5XhrnafEssESF/lVdOR1v0ja02kFuhsdsw3anzdz0NvPaPbFgPmjU+v9t9R8KN6r+g==
 
-"@stellar/js-xdr@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@stellar/js-xdr/-/js-xdr-3.0.1.tgz#d500f1e1332210cd56e0ef95e44c54506d9f48f3"
-  integrity sha512-dp5Eh7Nr1YjiIeqpdkj2cQYxfoPudDAH3ck8MWggp48Htw66Z/hUssNYUQG/OftLjEmHT90Z/dtey2Y77DOxIw==
+"@stellar/js-xdr@^3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@stellar/js-xdr/-/js-xdr-3.1.2.tgz#db7611135cf21e989602fd72f513c3bed621bc74"
+  integrity sha512-VVolPL5goVEIsvuGqDc5uiKxV03lzfWdvYg1KikvwheDmTBO68CKDji3bAZ/kppZrx5iTA8z3Ld5yuytcvhvOQ==
 
-"@stellar/stellar-base@10.0.1":
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/@stellar/stellar-base/-/stellar-base-10.0.1.tgz#cf4458e081f694109422521562e53e642c29991b"
-  integrity sha512-BDbx7VHOEQh+4J3Q+gStNXgPaNckVFmD4aOlBBGwxlF6vPFmVnW8IoJdkX7T58zpX55eWI6DXvEhDBlrqTlhAQ==
+"@stellar/stellar-base@^12.1.0":
+  version "12.1.0"
+  resolved "https://registry.yarnpkg.com/@stellar/stellar-base/-/stellar-base-12.1.0.tgz#45b55a38738ed267e0d55a1fee3c4153c82d0fa6"
+  integrity sha512-pWwn+XWP5NotmIteZNuJzHeNn9DYSqH3lsYbtFUoSYy1QegzZdi9D8dK6fJ2fpBAnf/rcDjHgHOw3gtHaQFVbg==
   dependencies:
-    "@stellar/js-xdr" "^3.0.1"
+    "@stellar/js-xdr" "^3.1.2"
     base32.js "^0.1.0"
     bignumber.js "^9.1.2"
     buffer "^6.0.3"
     sha.js "^2.3.6"
     tweetnacl "^1.0.3"
   optionalDependencies:
-    sodium-native "^4.0.1"
+    sodium-native "^4.1.1"
 
-"@stellar/stellar-sdk@^11.1.0":
-  version "11.1.0"
-  resolved "https://registry.yarnpkg.com/@stellar/stellar-sdk/-/stellar-sdk-11.1.0.tgz#4a619fa645a7392204b6e80cb0a7f3ef94cdd077"
-  integrity sha512-Ufw+4udr7lqyzPIhqSAzBTgcl/YlgFZLgeBlDr5ZZy1v+g7AT4dOZFurcCrHt7Pz8DGtVcxNX7GLxYLdOC3GIg==
+"@stellar/stellar-sdk@12.2.0":
+  version "12.2.0"
+  resolved "https://registry.yarnpkg.com/@stellar/stellar-sdk/-/stellar-sdk-12.2.0.tgz#c449bc52be282c7706aabbd257acbc5aec3345b3"
+  integrity sha512-Wy5sDOqb5JvAC76f4sQIV6Pe3JNyZb0PuyVNjwt3/uWsjtxRkFk6s2yTHTefBLWoR+mKxDjO7QfzhycF1v8FXQ==
   dependencies:
-    "@stellar/stellar-base" "10.0.1"
-    axios "^1.6.0"
+    "@stellar/stellar-base" "^12.1.0"
+    axios "^1.7.2"
     bignumber.js "^9.1.2"
     eventsource "^2.0.2"
     randombytes "^2.1.0"
@@ -2427,12 +2432,12 @@ axios@0.25.0:
   dependencies:
     follow-redirects "^1.14.7"
 
-axios@^1.6.0:
-  version "1.6.5"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.6.5.tgz#2c090da14aeeab3770ad30c3a1461bc970fb0cd8"
-  integrity sha512-Ii012v05KEVuUoFWmMW/UQv9aRIc3ZwkWDcM+h5Il8izZCtRVpDUfwpoFf7eOtajT3QiGR4yDUx7lPqHJULgbg==
+axios@^1.7.2:
+  version "1.7.7"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.7.tgz#2f554296f9892a72ac8d8e4c5b79c14a91d0a47f"
+  integrity sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==
   dependencies:
-    follow-redirects "^1.15.4"
+    follow-redirects "^1.15.6"
     form-data "^4.0.0"
     proxy-from-env "^1.1.0"
 
@@ -5745,10 +5750,10 @@ follow-redirects@^1.14.7:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.0.tgz#06441868281c86d0dda4ad8bdaead2d02dca89d4"
   integrity sha512-aExlJShTV4qOUOL7yF1U5tvLCB0xQuudbf6toyYA0E/acBNw71mvjFTnLaRp50aQaYocMR0a/RMMBIHeZnGyjQ==
 
-follow-redirects@^1.15.4:
-  version "1.15.4"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.4.tgz#cdc7d308bf6493126b17ea2191ea0ccf3e535adf"
-  integrity sha512-Cr4D/5wlrb0z9dgERpUL3LrmPKVDsETIJhaCMeDfuFYcqa5bldGV6wBsAN6X/vxlXQtFBMrXdXxdL8CbDTGniw==
+follow-redirects@^1.15.6:
+  version "1.15.9"
+  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
+  integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -8789,10 +8794,10 @@ node-gyp-build@^4.3.0:
   resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.4.0.tgz#42e99687ce87ddeaf3a10b99dc06abc11021f3f4"
   integrity sha512-amJnQCcgtRVw9SvoebO3BKGESClrfXGCUTX9hSn1OuGQTQBOZmVd0Z0OlecpuRksKvbsUqALE8jls/ErClAPuQ==
 
-node-gyp-build@^4.6.0:
-  version "4.8.0"
-  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.8.0.tgz#3fee9c1731df4581a3f9ead74664369ff00d26dd"
-  integrity sha512-u6fs2AEUljNho3EYTJNBfImO5QTo/J/1Etd+NVdCj7qWKUSN/bSLkZwhDv7I+w/MSC6qJ4cknepkAYykDdK8og==
+node-gyp-build@^4.8.0:
+  version "4.8.2"
+  resolved "https://registry.yarnpkg.com/node-gyp-build/-/node-gyp-build-4.8.2.tgz#4f802b71c1ab2ca16af830e6c1ea7dd1ad9496fa"
+  integrity sha512-IRUxE4BVsHWXkV/SFOut4qTlagw2aM8T5/vnTsmrHJvVoKueJHRc/JaFND7QDDc61kLYUJ6qlZM3sqTSyx2dTw==
 
 node-gyp@^8.4.1:
   version "8.4.1"
@@ -11147,12 +11152,12 @@ sodium-native@^3.3.0:
   dependencies:
     node-gyp-build "^4.3.0"
 
-sodium-native@^4.0.1:
-  version "4.0.5"
-  resolved "https://registry.yarnpkg.com/sodium-native/-/sodium-native-4.0.5.tgz#76f6c742027df2db074725fedcb85d542a0c842c"
-  integrity sha512-YGimGhy7Ho6pTAAvuNdn3Tv9C2MD7HP89X1omReHat0Fd1mMnapGqwzb5YoHTAbIEh8tQmKP6+uLlwYCkf+EOA==
+sodium-native@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/sodium-native/-/sodium-native-4.1.1.tgz#109bc924dd55c13db87c6dd30da047487595723c"
+  integrity sha512-LXkAfRd4FHtkQS4X6g+nRcVaN7mWVNepV06phIsC6+IZFvGh1voW5TNQiQp2twVaMf05gZqQjuS+uWLM6gHhNQ==
   dependencies:
-    node-gyp-build "^4.6.0"
+    node-gyp-build "^4.8.0"
 
 sonic-boom@^2.2.1:
   version "2.8.0"

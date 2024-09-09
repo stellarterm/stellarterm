@@ -7,7 +7,7 @@ import images from '../../../../images';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 import AppPopover from '../../../Common/AppPopover/AppPopover';
 import { getSlippageValue } from '../SwapSettings/SwapSettings';
-import Swap, { FEE_ADDRESS } from '../../../../lib/driver/driverInstances/Swap';
+import Swap, { FEE_ADDRESS, SMART_SWAP_VERSION } from '../../../../lib/driver/driverInstances/Swap';
 import { formatNumber } from '../../../../lib/helpers/Format';
 import Driver from '../../../../lib/driver/Driver';
 import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
@@ -28,6 +28,7 @@ const SwapConfirm = ({ params, submit, d }) => {
         path,
         priceImpact,
         isSend,
+        smartSwapVersion,
     } = params;
 
     const slippage = Number(getSlippageValue());
@@ -100,6 +101,29 @@ const SwapConfirm = ({ params, submit, d }) => {
             submit.finish();
         }
 
+        if (smartSwapVersion === SMART_SWAP_VERSION.V2) {
+            d.swap.submitSwapV2(d.session.account.accountId(), async tx => {
+                const result = await d.session.handlers.sign(tx, true);
+                return result.signedTx;
+            }).then(result => {
+                setPending(false);
+                submit.finish();
+                if (Number(result.sold) === 0) {
+                    d.toastService.error('Swap failed', 'Something went wrong');
+                    return;
+                }
+                d.modal.handlers.activate('SwapSuccess', {
+                    source,
+                    destination,
+                    hash: null,
+                    sourceAmount: result.sold,
+                    destinationAmount: result.bought,
+                });
+            });
+            return;
+        }
+
+
         const signAndSubmit = await d.session.handlers.swap({
             path,
             withTrust,
@@ -122,12 +146,14 @@ const SwapConfirm = ({ params, submit, d }) => {
             const serverResult = await signAndSubmit.serverResult;
             submit.finish();
 
+            const swapAmount = Swap.getSwapAmount(serverResult, isSend);
+
             d.modal.handlers.activate('SwapSuccess', {
                 source,
                 destination,
                 hash: serverResult.id,
-                sourceAmount: isSend ? sourceAmount : Swap.getReceiveSwapSourceAmount(serverResult),
-                destinationAmount: isSend ? Swap.getSendSwapDestAmount(serverResult) : destinationAmount,
+                sourceAmount: isSend ? sourceAmount : swapAmount,
+                destinationAmount: isSend ? swapAmount : destinationAmount,
             });
         } catch (error) {
             const errorMessage = ErrorHandler(error);

@@ -1,4 +1,5 @@
 import * as StellarSdk from '@stellar/stellar-sdk';
+import StellarBrokerClient from '@stellar-broker/client/lib/stellarbroker';
 import BigNumber from 'bignumber.js';
 import { post, get } from '../../api/request';
 import { TOP_MARKETS_API } from '../../../env-consts';
@@ -9,6 +10,13 @@ const XDR_AMOUNT_COEFFICIENT = 0.0000001;
 const SMART_ROUTING_MIN_AMOUNT = 100; // 100$
 const SMART_ROUTING_FEE = 30; // 30%
 const SMART_ROUTING_MAX_PRICE_IMPACT = -0.5;
+
+
+export const SMART_SWAP_VERSION = {
+    DISABLED: 'disabled',
+    V1: 'v1',
+    V2: 'v2',
+};
 
 export const FEE_ADDRESS = 'GAEGJFQYHAFZEAWHQ2ZIE4Z6OIZDSCXTOKFUEJ3QMBNOIJRVY3SXBVO6';
 
@@ -31,6 +39,12 @@ export default class Swap {
 
     constructor(driver) {
         this.driver = driver;
+
+        this.client = null;
+
+        this.timeout = null;
+
+        this.finishPromiseResolver = null;
     }
 
     // Path result
@@ -59,61 +73,169 @@ export default class Swap {
     // source_amount: string
     // source_asset_type: string
 
-    getBestSendPath({ source, destination, sourceAmount, sourcePriceUSD, destinationPriceUSD, smartSwapEnabled }) {
-        return this.driver.Server.strictSendPaths(source, sourceAmount, [destination])
-            .call()
-            .then(({ records }) => Swap.findMaxSendPath(records))
-            .then(result => {
-                const priceImpact = new BigNumber(result.destination_amount)
-                    .times(new BigNumber(destinationPriceUSD))
-                    .div(new BigNumber(result.source_amount))
-                    .div(new BigNumber(sourcePriceUSD))
-                    .minus(1)
-                    .times(100)
-                    .toNumber();
 
-                if (
-                    smartSwapEnabled &&
-                    priceImpact <= SMART_ROUTING_MAX_PRICE_IMPACT &&
-                    (sourceAmount * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT)
-                ) {
-                    return Swap.getSmartRoutingPath(true, source, destination, sourceAmount);
-                }
-
-                return ({
-                    isSmartRouting: false,
-                    type: 'send',
-                    extended_paths: [{
-                        destinationAmount: Number(result.destination_amount),
-                        sourceAmount: Number(result.source_amount),
-                        path: result.path,
-                        percent: 100,
-                        readablePath: [
-                            source.code,
-                            ...result.path.map(({ asset_type: type, asset_code: code }) => (type === 'native' ? 'XLM' : code)),
-                            destination.code,
-                        ],
-                    }],
-                    profit: 0,
-                    initial_sum: result.destination_amount,
-                    optimized_sum: result.destination_amount,
-                    fee_path: null,
-                });
-            });
-    }
-
-    getBestReceivePath({
+    listenToBestPath({
         source,
         destination,
-        destinationAmount,
+        amount,
         destinationPriceUSD,
         sourcePriceUSD,
-        smartSwapEnabled,
+        smartSwapVersion,
+        isSend,
+        callback,
+        errorCallback,
+        slippage,
     }) {
-        return this.driver.Server.strictReceivePaths([source], destination, destinationAmount)
-            .call()
-            .then(({ records }) => Swap.findMinReceivePath(records))
+        this.unlistenToBestPath();
+        if (smartSwapVersion === SMART_SWAP_VERSION.V2) {
+            this.getBestPathV2({
+                source,
+                destination,
+                amount,
+                isSend,
+                callback,
+                errorCallback,
+                slippage,
+            });
+
+            return;
+        }
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+        this.getBestPathV1({
+            source,
+            destination,
+            amount,
+            destinationPriceUSD,
+            sourcePriceUSD,
+            smartSwapVersion,
+            isSend,
+        }).then(res => {
+            callback(res);
+
+            this.timeout = setTimeout(() => this.listenToBestPath({
+                source,
+                destination,
+                amount,
+                destinationPriceUSD,
+                sourcePriceUSD,
+                smartSwapVersion,
+                isSend,
+                callback,
+                errorCallback,
+                slippage,
+            }), 15000);
+        }).catch(() => {
+            errorCallback();
+        });
+    }
+
+    unlistenToBestPath() {
+        if (this.client) {
+            this.client.stop();
+            this.client.close();
+            this.client = null;
+        }
+        if (this.timeout) {
+            clearTimeout(this.timeout);
+        }
+    }
+
+
+    submitSwapV2(accountId, signCallback) {
+        this.client.confirmQuote(accountId, signCallback);
+
+        return new Promise(resolve => {
+            this.finishPromiseResolver = resolve;
+        });
+    }
+
+    async getBestPathV2({
+        source,
+        destination,
+        amount,
+        isSend,
+        callback,
+        errorCallback,
+        slippage,
+    }) {
+        if (!this.client) {
+            this.client = new StellarBrokerClient({
+                partnerKey: '5MkkwmdX3Z3kNaH9exQRxPXnf8pRDzkDoq6HhGbj27WoxXijRMyMFJ37yDPrbtb1vs',
+                network: this.driver.Server.isTestnet ? 'testnet' : 'public',
+            });
+
+            await this.client.connect();
+
+            this.client.on('quote', ({ quote }) => {
+                if (quote.error) {
+                    errorCallback(quote.error);
+                    return;
+                }
+                const result = ({
+                    isSmartRouting: true,
+                    type: isSend ? 'send' : 'receive',
+                    extended_paths: [],
+                    profit: Number((isSend ?
+                        +quote.estimatedBuyingAmount - +quote.directTrade.buying :
+                        +quote.estimatedSellingAmount - +quote.directTrade.selling).toFixed(7)),
+                    initial_sum: isSend ? +quote.directTrade.buying : +quote.directTrade.selling,
+                    optimized_sum: isSend ? +quote.estimatedBuyingAmount : +quote.estimatedSellingAmount,
+                    fee_path: null,
+                });
+
+                if (callback) {
+                    callback(result);
+                }
+            });
+
+            this.client.on('error', res => {
+                if (errorCallback) {
+                    errorCallback(res);
+                }
+            });
+
+            this.client.on('finished', ({ result }) => {
+                if (this.finishPromiseResolver) {
+                    this.finishPromiseResolver(result);
+                    this.finishPromiseResolver = null;
+                }
+            });
+        }
+
+        this.client.quote({
+            sellingAsset: getAssetString(source),
+            buyingAsset: getAssetString(destination),
+            sellingAmount: isSend ? amount : undefined,
+            buyingAmount: isSend ? undefined : amount,
+            slippageTolerance: slippage,
+        });
+    }
+
+
+    getBestPathV1({
+        source,
+        destination,
+        amount,
+        destinationPriceUSD,
+        sourcePriceUSD,
+        smartSwapVersion,
+        isSend, // Boolean: true for send, false for receive
+    }) {
+        const pathsPromise = isSend
+            ? this.driver.Server.strictSendPaths(source, amount, [destination]).call()
+            : this.driver.Server.strictReceivePaths([source], destination, amount).call();
+
+        return pathsPromise
+            .then(({ records }) =>
+                // Use appropriate helper function based on the direction
+                (isSend
+                    ? Swap.findMaxSendPath(records)
+                    : Swap.findMinReceivePath(records)),
+            )
             .then(result => {
+                // Calculate the price impact
                 const priceImpact = new BigNumber(result.destination_amount)
                     .times(new BigNumber(destinationPriceUSD))
                     .div(new BigNumber(result.source_amount))
@@ -122,17 +244,19 @@ export default class Swap {
                     .times(100)
                     .toNumber();
 
-                if (
-                    smartSwapEnabled &&
+                // Check if Smart Swap should be used
+                const shouldUseSmartSwap = smartSwapVersion === SMART_SWAP_VERSION.V1 &&
                     priceImpact <= SMART_ROUTING_MAX_PRICE_IMPACT &&
-                    (Number(result.source_amount) * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT)
-                ) {
-                    return Swap.getSmartRoutingPath(false, source, destination, destinationAmount);
+                    (Number(result.source_amount) * sourcePriceUSD >= SMART_ROUTING_MIN_AMOUNT);
+
+                if (shouldUseSmartSwap) {
+                    return Swap.getSmartRoutingPath(isSend, source, destination, amount);
                 }
 
+                // Return the regular path data
                 return ({
                     isSmartRouting: false,
-                    type: 'receive',
+                    type: isSend ? 'send' : 'receive',
                     extended_paths: [{
                         destinationAmount: Number(result.destination_amount),
                         sourceAmount: Number(result.source_amount),
@@ -145,13 +269,12 @@ export default class Swap {
                         ],
                     }],
                     profit: 0,
-                    initial_sum: result.source_amount,
-                    optimized_sum: result.source_amount,
+                    initial_sum: isSend ? result.destination_amount : result.source_amount,
+                    optimized_sum: isSend ? result.destination_amount : result.source_amount,
                     fee_path: null,
                 });
             });
     }
-
     static getSmartRoutingPath(isSend, source, destination, amount) {
         return get(getEndpoint(ENDPOINTS.SMART_ROUTING, {
             type: isSend ? 'send' : 'receive',
@@ -164,24 +287,31 @@ export default class Swap {
         }));
     }
 
-    getUsdPrices(source, destination) {
+    async getUsdPrices(source, destination) {
         const body = JSON.stringify({ asset_keys: [getAssetString(source), getAssetString(destination)] });
-
         const headers = { 'Content-Type': 'application/json' };
 
-        return post(`${TOP_MARKETS_API}assets/native-prices/`, { headers, body })
-            .then(({ results }) => {
-                const sourcePrice = results.find(({ asset_code: code, asset_issuer: issuer }) =>
-                    code === source.code && issuer === source.issuer);
-                const destPrice =
-                    results.find(({ asset_code: code, asset_issuer: issuer }) =>
-                        code === destination.code && issuer === destination.issuer);
+        try {
+            const response = await post(`${TOP_MARKETS_API}assets/native-prices/`, { headers, body });
+            const { results } = response;
 
-                return [
-                    this.getUsdPrice(source, sourcePrice),
-                    this.getUsdPrice(destination, destPrice),
-                ];
-            });
+            // Helper function to find price for an asset
+            const findPrice = asset =>
+                results.find(({ asset_code: code, asset_issuer: issuer }) =>
+                    code === asset.code && issuer === asset.issuer,
+                );
+
+            const sourcePrice = findPrice(source);
+            const destPrice = findPrice(destination);
+
+            return [
+                this.getUsdPrice(source, sourcePrice),
+                this.getUsdPrice(destination, destPrice),
+            ];
+        } catch (error) {
+            console.error('Error fetching prices:', error);
+            return [null, null]; // Return null in case of failure
+        }
     }
 
     getUsdPrice(asset, price) {
@@ -199,148 +329,90 @@ export default class Swap {
     }
 
     /**
-     * Get the final amount of the send-side swap transaction
-     * @param txRes: Horizon.SubmitTransactionResponse swap transaction result
-     * @return {string} swap destination amount
+     * Get the final amount of the swap transaction (send or receive)
+     * @return {string} swap amount
+     * @param txRes Horizon.HorizonApi.SubmitTransactionResponse swap transaction result
+     * @param isSend boolean, true for send-side swap, false for receive-side swap
      */
-    static getSendSwapDestAmount(txRes) {
+    static getSwapAmount(txRes, isSend) {
         const transactionResult = StellarSdk.xdr.TransactionResult.fromXDR(
             txRes.result_xdr,
             'base64',
         );
 
-        const sendSwapOps = transactionResult
+        // Filter operations based on whether it's a send or receive swap
+        const swapOps = transactionResult
             .result()
             .results()
-            // use only pathPaymentStrictSend operations
-            .filter(item => item.value().switch().name === StellarSdk.xdr.OperationType.pathPaymentStrictSend().name)
-            // do not sum up the amount that was sent as a fee
-            .filter(item => StellarSdk.StrKey.encodeEd25519PublicKey(
-                item
-                    .tr()
-                    .pathPaymentStrictSendResult()
-                    .success()
-                    .last()
-                    .destination()
-                    .value(),
-            ) !== FEE_ADDRESS);
+            .filter(item =>
+                item.value().switch().name === (isSend
+                    ? StellarSdk.xdr.OperationType.pathPaymentStrictSend().name
+                    : StellarSdk.xdr.OperationType.pathPaymentStrictReceive().name),
+            );
 
-        const destinationAssetString = Swap.getResultXdrAssetString(
-            sendSwapOps[0]
-                .tr()
-                .pathPaymentStrictSendResult()
-                .success()
-                .last()
-                .asset(),
+        // Extract the asset string (destination for send, source for receive)
+        const swapOp = swapOps[0];
+        const assetString = Swap.getResultXdrAssetString(
+            isSend
+                ? swapOp.tr().pathPaymentStrictSendResult().success().last()
+                    .asset()
+                : swapOp.tr().pathPaymentStrictReceiveResult().success().offers()[0].value().assetBought(),
         );
 
-        return sendSwapOps.reduce((acc, op) => acc.plus(
-            op.tr()
-                .pathPaymentStrictSendResult()
-                .success()
-                .offers()
-                .reduce((offersAcc, offer) => {
-                    const offerValue = offer.value();
-                    const asset = offerValue.assetSold();
-                    const assetString = Swap.getResultXdrAssetString(asset);
-
-                    if (assetString === destinationAssetString) {
-                        return offersAcc.plus(new BigNumber(Number(offerValue.amountSold())));
-                    }
-                    return offersAcc;
-                }, new BigNumber(0)),
-        ), new BigNumber(0))
-            .times(XDR_AMOUNT_COEFFICIENT)
-            .toNumber()
-            .toFixed(7);
-    }
-
-    /**
-     * Get the final amount of the receive-side swap transaction
-     * @param txRes: Horizon.SubmitTransactionResponse swap transaction result
-     * @return {string} swap source amount
-     */
-    static getReceiveSwapSourceAmount(txRes) {
-        const transactionResult = StellarSdk.xdr.TransactionResult.fromXDR(
-            txRes.result_xdr,
-            'base64',
-        );
-
-        const receiveSwapOps = transactionResult
-            .result()
-            .results()
-            .filter(res => res.value().switch().name === StellarSdk.xdr.OperationType.pathPaymentStrictReceive().name);
-
-        const sourceAssetString = Swap.getResultXdrAssetString(
-            receiveSwapOps[0]
-                .tr()
-                .pathPaymentStrictReceiveResult()
-                .success()
-                .offers()[0]
-                .value()
-                .assetBought(),
-        );
-
-        let totalAmount = receiveSwapOps.reduce((acc, op) => acc.plus(
+        let totalAmount = swapOps.reduce((acc, op) => acc.plus(
             new BigNumber(
-                op
-                    .tr()
-                    .pathPaymentStrictReceiveResult()
+                op.tr()[isSend ? 'pathPaymentStrictSendResult' : 'pathPaymentStrictReceiveResult']()
                     .success()
                     .offers()
                     .reduce((offersAcc, offer) => {
                         const offerValue = offer.value();
-                        const asset = offerValue.assetBought();
+                        const asset = isSend
+                            ? offerValue.assetSold()
+                            : offerValue.assetBought();
 
-                        const assetString = Swap.getResultXdrAssetString(asset);
+                        const currentAssetString = Swap.getResultXdrAssetString(asset);
 
-                        if (assetString === sourceAssetString) {
-                            return offersAcc.plus(new BigNumber(Number(offerValue.amountBought())));
+                        if (currentAssetString === assetString) {
+                            return offersAcc.plus(new BigNumber(
+                                Number(isSend ? offerValue.amountSold() : offerValue.amountBought()),
+                            ));
                         }
                         return offersAcc;
                     }, new BigNumber(0)),
             ),
         ), new BigNumber(0));
 
+        if (!isSend) {
+            // If receive transaction, sum up the amount that was sent as a fee in the send ops
+            const feeOps = transactionResult
+                .result()
+                .results()
+                .filter(item =>
+                    item.value().switch().name === StellarSdk.xdr.OperationType.pathPaymentStrictSend().name,
+                )
+                .filter(item => StellarSdk.StrKey.encodeEd25519PublicKey(
+                    item.tr().pathPaymentStrictSendResult().success().last()
+                        .destination()
+                        .value(),
+                ) === FEE_ADDRESS);
 
-        // sum up the amount that was sent as a fee
-        const feeOps = transactionResult
-            .result()
-            .results()
-            .filter(res => res.value().switch().name === StellarSdk.xdr.OperationType.pathPaymentStrictSend().name)
-            .filter(item => StellarSdk.StrKey.encodeEd25519PublicKey(
-                item
-                    .tr()
-                    .pathPaymentStrictSendResult()
-                    .success()
-                    .last()
-                    .destination()
-                    .value(),
-            ) === FEE_ADDRESS);
+            if (feeOps.length) {
+                feeOps.forEach(item => {
+                    totalAmount = totalAmount.plus(
+                        item.tr().pathPaymentStrictSendResult().success().offers()
+                            .reduce((offersAcc, offer) => {
+                                const offerValue = offer.value();
+                                const asset = offerValue.assetBought();
+                                const feeAssetString = Swap.getResultXdrAssetString(asset);
 
-        // include fee amounts in the total amount
-        if (feeOps.length) {
-            feeOps.forEach(item => {
-                totalAmount = totalAmount.plus(
-                    item
-                        .tr()
-                        .pathPaymentStrictSendResult()
-                        .success()
-                        .offers()
-                        .reduce((offersAcc, offer) => {
-                            const offerValue = offer.value();
-                            const asset = offerValue.assetBought();
-
-                            const assetString = Swap.getResultXdrAssetString(asset);
-
-                            if (assetString === sourceAssetString) {
-                                return offersAcc.plus(new BigNumber(Number(offerValue.amountBought())));
-                            }
-
-                            return offersAcc;
-                        }, new BigNumber(0)),
-                );
-            });
+                                if (feeAssetString === assetString) {
+                                    return offersAcc.plus(new BigNumber(Number(offerValue.amountBought())));
+                                }
+                                return offersAcc;
+                            }, new BigNumber(0)),
+                    );
+                });
+            }
         }
 
         return totalAmount.times(XDR_AMOUNT_COEFFICIENT).toNumber().toFixed(7);

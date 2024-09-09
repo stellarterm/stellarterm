@@ -4,29 +4,30 @@ import images from '../../../../images';
 import Input from '../../../Common/Input/Input';
 import InfoBlock from '../../../Common/InfoBlock/InfoBlock';
 import Driver from '../../../../lib/driver/Driver';
+import { SMART_SWAP_VERSION } from '../../../../lib/driver/driverInstances/Swap';
 
 export const SWAP_SLIPPAGE_ALIAS = 'swap_slippage_value';
-export const SWAP_SMART_ENABLED = 'swap_smart_enabled';
+export const SWAP_SMART_VERSION = 'swap_smart_version';
 
 export const getSlippageValue = () => localStorage.getItem(SWAP_SLIPPAGE_ALIAS) || '1';
 export const setSlippageValue = slippage => {
     localStorage.setItem(SWAP_SLIPPAGE_ALIAS, slippage);
 };
 
-export const getSmartSwapEnabledValue = () => (localStorage.getItem(SWAP_SMART_ENABLED) || 'true') === 'true';
-export const setSmartSwapEnabledValue = value => {
-    localStorage.setItem(SWAP_SMART_ENABLED, value);
+export const getSmartSwapVersionValue = () => localStorage.getItem(SWAP_SMART_VERSION) || SMART_SWAP_VERSION.V2;
+export const setSmartSwapVersionValue = value => {
+    localStorage.setItem(SWAP_SMART_VERSION, value);
 };
 
 const SWAP_PERCENTS = [0.1, 0.5, 1];
 
 const SwapSettings = ({ submit, d }) => {
     const [slippage, setSlippage] = useState(getSlippageValue());
-    const [smartSwapEnabled, setSmartSwapEnabled] = useState(getSmartSwapEnabledValue());
+    const [smartSwapVersion, setSmartSwapVersion] = useState(getSmartSwapVersionValue());
 
     const onSave = () => {
         setSlippageValue(slippage);
-        setSmartSwapEnabledValue(smartSwapEnabled);
+        setSmartSwapVersionValue(smartSwapVersion);
         d.toastService.success('Success', 'You\'ve successfully saved settings');
         d.modal.handlers.finish();
     };
@@ -85,25 +86,34 @@ const SwapSettings = ({ submit, d }) => {
                     }
                 />
 
-                <label
-                    htmlFor="enableSmartSwap"
-                    className="SwapSettings-smart_swap"
-                    onClick={() => setSmartSwapEnabled(prev => !prev)}
-                >
-                    <input
-                        name="enableSmartSwap"
-                        className="LoginPage__accept__checkbox"
-                        type="checkbox"
-                        checked={smartSwapEnabled}
-                        readOnly
-
-                    />
-                    Enable Smart Swap
-                </label>
-
                 {Boolean(slippage) && Number(slippage) <= 0.1 && Number(slippage) > 0 &&
                     <InfoBlock type={'warning'} withIcon onlyTitle smallInRow title={'Your transaction may fail'} />
                 }
+
+                <div className="SwapSettings-title topMargin">
+                    Smart swap
+                </div>
+
+                <div className="SwapSettings-switcher">
+                    <div
+                        className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V2 ? 'active' : ''}`}
+                        onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V2)}
+                    >
+                        Smart Swap V2
+                    </div>
+                    <div
+                        className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V1 ? 'active' : ''}`}
+                        onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V1)}
+                    >
+                        Smart Swap V1
+                    </div>
+                    <div
+                        className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.DISABLED ? 'active' : ''}`}
+                        onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.DISABLED)}
+                    >
+                        Disabled
+                    </div>
+                </div>
 
                 <div className="Modal_button-block">
                     <button
