@@ -12,14 +12,14 @@ export const HORIZON_SERVER_EVENTS = {
 const DIRECT_HOSTNAME = 'direct.stellarterm.com';
 const DIRECT_HORIZON = 'https://direct.stellarterm.com/horizon';
 
-const defaultHorizonServer = window.location.hostname === DIRECT_HOSTNAME ?
-    DIRECT_HORIZON : DEFAULT_SERVERS.stellar.url;
-
-
 const DEFAULT_SERVERS = {
     stellarTerm: { name: 'StellarTerm horizon', url: 'https://stellarterm.com/horizon' },
     stellar: { name: 'Stellar horizon', url: 'https://horizon.stellar.org' },
 };
+
+const defaultHorizonServer = window.location.hostname === DIRECT_HOSTNAME ?
+    DIRECT_HORIZON : DEFAULT_SERVERS.stellar.url;
+
 
 const CUSTOM_HORIZON_SERVERS_LIST_LS = 'customHorizonServersList';
 const ACTIVE_HORIZON_SERVER = 'activeHorizonServer';
