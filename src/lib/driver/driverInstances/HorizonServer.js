@@ -13,7 +13,7 @@ export const HORIZON_SERVER_EVENTS = {
 const DIRECT_HOSTNAME = 'direct.stellarterm.com';
 const DIRECT_HORIZON = 'https://direct.stellarterm.com/horizon';
 
-const defaultHorizonServer = window.location.hostname === DIRECT_HOSTNAME ? DIRECT_HORIZON : DEFAULT_HORIZON;
+const defaultHorizonServer = window.location.hostname === DIRECT_HOSTNAME ? DIRECT_HORIZON : DEFAULT_SERVERS.stellar;
 
 
 const DEFAULT_SERVERS = {
