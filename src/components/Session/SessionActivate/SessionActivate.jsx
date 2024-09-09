@@ -120,7 +120,7 @@ export default function SessionActivate(props) {
                                     </div>
                                 </div>
 
-                                <Link className="s-button" to="/buy-crypto?code=xlm_stellar">
+                                <Link className="s-button" to="/buy-crypto?crypto=xlm_stellar">
                                     Buy XLM
                                 </Link>
                             </div>
