@@ -2,7 +2,6 @@ import * as StellarSdk from '@stellar/stellar-sdk';
 import Event from '../../helpers/Event';
 import { get } from '../../api/request';
 import { SESSION_STATE } from '../../constants/sessionConstants';
-import { DEFAULT_HORIZON } from '../../../env-consts';
 
 
 export const HORIZON_SERVER_EVENTS = {
@@ -13,7 +12,8 @@ export const HORIZON_SERVER_EVENTS = {
 const DIRECT_HOSTNAME = 'direct.stellarterm.com';
 const DIRECT_HORIZON = 'https://direct.stellarterm.com/horizon';
 
-const defaultHorizonServer = window.location.hostname === DIRECT_HOSTNAME ? DIRECT_HORIZON : DEFAULT_SERVERS.stellar;
+const defaultHorizonServer = window.location.hostname === DIRECT_HOSTNAME ?
+    DIRECT_HORIZON : DEFAULT_SERVERS.stellar.url;
 
 
 const DEFAULT_SERVERS = {
