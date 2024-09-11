@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import _ from 'lodash';
 import * as StellarSdk from '@stellar/stellar-sdk';
+import { TransactionBuilder } from '@stellar/stellar-base';
 import directory from 'stellarterm-directory';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
@@ -75,7 +76,7 @@ const MagicSpoon = {
             console.log('Signing with Freighter extension');
             try {
                 const result = await signTransaction(tx.toEnvelope().toXDR('base64'));
-                return new StellarSdk.Transaction(result, this.Server.networkPassphrase);
+                return TransactionBuilder.fromXDR(result, this.Server.networkPassphrase);
             } catch (e) {
                 return Promise.reject(e);
             }
@@ -85,7 +86,7 @@ const MagicSpoon = {
             console.log('Signing with LOBSTR | Signer extension');
             try {
                 const result = await signWithLobstr(tx.toEnvelope().toXDR('base64'));
-                return new StellarSdk.Transaction(result, this.Server.networkPassphrase);
+                return TransactionBuilder.fromXDR(result, this.Server.networkPassphrase);
             } catch (e) {
                 return Promise.reject(e);
             }
