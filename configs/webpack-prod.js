@@ -34,7 +34,7 @@ switch (true) {
 
 module.exports = merge(commonConfig, {
     mode: 'production',
-    devtool: 'source-map',
+    devtool: false,
     module: {
         rules: [
             // SCSS and CSS files
@@ -74,4 +74,10 @@ module.exports = merge(commonConfig, {
             ],
         }),
     ],
+    optimization: {
+        splitChunks: {
+            chunks: 'all',
+        },
+        minimizer: [() => ({ terserOptions: { mangle: false } })]
+    },
 });

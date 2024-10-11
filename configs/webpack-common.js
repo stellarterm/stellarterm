@@ -74,9 +74,4 @@ module.exports = {
         new CreateBuildInfo(),
         new CreateImages(),
     ],
-    optimization: {
-        splitChunks: {
-            chunks: 'all',
-        },
-    },
 };
