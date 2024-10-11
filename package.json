@@ -7,7 +7,7 @@
   "scripts": {
     "setup": "yarn install",
     "start": "webpack serve --config=configs/webpack-dev.js",
-    "build": "yarn run clean-dist && webpack --config=configs/webpack-prod.js",
+    "production": "yarn run clean-dist && webpack --config=configs/webpack-prod.js",
     "lint": "./node_modules/.bin/eslint .",
     "lint-fix": "./node_modules/.bin/eslint . --fix",
     "hash": "cd dist; openssl dgst -sha256 index.html",
