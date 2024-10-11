@@ -23,4 +23,4 @@ api/setEnvironment.sh
 api/setStagingEnvironment.sh
 /cmc-key.js
 
-.env.json
+.env
