@@ -17,4 +17,4 @@ package-lock.json
 
 .vscode
 
-.env.json
+.env
