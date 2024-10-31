@@ -9,7 +9,7 @@ $so-inputPadding: 0.3333em 1em 0.3333em 1em;
 
 // These should only be used to derive main colors
 $s-color-primaryRoot: #68c86f; // a bright brand color
-$s-color-neutralRoot: blacken(#5b6a72,60);
+$s-color-neutralRoot: blacken(#5b6a72,60%);
 
 // Themes that override root colors will need to regenerate these
 // These color names are stable and will not change

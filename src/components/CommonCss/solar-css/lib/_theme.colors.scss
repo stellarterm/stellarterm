@@ -8,7 +8,7 @@
 
 // These should only be used to derive main colors
 $s-color-primaryRoot: #08b5e5; // a bright brand color
-$s-color-neutralRoot: blacken(#5b6a72,60);
+$s-color-neutralRoot: blacken(#5b6a72,60%);
 
 // Themes that override root colors will need to regenerate these
 // These color names are stable and will not change

@@ -1,5 +1,5 @@
 import url from 'url';
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -10,22 +10,28 @@ import faviconHandler from '../lib/helpers/faviconUtils';
 import { SESSION_EVENTS, SESSION_STATE } from '../lib/constants/sessionConstants';
 import GlobalModal from './GlobalModal/GlobalModal';
 import ToastTemplate from './ToastTemplate/ToastTemplate';
-import NotFound from './NotFound/NotFound';
-import Markets from './Markets/Markets';
-import Download from './Download/Download';
-import Exchange from './Exchange/Exchange';
-import HomePage from './HomePage/HomePage';
-import TermsOfUse from './TermsOfUse/TermsOfUse';
-import PrivacyPolicy from './PrivacyPolicy/PrivacyPolicy';
-import TestNetwork from './TestNetwork/TestNetwork';
-import ReloadToTestnet from './ReloadToTestnet/ReloadToTestnet';
-import Session from './Session/Session';
 import Header from './Header/Header';
 import Footer from './Footer/Footer';
-import OnRamp from './OnRamp/OnRamp';
+
 import ErrorBoundary from './Common/ErrorBoundary/ErrorBoundary';
 import AppLoading from './AppLoading/AppLoading';
-import Swap from './Swap/Swap';
+
+import './App.scss';
+
+
+const ExchangePage = lazy(() => import('./Exchange/Exchange'));
+const HomePage = lazy(() => import('./HomePage/HomePage'));
+const DownloadPage = lazy(() => import('./Download/Download'));
+const TermsOfUsePage = lazy(() => import('./TermsOfUse/TermsOfUse'));
+const NotFoundPage = lazy(() => import('./NotFound/NotFound'));
+const SwapPage = lazy(() => import('./Swap/Swap'));
+const OnRampPage = lazy(() => import('./OnRamp/OnRamp'));
+const SessionPage = lazy(() => import('./Session/Session'));
+const MarketsPage = lazy(() => import('./Markets/Markets'));
+const PrivacyPolicyPage = lazy(() => import('./PrivacyPolicy/PrivacyPolicy'));
+const TestNetworkPage = lazy(() => import('./TestNetwork/TestNetwork'));
+const ReloadToTestnetPage = lazy(() => import('./ReloadToTestnet/ReloadToTestnet'));
+
 
 window.React = React;
 const mountNode = document.getElementById('app');
@@ -140,59 +146,61 @@ class TermApp extends React.Component {
                             <div>
                                 <Header d={d} />
                                 {isTickerLoaded ? (
-                                    <Switch>
-                                        <Route exact path="/" render={props => <HomePage {...props} driver={d} />} />
-                                        <Route path="/download/" component={Download} />
-                                        <Route
-                                            path="/testnet/"
-                                            component={d.Server.isTestnet ? TestNetwork : ReloadToTestnet}
-                                        />
-                                        <Route path="/privacy/" component={PrivacyPolicy} />
-                                        <Route path="/terms-of-use/" component={TermsOfUse} />
-                                        <Route
-                                            path="/account/"
-                                            render={props => <Session {...props} d={d} urlParts={'account'} />}
-                                        />
-                                        <Route
-                                            path="/ledger/"
-                                            render={props => <Session {...props} d={d} urlParts={'ledger'} />}
-                                        />
-                                        <Route
-                                            path="/trezor/"
-                                            render={props => (
-                                                <Session {...props} d={this.props.d} urlParts={'trezor'} />
-                                            )}
-                                        />
-                                        <Route
-                                            path="/freighter/"
-                                            render={props => (
-                                                <Session {...props} d={this.props.d} urlParts={'freighter'} />
-                                            )}
-                                        />
-                                        <Route
-                                            path="/wallet-connect/"
-                                            render={props => (
-                                                <Session {...props} d={this.props.d} urlParts={'wallet-connect'} />
-                                            )}
-                                        />
-                                        <Route
-                                            path="/lobstr/"
-                                            render={props => (
-                                                <Session {...props} d={this.props.d} urlParts={'lobstr'} />
-                                            )}
-                                        />
-                                        <Route
-                                            path="/signup/"
-                                            render={props => <Session {...props} d={d} urlParts={'signup'} />}
-                                        />
-                                        <Route path="/markets" render={props => <Markets {...props} d={d} />} />
-                                        <Route path="/exchange" render={props => <Exchange {...props} d={d} />} />
+                                    <Suspense fallback={<AppLoading text="Loading..." />}>
+                                        <Switch>
+                                            <Route exact path="/" render={props => <HomePage {...props} driver={d} />} />
+                                            <Route path="/download/" component={DownloadPage} />
+                                            <Route
+                                                path="/testnet/"
+                                                component={d.Server.isTestnet ? TestNetworkPage : ReloadToTestnetPage}
+                                            />
+                                            <Route path="/privacy/" component={PrivacyPolicyPage} />
+                                            <Route path="/terms-of-use/" component={TermsOfUsePage} />
+                                            <Route
+                                                path="/account/"
+                                                render={props => <SessionPage {...props} d={d} urlParts={'account'} />}
+                                            />
+                                            <Route
+                                                path="/ledger/"
+                                                render={props => <SessionPage {...props} d={d} urlParts={'ledger'} />}
+                                            />
+                                            <Route
+                                                path="/trezor/"
+                                                render={props => (
+                                                    <SessionPage {...props} d={this.props.d} urlParts={'trezor'} />
+                                                )}
+                                            />
+                                            <Route
+                                                path="/freighter/"
+                                                render={props => (
+                                                    <SessionPage {...props} d={this.props.d} urlParts={'freighter'} />
+                                                )}
+                                            />
+                                            <Route
+                                                path="/wallet-connect/"
+                                                render={props => (
+                                                    <SessionPage {...props} d={this.props.d} urlParts={'wallet-connect'} />
+                                                )}
+                                            />
+                                            <Route
+                                                path="/lobstr/"
+                                                render={props => (
+                                                    <SessionPage {...props} d={this.props.d} urlParts={'lobstr'} />
+                                                )}
+                                            />
+                                            <Route
+                                                path="/signup/"
+                                                render={props => <SessionPage {...props} d={d} urlParts={'signup'} />}
+                                            />
+                                            <Route path="/markets" render={props => <MarketsPage {...props} d={d} />} />
+                                            <Route path="/exchange" render={props => <ExchangePage {...props} d={d} />} />
 
-                                        <Route path="/buy-crypto" render={props => <OnRamp {...props} />} />
-                                        <Route path="/swap" render={props => <Swap {...props} d={d} />} />
+                                            <Route path="/buy-crypto" render={props => <OnRampPage {...props} />} />
+                                            <Route path="/swap" render={props => <SwapPage {...props} d={d} />} />
 
-                                        <Route component={NotFound} />
-                                    </Switch>
+                                            <Route component={NotFoundPage} />
+                                        </Switch>
+                                    </Suspense>
                                 ) : (
                                     <AppLoading text="Loading assets and balances" />
                                 )}
