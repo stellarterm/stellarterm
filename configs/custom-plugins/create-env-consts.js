@@ -1,5 +1,6 @@
 const config = require('../constants/env-config.json');
 const fs = require('fs');
+const Environments = require('./../constants/environments');
 
 module.exports = class CreateEnvConsts {
     constructor(environment) {
@@ -12,9 +13,13 @@ module.exports = class CreateEnvConsts {
                 return; // Skip the generation
             }
 
-            fs.rmSync('./src/env-consts.js', { force: true});
+            fs.rmSync('./src/env-consts.js', { force: true });
 
             const envConsts = config[this.environment];
+
+            if (this.environment === Environments.production) {
+                envConsts.WALLET_CONNECT_PROJECT_ID = process.env.WALLET_CONNECT_PROJECT_ID;
+            }
 
             const envConfig = Object
                 .entries(envConsts)
