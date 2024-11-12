@@ -1,6 +1,5 @@
 // development config
 const dotenv = require('dotenv');
-const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 
 const commonConfig = require('./webpack-common');
@@ -10,12 +9,12 @@ const CreateEnvConsts = require('./custom-plugins/create-env-consts');
 const DevelopLocalAPI = require('./custom-plugins/develop-local-api');
 const Environments = require('./constants/environments');
 
-const wcProjectId = dotenv.config().parsed
-    ? dotenv.config().parsed.WALLET_CONNECT_PROJECT_ID
+const cmcKey = dotenv.config().parsed
+    ? dotenv.config().parsed.COIN_MARKET_CUP_KEY
     : null;
 
 
-const hasApiKey = !!process.env.COIN_MARKET_CUP_KEY;
+const hasApiKey = Boolean(process.env.COIN_MARKET_CUP_KEY || cmcKey);
 
 if (!hasApiKey) {
     console.warn('No COIN_MARKET_CUP_KEY found. Can not use local environment. Staging env will be used');
@@ -44,11 +43,6 @@ module.exports = merge(commonConfig, {
             template: './src/index.html',
             inject: 'body',
             minify: false,
-        }),
-        new webpack.DefinePlugin({
-            'process.env': JSON.stringify({
-                WALLET_CONNECT_PROJECT_ID: wcProjectId,
-            }),
         }),
         new CreateEnvConsts(environment),
         new DevelopLocalAPI(hasApiKey),
