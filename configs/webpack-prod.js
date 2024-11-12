@@ -72,6 +72,6 @@ module.exports = merge(commonConfig, {
         splitChunks: {
             chunks: 'all',
         },
-        minimizer: [() => ({ terserOptions: { mangle: false } })]
+        minimizer: [() => ({ terserOptions: { mangle: false } })],
     },
 });
