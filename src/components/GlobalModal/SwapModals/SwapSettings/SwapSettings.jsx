@@ -8,7 +8,9 @@ import Driver from '../../../../lib/driver/Driver';
 export const SWAP_SLIPPAGE_ALIAS = 'swap_slippage_value';
 export const SWAP_SMART_ENABLED = 'swap_smart_enabled';
 
-export const getSlippageValue = () => localStorage.getItem(SWAP_SLIPPAGE_ALIAS) || '1';
+const DEFAULT_SLIPPAGE = '13';
+
+export const getSlippageValue = () => localStorage.getItem(SWAP_SLIPPAGE_ALIAS) || DEFAULT_SLIPPAGE;
 export const setSlippageValue = slippage => {
     localStorage.setItem(SWAP_SLIPPAGE_ALIAS, slippage);
 };
@@ -18,7 +20,7 @@ export const setSmartSwapEnabledValue = value => {
     localStorage.setItem(SWAP_SMART_ENABLED, value);
 };
 
-const SWAP_PERCENTS = [0.1, 0.5, 1];
+const SWAP_PERCENTS = [0.1, 0.5, 1, 5];
 
 const SwapSettings = ({ submit, d }) => {
     const [slippage, setSlippage] = useState(getSlippageValue());

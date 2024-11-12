@@ -13,6 +13,7 @@ import Driver from '../../../../lib/driver/Driver';
 import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
 
+const SLIPPAGE_WARNING_THRESHOLD = 5; // > 5%
 
 const SwapConfirm = ({ params, submit, d }) => {
     const [isPriceReverted, setIsPriceReverted] = useState(false);
@@ -210,7 +211,7 @@ const SwapConfirm = ({ params, submit, d }) => {
 
                 <div className="SwapConfirm_details-title">Swap details</div>
 
-                <div className="SwapConfirm_details-row">
+                <div className={`SwapConfirm_details-row ${Number(slippage) >= SLIPPAGE_WARNING_THRESHOLD ? 'red' : ''}`}>
                     <div className="SwapConfirm_detail-label">
                         <span>Slippage tolerance</span>
                         <AppPopover

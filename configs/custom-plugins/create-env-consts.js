@@ -1,6 +1,11 @@
 const config = require('../constants/env-config.json');
 const fs = require('fs');
-const Environments = require('./../constants/environments');
+const dotenv = require('dotenv');
+
+
+const wcProjectId = dotenv.config().parsed
+    ? dotenv.config().parsed.WALLET_CONNECT_PROJECT_ID
+    : null;
 
 module.exports = class CreateEnvConsts {
     constructor(environment) {
@@ -17,9 +22,11 @@ module.exports = class CreateEnvConsts {
 
             const envConsts = config[this.environment];
 
-            if (this.environment === Environments.production) {
-                envConsts.WALLET_CONNECT_PROJECT_ID = process.env.WALLET_CONNECT_PROJECT_ID;
+            if (!process.env.WALLET_CONNECT_PROJECT_ID && !wcProjectId) {
+                throw new Error('No WALLET_CONNECT_PROJECT_ID found. Please check your environment variables.');
             }
+
+            envConsts.WALLET_CONNECT_PROJECT_ID = process.env.WALLET_CONNECT_PROJECT_ID || wcProjectId;
 
             const envConfig = Object
                 .entries(envConsts)
