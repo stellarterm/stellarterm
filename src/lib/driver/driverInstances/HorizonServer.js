@@ -131,7 +131,7 @@ export default class HorizonServer {
 
             const reg = new RegExp(`(.+)${TESTNET_URL}$`);
             window.history.replaceState({}, '', window.location.pathname.replace(reg, '$1'));
-        } else if (window.stCustomConfig.horizonUrl) {
+        } else if (window.stCustomConfig && window.stCustomConfig.horizonUrl) {
             network.isDefault = false;
             network.isCustom = true;
             network.horizonUrl = window.stCustomConfig.horizonUrl;

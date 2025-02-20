@@ -1,9 +1,9 @@
 // Graphics in css should be for just decorational items
 
 @mixin so-graphic($name, $nativeWidth, $nativeHeight) {
-  width: $nativeWidth/2 + px;
-  height: $nativeHeight/2 + px;
-  background-size: $nativeWidth/2 + px $nativeHeight/2 + px;
+  width: $nativeWidth*0.5 + px;
+  height: $nativeHeight*0.5 + px;
+  background-size: $nativeWidth*0.5 + px $nativeHeight*0.5 + px;
   background-image: url($so-graphicsPath + $name);
 }
 

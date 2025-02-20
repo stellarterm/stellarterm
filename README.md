@@ -21,24 +21,12 @@ It is currently under active development and is not yet finished. See it in acti
 ### Testnet
 To use the testnet, simply add `#testnet` or `/testnet` to the url to activate it. To exit, refresh the page where the url is not `/testnet`.
 
-### Custom horizon builds
-Some developers may want to use StellarTerm pointed to a custom horizon server or even a custom network. To do this, you must build StellarTerm locally.
-
-The StellarTerm build process checks for the presence of relevant environment variables.
-
-```sh
-export STELLARTERM_CUSTOM_HORIZON_URL="https://horizon-testnet.stellar.org"
-export STELLARTERM_CUSTOM_NETWORK_PASSPHRASE="Test SDF Network ; September 2015"
-```
-
-Once built, the configuration will be embedded into the StellarTerm output file (and the environment variable is no longer needed). To check this, look at the output of `index.html` and search for `stCustomConfig`.
-
 ## Deployment
 The project is hosted on GitHub pages in the [stellarterm/stellarterm.github.io](https://github.com/stellarterm/stellarterm.github.io/) repository. The client is wrapped into a single html file and it's sha 256 sum is recorded on each git commit.
 
 ## Client development instructions
 ### Prerequisites
-Make sure you have Node.js 7.4.0 or higher installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
+Make sure you have Node.js 20 or higher installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
 
 ```sh
 # Check your node version using this command
@@ -71,5 +59,3 @@ npm run production
 ## License
 Products in the StellarTerm ecosystem is open source software and is licensed under the [Apache-2.0 license](https://github.com/stellarterm/stellarterm/blob/master/LICENSE-2.0.txt). Please understand the license carefully before using StellarTerm.
 
-## Credits
-- Started the project using the super helpful [react-gulp-browserify yeoman generator](https://github.com/randylien/generator-react-gulp-browserify)
