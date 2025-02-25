@@ -14,6 +14,7 @@ import Driver from '../../lib/driver/Driver';
 import { SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
 import { formatNumber, roundAndFormat } from '../../lib/helpers/Format';
 import { getSmartSwapEnabledValue } from '../GlobalModal/SwapModals/SwapSettings/SwapSettings';
+import { USDC, XLM } from '../../lib/constants/assets';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
 
 
@@ -74,7 +75,7 @@ const Swap = ({ d }) => {
 
         if (!sourcePath || !destinationPath) {
             // default state
-            history.replace('/swap/XLM-native/USDC-www.centre.io');
+            history.replace(`/swap/${Stellarify.assetToSlug(XLM)}/${Stellarify.assetToSlug(USDC)}`);
             return;
         }
 

@@ -8,6 +8,7 @@ import images from '../../../../../images';
 import Stellarify from '../../../../../lib/helpers/Stellarify';
 import { getTransferDomain, checkAssetSettings, getTransferServer } from '../../../../../lib/helpers/SepUtils';
 import { UNSUPPORTED_JWT_AUTH_TYPES } from '../../../../../lib/constants/sessionConstants';
+import { USDC, XLM } from '../../../../../lib/constants/assets';
 
 export default class AssetActionButtons extends React.Component {
     constructor(props) {
@@ -83,14 +84,14 @@ export default class AssetActionButtons extends React.Component {
                 </Link>
 
 
-                <Link to="/swap/XLM-native/USDC-www.centre.io">
+                <Link to={`/swap/${Stellarify.assetToSlug(XLM)}/${Stellarify.assetToSlug(USDC)}`}>
                     <div className="actionBtn">
                         <div className="btnHint">Swap</div>
                         <img className="actionBtn_icon" src={images['icon-swap']} alt="swap" />
                     </div>
                 </Link>
 
-                <Link to="/exchange/XLM-native/USDC-www.centre.io">
+                <Link to={`/exchange/${Stellarify.assetToSlug(XLM)}/${Stellarify.assetToSlug(USDC)}`}>
                     <div className="actionBtn">
                         <div className="btnHint">Trade</div>
                         <img className="actionBtn_icon" src={images['icon-trade']} alt="trade" />
