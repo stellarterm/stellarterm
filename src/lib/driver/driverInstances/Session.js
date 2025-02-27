@@ -340,6 +340,16 @@ export default function Send(driver) {
                 this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
             });
         },
+        signTxOrAuthWithSecret: async tx => {
+            if (this.authType !== AUTH_TYPE.SECRET) {
+                return null;
+            }
+            if (tx.sign) {
+                this.account.signWithSecret(tx);
+                return tx;
+            }
+            return this.account.signAuthWithSecret(tx);
+        },
         sign: async (tx, onlySign) => {
             if (this.authType === AUTH_TYPE.SECRET) {
                 this.account.signWithSecret(tx);

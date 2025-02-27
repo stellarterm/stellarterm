@@ -1,10 +1,11 @@
 import * as StellarSdk from '@stellar/stellar-sdk';
-import StellarBrokerClient from '@stellar-broker/client/lib/stellarbroker';
+import { StellarBrokerClient, Mediator } from '@stellar-broker/client';
 import BigNumber from 'bignumber.js';
 import { post, get } from '../../api/request';
 import { TOP_MARKETS_API } from '../../../env-consts';
 import { ENDPOINTS, getEndpoint } from '../../api/endpoints';
 import { getAssetString } from './Session';
+import { AUTH_TYPE } from '../../constants/sessionConstants';
 
 const XDR_AMOUNT_COEFFICIENT = 0.0000001;
 const SMART_ROUTING_MIN_AMOUNT = 20; // 20$
@@ -85,6 +86,7 @@ export default class Swap {
         callback,
         errorCallback,
         slippage,
+        signCallback,
     }) {
         this.unlistenToBestPath();
         if (smartSwapVersion === SMART_SWAP_VERSION.V2) {
@@ -96,6 +98,7 @@ export default class Swap {
                 callback,
                 errorCallback,
                 slippage,
+                signCallback,
             });
 
             return;
@@ -126,8 +129,8 @@ export default class Swap {
                 errorCallback,
                 slippage,
             }), 15000);
-        }).catch(() => {
-            errorCallback();
+        }).catch(e => {
+            errorCallback(e);
         });
     }
 
@@ -143,11 +146,53 @@ export default class Swap {
     }
 
 
-    submitSwapV2(accountId, signCallback) {
-        this.client.confirmQuote(accountId, signCallback);
+    async submitSwapV2({ isSend, source, destination, sourceAmount, destinationAmount }) {
+        let mediator;
+        let kp;
+
+        if (!mediator && this.driver.multisig.isMultisigEnabled) {
+            this.driver.toastService.error('Oops', 'Swap v2 currently not supported with multisig');
+            return Promise.reject(new Error('Text'));
+        }
+
+        if (this.driver.session.authType !== AUTH_TYPE.SECRET || this.driver.multisig.isMultisigEnabled) {
+            mediator = new Mediator(
+                this.driver.session.account.accountId(),
+                isSend ? source : destination,
+                isSend ? destination : source,
+                isSend ? sourceAmount : destinationAmount,
+                async transaction => {
+                    const result = await this.driver.session.handlers.sign(transaction, true);
+                    return result.signedTx;
+                },
+            );
+
+            const secret = await mediator.init();
+            kp = StellarSdk.Keypair.fromSecret(secret);
+        }
+
+        const authCb = async tx => {
+            if (!mediator) {
+                return this.driver.session.handlers.signTxOrAuthWithSecret(tx);
+            }
+
+
+            if (tx.sign) {
+                tx.sign(kp);
+                return tx;
+            }
+
+            return kp.sign(tx);
+        };
+        this.client.confirmQuote(kp ? kp.publicKey() : this.driver.session.account.accountId(), authCb);
 
         return new Promise(resolve => {
             this.finishPromiseResolver = resolve;
+        }).then(result => {
+            if (mediator) {
+                setTimeout(() => mediator.dispose(), 2000);
+            }
+            return result;
         });
     }
 
@@ -163,8 +208,8 @@ export default class Swap {
         if (!this.client) {
             this.client = new StellarBrokerClient({
                 partnerKey: '5MkkwmdX3Z3kNaH9exQRxPXnf8pRDzkDoq6HhGbj27WoxXijRMyMFJ37yDPrbtb1vs',
-                network: this.driver.Server.isTestnet ? 'testnet' : 'public',
             });
+
 
             await this.client.connect();
 

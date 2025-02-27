@@ -97,6 +97,8 @@ const MagicSpoon = {
             return transaction.sign(keypair);
         };
 
+        sdkAccount.signAuthWithSecret = auth => keypair.sign(auth);
+
         sdkAccount.getLumenBalanceInstance = () => sdkAccount.balances.find(({ asset_type: assetType }) => assetType === 'native');
 
         sdkAccount.getAssetBalanceInstance = targetAsset => {

@@ -103,13 +103,16 @@ const SwapConfirm = ({ params, submit, d }) => {
         }
 
         if (smartSwapVersion === SMART_SWAP_VERSION.V2) {
-            d.swap.submitSwapV2(d.session.account.accountId(), async tx => {
-                const result = await d.session.handlers.sign(tx, true);
-                return result.signedTx;
+            d.swap.submitSwapV2({
+                isSend,
+                source,
+                destination,
+                sourceAmount,
+                destinationAmount,
             }).then(result => {
                 setPending(false);
                 submit.finish();
-                if (Number(result.sold) === 0) {
+                if (!result && Number(result.sold) === 0) {
                     d.toastService.error('Swap failed', 'Something went wrong');
                     return;
                 }
@@ -120,7 +123,10 @@ const SwapConfirm = ({ params, submit, d }) => {
                     sourceAmount: result.sold,
                     destinationAmount: result.bought,
                 });
-            });
+            }).catch(() => {
+                setPending(false);
+                submit.finish();
+            })
             return;
         }
 

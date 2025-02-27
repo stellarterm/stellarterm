@@ -78,7 +78,7 @@ const Swap = ({ d }) => {
 
         if (!sourcePath || !destinationPath) {
             // default state
-            history.replace('/swap/XLM-native/USDC-www.centre.io');
+            history.replace(`/swap/XLM-native/${Stellarify.assetToSlug(new StellarSdk.Asset('USDC', 'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN'))}`);
             return;
         }
 
@@ -290,7 +290,7 @@ const Swap = ({ d }) => {
                 setPath(res);
             },
             errorCallback: error => {
-                setErrorText(error || SWAP_NO_PATH_ERROR);
+                setErrorText(error.toString() || SWAP_NO_PATH_ERROR);
                 setPending(false);
             },
         });

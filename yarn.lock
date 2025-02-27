@@ -1363,10 +1363,10 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
 
-"@stellar-broker/client@0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@stellar-broker/client/-/client-0.3.0.tgz#ee34903e755787e93eae3723daad55ada4e9338b"
-  integrity sha512-8ah7JsNN5O2p+3/lst/f6+EQMCpsv95zkYlin9nsaYTXFOXt/bpeBTBZ4xlixjLXHfaw89crm69sEBD5MGxZXQ==
+"@stellar-broker/client@0.6.3":
+  version "0.6.3"
+  resolved "https://registry.yarnpkg.com/@stellar-broker/client/-/client-0.6.3.tgz#fb9785fb1c4a8b9bf2a91df1ff2800193dff0637"
+  integrity sha512-nWcPbHM4Nd5KNn5z4FRZASmXkBX/SGkHagCSCJRIYeGpiq29M3UuMggqsk7m6BMF6LIkks6cvXuGsEHHZ0y0OQ==
 
 "@stellar/freighter-api@1.4.0":
   version "1.4.0"
@@ -1378,10 +1378,10 @@
   resolved "https://registry.yarnpkg.com/@stellar/js-xdr/-/js-xdr-3.1.2.tgz#db7611135cf21e989602fd72f513c3bed621bc74"
   integrity sha512-VVolPL5goVEIsvuGqDc5uiKxV03lzfWdvYg1KikvwheDmTBO68CKDji3bAZ/kppZrx5iTA8z3Ld5yuytcvhvOQ==
 
-"@stellar/stellar-base@^12.1.0":
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/@stellar/stellar-base/-/stellar-base-12.1.0.tgz#45b55a38738ed267e0d55a1fee3c4153c82d0fa6"
-  integrity sha512-pWwn+XWP5NotmIteZNuJzHeNn9DYSqH3lsYbtFUoSYy1QegzZdi9D8dK6fJ2fpBAnf/rcDjHgHOw3gtHaQFVbg==
+"@stellar/stellar-base@^13.0.1":
+  version "13.0.1"
+  resolved "https://registry.yarnpkg.com/@stellar/stellar-base/-/stellar-base-13.0.1.tgz#0897f77349ded61e838c0d55519f36f720efe3c9"
+  integrity sha512-Xbd12mc9Oj/130Tv0URmm3wXG77XMshZtZ2yNCjqX5ZbMD5IYpbBs3DVCteLU/4SLj/Fnmhh1dzhrQXnk4r+pQ==
   dependencies:
     "@stellar/js-xdr" "^3.1.2"
     base32.js "^0.1.0"
@@ -1390,17 +1390,18 @@
     sha.js "^2.3.6"
     tweetnacl "^1.0.3"
   optionalDependencies:
-    sodium-native "^4.1.1"
+    sodium-native "^4.3.0"
 
-"@stellar/stellar-sdk@12.2.0":
-  version "12.2.0"
-  resolved "https://registry.yarnpkg.com/@stellar/stellar-sdk/-/stellar-sdk-12.2.0.tgz#c449bc52be282c7706aabbd257acbc5aec3345b3"
-  integrity sha512-Wy5sDOqb5JvAC76f4sQIV6Pe3JNyZb0PuyVNjwt3/uWsjtxRkFk6s2yTHTefBLWoR+mKxDjO7QfzhycF1v8FXQ==
+"@stellar/stellar-sdk@13.1.0":
+  version "13.1.0"
+  resolved "https://registry.yarnpkg.com/@stellar/stellar-sdk/-/stellar-sdk-13.1.0.tgz#5eefee4fd340163f4fca656a97ebc5434b6eb6c5"
+  integrity sha512-ARQkUdyGefXdTgwSF0eONkzv/geAqUfyfheJ9Nthz6GAr5b41fNwWW9UtE8JpXC4IpvE3t5elIUN5hKJzASN9w==
   dependencies:
-    "@stellar/stellar-base" "^12.1.0"
-    axios "^1.7.2"
+    "@stellar/stellar-base" "^13.0.1"
+    axios "^1.7.9"
     bignumber.js "^9.1.2"
     eventsource "^2.0.2"
+    feaxios "^0.0.23"
     randombytes "^2.1.0"
     toml "^3.0.0"
     urijs "^1.19.1"
@@ -2490,10 +2491,10 @@ axios@0.25.0:
   dependencies:
     follow-redirects "^1.14.7"
 
-axios@^1.7.2:
-  version "1.7.7"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.7.tgz#2f554296f9892a72ac8d8e4c5b79c14a91d0a47f"
-  integrity sha512-S4kL7XrjgBmvdGut0sN3yJxqYzrDOnivkBiN0OFs6hLiUam3UPvswUo0kqGyhqUZGEOytHyumEdXsAkgCOUf3Q==
+axios@^1.7.9:
+  version "1.7.9"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.9.tgz#d7d071380c132a24accda1b2cfc1535b79ec650a"
+  integrity sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.0"
@@ -4883,6 +4884,13 @@ fd-slicer@~1.1.0:
   dependencies:
     pend "~1.2.0"
 
+feaxios@^0.0.23:
+  version "0.0.23"
+  resolved "https://registry.yarnpkg.com/feaxios/-/feaxios-0.0.23.tgz#76f37a2666232377ce75354e46dd85cbceeb1758"
+  integrity sha512-eghR0A21fvbkcQBgZuMfQhrXxJzC0GNUGC9fXhBge33D+mFDTwl0aJ35zoQQn575BhyjQitRc5N4f+L4cP708g==
+  dependencies:
+    is-retry-allowed "^3.0.0"
+
 figures@^2.0.0:
   version "2.0.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-2.0.0.tgz#3ab1a2d2a62c8bfb431a0c94cb797a2fce27c962"
@@ -5065,7 +5073,7 @@ flat@^5.0.2:
   resolved "https://registry.yarnpkg.com/flat/-/flat-5.0.2.tgz#8ca6fe332069ffa9d324c327198c598259ceb241"
   integrity sha512-b6suED+5/3rTpUBdG1gupIl8MPFCAMA0QXwmljLhvCUKcUvdE4gWky9zpuGCcXHOsz4J9wPGNWq6OKpmIzz3hQ==
 
-follow-redirects@^1.0.0:
+follow-redirects@^1.0.0, follow-redirects@^1.15.6:
   version "1.15.9"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
   integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
@@ -5074,11 +5082,6 @@ follow-redirects@^1.14.7:
   version "1.15.0"
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.0.tgz#06441868281c86d0dda4ad8bdaead2d02dca89d4"
   integrity sha512-aExlJShTV4qOUOL7yF1U5tvLCB0xQuudbf6toyYA0E/acBNw71mvjFTnLaRp50aQaYocMR0a/RMMBIHeZnGyjQ==
-
-follow-redirects@^1.15.6:
-  version "1.15.9"
-  resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.15.9.tgz#a604fa10e443bf98ca94228d9eebcc2e8a2c8ee1"
-  integrity sha512-gew4GsXizNgdoRyqmyfMHyAmXsZDk6mHkSxZFCzW9gwlbtOW44CDtYavM+y+72qD/Vq2l550kMF52DT8fOLJqQ==
 
 for-each@^0.3.3:
   version "0.3.3"
@@ -6186,6 +6189,11 @@ is-retry-allowed@^1.0.0, is-retry-allowed@^1.1.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-1.2.0.tgz#d778488bd0a4666a3be8a1482b9f2baafedea8b4"
   integrity sha512-RUbUeKwvm3XG2VYamhJL1xFktgjvPzL0Hq8C+6yrWIswDy3BIXGqCxhxkc30N9jqK311gVU137K8Ei55/zVJRg==
+
+is-retry-allowed@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/is-retry-allowed/-/is-retry-allowed-3.0.0.tgz#ea79389fd350d156823c491bee9c69f485b1445c"
+  integrity sha512-9xH0xvoggby+u0uGF7cZXdrutWiBiaFG8ZT4YFPXL8NzkyAwX3AKGLeFQLvzDpM430+nDFBZ1LHkie/8ocL06A==
 
 is-stream@^1.0.0, is-stream@^1.0.1, is-stream@^1.1.0:
   version "1.1.0"
@@ -8776,10 +8784,10 @@ sodium-native@^3.3.0:
   dependencies:
     node-gyp-build "^4.3.0"
 
-sodium-native@^4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/sodium-native/-/sodium-native-4.1.1.tgz#109bc924dd55c13db87c6dd30da047487595723c"
-  integrity sha512-LXkAfRd4FHtkQS4X6g+nRcVaN7mWVNepV06phIsC6+IZFvGh1voW5TNQiQp2twVaMf05gZqQjuS+uWLM6gHhNQ==
+sodium-native@^4.3.0:
+  version "4.3.2"
+  resolved "https://registry.yarnpkg.com/sodium-native/-/sodium-native-4.3.2.tgz#de6c1545cdb88b7aa8c12c35cceba170d6d1a8ca"
+  integrity sha512-C/+lDL98iFA1nGo/um6FfLWYRE+Puw0vlSKr5bhWr1EqKjOFVfLLUQ9ccm2PL3RlF8krVWZusL4LTOlNlm2cJA==
   dependencies:
     node-gyp-build "^4.8.0"
 
