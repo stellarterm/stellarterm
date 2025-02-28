@@ -2,6 +2,7 @@ import url from 'url';
 import React, { lazy, Suspense } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom';
+import { Mediator } from '@stellar-broker/client';
 import PropTypes from 'prop-types';
 import isElectron from 'is-electron';
 import Driver from '../lib/driver/Driver';
@@ -67,6 +68,15 @@ class TermApp extends React.Component {
             if (eventName === SESSION_EVENTS.LOGIN_EVENT || eventName === SESSION_EVENTS.LOGOUT_EVENT) {
                 const { state, unfundedAccountId, account } = session;
                 faviconHandler(state, unfundedAccountId, account);
+
+                if (state !== SESSION_STATE.IN) {
+                    return;
+                }
+
+                if (Mediator.hasObsoleteMediators(account.accountId())) {
+                    this.props.d.modal.handlers.cancel();
+                    this.props.d.modal.handlers.activate('DisposeMediator');
+                }
             }
         });
 
@@ -96,6 +106,13 @@ class TermApp extends React.Component {
                 this.d.toastService.clearToasts();
                 this.d.toastService.success('Connection restored', 'Internet connection has been restored');
             });
+
+            if (this.props.d.session.state === SESSION_STATE.IN &&
+                Mediator.hasObsoleteMediators(this.props.d.session.account.accountId())
+            ) {
+                this.props.d.modal.handlers.cancel();
+                this.props.d.modal.handlers.activate('DisposeMediator');
+            }
         });
 
         window.addEventListener('offline', () => {

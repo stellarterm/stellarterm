@@ -31,6 +31,7 @@ import SwapSettings from './SwapModals/SwapSettings/SwapSettings';
 import SwapConfirm from './SwapModals/SwapConfirm/SwapConfirm';
 import SwapSuccess from './SwapModals/SwapSuccess/SwapSuccess';
 import SwapSavings from './SwapModals/SwapSavings/SwapSavings';
+import DisposeMediatorModal from './DisposeMediatorModal/DisposeMediatorModal';
 
 export default class GlobalModal extends React.Component {
     constructor(props) {
@@ -196,6 +197,9 @@ export default class GlobalModal extends React.Component {
                 break;
             case 'SwapSavings':
                 body = <SwapSavings submit={d.modal.handlers} path={modal.inputData} />;
+                break;
+            case 'DisposeMediator':
+                body = <DisposeMediatorModal submit={d.modal.handlers} d={d} />;
                 break;
             default:
                 body = (
