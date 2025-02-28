@@ -150,8 +150,8 @@ export default class Swap {
         let mediator;
         let kp;
 
-        if (this.driver.session.authType !== AUTH_TYPE.LOBSTR_SIGNER_EXTENSION
-            &&
+        if (this.driver.session.authType !== AUTH_TYPE.LOBSTR_SIGNER_EXTENSION &&
+            this.driver.session.authType !== AUTH_TYPE.WALLET_CONNECT &&
             this.driver.multisig.isMultisigEnabled
         ) {
             this.driver.toastService.error('Oops', 'Swap v2 currently not supported with multisig');
