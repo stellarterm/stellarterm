@@ -150,9 +150,12 @@ export default class Swap {
         let mediator;
         let kp;
 
-        if (!mediator && this.driver.multisig.isMultisigEnabled) {
+        if (this.driver.session.authType !== AUTH_TYPE.LOBSTR_SIGNER_EXTENSION
+            &&
+            this.driver.multisig.isMultisigEnabled
+        ) {
             this.driver.toastService.error('Oops', 'Swap v2 currently not supported with multisig');
-            return Promise.reject(new Error('Text'));
+            return Promise.reject(new Error('Swap v2 currently not supported with multisig'));
         }
 
         if (this.driver.session.authType !== AUTH_TYPE.SECRET || this.driver.multisig.isMultisigEnabled) {
