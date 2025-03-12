@@ -1363,10 +1363,10 @@
     "@stablelib/random" "^1.0.2"
     "@stablelib/wipe" "^1.0.1"
 
-"@stellar-broker/client@0.6.8":
-  version "0.6.8"
-  resolved "https://registry.yarnpkg.com/@stellar-broker/client/-/client-0.6.8.tgz#fb76b6e4bd3ff8279e1c8eafc7aa392ae58e69c6"
-  integrity sha512-hPiIu78U30XGPUzfEhnRHVOVj5F0Pa7fnaK3b7gDyijgcRagWSjIWwmOCNQy02urqY/d7leT+/0DftHg3yCuYA==
+"@stellar-broker/client@0.6.9":
+  version "0.6.9"
+  resolved "https://registry.yarnpkg.com/@stellar-broker/client/-/client-0.6.9.tgz#3dc22cf6c844fcaa006fd01da575a2089f7ea3cc"
+  integrity sha512-zPUDY91laZ7bjPCCyWDeSsF48VOoHk3LrNk1rw8njMdP+SFO4puQdfVmalDP6ClKoWMzk5nqRoLpCJgh0zXr9g==
 
 "@stellar/freighter-api@1.4.0":
   version "1.4.0"
