@@ -189,13 +189,19 @@ export default class Swap {
         };
         this.client.confirmQuote(kp ? kp.publicKey() : this.driver.session.account.accountId(), authCb);
 
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
             this.finishPromiseResolver = resolve;
+            setTimeout(() => reject(), 60 * 1000);
         }).then(result => {
             if (mediator) {
                 setTimeout(() => mediator.dispose(), 2000);
             }
             return result;
+        }).catch(() => {
+            if (mediator) {
+                setTimeout(() => mediator.dispose(), 2000);
+            }
+            this.driver.toastService.error('Swap timed out', 'Your funds will be returned in a few seconds.');
         });
     }
 
