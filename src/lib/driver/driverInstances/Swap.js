@@ -2,7 +2,7 @@ import * as StellarSdk from '@stellar/stellar-sdk';
 import { StellarBrokerClient, Mediator } from '@stellar-broker/client';
 import BigNumber from 'bignumber.js';
 import { post, get } from '../../api/request';
-import { TOP_MARKETS_API } from '../../../env-consts';
+import { BROKER_PARTNER_KEY, TOP_MARKETS_API } from '../../../env-consts';
 import { ENDPOINTS, getEndpoint } from '../../api/endpoints';
 import { getAssetString } from './Session';
 import { AUTH_TYPE } from '../../constants/sessionConstants';
@@ -216,7 +216,7 @@ export default class Swap {
     }) {
         if (!this.client) {
             this.client = new StellarBrokerClient({
-                partnerKey: '5MkkwmdX3Z3kNaH9exQRxPXnf8pRDzkDoq6HhGbj27WoxXijRMyMFJ37yDPrbtb1vs',
+                partnerKey: BROKER_PARTNER_KEY,
             });
 
 

@@ -7,6 +7,10 @@ const wcProjectId = dotenv.config().parsed
     ? dotenv.config().parsed.WALLET_CONNECT_PROJECT_ID
     : null;
 
+const brokerKey = dotenv.config().parsed
+    ? dotenv.config().parsed.BROKER_PARTNER_KEY
+    : null;
+
 module.exports = class CreateEnvConsts {
     constructor(environment) {
         this.environment = environment;
@@ -26,7 +30,12 @@ module.exports = class CreateEnvConsts {
                 throw new Error('No WALLET_CONNECT_PROJECT_ID found. Please check your environment variables.');
             }
 
+            if (!process.env.BROKER_PARTNER_KEY && !brokerKey) {
+                throw new Error('No BROKER_PARTNER_KEY found. Please check your environment variables.');
+            }
+
             envConsts.WALLET_CONNECT_PROJECT_ID = process.env.WALLET_CONNECT_PROJECT_ID || wcProjectId;
+            envConsts.BROKER_PARTNER_KEY = process.env.BROKER_PARTNER_KEY || brokerKey;
 
             const envConfig = Object
                 .entries(envConsts)
