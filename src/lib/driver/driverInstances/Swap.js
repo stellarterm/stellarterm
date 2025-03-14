@@ -168,6 +168,7 @@ export default class Swap {
                     const result = await this.driver.session.handlers.sign(transaction, true);
                     return result.signedTx;
                 },
+                5,
             );
 
             const secret = await mediator.init();
