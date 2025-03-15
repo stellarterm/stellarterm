@@ -193,8 +193,8 @@ export default class Swap {
             ({ asset_code: code, asset_issuer: issuer }) => destination.code === code && destination.issuer === issuer);
 
         if (!userHasTrustline && this.driver.session.authType === AUTH_TYPE.SECRET) {
-            await this.driver.session.handlers.addTrust(destination.code, destination.issuer);
-            await new Promise(resolve => { setTimeout(() => resolve(), 2000); });
+            const { serverResult } = await this.driver.session.handlers.addTrust(destination.code, destination.issuer);
+            await serverResult;
         }
 
         this.client.confirmQuote(kp ? kp.publicKey() : this.driver.session.account.accountId(), authCb);
