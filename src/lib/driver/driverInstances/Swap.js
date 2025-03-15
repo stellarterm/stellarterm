@@ -146,7 +146,7 @@ export default class Swap {
     }
 
 
-    async submitSwapV2({ isSend, source, destination, sourceAmount, destinationAmount }) {
+    async submitSwapV2({ isSend, source, destination, sourceAmount, destinationAmount, withTrust }) {
         let mediator;
         let kp;
 
@@ -189,10 +189,7 @@ export default class Swap {
             return kp.sign(tx);
         };
 
-        const userHasTrustline = this.driver.session.account.balances.some(
-            ({ asset_code: code, asset_issuer: issuer }) => destination.code === code && destination.issuer === issuer);
-
-        if (!userHasTrustline && this.driver.session.authType === AUTH_TYPE.SECRET) {
+        if (withTrust && this.driver.session.authType === AUTH_TYPE.SECRET) {
             const { serverResult } = await this.driver.session.handlers.addTrust(destination.code, destination.issuer);
             await serverResult;
         }

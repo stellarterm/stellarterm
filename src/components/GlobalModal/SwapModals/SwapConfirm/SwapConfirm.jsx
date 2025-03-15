@@ -109,6 +109,7 @@ const SwapConfirm = ({ params, submit, d }) => {
                 destination,
                 sourceAmount,
                 destinationAmount,
+                withTrust,
             }).then(result => {
                 setPending(false);
                 submit.finish();
