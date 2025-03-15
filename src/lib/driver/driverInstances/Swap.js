@@ -188,6 +188,15 @@ export default class Swap {
 
             return kp.sign(tx);
         };
+
+        const userHasTrustline = this.driver.session.account.balances.some(
+            ({ asset_code: code, asset_issuer: issuer }) => destination.code === code && destination.issuer === issuer);
+
+        if (!userHasTrustline && this.driver.session.authType === AUTH_TYPE.SECRET) {
+            await this.driver.session.handlers.addTrust(destination.code, destination.issuer);
+            await new Promise(resolve => { setTimeout(() => resolve(), 2000); });
+        }
+
         this.client.confirmQuote(kp ? kp.publicKey() : this.driver.session.account.accountId(), authCb);
 
         return new Promise((resolve, reject) => {
