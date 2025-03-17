@@ -18,11 +18,18 @@ const SwapSavings = ({ submit, path }) => (
 
         <div className="SwapSavings_content">
             <div className="SwapSavings_title">
-                    What is smart swap?
+                What Are Smart Swaps?
             </div>
             <div className="SwapSavings_description">
-                    Smart Swap enables programmatic optimization of your swap to find the best routes.
-                    A fee of 30% of the extra savings generated is automatically included in this quote
+                Smart Swaps use advanced routing engines to help you achieve better exchange rates.
+                 Our platform offers several Smart Swap engines—such as Stellar Classic,
+                 StellarTerm, and Stellar Broker. These engines work by splitting your trades into smaller
+                 parts or analyzing multiple liquidity sources,
+                 thereby finding potentially better routes for your swaps.
+                <br />
+                Some Smart Swap engines charge a fee only on the extra savings generated, ensuring you only pay
+                 when you benefit from improved rates. You can explore and adjust these options in your settings to
+                 find the balance that works best for you.
             </div>
 
             {!!path.extended_paths.length && <div className="SwapSavings_path-list">

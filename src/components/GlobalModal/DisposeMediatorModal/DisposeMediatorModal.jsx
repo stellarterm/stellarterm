@@ -20,7 +20,7 @@ const DisposeMediatorModal = ({ submit, d }) => {
     return (
         <div className="Modal DisposeMediatorModal SwapSavings">
             <div className="Modal_header">
-                <span>Smart Swap V2</span>
+                <span>Stellar Broker</span>
                 <img
                     src={images['icon-close']}
                     alt="X"
@@ -32,15 +32,23 @@ const DisposeMediatorModal = ({ submit, d }) => {
 
             <div className="SwapSavings_content">
                 <div className="SwapSavings_title">
-                    Return the tokens from the mediator account.
+                    Retrieve Tokens from Mediator Account
                 </div>
                 <div className="SwapSavings_description">
-                    You have tokens left on the mediator account after completing Smart Swap V2!
-                    Do you want to retrieve them?
+                    Oops! It looks like some tokens are still in your Stellar Broker Mediator Account
+                    from the last swap. You can learn more about how Stellar Broker swaps work in the
+                    StellarTerm settings. For assistance, please contact
+                    {/* eslint-disable-next-line jsx-a11y/anchor-has-content */}
+                    <a href="mailto:support@stellarterm.com" target="_blank" rel="noopener noreferrer">
+                        support@stellarterm.com
+                    </a>
+                    <br />
+                    <br />
+                    Would you like to move these funds to your main account now?
                 </div>
 
                 <button className="s-button" onClick={() => dispose()}>
-                    {pending ? <div className="nk-spinner" /> : 'Return'}
+                    {pending ? <div className="nk-spinner" /> : 'Retrieve Funds'}
                 </button>
             </div>
         </div>

@@ -22,11 +22,16 @@
         font-weight: 300;
         color: #505558;
         margin-bottom: 16px;
+
+        &.fixed-height {
+            height: 96px;
+        }
     }
 
     &-switcher {
         display: flex;
         height: 55px;
+        margin-bottom: 20px;
 
 
         &-option {

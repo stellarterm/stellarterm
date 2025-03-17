@@ -93,7 +93,7 @@ const SwapSettings = ({ submit, d }) => {
                 }
 
                 <div className="SwapSettings-title topMargin">
-                    Smart swap
+                    Swap Routing Engine
                 </div>
 
                 <div className="SwapSettings-switcher">
@@ -101,20 +101,26 @@ const SwapSettings = ({ submit, d }) => {
                         className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V2 ? 'active' : ''}`}
                         onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V2)}
                     >
-                        Smart Swap V2
+                        Stellar Broker
                     </div>
                     <div
                         className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V1 ? 'active' : ''}`}
                         onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V1)}
                     >
-                        Smart Swap V1
+                        StellarTerm
                     </div>
                     <div
                         className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.DISABLED ? 'active' : ''}`}
                         onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.DISABLED)}
                     >
-                        Disabled
+                        Basic
                     </div>
+                </div>
+
+                <div className="SwapSettings-description fixed-height">
+                    {smartSwapVersion === SMART_SWAP_VERSION.DISABLED ? 'This option uses the standard Stellar Path Payment operation to find the best rates exclusively on the classic Stellar DEX and the built-in Stellar AMM. No advanced splitting or routing is performed.' : ''}
+                    {smartSwapVersion === SMART_SWAP_VERSION.V1 ? 'This option utilizes the classic Stellar DEX and Stellar AMM but splits your total amount into smaller parts. By routing multiple smaller swaps, StellarTerm can optimize rates more effectively than a single path payment. A fee of 30% of the extra savings generated is automatically included in the quote.' : ''}
+                    {smartSwapVersion === SMART_SWAP_VERSION.V2 ? 'This is our most advanced swap option, leveraging Stellar Broker to scan both the classic Stellar network (DEX, AMM) and Saroban-based liquidity pools. Stellar Broker aims to secure the best rates across all available sources. Note that both Stellar Broker and StellarTerm each take a 20% fee on any extra savings generated. This fee is already included in your quote.' : ''}
                 </div>
 
                 <div className="Modal_button-block">
