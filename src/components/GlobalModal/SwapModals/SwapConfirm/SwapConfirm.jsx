@@ -124,10 +124,11 @@ const SwapConfirm = ({ params, submit, d }) => {
                     sourceAmount: result.sold,
                     destinationAmount: result.bought,
                 });
-            }).catch(() => {
+            }).catch(e => {
                 setPending(false);
                 submit.finish();
-            })
+                d.toastService.error('Swap error', e.message);
+            });
             return;
         }
 
