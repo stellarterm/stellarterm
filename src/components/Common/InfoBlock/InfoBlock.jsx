@@ -10,8 +10,8 @@ const BLOCK_ICONS = new Map([
 ]);
 
 const InfoBlock = props => {
-    const { type, children, withIcon, onlyTitle, title, smallInRow } = props;
-    const infoClassName = `InfoBlock_base Info_${type} ${smallInRow ? 'InfoBlock_smallInRow' : ''}`;
+    const { type, children, withIcon, onlyTitle, title, smallInRow, extraSmallInRow } = props;
+    const infoClassName = `InfoBlock_base Info_${type} ${smallInRow ? 'InfoBlock_smallInRow' : ''}  ${extraSmallInRow ? 'InfoBlock_extraSmallInRow' : ''}`;
 
     return (
         <div className={infoClassName}>
@@ -28,6 +28,7 @@ InfoBlock.defaultProps = {
     withIcon: false,
     onlyTitle: false,
     smallInRow: false,
+    extraSmallInRow: false,
     type: 'success',
     children: <span>No children provided. Use onlyTitle prop or provide children elements.</span>,
     title: 'Default title',
@@ -37,6 +38,7 @@ InfoBlock.propTypes = {
     withIcon: PropTypes.bool,
     onlyTitle: PropTypes.bool,
     smallInRow: PropTypes.bool,
+    extraSmallInRow: PropTypes.bool,
     children: PropTypes.node.isRequired,
     type: PropTypes.oneOf(BLOCK_TYPES),
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
