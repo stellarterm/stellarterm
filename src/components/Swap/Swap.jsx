@@ -292,7 +292,7 @@ const Swap = ({ d }) => {
                 setPath(res);
             },
             errorCallback: error => {
-                setErrorText(error.toString() || SWAP_NO_PATH_ERROR);
+                setErrorText(error && !error.toString().startsWith('[object') ? error.toString() : SWAP_NO_PATH_ERROR);
                 setPending(false);
             },
         });
@@ -324,7 +324,7 @@ const Swap = ({ d }) => {
                 setPath(res);
             },
             errorCallback: error => {
-                setErrorText(error || SWAP_NO_PATH_ERROR);
+                setErrorText(error && !error.toString().startsWith('[object') ? error.toString() : SWAP_NO_PATH_ERROR);
                 setPending(false);
             },
         });
