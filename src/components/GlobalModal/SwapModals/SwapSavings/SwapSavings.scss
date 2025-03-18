@@ -16,6 +16,13 @@
     &_description {
         margin-bottom: 34px;
         font-weight: 300;
+
+        a {
+            text-decoration: none;
+            color: #69c76f;
+            font-weight: 600;
+            margin-left: 5px;
+        }
     }
 
     &_path-list {

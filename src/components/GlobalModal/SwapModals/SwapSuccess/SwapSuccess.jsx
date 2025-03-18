@@ -54,14 +54,14 @@ const SwapSuccess = ({ submit, d, details }) => {
                 </div>
 
                 <div className="SwapSuccess_buttons">
-                    <button
+                    {hash && <button
                         className="cancel-button"
                         onClick={() => {
                             window.open(`https://stellar.expert/explorer/${d.Server.isTestnet ? 'testnet' : 'public'}/tx/${hash}`, '_blank');
                         }}
                     >
                         View details
-                    </button>
+                    </button>}
                     <button className="s-button" onClick={() => submit.cancel()}>Done</button>
                 </div>
             </div>

@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import * as StellarSdk from '@stellar/stellar-sdk';
+import { TransactionBuilder } from '@stellar/stellar-base';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from '@trezor/connect-web';
@@ -339,7 +340,17 @@ export default function Send(driver) {
                 this.event.trigger(SESSION_EVENTS.LOGIN_EVENT, this);
             });
         },
-        sign: async tx => {
+        signTxOrAuthWithSecret: async tx => {
+            if (this.authType !== AUTH_TYPE.SECRET) {
+                return null;
+            }
+            if (tx.sign) {
+                this.account.signWithSecret(tx);
+                return tx;
+            }
+            return this.account.signAuthWithSecret(tx);
+        },
+        sign: async (tx, onlySign) => {
             if (this.authType === AUTH_TYPE.SECRET) {
                 this.account.signWithSecret(tx);
                 console.log('Signed tx\nhash:', tx.hash().toString('hex'), `\n\n${tx.toEnvelope().toXDR('base64')}`);
@@ -349,9 +360,9 @@ export default function Send(driver) {
                 };
             } else if (this.authType === AUTH_TYPE.WALLET_CONNECT) {
                 // use signTx in case when needed to sign challenge tx (manage data operation)
-                if (tx.operations.find(({ type }) => type === 'manageData')) {
+                if (onlySign || tx.operations.find(({ type }) => type === 'manageData')) {
                     const signedXDR = await driver.walletConnectService.signTx(tx);
-                    const signedTx = new StellarSdk.Transaction(signedXDR, driver.Server.networkPassphrase);
+                    const signedTx = TransactionBuilder.fromXDR(signedXDR, StellarSdk.Networks.PUBLIC);
 
                     return {
                         status: TX_STATUS.FINISH,

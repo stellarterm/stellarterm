@@ -26,6 +26,7 @@ const SwapFormRow = ({
     setIsInsufficient,
     setIsInvalid,
     savings,
+    mediatorCost,
 }) => {
     const [isListOpen, setIsListOpen] = useState(false);
 
@@ -47,8 +48,18 @@ const SwapFormRow = ({
         if (!isLogged || !asset) {
             return null;
         }
-        return isDestination ? d.session.account.getBalance(asset) : d.session.account.getAvailableBalance(asset);
-    }, [isLogged, asset, d.session.account, updateIndex]);
+
+        if (isDestination) {
+            return d.session.account.getBalance(asset);
+        }
+
+        if (asset.isNative()) {
+            const newBalance = d.session.account.getAvailableBalance(asset) - mediatorCost;
+            return newBalance > 0 ? newBalance : 0;
+        }
+
+        return d.session.account.getAvailableBalance(asset);
+    }, [isLogged, asset, d.session.account, updateIndex, mediatorCost]);
 
     const isInsufficientBalance = useMemo(() => {
         if (!isLogged || !amount || isDestination) {
@@ -170,4 +181,5 @@ SwapFormRow.propTypes = {
     setIsInsufficient: PropTypes.func,
     setIsInvalid: PropTypes.func,
     savings: PropTypes.node,
+    mediatorCost: PropTypes.number,
 };

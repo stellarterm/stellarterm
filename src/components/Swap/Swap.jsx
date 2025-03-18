@@ -5,17 +5,20 @@ import * as StellarSdk from '@stellar/stellar-sdk';
 import BigNumber from 'bignumber.js';
 import processBalances from '../Session/SessionContent/SessionAccount/AccountView/BalancesTable/processBalances';
 import NotFound from '../NotFound/NotFound';
-import useUpdateInterval from '../../lib/hooks/useUpdateInterval';
 import images from '../../images';
 import InfoBlock from '../Common/InfoBlock/InfoBlock';
 import useDebounce from '../../lib/hooks/useDebounce';
 import Stellarify from '../../lib/helpers/Stellarify';
 import Driver from '../../lib/driver/Driver';
-import { SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
+import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
 import { formatNumber, roundAndFormat } from '../../lib/helpers/Format';
-import { getSmartSwapEnabledValue } from '../GlobalModal/SwapModals/SwapSettings/SwapSettings';
+import {
+    getSlippageValue,
+    getSmartSwapVersionValue,
+} from '../GlobalModal/SwapModals/SwapSettings/SwapSettings';
 import { USDC, XLM } from '../../lib/constants/assets';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
+import { MEDIATOR_FEE_RESERVE, SMART_SWAP_VERSION } from '../../lib/driver/driverInstances/Swap';
 
 
 const SWAP_EQUAL_ASSETS_ERROR = 'Swap of equal assets is unavailable.';
@@ -36,7 +39,7 @@ const Swap = ({ d }) => {
     const [destinationAmount, setDestinationAmount] = useState('');
     const [isSend, setIsSend] = useState(true);
     const [pending, setPending] = useState(false);
-    const [smartSwapEnabled, setSmartSwapEnabled] = useState(getSmartSwapEnabledValue());
+    const [smartSwapVersion, setSmartSwapVersion] = useState(getSmartSwapVersionValue());
 
     const [isInsufficientSourceBalance, setIsInsufficientSourceBalance] = useState(false);
     const [isInvalidSourceAmount, setIsInvalidSourceAmount] = useState(false);
@@ -61,6 +64,8 @@ const Swap = ({ d }) => {
 
         return () => document.removeEventListener('visibilitychange', onVisibilityChange);
     }, []);
+
+    useEffect(() => () => d.swap.unlistenToBestPath(), []);
 
     const updateBalances = () => {
         processBalances(d).then(res => {
@@ -249,7 +254,7 @@ const Swap = ({ d }) => {
     };
 
     const savings = useMemo(() => {
-        if (!path || !path.isSmartRouting) {
+        if (!path || !path.isSmartRouting || !Number(path.profit)) {
             return null;
         }
 
@@ -267,26 +272,31 @@ const Swap = ({ d }) => {
         }
         setPending(true);
 
-        d.swap.getBestSendPath({
+        d.swap.listenToBestPath({
             source,
             destination,
-            sourceAmount: debouncedSourceAmount,
+            amount: debouncedSourceAmount,
             sourcePriceUSD,
             destinationPriceUSD,
-            smartSwapEnabled,
-        }).then(res => {
-            setPending(false);
-            if (!res) {
-                setErrorText(SWAP_NO_PATH_ERROR);
-                return;
-            }
+            smartSwapVersion,
+            isSend: true,
+            slippage: Number(getSlippageValue()) / 100,
+            callback: res => {
+                setPending(false);
+                if (!res) {
+                    setErrorText(SWAP_NO_PATH_ERROR);
+                    return;
+                }
 
-            setDestinationAmount(res.optimized_sum);
-            setPath(res);
-        }).catch(() => {
-            setErrorText(SWAP_NO_PATH_ERROR);
+                setDestinationAmount(res.optimized_sum);
+                setPath(res);
+            },
+            errorCallback: error => {
+                setErrorText(error.toString() || SWAP_NO_PATH_ERROR);
+                setPending(false);
+            },
         });
-    }, [source, destination, debouncedSourceAmount, smartSwapEnabled]);
+    }, [source, destination, debouncedSourceAmount, smartSwapVersion]);
 
     const getReceivePath = useCallback(() => {
         if (!destination) {
@@ -294,56 +304,52 @@ const Swap = ({ d }) => {
         }
         setPending(true);
 
-        d.swap.getBestReceivePath({
+        d.swap.listenToBestPath({
             source,
             destination,
-            destinationAmount: debouncedDestinationAmount,
+            amount: debouncedDestinationAmount,
             destinationPriceUSD,
             sourcePriceUSD,
-            smartSwapEnabled,
-        }).then(res => {
-            setPending(false);
+            smartSwapVersion,
+            isSend: false,
+            callback: res => {
+                setPending(false);
 
-            if (!res) {
-                setErrorText(SWAP_NO_PATH_ERROR);
-                return;
-            }
+                if (!res) {
+                    setErrorText(SWAP_NO_PATH_ERROR);
+                    return;
+                }
 
-            setSourceAmount(res.optimized_sum);
-            setPath(res);
-        }).catch(() => {
-            setErrorText(SWAP_NO_PATH_ERROR);
+                setSourceAmount(res.optimized_sum);
+                setPath(res);
+            },
+            errorCallback: error => {
+                setErrorText(error || SWAP_NO_PATH_ERROR);
+                setPending(false);
+            },
         });
-    }, [source, destination, debouncedDestinationAmount, smartSwapEnabled]);
+    }, [source, destination, debouncedDestinationAmount, smartSwapVersion]);
 
 
     useEffect(() => {
-        if (!isSend || !Number(debouncedSourceAmount) || !destination || !Number(sourceAmount)) {
+        if (!isSend || !Number(debouncedSourceAmount) || !destination || !Number(sourceAmount) || isHidden) {
             return;
         }
         getSendPath();
-    }, [debouncedSourceAmount, isSend, source, destination, smartSwapEnabled]);
+    }, [debouncedSourceAmount, isSend, source, destination, smartSwapVersion, isHidden]);
 
     useEffect(() => {
-        if (isSend || !Number(debouncedDestinationAmount) || !Number(destinationAmount)) {
+        if (isSend || !Number(debouncedDestinationAmount) || !Number(destinationAmount) || isHidden) {
             return;
         }
         getReceivePath();
-    }, [debouncedDestinationAmount, isSend, source, destination, smartSwapEnabled]);
-
-    const updateIndex = useUpdateInterval(15000, [sourceAmount, destinationAmount]);
+    }, [debouncedDestinationAmount, isSend, source, destination, smartSwapVersion, isHidden]);
 
     useEffect(() => {
-        if (!Number(sourceAmount) || !Number(destinationAmount) || isHidden) {
-            return;
+        if (isHidden) {
+            d.swap.unlistenToBestPath();
         }
-
-        if (isSend) {
-            getSendPath();
-        } else {
-            getReceivePath();
-        }
-    }, [updateIndex, isHidden]);
+    }, [isHidden]);
 
     useEffect(() => {
         if (d.modal.modalName === 'SwapConfirm' && d.modal.active) {
@@ -357,6 +363,7 @@ const Swap = ({ d }) => {
                 path,
                 priceImpact,
                 isSend,
+                smartSwapVersion,
             });
         }
     }, [
@@ -371,6 +378,7 @@ const Swap = ({ d }) => {
         isSend,
         d.modal.modalName,
         d.modal.active,
+        smartSwapVersion,
     ]);
 
     useEffect(() => {
@@ -385,9 +393,28 @@ const Swap = ({ d }) => {
 
     const openSettings = () => {
         d.modal.handlers.activate('SwapSettings').then(() => {
-            setSmartSwapEnabled(getSmartSwapEnabledValue());
+            setSmartSwapVersion(getSmartSwapVersionValue());
         });
     };
+
+    const isMediatorNeeded = smartSwapVersion === SMART_SWAP_VERSION.V2
+        && d.session.state === SESSION_STATE.IN
+        && d.session.authType !== AUTH_TYPE.SECRET;
+
+
+    const mediatorCost = useMemo(() => {
+        if (d.session.state !== SESSION_STATE.IN || !source || !destination) {
+            return 0;
+        }
+        const subentries = 1 + d.session.account.signers.length
+            + [source, destination].filter(a => !a.isNative()).length;
+
+        return MEDIATOR_FEE_RESERVE + (0.5 * subentries);
+    }, [source, destination, d.session.state]);
+
+    const isInsufficientXLM = d.session.state === SESSION_STATE.IN ?
+        mediatorCost > d.session.account.getAvailableBalance(StellarSdk.Asset.native()) :
+        false;
 
     const onSubmit = async () => {
         const { status } = await d.modal.handlers.activate('SwapConfirm', {
@@ -399,6 +426,7 @@ const Swap = ({ d }) => {
             destinationAmountUSD,
             path,
             priceImpact,
+            smartSwapVersion,
             isSend,
         });
 
@@ -416,6 +444,9 @@ const Swap = ({ d }) => {
         }
         if (!destination) {
             return <button className="s-button" disabled>Select an asset</button>;
+        }
+        if (isInsufficientXLM) {
+            return <button className="s-button" disabled>Insufficient XLM Balance</button>;
         }
         if (!sourceAmount && !destinationAmount) {
             return <button className="s-button" disabled>Enter an amount</button>;
@@ -472,6 +503,7 @@ const Swap = ({ d }) => {
                     setIsInsufficient={setIsInsufficientSourceBalance}
                     setIsInvalid={setIsInvalidSourceAmount}
                     savings={(path && path.type === 'receive') ? savings : null}
+                    mediatorCost={mediatorCost}
                 />
 
                 <div className="Swap_switch" onClick={() => revertAssets()}>
@@ -503,11 +535,29 @@ const Swap = ({ d }) => {
                 }
             </div>
 
-            {Boolean(errorText) &&
-                <InfoBlock type={'warning'} withIcon onlyTitle smallInRow title={errorText} />
+            {(Boolean(errorText) || isInsufficientXLM) &&
+                <InfoBlock
+                    type={'warning'}
+                    withIcon
+                    onlyTitle
+                    extraSmallInRow
+                    title={
+                        isInsufficientXLM ?
+                            'Not enough XLM to perform a smart swap.' :
+                            errorText
+                    }
+                />
             }
 
             {getSwapButton()}
+
+            {isMediatorNeeded &&
+                <div className="Swap_mediator">
+                    Smart Swap needs <b>{mediatorCost} XLM</b>, which <b>will be returned</b> to your
+                    <br />
+                    account (minus fees) after the swap.
+                </div>
+            }
         </div>
     );
 };

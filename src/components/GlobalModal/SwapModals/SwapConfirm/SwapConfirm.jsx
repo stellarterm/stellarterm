@@ -6,8 +6,8 @@ import PropTypes from 'prop-types';
 import images from '../../../../images';
 import AssetCardSeparateLogo from '../../../Common/AssetCard/AssetCardSeparateLogo/AssetCardSeparateLogo';
 import AppPopover from '../../../Common/AppPopover/AppPopover';
-import { getSlippageValue } from '../SwapSettings/SwapSettings';
-import Swap, { FEE_ADDRESS } from '../../../../lib/driver/driverInstances/Swap';
+import { getSlippageValue, getSmartSwapVersionValue } from '../SwapSettings/SwapSettings';
+import Swap, { FEE_ADDRESS, SMART_SWAP_VERSION } from '../../../../lib/driver/driverInstances/Swap';
 import { formatNumber } from '../../../../lib/helpers/Format';
 import Driver from '../../../../lib/driver/Driver';
 import { AUTH_TYPE, TX_STATUS } from '../../../../lib/constants/sessionConstants';
@@ -29,6 +29,7 @@ const SwapConfirm = ({ params, submit, d }) => {
         path,
         priceImpact,
         isSend,
+        smartSwapVersion,
     } = params;
 
     const slippage = Number(getSlippageValue());
@@ -101,6 +102,37 @@ const SwapConfirm = ({ params, submit, d }) => {
             submit.finish();
         }
 
+        if (smartSwapVersion === SMART_SWAP_VERSION.V2) {
+            d.swap.submitSwapV2({
+                isSend,
+                source,
+                destination,
+                sourceAmount,
+                destinationAmount,
+                withTrust,
+            }).then(result => {
+                setPending(false);
+                submit.finish();
+                if (!result && Number(result.sold) === 0) {
+                    d.toastService.error('Swap failed', 'Something went wrong');
+                    return;
+                }
+                d.modal.handlers.activate('SwapSuccess', {
+                    source,
+                    destination,
+                    hash: null,
+                    sourceAmount: result.sold,
+                    destinationAmount: result.bought,
+                });
+            }).catch(e => {
+                setPending(false);
+                submit.finish();
+                d.toastService.error('Swap error', e.message);
+            });
+            return;
+        }
+
+
         const signAndSubmit = await d.session.handlers.swap({
             path,
             withTrust,
@@ -123,12 +155,14 @@ const SwapConfirm = ({ params, submit, d }) => {
             const serverResult = await signAndSubmit.serverResult;
             submit.finish();
 
+            const swapAmount = Swap.getSwapAmount(serverResult, isSend);
+
             d.modal.handlers.activate('SwapSuccess', {
                 source,
                 destination,
                 hash: serverResult.id,
-                sourceAmount: isSend ? sourceAmount : Swap.getReceiveSwapSourceAmount(serverResult),
-                destinationAmount: isSend ? Swap.getSendSwapDestAmount(serverResult) : destinationAmount,
+                sourceAmount: isSend ? sourceAmount : swapAmount,
+                destinationAmount: isSend ? swapAmount : destinationAmount,
             });
         } catch (error) {
             const errorMessage = ErrorHandler(error);
@@ -211,7 +245,9 @@ const SwapConfirm = ({ params, submit, d }) => {
 
                 <div className="SwapConfirm_details-title">Swap details</div>
 
-                <div className={`SwapConfirm_details-row ${Number(slippage) >= SLIPPAGE_WARNING_THRESHOLD ? 'red' : ''}`}>
+                <div
+                    className={`SwapConfirm_details-row ${Number(slippage) >= SLIPPAGE_WARNING_THRESHOLD ? 'red' : ''}`}
+                >
                     <div className="SwapConfirm_detail-label">
                         <span>Slippage tolerance</span>
                         <AppPopover
@@ -263,7 +299,8 @@ const SwapConfirm = ({ params, submit, d }) => {
                                                 {item.readablePath.map((code, index) => (
                                                     <React.Fragment key={code}>
                                                         <span>{code}</span>
-                                                        {index !== (item.readablePath.length - 1) && <img src={images['icon-arrow-right']} alt="" />}
+                                                        {index !== (item.readablePath.length - 1) &&
+                                                            <img src={images['icon-arrow-right']} alt="" />}
                                                     </React.Fragment>
                                                 ))}
                                             </div>
@@ -297,11 +334,11 @@ const SwapConfirm = ({ params, submit, d }) => {
 
                         <div className="SwapConfirm_path">
                             {path.extended_paths[0].readablePath.map((code, index) =>
-                            // eslint-disable-next-line react/no-array-index-key
+                                // eslint-disable-next-line react/no-array-index-key
                                 <div key={code + index} className="SwapConfirm_path">
                                     <span>{code}</span>
                                     {index !== (path.extended_paths[0].readablePath.length - 1) &&
-                                         <img src={images['icon-arrow-right']} alt="" />}
+                                        <img src={images['icon-arrow-right']} alt="" />}
                                 </div>,
                             )}
                         </div>
@@ -322,12 +359,26 @@ const SwapConfirm = ({ params, submit, d }) => {
 
                 <div className="SwapConfirm_info">
                     Output is estimated. You will {isSend ? 'receive at least' : 'send a maximum of'}
-                    <span className="SwapConfirm_info-amount"> {formatNumber(optimizedEstimatedValue)} {isSend ? destination.code : source.code} </span>
+                    <span
+                        className="SwapConfirm_info-amount"
+                    > {formatNumber(optimizedEstimatedValue)} {isSend ? destination.code : source.code} </span>
                     or the transaction will revert.
                 </div>
 
+                {d.session.authType !== AUTH_TYPE.SECRET &&
+                    getSmartSwapVersionValue() === SMART_SWAP_VERSION.V2 &&
+                    <div className="SwapConfirm_description">
+                        You’re using Stellar Broker as your swap engine.
+                         The funds to be exchanged will be moved to a dedicated mediator account on the
+                         Stellar network that you can access. Once the swap completes, the resulting
+                         assets return to your main account. If the swap fails or is interrupted, any unswapped
+                         funds are automatically refunded. By clicking ‘Confirm Swap,’ you
+                         agree to proceed under these conditions.
+                    </div>
+                }
+
                 <button className="s-button" disabled={priceHasChanges || pending} onClick={() => submitSwap()}>
-                    Confirm Swap
+                        Confirm Swap
                     {pending && <div className="nk-spinner" />}
                 </button>
 
