@@ -535,22 +535,29 @@ const Swap = ({ d }) => {
                 }
             </div>
 
-            {Boolean(errorText) &&
-                <InfoBlock type={'warning'} withIcon onlyTitle extraSmallInRow title={errorText} />
-            }
-
-            {isMediatorNeeded &&
+            {(Boolean(errorText) || isInsufficientXLM) &&
                 <InfoBlock
-                    type="warning"
-                    withIcon={isInsufficientXLM}
+                    type={'warning'}
+                    withIcon
                     onlyTitle
                     extraSmallInRow
-                    title={`Smart Swap needs ${mediatorCost} XLM,
-                     which will be returned to your account (minus fees) after the swap.`}
+                    title={
+                        isInsufficientXLM ?
+                            'Not enough XLM to perform a smart swap.' :
+                            errorText
+                    }
                 />
             }
 
             {getSwapButton()}
+
+            {isMediatorNeeded &&
+                <div className="Swap_mediator">
+                    Smart Swap needs <b>{mediatorCost} XLM</b>, which <b>will be returned</b> to your
+                    <br />
+                    account (minus fees) after the swap.
+                </div>
+            }
         </div>
     );
 };
