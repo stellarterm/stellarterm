@@ -45,6 +45,17 @@
             margin-right: 8px;
         }
     }
+
+    &.InfoBlock_extraSmallInRow {
+        padding: 0;
+        border: none;
+        background: #fff;
+        margin-bottom: 16px;
+
+        .info_title {
+            font-size: 14px;
+        }
+    }
 }
 
 .Info_success {

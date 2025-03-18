@@ -19,6 +19,8 @@ export const SMART_SWAP_VERSION = {
     V2: 'v2',
 };
 
+export const MEDIATOR_FEE_RESERVE = 5;
+
 export const FEE_ADDRESS = 'GAEGJFQYHAFZEAWHQ2ZIE4Z6OIZDSCXTOKFUEJ3QMBNOIJRVY3SXBVO6';
 
 export default class Swap {
@@ -168,7 +170,7 @@ export default class Swap {
                     const result = await this.driver.session.handlers.sign(transaction, true);
                     return result.signedTx;
                 },
-                5,
+                MEDIATOR_FEE_RESERVE,
             );
 
             const secret = await mediator.init();

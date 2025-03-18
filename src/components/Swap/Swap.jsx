@@ -10,7 +10,7 @@ import InfoBlock from '../Common/InfoBlock/InfoBlock';
 import useDebounce from '../../lib/hooks/useDebounce';
 import Stellarify from '../../lib/helpers/Stellarify';
 import Driver from '../../lib/driver/Driver';
-import { SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
+import { AUTH_TYPE, SESSION_EVENTS, SESSION_STATE } from '../../lib/constants/sessionConstants';
 import { formatNumber, roundAndFormat } from '../../lib/helpers/Format';
 import {
     getSlippageValue,
@@ -18,6 +18,7 @@ import {
 } from '../GlobalModal/SwapModals/SwapSettings/SwapSettings';
 import { USDC, XLM } from '../../lib/constants/assets';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
+import { MEDIATOR_FEE_RESERVE, SMART_SWAP_VERSION } from '../../lib/driver/driverInstances/Swap';
 
 
 const SWAP_EQUAL_ASSETS_ERROR = 'Swap of equal assets is unavailable.';
@@ -396,6 +397,25 @@ const Swap = ({ d }) => {
         });
     };
 
+    const isMediatorNeeded = smartSwapVersion === SMART_SWAP_VERSION.V2
+        && d.session.state === SESSION_STATE.IN
+        && d.session.authType !== AUTH_TYPE.SECRET;
+
+
+    const mediatorCost = useMemo(() => {
+        if (d.session.state !== SESSION_STATE.IN || !source || !destination) {
+            return 0;
+        }
+        const subentries = 1 + d.session.account.signers.length
+            + [source, destination].filter(a => !a.isNative()).length;
+
+        return MEDIATOR_FEE_RESERVE + (0.5 * subentries);
+    }, [source, destination, d.session.state]);
+
+    const isInsufficientXLM = d.session.state === SESSION_STATE.IN ?
+        mediatorCost > d.session.account.getAvailableBalance(StellarSdk.Asset.native()) :
+        false;
+
     const onSubmit = async () => {
         const { status } = await d.modal.handlers.activate('SwapConfirm', {
             source,
@@ -424,6 +444,9 @@ const Swap = ({ d }) => {
         }
         if (!destination) {
             return <button className="s-button" disabled>Select an asset</button>;
+        }
+        if (isInsufficientXLM) {
+            return <button className="s-button" disabled>Insufficient XLM Balance</button>;
         }
         if (!sourceAmount && !destinationAmount) {
             return <button className="s-button" disabled>Enter an amount</button>;
@@ -480,6 +503,7 @@ const Swap = ({ d }) => {
                     setIsInsufficient={setIsInsufficientSourceBalance}
                     setIsInvalid={setIsInvalidSourceAmount}
                     savings={(path && path.type === 'receive') ? savings : null}
+                    mediatorCost={mediatorCost}
                 />
 
                 <div className="Swap_switch" onClick={() => revertAssets()}>
@@ -512,7 +536,18 @@ const Swap = ({ d }) => {
             </div>
 
             {Boolean(errorText) &&
-                <InfoBlock type={'warning'} withIcon onlyTitle smallInRow title={errorText} />
+                <InfoBlock type={'warning'} withIcon onlyTitle extraSmallInRow title={errorText} />
+            }
+
+            {isMediatorNeeded &&
+                <InfoBlock
+                    type="warning"
+                    withIcon={isInsufficientXLM}
+                    onlyTitle
+                    extraSmallInRow
+                    title={`Smart Swap needs ${mediatorCost} XLM,
+                     which will be returned to your account (minus fees) after the swap.`}
+                />
             }
 
             {getSwapButton()}
