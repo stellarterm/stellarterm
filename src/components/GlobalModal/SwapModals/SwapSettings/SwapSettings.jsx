@@ -9,7 +9,7 @@ import { SMART_SWAP_VERSION } from '../../../../lib/driver/driverInstances/Swap'
 export const SWAP_SLIPPAGE_ALIAS = 'swap_slippage_value';
 export const SWAP_SMART_VERSION = 'swap_smart_version';
 
-const DEFAULT_SLIPPAGE = '13';
+const DEFAULT_SLIPPAGE = '5';
 
 export const getSlippageValue = () => localStorage.getItem(SWAP_SLIPPAGE_ALIAS) || DEFAULT_SLIPPAGE;
 export const setSlippageValue = slippage => {

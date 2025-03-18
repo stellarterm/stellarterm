@@ -16,6 +16,7 @@ import {
     getSlippageValue,
     getSmartSwapVersionValue,
 } from '../GlobalModal/SwapModals/SwapSettings/SwapSettings';
+import { USDC, XLM } from '../../lib/constants/assets';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
 
 
@@ -78,7 +79,7 @@ const Swap = ({ d }) => {
 
         if (!sourcePath || !destinationPath) {
             // default state
-            history.replace(`/swap/XLM-native/${Stellarify.assetToSlug(new StellarSdk.Asset('USDC', 'GA5ZSEJYB37JRC5AVCIA5MOP4RHTM335X2KGX3IHOJAPP5RE34K4KZVN'))}`);
+            history.replace(`/swap/${Stellarify.assetToSlug(XLM)}/${Stellarify.assetToSlug(USDC)}`);
             return;
         }
 
