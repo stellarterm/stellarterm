@@ -519,7 +519,8 @@ const Swap = ({ d }) => {
                     setAsset={setDestinationAsset}
                     amount={destinationAmount}
                     setAmount={handleSetDestinationAmount}
-                    disabledInput={isEqualAssets}
+                    // strict receive temporarily disabled in broker
+                    disabledInput={isEqualAssets || smartSwapVersion === SMART_SWAP_VERSION.V2}
                     usdValue={destinationAmountUSD}
                     priceImpact={priceImpact}
                     isDestination
