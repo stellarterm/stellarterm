@@ -267,6 +267,11 @@ export default class Swap {
             });
         }
 
+        if (getAssetString(source) === getAssetString(destination)) {
+            return;
+        }
+
+        // strict receive temporarily disabled
         this.client.quote({
             sellingAsset: getAssetString(source),
             buyingAsset: getAssetString(destination),

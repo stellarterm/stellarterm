@@ -19,6 +19,7 @@ import {
 import { USDC, XLM } from '../../lib/constants/assets';
 import SwapFormRow from './SwapFormRow/SwapFormRow';
 import { MEDIATOR_FEE_RESERVE, SMART_SWAP_VERSION } from '../../lib/driver/driverInstances/Swap';
+import { getAssetString } from '../../lib/driver/driverInstances/Session';
 
 
 const SWAP_EQUAL_ASSETS_ERROR = 'Swap of equal assets is unavailable.';
@@ -133,6 +134,7 @@ const Swap = ({ d }) => {
     }, [knownAssets]);
 
     const setSourceAsset = asset => {
+        d.swap.unlistenToBestPath();
         const slug = Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer));
 
         const { pathname } = location;
@@ -142,6 +144,7 @@ const Swap = ({ d }) => {
     };
 
     const setDestinationAsset = asset => {
+        d.swap.unlistenToBestPath();
         const slug = Stellarify.assetToSlug(new StellarSdk.Asset(asset.code, asset.issuer));
 
         const { pathname } = location;
@@ -151,6 +154,7 @@ const Swap = ({ d }) => {
     };
 
     const handleSetSourceAmount = amount => {
+        d.swap.unlistenToBestPath();
         setIsSend(true);
         setDestinationAmount('');
         setPath(null);
@@ -158,6 +162,7 @@ const Swap = ({ d }) => {
     };
 
     const handleSetDestinationAmount = amount => {
+        d.swap.unlistenToBestPath();
         setIsSend(false);
         setSourceAmount('');
         setPath(null);
@@ -267,7 +272,7 @@ const Swap = ({ d }) => {
     }, [path]);
 
     const getSendPath = useCallback(() => {
-        if (!destination) {
+        if (!destination || getAssetString(source) === getAssetString(destination)) {
             return;
         }
         setPending(true);
@@ -299,7 +304,7 @@ const Swap = ({ d }) => {
     }, [source, destination, debouncedSourceAmount, smartSwapVersion]);
 
     const getReceivePath = useCallback(() => {
-        if (!destination) {
+        if (!destination || getAssetString(source) === getAssetString(destination)) {
             return;
         }
         setPending(true);
@@ -519,7 +524,8 @@ const Swap = ({ d }) => {
                     setAsset={setDestinationAsset}
                     amount={destinationAmount}
                     setAmount={handleSetDestinationAmount}
-                    disabledInput={isEqualAssets}
+                    // strict receive temporarily disabled in broker
+                    disabledInput={isEqualAssets || smartSwapVersion === SMART_SWAP_VERSION.V2}
                     usdValue={destinationAmountUSD}
                     priceImpact={priceImpact}
                     isDestination
