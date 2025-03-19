@@ -32,6 +32,7 @@ const MarketsPage = lazy(() => import('./Markets/Markets'));
 const PrivacyPolicyPage = lazy(() => import('./PrivacyPolicy/PrivacyPolicy'));
 const TestNetworkPage = lazy(() => import('./TestNetwork/TestNetwork'));
 const ReloadToTestnetPage = lazy(() => import('./ReloadToTestnet/ReloadToTestnet'));
+const MediatorDisposePage = lazy(() => import('./MediatorDispose/MediatorDispose'));
 
 
 window.React = React;
@@ -203,6 +204,12 @@ class TermApp extends React.Component {
                                                 path="/lobstr/"
                                                 render={props => (
                                                     <SessionPage {...props} d={this.props.d} urlParts={'lobstr'} />
+                                                )}
+                                            />
+                                            <Route
+                                                path="/mediator/"
+                                                render={props => (
+                                                    <MediatorDisposePage d={this.props.d} />
                                                 )}
                                             />
                                             <Route
