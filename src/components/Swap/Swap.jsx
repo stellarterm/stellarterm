@@ -408,7 +408,12 @@ const Swap = ({ d }) => {
 
 
     const mediatorCost = useMemo(() => {
-        if (d.session.state !== SESSION_STATE.IN || !source || !destination) {
+        if (
+            d.session.state !== SESSION_STATE.IN ||
+            !source ||
+            !destination ||
+            smartSwapVersion !== SMART_SWAP_VERSION.V2
+        ) {
             return 0;
         }
         const subentries = 1 + d.session.account.signers.length
