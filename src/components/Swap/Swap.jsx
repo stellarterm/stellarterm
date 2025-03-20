@@ -412,7 +412,8 @@ const Swap = ({ d }) => {
             d.session.state !== SESSION_STATE.IN ||
             !source ||
             !destination ||
-            smartSwapVersion !== SMART_SWAP_VERSION.V2
+            smartSwapVersion !== SMART_SWAP_VERSION.V2 ||
+            d.session.authType === AUTH_TYPE.SECRET
         ) {
             return 0;
         }
@@ -420,7 +421,7 @@ const Swap = ({ d }) => {
             + [source, destination].filter(a => !a.isNative()).length;
 
         return MEDIATOR_FEE_RESERVE + (0.5 * subentries);
-    }, [source, destination, d.session.state, smartSwapVersion]);
+    }, [source, destination, d.session.state, d.session.authType, smartSwapVersion]);
 
     const isInsufficientXLM = d.session.state === SESSION_STATE.IN ?
         mediatorCost > d.session.account.getAvailableBalance(StellarSdk.Asset.native()) :
