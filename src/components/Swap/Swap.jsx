@@ -420,7 +420,7 @@ const Swap = ({ d }) => {
             + [source, destination].filter(a => !a.isNative()).length;
 
         return MEDIATOR_FEE_RESERVE + (0.5 * subentries);
-    }, [source, destination, d.session.state]);
+    }, [source, destination, d.session.state, smartSwapVersion]);
 
     const isInsufficientXLM = d.session.state === SESSION_STATE.IN ?
         mediatorCost > d.session.account.getAvailableBalance(StellarSdk.Asset.native()) :
@@ -489,6 +489,7 @@ const Swap = ({ d }) => {
             <div className="Swap_header">
                 <div className="Swap_title">
                     Swap assets
+                    {smartSwapVersion === SMART_SWAP_VERSION.V2 && <span className="Swap_title-broker">with Broker</span>}
                 </div>
                 <img
                     src={images['icons-settings']}
