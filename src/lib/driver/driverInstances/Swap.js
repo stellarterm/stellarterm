@@ -156,8 +156,7 @@ export default class Swap {
             this.driver.session.authType !== AUTH_TYPE.WALLET_CONNECT &&
             this.driver.multisig.isMultisigEnabled
         ) {
-            this.driver.toastService.error('Oops', 'Swap v2 currently not supported with multisig');
-            return Promise.reject(new Error('Swap v2 currently not supported with multisig'));
+            return Promise.reject(new Error('Stellar Broker currently not supported with multisig'));
         }
 
         if (this.driver.session.authType !== AUTH_TYPE.SECRET || this.driver.multisig.isMultisigEnabled) {
