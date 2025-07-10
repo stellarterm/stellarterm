@@ -61,7 +61,7 @@ const PreferredHorizon = ({ d }) => {
                     className={`PreferredHorizon_card ${server.url === activeServer ? 'active' : ''}`}
                     onClick={() => changeHorizon(server.url)}
                 >
-                    {server.name && <span>{server.name}</span>}
+                    <span>{server.name || 'Custom'}</span>
                     <span className="PreferredHorizon_url">{server.url}</span>
                     <div className="PreferredHorizon_card-radio" />
                 </div>
@@ -75,7 +75,7 @@ const PreferredHorizon = ({ d }) => {
                             onChange={e => setCustomUrl(e.target.value)}
                             onKeyUp={onKeyPress}
                             className="PreferredHorizon_input"
-                            placeholder="Enter Horizon URL"
+                            placeholder="Enter Custom Horizon URL"
                         />
                         <button
                             className="s-button"
