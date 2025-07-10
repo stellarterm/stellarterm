@@ -1,3 +1,5 @@
+@import "PreferredHorizon/PreferredHorizon";
+
 .Header_main {
     position: relative;
     z-index: 10;
@@ -20,8 +22,45 @@
         .Header {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 18px 18px 21px;
+            padding: 18px 0 21px;
+
+            .Header_settings {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 32px;
+                width: 32px;
+                border-radius: 8px;
+                background: #F7F9FA;
+                margin-left: 15px;
+                cursor: pointer;
+                position: relative;
+
+                .Header_settings_menu {
+                    display: flex;
+                    position: absolute;
+                    top: calc(100% - 16px);
+                    right: 0;
+                    width: 300px;
+                    padding-top: 30px;
+                }
+
+                .Header_settings_icon--hover {
+                    display: none;
+                }
+
+                &:hover {
+                    background: #7ED085;
+
+                    .Header_settings_icon {
+                        display: none;
+
+                        &--hover {
+                            display: block;
+                        }
+                    }
+                }
+            }
 
             &:after {
                 display: none;
@@ -112,6 +151,7 @@
                 align-items: center;
                 font-size: 16px;
                 font-weight: 600;
+                margin-left: auto;
 
                 .Header_login-button {
                     cursor: pointer;
@@ -135,6 +175,7 @@
                 display: flex;
                 flex-direction: row;
                 align-items: center;
+                margin-left: auto;
 
                 .Header_account-info {
                     display: flex;
