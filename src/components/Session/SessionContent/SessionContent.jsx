@@ -10,7 +10,6 @@ import Multisig from './Multisig/Multisig';
 import SessionAccountMenu from './SessionAccountMenu/SessionAccountMenu';
 import Activity from './Activity/Activity';
 import SepTransactions from './SepTransactions/SepTransactions';
-import Settings from './Settings/Settings';
 import PendingPayments from './PendingPayments/PendingPayments';
 
 export default function SessionContent(props) {
@@ -43,11 +42,6 @@ export default function SessionContent(props) {
                     exact
                     path="/account/transactions/"
                     render={prop => <SepTransactions {...prop} d={d} />}
-                />
-                <Route
-                    exact
-                    path="/account/settings/"
-                    render={prop => <Settings {...prop} d={d} />}
                 />
                 <Redirect from="/lobstr/" to="/account/" />
                 <Redirect from="/ledger/" to="/account/" />

@@ -1,40 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Link, withRouter } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import createStellarIdenticon from 'stellar-identicon-js';
 import images from '../../images';
 import Driver from '../../lib/driver/Driver';
 import AppPopover from '../Common/AppPopover/AppPopover';
 import { SESSION_STATE } from '../../lib/constants/sessionConstants';
+import PreferredHorizon from './PreferredHorizon/PreferredHorizon';
 
-class Header extends React.Component {
-    constructor(props) {
-        super(props);
+const Header = ({ d }) => {
+    const location = useLocation();
+    const [currentPath, setCurrentPath] = useState(window.location.pathname);
+    const [showPopup, setShowPopup] = useState('');
+    const [isHovered, setIsHovered] = useState(false);
 
-        this.state = {
-            currentPath: window.location.pathname,
-            showPopup: '',
-        };
-        this.unlisten = this.props.d.session.event.sub(() => {
-            this.forceUpdate();
+    const forceUpdate = () => {
+        setCurrentPath(window.location.pathname + Math.random()); // Dummy trigger
+    };
+
+    useEffect(() => {
+        const unlisten = d.session.event.sub(() => {
+            forceUpdate();
         });
-    }
+        return () => unlisten();
+    }, [d]);
 
-    componentDidUpdate(prevProps) {
-        const currentPath = this.props.location.pathname;
+    useEffect(() => {
+        setCurrentPath(location.pathname);
+    }, [location]);
 
-        if (currentPath !== prevProps.location.pathname) {
-            this.setState({ currentPath });
-        }
-    }
+    const handleCopy = (popupShowType, text) => {
+        window.navigator.clipboard.writeText(text);
+        setShowPopup(popupShowType);
+        setTimeout(() => setShowPopup(''), 1000);
+    };
 
-    componentWillUnmount() {
-        this.unlisten();
-    }
-
-    getBuyCryptoLobsterLink() {
+    const getBuyCryptoLobsterLink = () => {
         const buyCryptoUrl = '/buy-crypto';
-        const isTheSameTab = this.state.currentPath.includes(buyCryptoUrl);
+        const isTheSameTab = currentPath.includes(buyCryptoUrl);
         const currentTabClass = isTheSameTab ? 'is-current' : '';
 
         return (
@@ -43,52 +46,34 @@ class Header extends React.Component {
                 <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
                 <img src={images.dropdown} alt="" />
                 <div className="buy_crypto-links">
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=xlm_stellar">
-                        Buy Stellar Lumens
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=usdc_stellar">
-                        Buy USDC Coin (Stellar)
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=btc">
-                        Buy Bitcoin
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=eth">
-                        Buy Ethereum
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=ltc_litecoin">
-                        Buy Litecoin
-                    </Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto">
-                        Buy other crypto
-                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=xlm_stellar">Buy Stellar Lumens</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=usdc_stellar">Buy USDC Coin (Stellar)</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=btc">Buy Bitcoin</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=eth">Buy Ethereum</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=ltc_litecoin">Buy Litecoin</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto">Buy other crypto</Link>
                 </div>
             </div>
         );
-    }
+    };
 
-    getNetworkBar() {
-        const { isDefault, currentServerUrl, networkPassphrase } = this.props.d.Server;
-
+    const getNetworkBar = () => {
+        const { isDefault, currentServerUrl, networkPassphrase } = d.Server;
         return !isDefault ? (
             <div className="so-back Header_network">
                 <div className="so-chunk">
                     <div className="Network_bar">
-                        <span>
-                            Horizon url: <strong>{currentServerUrl}</strong>
-                        </span>
-                        <span>
-                            Network passphrase: <strong>{networkPassphrase}</strong>
-                        </span>
+                        <span>Horizon url: <strong>{currentServerUrl}</strong></span>
+                        <span>Network passphrase: <strong>{networkPassphrase}</strong></span>
                     </div>
                 </div>
             </div>
         ) : null;
-    }
+    };
 
-    getAccountBlock() {
-        const { state, account, userFederation, unfundedAccountId } = this.props.d.session;
-        const hasMetadata = Boolean(this.props.d.walletConnectService.appMeta);
-        const { showPopup } = this.state;
+    const getAccountBlock = () => {
+        const { state, account, userFederation, unfundedAccountId } = d.session;
+        const hasMetadata = Boolean(d.walletConnectService.appMeta);
 
         if (state === SESSION_STATE.OUT) {
             return (
@@ -104,25 +89,27 @@ class Header extends React.Component {
                 </div>
             );
         }
+
         if (state === SESSION_STATE.LOADING) {
             return null;
         }
+
         const fullFederation = `${userFederation}*stellarterm.com`;
         const accountId = (account && account.account_id) || unfundedAccountId;
-        const viewPublicKey = `${accountId.substr(0, 5)}...${accountId.substr(-5, 5)}`;
+        const viewPublicKey = `${accountId.substr(0, 5)}...${accountId.substr(-5)}`;
         const canvas = createStellarIdenticon(accountId);
         const renderedIcon = canvas.toDataURL();
 
         return (
             <div className="Header_account">
                 <div className="Header_account-info CopyButton">
-                    <span className="federation" onClick={() => this.handleCopy('federationPopup', fullFederation)}>
+                    <span className="federation" onClick={() => handleCopy('federationPopup', fullFederation)}>
                         {userFederation}
                     </span>
                     <span
                         className="public-key"
                         onClick={() =>
-                            this.handleCopy(!userFederation ? 'federationPopup' : 'publicKeyPopup', accountId)
+                            handleCopy(!userFederation ? 'federationPopup' : 'publicKeyPopup', accountId)
                         }
                     >
                         {viewPublicKey}
@@ -136,7 +123,7 @@ class Header extends React.Component {
                     <AppPopover
                         hoverArea={
                             <div className="Header_app-icon">
-                                <img src={this.props.d.walletConnectService.appMeta.icons[0]} alt="" />
+                                <img src={d.walletConnectService.appMeta.icons[0]} alt="" />
                             </div>
                         }
                         content={<span>Account connected with WalletConnect</span>}
@@ -144,29 +131,19 @@ class Header extends React.Component {
                 )}
             </div>
         );
-    }
+    };
 
-    handleCopy(popupShowType, text) {
-        window.navigator.clipboard.writeText(text);
-        this.setState({ showPopup: popupShowType });
-        setTimeout(() => this.setState({ showPopup: '' }), 1000);
-    }
-
-    checkAccountTab(url) {
-        const { currentPath } = this.state;
-        return (
-            url === '/account/' &&
+    const checkAccountTab = url => (
+        url === '/account/' &&
             (currentPath.includes('ledger') ||
                 currentPath.includes('signup') ||
                 currentPath.includes('trezor') ||
                 currentPath.includes('freighter'))
-        );
-    }
+    );
 
-    createHeaderTab(url, text) {
-        const { currentPath } = this.state;
+    const createHeaderTab = (url, text) => {
         const isTheSameTab = currentPath.includes(url);
-        const isAccountTab = this.checkAccountTab(url);
+        const isAccountTab = checkAccountTab(url);
         const currentTabClass = isTheSameTab || isAccountTab ? 'is-current' : '';
 
         return (
@@ -174,38 +151,47 @@ class Header extends React.Component {
                 <span>{text}</span>
             </Link>
         );
-    }
+    };
 
-    render() {
-        const accountBlock = this.getAccountBlock();
-        return (
-            <div className="Header_main" id="stellarterm_header">
-                {this.getNetworkBar()}
+    return (
+        <div className="Header_main" id="stellarterm_header">
+            {getNetworkBar()}
 
-                <div className="so-back Header_background">
-                    <div className="so-chunk Header">
-                        <nav className="Header_nav">
-                            <Link className="Nav_logo" to={'/'}>
-                                StellarTerm
-                            </Link>
-                            {this.createHeaderTab('/swap/', 'Swap')}
-                            {this.createHeaderTab('/markets/', 'Markets')}
-                            {this.createHeaderTab('/exchange/', 'Exchange')}
-                            {this.getBuyCryptoLobsterLink()}
-                            {this.createHeaderTab('/account/', 'Account')}
-                        </nav>
+            <div className="so-back Header_background">
+                <div className="so-chunk Header">
+                    <nav className="Header_nav">
+                        <Link className="Nav_logo" to={'/'}>
+                            StellarTerm
+                        </Link>
+                        {createHeaderTab('/swap/', 'Swap')}
+                        {createHeaderTab('/markets/', 'Markets')}
+                        {createHeaderTab('/exchange/', 'Exchange')}
+                        {getBuyCryptoLobsterLink()}
+                        {createHeaderTab('/account/', 'Account')}
+                    </nav>
 
-                        {accountBlock}
+                    {getAccountBlock()}
+
+                    <div
+                        className="Header_settings"
+                        onMouseEnter={() => setIsHovered(true)}
+                        onMouseLeave={() => setIsHovered(false)}
+                    >
+                        <img src={images['icon-settings']} alt="settings" className="Header_settings_icon" />
+                        <img src={images['icon-settings-white']} alt="settings" className="Header_settings_icon--hover" />
+
+                        {isHovered && <div className="Header_settings_menu">
+                            <PreferredHorizon d={d} />
+                        </div>}
                     </div>
                 </div>
             </div>
-        );
-    }
-}
+        </div>
+    );
+};
 
 Header.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
-    location: PropTypes.objectOf(PropTypes.any),
 };
 
-export default withRouter(props => <Header {...props} />);
+export default Header;

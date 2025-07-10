@@ -55,7 +55,6 @@ export default class SessionAccountMenu extends React.Component {
                                     'Pending payments',
                                     pendingClaimableBalancesCount)
                                 }
-                                {this.constructor.createMenuTab('/account/settings/', 'Settings')}
                             </nav>
                         }
                         <nav className="subNav__nav">
