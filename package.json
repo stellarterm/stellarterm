@@ -15,8 +15,8 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
-    "@ledgerhq/hw-app-str": "7.0.0",
-    "@ledgerhq/hw-transport-webusb": "6.29.0",
+    "@ledgerhq/hw-app-str": "7.2.4",
+    "@ledgerhq/hw-transport-webusb": "6.29.8",
     "@lobstrco/signer-extension-api": "^1.0.0-beta.0",
     "@stellar-broker/client": "0.6.13",
     "@stellar/freighter-api": "1.4.0",
