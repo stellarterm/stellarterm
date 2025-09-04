@@ -6,19 +6,25 @@ import InfoBlock from '../../../Common/InfoBlock/InfoBlock';
 import Driver from '../../../../lib/driver/Driver';
 import { SMART_SWAP_VERSION } from '../../../../lib/driver/driverInstances/Swap';
 
-export const SWAP_SLIPPAGE_ALIAS = 'swap_slippage_value';
-export const SWAP_SMART_VERSION = 'swap_smart_version';
+export const SWAP_SLIPPAGE_LS_ALIAS = 'swap_slippage_value';
+export const SWAP_VERSION_LS_ALIAS = 'swap_smart_version';
 
 const DEFAULT_SLIPPAGE = '5';
 
-export const getSlippageValue = () => localStorage.getItem(SWAP_SLIPPAGE_ALIAS) || DEFAULT_SLIPPAGE;
+export const getSlippageValue = () => localStorage.getItem(SWAP_SLIPPAGE_LS_ALIAS) || DEFAULT_SLIPPAGE;
 export const setSlippageValue = slippage => {
-    localStorage.setItem(SWAP_SLIPPAGE_ALIAS, slippage);
+    localStorage.setItem(SWAP_SLIPPAGE_LS_ALIAS, slippage);
 };
 
-export const getSmartSwapVersionValue = () => localStorage.getItem(SWAP_SMART_VERSION) || SMART_SWAP_VERSION.V2;
+export const getSmartSwapVersionValue = () => {
+    const stored = localStorage.getItem(SWAP_VERSION_LS_ALIAS);
+    return stored && stored !== SMART_SWAP_VERSION.V2
+        ? stored
+        : SMART_SWAP_VERSION.V1;
+};
+
 export const setSmartSwapVersionValue = value => {
-    localStorage.setItem(SWAP_SMART_VERSION, value);
+    localStorage.setItem(SWAP_VERSION_LS_ALIAS, value);
 };
 
 const SWAP_PERCENTS = [0.1, 0.5, 1, 5];
@@ -97,12 +103,12 @@ const SwapSettings = ({ submit, d }) => {
                 </div>
 
                 <div className="SwapSettings-switcher">
-                    <div
-                        className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V2 ? 'active' : ''}`}
-                        onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V2)}
-                    >
-                        Stellar Broker
-                    </div>
+                    {/* <div */}
+                    {/*    className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V2 ? 'active' : ''}`} */}
+                    {/*    onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V2)} */}
+                    {/* > */}
+                    {/*    Stellar Broker */}
+                    {/* </div> */}
                     <div
                         className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V1 ? 'active' : ''}`}
                         onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V1)}
