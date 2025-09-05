@@ -18,9 +18,7 @@ export const setSlippageValue = slippage => {
 
 export const getSmartSwapVersionValue = () => {
     const stored = localStorage.getItem(SWAP_VERSION_LS_ALIAS);
-    return stored && stored !== SMART_SWAP_VERSION.V2
-        ? stored
-        : SMART_SWAP_VERSION.V1;
+    return stored || SMART_SWAP_VERSION.V2;
 };
 
 export const setSmartSwapVersionValue = value => {
@@ -103,12 +101,12 @@ const SwapSettings = ({ submit, d }) => {
                 </div>
 
                 <div className="SwapSettings-switcher">
-                    {/* <div */}
-                    {/*    className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V2 ? 'active' : ''}`} */}
-                    {/*    onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V2)} */}
-                    {/* > */}
-                    {/*    Stellar Broker */}
-                    {/* </div> */}
+                    <div
+                        className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V2 ? 'active' : ''}`}
+                        onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V2)}
+                    >
+                        Stellar Broker
+                    </div>
                     <div
                         className={`SwapSettings-switcher-option ${smartSwapVersion === SMART_SWAP_VERSION.V1 ? 'active' : ''}`}
                         onClick={() => setSmartSwapVersion(SMART_SWAP_VERSION.V1)}
