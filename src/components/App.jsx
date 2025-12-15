@@ -19,20 +19,18 @@ import AppLoading from './AppLoading/AppLoading';
 
 import './App.scss';
 
-
 const ExchangePage = lazy(() => import('./Exchange/Exchange'));
 const HomePage = lazy(() => import('./HomePage/HomePage'));
 const DownloadPage = lazy(() => import('./Download/Download'));
 const TermsOfUsePage = lazy(() => import('./TermsOfUse/TermsOfUse'));
 const NotFoundPage = lazy(() => import('./NotFound/NotFound'));
 const SwapPage = lazy(() => import('./Swap/Swap'));
-const OnRampPage = lazy(() => import('./OnRamp/OnRamp'));
+const WidgetPage = lazy(() => import('./DiscoWidget/WidgetIframe'));
 const SessionPage = lazy(() => import('./Session/Session'));
 const MarketsPage = lazy(() => import('./Markets/Markets'));
 const PrivacyPolicyPage = lazy(() => import('./PrivacyPolicy/PrivacyPolicy'));
 const TestNetworkPage = lazy(() => import('./TestNetwork/TestNetwork'));
 const ReloadToTestnetPage = lazy(() => import('./ReloadToTestnet/ReloadToTestnet'));
-
 
 window.React = React;
 const mountNode = document.getElementById('app');
@@ -107,7 +105,8 @@ class TermApp extends React.Component {
                 this.d.toastService.success('Connection restored', 'Internet connection has been restored');
             });
 
-            if (this.props.d.session.state === SESSION_STATE.IN &&
+            if (
+                this.props.d.session.state === SESSION_STATE.IN &&
                 Mediator.hasObsoleteMediators(this.props.d.session.account.accountId())
             ) {
                 this.props.d.modal.handlers.cancel();
@@ -165,7 +164,11 @@ class TermApp extends React.Component {
                                 {isTickerLoaded ? (
                                     <Suspense fallback={<AppLoading text="Loading..." />}>
                                         <Switch>
-                                            <Route exact path="/" render={props => <HomePage {...props} driver={d} />} />
+                                            <Route
+                                                exact
+                                                path="/"
+                                                render={props => <HomePage {...props} driver={d} />}
+                                            />
                                             <Route path="/download/" component={DownloadPage} />
                                             <Route
                                                 path="/testnet/"
@@ -196,7 +199,11 @@ class TermApp extends React.Component {
                                             <Route
                                                 path="/wallet-connect/"
                                                 render={props => (
-                                                    <SessionPage {...props} d={this.props.d} urlParts={'wallet-connect'} />
+                                                    <SessionPage
+                                                        {...props}
+                                                        d={this.props.d}
+                                                        urlParts={'wallet-connect'}
+                                                    />
                                                 )}
                                             />
                                             <Route
@@ -210,9 +217,12 @@ class TermApp extends React.Component {
                                                 render={props => <SessionPage {...props} d={d} urlParts={'signup'} />}
                                             />
                                             <Route path="/markets" render={props => <MarketsPage {...props} d={d} />} />
-                                            <Route path="/exchange" render={props => <ExchangePage {...props} d={d} />} />
+                                            <Route
+                                                path="/exchange"
+                                                render={props => <ExchangePage {...props} d={d} />}
+                                            />
 
-                                            <Route path="/buy-crypto" render={props => <OnRampPage {...props} />} />
+                                            <Route path="/buy-crypto" render={props => <WidgetPage {...props} />} />
                                             <Route path="/swap" render={props => <SwapPage {...props} d={d} />} />
 
                                             <Route component={NotFoundPage} />

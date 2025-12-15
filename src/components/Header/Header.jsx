@@ -46,12 +46,24 @@ const Header = ({ d }) => {
                 <img src={images['icon-visa-mc']} alt="credit-card" className="cards_logo" />
                 <img src={images.dropdown} alt="" />
                 <div className="buy_crypto-links">
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=xlm_stellar">Buy Stellar Lumens</Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=usdc_stellar">Buy USDC Coin (Stellar)</Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=btc">Buy Bitcoin</Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=eth">Buy Ethereum</Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=ltc_litecoin">Buy Litecoin</Link>
-                    <Link className="buy_crypto-link" to="/buy-crypto">Buy other crypto</Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=xlm&network=stellar">
+                        Buy Stellar Lumens
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=usdc&network=stellar">
+                        Buy USDC Coin (Stellar)
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=btc&network=bitcoin">
+                        Buy Bitcoin
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=eth&network=ethereum">
+                        Buy Ethereum
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto?crypto=ltc&network=litecoin">
+                        Buy Litecoin
+                    </Link>
+                    <Link className="buy_crypto-link" to="/buy-crypto">
+                        Buy other crypto
+                    </Link>
                 </div>
             </div>
         );
@@ -63,8 +75,12 @@ const Header = ({ d }) => {
             <div className="so-back Header_network">
                 <div className="so-chunk">
                     <div className="Network_bar">
-                        <span>Horizon url: <strong>{currentServerUrl}</strong></span>
-                        <span>Network passphrase: <strong>{networkPassphrase}</strong></span>
+                        <span>
+                            Horizon url: <strong>{currentServerUrl}</strong>
+                        </span>
+                        <span>
+                            Network passphrase: <strong>{networkPassphrase}</strong>
+                        </span>
                     </div>
                 </div>
             </div>
@@ -108,9 +124,7 @@ const Header = ({ d }) => {
                     </span>
                     <span
                         className="public-key"
-                        onClick={() =>
-                            handleCopy(!userFederation ? 'federationPopup' : 'publicKeyPopup', accountId)
-                        }
+                        onClick={() => handleCopy(!userFederation ? 'federationPopup' : 'publicKeyPopup', accountId)}
                     >
                         {viewPublicKey}
                     </span>
@@ -133,13 +147,12 @@ const Header = ({ d }) => {
         );
     };
 
-    const checkAccountTab = url => (
+    const checkAccountTab = url =>
         url === '/account/' &&
-            (currentPath.includes('ledger') ||
-                currentPath.includes('signup') ||
-                currentPath.includes('trezor') ||
-                currentPath.includes('freighter'))
-    );
+        (currentPath.includes('ledger') ||
+            currentPath.includes('signup') ||
+            currentPath.includes('trezor') ||
+            currentPath.includes('freighter'));
 
     const createHeaderTab = (url, text) => {
         const isTheSameTab = currentPath.includes(url);
@@ -178,11 +191,17 @@ const Header = ({ d }) => {
                         onMouseLeave={() => setIsHovered(false)}
                     >
                         <img src={images['icon-settings']} alt="settings" className="Header_settings_icon" />
-                        <img src={images['icon-settings-white']} alt="settings" className="Header_settings_icon--hover" />
+                        <img
+                            src={images['icon-settings-white']}
+                            alt="settings"
+                            className="Header_settings_icon--hover"
+                        />
 
-                        {isHovered && <div className="Header_settings_menu">
-                            <PreferredHorizon d={d} />
-                        </div>}
+                        {isHovered && (
+                            <div className="Header_settings_menu">
+                                <PreferredHorizon d={d} />
+                            </div>
+                        )}
                     </div>
                 </div>
             </div>
