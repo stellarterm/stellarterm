@@ -3,7 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { getUrlWithParams } from '../../lib/api/endpoints';
 import { widgetUrl, widgetStaticParams } from './constants';
 
-const getWidgetIframeLink = (cryptoLetterId, networkLetterId) => {
+const getWidgetIframeLink = (cryptoLetterId, networkLetterId, stellarPubKey) => {
     const widgetParams = { ...widgetStaticParams };
 
     if (cryptoLetterId) {
@@ -11,10 +11,16 @@ const getWidgetIframeLink = (cryptoLetterId, networkLetterId) => {
         widgetParams.defaultNetwork = networkLetterId;
     }
 
+    if (stellarPubKey && networkLetterId === 'stellar') {
+        widgetParams.walletAddress = stellarPubKey;
+    }
+
     return getUrlWithParams(widgetUrl, widgetParams, true);
 };
 
-const DiscoWidget = () => {
+const DiscoWidget = props => {
+    const stellarPubKey = props.d?.session?.account?.accountId() || props.d?.session?.unfundedAccountId;
+
     const location = useLocation();
     const urlParams = new URLSearchParams(location.search);
     const urlCrypto = urlParams.get('crypto');
@@ -24,7 +30,7 @@ const DiscoWidget = () => {
         <div className="Widget_container">
             <iframe
                 className="Widget_Iframe"
-                src={getWidgetIframeLink(urlCrypto, urlNetwork)}
+                src={getWidgetIframeLink(urlCrypto, urlNetwork, stellarPubKey)}
                 title="Coindisco Widget"
                 height="700px"
                 width="430px"

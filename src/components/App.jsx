@@ -222,7 +222,10 @@ class TermApp extends React.Component {
                                                 render={props => <ExchangePage {...props} d={d} />}
                                             />
 
-                                            <Route path="/buy-crypto" render={props => <WidgetPage {...props} />} />
+                                            <Route
+                                                path="/buy-crypto"
+                                                render={props => <WidgetPage {...props} d={d} />}
+                                            />
                                             <Route path="/swap" render={props => <SwapPage {...props} d={d} />} />
 
                                             <Route component={NotFoundPage} />
