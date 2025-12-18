@@ -11,8 +11,8 @@ const getWidgetIframeLink = (cryptoLetterId, networkLetterId, stellarPubKey) => 
         widgetParams.defaultNetwork = networkLetterId;
     }
 
-    if (stellarPubKey && networkLetterId === 'stellar') {
-        widgetParams.walletAddress = stellarPubKey;
+    if (stellarPubKey) {
+        widgetParams.wallets = `stellar:${stellarPubKey}`;
     }
 
     return getUrlWithParams(widgetUrl, widgetParams, true);
