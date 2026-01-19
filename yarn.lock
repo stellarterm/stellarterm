@@ -1906,10 +1906,10 @@
   resolved "https://registry.yarnpkg.com/@stellar/js-xdr/-/js-xdr-3.1.2.tgz#db7611135cf21e989602fd72f513c3bed621bc74"
   integrity sha512-VVolPL5goVEIsvuGqDc5uiKxV03lzfWdvYg1KikvwheDmTBO68CKDji3bAZ/kppZrx5iTA8z3Ld5yuytcvhvOQ==
 
-"@stellar/stellar-base@^14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@stellar/stellar-base/-/stellar-base-14.0.0.tgz#ec57a67f97da8b62c343453acac1c1a0886ae1aa"
-  integrity sha512-CM84WNbj1GoB4FSWof4In60I6+m5ja0jbUFGKFmpYxabbgiU3Nmf29k9ZM9rkFwdyApgG2kFrB5WEwwoOHSmVA==
+"@stellar/stellar-base@^14.0.4":
+  version "14.0.4"
+  resolved "https://registry.yarnpkg.com/@stellar/stellar-base/-/stellar-base-14.0.4.tgz#530511679588e8440277ded071e3a46a387c9fff"
+  integrity sha512-UbNW6zbdOBXJwLAV2mMak0bIC9nw3IZVlQXkv2w2dk1jgCbJjy3oRVC943zeGE5JAm0Z9PHxrIjmkpGhayY7kw==
   dependencies:
     "@noble/curves" "^1.9.6"
     "@stellar/js-xdr" "^3.1.2"
@@ -1918,13 +1918,13 @@
     buffer "^6.0.3"
     sha.js "^2.4.12"
 
-"@stellar/stellar-sdk@14.0.0":
-  version "14.0.0"
-  resolved "https://registry.yarnpkg.com/@stellar/stellar-sdk/-/stellar-sdk-14.0.0.tgz#f4d7a4141da3afb3a8b15ea2a7a43d529bb2773e"
-  integrity sha512-nZUxsxdCCF+YygS4ViUKjNUkCXY9Ly+En3Wsrd9jc5pdV9b+lWXiyv5AM5WLGLVB+qQrOeQWIBrQQuiYLsxTIQ==
+"@stellar/stellar-sdk@14.4.3":
+  version "14.4.3"
+  resolved "https://registry.yarnpkg.com/@stellar/stellar-sdk/-/stellar-sdk-14.4.3.tgz#9907e9ecc94d813e75357f70c70d1d8330c0fb6d"
+  integrity sha512-QfaScSNd4Ku0GGfaZjR8679+M5gLHG+09OLLqV3Bv1VaDKXjHmhf8ikalz2jlx3oFnmlEpEgnqXIdf4kdD2x/w==
   dependencies:
-    "@stellar/stellar-base" "^14.0.0"
-    axios "^1.8.4"
+    "@stellar/stellar-base" "^14.0.4"
+    axios "^1.13.2"
     bignumber.js "^9.3.1"
     eventsource "^2.0.2"
     feaxios "^0.0.23"
@@ -3062,10 +3062,10 @@ axios@0.25.0:
   dependencies:
     follow-redirects "^1.14.7"
 
-axios@^1.8.4:
-  version "1.11.0"
-  resolved "https://registry.yarnpkg.com/axios/-/axios-1.11.0.tgz#c2ec219e35e414c025b2095e8b8280278478fdb6"
-  integrity sha512-1Lx3WLFQWm3ooKDYZD1eXmoGO9fxYQjrycfHFC8P0sCfQVXyROp0p9PFWBehewBOdCwHc+f/b8I0fMto5eSfwA==
+axios@^1.13.2:
+  version "1.13.2"
+  resolved "https://registry.yarnpkg.com/axios/-/axios-1.13.2.tgz#9ada120b7b5ab24509553ec3e40123521117f687"
+  integrity sha512-VPk9ebNqPcy5lRGuSlKx752IlDatOjT9paPlm8A7yOuW2Fbvp4X3JznJtT4f0GzGLLiWE9W8onz51SqLYwzGaA==
   dependencies:
     follow-redirects "^1.15.6"
     form-data "^4.0.4"
