@@ -14,7 +14,7 @@ const Stellarify = {
     asset(input) {
     // Horizon json asset
         if (input.asset_type === 'native') {
-            return new StellarSdk.Asset.native();
+            return StellarSdk.Asset.native();
         }
         return new StellarSdk.Asset(input.asset_code, input.asset_issuer);
     },

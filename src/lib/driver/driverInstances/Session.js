@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import * as StellarSdk from '@stellar/stellar-sdk';
-import { TransactionBuilder } from '@stellar/stellar-base';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from '@trezor/connect-web';
@@ -362,7 +361,7 @@ export default function Send(driver) {
                 // use signTx in case when needed to sign challenge tx (manage data operation)
                 if (onlySign || tx.operations.find(({ type }) => type === 'manageData')) {
                     const signedXDR = await driver.walletConnectService.signTx(tx);
-                    const signedTx = TransactionBuilder.fromXDR(signedXDR, StellarSdk.Networks.PUBLIC);
+                    const signedTx = StellarSdk.TransactionBuilder.fromXDR(signedXDR, StellarSdk.Networks.PUBLIC);
 
                     return {
                         status: TX_STATUS.FINISH,

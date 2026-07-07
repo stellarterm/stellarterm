@@ -138,8 +138,8 @@ export default class Send {
 
     calculateAvailableAssets() {
         if (!Validate.publicKey(this.accountId).ready && !Validate.muxedKey(this.accountId).ready) {
-            this.availableAssets[Stellarify.assetToSlug(new StellarSdk.Asset.native())] = {
-                asset: new StellarSdk.Asset.native(),
+            this.availableAssets[Stellarify.assetToSlug(StellarSdk.Asset.native())] = {
+                asset: StellarSdk.Asset.native(),
                 sendable: true,
             };
             this.assetToSend = this.availableAssets['XLM-native'];
