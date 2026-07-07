@@ -15,13 +15,16 @@ module.exports = {
     },
     resolve: {
         extensions: ['.js', '.jsx'],
+        alias: {
+            'process/browser': require.resolve('process/browser.js'),
+        },
         fallback: {
             http: require.resolve('stream-http'),
             https: require.resolve('https-browserify'),
             util: false,
             url: false,
             buffer: require.resolve('buffer'),
-            process: require.resolve('process/browser'),
+            process: require.resolve('process/browser.js'),
         },
     },
     module: {
@@ -69,7 +72,7 @@ module.exports = {
             Buffer: ['buffer', 'Buffer'],
         }),
         new webpack.ProvidePlugin({
-            process: 'process/browser',
+            process: 'process/browser.js',
         }),
         new CreateBuildInfo(),
         new CreateImages(),
