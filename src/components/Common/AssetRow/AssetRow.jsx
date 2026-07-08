@@ -19,7 +19,7 @@ export default class AssetRow extends React.Component {
 
     getRowActionButton(discoveredAsset) {
         if (this.props.tradeLink) {
-            const native = new StellarSdk.Asset.native();
+            const native = StellarSdk.Asset.native();
             return (
                 <Link to={`/${Stellarify.pairToExchangeUrl(this.props.asset, native)}`} className="tradeLink">
                     {discoveredAsset}

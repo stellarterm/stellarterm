@@ -20,7 +20,7 @@
     "@lobstrco/signer-extension-api": "^1.0.0-beta.0",
     "@stellar-broker/client": "0.6.13",
     "@stellar/freighter-api": "1.4.0",
-    "@stellar/stellar-sdk": "15.1.0",
+    "@stellar/stellar-sdk": "16.0.1",
     "@stellarguard/stellar-uri": "^1.1.1",
     "@trezor/connect-plugin-stellar": "9.0.6",
     "@trezor/connect-web": "9.5.4",
@@ -86,7 +86,7 @@
     "webpack-merge": "^6.0.1"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "jest": {
     "transform": {
