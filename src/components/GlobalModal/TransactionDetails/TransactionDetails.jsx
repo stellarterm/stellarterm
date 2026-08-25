@@ -25,7 +25,10 @@ export default class TransactionDetails extends React.Component {
                     name: attr,
                 };
 
-                if (value === undefined) {
+                // stellar-sdk >= 16 leaves unset optional operation attributes as `null`
+                // (e.g. clearFlags/setFlags on setOptions, value on a manageData delete),
+                // where earlier versions left them `undefined`.
+                if (value === undefined || value === null) {
                     return null;
                 }
 
