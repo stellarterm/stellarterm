@@ -14,6 +14,7 @@ function loadSource(relativePath, mocks = {}) {
     const { code } = transformFileSync(filename, {
         babelrc: false,
         configFile: false,
+        presets: [require.resolve('@babel/preset-react')],
         plugins: [require.resolve('@babel/plugin-transform-modules-commonjs')],
     });
     const module = { exports: {} };
@@ -268,6 +269,68 @@ test('LOBSTR signed XDR and local signatures round-trip with the new SDK', async
     assertSigned(local);
     const payload = sdk.hash(new Uint8Array([1, 2, 3]));
     assert(signer.verify(payload, account.signAuthWithSecret(payload)));
+});
+
+test('LOBSTR login renders rejected access safely and allows retry on the page and in the modal', async () => {
+    const React = require('react');
+    const { renderToStaticMarkup } = require('react-dom/server');
+    const findForm = node => {
+        if (!React.isValidElement(node)) return undefined;
+        if (node.type === 'form') return node;
+        return React.Children.toArray(node.props.children).map(findForm).find(Boolean);
+    };
+    const fallback = 'Unable to connect to LOBSTR. Please try again.';
+    const cases = [
+        [new Error('User declined access'), 'User declined access'],
+        ['User declined access', 'User declined access'],
+        [{ message: 'Associated account not found' }, 'Associated account not found'],
+        [{ message: { code: 'unexpected' } }, fallback],
+        [null, fallback],
+    ];
+
+    for (const modal of [false, true]) {
+        for (const [error, expected] of cases) {
+            // Model the installed extension and hook state; use React's real renderer
+            // so passing an Error or another object into JSX fails this regression check.
+            const state = ['', true];
+            let cursor = 0;
+            let attempts = 0;
+            const { default: LobstrBody } = loadSource(
+                'src/components/Session/LoginPage/LobstrExtensionBody/LobstrExtensionBody.jsx',
+                {
+                    react: { ...React, useEffect() {}, useState() {
+                        const index = cursor++;
+                        return [state[index], value => { state[index] = value; }];
+                    } },
+                    '@lobstrco/signer-extension-api': {},
+                    '../../../../images': {},
+                    '../Common/HiddenDescription': () => null,
+                    '../SecretPhrase/SecretPhrase': () => null,
+                    '../../../../lib/driver/Driver': class Driver {},
+                    '../Common/AcceptTerms': () => React.createElement('button', null, 'Log in with LOBSTR'),
+                    '../../../../lib/helpers/BrowserSupport': { isChrome: () => true },
+                    '../../../Common/InfoBlock/InfoBlock': () => null,
+                },
+            );
+            const d = { session: { handlers: { logInWithLobstrExtension: async () => {
+                if (++attempts === 1) throw error;
+            } } } };
+            const render = () => {
+                cursor = 0;
+                return LobstrBody({ d, modal, history: { goBack() {} } });
+            };
+            findForm(render()).props.onSubmit({ preventDefault() {} });
+            await new Promise(resolve => setImmediate(resolve));
+            const html = renderToStaticMarkup(render());
+            assert(html.includes(expected));
+            assert(html.includes('Log in with LOBSTR'));
+            findForm(render()).props.onSubmit({ preventDefault() {} });
+            assert(!renderToStaticMarkup(render()).includes('ErrorTransactionBlock'));
+            await new Promise(resolve => setImmediate(resolve));
+            assert.equal(attempts, 2);
+            assert(!renderToStaticMarkup(render()).includes('ErrorTransactionBlock'));
+        }
+    }
 });
 
 test('WalletConnect restores a Stellar session and requests a verifiable signature', async () => {
