@@ -22,7 +22,11 @@ const LobstrExtensionBody = ({ history, d, modal }) => {
         event.preventDefault();
         setLoginError('');
         d.session.handlers.logInWithLobstrExtension()
-            .catch(e => setLoginError(e));
+            .catch(error => {
+                const message = typeof error === 'string' ? error : error && error.message;
+                setLoginError(typeof message === 'string' && message ?
+                    message : 'Unable to connect to LOBSTR. Please try again.');
+            });
     };
 
     const renderLoginError = () => {

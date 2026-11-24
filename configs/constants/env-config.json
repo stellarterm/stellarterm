@@ -13,7 +13,11 @@
         "DEFAULT_HORIZON": "https://horizon.stellar.org",
         "SMART_ROUTING_API": "https://staging--smart-routing.netlify.app/.netlify/functions/v1/",
         "SWAP_LOGS_API": "https://ultrastellar.com/api/v1/",
-        "WIDGET_URL": "https://widget.coindisco.com/?publicKey=pk_prod_01KCHBAKQBB84ZFT2MRY2EKNHZ"
+        "WIDGET_URL": "https://widget.coindisco.com/?publicKey=pk_prod_01KCHBAKQBB84ZFT2MRY2EKNHZ",
+        "HOST_SIGN_ORIGINS": [
+            "https://usdc-swap-staging.ultrastellar.com",
+            "https://stellar.usdcswap.com"
+        ]
     },
     "production": {
         "ANCHORS_URL": "https://fed.stellarterm.com/issuer_orgs/",
@@ -29,7 +33,8 @@
         "DEFAULT_HORIZON": "https://stellarterm.com/horizon",
         "SMART_ROUTING_API": "https://routing.ultrastellar.com/.netlify/functions/v1/",
         "SWAP_LOGS_API": "https://ultrastellar.com/api/v1/",
-        "WIDGET_URL": "https://widget.coindisco.com/?publicKey=pk_prod_01KCHBAKQBB84ZFT2MRY2EKNHZ"
+        "WIDGET_URL": "https://widget.coindisco.com/?publicKey=pk_prod_01KCHBAKQBB84ZFT2MRY2EKNHZ",
+        "HOST_SIGN_ORIGINS": ["https://stellar.usdcswap.com"]
     },
     "local": {
         "ANCHORS_URL": "https://fed-staging.stellarterm.com/issuer_orgs/",
@@ -45,6 +50,10 @@
         "DEFAULT_HORIZON": "https://horizon.stellar.org",
         "SMART_ROUTING_API": "https://routing.ultrastellar.com/.netlify/functions/v1/",
         "SWAP_LOGS_API": "https://ultrastellar.com/api/v1/",
-        "WIDGET_URL": "https://widget.coindisco.com/?publicKey=pk_prod_01KCHBAKQBB84ZFT2MRY2EKNHZ"
+        "WIDGET_URL": "https://widget.coindisco.com/?publicKey=pk_prod_01KCHBAKQBB84ZFT2MRY2EKNHZ",
+        "HOST_SIGN_ORIGINS": [
+            "http://localhost:8000",
+            "https://usdc-swap-staging.ultrastellar.com"
+        ]
     }
 }

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../../lib/driver/Driver';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
+import Stellarify from '../../../../lib/helpers/Stellarify';
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
@@ -49,9 +50,9 @@ export default class Sep7PayModal extends React.Component {
         const { xdr } = txDetails;
         const { d } = this.props;
         const tx = new StellarSdk.Transaction(xdr, d.Server.networkPassphrase);
-        const { type, value } = StellarSdk.Memo.fromXDRObject(tx._memo);
+        const { type } = tx.memo;
         const memoType = type && `MEMO_${type.toUpperCase()}`;
-        const memo = value && value.toString();
+        const memo = Stellarify.memoToString(tx.memo);
         const [operation] = tx.operations;
         return Object.assign({}, operation, { memoType, memo });
     }

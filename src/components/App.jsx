@@ -190,10 +190,11 @@ class TermApp extends React.Component {
                                                     <SessionPage {...props} d={this.props.d} urlParts={'trezor'} />
                                                 )}
                                             />
+                                            <Redirect from="/freighter/" to="/varial/" />
                                             <Route
-                                                path="/freighter/"
+                                                path="/varial/"
                                                 render={props => (
-                                                    <SessionPage {...props} d={this.props.d} urlParts={'freighter'} />
+                                                    <SessionPage {...props} d={this.props.d} urlParts={'varial'} />
                                                 )}
                                             />
                                             <Route

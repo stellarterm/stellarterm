@@ -14,7 +14,7 @@ import useIsMounted from '../../../../lib/hooks/useIsMounted';
 const SignChallengeWithVault = ({ d, resolver, tx }) => {
     const { multisigProvider, requiredSigners } = d.multisig;
 
-    const hash = tx.hash().toString('hex');
+    const hash = StellarSdk.xdr.encodeBytes(tx.hash(), 'hex');
 
     const [hasAllSignatures, setHasAllSignatures] = useState(false);
     const [vaultRequestPending, setVaultRequestPending] = useState(false);
