@@ -3,13 +3,14 @@ import * as StellarSdk from '@stellar/stellar-sdk';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import TrezorConnect from '@trezor/connect-web';
-import { getPublicKey } from '@stellar/freighter-api';
+import { requestAccess } from '@stellar/varial-sdk';
 import { getPublicKey as getPublicKeyFromLobstr } from '@lobstrco/signer-extension-api';
 import FastAverageColor from 'fast-average-color';
 import isElectron from 'is-electron';
 import directory from 'stellarterm-directory';
 import BigNumber from 'bignumber.js';
 import MagicSpoon from '../../helpers/MagicSpoon';
+import initializeTrezor from '../../helpers/Trezor';
 import Event from '../../helpers/Event';
 import * as request from '../../api/request';
 import { ENDPOINTS, getEndpoint } from '../../api/endpoints';
@@ -68,7 +69,7 @@ export default function Send(driver) {
 
         this.unfundedAccountId = '';
         this.account = null; // MagicSpoon.Account instance
-        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'freighter', 'wallet-connect' - AUTH_TYPE
+        this.authType = ''; // '', 'secret', 'ledger', 'pubkey', 'trezor', 'varial', 'wallet-connect' - AUTH_TYPE
         this.jwtToken = null;
         this.userFederation = '';
 
@@ -203,16 +204,18 @@ export default function Send(driver) {
         loginWithWalletConnect: async () => {
             await driver.walletConnectService.login();
         },
-        logInWithFreighter: async () => {
-            try {
-                const publicKey = await getPublicKey();
-                const keypair = StellarSdk.Keypair.fromPublicKey(publicKey);
-                return this.handlers.logIn(keypair, {
-                    authType: AUTH_TYPE.FREIGHTER,
-                });
-            } catch (e) {
-                throw e;
+        logInWithVarial: async () => {
+            const { address, error } = await requestAccess();
+            if (error) {
+                throw new Error(error.message || 'Unable to connect to Varial.');
             }
+            if (!address) {
+                throw new Error('Varial did not return an account address.');
+            }
+            const keypair = StellarSdk.Keypair.fromPublicKey(address);
+            return this.handlers.logIn(keypair, {
+                authType: AUTH_TYPE.VARIAL,
+            });
         },
         logInWithLobstrExtension: async () => {
             try {
@@ -225,17 +228,18 @@ export default function Send(driver) {
                 throw e;
             }
         },
-        logInWithTrezor: async bip32Path =>
-            TrezorConnect.stellarGetAddress({ path: bip32Path, showOnTrezor: false }).then(result => {
-                if (result.success) {
-                    const keypair = StellarSdk.Keypair.fromPublicKey(result.payload.address);
-                    return this.handlers.logIn(keypair, {
-                        authType: AUTH_TYPE.TREZOR,
-                        bip32Path,
-                    });
-                }
-                throw new Error(result.payload.error);
-            }),
+        logInWithTrezor: async bip32Path => {
+            await initializeTrezor();
+            const result = await TrezorConnect.stellarGetAddress({ path: bip32Path, showOnTrezor: false });
+            if (!result.success) {
+                throw new Error(result.error.message);
+            }
+            const keypair = StellarSdk.Keypair.fromPublicKey(result.payload.address);
+            return this.handlers.logIn(keypair, {
+                authType: AUTH_TYPE.TREZOR,
+                bip32Path,
+            });
+        },
         logInWithLedger: async bip32Path => {
             try {
                 const transport = await TransportWebUSB.create();
@@ -352,7 +356,10 @@ export default function Send(driver) {
         sign: async (tx, onlySign) => {
             if (this.authType === AUTH_TYPE.SECRET) {
                 this.account.signWithSecret(tx);
-                console.log('Signed tx\nhash:', tx.hash().toString('hex'), `\n\n${tx.toEnvelope().toXDR('base64')}`);
+                console.log(
+                    'Signed tx\nhash:', StellarSdk.xdr.encodeBytes(tx.hash(), 'hex'),
+                    `\n\n${tx.toXdr()}`,
+                );
                 return {
                     status: TX_STATUS.FINISH,
                     signedTx: tx,
@@ -361,7 +368,7 @@ export default function Send(driver) {
                 // use signTx in case when needed to sign challenge tx (manage data operation)
                 if (onlySign || tx.operations.find(({ type }) => type === 'manageData')) {
                     const signedXDR = await driver.walletConnectService.signTx(tx);
-                    const signedTx = StellarSdk.TransactionBuilder.fromXDR(signedXDR, StellarSdk.Networks.PUBLIC);
+                    const signedTx = StellarSdk.TransactionBuilder.fromXdr(signedXDR, StellarSdk.Networks.PUBLIC);
 
                     return {
                         status: TX_STATUS.FINISH,
@@ -375,8 +382,8 @@ export default function Send(driver) {
                     if (modalResult.status === 'finish') {
                         console.log(
                             'Signed tx with ledger\nhash:',
-                            modalResult.output.hash().toString('hex'),
-                            `\n\n${modalResult.output.toEnvelope().toXDR('base64')}`,
+                            StellarSdk.xdr.encodeBytes(modalResult.output.hash(), 'hex'),
+                            `\n\n${modalResult.output.toEnvelope().toXdr('base64')}`,
                         );
                         if (driver.session.account.signers.length > 1) {
                             driver.modal.handlers.cancel();
@@ -394,8 +401,8 @@ export default function Send(driver) {
                     status: TX_STATUS.FINISH,
                     signedTx,
                 };
-            } else if (this.authType === AUTH_TYPE.FREIGHTER) {
-                const signedTx = await this.account.signWithFreighter(tx);
+            } else if (this.authType === AUTH_TYPE.VARIAL) {
+                const signedTx = await this.account.signWithVarial(tx);
                 return {
                     status: TX_STATUS.FINISH,
                     signedTx,
@@ -412,8 +419,8 @@ export default function Send(driver) {
                     await this.account.sign(tx);
                     console.log(
                         'Signed tx\nhash:',
-                        tx.hash().toString('hex'),
-                        `\n\n${tx.toEnvelope().toXDR('base64')}`,
+                        StellarSdk.xdr.encodeBytes(tx.hash(), 'hex'),
+                        `\n\n${tx.toEnvelope().toXdr('base64')}`,
                     );
                     return {
                         status: TX_STATUS.FINISH,
@@ -455,7 +462,7 @@ export default function Send(driver) {
             const builtTx = tx.build();
 
             if (withLog) {
-                this.handlers.logSwap(builtTx.hash().toString('hex'));
+                this.handlers.logSwap(StellarSdk.xdr.encodeBytes(builtTx.hash(), 'hex'));
             }
 
             return this.handlers.signSubmit(builtTx);
@@ -484,11 +491,11 @@ export default function Send(driver) {
                         return driver.multisig.sendToSigner(tx);
                     }
 
-                    console.log('Submitting tx\nhash:', tx.hash().toString('hex'));
+                    console.log('Submitting tx\nhash:', StellarSdk.xdr.encodeBytes(tx.hash(), 'hex'));
                     const serverResult = driver.Server.submitTransaction(tx, { skipMemoRequiredCheck: true })
                         .then(transactionResult => {
                             this.hasPendingTransaction = false;
-                            console.log('Confirmed tx\nhash:', tx.hash().toString('hex'));
+                            console.log('Confirmed tx\nhash:', StellarSdk.xdr.encodeBytes(tx.hash(), 'hex'));
                             this.account.refresh();
                             if (this.authType === AUTH_TYPE.LEDGER || this.authType === AUTH_TYPE.WALLET_CONNECT) {
                                 driver.modal.handlers.ledgerFinish('closeWithTimeout', 3000);
@@ -500,7 +507,7 @@ export default function Send(driver) {
                             if (this.authType === AUTH_TYPE.LEDGER) {
                                 driver.modal.handlers.ledgerFinish('error');
                             }
-                            console.log('Failed tx\nhash:', tx.hash().toString('hex'));
+                            console.log('Failed tx\nhash:', StellarSdk.xdr.encodeBytes(tx.hash(), 'hex'));
                             throw error;
                         });
                     result = {
@@ -527,7 +534,7 @@ export default function Send(driver) {
                 .then(resChallenge => new StellarSdk.Transaction(resChallenge.transaction, selectedNetwork));
         },
         getToken: (endpointUrl, signedTx) => {
-            const body = JSON.stringify({ transaction: signedTx.toEnvelope().toXDR('base64') });
+            const body = JSON.stringify({ transaction: signedTx.toEnvelope().toXdr('base64') });
 
             return request.post(endpointUrl, { headers: CONTENT_TYPE_HEADER, body })
                 .then(({ token }) => {

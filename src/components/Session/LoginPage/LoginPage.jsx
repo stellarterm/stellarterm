@@ -5,7 +5,7 @@ import SignUpBody from './SignUpBody/SignUpBody';
 import LedgerBody from './LedgerBody/LedgerBody';
 import LoginPageBody from './LoginPageBody/LoginPageBody';
 import TrezorBody from './TrezorBody/TrezorBody';
-import FreighterBody from './FreighterBody/FreighterBody';
+import VarialBody from './VarialBody/VarialBody';
 import WalletConnectBody from './WalletConnectBody/WalletConnectBody';
 import LoginLinks from './Common/LoginLinksBlock/LoginLinks';
 import LobstrExtensionBody from './LobstrExtensionBody/LobstrExtensionBody';
@@ -49,12 +49,12 @@ export default function LoginPage(props) {
                 </div>
             );
             break;
-        case 'freighter':
+        case 'varial':
             pageBody = (
                 <div className="so-back islandBack islandBack--t">
                     <div className="island">
                         <div className="LoginPage">
-                            <FreighterBody {...props} d={props.d} />
+                            <VarialBody {...props} d={props.d} />
                         </div>
                     </div>
                 </div>

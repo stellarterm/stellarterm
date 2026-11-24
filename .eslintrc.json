@@ -42,6 +42,7 @@
         "no-cond-assign": ["error", "always"],
         "prefer-const": 1,
         "import/first": 1,
-        "import/order": 1
+        "import/order": 1,
+        "import/extensions": ["error", "always", { "js": "never", "jsx": "never", "mjs": "never", "cjs": "never" }]
     }
 }

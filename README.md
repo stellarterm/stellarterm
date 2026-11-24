@@ -26,7 +26,7 @@ The project is hosted on GitHub pages in the [stellarterm/stellarterm.github.io]
 
 ## Client development instructions
 ### Prerequisites
-Make sure you have Node.js 20 or higher installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
+Make sure you have Node.js 22.12.0 or higher installed. If not, install it ([Node version manager](https://github.com/creationix/nvm) is recommended).
 
 ```sh
 # Check your node version using this command
@@ -55,6 +55,12 @@ This builds a single index.html file with assets inlined. The single file contai
 ```sh
 npm run production
 ```
+
+### SDK and wallet regression checks
+```sh
+yarn test:sdk
+```
+These checks use synthetic transactions and mocked wallet connections; they do not submit transactions to a network.
 
 ## License
 Products in the StellarTerm ecosystem is open source software and is licensed under the [Apache-2.0 license](https://github.com/stellarterm/stellarterm/blob/master/LICENSE-2.0.txt). Please understand the license carefully before using StellarTerm.

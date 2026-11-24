@@ -14,10 +14,10 @@ const HARDWARE_WALLET_DATA = {
         capitalizedName: 'Trezor',
         logo: 'trezor-mini',
     },
-    freighter: {
-        link: '/freighter/',
-        capitalizedName: 'Freighter',
-        logo: 'freighter-logo',
+    varial: {
+        link: '/varial/',
+        capitalizedName: 'Varial',
+        logo: 'varial-logo',
     },
     walletConnect: {
         link: '/wallet-connect/',
@@ -48,5 +48,5 @@ export default function LoginLink(props) {
     );
 }
 LoginLink.propTypes = {
-    wallet: PropTypes.oneOf(['ledger', 'trezor', 'freighter', 'walletConnect']).isRequired,
+    wallet: PropTypes.oneOf(['ledger', 'trezor', 'varial', 'walletConnect']).isRequired,
 };

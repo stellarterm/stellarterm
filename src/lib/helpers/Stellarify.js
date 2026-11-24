@@ -31,10 +31,19 @@ const Stellarify = {
             case 'MEMO_HASH':
                 return StellarSdk.Memo.hash(content);
             case 'MEMO_RETURN':
-                return StellarSdk.Memo.returnHash(content);
+                return StellarSdk.Memo.return(content);
             default:
                 throw new Error(`Unknown Stellarify memo type. Got: ${type}`);
         }
+    },
+    memoToString({ type, value }) {
+        if (value === null || value === undefined) {
+            return '';
+        }
+        if (value instanceof Uint8Array) {
+            return Buffer.from(value).toString(type === StellarSdk.MemoText ? 'utf8' : 'hex');
+        }
+        return String(value);
     },
     parseAssetSlug(slug) {
     // Takes in a URL part 'XLM-native' or 'USD-stellarterm.com'

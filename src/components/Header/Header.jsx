@@ -152,7 +152,7 @@ const Header = ({ d }) => {
         (currentPath.includes('ledger') ||
             currentPath.includes('signup') ||
             currentPath.includes('trezor') ||
-            currentPath.includes('freighter'));
+            currentPath.includes('varial'));
 
     const createHeaderTab = (url, text) => {
         const isTheSameTab = currentPath.includes(url);

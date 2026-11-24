@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import AssetCardInRow from '../../Common/AssetCard/AssetCardInRow/AssetCardInRow';
 import Printify from '../../../lib/helpers/Printify';
+import Stellarify from '../../../lib/helpers/Stellarify';
 import Driver from '../../../lib/driver/Driver';
 import OperationsMap from './OperationsMap';
 
@@ -146,12 +147,12 @@ export default class TransactionDetails extends React.Component {
     getMemo() {
         const { tx } = this.props;
 
-        return tx.memo._type === 'none' ? (
+        return tx.memo.type === 'none' ? (
             <span className="Content_light">No memo</span>
         ) : (
             <React.Fragment>
-                <p className="Inline_title">{tx.memo._type}</p>
-                <div className="Inline_content">{tx.memo._value}</div>
+                <p className="Inline_title">{tx.memo.type}</p>
+                <div className="Inline_content">{Stellarify.memoToString(tx.memo)}</div>
             </React.Fragment>
         );
     }

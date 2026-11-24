@@ -6,10 +6,10 @@ import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 import AppStellar from '@ledgerhq/hw-app-str';
 import BigNumber from 'bignumber.js';
 import TrezorConnect from '@trezor/connect-web';
-import { signTransaction } from '@stellar/freighter-api';
+import { signTransaction } from '@stellar/varial-sdk';
 import { signTransaction as signWithLobstr } from '@lobstrco/signer-extension-api';
-import TransformTrezorTransaction from '@trezor/connect-plugin-stellar';
 import ErrorHandler from './ErrorHandler';
+import initializeTrezor from './Trezor';
 
 
 // Spoonfed Stellar-SDK: Super easy to use higher level Stellar-Sdk functions
@@ -18,16 +18,6 @@ import ErrorHandler from './ErrorHandler';
 // should ever use the spoon.
 
 const PERIOD_24H = 86400;
-
-const _hexToByteArray = str => {
-    const result = [];
-    let hex = str;
-    while (hex.length >= 2) {
-        result.push(parseInt(hex.substring(0, 2), 16));
-        hex = hex.substring(2, hex.length);
-    }
-    return new Uint8Array(result);
-};
 
 const MagicSpoon = {
     async Account(Server, keypair, opts, onUpdate) {
@@ -40,7 +30,7 @@ const MagicSpoon = {
             console.log('Sending to Ledger to sign');
             return TransportWebUSB.create()
                 .then(transport => new AppStellar(transport))
-                .then(app => app.signTransaction(this.bip32Path, transaction.signatureBase()))
+                .then(app => app.signTransaction(this.bip32Path, Buffer.from(transaction.signatureBase())))
                 .then(result => {
                     const signature = result.signature;
                     const hint = keypair.signatureHint();
@@ -54,38 +44,51 @@ const MagicSpoon = {
                 });
         };
 
-        sdkAccount.signWithTrezor = tx => {
+        sdkAccount.signWithTrezor = async tx => {
             console.log('Sending to Trezor to sign');
-            const params = TransformTrezorTransaction(this.bip32Path, tx);
+            if (![StellarSdk.Networks.PUBLIC, StellarSdk.Networks.TESTNET].includes(tx.networkPassphrase)) {
+                throw new Error('Trezor supports only the Stellar public network and testnet.');
+            }
+            const params = {
+                path: this.bip32Path,
+                xdrBase64: tx.toXdr(),
+                testnet: tx.networkPassphrase === StellarSdk.Networks.TESTNET,
+            };
 
+            await initializeTrezor();
             return TrezorConnect.stellarSignTransaction(params).then(result => {
                 if (result.success) {
-                    const signature = _hexToByteArray(result.payload.signature);
+                    const signature = StellarSdk.xdr.decodeBytes(result.payload.signature, 'hex');
                     const hint = keypair.signatureHint();
                     const decorated = new StellarSdk.xdr.DecoratedSignature({ hint, signature });
                     tx.signatures.push(decorated);
 
                     return tx;
                 }
-                return Promise.reject(result.payload);
+                throw new Error(result.error.message);
             });
         };
 
-        sdkAccount.signWithFreighter = async tx => {
-            console.log('Signing with Freighter extension');
-            try {
-                const result = await signTransaction(tx.toEnvelope().toXDR('base64'));
-                return StellarSdk.TransactionBuilder.fromXDR(result, this.Server.networkPassphrase);
-            } catch (e) {
-                return Promise.reject(e);
+        sdkAccount.signWithVarial = async tx => {
+            console.log('Signing with Varial extension');
+            const { signedTxXdr, error } = await signTransaction(tx.toEnvelope().toXdr('base64'), {
+                networkPassphrase: tx.networkPassphrase,
+                address: keypair.publicKey(),
+            });
+            if (error) {
+                throw new Error(error.message || 'Unable to sign the transaction with Varial.');
             }
+            if (!signedTxXdr) {
+                throw new Error('Varial did not return a signed transaction.');
+            }
+            return StellarSdk.TransactionBuilder.fromXdr(signedTxXdr, tx.networkPassphrase);
         };
 
         sdkAccount.signWithLobstrExtension = async tx => {
             console.log('Signing with LOBSTR | Signer extension');
             try {
-                const result = await signWithLobstr(tx.toEnvelope().toXDR('base64'));
-                return StellarSdk.TransactionBuilder.fromXDR(result, this.Server.networkPassphrase);
+                const result = await signWithLobstr(tx.toEnvelope().toXdr('base64'));
+                return StellarSdk.TransactionBuilder.fromXdr(result, this.Server.networkPassphrase);
             } catch (e) {
                 return Promise.reject(e);
             }

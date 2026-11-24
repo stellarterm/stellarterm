@@ -17,9 +17,8 @@ module.exports = {
         extensions: ['.js', '.jsx'],
         alias: {
             'process/browser': require.resolve('process/browser.js'),
-            // Force a single copy of the SDK: ESM importers (app code, @stellar-broker/client)
-            // and CJS requirers (@trezor/connect-plugin-stellar) would otherwise bundle
-            // both lib/esm and lib/cjs builds, breaking instanceof checks across them
+            // Keep Babel's CJS imports and dependencies' ESM imports on one SDK build
+            // so instanceof checks also work for transactions created by Stellar Broker.
             '@stellar/stellar-sdk$': require.resolve('@stellar/stellar-sdk'),
         },
         fallback: {

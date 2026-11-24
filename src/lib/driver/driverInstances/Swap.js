@@ -402,46 +402,43 @@ export default class Swap {
      * @param isSend boolean, true for send-side swap, false for receive-side swap
      */
     static getSwapAmount(txRes, isSend) {
-        const transactionResult = StellarSdk.xdr.TransactionResult.fromXDR(
+        const transactionResult = StellarSdk.xdr.TransactionResult.fromXdr(
             txRes.result_xdr,
             'base64',
         );
 
         // Filter operations based on whether it's a send or receive swap
         const swapOps = transactionResult
-            .result()
-            .results()
+            .result
+            .results
             .filter(item =>
-                item.value().switch().name === (isSend
-                    ? StellarSdk.xdr.OperationType.pathPaymentStrictSend().name
-                    : StellarSdk.xdr.OperationType.pathPaymentStrictReceive().name),
+                item.value.type === (isSend ? 'pathPaymentStrictSend' : 'pathPaymentStrictReceive'),
             );
 
         // Extract the asset string (destination for send, source for receive)
         const swapOp = swapOps[0];
         const assetString = Swap.getResultXdrAssetString(
             isSend
-                ? swapOp.tr().pathPaymentStrictSendResult().success().last()
-                    .asset()
-                : swapOp.tr().pathPaymentStrictReceiveResult().success().offers()[0].value().assetBought(),
+                ? swapOp.tr.pathPaymentStrictSendResult.success.last.asset
+                : swapOp.tr.pathPaymentStrictReceiveResult.success.offers[0].value.assetBought,
         );
 
         let totalAmount = swapOps.reduce((acc, op) => acc.plus(
             new BigNumber(
-                op.tr()[isSend ? 'pathPaymentStrictSendResult' : 'pathPaymentStrictReceiveResult']()
-                    .success()
-                    .offers()
+                op.tr[isSend ? 'pathPaymentStrictSendResult' : 'pathPaymentStrictReceiveResult']
+                    .success
+                    .offers
                     .reduce((offersAcc, offer) => {
-                        const offerValue = offer.value();
+                        const offerValue = offer.value;
                         const asset = isSend
-                            ? offerValue.assetSold()
-                            : offerValue.assetBought();
+                            ? offerValue.assetSold
+                            : offerValue.assetBought;
 
                         const currentAssetString = Swap.getResultXdrAssetString(asset);
 
                         if (currentAssetString === assetString) {
                             return offersAcc.plus(new BigNumber(
-                                Number(isSend ? offerValue.amountSold() : offerValue.amountBought()),
+                                (isSend ? offerValue.amountSold : offerValue.amountBought).toString(),
                             ));
                         }
                         return offersAcc;
@@ -452,28 +449,26 @@ export default class Swap {
         if (!isSend) {
             // If receive transaction, sum up the amount that was sent as a fee in the send ops
             const feeOps = transactionResult
-                .result()
-                .results()
+                .result
+                .results
                 .filter(item =>
-                    item.value().switch().name === StellarSdk.xdr.OperationType.pathPaymentStrictSend().name,
+                    item.value.type === 'pathPaymentStrictSend',
                 )
                 .filter(item => StellarSdk.StrKey.encodeEd25519PublicKey(
-                    item.tr().pathPaymentStrictSendResult().success().last()
-                        .destination()
-                        .value(),
+                    item.tr.pathPaymentStrictSendResult.success.last.destination.value.toBytes(),
                 ) === FEE_ADDRESS);
 
             if (feeOps.length) {
                 feeOps.forEach(item => {
                     totalAmount = totalAmount.plus(
-                        item.tr().pathPaymentStrictSendResult().success().offers()
+                        item.tr.pathPaymentStrictSendResult.success.offers
                             .reduce((offersAcc, offer) => {
-                                const offerValue = offer.value();
-                                const asset = offerValue.assetBought();
+                                const offerValue = offer.value;
+                                const asset = offerValue.assetBought;
                                 const feeAssetString = Swap.getResultXdrAssetString(asset);
 
                                 if (feeAssetString === assetString) {
-                                    return offersAcc.plus(new BigNumber(Number(offerValue.amountBought())));
+                                    return offersAcc.plus(new BigNumber(offerValue.amountBought.toString()));
                                 }
                                 return offersAcc;
                             }, new BigNumber(0)),
@@ -482,20 +477,17 @@ export default class Swap {
             }
         }
 
-        return totalAmount.times(XDR_AMOUNT_COEFFICIENT).toNumber().toFixed(7);
+        return totalAmount.times(XDR_AMOUNT_COEFFICIENT).toFixed(7);
     }
 
     static getResultXdrAssetString(assetResult) {
-        const assetValue = assetResult.value();
+        const asset = StellarSdk.Asset.fromOperation(assetResult);
 
-        if (!assetValue) {
+        if (asset.isNative()) {
             return 'native';
         }
 
-        const assetCode = assetValue.assetCode().toString();
-        const assetIssuer = StellarSdk.StrKey.encodeEd25519PublicKey(assetValue.issuer().value());
-
-        return `${assetCode}:${assetIssuer}`;
+        return `${asset.code}:${asset.issuer}`;
     }
 }
 

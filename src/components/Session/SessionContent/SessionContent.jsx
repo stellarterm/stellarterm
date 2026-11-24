@@ -47,7 +47,7 @@ export default function SessionContent(props) {
                 <Redirect from="/ledger/" to="/account/" />
                 <Redirect from="/wallet-connect/" to="/account/" />
                 <Redirect from="/trezor/" to="/account/" />
-                <Redirect from="/freighter/" to="/account/" />
+                <Redirect from="/varial/" to="/account/" />
                 <Redirect from="/signup/" to="/account/" />
                 <Route render={() => <NotFound />} />
             </Switch>

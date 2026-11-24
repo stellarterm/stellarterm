@@ -1,5 +1,4 @@
 import WalletConnectClient, { SIGN_CLIENT_EVENTS } from '@walletconnect/sign-client';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { getInternalError, getSdkError } from '@walletconnect/utils';
 import * as StellarSdk from '@stellar/stellar-sdk';
 import { AUTH_TYPE, TX_STATUS } from '../../constants/sessionConstants';
@@ -21,7 +20,7 @@ const STELLAR_METHODS = {
     SIGN: 'stellar_signXDR',
 };
 
-const REQUIRED_NAMESPACES = {
+const STELLAR_NAMESPACES = {
     stellar: {
         chains: [PUBNET],
         methods: Object.values(STELLAR_METHODS),
@@ -30,6 +29,17 @@ const REQUIRED_NAMESPACES = {
 };
 
 export default class WalletConnectService {
+    static getPublicKey(session) {
+        const namespace = session.namespaces.stellar || session.namespaces[PUBNET];
+        if (!namespace || !Array.isArray(namespace.accounts) || !Array.isArray(namespace.methods) ||
+            !Object.values(STELLAR_METHODS).every(method => namespace.methods.includes(method))) {
+            return null;
+        }
+        const account = namespace.accounts.find(value => value.startsWith(`${PUBNET}:`) &&
+            StellarSdk.StrKey.isValidEd25519PublicKey(value.split(':')[2]));
+        return account ? account.split(':')[2] : null;
+    }
+
     constructor(driver) {
         this.driver = driver;
         this.appMeta = null;
@@ -56,11 +66,12 @@ export default class WalletConnectService {
             return null;
         }
 
-        this.session =
-            await this.client.session.getAll()[0];
+        this.session = this.client.session.getAll().find(session => this.constructor.getPublicKey(session));
+        if (!this.session) {
+            return null;
+        }
 
-        // eslint-disable-next-line no-unused-vars
-        const [chain, reference, publicKey] = this.session.namespaces.stellar.accounts[0].split(':');
+        const publicKey = this.constructor.getPublicKey(this.session);
         this.appMeta = this.session.peer.metadata;
         const keypair = StellarSdk.Keypair.fromPublicKey(publicKey.toUpperCase());
 
@@ -156,14 +167,19 @@ export default class WalletConnectService {
         try {
             const { uri, approval } = await this.client.connect({
                 pairingTopic: pairing ? pairing.topic : undefined,
-                requiredNamespaces: REQUIRED_NAMESPACES,
+                optionalNamespaces: STELLAR_NAMESPACES,
             });
 
             if (!pairing) {
                 this.driver.modal.handlers.activate('WalletConnectQRModal', uri);
             }
 
-            this.session = await approval();
+            const session = await approval();
+            if (!this.constructor.getPublicKey(session)) {
+                await this.client.disconnect({ topic: session.topic, reason: getSdkError('USER_DISCONNECTED') });
+                throw new Error('This wallet does not support signing on the Stellar public network.');
+            }
+            this.session = session;
         } catch (e) {
             if (this.session) {
                 return Promise.resolve({ status: 'cancel' });
@@ -186,8 +202,7 @@ export default class WalletConnectService {
         this.driver.modal.handlers.cancel();
         this.appMeta = this.session.peer.metadata;
 
-        // eslint-disable-next-line no-unused-vars
-        const [chain, reference, publicKey] = this.session.namespaces.stellar.accounts[0].split(':');
+        const publicKey = this.constructor.getPublicKey(this.session);
         const keypair = StellarSdk.Keypair.fromPublicKey(publicKey.toUpperCase());
         return this.driver.session.handlers.logIn(keypair, {
             authType: AUTH_TYPE.WALLET_CONNECT,
@@ -204,11 +219,12 @@ export default class WalletConnectService {
 
     async logout() {
         if (this.session) {
+            const { topic } = this.session;
             await this.client.disconnect({
-                topic: this.session.topic,
+                topic,
                 reason: getSdkError('USER_DISCONNECTED'),
             });
-            this.onSessionDeleted(this.session.topic);
+            this.onSessionDeleted(topic);
         }
     }
 
@@ -217,7 +233,7 @@ export default class WalletConnectService {
             this.driver.modal.handlers.finish();
         }
 
-        const xdr = tx.toEnvelope().toXDR('base64');
+        const xdr = tx.toEnvelope().toXdr('base64');
 
         this.driver.modal.handlers.activate('WalletConnectRequestModal', {
             title: this.appMeta.name,
@@ -246,7 +262,7 @@ export default class WalletConnectService {
             this.driver.modal.handlers.finish();
         }
 
-        const xdr = tx.toEnvelope().toXDR('base64');
+        const xdr = tx.toEnvelope().toXdr('base64');
 
         return new Promise(((resolve, reject) => {
             this.driver.modal.handlers.activate('WalletConnectRequestModal', {
