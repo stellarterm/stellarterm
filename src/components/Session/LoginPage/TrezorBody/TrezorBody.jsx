@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import _ from 'lodash';
-import TrezorConnect, { DEVICE_EVENT, DEVICE } from '@trezor/connect-web';
 import Driver from '../../../../lib/driver/Driver';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
 import images from '../../../../images';
@@ -15,26 +14,12 @@ export default class TrezorBody extends React.Component {
     constructor(props) {
         super(props);
 
-        TrezorConnect.init({
-            lazyLoad: true, // this param will prevent iframe injection until TrezorConnect.method will be called
-            manifest: {
-                email: 'support@stellarterm.com',
-                appUrl: 'https://stellarterm.com',
-            },
-        });
-
         this.state = {
             bip32Path: '0',
             customBip32Path: false,
             loginError: false,
             showInstructions: false,
         };
-
-        TrezorConnect.on(DEVICE_EVENT, event => {
-            if (event.type === DEVICE.DISCONNECT) {
-                this.props.d.session.handlers.logout();
-            }
-        });
     }
 
     getTrezorLoginForm() {

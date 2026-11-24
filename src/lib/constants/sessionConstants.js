@@ -20,7 +20,7 @@ export const AUTH_TYPE = {
     PUBKEY: 'pubkey',
     LEDGER: 'ledger',
     TREZOR: 'trezor',
-    FREIGHTER: 'freighter',
+    VARIAL: 'varial',
     WALLET_CONNECT: 'wallet-connect',
     LOBSTR_SIGNER_EXTENSION: 'lobstr-signer-extension',
 };

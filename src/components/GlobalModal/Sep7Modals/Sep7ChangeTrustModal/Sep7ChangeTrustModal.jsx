@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import * as StellarSdk from '@stellar/stellar-sdk';
 import Driver from '../../../../lib/driver/Driver';
 import ErrorHandler from '../../../../lib/helpers/ErrorHandler';
+import Stellarify from '../../../../lib/helpers/Stellarify';
 import TransactionAuthorBlock from '../TransactionAuthorBlock/TransactionAuthorBlock';
 import AccountModalBlock from '../AccountModalBlock/AccountModalBlock';
 import Ellipsis from '../../../Common/Ellipsis/Ellipsis';
@@ -49,8 +50,7 @@ export default class Sep7ChangeTrustModal extends React.Component {
         const { txDetails, d } = this.props;
         const { xdr, originDomain } = txDetails;
         const tx = new StellarSdk.Transaction(xdr, d.Server.networkPassphrase);
-        const { value } = StellarSdk.Memo.fromXDRObject(tx._memo);
-        const memo = value && value.toString();
+        const memo = Stellarify.memoToString(tx.memo);
         const [operation] = tx.operations;
         const { limit, line } = operation;
 

@@ -9,7 +9,7 @@ import CopyButton from '../../CopyButton/CopyButton';
 
 const SignChallengeManually = ({ d, resolver, tx }) => {
     const { requiredSigners } = d.multisig;
-    const xdr = tx.toEnvelope().toXDR('base64');
+    const xdr = tx.toEnvelope().toXdr('base64');
 
     const [signedXDR, setSignedXDR] = useState('');
     const [errorText, setErrorText] = useState('');

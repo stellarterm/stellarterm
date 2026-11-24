@@ -23,19 +23,19 @@ export default () => (
                 {' '}on the Trezor website.
             </li>
             <li>
-                Install the{' '}
+                Open{' '}
                 <a
                     target="_blank"
                     rel="noopener noreferrer"
-                    href="https://wallet.trezor.io/#/bridge"
+                    href="https://trezor.io/trezor-suite"
                 >
-                    Trezor Bridge
+                    Trezor Suite
                 </a>
-                {' '}app on your computer. This application allows communication between
-                the Trezor device and supported browsers.
+                {' '}on your computer, or use Trezor Suite in the browser when prompted.
+                StellarTerm connects to your device through Trezor Suite.
             </li>
             <li>
-                After successfully installing, refresh the page and log in with your Trezor device.
+                Return to StellarTerm and log in with your Trezor device.
             </li>
             <li className="without-order-number">
                 Additional info about Trezor, you can find on the{' '}

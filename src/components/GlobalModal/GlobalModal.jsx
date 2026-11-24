@@ -72,7 +72,7 @@ export default class GlobalModal extends React.Component {
                         <div className="GlobalModal__content">
                             <a
                                 href={`https://www.stellar.org/laboratory/#txsigner?xdr=
-                            ${encodeURI(modal.inputData.toEnvelope().toXDR('base64'))}&network=public`}
+                            ${encodeURI(modal.inputData.toEnvelope().toXdr('base64'))}&network=public`}
                                 target="_blank"
                                 rel="nofollow noopener noreferrer"
                             >
@@ -81,7 +81,7 @@ export default class GlobalModal extends React.Component {
                         </div>
                     );
                 }
-                // To get tx xdr: modal.inputData.toEnvelope().toXDR('base64')
+                // To get tx xdr: modal.inputData.toEnvelope().toXdr('base64')
                 body = (
                     <div className="GlobalModal">
                         <div className="GlobalModal__header">Sign transaction</div>

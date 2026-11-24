@@ -1,6 +1,6 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { isConnected } from '@stellar/freighter-api';
+import { isConnected } from '@stellar/varial-sdk';
 import images from '../../../../images';
 import HiddenDescription from '../Common/HiddenDescription';
 import SecretPhrase from '../SecretPhrase/SecretPhrase';
@@ -8,14 +8,35 @@ import Driver from '../../../../lib/driver/Driver';
 import AcceptTerms from '../Common/AcceptTerms';
 
 
-const FreighterBody = ({ history, d, modal }) => {
+const VarialBody = ({ history, d, modal }) => {
     const [loginError, setLoginError] = useState('');
+    const [extensionConnected, setExtensionConnected] = useState(null);
 
-    const loginWithFreighter = event => {
+    useEffect(() => {
+        let active = true;
+        isConnected().then(({ isConnected: connected, error }) => {
+            if (active) {
+                setExtensionConnected(connected && !error);
+                if (error) {
+                    setLoginError(error.message || 'Unable to detect the Varial extension.');
+                }
+            }
+        }).catch(error => {
+            if (active) {
+                setExtensionConnected(false);
+                setLoginError(error.message || 'Unable to detect the Varial extension.');
+            }
+        });
+        return () => {
+            active = false;
+        };
+    }, []);
+
+    const loginWithVarial = event => {
         event.preventDefault();
         setLoginError('');
-        d.session.handlers.logInWithFreighter()
-            .catch(e => setLoginError(e));
+        d.session.handlers.logInWithVarial()
+            .catch(error => setLoginError(error.message || String(error)));
     };
 
     const renderLoginError = () => {
@@ -32,30 +53,34 @@ const FreighterBody = ({ history, d, modal }) => {
         return null;
     };
 
-    const getFreighterLoginForm = () => {
-        if (!isConnected()) {
+    const getVarialLoginForm = () => {
+        if (extensionConnected === null) {
+            return <p className="LoginPage__form--title">Checking for Varial...</p>;
+        }
+        if (!extensionConnected) {
             return (
                 <Fragment>
+                    {renderLoginError()}
                     <p className="LoginPage__form--title browser-support">
-                        Freighter extension is not installed.
+                        Varial extension is not installed.
                     </p>
                     <a
                         className="LoginPage__link"
                         target="_blank"
                         rel="nofollow noopener noreferrer"
-                        href="https://www.freighter.app/"
+                        href="https://varialwallet.com/"
                     >
-                        Install Freighter
+                        Install Varial
                     </a>
                 </Fragment>
             );
         }
         const loginErrorView = renderLoginError();
         return (
-            <form onSubmit={loginWithFreighter}>
+            <form onSubmit={loginWithVarial}>
                 <div className="LoginPage__submitWrap">
                     {loginErrorView}
-                    <AcceptTerms loginButtonText={'Log in with Freighter'} />
+                    <AcceptTerms loginButtonText={'Log in with Varial'} />
                 </div>
             </form>
         );
@@ -64,7 +89,7 @@ const FreighterBody = ({ history, d, modal }) => {
     if (modal) {
         return (
             <div className="LoginPage__body LoginPage__popup">
-                <div className="LoginPage__greenBox">{getFreighterLoginForm()}</div>
+                <div className="LoginPage__greenBox">{getVarialLoginForm()}</div>
             </div>
         );
     }
@@ -86,12 +111,12 @@ const FreighterBody = ({ history, d, modal }) => {
                     <div className="LoginPage__header">
                         <div className="LoginPage__header-wrap">
                             <span className="LoginPage__title">Access your account</span>
-                            <span className="LoginPage__intro">Use StellarTerm with your Freighter extension</span>
+                            <span className="LoginPage__intro">Use StellarTerm with your Varial extension</span>
                         </div>
-                        <img src={images['freighter-logo-main']} alt="freighter" height="66" />
+                        <img src={images['varial-logo-main']} alt="Varial" height="32" />
                     </div>
                     <div className="LoginPage__greenBox">
-                        {getFreighterLoginForm()}
+                        {getVarialLoginForm()}
                     </div>
                 </div>
                 <SecretPhrase d={d} />
@@ -100,9 +125,9 @@ const FreighterBody = ({ history, d, modal }) => {
     );
 };
 
-export default FreighterBody;
+export default VarialBody;
 
-FreighterBody.propTypes = {
+VarialBody.propTypes = {
     d: PropTypes.instanceOf(Driver).isRequired,
     history: PropTypes.objectOf(PropTypes.any),
     modal: PropTypes.bool,

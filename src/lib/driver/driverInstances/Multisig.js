@@ -240,7 +240,7 @@ export default class Multisig {
     }
 
     sendToSigner(tx) {
-        const xdr = tx.toEnvelope().toXDR('base64');
+        const xdr = tx.toEnvelope().toXdr('base64');
 
         if (!this.multisigProvider) {
             setTimeout(() => this.driver.modal.handlers.activate('multisigUnknown', {
@@ -480,7 +480,7 @@ export default class Multisig {
         this.driver.session.account.signers.forEach(signer => {
             const kp = StellarSdk.Keypair.fromPublicKey(signer.key);
 
-            const hasSignature = tx.signatures.some(s => kp.verify(tx.hash(), s.signature()));
+            const hasSignature = tx.signatures.some(s => kp.verify(tx.hash(), s.signature));
 
             if (hasSignature) {
                 weight += signer.weight;

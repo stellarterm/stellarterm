@@ -15,7 +15,7 @@ const SignChallengeBlock = ({ d, signedChallengeResolver, challengeTx }) => {
     const { multisigProvider } = d.multisig;
     const isVault = multisigProvider === MULTISIG_PROVIDERS.LOBSTR_VAULT;
 
-    const xdr = challengeTx.toEnvelope().toXDR('base64');
+    const xdr = challengeTx.toEnvelope().toXdr('base64');
 
 
     useEffect(() => {

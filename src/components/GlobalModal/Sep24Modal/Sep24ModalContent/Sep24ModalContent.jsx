@@ -293,7 +293,7 @@ export default class Sep24ModalContent extends React.Component {
             }
             let tx;
             try {
-                tx = StellarSdk.TransactionBuilder.fromXDR(xdr, this.NETWORK_PASSPHRASE);
+                tx = StellarSdk.TransactionBuilder.fromXdr(xdr, this.NETWORK_PASSPHRASE);
             } catch (e) {
                 this.postToBridge({ type: 'reject', id, code: -3, message: 'Invalid transaction XDR' });
                 return;
@@ -322,7 +322,7 @@ export default class Sep24ModalContent extends React.Component {
             this.postToBridge({
                 type: 'sign_tx_result',
                 id,
-                signedTxXdr: signedTx.toEnvelope().toXDR('base64'),
+                signedTxXdr: signedTx.toEnvelope().toXdr('base64'),
             });
         } catch (e) {
             this.postToBridge({ type: 'reject', id, code: -1, message: 'Signing failed' });

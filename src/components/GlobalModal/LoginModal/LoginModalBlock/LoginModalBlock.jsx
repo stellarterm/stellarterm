@@ -4,7 +4,7 @@ import Driver from '../../../../lib/driver/Driver';
 import LoginPageBody from '../../../Session/LoginPage/LoginPageBody/LoginPageBody';
 import LedgerBody from '../../../Session/LoginPage/LedgerBody/LedgerBody';
 import TrezorBody from '../../../Session/LoginPage/TrezorBody/TrezorBody';
-import FreighterBody from '../../../Session/LoginPage/FreighterBody/FreighterBody';
+import VarialBody from '../../../Session/LoginPage/VarialBody/VarialBody';
 import WalletConnectBody from '../../../Session/LoginPage/WalletConnectBody/WalletConnectBody';
 import LobstrExtensionBody from '../../../Session/LoginPage/LobstrExtensionBody/LobstrExtensionBody';
 
@@ -12,7 +12,7 @@ const TABS = {
     SECRET: 'secret',
     LEDGER: 'ledger',
     TREZOR: 'trezor',
-    FREIGHTER: 'freighter',
+    VARIAL: 'varial',
     WALLET_CONNECT: 'wallet-connect',
     LOBSTR: 'lobstr',
 };
@@ -48,8 +48,8 @@ export default class LoginModalBlock extends React.Component {
             case TABS.TREZOR: {
                 return <TrezorBody d={d} modal />;
             }
-            case TABS.FREIGHTER: {
-                return <FreighterBody d={d} modal />;
+            case TABS.VARIAL: {
+                return <VarialBody d={d} modal />;
             }
             default: throw new Error('Unknown tab name');
         }
@@ -95,10 +95,10 @@ export default class LoginModalBlock extends React.Component {
                         <span>WalletConnect</span>
                     </div>
                     <div
-                        onClick={() => this.handleChoose(TABS.FREIGHTER)}
-                        className={this.getTabClassName(TABS.FREIGHTER)}
+                        onClick={() => this.handleChoose(TABS.VARIAL)}
+                        className={this.getTabClassName(TABS.VARIAL)}
                     >
-                        <span>Freighter</span>
+                        <span>Varial</span>
                     </div>
                     <div
                         onClick={() => this.handleChoose(TABS.LEDGER)}
